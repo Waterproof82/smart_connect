@@ -4,19 +4,25 @@ import { Code2, Settings2, Smartphone, ArrowUpRight } from 'lucide-react';
 
 const solutions = [
   {
+    id: 'software-ia',
     icon: <Code2 className="w-6 h-6 text-blue-500" />,
     title: 'Software & IA',
     description: 'Desarrollo de herramientas personalizadas que se integran perfectamente con tus sistemas actuales. Soluciones a medida impulsadas por algoritmos inteligentes.',
+    serviceValue: 'Consultoría IA'
   },
   {
+    id: 'automatizacion-n8n',
     icon: <Settings2 className="w-6 h-6 text-purple-500" />,
     title: 'Automatización (n8n)',
     description: 'Orquesta flujos de trabajo complejos sin esfuerzo. Conectamos tus apps favoritas y automatizamos tareas repetitivas para que tu equipo se enfoque en innovar.',
+    serviceValue: 'Automatización n8n'
   },
   {
+    id: 'tarjetas-nfc',
     icon: <Smartphone className="w-6 h-6 text-emerald-500" />,
     title: 'Tarjetas Tap-to-Review',
     description: 'Hardware físico con alma digital. Tarjetas NFC elegantes que permiten a tus clientes dejar reseñas positivas al instante con un solo toque.',
+    serviceValue: 'Tarjetas NFC Reseñas'
   }
 ];
 
@@ -63,7 +69,7 @@ export const Features: React.FC = () => {
       <div className="grid md:grid-cols-3 gap-8">
         {solutions.map((item, idx) => (
           <div 
-            key={idx} 
+            key={item.id} 
             className={`glass-card p-10 rounded-3xl group hover:border-blue-500/30 transition-all duration-1000 cursor-default relative overflow-hidden ${
               isVisible 
                 ? 'opacity-100 translate-y-0 blur-0' 
@@ -88,7 +94,7 @@ export const Features: React.FC = () => {
             style={{ transitionDelay: `${(idx * 150) + 400}ms` }}
             >
               <a 
-                href="#" 
+                href={`#contacto?servicio=${encodeURIComponent(item.serviceValue)}`}
                 className="inline-flex items-center gap-2 text-sm font-bold text-blue-400 group-hover:text-blue-300 transition-colors relative"
               >
                 <span>Saber más</span>

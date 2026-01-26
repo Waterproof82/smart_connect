@@ -1,12 +1,44 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Mail, Phone, MapPin, Send, MessageSquare, Globe, Sparkles } from 'lucide-react';
+import { Mail, MapPin, Send, MessageSquare, Globe, Sparkles } from 'lucide-react';
 
 export const Contact: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const [selectedService, setSelectedService] = useState('Selecciona una opción');
   const sectionRef = useRef<HTMLDivElement>(null);
+  const nameInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    // Función para hacer scroll y focus
+    const scrollAndFocus = () => {
+      sectionRef.current?.scrollIntoView({ 
+        behavior: 'smooth', 
+        block: 'start' 
+      });
+      setTimeout(() => {
+        nameInputRef.current?.focus();
+      }, 800);
+    };
+
+    // Función para leer parámetro de servicio de la URL
+    const updateServiceFromURL = () => {
+      const hash = globalThis.location.hash;
+      if (!hash.includes('?')) return;
+      
+      const params = new URLSearchParams(hash.split('?')[1]);
+      const servicio = params.get('servicio');
+      if (!servicio) return;
+      
+      setSelectedService(decodeURIComponent(servicio));
+      setTimeout(scrollAndFocus, 100);
+    };
+
+    // Ejecutar al montar
+    updateServiceFromURL();
+
+    // Escuchar cambios en el hash
+    globalThis.addEventListener('hashchange', updateServiceFromURL);
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) setIsVisible(true);
@@ -14,7 +46,9 @@ export const Contact: React.FC = () => {
       { threshold: 0.1 }
     );
     if (sectionRef.current) observer.observe(sectionRef.current);
+    
     return () => {
+      globalThis.removeEventListener('hashchange', updateServiceFromURL);
       if (sectionRef.current) observer.unobserve(sectionRef.current);
     };
   }, []);
@@ -45,6 +79,7 @@ export const Contact: React.FC = () => {
           }`}>
             {[
               { 
+                id: 'contact-email',
                 icon: <Mail className="w-6 h-6" />, 
                 title: "Email Directo", 
                 value: "hola@smartconnect.ai", 
@@ -52,6 +87,7 @@ export const Contact: React.FC = () => {
                 color: "text-blue-500"
               },
               { 
+                id: 'contact-whatsapp',
                 icon: <MessageSquare className="w-6 h-6" />, 
                 title: "WhatsApp Business", 
                 value: "+34 600 000 000", 
@@ -59,14 +95,15 @@ export const Contact: React.FC = () => {
                 color: "text-emerald-500"
               },
               { 
+                id: 'contact-location',
                 icon: <MapPin className="w-6 h-6" />, 
                 title: "Oficinas Centrales", 
                 value: "Madrid, España", 
                 desc: "Hub Tecnológico de Innovación",
                 color: "text-purple-500"
               }
-            ].map((item, i) => (
-              <div key={i} className="glass-card p-8 rounded-3xl border border-white/5 flex gap-6 group hover:border-white/10 transition-all">
+            ].map((item) => (
+              <div key={item.id} className="glass-card p-8 rounded-3xl border border-white/5 flex gap-6 group hover:border-white/10 transition-all">
                 <div className={`w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center ${item.color} group-hover:scale-110 transition-transform`}>
                   {item.icon}
                 </div>
@@ -91,16 +128,19 @@ export const Contact: React.FC = () => {
               <form className="space-y-6 relative z-10" onSubmit={(e) => e.preventDefault()}>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Nombre Completo</label>
+                    <label htmlFor="contact-name" className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Nombre Completo</label>
                     <input 
+                      id="contact-name"
+                      ref={nameInputRef}
                       type="text" 
                       placeholder="Ej. Juan Pérez"
                       className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 outline-none focus:border-blue-500/50 transition-all text-sm"
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Empresa</label>
+                    <label htmlFor="contact-company" className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Empresa</label>
                     <input 
+                      id="contact-company"
                       type="text" 
                       placeholder="Ej. Restaurante L'Escale"
                       className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 outline-none focus:border-blue-500/50 transition-all text-sm"
@@ -109,8 +149,9 @@ export const Contact: React.FC = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Correo Electrónico</label>
+                  <label htmlFor="contact-email" className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Correo Electrónico</label>
                   <input 
+                    id="contact-email"
                     type="email" 
                     placeholder="juan@empresa.com"
                     className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 outline-none focus:border-blue-500/50 transition-all text-sm"
@@ -118,8 +159,13 @@ export const Contact: React.FC = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Servicio de Interés</label>
-                  <select className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 outline-none focus:border-blue-500/50 transition-all text-sm appearance-none">
+                  <label htmlFor="contact-service" className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Servicio de Interés</label>
+                  <select 
+                    id="contact-service"
+                    value={selectedService}
+                    onChange={(e) => setSelectedService(e.target.value)}
+                    className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 outline-none focus:border-blue-500/50 transition-all text-sm appearance-none"
+                  >
                     <option className="bg-[#0d0d1e]">Selecciona una opción</option>
                     <option className="bg-[#0d0d1e]">QRIBAR - Menú Digital</option>
                     <option className="bg-[#0d0d1e]">Automatización n8n</option>
@@ -129,8 +175,9 @@ export const Contact: React.FC = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Mensaje</label>
+                  <label htmlFor="contact-message" className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Mensaje</label>
                   <textarea 
+                    id="contact-message"
                     rows={4}
                     placeholder="Cuéntanos brevemente sobre tu proyecto..."
                     className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 outline-none focus:border-blue-500/50 transition-all text-sm resize-none"
