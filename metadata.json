@@ -1,0 +1,8 @@
+{
+  "name": "SmartConnect AI - Business Scaling with IA",
+  "description": "A high-performance landing page and dashboard for a technology company specializing in NFC cards, automation, and digital restaurant solutions.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
