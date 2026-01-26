@@ -101,7 +101,7 @@ export const Contact: React.FC = () => {
 
   // Verificar si un campo es válido
   const isFieldValid = (field: keyof FormData): boolean => {
-    return touched[field] && !validationErrors[field];
+    return touched[field] && !validationErrors[field] && formData[field].trim() !== '';
   };
 
   // Verificar si un campo tiene error
