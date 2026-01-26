@@ -54,7 +54,7 @@ export const QRIBARSection: React.FC = () => {
               { name: 'Entrecot Angus', desc: 'A la parrilla, 300g', price: '32€' }
             ].map((dish, i) => (
               <div 
-                key={i} 
+                key={dish.name} 
                 className={`flex justify-between items-center py-3 border-b border-white/5 transition-all duration-700`}
                 style={{ 
                   transitionDelay: `${isVisible ? (800 + (i * 100)) : 0}ms`,
@@ -87,7 +87,7 @@ export const QRIBARSection: React.FC = () => {
       }`}>
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-500 text-xs font-semibold mb-6">
           <Utensils className="w-3.5 h-3.5" />
-          SECTOR HORECA
+          SECTOR HOSTELERÍA
         </div>
         
         <h2 className="text-5xl font-extrabold mb-8 leading-tight">
@@ -102,10 +102,11 @@ export const QRIBARSection: React.FC = () => {
           {[
             'Actualización de precios en tiempo real',
             'Diseño adaptable a tu identidad visual',
-            'Integración con sistemas de reservas'
+            'Aumenta la rotación de mesas',
+            'Integración con sistemas de pedidos y pagos'
           ].map((text, i) => (
             <div 
-              key={i} 
+              key={text} 
               className={`flex items-center gap-3 transition-all duration-700`}
               style={{ 
                 transitionDelay: `${isVisible ? (400 + (i * 150)) : 0}ms`,
@@ -121,11 +122,16 @@ export const QRIBARSection: React.FC = () => {
           ))}
         </div>
 
-        <button className={`bg-amber-500 hover:bg-amber-600 text-black px-10 py-4 rounded-xl font-bold transition-all shadow-xl shadow-amber-500/20 active:scale-95 delay-1000 ${
-          isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'
-        }`}>
-          Digitalizar mi carta ahora
-        </button>
+        <a 
+          href="https://www.qribar.es" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className={`inline-block bg-amber-500 hover:bg-amber-600 text-black px-10 py-4 rounded-xl font-bold transition-all shadow-xl shadow-amber-500/20 active:scale-95 delay-1000 ${
+            isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'
+          }`}
+        >
+          Más información
+        </a>
       </div>
     </div>
   );

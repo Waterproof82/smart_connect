@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Cpu, ChevronDown, Code2, Settings2, Smartphone, Utensils, Sparkles } from 'lucide-react';
+import { Cpu, ChevronDown, Code2, Settings2, Smartphone, Utensils } from 'lucide-react';
 
 interface NavbarProps {
   scrolled: boolean;
@@ -11,27 +11,31 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
 
   const solutions = [
     {
+      id: 'software-ia',
       icon: <Code2 className="w-5 h-5 text-blue-500" />,
       title: 'Software & IA',
       desc: 'Soluciones a medida',
       href: '#soluciones'
     },
     {
+      id: 'automatizacion-n8n',
       icon: <Settings2 className="w-5 h-5 text-purple-500" />,
       title: 'Automatización n8n',
       desc: 'Flujos inteligentes',
       href: '#soluciones'
     },
     {
+      id: 'tarjetas-nfc',
       icon: <Smartphone className="w-5 h-5 text-emerald-500" />,
       title: 'Tarjetas NFC',
       desc: 'Reseñas al instante',
       href: '#soluciones'
     },
     {
+      id: 'qribar',
       icon: <Utensils className="w-5 h-5 text-amber-500" />,
       title: 'QR iBar',
-      desc: 'Menús digitales HORECA',
+      desc: 'Menús digitales HOSTELERÍA',
       href: '#qribar'
     }
   ];
@@ -56,12 +60,30 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
         {/* Navigation */}
         <div className="hidden md:flex items-center gap-10 text-sm font-semibold text-gray-400">
           {/* Soluciones Dropdown */}
-          <div 
+          <div
             className="relative group"
+            role="menu"
+            tabIndex={0}
             onMouseEnter={() => setIsDropdownOpen(true)}
             onMouseLeave={() => setIsDropdownOpen(false)}
+            onFocus={() => setIsDropdownOpen(true)}
+            onBlur={() => setIsDropdownOpen(false)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                setIsDropdownOpen((prev) => !prev);
+              }
+              if (e.key === 'Escape') {
+                setIsDropdownOpen(false);
+              }
+            }}
           >
-            <button className="flex items-center gap-1.5 hover:text-white transition-colors py-2">
+            <button
+              className="flex items-center gap-1.5 hover:text-white transition-colors py-2"
+              aria-haspopup="true"
+              aria-expanded={isDropdownOpen}
+              onClick={() => setIsDropdownOpen((prev) => !prev)}
+              tabIndex={-1}
+            >
               Soluciones
               <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`} />
             </button>
@@ -72,9 +94,9 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
             }`}>
               <div className="w-[280px] glass-card border border-white/10 rounded-[2rem] p-4 shadow-2xl">
                 <div className="grid gap-2">
-                  {solutions.map((item, i) => (
+                  {solutions.map((item) => (
                     <a 
-                      key={i} 
+                      key={item.id} 
                       href={item.href}
                       onClick={handleDropdownLinkClick}
                       className="flex items-center gap-4 p-3 rounded-2xl hover:bg-white/5 transition-colors group/item"
@@ -95,17 +117,6 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
 
           <a href="#exito" className="hover:text-white transition-colors">Éxito</a>
           <a href="#contacto" className="hover:text-white transition-colors">Contacto</a>
-        </div>
-
-        {/* CTA Button */}
-        <div className="flex items-center gap-4">
-          <a 
-            href="#contacto" 
-            className="bg-blue-600 hover:bg-blue-700 text-white px-7 py-2.5 rounded-full text-sm font-bold transition-all shadow-xl shadow-blue-600/20 active:scale-95 flex items-center gap-2"
-          >
-            <Sparkles className="w-4 h-4" />
-            Empezar
-          </a>
         </div>
       </div>
     </nav>
