@@ -57,4 +57,48 @@ Se aplican los estándares de calidad del Máster de Desarrollo con IA:
 
 ---
 
+## 4. PROTOCOLOS DE MANTENIMIENTO AUTOMÁTICO
+
+Tras aplicar cambios en el código (features, fixes, refactors), el agente debe ejecutar los siguientes protocolos:
+
+### 4.1. Protocolo de Versionado
+
+El agente debe actualizar los archivos de versión del proyecto basándose en la naturaleza del cambio (Major, Minor, Patch).
+
+* **`pubspec.yaml`:**
+    * Actualizar `version:` (Formato: major.minor.patch+build).
+* **`android/app/build.gradle`:**
+    * `versionCode` (debe coincidir con el build number).
+    * `versionName` (debe coincidir con major.minor.patch).
+* **`ios/Runner/Info.plist`:**
+    * `CFBundleShortVersionString` (debe coincidir con major.minor.patch).
+    * `CFBundleVersion` (debe coincidir con el build number).
+
+### 4.2. Protocolo de `CHANGELOG.md`
+
+El agente debe documentar el cambio realizado en el archivo `CHANGELOG.md`, adhiriéndose estrictamente al formato **Keep a Changelog 1.1.0**.
+
+* **Principio:** Los *changelogs* son para humanos, no para máquinas.
+* **Idioma:** Inglés.
+* **Estructura:**
+    * El orden debe ser cronológico inverso (la versión más reciente primero).
+    * Debe existir una sección `[Unreleased]` en la parte superior para agrupar los cambios pendientes de lanzamiento.
+    * Cada versión debe tener un encabezado `## [Version] - YYYY-MM-DD`.
+* **Tipos de Cambio (Etiquetas Requeridas):** Todo cambio debe agruparse bajo una de las siguientes seis etiquetas:
+    * `Added`: Para nuevas funcionalidades (*features*).
+    * `Changed`: Para cambios en funcionalidades existentes.
+    * `Deprecated`: Para funcionalidades que serán eliminadas próximamente.
+    * `Removed`: Para funcionalidades eliminadas.
+    * `Fixed`: Para cualquier corrección de *bugs*.
+    * `Security`: En caso de vulnerabilidades.
+
+### 4.3. Protocolo de Documentación (Audit Log)
+
+El agente debe registrar cada operación que realice (generación, refactorización, validación).
+
+* **Ubicación:** `docs/audit`
+* **Formato:** Archivo Markdown (`.md`).
+* **Idioma:** Inglés.
+* **Contenido:** El registro debe incluir la fecha y hora (timestamp) y una descripción de la acción (ej. *Refactored class 'X' to apply SRP.*).
+
 **¿Entendido? Confirma para comenzar con el primer paso del desarrollo.**
