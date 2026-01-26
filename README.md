@@ -147,7 +147,7 @@ import { Lead } from '@core/domain/entities';          // Core
 
 ## 🎓 Filosofía del Proyecto
 
-Este proyecto sigue las mejores prácticas del **Máster de Desarrollo con IA**:
+Este proyecto sigue las mejores prácticas:
 - Clean Architecture
 - Test-Driven Development (TDD)
 - Security by Design

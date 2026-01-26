@@ -52,6 +52,11 @@ smart-connect/
 │   ├── setup.ts                     # Jest Configuration
 │   └── README.md                    # TDD Guide
 │
+├── 📂 docs/                          # 📚 Documentación Técnica
+│   ├── adr/                         # Architecture Decision Records
+│   ├── audit/                       # Audit Logs
+│   └── context/                     # Context for AI Agents
+│
 ├── 📂 public/                        # Static Assets
 │   └── assets/                      # Images, Icons, etc.
 │
