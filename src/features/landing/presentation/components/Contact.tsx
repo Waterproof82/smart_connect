@@ -172,144 +172,6 @@ export const Contact: React.FC = () => {
     );
   };
 
-  // Generar HTML del email con diseño moderno
-  const generateEmailHTML = (data: FormData): string => {
-    const currentDate = new Date().toLocaleDateString('es-ES', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-
-    return `
-      <!DOCTYPE html>
-      <html lang="es">
-      <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Nueva Solicitud de Contacto - SmartConnect AI</title>
-      </head>
-      <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #0a0a0a; color: #ffffff;">
-        <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #0a0a0a; padding: 40px 20px;">
-          <tr>
-            <td align="center">
-              <table width="600" cellpadding="0" cellspacing="0" style="background: linear-gradient(135deg, #1a1a2e 0%, #0f0f1e 100%); border-radius: 24px; overflow: hidden; box-shadow: 0 20px 60px rgba(59, 130, 246, 0.3);">
-                
-                <!-- Header -->
-                <tr>
-                  <td style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); padding: 40px; text-align: center;">
-                    <h1 style="margin: 0; font-size: 32px; font-weight: 800; color: #ffffff; text-shadow: 0 2px 10px rgba(0,0,0,0.3);">
-                      🚀 Nueva Solicitud de Contacto
-                    </h1>
-                    <p style="margin: 10px 0 0 0; font-size: 14px; color: rgba(255,255,255,0.9); font-weight: 500;">
-                      SmartConnect AI - Business Accelerator
-                    </p>
-                  </td>
-                </tr>
-
-                <!-- Fecha y Hora -->
-                <tr>
-                  <td style="padding: 20px 40px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1);">
-                    <p style="margin: 0; font-size: 13px; color: #9ca3af;">
-                      📅 Recibido el ${currentDate}
-                    </p>
-                  </td>
-                </tr>
-
-                <!-- Información del Cliente -->
-                <tr>
-                  <td style="padding: 40px;">
-                    <h2 style="margin: 0 0 24px 0; font-size: 20px; font-weight: 700; color: #60a5fa; border-left: 4px solid #3b82f6; padding-left: 16px;">
-                      👤 Información del Cliente
-                    </h2>
-                    
-                    <table width="100%" cellpadding="12" cellspacing="0">
-                      <tr>
-                        <td style="width: 40%; font-weight: 600; color: #9ca3af; font-size: 14px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
-                          Nombre Completo:
-                        </td>
-                        <td style="font-size: 14px; color: #ffffff; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
-                          ${data.name}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style="width: 40%; font-weight: 600; color: #9ca3af; font-size: 14px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
-                          Empresa:
-                        </td>
-                        <td style="font-size: 14px; color: #ffffff; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
-                          ${data.company}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style="width: 40%; font-weight: 600; color: #9ca3af; font-size: 14px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
-                          Email:
-                        </td>
-                        <td style="font-size: 14px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
-                          <a href="mailto:${data.email}" style="color: #60a5fa; text-decoration: none;">
-                            ${data.email}
-                          </a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style="width: 40%; font-weight: 600; color: #9ca3af; font-size: 14px; padding: 12px 0;">
-                          Servicio de Interés:
-                        </td>
-                        <td style="font-size: 14px; padding: 12px 0;">
-                          <span style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: #ffffff; padding: 6px 16px; border-radius: 20px; font-weight: 600; font-size: 13px; display: inline-block;">
-                            ${data.service}
-                          </span>
-                        </td>
-                      </tr>
-                    </table>
-                  </td>
-                </tr>
-
-                <!-- Mensaje -->
-                <tr>
-                  <td style="padding: 0 40px 40px 40px;">
-                    <h2 style="margin: 0 0 16px 0; font-size: 20px; font-weight: 700; color: #60a5fa; border-left: 4px solid #3b82f6; padding-left: 16px;">
-                      💬 Mensaje del Cliente
-                    </h2>
-                    <div style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 16px; padding: 24px; font-size: 14px; line-height: 1.6; color: #e5e7eb;">
-                      ${data.message.replaceAll('\n', '<br>')}
-                    </div>
-                  </td>
-                </tr>
-
-                <!-- CTA -->
-                <tr>
-                  <td style="padding: 0 40px 40px 40px; text-align: center;">
-                    <a href="mailto:${data.email}?subject=Re: Solicitud de ${data.service}" style="display: inline-block; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: #ffffff; text-decoration: none; padding: 16px 48px; border-radius: 12px; font-weight: 700; font-size: 15px; box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4); transition: all 0.3s;">
-                      📧 Responder a ${data.name}
-                    </a>
-                  </td>
-                </tr>
-
-                <!-- Footer -->
-                <tr>
-                  <td style="background: rgba(255,255,255,0.02); padding: 24px 40px; text-align: center; border-top: 1px solid rgba(255,255,255,0.05);">
-                    <p style="margin: 0 0 8px 0; font-size: 14px; font-weight: 600; color: #ffffff;">
-                      SmartConnect AI
-                    </p>
-                    <p style="margin: 0; font-size: 12px; color: #6b7280;">
-                      Business Accelerator • Transformando Negocios con IA y Automatización
-                    </p>
-                    <p style="margin: 12px 0 0 0; font-size: 11px; color: #4b5563;">
-                      Este email fue generado automáticamente desde el formulario de contacto.
-                    </p>
-                  </td>
-                </tr>
-
-              </table>
-            </td>
-          </tr>
-        </table>
-      </body>
-      </html>
-    `;
-  };
-
   // Manejar envío del formulario
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -320,15 +182,31 @@ export const Contact: React.FC = () => {
     setSubmitStatus('idle');
 
     try {
-      const emailHTML = generateEmailHTML(formData);
+      // Preparar payload para n8n webhook
+      const webhookPayload = {
+        nombre: formData.name,
+        empresa: formData.company,
+        email: formData.email,
+        servicio_interes: formData.service,
+        mensaje_cuerpo: formData.message
+      };
+
+      // Llamada al webhook de n8n
+      const webhookUrl = ENV.N8N_WEBHOOK_URL || 'http://localhost:5678/webhook-test/hot-lead-intake';
       
-      // Aquí integrarías con tu servicio de email (n8n, SendGrid, etc.)
-      // Por ahora, simulamos el envío
-      console.log('Enviando email a:', ENV.CONTACT_EMAIL);
-      console.log('HTML generado:', emailHTML);
-      
-      // Simulación de envío (reemplazar con API real)
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      const response = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8'
+        },
+        body: JSON.stringify(webhookPayload)
+      });
+
+      if (!response.ok) {
+        throw new Error(`Webhook error: ${response.status}`);
+      }
+
+      console.log('✅ Lead enviado a n8n webhook:', webhookPayload);
       
       setSubmitStatus('success');
       
@@ -342,11 +220,25 @@ export const Contact: React.FC = () => {
           message: ''
         });
         setSelectedService('Selecciona una opción');
+        setTouched({
+          name: false,
+          company: false,
+          email: false,
+          service: false,
+          message: false
+        });
+        setValidationErrors({
+          name: '',
+          company: '',
+          email: '',
+          service: '',
+          message: ''
+        });
         setSubmitStatus('idle');
       }, 3000);
       
     } catch (error) {
-      console.error('Error al enviar:', error);
+      console.error('❌ Error al enviar lead:', error);
       setSubmitStatus('error');
       setTimeout(() => setSubmitStatus('idle'), 3000);
     } finally {
