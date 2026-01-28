@@ -43,7 +43,7 @@ Deno.serve(async (req) => {
     }
 
     const response = await fetch(
-      'https://generativelanguage.googleapis.com/v1/models/text-embedding-004:embedContent',
+      'https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:embedContent',
       {
         method: 'POST',
         headers: { 
@@ -51,8 +51,9 @@ Deno.serve(async (req) => {
           'x-goog-api-key': GEMINI_API_KEY
         },
         body: JSON.stringify({
-          model: 'models/text-embedding-004',
-          content: { parts: [{ text }] }
+          model: 'gemini-embedding-001',
+          content: { parts: [{ text }] },
+          outputDimensionality: 768
         })
       }
     );

@@ -13,7 +13,9 @@
 - [x] Documentación completa (`docs/EDGE_FUNCTIONS_DEPLOYMENT.md`)
 - [x] Tests de validación creados (`test_edge_functions.js`)
 - [x] `GEMINI_API_KEY` en `.env.local` (SIN prefijo `VITE_`)
-- [ ] **Supabase CLI instalado** → `npm install -g supabase`
+- [x] **Supabase CLI instalado** → `supabase --version` (2.72.7)
+- [x] **Modelo actualizado** → gemini-embedding-001 (768 dim) - 28/01/2026
+- [x] **Base de datos entrenada** → 10 documentos insertados exitosamente
 
 ---
 
@@ -34,14 +36,14 @@
 7. ✨ Muestra URLs de las funciones
 
 ### Checklist durante ejecución:
-- ✅ Script inicia sin errores
-- ✅ Navegador abre para login de Supabase
-- ✅ Login exitoso (✅ en la terminal)
-- ✅ Proyecto conectado (✅ en la terminal)
-- ✅ `GEMINI_API_KEY` configurado (✅ en la terminal)
-- ✅ `gemini-embedding` desplegado (✅ en la terminal)
-- ✅ `gemini-generate` desplegado (✅ en la terminal)
-- ✅ URLs mostradas al final
+- [x] Script inicia sin errores
+- [x] Navegador abre para login de Supabase
+- [x] Login exitoso (✅ en la terminal)
+- [x] Proyecto conectado (✅ en la terminal)
+- [x] `GEMINI_API_KEY` configurado (✅ en la terminal)
+- [x] `gemini-embedding` desplegado (✅ en la terminal) - **v1beta**
+- [x] `gemini-generate` desplegado (✅ en la terminal) - **v1beta**
+- [x] URLs mostradas al final
 
 ---
 
@@ -53,9 +55,9 @@ node test_edge_functions.js
 ```
 
 ### Checklist de validación:
-- ✅ Test 1 (gemini-embedding) muestra: `✅ Success: Embedding generado (768 dimensiones)`
-- ✅ Test 2 (gemini-generate) muestra: `✅ Success: Respuesta generada`
-- ✅ **NO** aparecen errores `❌ Error:`
+- [x] Test 1 (gemini-embedding) muestra: `✅ Success: Embedding generado (768 dimensiones)`
+- [x] Test 2 (gemini-generate) muestra: `✅ Success: Respuesta generada` - **gemini-2.5-flash**
+- [x] **NO** aparecen errores `❌ Error:`
 
 ### Si hay errores:
 1. Verifica que las funciones estén activas en [Supabase Dashboard](https://supabase.com/dashboard/project/tysjedvujvsmrzzrmesr)
@@ -72,13 +74,13 @@ npm run dev
 ```
 
 ### Checklist de prueba:
-- ✅ Aplicación abre en http://localhost:5173
-- ✅ Botón del chatbot visible (esquina inferior derecha)
-- ✅ Clic en el chatbot abre el panel
-- ✅ Escribir: **"¿Cuánto cuesta QRIBAR?"**
-- ✅ Chatbot responde con información de pricing
-- ✅ Respuesta menciona "$200 USD" o similar (del knowledge base)
-- ✅ **NO** aparece "Lo siento, tuve un problema..."
+- [x] Aplicación abre en http://localhost:5173
+- [x] Botón del chatbot visible (esquina inferior derecha)
+- [x] Clic en el chatbot abre el panel
+- [x] Escribir: **"¿Cuánto cuesta QRIBAR?"**
+- [x] Chatbot responde con información de pricing
+- [x] Respuesta menciona precios correctos (del knowledge base)
+- [x] **NO** aparece "Lo siento, tuve un problema..."
 
 ---
 
@@ -91,10 +93,10 @@ npm run dev
 4. Observa las peticiones HTTP
 
 ### Checklist de seguridad:
-- [ ] Aparecen peticiones a: `https://tysjedvujvsmrzzrmesr.supabase.co/functions/v1/gemini-embedding`
-- [ ] Aparecen peticiones a: `https://tysjedvujvsmrzzrmesr.supabase.co/functions/v1/gemini-generate`
-- [ ] **NO** aparecen peticiones a: `https://generativelanguage.googleapis.com/...?key=AIza...`
-- [ ] En la pestaña **Payload**, **NO** aparece `GEMINI_API_KEY`
+- [x] Aparecen peticiones a: `https://tysjedvujvsmrzzrmesr.supabase.co/functions/v1/gemini-embedding`
+- [x] Aparecen peticiones a: `https://tysjedvujvsmrzzrmesr.supabase.co/functions/v1/gemini-generate`
+- [x] **NO** aparecen peticiones a: `https://generativelanguage.googleapis.com/...?key=AIza...`
+- [x] En la pestaña **Payload**, **NO** aparece `GEMINI_API_KEY`
 
 ### ✅ CONFIRMACIÓN VISUAL:
 
@@ -108,6 +110,7 @@ Network Tab:
 **DESPUÉS (Seguro):**
 ```
 Network Tab:
+  tysjedvujvsmrzzrmesr.supabase.co/functions/v1/gemini-embedding
   tysjedvujvsmrzzrmesr.supabase.co/functions/v1/gemini-generate
   👆 ✅ API KEY OCULTA (server-side)
 ```
@@ -116,11 +119,35 @@ Network Tab:
 
 ## 📊 RESUMEN FINAL
 
-### Si TODOS los checkboxes están marcados:
+### Estado Actual (28/01/2026 - 21:15h):
+- [x] Edge Functions desplegadas correctamente
+- [x] **Modelo embedding:** gemini-embedding-001 (v1beta + 768 dim)
+- [x] **Modelo chat:** gemini-2.5-flash (v1beta)
+- [x] **Base de datos entrenada:** 10 documentos con embeddings de 768 dimensiones
+- [x] **Tests de búsqueda:** 70-83% similarity (✅ validado)
+- [x] **Tests Edge Functions:** ✅ Todos pasados
+- [x] **Chatbot funcionando:** ✅ Respuestas correctas con RAG
+- [x] Seguridad validada (API key oculta)
+
+### Detalles técnicos del RAG:
+```
+✅ Documentos insertados: 10
+❌ Errores: 0
+
+📊 Resultados de búsqueda:
+1. "cuánto cuesta un menú digital?" → 70.1% match (QRIBAR)
+2. "cómo funciona la automatización n8n?" → 83.7% match (n8n)
+3. "quiero más reseñas en Google" → 72.0% match (Tap-to-Review)
+```
+
+### ✅ DESPLIEGUE COMPLETADO EXITOSAMENTE:
 ```
 ┌────────────────────────────────────────────┐
 │  ✨ DESPLIEGUE EXITOSO                     │
 │  🔒 API key segura (server-side)           │
+│  🤖 RAG con 10 documentos entrenados       │
+│  💬 gemini-2.5-flash funcionando           │
+│  🔍 gemini-embedding-001 (768 dim)         │
 │  ✅ Chatbot funcionando correctamente      │
 │  🎯 Listo para producción                  │
 └────────────────────────────────────────────┘

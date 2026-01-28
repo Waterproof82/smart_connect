@@ -27,7 +27,22 @@ Deno.serve(async (req) => {
       );
     }
 
-    const { contents, generationConfig } = await req.json();
+    const requestBody = await req.json();
+    console.log('Request body received:', JSON.stringify(requestBody, null, 2));
+    
+    const { contents, generationConfig } = requestBody;
+    
+    // Validar que contents existe
+    if (!contents || !Array.isArray(contents)) {
+      return new Response(
+        JSON.stringify({ 
+          error: 'Invalid request: contents must be an array',
+          received: typeof contents
+        }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+    
     const GEMINI_API_KEY = Deno.env.get('GEMINI_API_KEY');
 
     // Debug logging
@@ -43,7 +58,7 @@ Deno.serve(async (req) => {
     }
 
     const response = await fetch(
-      'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent',
+      'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent',
       {
         method: 'POST',
         headers: { 

@@ -447,13 +447,17 @@ Resultados (3 meses):
 async function generateEmbedding(text) {
   try {
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/text-embedding-004:embedContent?key=${GEMINI_API_KEY}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:embedContent`,
       {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'x-goog-api-key': GEMINI_API_KEY
+        },
         body: JSON.stringify({
-          model: 'models/text-embedding-004',
-          content: { parts: [{ text }] }
+          model: 'gemini-embedding-001',
+          content: { parts: [{ text }] },
+          outputDimensionality: 768
         })
       }
     );
@@ -461,6 +465,7 @@ async function generateEmbedding(text) {
     const data = await response.json();
     
     if (!data?.embedding?.values) {
+      console.error('Invalid response:', JSON.stringify(data, null, 2));
       throw new Error('Invalid embedding response from Gemini');
     }
     
