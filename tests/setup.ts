@@ -4,6 +4,15 @@
  */
 
 import '@testing-library/jest-dom';
+import { randomUUID } from 'node:crypto';
+
+// Polyfill for crypto.randomUUID() in Node.js < 19
+if (!globalThis.crypto) {
+  globalThis.crypto = {} as any;
+}
+if (!globalThis.crypto.randomUUID) {
+  globalThis.crypto.randomUUID = randomUUID;
+}
 
 // Mock environment variables
 process.env.VITE_GEMINI_API_KEY = 'test-api-key';
