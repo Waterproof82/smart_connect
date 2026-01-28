@@ -3,4 +3,4 @@
  * @module features/chatbot/presentation
  */
 
-export { ExpertAssistant } from './ExpertAssistant';
+export { ExpertAssistant } from './ExpertAssistantWithRAG';

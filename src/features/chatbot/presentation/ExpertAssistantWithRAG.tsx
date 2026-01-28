@@ -1,14 +1,148 @@
-
 import React, { useState, useRef, useEffect } from 'react';
-import { MessageCircle, X, Send, User, Bot, Sparkles, Loader2, MessageSquare } from 'lucide-react';
-import { GoogleGenAI } from "@google/genai";
+import { X, Send, User, Bot, Sparkles, Loader2, MessageSquare } from 'lucide-react';
+import { createClient } from '@supabase/supabase-js';
 
+// ====================================
+// CONFIGURACIÓN
+// ====================================
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || '';
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+
+if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+  console.error('❌ Error: Faltan variables de entorno. Verifica tu archivo .env.local');
+}
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// ====================================
+// SERVICIO DE RAG
+// ====================================
+class RAGService {
+  // Genera embeddings usando Supabase Edge Function (API key protegida)
+  async generateEmbedding(text: string): Promise<number[]> {
+    const { data, error } = await supabase.functions.invoke('gemini-embedding', {
+      body: { text }
+    });
+    
+    console.log('Edge Function Response:', { data, error });
+    
+    if (error) {
+      console.error('Error generating embedding:', error);
+      throw error;
+    }
+    
+    // Verificar si la respuesta contiene un error de Gemini API
+    if (data?.error) {
+      console.error('Gemini API Error:', JSON.stringify(data.error, null, 2));
+      throw new Error(`Gemini API Error: ${data.error.message || JSON.stringify(data.error)}`);
+    }
+    
+    if (!data?.embedding?.values) {
+      console.error('Invalid response format:', JSON.stringify(data, null, 2));
+      throw new Error('Invalid embedding response format');
+    }
+    
+    return data.embedding.values;
+  }
+
+  // Busca documentos similares en Supabase
+  async searchSimilarDocs(query: string, limit: number = 3): Promise<any[]> {
+    try {
+      // Generar embedding de la consulta
+      const queryEmbedding = await this.generateEmbedding(query);
+
+      // Buscar en Supabase usando vector similarity
+      // Reducir el threshold para obtener más resultados
+      const { data, error } = await supabase.rpc('match_documents', {
+        query_embedding: queryEmbedding,
+        match_threshold: 0.3, // Bajado de 0.5 a 0.3
+        match_count: limit
+      });
+
+      if (error) {
+        console.error('Supabase search error:', error);
+        return [];
+      }
+
+      return data || [];
+    } catch (error) {
+      console.error('RAG search error:', error);
+      return [];
+    }
+  }
+
+  // Genera respuesta con contexto RAG
+  async generateWithRAG(userQuery: string): Promise<string> {
+    try {
+      // 1. Buscar documentos relevantes
+      const relevantDocs = await this.searchSimilarDocs(userQuery);
+
+      // 2. Construir contexto
+      const context = relevantDocs.length > 0
+        ? relevantDocs.map(doc => doc.content).join('\n\n')
+        : '';
+
+      // 3. Construir prompt con contexto
+      const systemPrompt = `Eres el Asistente Experto de SmartConnect AI. 
+
+TUS SERVICIOS PRINCIPALES:
+1. QRIBAR: Menús digitales interactivos para restaurantes y bares
+2. Automatización n8n: Flujos de trabajo inteligentes para empresas
+3. Tarjetas Tap-to-Review NFC: Sistema para aumentar reseñas en Google Maps
+
+${context ? `INFORMACIÓN DE LA BASE DE CONOCIMIENTO:\n${context}\n\n` : ''}
+
+INSTRUCCIONES:
+- Responde SIEMPRE en español
+- Sé profesional, conciso y entusiasta
+- Si la información está en la base de conocimiento, úsala
+- Si no sabes algo, reconócelo y ofrece contactar al equipo
+- Mantén respuestas bajo 150 palabras`;
+
+      // 4. Llamar a Gemini a través de Supabase Edge Function
+      const { data, error } = await supabase.functions.invoke('gemini-generate', {
+        body: {
+          contents: [
+            { 
+              role: 'user',
+              parts: [{ text: `${systemPrompt}\n\nPregunta del usuario: ${userQuery}` }] 
+            }
+          ],
+          generationConfig: {
+            temperature: 0.7,
+            maxOutputTokens: 500
+          }
+        }
+      });
+      
+      console.log('Generate Response:', { data, error });
+      
+      if (error) {
+        console.error('Error generating response:', error);
+        throw error;
+      }
+      
+      // Si el data contiene un error de Gemini
+      if (data?.error) {
+        console.error('Gemini API Error in generate:', JSON.stringify(data, null, 2));
+        throw new Error(`Gemini API Error: ${data.error.message || JSON.stringify(data.error)}`);
+      }
+
+      return data.candidates?.[0]?.content?.parts?.[0]?.text || 
+             "Lo siento, tuve un problema al procesar tu solicitud.";
+    } catch (error) {
+      console.error('RAG generation error:', error);
+      return "Lo siento, tuve un problema al procesar tu solicitud.";
+    }
+  }
+}
 export const ExpertAssistant: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<{ role: 'user' | 'assistant'; content: string }[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const ragService = useRef(new RAGService());
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -25,24 +159,15 @@ export const ExpertAssistant: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-      const response = await ai.models.generateContent({
-        model: 'gemini-3-flash-preview',
-        contents: userMessage,
-        config: {
-          systemInstruction: `Eres el Asistente Experto de SmartConnect AI. Ayudas a dueños de negocios a entender cómo la IA, la automatización n8n y las tarjetas de reseña NFC pueden escalar su negocio. Sé profesional, conciso y entusiasta. Los servicios principales son: 
-          1. QRIBAR: Menús digitales para hostelería. 
-          2. Automatización n8n: Flujos de trabajo para empresas.
-          3. Tarjetas Tap-to-Review: Aumento de reseñas en Google Maps.
-          Responde siempre en español.`,
-        }
-      });
-
-      const assistantContent = response.text || "Lo siento, tuve un problema al procesar tu solicitud.";
+      // Usar RAG para generar respuesta
+      const assistantContent = await ragService.current.generateWithRAG(userMessage);
       setMessages(prev => [...prev, { role: 'assistant', content: assistantContent }]);
     } catch (error) {
       console.error("AI Error:", error);
-      setMessages(prev => [...prev, { role: 'assistant', content: "Hubo un error al conectar con el asistente." }]);
+      setMessages(prev => [...prev, { 
+        role: 'assistant', 
+        content: "Hubo un error al conectar con el asistente. Por favor, intenta de nuevo." 
+      }]);
     } finally {
       setIsLoading(false);
     }
@@ -60,7 +185,7 @@ export const ExpertAssistant: React.FC = () => {
               </div>
               <div>
                 <h4 className="font-bold text-sm leading-none">Asistente Experto</h4>
-                <p className="text-[10px] text-blue-100 opacity-70">En línea ahora</p>
+                <p className="text-[10px] text-blue-100 opacity-70">Entrenado con IA</p>
               </div>
             </div>
             <button onClick={() => setIsOpen(false)} className="text-white/70 hover:text-white">
@@ -81,8 +206,8 @@ export const ExpertAssistant: React.FC = () => {
               </div>
             )}
             
-            {messages.map((m, i) => (
-              <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+          {messages.map((m, i) => (
+            <div key={`${m.role}-${i}`} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 <div className={`max-w-[80%] flex gap-3 ${m.role === 'user' ? 'flex-row-reverse' : ''}`}>
                   <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${m.role === 'user' ? 'bg-blue-600' : 'bg-white/5 border border-white/10'}`}>
                     {m.role === 'user' ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4 text-blue-400" />}
@@ -129,7 +254,7 @@ export const ExpertAssistant: React.FC = () => {
       <div className="flex items-center gap-3">
         {/* WhatsApp Button */}
         <a 
-          href="https://wa.me/1234567890" // Reemplazar con el número real
+          href="https://wa.me/1234567890"
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-4 bg-[#25D366] hover:bg-[#1ebc57] text-white px-6 py-3 rounded-full shadow-2xl transition-all active:scale-95 border border-white/10 group overflow-hidden relative"
@@ -143,7 +268,6 @@ export const ExpertAssistant: React.FC = () => {
             <p className="text-[11px] font-bold leading-none mb-0.5">WhatsApp</p>
             <p className="text-[9px] text-white/80 font-medium">Habla con nosotros</p>
           </div>
-          {/* Shimmer Effect */}
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
         </a>
 
@@ -158,7 +282,7 @@ export const ExpertAssistant: React.FC = () => {
             <div className={`w-10 h-10 rounded-full flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform ${
               isOpen ? 'bg-white/20' : 'bg-blue-600'
             }`}>
-               <Bot className={`${isOpen ? 'text-white' : 'text-white'} w-5 h-5`} />
+               <Bot className="text-white w-5 h-5" />
             </div>
             <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
           </div>
