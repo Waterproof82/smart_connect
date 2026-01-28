@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed HTML structure corruption (duplicate body tags and malformed head section)
 - Eliminated circular import dependencies in landing page components
 - Cleared persistent Vite and browser caches preventing proper module loading
+- Changed Vite dev server port from 3000 to 5173 to avoid port conflicts
 
 ### Added
 - Tailwind CSS v3.4.17 with proper PostCSS configuration
@@ -26,9 +27,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated `src/main.tsx` to import index.css for Tailwind processing
 - Simplified `src/App.tsx` temporarily to isolate and fix module resolution issues
 - Switched from barrel exports to direct component imports to avoid circular dependencies
+- Updated Vite config to use port 5173 instead of 3000
 
 ### Known Issues
-- Contact component temporarily disabled due to missing LeadEntity.ts dependency (requires refactoring)
+- Contact component temporarily disabled due to circular dependency with SecurityLogger in LeadEntity
 
 ### Security
 - **OWASP Top 10:2021 Full Compliance (8/10 categories):**

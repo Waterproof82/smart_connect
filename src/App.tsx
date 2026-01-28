@@ -4,6 +4,7 @@ import { Navbar } from '@features/landing/presentation/components/Navbar';
 import { Hero } from '@features/landing/presentation/components/Hero';
 import { Features } from '@features/landing/presentation/components/Features';
 import { SuccessStats } from '@features/landing/presentation/components/SuccessStats';
+// import { Contact } from '@features/landing/presentation/components/Contact';
 
 const App: React.FC = () => {
   const [scrolled, setScrolled] = React.useState(false);
@@ -22,8 +23,6 @@ const App: React.FC = () => {
       <Hero />
       <Features />
       <SuccessStats />
-      
-      {/* TODO: Re-enable Contact component after fixing LeadEntity dependency */}
       {/* <Contact /> */}
       
       {/* Footer */}
