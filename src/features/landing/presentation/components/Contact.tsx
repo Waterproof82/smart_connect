@@ -2,6 +2,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Mail, MapPin, Send, MessageSquare, Sparkles, CheckCircle2 } from 'lucide-react';
 import { ENV } from '@shared/config/env.config';
+import { getLandingContainer } from '../LandingContainer';
+import { LeadEntity } from '../../domain/entities';
+
+// ====================================
+// DEPENDENCY INJECTION
+// ====================================
+const webhookUrl = ENV.N8N_WEBHOOK_URL || 'http://localhost:5678/webhook-test/hot-lead-intake';
+const container = getLandingContainer(webhookUrl);
 
 interface FormData {
   name: string;
@@ -48,53 +56,30 @@ export const Contact: React.FC = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const nameInputRef = useRef<HTMLInputElement>(null);
 
-  // Validaciones individuales por campo
-  const validateName = (value: string): string => {
-    if (!value.trim()) return 'El nombre es requerido';
-    if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]{2,50}$/.test(value)) {
-      return 'Solo letras y espacios (2-50 caracteres)';
-    }
-    return '';
+  // Use LeadEntity for validation
+  const createLeadEntity = (): LeadEntity => {
+    return new LeadEntity({
+      name: formData.name,
+      company: formData.company,
+      email: formData.email,
+      service: formData.service,
+      message: formData.message,
+    });
   };
 
-  const validateCompany = (value: string): string => {
-    if (!value.trim()) return 'La empresa es requerida';
-    if (!/^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ\s&'.,\u002D]{2,100}$/.test(value)) {
-      return 'Nombre de empresa válido (2-100 caracteres)';
-    }
-    return '';
-  };
-
-  const validateEmail = (value: string): string => {
-    if (!value.trim()) return 'El email es requerido';
-    if (!/^[a-zA-Z0-9._%+\u002D]+@[a-zA-Z0-9.\u002D]+\.[a-zA-Z]{2,}$/.test(value)) {
-      return 'Formato de email inválido (ejemplo@dominio.com)';
-    }
-    return '';
-  };
-
-  const validateService = (value: string): string => {
-    if (value === 'Selecciona una opción' || !value) {
-      return 'Debes seleccionar un servicio';
-    }
-    return '';
-  };
-
-  const validateMessage = (value: string): string => {
-    if (!value.trim()) return 'El mensaje es requerido';
-    if (value.length < 10) return 'Mínimo 10 caracteres';
-    if (value.length > 1000) return 'Máximo 1000 caracteres';
-    return '';
-  };
-
-  // Validaciones
+  // Validations using LeadEntity
   const validateField = (field: keyof FormData, value: string): string => {
+    const tempLead = new LeadEntity({
+      ...formData,
+      [field]: value,
+    });
+
     switch (field) {
-      case 'name': return validateName(value);
-      case 'company': return validateCompany(value);
-      case 'email': return validateEmail(value);
-      case 'service': return validateService(value);
-      case 'message': return validateMessage(value);
+      case 'name': return tempLead.validateName();
+      case 'company': return tempLead.validateCompany();
+      case 'email': return tempLead.validateEmail();
+      case 'service': return tempLead.validateService();
+      case 'message': return tempLead.validateMessage();
       default: return '';
     }
   };
@@ -158,21 +143,11 @@ export const Contact: React.FC = () => {
 
   // Validar que todos los campos estén completos y sin errores
   const isFormValid = () => {
-    return (
-      formData.name.trim() !== '' &&
-      formData.company.trim() !== '' &&
-      formData.email.trim() !== '' &&
-      formData.service !== 'Selecciona una opción' &&
-      formData.message.trim() !== '' &&
-      !validationErrors.name &&
-      !validationErrors.company &&
-      !validationErrors.email &&
-      !validationErrors.service &&
-      !validationErrors.message
-    );
+    const lead = createLeadEntity();
+    return lead.isValid();
   };
 
-  // Manejar envío del formulario
+  // Manejar envío del formulario usando Clean Architecture
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -182,60 +157,49 @@ export const Contact: React.FC = () => {
     setSubmitStatus('idle');
 
     try {
-      // Preparar payload para n8n webhook
-      const webhookPayload = {
-        nombre: formData.name,
-        empresa: formData.company,
-        email: formData.email,
-        servicio_interes: formData.service,
-        mensaje_cuerpo: formData.message
-      };
+      // Create lead entity
+      const lead = createLeadEntity();
 
-      // Llamada al webhook de n8n
-      const webhookUrl = ENV.N8N_WEBHOOK_URL || 'http://localhost:5678/webhook-test/hot-lead-intake';
-      
-      const response = await fetch(webhookUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json; charset=utf-8'
-        },
-        body: JSON.stringify(webhookPayload)
-      });
+      // Use SubmitLeadUseCase (Clean Architecture approach)
+      const result = await container.submitLeadUseCase.execute(lead);
 
-      if (!response.ok) {
-        throw new Error(`Webhook error: ${response.status}`);
+      if (result.success) {
+        setSubmitStatus('success');
+        
+        // Resetear formulario después de 3 segundos
+        setTimeout(() => {
+          setFormData({
+            name: '',
+            company: '',
+            email: '',
+            service: '',
+            message: ''
+          });
+          setSelectedService('Selecciona una opción');
+          setTouched({
+            name: false,
+            company: false,
+            email: false,
+            service: false,
+            message: false
+          });
+          setValidationErrors({
+            name: '',
+            company: '',
+            email: '',
+            service: '',
+            message: ''
+          });
+          setSubmitStatus('idle');
+        }, 3000);
+      } else {
+        // Handle validation errors from use case
+        if (result.errors) {
+          setValidationErrors(result.errors);
+        }
+        setSubmitStatus('error');
+        setTimeout(() => setSubmitStatus('idle'), 3000);
       }
-
-      console.log('✅ Lead enviado a n8n webhook:', webhookPayload);
-      
-      setSubmitStatus('success');
-      
-      // Resetear formulario después de 3 segundos
-      setTimeout(() => {
-        setFormData({
-          name: '',
-          company: '',
-          email: '',
-          service: '',
-          message: ''
-        });
-        setSelectedService('Selecciona una opción');
-        setTouched({
-          name: false,
-          company: false,
-          email: false,
-          service: false,
-          message: false
-        });
-        setValidationErrors({
-          name: '',
-          company: '',
-          email: '',
-          service: '',
-          message: ''
-        });
-        setSubmitStatus('idle');
-      }, 3000);
       
     } catch (error) {
       console.error('❌ Error al enviar lead:', error);

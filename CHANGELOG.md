@@ -9,6 +9,65 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.3.0] - 2026-01-28
 
+### Added
+- **Core Infrastructure:** Created shared business logic layer in `src/core/`
+  - Domain Entities: Custom error classes (`DomainError`, `ValidationError`, `ApiError`, `NetworkError`, etc.)
+  - Data Layer: `IHttpClient` interface + `FetchHttpClient` implementation with timeout & error handling
+  - Domain Layer: `ILogger` interface + `ConsoleLogger` for centralized logging
+  - Test Coverage: 28 unit tests for core infrastructure (all passing ✅)
+
+### Changed
+- **QRIBAR Feature:** Refactored with Clean Architecture + SOLID principles
+  - Domain Layer: `MenuItem` and `Restaurant` entities with business rules validation
+  - Data Layer: `MenuRepositoryImpl` with `IMenuDataSource` abstraction
+  - Presentation Layer: Separated `useQRIBAR` hook, `useIntersectionObserver` hook
+  - Components: Split into `MenuPhone` and `MenuInfo` (pure presentational)
+  - Dependency Injection: Manual DI setup in `QRIBARSection`
+  - Test Coverage: 30 unit tests (all passing ✅)
+- **All Features:** Migrated to use shared core infrastructure
+  - Chatbot: `GeminiDataSource` now uses `ApiError` from `@core/domain/entities`
+  - Chatbot: `SupabaseDataSource` uses `ApiError` and `NotFoundError` from core
+  - Landing: `N8NWebhookDataSource` uses `NetworkError` and `ConsoleLogger` from core
+  - Landing: `SubmitLeadUseCase` uses centralized logging
+  - QRIBAR: All use cases and repositories now use `ConsoleLogger` from core
+  - Benefits: Eliminated code duplication, consistent error handling, unified logging
+  - Test Coverage: 182 unit tests (all passing ✅)
+
+### Removed
+- **Lead Scoring Feature:** Removed unused `src/features/lead-scoring/` directory
+  - Feature was planned but not implemented (empty directories)
+  - Lead scoring logic remains in n8n automation backend
+  - Updated documentation to reflect current architecture
+
+### Added
+- **Integration Tests:** Created comprehensive integration test suites
+  - `chatbot-rag-flow.test.ts`: 9 test cases for complete RAG pipeline (query → embedding → search → response)
+  - `lead-submission-flow.test.ts`: 17 test cases for lead submission flow (entity → repository → webhook)
+  - Total: 26 integration tests (pending entity updates to run)
+- **Test Coverage:** Repository layer now fully tested
+  - `ChatRepositoryImpl.test.ts`: 6 test cases for chat response generation
+  - `EmbeddingRepositoryImpl.test.ts`: 7 test cases for embedding generation
+  - `DocumentRepositoryImpl.test.ts`: 8 test cases for similarity search
+  - `LeadRepositoryImpl.test.ts`: 8 test cases for lead submission
+  - Total: 29 repository tests (all passing ✅)
+
+### Fixed
+- **Repository Tests:** Fixed parameter transformation expectations in repository tests
+  - ChatRepositoryImpl: Corrected `userQuery` → `prompt` transformation validation
+  - DocumentRepositoryImpl: Fixed `limit` → `matchCount` and `threshold` → `matchThreshold` expectations
+  - All 26 repository unit tests now passing (100% pass rate)
+
+### Changed
+- **Landing Feature:** Refactored contact form with Clean Architecture
+  - Separated validation logic into `LeadEntity` domain entity
+  - Created `SubmitLeadUseCase` for business logic orchestration
+  - Implemented Repository Pattern with `ILeadRepository` interface
+  - Moved HTTP communication to `N8NWebhookDataSource` data source
+  - Applied SOLID principles (SRP, DIP, ISP)
+  - Improved testability with dependency injection via `LandingContainer`
+
+## [0.3.0] - 2026-01-28
+
 ### Changed
 - **MAJOR REFACTOR:** Complete Clean Architecture implementation for chatbot feature
   - Separated concerns into Domain, Data, and Presentation layers

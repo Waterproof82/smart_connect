@@ -515,11 +515,6 @@ smart-connect/
 │   │   │   ├── presentation/        # ExpertAssistant Component
 │   │   │   ├── domain/              # Conversation Logic, RAG
 │   │   │   └── data/                # Gemini API Integration (train_rag.js)
-│   │   │
-│   │   └── 📂 lead-scoring/         # 🌡️ Análisis de Temperatura del Lead
-│   │       ├── presentation/        # Lead Dashboard
-│   │       ├── domain/              # Scoring Algorithm
-│   │       └── data/                # n8n Integration, Google Sheets
 │   │
 │   ├── 📂 shared/                    # 🔄 SHARED SCOPE - Utilidades Comunes
 │   │   ├── components/              # DashboardPreview, etc.

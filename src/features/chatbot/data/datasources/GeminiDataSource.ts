@@ -6,6 +6,7 @@
  */
 
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { ApiError } from '@core/domain/entities';
 
 export interface GeminiEmbeddingResponse {
   embedding: {
@@ -42,15 +43,19 @@ export class GeminiDataSource {
     );
 
     if (error) {
-      throw new Error(`Embedding generation failed: ${error.message}`);
+      throw new ApiError(`Embedding generation failed: ${error.message}`, 500);
     }
 
     if (data?.error) {
-      throw new Error(`Gemini API error: ${data.error.message || JSON.stringify(data.error)}`);
+      throw new ApiError(
+        `Gemini API error: ${data.error.message || 'Unknown error'}`,
+        400,
+        data.error
+      );
     }
 
     if (!data?.embedding?.values) {
-      throw new Error('Invalid embedding response format');
+      throw new ApiError('Invalid embedding response format', 500);
     }
 
     return data.embedding.values;
@@ -83,17 +88,21 @@ export class GeminiDataSource {
     );
 
     if (error) {
-      throw new Error(`Response generation failed: ${error.message}`);
+      throw new ApiError(`Response generation failed: ${error.message}`, 500);
     }
 
     if (data?.error) {
-      throw new Error(`Gemini API error: ${data.error.message || JSON.stringify(data.error)}`);
+      throw new ApiError(
+        `Gemini API error: ${data.error.message || 'Unknown error'}`,
+        400,
+        data.error
+      );
     }
 
     const responseText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
 
     if (!responseText) {
-      throw new Error('Invalid response format from Gemini API');
+      throw new ApiError('Invalid response format from Gemini API', 500);
     }
 
     return responseText;

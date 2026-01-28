@@ -142,7 +142,6 @@ Presentation Layer (UI)
 
 ### Long Term (Low Priority)
 4. **Apply to Other Features:**
-   - Refactor `lead-scoring` feature with Clean Architecture
    - Refactor `qribar` feature with Clean Architecture
    - Create shared testing utilities
 

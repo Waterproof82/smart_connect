@@ -6,6 +6,7 @@
  */
 
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { ApiError, NotFoundError } from '@core/domain/entities';
 
 export interface SupabaseDocument {
   id: string;
@@ -37,7 +38,7 @@ export class SupabaseDataSource {
     });
 
     if (error) {
-      throw new Error(`Document search failed: ${error.message}`);
+      throw new ApiError(`Document search failed: ${error.message}`, 500);
     }
 
     return data || [];
@@ -60,7 +61,7 @@ export class SupabaseDataSource {
     });
 
     if (error) {
-      throw new Error(`Document storage failed: ${error.message}`);
+      throw new ApiError(`Document storage failed: ${error.message}`, 500);
     }
   }
 
