@@ -27,6 +27,12 @@ export default {
     '!src/main.tsx',
     '!src/**/*.stories.tsx',
   ],
+  // Ignorar tests de integración y E2E por defecto (requieren conexión y credenciales)
+  testPathIgnorePatterns: [
+    '/node_modules/',
+    '/tests/integration/',
+    '/tests/e2e/'
+  ],
   coverageThreshold: {
     global: {
       branches: 80,

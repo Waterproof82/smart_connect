@@ -1,48 +1,77 @@
-
 import React, { useState, useRef, useEffect } from 'react';
-import { MessageCircle, X, Send, User, Bot, Sparkles, Loader2, MessageSquare } from 'lucide-react';
-import { GoogleGenAI } from "@google/genai";
+import { X, Send, User, Bot, Sparkles, Loader2, MessageSquare } from 'lucide-react';
+import { getChatbotContainer } from './ChatbotContainer';
+import { MessageEntity, ChatSessionEntity } from '../domain/entities';
 
+// ====================================
+// DEPENDENCY INJECTION
+// ====================================
+const container = getChatbotContainer();
+
+// ====================================
+// COMPONENT
+// ====================================
 export const ExpertAssistant: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<{ role: 'user' | 'assistant'; content: string }[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  
+  // Use domain entities for chat session management
+  const chatSessionRef = useRef(new ChatSessionEntity());
 
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [messages, isLoading]);
+  }, [chatSessionRef.current.messages, isLoading]);
 
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
 
-    const userMessage = input;
+    const userMessage = input.trim();
     setInput('');
-    setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
+    
+    // Add user message to session
+    const userEntity = new MessageEntity({
+      role: 'user',
+      content: userMessage,
+    });
+    chatSessionRef.current = chatSessionRef.current.addMessage(userEntity);
+    
+    // Force re-render
     setIsLoading(true);
 
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-      const response = await ai.models.generateContent({
-        model: 'gemini-3-flash-preview',
-        contents: userMessage,
-        config: {
-          systemInstruction: `Eres el Asistente Experto de SmartConnect AI. Ayudas a dueños de negocios a entender cómo la IA, la automatización n8n y las tarjetas de reseña NFC pueden escalar su negocio. Sé profesional, conciso y entusiasta. Los servicios principales son: 
-          1. QRIBAR: Menús digitales para hostelería. 
-          2. Automatización n8n: Flujos de trabajo para empresas.
-          3. Tarjetas Tap-to-Review: Aumento de reseñas en Google Maps.
-          Responde siempre en español.`,
-        }
+      // Use GenerateResponseUseCase (Clean Architecture approach)
+      const result = await container.generateResponseUseCase.execute({
+        userQuery: userMessage,
+        conversationHistory: chatSessionRef.current.messages,
+        maxDocuments: 3,
+        similarityThreshold: 0.3,
       });
 
-      const assistantContent = response.text || "Lo siento, tuve un problema al procesar tu solicitud.";
-      setMessages(prev => [...prev, { role: 'assistant', content: assistantContent }]);
+      // Add assistant message to session
+      const assistantEntity = new MessageEntity({
+        role: 'assistant',
+        content: result.response,
+      });
+      chatSessionRef.current = chatSessionRef.current.addMessage(assistantEntity);
+
+      // Log RAG context for debugging
+      if (result.documentsFound > 0) {
+        console.log('✅ RAG Context Used:', {
+          documentsFound: result.documentsFound,
+          contextLength: result.contextUsed.length,
+        });
+      }
     } catch (error) {
-      console.error("AI Error:", error);
-      setMessages(prev => [...prev, { role: 'assistant', content: "Hubo un error al conectar con el asistente." }]);
+      console.error('❌ AI Error:', error);
+      const errorEntity = new MessageEntity({
+        role: 'assistant',
+        content: 'Hubo un error al conectar con el asistente. Por favor, intenta de nuevo.',
+      });
+      chatSessionRef.current = chatSessionRef.current.addMessage(errorEntity);
     } finally {
       setIsLoading(false);
     }
@@ -60,7 +89,7 @@ export const ExpertAssistant: React.FC = () => {
               </div>
               <div>
                 <h4 className="font-bold text-sm leading-none">Asistente Experto</h4>
-                <p className="text-[10px] text-blue-100 opacity-70">En línea ahora</p>
+                <p className="text-[10px] text-blue-100 opacity-70">Entrenado con IA</p>
               </div>
             </div>
             <button onClick={() => setIsOpen(false)} className="text-white/70 hover:text-white">
@@ -69,7 +98,7 @@ export const ExpertAssistant: React.FC = () => {
           </div>
 
           <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 space-y-6 bg-gradient-to-b from-transparent to-[#050505]/50">
-            {messages.length === 0 && (
+            {chatSessionRef.current.isEmpty() && (
               <div className="text-center py-10 px-6">
                 <div className="w-16 h-16 bg-blue-600/10 rounded-2xl flex items-center justify-center mx-auto mb-6 text-blue-500">
                   <Sparkles className="w-8 h-8" />
@@ -81,8 +110,8 @@ export const ExpertAssistant: React.FC = () => {
               </div>
             )}
             
-            {messages.map((m, i) => (
-              <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+            {chatSessionRef.current.messages.map((m, i) => (
+              <div key={m.id} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 <div className={`max-w-[80%] flex gap-3 ${m.role === 'user' ? 'flex-row-reverse' : ''}`}>
                   <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${m.role === 'user' ? 'bg-blue-600' : 'bg-white/5 border border-white/10'}`}>
                     {m.role === 'user' ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4 text-blue-400" />}
@@ -129,7 +158,7 @@ export const ExpertAssistant: React.FC = () => {
       <div className="flex items-center gap-3">
         {/* WhatsApp Button */}
         <a 
-          href="https://wa.me/1234567890" // Reemplazar con el número real
+          href="https://wa.me/1234567890"
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-4 bg-[#25D366] hover:bg-[#1ebc57] text-white px-6 py-3 rounded-full shadow-2xl transition-all active:scale-95 border border-white/10 group overflow-hidden relative"
@@ -143,7 +172,6 @@ export const ExpertAssistant: React.FC = () => {
             <p className="text-[11px] font-bold leading-none mb-0.5">WhatsApp</p>
             <p className="text-[9px] text-white/80 font-medium">Habla con nosotros</p>
           </div>
-          {/* Shimmer Effect */}
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
         </a>
 
@@ -158,7 +186,7 @@ export const ExpertAssistant: React.FC = () => {
             <div className={`w-10 h-10 rounded-full flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform ${
               isOpen ? 'bg-white/20' : 'bg-blue-600'
             }`}>
-               <Bot className={`${isOpen ? 'text-white' : 'text-white'} w-5 h-5`} />
+               <Bot className="text-white w-5 h-5" />
             </div>
             <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
           </div>

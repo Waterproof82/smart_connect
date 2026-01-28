@@ -4,6 +4,33 @@ Este documento establece el contexto, reglas y arquitectura para el desarrollo d
 
 ---
 
+## 🚀 INICIALIZACIÓN DEL AGENTE (LEER PRIMERO)
+
+Antes de cualquier tarea, el agente debe cargar contexto en este orden:
+
+### 1️⃣ **CONTEXTO OBLIGATORIO** (Siempre leer)
+- 📂 **`docs/context/`** → Guías de contexto específico:
+  - `adr.md` → Cómo crear Architecture Decision Records
+  - `readme_testing.md` → Estrategia de testing y TDD
+  - `security_agent.md` → Protocolos de seguridad OWASP
+  - `chatbot_ia/GUIA_IMPLEMENTACION_RAG.md` → RAG chatbot implementation
+
+### 2️⃣ **ARQUITECTURA GENERAL** (Si es necesario)
+- 📄 **`ARQUITECTURA.md`** → Visión completa del sistema (solo si necesitas entender el big picture)
+
+### 3️⃣ **DOCUMENTACIÓN TÉCNICA** (Según tarea)
+- 📂 **`docs/`** → Guías específicas:
+  - `CHATBOT_RAG_ARCHITECTURE.md` → RAG técnico completo
+  - `CONTACT_FORM_WEBHOOK.md` → Integración n8n webhook
+  - `EDGE_FUNCTIONS_DEPLOYMENT.md` → Supabase Edge Functions
+
+### 4️⃣ **HISTORIAL** (Para debugging)
+- 📂 **`docs/audit/`** → Logs de operaciones anteriores
+- 📂 **`docs/adr/`** → Decisiones arquitectónicas tomadas
+- 📄 **`CHANGELOG.md`** → Historial de versiones
+
+---
+
 ## 🎯 PROPÓSITO DE NEGOCIO (Agencia-Escuela)
 El objetivo es transformar negocios mediante soluciones técnicas que aporten valor inmediato. 
 - **Reputación:** Tarjetas NFC/QR para potenciar Google Reviews e Instagram (estilo Tapstar).
@@ -50,10 +77,22 @@ Se aplican los estándares de calidad del Máster de Desarrollo con IA:
 ---
 
 ## 📋 INSTRUCCIONES PARA LA IA (TU ROL)
-- **Precisión:** NO generes código no solicitado.
-- **TDD:** Si pido un TEST, genera SOLO el test. Si pido IMPLEMENTACIÓN, genera SOLO la implementación.
-- **Contexto:** Usa siempre el RAG de conocimiento sobre QRIBAR y servicios de software para las respuestas del bot.
-- **Negocio:** Cada línea de código debe estar orientada a facilitar la venta o la conversión del cliente final.
+
+### Flujo de trabajo obligatorio:
+1. **INICIALIZACIÓN:** Lee `docs/context/` relevante ANTES de empezar cualquier tarea
+2. **CONTEXTO:** Si necesitas entender el sistema completo → `ARQUITECTURA.md`
+3. **PRECISIÓN:** NO generes código no solicitado
+4. **TDD:** Si pido un TEST, genera SOLO el test. Si pido IMPLEMENTACIÓN, genera SOLO la implementación
+5. **RAG:** Usa siempre el conocimiento sobre QRIBAR y servicios de software para las respuestas del bot
+6. **NEGOCIO:** Cada línea de código debe estar orientada a facilitar la venta o la conversión del cliente final
+
+### Consulta documentación según el tipo de tarea:
+- **Testing/TDD** → `docs/context/readme_testing.md`
+- **Seguridad** → `docs/context/security_agent.md`
+- **ADR** → `docs/context/adr.md`
+- **Chatbot RAG** → `docs/context/chatbot_ia/GUIA_IMPLEMENTACION_RAG.md`
+- **Webhook/n8n** → `docs/CONTACT_FORM_WEBHOOK.md`
+- **Edge Functions** → `docs/EDGE_FUNCTIONS_DEPLOYMENT.md`
 
 ---
 
