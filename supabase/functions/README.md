@@ -69,7 +69,7 @@ See [EDGE_FUNCTIONS_DEPLOYMENT.md](../docs/EDGE_FUNCTIONS_DEPLOYMENT.md) for det
 
 **Quick Start:**
 ```powershell
-.\deploy-edge-functions.ps1
+.\scripts\deploy-edge-functions.ps1
 ```
 
 ## Security

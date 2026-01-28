@@ -5,7 +5,7 @@
 ### Archivos Creados
 - ✅ `supabase/functions/gemini-embedding/index.ts` - Function para generar embeddings
 - ✅ `supabase/functions/gemini-generate/index.ts` - Function para generar respuestas
-- ✅ `deploy-edge-functions.ps1` - Script de despliegue automatizado
+- ✅ `scripts/deploy-edge-functions.ps1` - Script de despliegue automatizado
 - ✅ `ExpertAssistantWithRAG.tsx` - Componente actualizado para usar Edge Functions
 
 ### ¿Qué son las Edge Functions?
@@ -39,7 +39,7 @@ supabase --version
 Ejecuta el script que automatiza todo el proceso:
 
 ```powershell
-.\deploy-edge-functions.ps1
+.\scripts\deploy-edge-functions.ps1
 ```
 
 El script:
@@ -190,7 +190,7 @@ const { data } = await supabase.functions.invoke('gemini-generate', {
 
 ## 🎯 Próximos Pasos
 
-1. ✅ Ejecuta `.\deploy-edge-functions.ps1`
+1. ✅ Ejecuta `.\scripts\deploy-edge-functions.ps1`
 2. ✅ Verifica despliegue en Supabase Dashboard
 3. ✅ Prueba el chatbot: `npm run dev`
 4. ✅ Pregunta: "¿Cuánto cuesta QRIBAR?"
