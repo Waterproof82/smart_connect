@@ -8,7 +8,6 @@
  */
 
 import DOMPurify from 'dompurify';
-import { SecurityLogger } from '../../../../core/domain/usecases';
 
 export interface Lead {
   readonly name: string;
@@ -19,8 +18,6 @@ export interface Lead {
 }
 
 export class LeadEntity implements Lead {
-  private static readonly securityLogger = new SecurityLogger('Lead');
-  
   readonly name: string;
   readonly company: string;
   readonly email: string;
@@ -108,12 +105,8 @@ export class LeadEntity implements Lead {
     
     for (const pattern of dangerousPatterns) {
       if (pattern.test(this.message)) {
-        // Log XSS attempt for security monitoring
-        LeadEntity.securityLogger.logXSSAttempt({
-          payload: this.message,
-          field: 'message',
-        });
-        
+        // XSS attempt detected - return validation error
+        // TODO: Add security logging when circular dependency is resolved
         return 'El mensaje contiene caracteres o código no permitido';
       }
     }

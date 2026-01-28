@@ -245,7 +245,7 @@ export class SecurityLogger extends ConsoleLogger {
    * 
    * Implementation:
    * ```typescript
-   * private async sendAlert(event: SecurityEvent): Promise<void> {
+   * private async sendAlert(event: SecurityEvent): Prmise<void> {
    *   // Email alert
    *   await sendEmail({
    *     to: 'security@smartconnect.ai',

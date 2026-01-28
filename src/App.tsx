@@ -4,7 +4,8 @@ import { Navbar } from '@features/landing/presentation/components/Navbar';
 import { Hero } from '@features/landing/presentation/components/Hero';
 import { Features } from '@features/landing/presentation/components/Features';
 import { SuccessStats } from '@features/landing/presentation/components/SuccessStats';
-// import { Contact } from '@features/landing/presentation/components/Contact';
+import { Contact } from '@features/landing/presentation/components/Contact';
+import { ExpertAssistant } from '@features/chatbot/presentation';
 
 const App: React.FC = () => {
   const [scrolled, setScrolled] = React.useState(false);
@@ -23,7 +24,10 @@ const App: React.FC = () => {
       <Hero />
       <Features />
       <SuccessStats />
-      {/* <Contact /> */}
+      <Contact />
+      
+      {/* AI Chatbot Assistant */}
+      <ExpertAssistant />
       
       {/* Footer */}
       <footer className="bg-black/50 py-8 text-center text-gray-400">

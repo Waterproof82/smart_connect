@@ -8,29 +8,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Fixed
-- Resolved module resolution errors (ILogger export issue) caused by HTML importmap conflicts
-- Fixed HTML structure corruption (duplicate body tags and malformed head section)
-- Eliminated circular import dependencies in landing page components
-- Cleared persistent Vite and browser caches preventing proper module loading
-- Changed Vite dev server port from 3000 to 5173 to avoid port conflicts
+- **CRITICAL:** Resolved circular dependency causing ILogger export error in production build
+  - Separated type exports from implementation exports in `src/core/domain/usecases/index.ts`
+  - Changed export order: Logger types/classes first → SecurityLogger second (which extends ConsoleLogger)
+  - Added explicit documentation about export order importance to prevent future issues
+- Fixed Vite environment variable usage in Logger.ts (`process.env.NODE_ENV` → `import.meta.env.MODE`)
+- Removed SecurityLogger import from LeadEntity to break circular dependency chain (Contact → Lead → SecurityLogger → Logger)
 
 ### Added
-- Tailwind CSS v3.4.17 with proper PostCSS configuration
-- `src/index.css` with Tailwind directives (@tailwind base/components/utilities)
-- `tailwind.config.js` with content paths for all src files
-- `postcss.config.js` with Tailwind and Autoprefixer plugins
-- Complete landing page (Navbar, Hero, Features, SuccessStats components)
-- Footer section with copyright notice
+- **Landing Page Complete:** Integrated all 5 sections (Navbar, Hero, Features, SuccessStats, Contact)
+- **AI Chatbot Integration:** Added ExpertAssistant component with RAG architecture
+  - Floating button with WhatsApp companion in bottom-right corner
+  - Full chat interface with message history and typing indicators
+  - Clean Architecture implementation (Domain → Data → Presentation layers)
+  - Integrates with Supabase Edge Functions (gemini-embedding, gemini-generate)
+  - Uses ChatSessionEntity for state management and MessageEntity for validation
 
 ### Changed
-- Simplified `index.html` to minimal 13-line structure (removed importmap and inline styles)
-- Updated `src/main.tsx` to import index.css for Tailwind processing
-- Simplified `src/App.tsx` temporarily to isolate and fix module resolution issues
-- Switched from barrel exports to direct component imports to avoid circular dependencies
-- Updated Vite config to use port 5173 instead of 3000
+- Updated `src/App.tsx` to include Contact component and ExpertAssistant chatbot
+- Refactored barrel export in `@core/domain/usecases` with explicit type/implementation separation
 
 ### Known Issues
-- Contact component temporarily disabled due to circular dependency with SecurityLogger in LeadEntity
+- XSS logging in LeadEntity.validateMessage() temporarily disabled (TODO added for future re-implementation)
+- Chatbot requires Edge Functions deployment and RAG database training to be fully functional
 
 ### Security
 - **OWASP Top 10:2021 Full Compliance (8/10 categories):**

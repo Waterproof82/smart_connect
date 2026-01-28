@@ -3,6 +3,7 @@
  * @module core/domain/usecases
  * 
  * Abstraction for logging across the application
+ * Updated: 2026-01-28
  */
 
 export enum LogLevel {
@@ -24,7 +25,7 @@ export class ConsoleLogger implements ILogger {
 
   debug(message: string, ...args: unknown[]): void {
     // Only log in development
-    if (process.env.NODE_ENV !== 'production') {
+    if (import.meta.env.MODE !== 'production') {
       console.debug(`${this.prefix} ${message}`, ...args);
     }
   }
@@ -41,7 +42,7 @@ export class ConsoleLogger implements ILogger {
     if (error instanceof Error) {
       console.error(`${this.prefix} ❌ ${message}`, error.message, ...args);
       // Only show stack in development
-      if (process.env.NODE_ENV !== 'production') {
+      if (import.meta.env.MODE !== 'production') {
         console.error('Stack:', error.stack);
       }
     } else {
