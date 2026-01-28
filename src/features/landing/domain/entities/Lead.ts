@@ -3,7 +3,12 @@
  * 
  * Represents a business lead from the contact form.
  * Pure domain entity with validation rules.
+ * 
+ * Security: Implements OWASP A03:2021 (Injection) mitigations
  */
+
+import DOMPurify from 'dompurify';
+import { SecurityLogger } from '../../../../core/domain/usecases';
 
 export interface Lead {
   readonly name: string;
@@ -14,6 +19,8 @@ export interface Lead {
 }
 
 export class LeadEntity implements Lead {
+  private static readonly securityLogger = new SecurityLogger('Lead');
+  
   readonly name: string;
   readonly company: string;
   readonly email: string;
@@ -79,11 +86,49 @@ export class LeadEntity implements Lead {
 
   /**
    * Validates the message field
+   * 
+   * Security: OWASP A03:2021 (Injection Prevention)
+   * - Sanitizes HTML/JavaScript injection attempts
+   * - Detects common XSS patterns
+   * - Uses DOMPurify for robust sanitization
    */
   validateMessage(): string {
     if (!this.message.trim()) return 'El mensaje es requerido';
-    if (this.message.length < 10) return 'Mínimo 10 caracteres';
-    if (this.message.length > 1000) return 'Máximo 1000 caracteres';
+    
+    // Check dangerous patterns BEFORE length validation
+    const dangerousPatterns = [
+      /<script[\s\S]*?>[\s\S]*?<\/script>/gi,
+      /<iframe[\s\S]*?>[\s\S]*?<\/iframe>/gi,
+      /javascript:/gi,
+      /on\w+\s*=\s*["'][^"']*["']/gi, // onclick, onerror, etc.
+      /<img[\s\S]*?onerror[\s\S]*?>/gi,
+      /<svg[\s\S]*?onload[\s\S]*?>/gi,
+      /data:text\/html/gi,
+    ];
+    
+    for (const pattern of dangerousPatterns) {
+      if (pattern.test(this.message)) {
+        // Log XSS attempt for security monitoring
+        LeadEntity.securityLogger.logXSSAttempt({
+          payload: this.message,
+          field: 'message',
+        });
+        
+        return 'El mensaje contiene caracteres o código no permitido';
+      }
+    }
+    
+    // Sanitize HTML (removes all tags and scripts)
+    const sanitized = DOMPurify.sanitize(this.message, { 
+      ALLOWED_TAGS: [], // No HTML tags allowed
+      ALLOWED_ATTR: [],
+      KEEP_CONTENT: true, // Keep text content
+    });
+    
+    // Validate length on sanitized content
+    if (sanitized.length < 10) return 'Mínimo 10 caracteres';
+    if (sanitized.length > 1000) return 'Máximo 1000 caracteres';
+    
     return '';
   }
 
@@ -110,14 +155,23 @@ export class LeadEntity implements Lead {
 
   /**
    * Converts to webhook payload format
+   * 
+   * Security: All fields are already validated and sanitized
    */
   toWebhookPayload(): Record<string, string> {
+    // Sanitize message one more time before sending
+    const sanitizedMessage = DOMPurify.sanitize(this.message, { 
+      ALLOWED_TAGS: [],
+      ALLOWED_ATTR: [],
+      KEEP_CONTENT: true,
+    });
+    
     return {
       nombre: this.name,
       empresa: this.company,
       email: this.email,
       servicio_interes: this.service,
-      mensaje_cuerpo: this.message,
+      mensaje_cuerpo: sanitizedMessage,
     };
   }
 }

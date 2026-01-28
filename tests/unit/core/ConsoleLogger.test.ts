@@ -7,14 +7,13 @@ import { ConsoleLogger } from '../../../src/core/domain/usecases/Logger';
 
 describe('ConsoleLogger', () => {
   let logger: ConsoleLogger;
-  let consoleDebugSpy: jest.SpyInstance;
   let consoleInfoSpy: jest.SpyInstance;
   let consoleWarnSpy: jest.SpyInstance;
   let consoleErrorSpy: jest.SpyInstance;
 
   beforeEach(() => {
     logger = new ConsoleLogger('[Test]');
-    consoleDebugSpy = jest.spyOn(console, 'debug').mockImplementation();
+    jest.spyOn(console, 'debug').mockImplementation();
     consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
     consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation();
     consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();

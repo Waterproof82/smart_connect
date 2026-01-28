@@ -4,3 +4,4 @@
  */
 
 export { ILogger, ConsoleLogger, LogLevel } from './Logger';
+export { SecurityLogger, SecurityEvent, SecurityEventType } from './SecurityLogger';

@@ -134,6 +134,83 @@ describe('LeadEntity', () => {
       const lead = new LeadEntity({ ...validLeadData, message: 'A'.repeat(1001) });
       expect(lead.validateMessage()).toBe('Máximo 1000 caracteres');
     });
+
+    // ===================================
+    // SECURITY TESTS: OWASP A03:2021 (Injection)
+    // ===================================
+
+    it('should reject script tag injection', () => {
+      const lead = new LeadEntity({ 
+        ...validLeadData, 
+        message: '<script>alert("XSS")</script>This is a malicious message' 
+      });
+      expect(lead.validateMessage()).toBe('El mensaje contiene caracteres o código no permitido');
+    });
+
+    it('should reject iframe injection', () => {
+      const lead = new LeadEntity({ 
+        ...validLeadData, 
+        message: '<iframe src="https://evil.com"></iframe>Legit message here' 
+      });
+      expect(lead.validateMessage()).toBe('El mensaje contiene caracteres o código no permitido');
+    });
+
+    it('should reject javascript: protocol', () => {
+      const lead = new LeadEntity({ 
+        ...validLeadData, 
+        message: 'Click here: javascript:alert("XSS") for more info' 
+      });
+      expect(lead.validateMessage()).toBe('El mensaje contiene caracteres o código no permitido');
+    });
+
+    it('should reject onclick event handler', () => {
+      const lead = new LeadEntity({ 
+        ...validLeadData, 
+        message: '<div onclick="alert(\'XSS\')">Click me</div>' 
+      });
+      expect(lead.validateMessage()).toBe('El mensaje contiene caracteres o código no permitido');
+    });
+
+    it('should reject img onerror injection', () => {
+      const lead = new LeadEntity({ 
+        ...validLeadData, 
+        message: '<img src=x onerror="alert(\'XSS\')">' 
+      });
+      expect(lead.validateMessage()).toBe('El mensaje contiene caracteres o código no permitido');
+    });
+
+    it('should reject svg onload injection', () => {
+      const lead = new LeadEntity({ 
+        ...validLeadData, 
+        message: '<svg onload="alert(\'XSS\')"></svg>' 
+      });
+      expect(lead.validateMessage()).toBe('El mensaje contiene caracteres o código no permitido');
+    });
+
+    it('should reject data:text/html injection', () => {
+      const lead = new LeadEntity({ 
+        ...validLeadData, 
+        message: 'Check this: data:text/html,<script>alert("XSS")</script>' 
+      });
+      expect(lead.validateMessage()).toBe('El mensaje contiene caracteres o código no permitido');
+    });
+
+    it('should accept message with safe HTML entities (sanitized)', () => {
+      const lead = new LeadEntity({ 
+        ...validLeadData, 
+        message: 'I love <3 your service! It\'s >100% awesome!' 
+      });
+      // DOMPurify will sanitize but keep text content
+      expect(lead.validateMessage()).toBe('');
+    });
+
+    it('should accept message with emojis and special characters', () => {
+      const lead = new LeadEntity({ 
+        ...validLeadData, 
+        message: '¡Hola! Me interesa QRIBAR para mi restaurante 🍔🍕 (contacto urgente)' 
+      });
+      expect(lead.validateMessage()).toBe('');
+    });
   });
 
   describe('validate', () => {
@@ -189,6 +266,21 @@ describe('LeadEntity', () => {
       expect(payload.email).toBe(validLeadData.email);
       expect(payload.servicio_interes).toBe(validLeadData.service);
       expect(payload.mensaje_cuerpo).toBe(validLeadData.message);
+    });
+
+    it('should sanitize message in webhook payload', () => {
+      const lead = new LeadEntity({
+        ...validLeadData,
+        message: 'Normal text <b>bold</b> and <script>alert("XSS")</script> more text',
+      });
+      
+      const payload = lead.toWebhookPayload();
+      
+      // DOMPurify should strip all HTML tags but keep text content
+      expect(payload.mensaje_cuerpo).not.toContain('<script>');
+      expect(payload.mensaje_cuerpo).not.toContain('<b>');
+      expect(payload.mensaje_cuerpo).toContain('Normal text');
+      expect(payload.mensaje_cuerpo).toContain('more text');
     });
   });
 });

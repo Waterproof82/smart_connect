@@ -105,7 +105,7 @@ describe('MenuItem Entity', () => {
       const menuItem = MenuItem.create({
         id: '1',
         name: 'Test',
-        price: 24.50
+        price: 24.5
       });
 
       expect(menuItem.formattedPrice).toBe('24.50€');

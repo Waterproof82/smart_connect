@@ -6,8 +6,8 @@
 import { FetchHttpClient } from '../../../src/core/data/datasources/FetchHttpClient';
 import { ApiError, NetworkError } from '../../../src/core/domain/entities/Errors';
 
-// Mock global fetch
-global.fetch = jest.fn();
+// Mock globalThis fetch
+globalThis.fetch = jest.fn();
 
 describe('FetchHttpClient', () => {
   let client: FetchHttpClient;
@@ -24,7 +24,7 @@ describe('FetchHttpClient', () => {
   describe('request()', () => {
     it('should make successful GET request', async () => {
       const mockData = { id: 1, name: 'Test' };
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
+      (globalThis.fetch as jest.Mock).mockResolvedValueOnce({
         ok: true,
         status: 200,
         statusText: 'OK',
@@ -36,7 +36,7 @@ describe('FetchHttpClient', () => {
 
       expect(response.data).toEqual(mockData);
       expect(response.status).toBe(200);
-      expect(global.fetch).toHaveBeenCalledWith(
+      expect(globalThis.fetch).toHaveBeenCalledWith(
         'https://api.example.com/users',
         expect.objectContaining({
           method: 'GET',
@@ -49,7 +49,7 @@ describe('FetchHttpClient', () => {
       const mockResponse = { success: true };
       const postData = { name: 'New User' };
 
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
+      (globalThis.fetch as jest.Mock).mockResolvedValueOnce({
         ok: true,
         status: 201,
         statusText: 'Created',
@@ -61,7 +61,7 @@ describe('FetchHttpClient', () => {
 
       expect(response.data).toEqual(mockResponse);
       expect(response.status).toBe(201);
-      expect(global.fetch).toHaveBeenCalledWith(
+      expect(globalThis.fetch).toHaveBeenCalledWith(
         'https://api.example.com/users',
         expect.objectContaining({
           method: 'POST',
@@ -71,7 +71,7 @@ describe('FetchHttpClient', () => {
     });
 
     it('should build URL with query parameters', async () => {
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
+      (globalThis.fetch as jest.Mock).mockResolvedValueOnce({
         ok: true,
         status: 200,
         headers: new Headers({ 'content-type': 'application/json' }),
@@ -80,7 +80,7 @@ describe('FetchHttpClient', () => {
 
       await client.get('/search', { params: { q: 'test', page: '1' } });
 
-      expect(global.fetch).toHaveBeenCalledWith(
+      expect(globalThis.fetch).toHaveBeenCalledWith(
         'https://api.example.com/search?q=test&page=1',
         expect.any(Object)
       );
@@ -88,7 +88,7 @@ describe('FetchHttpClient', () => {
 
     it('should throw ApiError on HTTP error', async () => {
       const errorData = { error: 'Not found' };
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
+      (globalThis.fetch as jest.Mock).mockResolvedValueOnce({
         ok: false,
         status: 404,
         statusText: 'Not Found',
@@ -103,13 +103,13 @@ describe('FetchHttpClient', () => {
     });
 
     it('should throw NetworkError on fetch failure', async () => {
-      (global.fetch as jest.Mock).mockRejectedValueOnce(new Error('Network failure'));
+      (globalThis.fetch as jest.Mock).mockRejectedValueOnce(new Error('Network failure'));
 
       await expect(client.get('/users')).rejects.toThrow(NetworkError);
     });
 
     it('should handle absolute URLs', async () => {
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
+      (globalThis.fetch as jest.Mock).mockResolvedValueOnce({
         ok: true,
         status: 200,
         headers: new Headers({ 'content-type': 'application/json' }),
@@ -118,7 +118,7 @@ describe('FetchHttpClient', () => {
 
       await client.get('https://other-api.com/data');
 
-      expect(global.fetch).toHaveBeenCalledWith(
+      expect(globalThis.fetch).toHaveBeenCalledWith(
         'https://other-api.com/data',
         expect.any(Object)
       );
@@ -126,7 +126,7 @@ describe('FetchHttpClient', () => {
 
     it('should handle non-JSON responses', async () => {
       const textData = 'Plain text response';
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
+      (globalThis.fetch as jest.Mock).mockResolvedValueOnce({
         ok: true,
         status: 200,
         headers: new Headers({ 'content-type': 'text/plain' }),

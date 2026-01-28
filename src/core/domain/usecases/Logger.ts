@@ -16,7 +16,7 @@ export interface ILogger {
   debug(message: string, ...args: unknown[]): void;
   info(message: string, ...args: unknown[]): void;
   warn(message: string, ...args: unknown[]): void;
-  error(message: string, error?: Error | unknown, ...args: unknown[]): void;
+  error(message: string, error?: unknown, ...args: unknown[]): void;
 }
 
 export class ConsoleLogger implements ILogger {
@@ -37,7 +37,7 @@ export class ConsoleLogger implements ILogger {
     console.warn(`${this.prefix} ⚠️ ${message}`, ...args);
   }
 
-  error(message: string, error?: Error | unknown, ...args: unknown[]): void {
+  error(message: string, error?: unknown, ...args: unknown[]): void {
     if (error instanceof Error) {
       console.error(`${this.prefix} ❌ ${message}`, error.message, ...args);
       // Only show stack in development
