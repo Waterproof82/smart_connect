@@ -222,7 +222,7 @@ export class SecurityLogger extends ConsoleLogger {
   }
 
   /**
-   * TODO: Send security event to Supabase database
+   * : Send security event to Supabase database
    * 
    * Implementation:
    * ```typescript
