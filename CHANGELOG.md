@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Resolved module resolution errors (ILogger export issue) caused by HTML importmap conflicts
+- Fixed HTML structure corruption (duplicate body tags and malformed head section)
+- Eliminated circular import dependencies in landing page components
+- Cleared persistent Vite and browser caches preventing proper module loading
+
+### Added
+- Tailwind CSS v3.4.17 with proper PostCSS configuration
+- `src/index.css` with Tailwind directives (@tailwind base/components/utilities)
+- `tailwind.config.js` with content paths for all src files
+- `postcss.config.js` with Tailwind and Autoprefixer plugins
+
+### Changed
+- Simplified `index.html` to minimal 13-line structure (removed importmap and inline styles)
+- Updated `src/main.tsx` to import index.css for Tailwind processing
+- Simplified `src/App.tsx` temporarily to isolate and fix module resolution issues
+
 ### Security
 - **OWASP Top 10:2021 Full Compliance (8/10 categories):**
   - **A01 (Broken Access Control):** Added tenant isolation in `SupabaseDataSource.searchSimilarDocuments()` with application-layer filtering
@@ -19,14 +36,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - **A09 (Security Logging):** Created `SecurityLogger` class with 8 event types, severity classification, and security_logs table schema
   - **Test Coverage:** 221 unit tests (+29 security tests) including 10 XSS, 22 SecurityLogger, 7 HoneypotField (all passing ✅)
   - **Documentation:** 2,800+ lines across 5 security documents (audit logs, policies, deployment guides)
-
-### Added
-- **Security Infrastructure:**
-  - `SecurityLogger` class with 8 event types (AUTH_FAILURE, XSS_ATTEMPT, RATE_LIMIT_EXCEEDED, etc.)
-  - `HoneypotField` React component for invisible bot detection in forms
-  - Security event logging integrated in Lead XSS validation
-  - Supabase security_logs table schema with 90-day retention policy
-  - Dependency update policy with quarterly review schedule
 
 ## [0.3.0] - 2026-01-28
 
