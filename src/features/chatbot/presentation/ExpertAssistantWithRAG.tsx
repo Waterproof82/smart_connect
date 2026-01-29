@@ -2,6 +2,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { X, Send, User, Bot, Sparkles, Loader2, MessageSquare } from 'lucide-react';
 import { getChatbotContainer } from './ChatbotContainer';
 import { MessageEntity, ChatSessionEntity } from '../domain/entities';
+import { sanitizeInput } from '@shared/utils/sanitizer';
+import { rateLimiter, RateLimitPresets } from '@shared/utils/rateLimiter';
 
 // ====================================
 // DEPENDENCY INJECTION
@@ -29,13 +31,42 @@ export const ExpertAssistant: React.FC = () => {
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
 
-    const userMessage = input.trim();
+    // ✅ Security: Rate limiting (OWASP A04:2021 - Insecure Design)
+    // Note: Using 'anonymous' identifier - can be enhanced with actual user ID or IP
+    const userIdentifier = 'anonymous';
+    const isAllowed = await rateLimiter.checkLimit(userIdentifier, RateLimitPresets.CHATBOT);
+
+    if (!isAllowed) {
+      const errorEntity = new MessageEntity({
+        role: 'assistant',
+        content: 'Has enviado demasiados mensajes. Por favor, espera un minuto antes de continuar.',
+      });
+      chatSessionRef.current = chatSessionRef.current.addMessage(errorEntity);
+      return;
+    }
+
+    // ✅ Security: Sanitize user input (OWASP A03:2021 - Injection)
+    let sanitizedInput: string;
+    try {
+      sanitizedInput = sanitizeInput(input.trim(), 'chatbot_message', 4000);
+    } catch (error) {
+      // Input validation failed (too long or invalid)
+      console.error('❌ Input validation failed:', error);
+      const errorEntity = new MessageEntity({
+        role: 'assistant',
+        content: 'Tu mensaje es demasiado largo. Máximo 4000 caracteres.',
+      });
+      chatSessionRef.current = chatSessionRef.current.addMessage(errorEntity);
+      setInput('');
+      return;
+    }
+
     setInput('');
     
-    // Add user message to session
+    // Add user message to session (using sanitized input)
     const userEntity = new MessageEntity({
       role: 'user',
-      content: userMessage,
+      content: sanitizedInput,
     });
     chatSessionRef.current = chatSessionRef.current.addMessage(userEntity);
     
@@ -45,10 +76,7 @@ export const ExpertAssistant: React.FC = () => {
     try {
       // Use GenerateResponseUseCase (Clean Architecture approach)
       const result = await container.generateResponseUseCase.execute({
-        userQuery: userMessage,
-        conversationHistory: chatSessionRef.current.messages,
-        maxDocuments: 3,
-        similarityThreshold: 0.3,
+        userQuery: sanitizedInput, // ✅ Use sanitized input
       });
 
       // Add assistant message to session

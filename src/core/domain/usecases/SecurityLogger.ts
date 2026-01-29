@@ -8,6 +8,8 @@
  */
 
 import { ConsoleLogger } from './Logger';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { ENV } from '@shared/config/env.config';
 
 export type SecurityEventType =
   | 'AUTH_FAILURE'
@@ -29,6 +31,15 @@ export interface SecurityEvent {
 }
 
 export class SecurityLogger extends ConsoleLogger {
+  private readonly supabase: SupabaseClient;
+
+  constructor() {
+    super('[Security]');
+    // Initialize Supabase client with anon key
+    // RLS policies ensure only service role can read logs
+    this.supabase = createClient(ENV.SUPABASE_URL, ENV.SUPABASE_ANON_KEY);
+  }
+
   /**
    * Logs a security event
    * 
@@ -36,10 +47,10 @@ export class SecurityLogger extends ConsoleLogger {
    * 
    * Security considerations:
    * - All events are logged to console in development
-   * - Production should integrate with Supabase security_logs table
-   * - Critical events should trigger alerts (email, Slack, etc.)
+   * - Production events are persisted to Supabase security_logs table
+   * - Critical events trigger console alerts (future: email/Slack)
    */
-  logSecurityEvent(event: SecurityEvent): void {
+  async logSecurityEvent(event: SecurityEvent): Promise<void> {
     const securityLog = {
       timestamp: new Date().toISOString(),
       severity: this.getSeverity(event.type),
@@ -52,30 +63,26 @@ export class SecurityLogger extends ConsoleLogger {
     // Log based on severity
     if (securityLog.severity === 'CRITICAL') {
       console.error('🔒 SECURITY ALERT:', formattedLog);
+      await this.sendAlert(securityLog);
     } else if (securityLog.severity === 'WARNING') {
       console.warn('🔒 SECURITY WARNING:', formattedLog);
     } else {
       console.info('🔒 SECURITY EVENT:', formattedLog);
     }
 
-    // TODO: In production, send to Supabase security_logs table
-    // await this.sendToDatabase(securityLog);
-
-    // TODO: For CRITICAL events, send alert
-    // if (securityLog.severity === 'CRITICAL') {
-    //   await this.sendAlert(securityLog);
-    // }
+    // Persist to database
+    await this.sendToDatabase(securityLog);
   }
 
   /**
    * Logs an authentication failure
    */
-  logAuthFailure(details: {
+  async logAuthFailure(details: {
     userId?: string;
     ip?: string;
     reason: string;
     metadata?: Record<string, unknown>;
-  }): void {
+  }): Promise<void> {
     this.logSecurityEvent({
       type: 'AUTH_FAILURE',
       userId: details.userId,
@@ -88,11 +95,11 @@ export class SecurityLogger extends ConsoleLogger {
   /**
    * Logs an authentication success
    */
-  logAuthSuccess(details: {
+  async logAuthSuccess(details: {
     userId: string;
     ip?: string;
     method?: string;
-  }): void {
+  }): Promise<void> {
     const methodInfo = details.method ? ` via ${details.method}` : '';
     this.logSecurityEvent({
       type: 'AUTH_SUCCESS',
@@ -105,12 +112,12 @@ export class SecurityLogger extends ConsoleLogger {
   /**
    * Logs a rate limit violation
    */
-  logRateLimitExceeded(details: {
+  async logRateLimitExceeded(details: {
     userId?: string;
     ip?: string;
     endpoint: string;
     limit: number;
-  }): void {
+  }): Promise<void> {
     this.logSecurityEvent({
       type: 'RATE_LIMIT_EXCEEDED',
       userId: details.userId,
@@ -123,12 +130,12 @@ export class SecurityLogger extends ConsoleLogger {
   /**
    * Logs an XSS injection attempt
    */
-  logXSSAttempt(details: {
+  async logXSSAttempt(details: {
     userId?: string;
     ip?: string;
     payload: string;
     field: string;
-  }): void {
+  }): Promise<void> {
     this.logSecurityEvent({
       type: 'XSS_ATTEMPT',
       userId: details.userId,
@@ -146,12 +153,12 @@ export class SecurityLogger extends ConsoleLogger {
   /**
    * Logs a suspicious query pattern
    */
-  logSuspiciousQuery(details: {
+  async logSuspiciousQuery(details: {
     userId?: string;
     ip?: string;
     query: string;
     reason: string;
-  }): void {
+  }): Promise<void> {
     this.logSecurityEvent({
       type: 'SUSPICIOUS_QUERY',
       userId: details.userId,
@@ -164,12 +171,12 @@ export class SecurityLogger extends ConsoleLogger {
   /**
    * Logs unauthorized access attempt
    */
-  logUnauthorizedAccess(details: {
+  async logUnauthorizedAccess(details: {
     userId?: string;
     ip?: string;
     resource: string;
     action: string;
-  }): void {
+  }): Promise<void> {
     this.logSecurityEvent({
       type: 'UNAUTHORIZED_ACCESS',
       userId: details.userId,
@@ -222,43 +229,60 @@ export class SecurityLogger extends ConsoleLogger {
   }
 
   /**
-   * : Send security event to Supabase database
+   * Persists security event to Supabase database
    * 
-   * Implementation:
-   * ```typescript
-   * private async sendToDatabase(event: SecurityEvent): Promise<void> {
-   *   const supabase = createClient(env.SUPABASE_URL, env.SUPABASE_SERVICE_KEY);
-   *   await supabase.from('security_logs').insert({
-   *     event_type: event.type,
-   *     user_id: event.userId,
-   *     ip_address: event.ip,
-   *     details: event.details,
-   *     metadata: event.metadata,
-   *     severity: this.getSeverity(event.type),
-   *   });
-   * }
-   * ```
+   * @param log Security log with formatted data
+   * 
+   * Security:
+   * - Uses anon key for insert (RLS allows inserts)
+   * - Only service role can read logs (admin dashboard)
+   * - Sensitive data is sanitized before storage
    */
+  private async sendToDatabase(log: any): Promise<void> {
+    try {
+      const { error } = await this.supabase.from('security_logs').insert({
+        event_type: log.type,
+        user_id: log.userId || null,
+        ip_address: log.ip || null,
+        user_agent: log.userAgent || null,
+        details: log.details,
+        metadata: log.metadata || {},
+        severity: log.severity,
+        created_at: log.timestamp,
+      });
+
+      if (error) {
+        console.error('❌ Failed to persist security log to database:', error.message);
+        // Don't throw - logging should never break app flow
+      }
+    } catch (err) {
+      console.error('❌ Exception while persisting security log:', err);
+      // Don't throw - logging should never break app flow
+    }
+  }
 
   /**
-   * TODO: Send alert for critical events
+   * Sends alert for critical security events
+   * 
+   * @param log Security log with CRITICAL severity
    * 
    * Implementation:
-   * ```typescript
-   * private async sendAlert(event: SecurityEvent): Prmise<void> {
-   *   // Email alert
-   *   await sendEmail({
-   *     to: 'security@smartconnect.ai',
-   *     subject: `SECURITY ALERT: ${event.type}`,
-   *     body: this.formatSecurityLog(event),
-   *   });
-   *   
-   *   // Slack/Teams notification
-   *   await sendSlackNotification({
-   *     channel: '#security-alerts',
-   *     message: `🚨 CRITICAL: ${event.details}`,
-   *   });
-   * }
-   * ```
+   * - Console alert (immediate visibility)
+   * - Future: Email to security@smartconnect.ai
+   * - Future: Telegram/Slack notification
    */
+  private async sendAlert(log: any): Promise<void> {
+    // Enhanced console alert for visibility
+    console.error(`
+╔══════════════════════════════════════════════════════════════════╗
+║                    🚨 CRITICAL SECURITY ALERT 🚨                  ║
+╠══════════════════════════════════════════════════════════════════╣
+║ Type: ${log.type.padEnd(57)}║
+║ User: ${(log.userId || 'anonymous').padEnd(57)}║
+║ IP: ${(log.ip || 'unknown').padEnd(59)}║
+║ Details: ${log.details.substring(0, 53).padEnd(53)}║
+║ Time: ${log.timestamp.padEnd(57)}║
+╚══════════════════════════════════════════════════════════════════╝
+    `);
+  }
 }

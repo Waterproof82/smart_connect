@@ -4,6 +4,8 @@ import { Mail, MapPin, Send, MessageSquare, Sparkles, CheckCircle2 } from 'lucid
 import { ENV } from '@shared/config/env.config';
 import { getLandingContainer } from '../LandingContainer';
 import { LeadEntity } from '../../domain/entities';
+import { sanitizeInput, isValidEmail } from '@shared/utils/sanitizer';
+import { rateLimiter, RateLimitPresets } from '@shared/utils/rateLimiter';
 
 // ====================================
 // DEPENDENCY INJECTION
@@ -153,12 +155,46 @@ export const Contact: React.FC = () => {
     
     if (!isFormValid()) return;
 
+    // ✅ Security: Rate limiting (OWASP A04:2021 - Insecure Design)
+    // Note: Using email as identifier - can be enhanced with IP detection
+    const userIdentifier = formData.email || 'anonymous';
+    const isAllowed = await rateLimiter.checkLimit(userIdentifier, RateLimitPresets.CONTACT_FORM);
+
+    if (!isAllowed) {
+      setValidationErrors({
+        ...validationErrors,
+        message: 'Has enviado demasiados formularios. Por favor, espera una hora.',
+      });
+      setSubmitStatus('error');
+      return;
+    }
+
     setIsSubmitting(true);
     setSubmitStatus('idle');
 
     try {
-      // Create lead entity
-      const lead = createLeadEntity();
+      // ✅ Security: Sanitize all inputs (OWASP A03:2021 - Injection)
+      const sanitizedData = {
+        name: sanitizeInput(formData.name, 'contact_name', 100),
+        company: sanitizeInput(formData.company, 'contact_company', 100),
+        email: sanitizeInput(formData.email, 'contact_email', 255),
+        service: sanitizeInput(formData.service, 'contact_service', 100),
+        message: sanitizeInput(formData.message, 'contact_message', 2000),
+      };
+
+      // Double-check email format after sanitization
+      if (!isValidEmail(sanitizedData.email)) {
+        setValidationErrors({
+          ...validationErrors,
+          email: 'Email inválido',
+        });
+        setSubmitStatus('error');
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Create lead entity with sanitized data
+      const lead = new LeadEntity(sanitizedData);
 
       // Use SubmitLeadUseCase (Clean Architecture approach)
       const result = await container.submitLeadUseCase.execute(lead);

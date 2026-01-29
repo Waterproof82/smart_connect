@@ -7,6 +7,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Security
+- **CRITICAL FIX:** Removed API key exposure from `vite.config.ts` browser bundle (OWASP A02:2021 - Cryptographic Failures)
+  - Eliminated `process.env.GEMINI_API_KEY` from Vite define config
+  - All API calls now properly routed through Supabase Edge Functions
+  - Closes CWE-798 (Use of Hard-coded Credentials) vulnerability
+- **SecurityLogger Persistence:** Implemented database persistence for security events
+  - Added Supabase integration for logging to `security_logs` table
+  - Created SQL migration: `20260129_create_security_logs.sql` with RLS policies
+  - All security events (XSS, rate limit, auth failures) now persisted
+  - Critical events trigger enhanced console alerts with formatted output
+- **Input Sanitization:** Comprehensive XSS prevention across all user inputs
+  - Created `sanitizer.ts` utility with DOMPurify integration
+  - Added `sanitizeInput()`, `sanitizeHTML()`, `sanitizeURL()` functions
+  - Integrated in chatbot (`ExpertAssistantWithRAG.tsx`) with 4000 char limit
+  - Integrated in contact form (`Contact.tsx`) with field-specific validation
+  - Email and phone validation with regex patterns
+- **Rate Limiting:** Implemented sliding window rate limiter
+  - Created `rateLimiter.ts` with in-memory request tracking
+  - Chatbot: 10 messages per minute per user
+  - Contact form: 3 submissions per hour per user
+  - Security events logged when limits exceeded
+  - Auto-cleanup of expired entries every 5 minutes
+
+### Added
+- **Test Suite:** Unit tests for security utilities
+  - `MessageEntity.test.ts`: 40+ tests for domain entity validation
+  - `sanitizer.test.ts`: 35+ tests for XSS prevention and input validation
+  - Tests cover edge cases, special characters, multiline content, URLs
+- **Security Infrastructure:**
+  - `src/shared/utils/sanitizer.ts`: Input sanitization utilities (200+ lines)
+  - `src/shared/utils/rateLimiter.ts`: Rate limiting middleware (180+ lines)
+  - `supabase/migrations/20260129_create_security_logs.sql`: Database schema with RLS
+
 ### Fixed
 - **CRITICAL:** Resolved circular dependency causing ILogger export error in production build
   - Separated type exports from implementation exports in `src/core/domain/usecases/index.ts`
