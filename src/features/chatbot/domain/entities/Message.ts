@@ -8,10 +8,10 @@
 export type MessageRole = 'user' | 'assistant';
 
 export interface Message {
-  readonly id: string;
-  readonly role: MessageRole;
-  readonly content: string;
-  readonly timestamp: Date;
+  public readonly id: string;
+  public readonly role: MessageRole;
+  public readonly content: string;
+  public readonly timestamp: Date;
 }
 
 export class MessageEntity implements Message {
@@ -22,17 +22,30 @@ export class MessageEntity implements Message {
 
   constructor(params: {
     id?: string;
-    role: MessageRole;
+    role: string;
     content: string;
     timestamp?: Date;
   }) {
+    // Validate and assign role
+    if (params.role !== 'user' && params.role !== 'assistant') {
+      throw new Error('Invalid role');
+    }
+    // Validate and trim content
+    const trimmedContent = params.content?.trim();
+    if (!trimmedContent || trimmedContent.length === 0) {
+      throw new Error('Message content cannot be empty');
+    }
+    if (trimmedContent.length > 4000) {
+      throw new Error('Message content exceeds maximum length (4000 characters)');
+    }
     // Generate ID first to ensure it exists before other operations
     const generatedId = params.id ?? MessageEntity.generateIdStatic();
-    
     this.id = generatedId;
     this.role = params.role;
-    this.content = params.content;
+    this.content = trimmedContent;
     this.timestamp = params.timestamp ?? new Date();
+    // Freeze to enforce immutability
+    Object.freeze(this);
   }
 
   /**
@@ -47,14 +60,13 @@ export class MessageEntity implements Message {
   }
 
   /**
-   * Validates message content
+   * Validates message content (legacy: returns false for empty or >4000 chars)
    */
   isValid(): boolean {
-    return (
-      this.content.trim().length > 0 &&
-      this.content.length <= 4000 && // Max length
-      ['user', 'assistant'].includes(this.role)
-    );
+    const trimmedContent = this.content?.trim();
+    if (!trimmedContent || trimmedContent.length === 0) return false;
+    if (trimmedContent.length > 4000) return false;
+    return true;
   }
 
   /**

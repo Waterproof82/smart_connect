@@ -49,26 +49,21 @@ describe('MessageEntity', () => {
         role: 'user',
         content: 'Valid message',
       });
-
       expect(message.isValid()).toBe(true);
     });
 
-    it('should return false for empty content', () => {
-      const message = new MessageEntity({
+    it('should throw for empty content', () => {
+      expect(() => new MessageEntity({
         role: 'user',
         content: '   ',
-      });
-
-      expect(message.isValid()).toBe(false);
+      })).toThrow('Message content cannot be empty');
     });
 
-    it('should return false for content exceeding 4000 characters', () => {
-      const message = new MessageEntity({
+    it('should throw for content exceeding 4000 characters', () => {
+      expect(() => new MessageEntity({
         role: 'user',
         content: 'a'.repeat(4001),
-      });
-
-      expect(message.isValid()).toBe(false);
+      })).toThrow('Message content exceeds maximum length (4000 characters)');
     });
 
     it('should return true for content at exactly 4000 characters', () => {
@@ -76,7 +71,6 @@ describe('MessageEntity', () => {
         role: 'user',
         content: 'a'.repeat(4000),
       });
-
       expect(message.isValid()).toBe(true);
     });
   });

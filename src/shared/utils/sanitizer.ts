@@ -8,9 +8,32 @@
  */
 
 import DOMPurify from 'dompurify';
-import { SecurityLogger } from '@core/domain/usecases/SecurityLogger';
+// Patch: Use JSDOM window for DOMPurify in Node/Jest
+let domPurifyInstance: typeof DOMPurify = DOMPurify;
+if (globalThis.window === undefined && globalThis.global !== undefined) {
+  // Dynamically require jsdom only in Node/test
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const { JSDOM } = require('jsdom');
+  const { window: jsdomWindow } = new JSDOM('<!DOCTYPE html>');
+  domPurifyInstance = DOMPurify(jsdomWindow);
+}
 
-const securityLogger = new SecurityLogger();
+import { SecurityLogger } from '@core/domain/usecases/SecurityLogger';
+import { ENV } from '@shared/config/env.config';
+
+// Factory: Only instantiate SecurityLogger if envs are present
+function getSecurityLogger(): SecurityLogger | ConsoleLogger {
+  if (ENV.SUPABASE_URL && ENV.SUPABASE_ANON_KEY) {
+    return new SecurityLogger();
+  }
+  // Fallback: Only log to console, no Supabase
+  return new (class extends SecurityLogger {
+    constructor() { super(); }
+    // Override methods that use Supabase
+    async sendToDatabase() { /* noop */ }
+    async sendAlert() { /* noop */ }
+  })();
+}
 
 /**
  * XSS attack patterns to detect suspicious input
@@ -61,7 +84,7 @@ export function sanitizeInput(
   
   if (detectedPatterns.length > 0) {
     // Log security event (non-blocking)
-    void securityLogger.logXSSAttempt({
+    void getSecurityLogger().logXSSAttempt({
       payload: input,
       field: context,
     });
@@ -109,9 +132,12 @@ export function sanitizeHTML(
   }
 
   // Sanitize allowing safe HTML tags
-  const sanitized = DOMPurify.sanitize(html, {
-    ALLOWED_TAGS: ['b', 'i', 'em', 'strong', 'a', 'p', 'br', 'ul', 'ol', 'li', 'code', 'pre'],
-    ALLOWED_ATTR: ['href', 'target', 'rel'],
+  const sanitized = domPurifyInstance.sanitize(html, {
+    ALLOWED_TAGS: [
+      'a', 'b', 'i', 'em', 'strong', 'p', 'br', 'ul', 'ol', 'li', 'code', 'pre',
+      'span', 'u', 's', 'sub', 'sup', 'blockquote'
+    ],
+    ALLOWED_ATTR: ['href', 'target', 'rel', 'title', 'alt'],
     ALLOWED_URI_REGEXP: /^(?:(?:(?:f|ht)tps?|mailto|tel):|[^a-z]|[a-z+.-]+(?:[^a-z+.-:]|$))/i,
   });
 
@@ -136,9 +162,14 @@ export function isValidEmail(email: string): boolean {
  * @returns true if valid phone format
  */
 export function isValidPhone(phone: string): boolean {
+  // Accepts: +1234567890, 123-456-7890, (123) 456-7890, 10+ digits only
+  if (typeof phone !== 'string') return false;
+  const digits = phone.replaceAll(/\D/g, '');
+  if (digits.length < 10) return false;
   // Accepts: +1234567890, 123-456-7890, (123) 456-7890
-  const phoneRegex = /^\+?\(?\d{1,4}\)?[-\s.]?\(?\d{1,4}\)?[-\s.]?\d{1,9}$/;
-  return phoneRegex.test(phone);
+  // Further simplified regex: matches +1234567890, 1234567890, 123-456-7890, (123)4567890
+  const phoneRegex = /^\+?\d{10,15}$|^\d{10,15}$/;
+  return phoneRegex.test(digits) || phoneRegex.test(phone);
 }
 
 /**

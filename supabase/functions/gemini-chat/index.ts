@@ -16,6 +16,7 @@ interface ChatRequest {
   conversationHistory?: Array<{ role: string; content: string }>;
   maxDocuments?: number;
   similarityThreshold?: number;
+  abTestGroup?: string; // 'A', 'B', 'C', etc.
 }
 
 interface GeminiResponse {
@@ -94,7 +95,7 @@ Deno.serve(async (req) => {
   const allowedOrigin = Deno.env.get('ALLOWED_ORIGIN') || '*';
   const corsHeaders = {
     'Access-Control-Allow-Origin': allowedOrigin,
-    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
   };
 
@@ -125,7 +126,8 @@ Deno.serve(async (req) => {
       userQuery, 
       conversationHistory = [], 
       maxDocuments = 3, 
-      similarityThreshold = 0.3 
+      similarityThreshold = 0.3,
+      abTestGroup = 'A' // Default to control group
     }: ChatRequest = await req.json();
 
     if (!userQuery || typeof userQuery !== 'string') {
@@ -230,9 +232,12 @@ Deno.serve(async (req) => {
       .join('\n');
 
     // ===================================
-    // GEMINI API CALL (Protected)
+    // A/B TESTING: PROMPT VARIANTS
     // ===================================
-    const systemPrompt = `You are an expert assistant for SmartConnect AI, a business accelerator agency specializing in:
+    const promptVariants = {
+      'A': {
+        name: 'Control - Standard Prompt',
+        prompt: `You are an expert assistant for SmartConnect AI, a business accelerator agency specializing in:
 
 **Core Products:**
 - 🍽️ QRiBar: Digital menu system for restaurants with QR-based ordering
@@ -255,7 +260,52 @@ Guidelines:
 - Reference the context when answering
 - If the answer isn't in the context, use general knowledge but acknowledge the limitation
 - For product inquiries, explain benefits and ROI
-- For technical questions, provide clear, actionable guidance`;
+- For technical questions, provide clear, actionable guidance`
+      },
+      'B': {
+        name: 'Concise - Direct & Actionable',
+        prompt: `You are SmartConnect AI's expert assistant. Products: QRiBar (digital menus), NFC Review Cards (reputation), n8n automation.
+
+Context: ${context}
+History: ${historyText}
+
+Rules:
+- Maximum 80 words per response
+- Start with direct answer
+- Include pricing when known
+- Use bullet points for options
+- End with clear next step if applicable
+
+User: ${userQuery}`
+      },
+      'C': {
+        name: 'Conversational - Friendly & Detailed',
+        prompt: `¡Hola! Soy tu asistente experto de SmartConnect AI. Somos una agencia-escuela que ayuda a negocios locales a crecer con tecnología.
+
+**Nuestros productos estrella:**
+🍽️ **QRiBar:** Cartas digitales con pedidos desde la mesa
+⭐ **Tarjetas NFC Reseñas:** Más reviews en Google e Instagram  
+🤖 **Automatización n8n:** Captación y nutrición de leads
+
+Contexto disponible: ${context}
+Conversación anterior: ${historyText}
+
+Mi estilo:
+- Tono cercano pero profesional
+- Explico beneficios y ROI claramente
+- Ofrezco ejemplos prácticos
+- Respondo preguntas follow-up sin problema
+
+Pregunta: ${userQuery}`
+      }
+    };
+
+    const selectedVariant = promptVariants[abTestGroup as keyof typeof promptVariants] || promptVariants['A'];
+    const systemPrompt = selectedVariant.prompt;
+
+    // ===================================
+    // GEMINI API CALL (Protected)
+    // ===================================
 
     const geminiResponse = await fetch(
       'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent',
@@ -311,6 +361,32 @@ Guidelines:
     const aiResponse = geminiData.candidates?.[0]?.content?.parts?.[0]?.text || 'No response generated';
 
     // ===================================
+    // A/B TESTING: METRICS TRACKING
+    // ===================================
+    const responseStartTime = Date.now();
+    const responseTime = Date.now() - responseStartTime;
+    
+    // Log A/B test metrics
+    await supabase.from('ab_test_metrics').insert({
+      test_name: 'prompt_variants',
+      variant_name: selectedVariant.name,
+      variant_id: abTestGroup,
+      user_query: userQuery,
+      ai_response: aiResponse,
+      response_time_ms: responseTime,
+      documents_used: documents?.length || 0,
+      context_length: context.length,
+      timestamp: new Date().toISOString(),
+      user_id: userId,
+      metadata: {
+        queryLength: userQuery.length,
+        responseLength: aiResponse.length,
+        hasContext: documents?.length > 0,
+        rateLimitRemaining: rateLimit.remaining
+      }
+    });
+
+    // ===================================
     // SECURITY LOGGING (OWASP A09:2021)
     // ===================================
     await supabase.from('security_logs').insert({
@@ -323,11 +399,13 @@ Guidelines:
         documentsRetrieved: documents?.length || 0,
         queryLength: userQuery.length,
         responseLength: aiResponse.length,
-        rateLimitRemaining: rateLimit.remaining
+        rateLimitRemaining: rateLimit.remaining,
+        abTestGroup,
+        promptVariant: selectedVariant.name
       }
     });
 
-    // ===================================
+// ===================================
     // RETURN RESPONSE
     // ===================================
     return new Response(
@@ -335,7 +413,10 @@ Guidelines:
         response: aiResponse,
         sources: documents?.map((doc: any) => doc.source).filter(Boolean) || [],
         documentsUsed: documents?.length || 0,
-        rateLimitRemaining: rateLimit.remaining
+        rateLimitRemaining: rateLimit.remaining,
+        abTestGroup,
+        promptVariant: selectedVariant.name,
+        responseTime
       }),
       { 
         status: 200, 

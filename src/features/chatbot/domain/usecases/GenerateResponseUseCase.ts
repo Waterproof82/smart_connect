@@ -11,10 +11,15 @@ import { IChatRepository } from '../repositories/IChatRepository';
 import { IEmbeddingRepository } from '../repositories/IEmbeddingRepository';
 import { IDocumentRepository } from '../repositories/IDocumentRepository';
 
+
 export interface GenerateResponseInput {
   userQuery: string;
   conversationHistory?: Array<{ role: string; content: string }>;
   temperature?: number;
+  abTestGroup?: string;
+  includeContext?: boolean;
+  maxContextDocuments?: number;
+  threshold?: number;
 }
 
 export interface GenerateResponseOutput {
@@ -35,25 +40,63 @@ export class GenerateResponseUseCase {
       userQuery,
       conversationHistory = [],
       temperature = 0.7,
+      abTestGroup,
+      includeContext = true,
+      maxContextDocuments = 3,
+      threshold = 0.3,
     } = input;
 
-    // Generate response via Edge Function (RAG handled server-side)
-    // gemini-chat Edge Function handles:
-    // 1. Embedding generation
-    // 2. Vector search
-    // 3. Context building
-    // 4. Response generation
+    let contextUsed: string[] = [];
+    let documentsFound = 0;
+    let context = '';
+
+    // Detect if embedding provider is GeminiDataSource (remote RAG)
+    const isGemini =
+      (this.embeddingRepository as any).geminiDataSource !== undefined;
+
+    if (isGemini) {
+      // Delegate all RAG to backend (Edge Function)
+      const response = await this.chatRepository.generateResponse({
+        userQuery,
+        conversationHistory,
+        temperature,
+        maxTokens: 1024,
+        abTestGroup,
+        // context is ignored, backend handles RAG
+      });
+      return {
+        response,
+        contextUsed: [],
+        documentsFound: 0,
+      };
+    }
+
+    // Local RAG (embedding + document search)
+    if (includeContext) {
+      const queryEmbedding = await this.embeddingRepository.generateEmbedding(userQuery);
+      const relevantDocs = await this.documentRepository.searchSimilarDocuments({
+        queryEmbedding,
+        limit: maxContextDocuments,
+        threshold,
+      });
+      contextUsed = relevantDocs.map(doc => doc.content);
+      documentsFound = relevantDocs.length;
+      context = contextUsed.join('\n\n');
+    }
+
     const response = await this.chatRepository.generateResponse({
       userQuery,
       conversationHistory,
       temperature,
       maxTokens: 1024,
+      abTestGroup,
+      context,
     });
 
     return {
       response,
-      contextUsed: [], // Not returned by Edge Function (could be added)
-      documentsFound: 0, // Not returned by Edge Function (could be added)
+      contextUsed,
+      documentsFound,
     };
   }
 }

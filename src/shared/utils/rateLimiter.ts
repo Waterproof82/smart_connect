@@ -7,9 +7,23 @@
  * Implementation: In-memory rate limiting with sliding window
  */
 
-import { SecurityLogger } from '@core/domain/usecases/SecurityLogger';
 
-const securityLogger = new SecurityLogger();
+import { SecurityLogger } from '@core/domain/usecases/SecurityLogger';
+import { ENV } from '@shared/config/env.config';
+
+// Factory: Only instantiate SecurityLogger if envs are present
+function getSecurityLogger(): SecurityLogger | ConsoleLogger {
+  if (ENV.SUPABASE_URL && ENV.SUPABASE_ANON_KEY) {
+    return new SecurityLogger();
+  }
+  // Fallback: Only log to console, no Supabase
+  return new (class extends SecurityLogger {
+    constructor() { super(); }
+    // Override methods that use Supabase
+    async sendToDatabase() { /* noop */ }
+    async sendAlert() { /* noop */ }
+  })();
+}
 
 /**
  * Rate limit configuration
@@ -91,7 +105,7 @@ export class RateLimiter {
     // Check if limit exceeded
     if (entry.timestamps.length >= finalConfig.maxRequests) {
       // Log security event
-      void securityLogger.logRateLimitExceeded({
+      void getSecurityLogger().logRateLimitExceeded({
         userId: identifier,
         endpoint: 'rate-limit',
         limit: finalConfig.maxRequests,

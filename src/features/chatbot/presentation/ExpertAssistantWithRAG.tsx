@@ -4,6 +4,7 @@ import { getChatbotContainer } from './ChatbotContainer';
 import { MessageEntity, ChatSessionEntity } from '../domain/entities';
 import { sanitizeInput } from '@shared/utils/sanitizer';
 import { rateLimiter, RateLimitPresets } from '@shared/utils/rateLimiter';
+import { getABTestGroup } from '@shared/utils/abTestUtils';
 
 // ====================================
 // DEPENDENCY INJECTION
@@ -18,6 +19,9 @@ export const ExpertAssistant: React.FC = () => {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  
+  // A/B Testing: Assign user to test group
+  const abTestGroup = getABTestGroup();
   
   // Use domain entities for chat session management
   const chatSessionRef = useRef(new ChatSessionEntity());
@@ -86,6 +90,7 @@ export const ExpertAssistant: React.FC = () => {
       const result = await container.generateResponseUseCase.execute({
         userQuery: sanitizedInput, // ✅ Use sanitized input
         conversationHistory, // ✅ Pass conversation context
+        abTestGroup, // ✅ Pass A/B test group
       });
 
       // Add assistant message to session
@@ -100,6 +105,7 @@ export const ExpertAssistant: React.FC = () => {
         console.log('✅ RAG Context Used:', {
           documentsFound: result.documentsFound,
           contextLength: result.contextUsed.length,
+          abTestGroup,
         });
       }
     } catch (error) {

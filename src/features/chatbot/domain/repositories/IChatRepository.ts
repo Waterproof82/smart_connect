@@ -14,6 +14,7 @@ export interface GenerateResponseParams {
   context?: string;
   temperature?: number;
   maxTokens?: number;
+  abTestGroup?: string;
 }
 
 export interface IChatRepository {
