@@ -15,11 +15,7 @@ smart-connect/
 │   │   │   ├── presentation/
 │   │   │   ├── domain/
 │   │   │   └── data/
-│   │   ├── chatbot/            # Asistente Experto RAG
-│   │   │   ├── presentation/
-│   │   │   ├── domain/
-│   │   │   └── data/
-│   │   └── lead-scoring/       # Análisis de Temperatura del Lead
+│   │   └── chatbot/            # Asistente Experto RAG
 │   │       ├── presentation/
 │   │       ├── domain/
 │   │       └── data/

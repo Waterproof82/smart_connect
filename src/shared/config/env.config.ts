@@ -17,6 +17,8 @@ export const ENV = {
   N8N_WEBHOOK_URL: getEnvVar('VITE_N8N_WEBHOOK_URL', ''),
   GOOGLE_SHEETS_ID: getEnvVar('VITE_GOOGLE_SHEETS_ID', ''),
   CONTACT_EMAIL: getEnvVar('VITE_CONTACT_EMAIL', ''),
+  SUPABASE_URL: getEnvVar('VITE_SUPABASE_URL', ''),
+  SUPABASE_ANON_KEY: getEnvVar('VITE_SUPABASE_ANON_KEY', ''),
   MODE: import.meta.env.MODE,
   DEV: import.meta.env.DEV,
   PROD: import.meta.env.PROD,

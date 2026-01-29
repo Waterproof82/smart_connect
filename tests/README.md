@@ -21,11 +21,11 @@ tests/
 Write the test FIRST. It should fail because the functionality doesn't exist yet.
 
 ```typescript
-// tests/unit/lead-scoring.test.ts
-describe('LeadScoring', () => {
-  it('should classify lead as HOT when score > 80', () => {
-    const score = calculateLeadScore({ engagement: 100 });
-    expect(score.temperature).toBe('HOT');
+// tests/unit/chatbot/GenerateResponseUseCase.test.ts
+describe('GenerateResponseUseCase', () => {
+  it('should generate a response using RAG context', async () => {
+    const response = await useCase.execute('What is QRIBAR?');
+    expect(response.content).toContain('digital menu');
   });
 });
 ```
@@ -78,7 +78,7 @@ npm test -- --watch
 npm test -- --coverage
 
 # Run specific test file
-npm test -- lead-scoring.test.ts
+npm test -- chatbot/GenerateResponseUseCase.test.ts
 ```
 
 ## 📋 Test Naming Convention

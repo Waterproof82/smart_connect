@@ -60,7 +60,7 @@ Se aplican los estándares de calidad del Máster de Desarrollo con IA:
 2. **Clean Architecture & Scope Rule:**
    - **Capas:** Data (Infra), Domain (Business Logic), Presentation (UI).
    - **Shared Scope:** Código global reutilizable.
-   - **Local Scope:** Lógica específica de la feature (ej: /qribar-menu, /lead-scoring).
+   - **Local Scope:** Lógica específica de la feature (ej: /qribar, /chatbot).
 3. **Seguridad (Security by Design):**
    - Implementación estricta de mitigaciones OWASP Top 10.
    - Validación de datos sensibles y variables de entorno.

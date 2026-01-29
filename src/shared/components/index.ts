@@ -4,3 +4,4 @@
  */
 
 export { DashboardPreview } from './DashboardPreview';
+export { HoneypotField } from './HoneypotField';

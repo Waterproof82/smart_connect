@@ -1,19 +1,16 @@
 
-import React, { useState, useEffect } from 'react';
-import { 
-  Navbar, 
-  Hero, 
-  Features, 
-  SuccessStats, 
-  Contact 
-} from '@features/landing/presentation/components';
-import { QRIBARSection } from '@features/qribar/presentation';
+import React from 'react';
+import { Navbar } from '@features/landing/presentation/components/Navbar';
+import { Hero } from '@features/landing/presentation/components/Hero';
+import { Features } from '@features/landing/presentation/components/Features';
+import { SuccessStats } from '@features/landing/presentation/components/SuccessStats';
+import { Contact } from '@features/landing/presentation/components/Contact';
 import { ExpertAssistant } from '@features/chatbot/presentation';
 
 const App: React.FC = () => {
-  const [scrolled, setScrolled] = useState(false);
+  const [scrolled, setScrolled] = React.useState(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
     };
@@ -22,38 +19,20 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#020408] selection:bg-blue-500 selection:text-white">
+    <div className="min-h-screen bg-[#020408] text-white">
       <Navbar scrolled={scrolled} />
+      <Hero />
+      <Features />
+      <SuccessStats />
+      <Contact />
       
-      <main>
-        <section id="inicio">
-          <Hero />
-        </section>
-
-        <section id="soluciones" className="py-24">
-          <Features />
-        </section>
-
-        <section id="exito" className="py-12 bg-[#050505]">
-          <SuccessStats />
-        </section>
-
-        <section id="qribar" className="py-24 bg-gradient-to-b from-[#020408] to-[#0a0a0a]">
-          <QRIBARSection />
-        </section>
-
-        <section id="contacto" className="bg-gradient-to-b from-[#050505] to-[#020408]">
-          <Contact />
-        </section>
-      </main>
-
-      <footer className="py-12 border-t border-white/5 text-center text-gray-500 text-sm">
-        <div className="container mx-auto px-4">
-          <p>© 2024 SmartConnect AI. Todos los derechos reservados.</p>
-        </div>
-      </footer>
-
+      {/* AI Chatbot Assistant */}
       <ExpertAssistant />
+      
+      {/* Footer */}
+      <footer className="bg-black/50 py-8 text-center text-gray-400">
+        <p>© 2026 SmartConnect AI. Todos los derechos reservados.</p>
+      </footer>
     </div>
   );
 };
