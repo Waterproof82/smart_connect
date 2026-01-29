@@ -74,9 +74,18 @@ export const ExpertAssistant: React.FC = () => {
     setIsLoading(true);
 
     try {
+      // Build conversation history from current session (last 5 messages for context)
+      const conversationHistory = chatSessionRef.current.messages
+        .slice(-5) // Last 5 messages
+        .map(msg => ({
+          role: msg.role,
+          content: msg.content,
+        }));
+
       // Use GenerateResponseUseCase (Clean Architecture approach)
       const result = await container.generateResponseUseCase.execute({
         userQuery: sanitizedInput, // ✅ Use sanitized input
+        conversationHistory, // ✅ Pass conversation context
       });
 
       // Add assistant message to session

@@ -2,7 +2,7 @@
  * GenerateResponseUseCase
  * 
  * Business logic for generating AI responses with RAG.
- * Orchestrates: Search documents → Build context → Generate response
+ * Now delegates RAG logic to gemini-chat Edge Function.
  * 
  * Follows Single Responsibility Principle (SOLID).
  */
@@ -13,8 +13,7 @@ import { IDocumentRepository } from '../repositories/IDocumentRepository';
 
 export interface GenerateResponseInput {
   userQuery: string;
-  includeContext?: boolean;
-  maxContextDocuments?: number;
+  conversationHistory?: Array<{ role: string; content: string }>;
   temperature?: number;
 }
 
@@ -34,67 +33,27 @@ export class GenerateResponseUseCase {
   async execute(input: GenerateResponseInput): Promise<GenerateResponseOutput> {
     const {
       userQuery,
-      includeContext = true,
-      maxContextDocuments = 3,
+      conversationHistory = [],
       temperature = 0.7,
     } = input;
 
-    // 1. Search for relevant documents (if RAG enabled)
-    let contextDocs: string[] = [];
-    let docsFound = 0;
-
-    if (includeContext) {
-      // Generate embedding for user query
-      const queryEmbedding = await this.embeddingRepository.generateEmbedding(
-        userQuery
-      );
-
-      // Search similar documents
-      const documents = await this.documentRepository.searchSimilarDocuments({
-        queryEmbedding,
-        limit: maxContextDocuments,
-        threshold: 0.3,
-      });
-
-      docsFound = documents.length;
-      contextDocs = documents.map((doc) => doc.content);
-    }
-
-    // 2. Build context from documents
-    const context = contextDocs.length > 0 ? contextDocs.join('\n\n') : '';
-
-    // 3. Build system prompt
-    const systemPrompt = this.buildSystemPrompt(context);
-
-    // 4. Generate response
+    // Generate response via Edge Function (RAG handled server-side)
+    // gemini-chat Edge Function handles:
+    // 1. Embedding generation
+    // 2. Vector search
+    // 3. Context building
+    // 4. Response generation
     const response = await this.chatRepository.generateResponse({
-      userQuery: `${systemPrompt}\n\nPregunta del usuario: ${userQuery}`,
+      userQuery,
+      conversationHistory,
       temperature,
-      maxTokens: 500,
+      maxTokens: 1024,
     });
 
     return {
       response,
-      contextUsed: contextDocs,
-      documentsFound: docsFound,
+      contextUsed: [], // Not returned by Edge Function (could be added)
+      documentsFound: 0, // Not returned by Edge Function (could be added)
     };
-  }
-
-  private buildSystemPrompt(context: string): string {
-    return `Eres el Asistente Experto de SmartConnect AI. 
-
-TUS SERVICIOS PRINCIPALES:
-1. QRIBAR: Menús digitales interactivos para restaurantes y bares
-2. Automatización n8n: Flujos de trabajo inteligentes para empresas
-3. Tarjetas Tap-to-Review NFC: Sistema para aumentar reseñas en Google Maps
-
-${context ? `INFORMACIÓN DE LA BASE DE CONOCIMIENTO:\n${context}\n\n` : ''}
-
-INSTRUCCIONES:
-- Responde SIEMPRE en español
-- Sé profesional, conciso y entusiasta
-- Si la información está en la base de conocimiento, úsala
-- Si no sabes algo, reconócelo y ofrece contactar al equipo
-- Mantén respuestas bajo 150 palabras`;
   }
 }

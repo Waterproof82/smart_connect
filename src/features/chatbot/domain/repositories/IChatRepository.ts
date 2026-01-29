@@ -10,6 +10,7 @@ import { Message } from '../entities/Message';
 
 export interface GenerateResponseParams {
   userQuery: string;
+  conversationHistory?: Array<{ role: string; content: string }>;
   context?: string;
   temperature?: number;
   maxTokens?: number;
