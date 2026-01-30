@@ -49,7 +49,7 @@ export class DocumentRepositoryImpl implements IDocumentRepository {
     });
   }
 
-  async getDocumentById(id: string): Promise<Document | null> {
+  async getDocumentById(id: number): Promise<Document | null> {
     const doc = await this.supabaseDataSource.getDocumentById(id);
 
     if (!doc) {

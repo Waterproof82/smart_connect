@@ -3,10 +3,9 @@
 // ========================================
 // @ts-nocheck - Deno runtime types
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.7';
 
-// Simple in-memory rate limiter (for development)
-// TODO: Use Upstash Redis for production
+// Simple in-memory rate limiter (Upstash Redis migration deferred by business decision)
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
 
 function checkRateLimit(userId: string): { allowed: boolean; remaining: number } {
@@ -29,7 +28,9 @@ function checkRateLimit(userId: string): { allowed: boolean; remaining: number }
   return { allowed: true, remaining: maxRequests - userLimit.count };
 }
 
+// Log for debugging function startup
 Deno.serve(async (req) => {
+  console.log('EDGE FUNCTION INICIADA');
   // CORS headers
   const allowedOrigin = Deno.env.get('ALLOWED_ORIGIN') || '*';
   const corsHeaders = {
@@ -42,6 +43,7 @@ Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
   }
+
 
   try {
     // ===================================
@@ -60,7 +62,11 @@ Deno.serve(async (req) => {
     const token = authHeader.replace('Bearer ', '');
     const supabaseUrl = Deno.env.get('SUPABASE_URL');
     const supabaseKey = Deno.env.get('SUPABASE_ANON_KEY');
-    
+
+    console.log('DEBUG: SUPABASE_URL', supabaseUrl);
+    console.log('DEBUG: SUPABASE_ANON_KEY', supabaseKey?.substring(0, 10) + '...' + supabaseKey?.slice(-5));
+    console.log('DEBUG: JWT token (first 30 chars):', token.substring(0, 30));
+
     if (!supabaseUrl || !supabaseKey) {
       console.error('SECURITY: Missing Supabase configuration');
       return new Response(
@@ -68,14 +74,23 @@ Deno.serve(async (req) => {
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
-    
+
     const supabase = createClient(supabaseUrl, supabaseKey);
-    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+    let user, authError;
+    try {
+      const result = await supabase.auth.getUser(token);
+      user = result.data.user;
+      authError = result.error;
+      console.log('DEBUG: getUser result', JSON.stringify(result));
+    } catch (e) {
+      console.error('DEBUG: Exception in getUser', e);
+      authError = e;
+    }
 
     if (authError || !user) {
-      console.warn('SECURITY: Invalid or expired token', authError?.message);
+      console.warn('SECURITY: Invalid or expired token', authError?.message || authError);
       return new Response(
-        JSON.stringify({ error: 'Invalid or expired token' }),
+        JSON.stringify({ error: 'Invalid or expired token', debug: authError }),
         { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }

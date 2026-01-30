@@ -1,3 +1,5 @@
+// Polyfill fetch for Node.js (required by supabase-js Edge Functions)
+import 'cross-fetch/polyfill';
 // ========================================
 // E2E TEST: Full RAG Chatbot Flow
 // ========================================
@@ -7,35 +9,54 @@ import * as dotenv from 'dotenv';
 
 dotenv.config({ path: '.env.local' });
 
-const SUPABASE_URL = process.env.VITE_SUPABASE_URL || '';
-const SUPABASE_ANON_KEY = process.env.VITE_SUPABASE_ANON_KEY || '';
+const SUPABASE_URL = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL || '';
+const SUPABASE_ANON_KEY = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY || '';
 
 describe('RAG Chatbot E2E Flow', () => {
   let supabase: any;
-
-  beforeAll(() => {
+  let jwt: string;
+  beforeAll(async () => {
     supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // Autenticación anónima para test
+    const { data: anonData, error: anonError } = await supabase.auth.signInAnonymously();
+    if (anonError) throw anonError;
+    if (!anonData?.session?.access_token) {
+      throw new Error('No JWT available from anonymous sign-in');
+    }
+    jwt = anonData.session.access_token;
   });
 
   it('should complete full RAG workflow: query -> embedding -> search -> generate', async () => {
     const userQuery = '¿Cuánto cuesta QRIBAR?';
 
     // Step 1: Generate embedding for query
-    const { data: embData, error: embError } = await supabase.functions.invoke('gemini-embedding', {
-      body: { text: userQuery }
+
+    const { data: embData, error: embError, status } = await supabase.functions.invoke('gemini-embedding', {
+      body: { text: userQuery },
+      headers: { Authorization: `Bearer ${jwt}` }
     });
 
-    expect(embError).toBeNull();
+    if (embError || !embData?.embedding?.values) {
+      let errorBody = '';
+      if (embError?.context?.text && typeof embError.context.text === 'function') {
+        errorBody = await embError.context.text();
+      }
+      console.error('❌ Edge Function embedding error:', { embError, embData, status, errorBody });
+      return expect(embError).toBeNull(); // Falla el test con mensaje claro
+    }
     expect(embData.embedding.values).toHaveLength(768);
 
     // Step 2: Search similar documents
+
     const { data: docs, error: searchError } = await supabase.rpc('match_documents', {
       query_embedding: embData.embedding.values,
       match_threshold: 0.3,
       match_count: 3
     });
-
-    expect(searchError).toBeNull();
+    if (searchError || !docs) {
+      console.error('❌ match_documents error:', { searchError, docs });
+      return expect(searchError).toBeNull();
+    }
     expect(Array.isArray(docs)).toBe(true);
 
     // Step 3: Build context
@@ -60,7 +81,8 @@ INSTRUCCIONES:
 - Si no sabes algo, reconócelo y ofrece contactar al equipo
 - Mantén respuestas bajo 150 palabras`;
 
-    const { data: genData, error: genError } = await supabase.functions.invoke('gemini-generate', {
+
+    const { data: genData, error: genError, status: genStatus } = await supabase.functions.invoke('gemini-generate', {
       body: {
         contents: [
           { 
@@ -72,10 +94,14 @@ INSTRUCCIONES:
           temperature: 0.7,
           maxOutputTokens: 500
         }
-      }
+      },
+      headers: { Authorization: `Bearer ${jwt}` }
     });
 
-    expect(genError).toBeNull();
+    if (genError || !genData?.candidates) {
+      console.error('❌ gemini-generate error:', { genError, genData, genStatus });
+      return expect(genError).toBeNull();
+    }
     expect(genData.candidates).toBeDefined();
     expect(genData.candidates[0].content.parts[0].text).toBeTruthy();
 
@@ -97,17 +123,26 @@ INSTRUCCIONES:
   it('should handle queries without matching documents', async () => {
     const userQuery = 'Random unrelated question about something not in KB';
 
-    const { data: embData } = await supabase.functions.invoke('gemini-embedding', {
-      body: { text: userQuery }
+    const { data: embData, error: embError, status } = await supabase.functions.invoke('gemini-embedding', {
+      body: { text: userQuery },
+      headers: { Authorization: `Bearer ${jwt}` }
     });
+    if (embError || !embData?.embedding?.values) {
+      console.error('❌ Edge Function embedding error:', { embError, embData, status });
+      return expect(embError).toBeNull();
+    }
 
-    await supabase.rpc('match_documents', {
+    const { data: docs, error: searchError } = await supabase.rpc('match_documents', {
       query_embedding: embData.embedding.values,
       match_threshold: 0.3,
       match_count: 3
     });
+    if (searchError || !docs) {
+      console.error('❌ match_documents error:', { searchError, docs });
+      return expect(searchError).toBeNull();
+    }
 
-    const { data: genData, error: genError } = await supabase.functions.invoke('gemini-generate', {
+    const { data: genData, error: genError, status: genStatus } = await supabase.functions.invoke('gemini-generate', {
       body: {
         contents: [
           { 
@@ -119,10 +154,13 @@ INSTRUCCIONES:
           temperature: 0.7,
           maxOutputTokens: 200
         }
-      }
+      },
+      headers: { Authorization: `Bearer ${jwt}` }
     });
-
-    expect(genError).toBeNull();
+    if (genError || !genData?.candidates) {
+      console.error('❌ gemini-generate error:', { genError, genData, genStatus });
+      return expect(genError).toBeNull();
+    }
     expect(genData.candidates[0].content.parts[0].text).toBeTruthy();
   }, 30000);
 });

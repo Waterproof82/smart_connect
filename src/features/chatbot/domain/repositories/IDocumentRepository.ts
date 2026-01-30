@@ -28,5 +28,5 @@ export interface IDocumentRepository {
   /**
    * Retrieves a document by ID
    */
-  getDocumentById?(id: string): Promise<Document | null>;
+  getDocumentById?(id: number): Promise<Document | null>;
 }

@@ -17,6 +17,7 @@ export class ChatRepositoryImpl implements IChatRepository {
   async generateResponse(params: GenerateResponseParams): Promise<string> {
     return this.geminiDataSource.generateResponse({
       prompt: params.userQuery,
+      conversationHistory: params.conversationHistory,
       temperature: params.temperature,
       maxTokens: params.maxTokens,
     });

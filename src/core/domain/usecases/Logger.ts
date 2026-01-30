@@ -1,3 +1,4 @@
+import { getEnvMode } from '@shared/utils/envMode';
 /**
  * Logger Interface
  * @module core/domain/usecases
@@ -20,12 +21,14 @@ export interface ILogger {
   error(message: string, error?: unknown, ...args: unknown[]): void;
 }
 
+
+
 export class ConsoleLogger implements ILogger {
   constructor(private readonly prefix: string = '[App]') {}
 
   debug(message: string, ...args: unknown[]): void {
-    // Only log in development
-    if (import.meta.env.MODE !== 'production') {
+    // Only log in development or test
+    if (getEnvMode() !== 'production') {
       console.debug(`${this.prefix} ${message}`, ...args);
     }
   }
@@ -41,8 +44,8 @@ export class ConsoleLogger implements ILogger {
   error(message: string, error?: unknown, ...args: unknown[]): void {
     if (error instanceof Error) {
       console.error(`${this.prefix} ❌ ${message}`, error.message, ...args);
-      // Only show stack in development
-      if (import.meta.env.MODE !== 'production') {
+      // Only show stack in development or test
+      if (getEnvMode() !== 'production') {
         console.error('Stack:', error.stack);
       }
     } else {

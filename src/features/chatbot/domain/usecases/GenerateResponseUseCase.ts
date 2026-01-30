@@ -2,7 +2,7 @@
  * GenerateResponseUseCase
  * 
  * Business logic for generating AI responses with RAG.
- * Orchestrates: Search documents → Build context → Generate response
+ * Now delegates RAG logic to gemini-chat Edge Function.
  * 
  * Follows Single Responsibility Principle (SOLID).
  */
@@ -11,11 +11,15 @@ import { IChatRepository } from '../repositories/IChatRepository';
 import { IEmbeddingRepository } from '../repositories/IEmbeddingRepository';
 import { IDocumentRepository } from '../repositories/IDocumentRepository';
 
+
 export interface GenerateResponseInput {
   userQuery: string;
+  conversationHistory?: Array<{ role: string; content: string }>;
+  temperature?: number;
+  abTestGroup?: string;
   includeContext?: boolean;
   maxContextDocuments?: number;
-  temperature?: number;
+  threshold?: number;
 }
 
 export interface GenerateResponseOutput {
@@ -34,67 +38,65 @@ export class GenerateResponseUseCase {
   async execute(input: GenerateResponseInput): Promise<GenerateResponseOutput> {
     const {
       userQuery,
+      conversationHistory = [],
+      temperature = 0.7,
+      abTestGroup,
       includeContext = true,
       maxContextDocuments = 3,
-      temperature = 0.7,
+      threshold = 0.3,
     } = input;
 
-    // 1. Search for relevant documents (if RAG enabled)
-    let contextDocs: string[] = [];
-    let docsFound = 0;
+    let contextUsed: string[] = [];
+    let documentsFound = 0;
+    let context = '';
 
-    if (includeContext) {
-      // Generate embedding for user query
-      const queryEmbedding = await this.embeddingRepository.generateEmbedding(
-        userQuery
-      );
+    // Detect if embedding provider is GeminiDataSource (remote RAG)
+    const isGemini =
+      (this.embeddingRepository as any).geminiDataSource !== undefined;
 
-      // Search similar documents
-      const documents = await this.documentRepository.searchSimilarDocuments({
-        queryEmbedding,
-        limit: maxContextDocuments,
-        threshold: 0.3,
+    if (isGemini) {
+      // Delegate all RAG to backend (Edge Function)
+      const response = await this.chatRepository.generateResponse({
+        userQuery,
+        conversationHistory,
+        temperature,
+        maxTokens: 1024,
+        abTestGroup,
+        // context is ignored, backend handles RAG
       });
-
-      docsFound = documents.length;
-      contextDocs = documents.map((doc) => doc.content);
+      return {
+        response,
+        contextUsed: [],
+        documentsFound: 0,
+      };
     }
 
-    // 2. Build context from documents
-    const context = contextDocs.length > 0 ? contextDocs.join('\n\n') : '';
+    // Local RAG (embedding + document search)
+    if (includeContext) {
+      const queryEmbedding = await this.embeddingRepository.generateEmbedding(userQuery);
+      const relevantDocs = await this.documentRepository.searchSimilarDocuments({
+        queryEmbedding,
+        limit: maxContextDocuments,
+        threshold,
+      });
+      contextUsed = relevantDocs.map(doc => doc.content);
+      documentsFound = relevantDocs.length;
+      context = contextUsed.join('\n\n');
+    }
 
-    // 3. Build system prompt
-    const systemPrompt = this.buildSystemPrompt(context);
-
-    // 4. Generate response
     const response = await this.chatRepository.generateResponse({
-      userQuery: `${systemPrompt}\n\nPregunta del usuario: ${userQuery}`,
+      userQuery,
+      conversationHistory,
       temperature,
-      maxTokens: 500,
+      maxTokens: 1024,
+      abTestGroup,
+      context,
     });
 
     return {
       response,
-      contextUsed: contextDocs,
-      documentsFound: docsFound,
+      contextUsed,
+      documentsFound,
     };
-  }
-
-  private buildSystemPrompt(context: string): string {
-    return `Eres el Asistente Experto de SmartConnect AI. 
-
-TUS SERVICIOS PRINCIPALES:
-1. QRIBAR: Menús digitales interactivos para restaurantes y bares
-2. Automatización n8n: Flujos de trabajo inteligentes para empresas
-3. Tarjetas Tap-to-Review NFC: Sistema para aumentar reseñas en Google Maps
-
-${context ? `INFORMACIÓN DE LA BASE DE CONOCIMIENTO:\n${context}\n\n` : ''}
-
-INSTRUCCIONES:
-- Responde SIEMPRE en español
-- Sé profesional, conciso y entusiasta
-- Si la información está en la base de conocimiento, úsala
-- Si no sabes algo, reconócelo y ofrece contactar al equipo
-- Mantén respuestas bajo 150 palabras`;
   }
 }

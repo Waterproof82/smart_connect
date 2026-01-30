@@ -4,7 +4,7 @@
  */
 
 export interface RestaurantProps {
-  id: string;
+  id: number;
   name: string;
   description?: string;
   imageUrl?: string;
@@ -12,7 +12,7 @@ export interface RestaurantProps {
 
 export class Restaurant {
   private constructor(
-    public readonly id: string,
+    public readonly id: number,
     public readonly name: string,
     public readonly description: string,
     public readonly imageUrl: string

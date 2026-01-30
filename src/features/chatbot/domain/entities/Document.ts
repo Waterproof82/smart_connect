@@ -13,7 +13,7 @@ export interface DocumentMetadata {
 }
 
 export interface Document {
-  readonly id: string;
+  readonly id: number | string;
   readonly content: string;
   readonly metadata: DocumentMetadata;
   readonly embedding?: number[];
@@ -21,20 +21,20 @@ export interface Document {
 }
 
 export class DocumentEntity implements Document {
-  readonly id: string;
+  readonly id: number | string;
   readonly content: string;
   readonly metadata: DocumentMetadata;
   readonly embedding?: number[];
   readonly similarity?: number;
 
   constructor(params: {
-    id?: string;
+    id?: number | string;
     content: string;
     metadata?: DocumentMetadata;
     embedding?: number[];
     similarity?: number;
   }) {
-    this.id = params.id ?? crypto.randomUUID();
+    this.id = params.id ?? `doc-${Math.random().toString(36).slice(2, 10)}`;
     this.content = params.content;
     this.metadata = params.metadata ?? {};
     this.embedding = params.embedding;

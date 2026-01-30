@@ -1,11 +1,75 @@
-# Changelog
+## [Unreleased]
+### Fixed
+- Fixed CORS error when submitting Contact form: Configured n8n webhook to send proper CORS headers, allowing frontend to communicate with backend.
+- Prevented frontend crash when SUPABASE_URL or SUPABASE_ANON_KEY are missing: SecurityLogger and rateLimiter now fallback to console-only logging if env vars are absent, avoiding 'supabaseUrl is required' error in production and preview builds.
 
-All notable changes to this project will be documented in this file.
+## [Unreleased]
+### Changed
+- Fixed all reported code quality errors (optional chaining, void usage, globalThis usage, cognitive complexity).
+- **Environment Variables:** Unified `.env.local` for both frontend (VITE_*) and backend (no prefix) secrets. Refactored universal env resolver to use `globalThis.window` and optional chaining for maximum compatibility and security. No more ESM/Node/env runtime errors.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+
+### Fixed
+
+
+
+
+
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+### Fixed
+- **RAG Vector Search:** Fixed embedding format incompatibility preventing document retrieval
+  - Root cause: Embeddings stored as JSON arrays instead of pgvector type
+  - Solution: Created `insert_document()` RPC function with explicit `::vector(768)` cast
+  - Updated `match_documents()` to accept text parameter and cast internally
+  - Repopulated knowledge base with 5 documents in correct format
+  - Result: Chatbot now successfully retrieves context (documentsUsed > 0) and provides accurate responses
+  - Affected files: `populate-knowledge-base.mjs`, migrations 20260129130000 & 20260129131000, `gemini-chat/index.ts`
+
+### Added
+- **Edge Functions Deployment Infrastructure:** Complete setup for secure RAG chatbot deployment
+  - Created `supabase/functions/gemini-chat/index.ts`: Simplified Edge Function without RAG (3.9kB bundle)
+    - Direct Gemini API integration (gemini-1.5-flash-latest)
+    - Rate limiting (10 requests/minute, in-memory)
+    - Conversation history support (last 5 messages)
+    - CORS handling and comprehensive error handling
+    - *Note:* RAG version (with vector search) backed up to `index-rag-backup.ts` pending database setup
+  - Created `supabase/.env.example`: Environment variables template for Edge Functions
+  - Created `scripts/deploy-edge-functions.ps1`: Automated deployment script (119 lines)
+    - Multi-function deployment support (all|gemini-chat|gemini-generate|gemini-embedding)
+    - Automatic .env.local parsing and validation
+    - Dry-run mode for testing
+    - Skip secrets flag for faster re-deployments
+  - Created `docs/EDGE_FUNCTIONS_TESTING.md`: Comprehensive testing guide (300+ lines)
+    - 5 test suites: RAG functionality, rate limiting, security logging, error handling, frontend integration
+    - PowerShell scripts for automated testing
+    - SQL queries for log verification
+    - Monitoring and troubleshooting guides
+- **Database Migrations:** Vector database schema for RAG knowledge base
+  - Created `supabase/migrations/20260129_create_documents_table.sql`
+    - `documents` table with pgvector extension (768-dimensional embeddings)
+    - `match_documents()` RPC function for cosine similarity search
+    - Row Level Security policies (public read, service role write)
+    - HNSW index for efficient vector search
+
+### Fixed
+- **Chatbot Authentication Architecture:** Resolved 401 errors from Edge Function auth mismatch
+  - Updated `GeminiDataSource.ts`: Changed from `gemini-embedding` to `gemini-chat` Edge Function
+  - Updated `GenerateResponseUseCase.ts`: Removed client-side RAG logic (80+ lines simplified)
+  - Updated `IChatRepository.ts`: Added `conversationHistory` parameter to interface
+  - Updated `ChatRepositoryImpl.ts`: Passes conversation history to data source
+  - Updated `ExpertAssistantWithRAG.tsx`: Sends last 5 messages as context
+  - Root cause: `gemini-embedding` and `gemini-generate` require user JWT validation, but frontend only has Anon Key
+  - Solution: `gemini-chat` accepts Anon Key without strict user authentication
+
+### Known Issues
+- **CRITICAL:** `GEMINI_API_KEY` configured in Supabase is invalid (returns 403/404)
+  - Chatbot returns 503 errors until API key is updated
+  - See `docs/GEMINI_API_KEY_FIX.md` for resolution steps
+  - Requires: New API key from https://aistudio.google.com/apikey
+  - Action: Update `.env.local` and `supabase secrets set GEMINI_API_KEY=<new_key>`
 
 ### Security
 - **CRITICAL FIX:** Removed API key exposure from `vite.config.ts` browser bundle (OWASP A02:2021 - Cryptographic Failures)

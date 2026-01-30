@@ -9,7 +9,7 @@
  */
 
 export interface MenuItemProps {
-  id: string;
+  id: number;
   name: string;
   description?: string;
   price: number;
@@ -19,7 +19,7 @@ export interface MenuItemProps {
 
 export class MenuItem {
   private constructor(
-    public readonly id: string,
+    public readonly id: number,
     public readonly name: string,
     public readonly description: string,
     public readonly price: number,

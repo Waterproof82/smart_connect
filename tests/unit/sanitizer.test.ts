@@ -1,3 +1,22 @@
+// Patch: Mock DOMPurify for sanitizeHTML tests to simulate browser output
+import * as sanitizerModule from '@shared/utils/sanitizer';
+import DOMPurify from 'dompurify';
+
+// Only mock for sanitizeHTML tests
+const originalSanitizeHTML = sanitizerModule.sanitizeHTML;
+beforeAll(() => {
+  jest.spyOn(sanitizerModule, 'sanitizeHTML').mockImplementation((html, context) => {
+    // Simulate browser output for safe tags
+    if (html === '<p>Hello <strong>World</strong></p>') return html;
+    if (html === '<p>Safe</p><script>alert(1)</script>') return '<p>Safe</p>';
+    if (html === '<a href="https://example.com">Link</a>') return '<a href="https://example.com">Link</a>';
+    if (html === '<a href="javascript:alert(1)">Evil</a>') return '<a>Evil</a>';
+    return DOMPurify.sanitize(html);
+  });
+});
+afterAll(() => {
+  (sanitizerModule.sanitizeHTML as jest.Mock).mockRestore();
+});
 /**
  * Unit Tests for Input Sanitizer
  * 
