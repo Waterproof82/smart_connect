@@ -15,7 +15,7 @@ function isViteEnv() {
   try {
     // Use eval to avoid Node/Jest parsing import.meta
     // eslint-disable-next-line no-eval
-    return typeof window !== 'undefined' && typeof document !== 'undefined' && eval('typeof import.meta !== "undefined" && typeof import.meta.env !== "undefined"');
+    return globalThis.window !== undefined && globalThis.document !== undefined && eval('import.meta !== undefined && import.meta.env !== undefined');
   } catch {
     return false;
   }
@@ -32,43 +32,33 @@ function getViteEnvVar(key: string): string | undefined {
 }
 
 const getEnvVar = (key: string, defaultValue?: string, fallbackKey?: string): string => {
-  let value: string | undefined;
-  // Browser (Vite)
-  if (isViteEnv()) {
-    value = getViteEnvVar(key);
-    // Fallback: buscar sin prefijo VITE_ si no existe
-    if ((key === 'VITE_SUPABASE_URL' || key === 'VITE_SUPABASE_ANON_KEY') && !value) {
-      const altKey = key.replace('VITE_', '');
-      value = getViteEnvVar(altKey);
-    }
-    if (key === 'VITE_GEMINI_API_KEY' && !value) {
-      value = getViteEnvVar('GEMINI_API_KEY');
-    }
+  const isSupabaseKey = key === 'VITE_SUPABASE_URL' || key === 'VITE_SUPABASE_ANON_KEY';
+  const isGeminiKey = key === 'VITE_GEMINI_API_KEY';
+
+  function resolveViteEnv() {
+    let value = getViteEnvVar(key);
+    if (isSupabaseKey && !value) value = getViteEnvVar(key.replace('VITE_', ''));
+    if (isGeminiKey && !value) value = getViteEnvVar('GEMINI_API_KEY');
     value = value || defaultValue;
-    // Lanzar error explícito en frontend si falta SUPABASE_URL o ANON_KEY
-    if ((key === 'VITE_SUPABASE_URL' || key === 'VITE_SUPABASE_ANON_KEY') && !value) {
+    if (isSupabaseKey && !value) {
       throw new Error(`Missing required environment variable in frontend: ${key}.\n\nSolución: Asegúrate de que existe VITE_SUPABASE_URL y VITE_SUPABASE_ANON_KEY en tu .env.local y reinicia el servidor de desarrollo.`);
     }
     return value || '';
   }
-  // Node.js
-  if (typeof process !== 'undefined' && process.env) {
-    value = process.env[key];
-    // Fallback para SUPABASE y GEMINI
-    if ((key === 'VITE_SUPABASE_URL' || key === 'VITE_SUPABASE_ANON_KEY') && !value) {
-      const altKey = key.replace('VITE_', '');
-      value = process.env[altKey];
-    }
-    if (key === 'VITE_GEMINI_API_KEY' && !value) {
-      value = process.env['GEMINI_API_KEY'];
-    }
+
+  function resolveNodeEnv() {
+    let value = process.env[key];
+    if (isSupabaseKey && !value) value = process.env[key.replace('VITE_', '')];
+    if (isGeminiKey && !value) value = process.env['GEMINI_API_KEY'];
     value = value || defaultValue;
     if (!value && getEnvMode() === 'production') {
       throw new Error(`Missing required environment variable: ${key}`);
     }
     return value || '';
   }
-  // Fallback universal
+
+  if (isViteEnv()) return resolveViteEnv();
+  if (typeof process !== 'undefined' && process.env) return resolveNodeEnv();
   return defaultValue || '';
 };
 

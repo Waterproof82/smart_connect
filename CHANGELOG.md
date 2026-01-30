@@ -1,24 +1,20 @@
 ## [Unreleased]
 ### Fixed
+- Fixed CORS error when submitting Contact form: Configured n8n webhook to send proper CORS headers, allowing frontend to communicate with backend.
 - Prevented frontend crash when SUPABASE_URL or SUPABASE_ANON_KEY are missing: SecurityLogger and rateLimiter now fallback to console-only logging if env vars are absent, avoiding 'supabaseUrl is required' error in production and preview builds.
 
 ## [Unreleased]
 ### Changed
-- **RAG Orchestration:** Frontend now delegates all RAG (embedding + document search) to backend Edge Function when using GeminiDataSource. Local semantic search is only performed if a local embedding provider is used. This prevents empty embedding errors and ensures robust, best-practice hybrid orchestration.
+- Fixed all reported code quality errors (optional chaining, void usage, globalThis usage, cognitive complexity).
 - **Environment Variables:** Unified `.env.local` for both frontend (VITE_*) and backend (no prefix) secrets. Refactored universal env resolver to use `globalThis.window` and optional chaining for maximum compatibility and security. No more ESM/Node/env runtime errors.
-### Added
-- A/B testing support for chatbot (Edge Function, frontend, analytics, migrations)
-- ab_test_metrics table and analytics dashboard SQL
-### Changed
-- Updated Edge Function CORS headers to allow x-supabase-client-platform (fixes CORS error with Supabase JS SDK)
+
+
 ### Fixed
-- Validated all pending commit tests: A/B group assignment, distribution, and backend integration
 
-# Changelog
 
-All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+
+
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]

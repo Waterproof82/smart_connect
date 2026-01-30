@@ -19,7 +19,10 @@ if (globalThis.window === undefined && globalThis.global !== undefined) {
 }
 
 import { SecurityLogger } from '@core/domain/usecases/SecurityLogger';
+import { ConsoleLogger } from '@core/domain/usecases/Logger';
 import { ENV } from '@shared/config/env.config';
+// Singleton instance for logging security events
+const securityLogger = getSecurityLogger();
 
 // Factory: Only instantiate SecurityLogger if envs are present
 function getSecurityLogger(): SecurityLogger | ConsoleLogger {
@@ -27,11 +30,15 @@ function getSecurityLogger(): SecurityLogger | ConsoleLogger {
     return new SecurityLogger();
   }
   // Fallback: Only log to console, no Supabase
-  return new (class extends SecurityLogger {
-    constructor() { super(); }
-    // Override methods that use Supabase
-    async sendToDatabase() { /* noop */ }
-    async sendAlert() { /* noop */ }
+  return new (class extends ConsoleLogger {
+    constructor() { super('[Security]'); }
+    async logSecurityEvent() { /* noop */ }
+    async logAuthFailure() { /* noop */ }
+    async logAuthSuccess() { /* noop */ }
+    async logRateLimitExceeded() { /* noop */ }
+    async logXSSAttempt() { /* noop */ }
+    async logSuspiciousQuery() { /* noop */ }
+    async logUnauthorizedAccess() { /* noop */ }
   })();
 }
 
@@ -84,7 +91,7 @@ export function sanitizeInput(
   
   if (detectedPatterns.length > 0) {
     // Log security event (non-blocking)
-    void getSecurityLogger().logXSSAttempt({
+    securityLogger.logXSSAttempt({
       payload: input,
       field: context,
     });
@@ -125,7 +132,7 @@ export function sanitizeHTML(
   const detectedPatterns = XSS_PATTERNS.filter(pattern => pattern.test(html));
   
   if (detectedPatterns.length > 0) {
-    void securityLogger.logXSSAttempt({
+    securityLogger.logXSSAttempt({
       payload: html,
       field: context,
     });
@@ -186,7 +193,7 @@ export function sanitizeURL(url: string): string {
   const lowerUrl = url.toLowerCase().trim();
 
   if (dangerousProtocols.some(protocol => lowerUrl.startsWith(protocol))) {
-    void securityLogger.logXSSAttempt({
+    securityLogger.logXSSAttempt({
       payload: url,
       field: 'url',
     });

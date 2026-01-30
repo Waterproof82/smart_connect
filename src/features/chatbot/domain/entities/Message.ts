@@ -8,14 +8,14 @@
 export type MessageRole = 'user' | 'assistant';
 
 export interface Message {
-  public readonly id: string;
+  public readonly id: number;
   public readonly role: MessageRole;
   public readonly content: string;
   public readonly timestamp: Date;
 }
 
 export class MessageEntity implements Message {
-  readonly id: string;
+  readonly id: number;
   readonly role: MessageRole;
   readonly content: string;
   readonly timestamp: Date;

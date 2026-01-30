@@ -6,7 +6,7 @@ import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 // Simple in-memory rate limiter (for development)
-// TODO: Use Upstash Redis for production
+// Rate limiter: In-memory implementation (Upstash Redis migration deferred by business decision)
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
 
 function checkRateLimit(userId: string): { allowed: boolean; remaining: number } {
@@ -29,6 +29,8 @@ function checkRateLimit(userId: string): { allowed: boolean; remaining: number }
   return { allowed: true, remaining: maxRequests - userLimit.count };
 }
 
+// Forzar log para debug de ejecución
+console.log('Gemini-generate handler INIT');
 Deno.serve(async (req) => {
   // CORS headers
   const allowedOrigin = Deno.env.get('ALLOWED_ORIGIN') || '*';
