@@ -11,12 +11,7 @@
     ],
     "skipLibCheck": true,
     "types": [
-<<<<<<< HEAD
-      "node",
-      "jest"
-=======
-      "node"
->>>>>>> production_tasks
+  "node"
     ],
     "moduleResolution": "bundler",
     "isolatedModules": true,
