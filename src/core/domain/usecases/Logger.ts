@@ -29,12 +29,12 @@ export class ConsoleLogger implements ILogger {
   debug(message: string, ...args: unknown[]): void {
     // Only log in development or test
     if (getEnvMode() !== 'production') {
-      console.debug(`${this.prefix} ${message}`, ...args);
+      console.warn(`${this.prefix} ${message}`, ...args);
     }
   }
 
   info(message: string, ...args: unknown[]): void {
-    console.info(`${this.prefix} ${message}`, ...args);
+    console.warn(`${this.prefix} ${message}`, ...args);
   }
 
   warn(message: string, ...args: unknown[]): void {

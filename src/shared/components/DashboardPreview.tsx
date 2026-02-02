@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { BarChart, Bar, XAxis, ResponsiveContainer, Tooltip, Cell } from 'recharts';
-import { LayoutDashboard, Bell, TrendingUp, Star, Webhook, User } from 'lucide-react';
+import { BarChart, Bar, XAxis, ResponsiveContainer, Tooltip } from 'recharts';
+import { LayoutDashboard, Bell, TrendingUp, Star, Webhook } from 'lucide-react';
 
 const data = [
   { name: 'Lun', value: 300 },
@@ -27,13 +27,14 @@ export const DashboardPreview: React.FC = () => {
       { threshold: 0.1 }
     );
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
+    const currentSection = sectionRef.current;
+    if (currentSection) {
+      observer.observe(currentSection);
     }
 
     return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
+      if (currentSection) {
+        observer.unobserve(currentSection);
       }
     };
   }, []);
@@ -77,14 +78,14 @@ export const DashboardPreview: React.FC = () => {
           {/* Left Column - Stats */}
           <div className="lg:col-span-3 space-y-6">
             {[
-              { label: 'Total Scans', value: '12,450', sub: '↗ +12% vs mes pasado', icon: <TrendingUp className="w-2.5 h-2.5" />, color: 'text-blue-500' },
-              { label: 'Reseñas Google', value: '4.9', sub: 'rating', icon: <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />, type: 'rating' }
-            ].map((card, i) => (
+              { label: 'Total Scans', value: '12,450', sub: '↗ +12% vs mes pasado', icon: <TrendingUp className="w-2.5 h-2.5" />, color: 'text-blue-500', delay: 500 },
+              { label: 'Reseñas Google', value: '4.9', sub: 'rating', icon: <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />, type: 'rating', delay: 650 }
+            ].map((card) => (
               <div 
-                key={i} 
+                key={card.label} 
                 className={`glass-card p-6 rounded-2xl border border-white/5 transition-all duration-700`}
                 style={{ 
-                  transitionDelay: `${isVisible ? (500 + (i * 150)) : 0}ms`,
+                  transitionDelay: `${isVisible ? card.delay : 0}ms`,
                   opacity: isVisible ? 1 : 0,
                   transform: isVisible ? 'translateX(0)' : 'translateX(-20px)'
                 }}
@@ -140,11 +141,7 @@ export const DashboardPreview: React.FC = () => {
                     cursor={{ fill: 'rgba(255,255,255,0.05)' }}
                     contentStyle={{ background: '#111', border: 'none', borderRadius: '8px', fontSize: '12px' }}
                   />
-                  <Bar dataKey="value" radius={[4, 4, 0, 0]}>
-                    {data.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={index === 6 || index === 3 ? '#3b82f6' : '#1e293b'} />
-                    ))}
-                  </Bar>
+                  <Bar dataKey="value" radius={[4, 4, 0, 0]} fill="#1e293b" />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -157,14 +154,14 @@ export const DashboardPreview: React.FC = () => {
             <h4 className="font-bold text-sm mb-8">Actividad Reciente</h4>
             <div className="space-y-6">
               {[
-                { icon: <User className="w-3 h-3" />, label: 'Nuevo Lead Capturado', sub: 'Restaurante Bellavista', color: 'bg-blue-500' },
-                { icon: <Star className="w-3 h-3" />, label: 'Nueva Reseña 5★', sub: 'Cliente Anónimo', color: 'bg-amber-500' },
-                { icon: <Webhook className="w-3 h-3" />, label: 'Webhook Ejecutado', sub: 'n8n Workflow #22', color: 'bg-purple-500' }
-              ].map((activity, i) => (
+                { icon: <Bell className="w-3 h-3" />, label: 'Usuario Escaneo NFC', sub: 'Hace 2 min', color: 'bg-blue-500', delay: 1200 },
+                { icon: <Star className="w-3 h-3" />, label: 'Nueva Reseña 5★', sub: 'Cliente Anónimo', color: 'bg-amber-500', delay: 1300 },
+                { icon: <Webhook className="w-3 h-3" />, label: 'Webhook Ejecutado', sub: 'n8n Workflow #22', color: 'bg-purple-500', delay: 1400 }
+              ].map((activity) => (
                 <div 
-                  key={i} 
+                  key={activity.label} 
                   className="flex gap-4 transition-all duration-500"
-                  style={{ transitionDelay: `${isVisible ? (1200 + (i * 100)) : 0}ms` }}
+                  style={{ transitionDelay: `${isVisible ? activity.delay : 0}ms` }}
                 >
                   <div className={`w-8 h-8 ${activity.color}/10 rounded-full flex items-center justify-center shrink-0`}>
                     <div className={`${activity.color} w-1.5 h-1.5 rounded-full`}></div>

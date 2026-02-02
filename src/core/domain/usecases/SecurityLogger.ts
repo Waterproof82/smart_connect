@@ -30,6 +30,11 @@ export interface SecurityEvent {
   metadata?: Record<string, unknown>;
 }
 
+interface SecurityLogEntry extends SecurityEvent {
+  timestamp: string;
+  severity: 'CRITICAL' | 'WARNING' | 'INFO';
+}
+
 export class SecurityLogger extends ConsoleLogger {
   private readonly supabase: SupabaseClient;
 
@@ -67,7 +72,7 @@ export class SecurityLogger extends ConsoleLogger {
     } else if (securityLog.severity === 'WARNING') {
       console.warn('🔒 SECURITY WARNING:', formattedLog);
     } else {
-      console.info('🔒 SECURITY EVENT:', formattedLog);
+      console.warn('🔒 SECURITY EVENT:', formattedLog);
     }
 
     // Persist to database
@@ -213,7 +218,7 @@ export class SecurityLogger extends ConsoleLogger {
   /**
    * Formats security log for console output
    */
-  private formatSecurityLog(log: any): string {
+  private formatSecurityLog(log: SecurityLogEntry): string {
     return JSON.stringify(
       {
         timestamp: log.timestamp,
@@ -238,7 +243,7 @@ export class SecurityLogger extends ConsoleLogger {
    * - Only service role can read logs (admin dashboard)
    * - Sensitive data is sanitized before storage
    */
-  private async sendToDatabase(log: any): Promise<void> {
+  private async sendToDatabase(log: SecurityLogEntry): Promise<void> {
     try {
       const { error } = await this.supabase.from('security_logs').insert({
         event_type: log.type,
@@ -271,7 +276,7 @@ export class SecurityLogger extends ConsoleLogger {
    * - Future: Email to security@smartconnect.ai
    * - Future: Telegram/Slack notification
    */
-  private async sendAlert(log: any): Promise<void> {
+  private async sendAlert(log: SecurityLogEntry): Promise<void> {
     // Enhanced console alert for visibility
     console.error(`
 ╔══════════════════════════════════════════════════════════════════╗

@@ -6,8 +6,8 @@ export function getEnvMode(): string {
     return process.env.NODE_ENV;
   }
   // Fallback for browser/Vite
-  if (globalThis.window !== undefined && (globalThis as any).VITE_MODE) {
-    return (globalThis as any).VITE_MODE;
+  if (globalThis.window !== undefined && (globalThis as unknown as { VITE_MODE?: string }).VITE_MODE) {
+    return (globalThis as unknown as { VITE_MODE: string }).VITE_MODE;
   }
   return 'production'; // Default to production if unknown
 }

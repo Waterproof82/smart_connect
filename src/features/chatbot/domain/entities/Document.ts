@@ -9,7 +9,7 @@ export interface DocumentMetadata {
   title?: string;
   category?: string;
   source?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface Document {

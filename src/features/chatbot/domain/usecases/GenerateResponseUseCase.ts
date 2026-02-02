@@ -52,7 +52,7 @@ export class GenerateResponseUseCase {
 
     // Detect if embedding provider is GeminiDataSource (remote RAG)
     const isGemini =
-      (this.embeddingRepository as any).geminiDataSource !== undefined;
+      (this.embeddingRepository as { geminiDataSource?: unknown }).geminiDataSource !== undefined;
 
     if (isGemini) {
       // Delegate all RAG to backend (Edge Function)

@@ -29,7 +29,7 @@ export class GeminiDataSource {
    * Note: gemini-chat handles embeddings internally for RAG
    * This method is kept for interface compatibility
    */
-  async generateEmbedding(text: string): Promise<number[]> {
+  async generateEmbedding(_text: string): Promise<number[]> {
     // For now, return empty array as gemini-chat handles embeddings internally
     // This could be updated to call a dedicated embedding endpoint if needed
     console.warn('generateEmbedding called but gemini-chat handles embeddings internally');
@@ -83,7 +83,7 @@ export class GeminiDataSource {
 
     // Log RAG statistics
     if (data.documentsUsed > 0) {
-      console.log(`✅ RAG: Used ${data.documentsUsed} documents from knowledge base`);
+      console.warn(`✅ RAG: Used ${data.documentsUsed} documents from knowledge base`);
     }
 
     return responseText;
