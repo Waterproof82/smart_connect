@@ -36,6 +36,7 @@
     "@types/node": "^22.19.7",
     "@types/react": "^19.2.9",
     "@types/react-dom": "^19.2.3",
+    "@vercel/node": "^5.5.28",
     "@vitejs/plugin-react": "^5.0.0",
     "autoprefixer": "^10.4.23",
     "cross-fetch": "^4.1.0",
