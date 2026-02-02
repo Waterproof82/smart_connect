@@ -80,7 +80,7 @@ function getGeminiApiKey(): string {
 
 export const ENV = {
   GEMINI_API_KEY: getGeminiApiKey(),
-  N8N_WEBHOOK_URL: getEnvVar('VITE_N8N_WEBHOOK_URL', ''), // Default to empty string if not set
+  N8N_WEBHOOK_URL: getEnvVar('VITE_N8N_WEBHOOK_URL', getEnvMode() === 'development' ? 'http://localhost:5678/webhook-test/hot-lead-intake' : ''),
   GOOGLE_SHEETS_ID: getEnvVar('VITE_GOOGLE_SHEETS_ID', ''),
   CONTACT_EMAIL: getEnvVar('VITE_CONTACT_EMAIL', ''),
   SUPABASE_URL: getEnvVar('VITE_SUPABASE_URL', ''),

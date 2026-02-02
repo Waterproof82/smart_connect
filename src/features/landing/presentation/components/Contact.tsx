@@ -10,7 +10,10 @@ import { rateLimiter, RateLimitPresets } from '@shared/utils/rateLimiter';
 // ====================================
 // DEPENDENCY INJECTION
 // ====================================
-const webhookUrl = ENV.N8N_WEBHOOK_URL || 'http://localhost:5678/webhook-test/hot-lead-intake';
+if (!ENV.N8N_WEBHOOK_URL) {
+  throw new Error('CRITICAL: VITE_N8N_WEBHOOK_URL is not defined. Please check your environment variables.');
+}
+const webhookUrl = ENV.N8N_WEBHOOK_URL;
 const container = getLandingContainer(webhookUrl);
 
 interface FormData {
