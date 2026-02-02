@@ -9,6 +9,7 @@
 import { MenuItem } from '../entities/MenuItem';
 import { IMenuRepository } from '../repositories/IMenuRepository';
 import { ConsoleLogger } from '@core/domain/usecases';
+import { NotFoundError } from '@core/domain/entities/Errors';
 
 const logger = new ConsoleLogger('[QRIBAR]');
 
@@ -23,7 +24,7 @@ export class GetMenuItems {
       return menuItems.filter(item => item.price > 0);
     } catch (error) {
       logger.error('Error fetching menu items', error);
-      throw new Error('Failed to load menu items');
+      throw new NotFoundError('Menu items');
     }
   }
 }
