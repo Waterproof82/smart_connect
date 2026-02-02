@@ -13,7 +13,7 @@ import { RestaurantProps } from '../../domain/entities/Restaurant';
 export class MockMenuDataSource implements IMenuDataSource {
   private readonly mockMenuItems: MenuItemProps[] = [
     {
-      id: '1',
+      id: 1,
       name: 'Risotto de Setas',
       description: 'Trufa negra, parmesano',
       price: 24,
@@ -21,7 +21,7 @@ export class MockMenuDataSource implements IMenuDataSource {
       imageUrl: ''
     },
     {
-      id: '2',
+      id: 2,
       name: 'Salmón Glaseado',
       description: 'Miel y mostaza antigua',
       price: 28,
@@ -29,7 +29,7 @@ export class MockMenuDataSource implements IMenuDataSource {
       imageUrl: ''
     },
     {
-      id: '3',
+      id: 3,
       name: 'Entrecot Angus',
       description: 'A la parrilla, 300g',
       price: 32,
@@ -39,7 +39,7 @@ export class MockMenuDataSource implements IMenuDataSource {
   ];
 
   private readonly mockRestaurant: RestaurantProps = {
-    id: 'le-gourmet',
+    id: 1,
     name: 'Le Gourmet',
     description: 'Alta Cocina & Vinos',
     imageUrl: 'https://picsum.photos/seed/food/600/800'
