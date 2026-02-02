@@ -16,7 +16,6 @@ if (globalThis.window === undefined && globalThis.global !== undefined) {
 }
 
 import { SecurityLogger } from '@core/domain/usecases/SecurityLogger';
-import { ConsoleLogger } from '@core/domain/usecases/Logger';
 import { ENV } from '@shared/config/env.config';
 
 // Factory: Only instantiate SecurityLogger if envs are present

@@ -117,7 +117,7 @@ VITE_N8N_WEBHOOK_URL=https://n8n-production-12fbe.up.railway.app/webhook-test/ho
 
 VITE_GOOGLE_SHEETS_ID=1ozjw4PGtBQZc1KFWlUxahz9qRmBOZDvVR6UyoIGBHl0
 
-VITE_GEMINI_API_KEY=AIzaSyAIXsagOBwrl03n17ITfPDDVpxLNs1fvn8
+VITE_GEMINI_API_KEY=your_gemini_api_key_here
 
 VITE_SUPABASE_URL=https://tysjedvujvsmrzzrmesr.supabase.co
 

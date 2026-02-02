@@ -49,7 +49,7 @@ jobs:
 
       # 4. QUALITY CHECKS (Si falla, se detiene todo)
       - name: Lint code
-        run: npm run lint -- --max-warnings 50
+        run: npm run lint -- --max-warnings 25
       
       - name: Type check
         run: npm run type-check

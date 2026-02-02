@@ -159,7 +159,7 @@ export const Contact: React.FC = () => {
   };
 
   // Manejar envío del formulario usando Clean Architecture
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     
     if (!isFormValid()) return;
@@ -296,11 +296,12 @@ export const Contact: React.FC = () => {
       },
       { threshold: 0.1 }
     );
-    if (sectionRef.current) observer.observe(sectionRef.current);
+    const sectionNode = sectionRef.current;
+    if (sectionNode) observer.observe(sectionNode);
     
     return () => {
       globalThis.removeEventListener('hashchange', updateServiceFromURL);
-      if (sectionRef.current) observer.unobserve(sectionRef.current);
+      if (sectionNode) observer.unobserve(sectionNode);
     };
   }, []);
 

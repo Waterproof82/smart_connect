@@ -7,13 +7,11 @@
 import { getEnvMode } from '@shared/utils/envMode';
 
 // Direct access to Vite env vars (for browser/Vite builds)
-// @ts-ignore - import.meta.env is available in Vite
-const viteEnv = typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {};
+const viteEnv = import.meta?.env ?? {};
 
 const getEnvVar = (key: string, defaultValue?: string): string => {
   // Browser/Vite environment
-  if (typeof window !== 'undefined') {
-    // @ts-ignore
+  if (globalThis.window !== undefined) {
     return viteEnv[key] || defaultValue || '';
   }
   

@@ -27,7 +27,7 @@ export class DocumentRepositoryImpl implements IDocumentRepository {
     return results.map(
       (doc) =>
         new DocumentEntity({
-          id: typeof doc.id === 'string' ? parseInt(doc.id, 10) : doc.id,
+          id: typeof doc.id === 'string' ? Number.parseInt(doc.id, 10) : doc.id,
           content: doc.content,
           metadata: doc.metadata,
           embedding: doc.embedding,
@@ -57,7 +57,7 @@ export class DocumentRepositoryImpl implements IDocumentRepository {
     }
 
     return new DocumentEntity({
-      id: typeof doc.id === 'string' ? parseInt(doc.id, 10) : doc.id,
+      id: typeof doc.id === 'string' ? Number.parseInt(doc.id, 10) : doc.id,
       content: doc.content,
       metadata: doc.metadata,
       embedding: doc.embedding,
