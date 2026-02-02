@@ -6,6 +6,7 @@ import { Features } from '@features/landing/presentation/components/Features';
 import { SuccessStats } from '@features/landing/presentation/components/SuccessStats';
 import { Contact } from '@features/landing/presentation/components/Contact';
 import { ExpertAssistant } from '@features/chatbot/presentation';
+import { EnvDebug } from '@features/landing/presentation/components/EnvDebug';
 
 const App: React.FC = () => {
   const [scrolled, setScrolled] = React.useState(false);
@@ -28,6 +29,9 @@ const App: React.FC = () => {
       
       {/* AI Chatbot Assistant */}
       <ExpertAssistant />
+      
+      {/* Environment Debug (only in dev) */}
+      <EnvDebug />
       
       {/* Footer */}
       <footer className="bg-black/50 py-8 text-center text-gray-400">
