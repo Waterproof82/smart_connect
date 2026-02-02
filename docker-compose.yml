@@ -1,3 +1,12 @@
+# ========================================
+# n8n Railway Production Configuration
+# ========================================
+# Project: SmartConnect AI
+# Environment: Production (Railway)
+# URL: https://n8n-production-12fbe.up.railway.app
+# Purpose: Workflow automation for lead processing
+# ========================================
+
 version: '3.8'
 
 services:
@@ -7,40 +16,97 @@ services:
     ports:
       - "5678:5678"
     environment:
-      - DB_TYPE=${DB_TYPE}
-      - DB_POSTGRESDB_HOST=${DB_POSTGRESDB_HOST}
-      - DB_POSTGRESDB_PORT=${DB_POSTGRESDB_PORT}
-      - DB_POSTGRESDB_DATABASE=${DB_POSTGRESDB_DATABASE}
-      - DB_POSTGRESDB_USER=${DB_POSTGRESDB_USER}
+      # Database Configuration (Railway Internal DNS)
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_HOST=postgres.railway.internal
+      - DB_POSTGRESDB_PORT=5432
+      - DB_POSTGRESDB_DATABASE=railway
+      - DB_POSTGRESDB_USER=postgres
       - DB_POSTGRESDB_PASSWORD=${DB_POSTGRESDB_PASSWORD}
-      - GENERIC_TIMEZONE=${GENERIC_TIMEZONE}
-      - N8N_COMMUNITY_PACKAGES_ALLOW_TOOL_USAGE=${N8N_COMMUNITY_PACKAGES_ALLOW_TOOL_USAGE}
-      - N8N_DIAGNOSTICS_ENABLED=${N8N_DIAGNOSTICS_ENABLED}
-      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}
-      - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=${N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS}
-      - N8N_HIRING_BANNER_ENABLED=${N8N_HIRING_BANNER_ENABLED}
-      - N8N_PROXY_HOPS=${N8N_PROXY_HOPS}
+      
+      # Core n8n Configuration
       - N8N_HOST=${N8N_HOST}
       - N8N_PROTOCOL=https
       - N8N_PORT=443
       - PORT=443
       - WEBHOOK_URL=${WEBHOOK_URL}
+      
+      # Security
+      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER=${N8N_BASIC_AUTH_USER}
+      - N8N_BASIC_AUTH_PASSWORD=${N8N_BASIC_AUTH_PASSWORD}
+      
+      # Timezone & Localization
+      - GENERIC_TIMEZONE=Europe/Madrid
+      - TZ=Europe/Madrid
+      
+      # Performance & Limits
       - GENERIC_TEMP_REQUEST_MAX_PAYLOAD_SIZE=50mb
+      - N8N_PAYLOAD_SIZE_MAX=16
+      
+      # Features & Community
+      - N8N_COMMUNITY_PACKAGES_ALLOW_TOOL_USAGE=false
+      - N8N_DIAGNOSTICS_ENABLED=true
+      - N8N_HIRING_BANNER_ENABLED=false
+      - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
+      
+      # Proxy Configuration (Railway)
+      - N8N_PROXY_HOPS=1
+      
+      # Integrations (Optional - Configure in Railway)
+      # - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      # - GOOGLE_SHEETS_ID=${GOOGLE_SHEETS_ID}
+      
     depends_on:
       - postgres
     volumes:
       - n8n_data:/home/node/.n8n
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:5678/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
   postgres:
     image: postgres:15-alpine
     restart: unless-stopped
     environment:
-      - POSTGRES_DB=${DB_NAME}
-      - POSTGRES_USER=${DB_USER}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=railway
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${DB_POSTGRESDB_PASSWORD}
+      - POSTGRES_INITDB_ARGS=--encoding=UTF-8 --lc-collate=C --lc-ctype=C
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   n8n_data:
+    driver: local
   postgres_data:
+    driver: local
+
+# ========================================
+# Environment Variables Required (Railway)
+# ========================================
+# Core:
+#   N8N_HOST=n8n-production-12fbe.up.railway.app
+#   WEBHOOK_URL=https://n8n-production-12fbe.up.railway.app
+#   N8N_ENCRYPTION_KEY=<random-32-chars>
+#
+# Auth:
+#   N8N_BASIC_AUTH_USER=admin
+#   N8N_BASIC_AUTH_PASSWORD=<secure-password>
+#
+# Database:
+#   DB_POSTGRESDB_PASSWORD=<postgres-password>
+#
+# Integrations (Optional):
+#   TELEGRAM_BOT_TOKEN=<token>
+#   GOOGLE_SHEETS_ID=1ozjw4PGtBQZc1KFWlUxahz9qRmBOZDvVR6UyoIGBHl0
+# ========================================
