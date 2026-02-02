@@ -1,4 +1,51 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [0.3.1] - 2026-02-02
+
+### Added
+- **n8n Railway Production Integration:** Complete workflow automation deployment
+  - Deployed n8n to Railway with PostgreSQL database
+  - Configured production webhook endpoint for lead intake
+  - Integrated contact form with n8n webhook for automated lead processing
+  - Set up lead temperature analysis, Google Sheets storage, and email/Telegram notifications
+  - Documentation: `docs/audit/2026-02-02_n8n-railway-production-deployment.md`
+
+### Fixed
+- **Build Pipeline:** Removed reference to deleted `debug-env.js` script from build command
+  - Issue: Vercel builds failing after cleanup due to `node scripts/debug-env.js` in package.json
+  - Solution: Changed build script to `vite build` only
+  - Result: Successful builds in 3.20s (453.59 kB bundle, 133.34 kB gzipped)
+- **CORS Configuration:** Enabled cross-origin requests for n8n webhook
+  - Issue: Frontend blocked by CORS policy when submitting to Railway n8n
+  - Solution: Configured `Access-Control-Allow-Origin: *` headers in n8n Webhook Response node
+  - Result: Contact form successfully sends leads from Vercel to Railway
+- **Environment Variable Injection:** Fixed Vite static replacement
+  - Issue: `eval()` preventing Vite from injecting `import.meta.env` at build time
+  - Solution: Removed eval() from `env.config.ts`, direct access to `import.meta.env`
+  - Result: Environment variables properly available in Vercel production builds
+
+### Removed
+- **Project Cleanup:** Removed obsolete test files and debug components (-761 lines)
+  - Deleted 9 test/debug scripts: `debug-env.js`, `diagnose-form.html`, `test-*.js`, `test-webhook-railway.ps1`
+  - Removed Jest configuration (`jest.config.ts`) and empty `__tests__/` directory
+  - Removed `REFACTOR_SUMMARY.md`, `metadata.json`, and `EnvDebug` component
+  - Removed unused Vercel API proxy configuration from `vercel.json`
+  - Updated `App.tsx` to remove debug component import
+
+### Security
+- **Git Repository Audit:** Verified no exposed secrets in commit history
+  - Confirmed `.env.local` properly ignored via `.gitignore`
+  - Verified Gemini API key only used server-side via Supabase Edge Functions
+  - Checked commit history for leaked credentials (none found)
+  - Removed unused `api/webhook.js` file
+
 ## [Unreleased]
+
 ### Fixed
 - Fixed CORS error when submitting Contact form: Configured n8n webhook to send proper CORS headers, allowing frontend to communicate with backend.
 - Prevented frontend crash when SUPABASE_URL or SUPABASE_ANON_KEY are missing: SecurityLogger and rateLimiter now fallback to console-only logging if env vars are absent, avoiding 'supabaseUrl is required' error in production and preview builds.
