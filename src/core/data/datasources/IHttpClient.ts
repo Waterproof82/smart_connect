@@ -10,6 +10,7 @@ export interface HttpClientConfig {
   baseURL?: string;
   headers?: Record<string, string>;
   timeout?: number;
+  enableRetry?: boolean; // Enable automatic retry on transient failures
 }
 
 export interface HttpRequestConfig {
