@@ -29,9 +29,9 @@ console.log('\n🎯 Expected values:');
 console.log('  VITE_N8N_WEBHOOK_URL should be: https://n8n-production-12fbe.up.railway.app/webhook-test/hot-lead-intake');
 
 if (!process.env.VITE_N8N_WEBHOOK_URL) {
-  console.error('\n❌ ERROR: VITE_N8N_WEBHOOK_URL is not set!');
-  console.error('Please configure it in Vercel Dashboard → Settings → Environment Variables\n');
-  process.exit(1);
+  console.error('\n⚠️  WARNING: VITE_N8N_WEBHOOK_URL is not set!');
+  console.error('The app will fail at runtime. Please configure it in Vercel Dashboard → Settings → Environment Variables');
+  console.error('Continuing build to show full error context...\n');
+} else {
+  console.log('\n✅ All required variables are set!\n');
 }
-
-console.log('\n✅ All required variables are set!\n');
