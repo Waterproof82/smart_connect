@@ -40,9 +40,12 @@ jobs:
           curl --compressed https://static.snyk.io/cli/latest/snyk-linux -o snyk
           chmod +x ./snyk
           sudo mv ./snyk /usr/local/bin/
-
-      - name: Authenticate Snyk
-        run: snyk auth ${{ secrets.SNYK_TOKEN }}
+        
+      # Snyk usa automáticamente la variable de entorno SNYK_TOKEN
+      - name: Setup Snyk environment
+        run: echo "SNYK_TOKEN is configured"
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
       # 4. QUALITY CHECKS (Si falla, se detiene todo)
       - name: Lint code
@@ -55,10 +58,14 @@ jobs:
       - name: Snyk Security Gate (PR)
         if: github.event_name == 'pull_request' && success()
         run: snyk test --severity-threshold=high
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
       - name: Snyk Monitor (Push to main)
         if: github.event_name == 'push' && success()
         run: snyk monitor --project-name="SmartConnect-AI-Production"
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
       # =========================================================
       # 🛑 ZONA DE BUILD (Solo llegamos aquí si todo pasó)
