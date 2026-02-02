@@ -8,6 +8,7 @@
 import { Restaurant } from '../entities/Restaurant';
 import { IMenuRepository } from '../repositories/IMenuRepository';
 import { ConsoleLogger } from '@core/domain/usecases';
+import { NotFoundError } from '@core/domain/entities/Errors';
 
 const logger = new ConsoleLogger('[QRIBAR]');
 
@@ -19,7 +20,7 @@ export class GetRestaurant {
       return await this.menuRepository.getRestaurant();
     } catch (error) {
       logger.error('Error fetching restaurant', error);
-      throw new Error('Failed to load restaurant information');
+      throw new NotFoundError('Restaurant information');
     }
   }
 }

@@ -3,7 +3,6 @@
 // ========================================
 // Purpose: Secure chatbot endpoint with RAG (Retrieval Augmented Generation)
 // Security: OWASP A02:2021 - Cryptographic Failures (API key protection)
-// Version: 1.1.0 - Fixed API key leak issue
 // @ts-nocheck - Deno runtime types
 
 import "https://deno.land/x/xhr@0.1.0/mod.ts";

@@ -8,6 +8,8 @@
  * - Description is optional
  */
 
+import { ValidationError } from '@core/domain/entities/Errors';
+
 export interface MenuItemProps {
   id: number;
   name: string;
@@ -30,12 +32,12 @@ export class MenuItem {
   static create(props: MenuItemProps): MenuItem {
     // Business rule: Name cannot be empty
     if (!props.name || props.name.trim().length === 0) {
-      throw new Error('MenuItem name cannot be empty');
+      throw new ValidationError('MenuItem name cannot be empty', 'name');
     }
 
     // Business rule: Price must be positive
     if (props.price <= 0) {
-      throw new Error('MenuItem price must be positive');
+      throw new ValidationError('MenuItem price must be positive', 'price');
     }
 
     return new MenuItem(
