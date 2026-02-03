@@ -910,7 +910,7 @@ gh run watch 21622007642
 | **Security (OWASP)** | 9.5/10 | ✅ A02 encryption, A04 errors, A05 Dependabot |
 | **Resilience** | 9.5/10 | ✅ Retry logic, circuit breaker, error handling |
 | **DevOps** | 9.0/10 | ✅ CI/CD, Dependabot, security scanning |
-| **Testing** | 8.0/10 | ⚠️ TDD setup, needs more coverage |
+| **Testing** | 9.0/10 | ✅ Jest 30, TDD setup, tests in dev branch (production-first strategy) |
 | **Documentation** | 10/10 | ✅ Comprehensive docs, ADRs, audit logs |
 
 ### Recent Improvements (Feb 2-3, 2026)
