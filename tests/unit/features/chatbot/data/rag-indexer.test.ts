@@ -10,7 +10,7 @@
  * Clean Architecture: Data Layer Test
  */
 
-import { RAGIndexer, DocumentChunk, ChunkMetadata } from '@/features/chatbot/data/rag-indexer';
+import { RAGIndexer } from '@/features/chatbot/data/rag-indexer';
 
 describe('RAGIndexer - Document Indexing', () => {
   let indexer: RAGIndexer;

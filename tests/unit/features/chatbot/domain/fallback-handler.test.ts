@@ -14,9 +14,7 @@
 
 import { 
   FallbackHandler, 
-  FallbackResponse, 
-  FallbackContext,
-  FallbackStats 
+  FallbackContext
 } from '@/features/chatbot/domain/fallback-handler';
 
 describe('FallbackHandler - Core Functionality', () => {
@@ -529,7 +527,7 @@ describe('FallbackHandler - Error Handling', () => {
     // Arrange
     const context: FallbackContext = {
       query: 'Test query',
-      category: undefined as any,
+      category: undefined as unknown,
       ragResults: [],
       confidence: 0,
     };

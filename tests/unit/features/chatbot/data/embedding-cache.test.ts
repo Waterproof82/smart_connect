@@ -10,7 +10,7 @@
  * Clean Architecture: Data Layer Test
  */
 
-import { EmbeddingCache, CacheEntry, CacheStats } from '@/features/chatbot/data/embedding-cache';
+import { EmbeddingCache } from '@/features/chatbot/data/embedding-cache';
 
 describe('EmbeddingCache - Core Functionality', () => {
   let cache: EmbeddingCache;
@@ -66,8 +66,8 @@ describe('EmbeddingCache - Core Functionality', () => {
 
     // Assert
     expect(entry).toBeDefined();
-    expect(entry!.timestamp).toBeGreaterThanOrEqual(beforeStore);
-    expect(entry!.timestamp).toBeLessThanOrEqual(afterStore);
+    expect(entry.timestamp).toBeGreaterThanOrEqual(beforeStore);
+    expect(entry.timestamp).toBeLessThanOrEqual(afterStore);
   });
 
   test('MUST include metadata in cache entry', async () => {

@@ -193,8 +193,8 @@ describe('RAGOrchestrator - Integration Tests', () => {
       // Assert
       expect(result.usedFallback).toBe(true);
       expect(result.fallbackResponse).toBeDefined();
-      expect(result.fallbackResponse!.message).toBeTruthy();
-      expect(result.fallbackResponse!.category).toBe('general');
+      expect(result.fallbackResponse.message).toBeTruthy();
+      expect(result.fallbackResponse.category).toBe('general');
     });
 
     test('MUST provide context-aware fallback for pricing queries', async () => {
@@ -210,7 +210,7 @@ describe('RAGOrchestrator - Integration Tests', () => {
       // Assert
       expect(result.usedFallback).toBe(true);
       // Fallback message should be present (escalation or contextual)
-      expect(result.fallbackResponse!.message).toBeTruthy();
+      expect(result.fallbackResponse.message).toBeTruthy();
     });
 
     test('MUST suggest human escalation for low confidence', async () => {
@@ -222,9 +222,9 @@ describe('RAGOrchestrator - Integration Tests', () => {
 
       // Assert
       expect(result.usedFallback).toBe(true);
-      expect(result.fallbackResponse!.shouldEscalate).toBe(true);
+      expect(result.fallbackResponse.shouldEscalate).toBe(true);
       // Escalation reason can be either 'urgent' or 'low_confidence' depending on conditions
-      expect(['urgent', 'low_confidence']).toContain(result.fallbackResponse!.escalationReason);
+      expect(['urgent', 'low_confidence']).toContain(result.fallbackResponse.escalationReason);
     });
   });
 

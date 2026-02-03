@@ -10,25 +10,25 @@ export class GoogleGenAI {
     }
   }
 
-  getGenerativeModel(config: { model: string }) {
-    return {
-      embedContent: async (text: string) => {
-        if (!text || text.trim() === '') {
-          throw new Error('Empty text provided');
-        }
-        
-        // Simulate text-embedding-004 output (768 dimensions)
-        const mockEmbedding = Array.from(
-          { length: 768 },
-          () => Math.random() * 2 - 1 // Random values between -1 and 1
-        );
-        
-        return {
-          embedding: {
+  models = {
+    embedContent: async (params: { model: string; contents: string }) => {
+      if (!params.contents || params.contents.trim() === '') {
+        throw new Error('Empty text provided');
+      }
+      
+      // Simulate text-embedding-004 output (768 dimensions)
+      const mockEmbedding = Array.from(
+        { length: 768 },
+        () => Math.random() * 2 - 1 // Random values between -1 and 1
+      );
+      
+      return {
+        embeddings: [
+          {
             values: mockEmbedding,
           },
-        };
-      },
-    };
-  }
+        ],
+      };
+    },
+  };
 }

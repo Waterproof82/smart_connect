@@ -34,7 +34,6 @@ export interface IndexDocumentsParams {
 
 export class RAGIndexer {
   private readonly genAI: GoogleGenAI;
-  private readonly embeddingModel;
   
   /**
    * Constructor
@@ -48,9 +47,6 @@ export class RAGIndexer {
     }
     
     this.genAI = new GoogleGenAI({ apiKey: geminiApiKey });
-    this.embeddingModel = this.genAI.getGenerativeModel({
-      model: 'text-embedding-004',
-    });
   }
 
   /**
@@ -139,8 +135,11 @@ export class RAGIndexer {
    */
   private async _generateEmbedding(text: string): Promise<number[]> {
     try {
-      const result = await this.embeddingModel.embedContent(text);
-      return result.embedding.values;
+      const result = await this.genAI.models.embedContent({
+        model: 'text-embedding-004',
+        contents: text,
+      });
+      return result.embeddings[0].values;
     } catch (error) {
       throw new Error(`Gemini API error: ${error}`);
     }

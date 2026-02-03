@@ -18,7 +18,7 @@
 export interface FallbackContext {
   query: string;
   category: string;
-  ragResults: any[];
+  ragResults: unknown[];
   confidence: number;
   userName?: string;
   previousInteractions?: number;
@@ -52,12 +52,7 @@ export class FallbackHandler {
   };
 
   constructor() {
-    this.stats = {
-      totalFallbacks: 0,
-      byCategory: new Map(),
-      totalEscalations: 0,
-      confidenceSum: 0,
-    };
+    this.stats = this._getInitialStats();
   }
 
   /**
@@ -125,9 +120,16 @@ export class FallbackHandler {
    * Reset statistics
    */
   resetStats(): void {
-    this.stats = {
+    this.stats = this._getInitialStats();
+  }
+
+  /**
+   * Get initial stats object (used by constructor and resetStats)
+   */
+  private _getInitialStats() {
+    return {
       totalFallbacks: 0,
-      byCategory: new Map(),
+      byCategory: new Map<string, number>(),
       totalEscalations: 0,
       confidenceSum: 0,
     };

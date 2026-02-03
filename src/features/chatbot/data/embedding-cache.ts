@@ -20,7 +20,7 @@ export interface CacheEntry {
   key: string;
   embedding: number[];
   timestamp: number;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   ttl?: number;
 }
 
@@ -46,7 +46,7 @@ export class EmbeddingCache {
     hits: number;
     misses: number;
   };
-  private supabaseClient?: SupabaseClient;
+  private readonly supabaseClient?: SupabaseClient;
   private readonly enableSupabaseBackup: boolean;
 
   constructor(config: EmbeddingCacheConfig) {
@@ -126,7 +126,7 @@ export class EmbeddingCache {
   async set(
     key: string,
     embedding: number[],
-    metadata?: Record<string, any>,
+    metadata?: Record<string, unknown>,
     customTtl?: number
   ): Promise<void> {
     // Validate key
@@ -238,9 +238,9 @@ export class EmbeddingCache {
    */
   private _globToRegex(pattern: string): RegExp {
     const escaped = pattern
-      .replace(/\./g, '\\.')
-      .replace(/\*/g, '.*')
-      .replace(/\?/g, '.');
+      .replaceAll('.', String.raw`\.`)
+      .replaceAll('*', '.*')
+      .replaceAll('?', '.');
     return new RegExp(`^${escaped}$`);
   }
 

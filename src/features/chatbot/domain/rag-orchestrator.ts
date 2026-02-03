@@ -18,7 +18,7 @@
  * docs/adr/006-rag-architecture-decision.md
  */
 
-import { RAGIndexer, RAGChunk } from '../data/rag-indexer';
+import { RAGIndexer, DocumentChunk } from '../data/rag-indexer';
 import { EmbeddingCache } from '../data/embedding-cache';
 import { 
   FallbackHandler, 
@@ -30,7 +30,7 @@ export interface RAGDocument {
   id: string;
   content: string;
   source: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface RAGSearchOptions {
@@ -41,7 +41,7 @@ export interface RAGSearchOptions {
 }
 
 export interface RAGSearchResult {
-  chunks: RAGChunk[];
+  chunks: DocumentChunk[];
   relevanceScores: number[];
   totalFound: number;
   cacheHit: boolean;
@@ -60,11 +60,16 @@ export interface RAGOrchestratorConfig {
 }
 
 export class RAGOrchestrator {
-  private indexer: RAGIndexer;
-  private cache: EmbeddingCache;
-  private fallbackHandler: FallbackHandler;
-  private config: Required<RAGOrchestratorConfig>;
-  private indexedChunks: RAGChunk[] = [];
+  private readonly indexer: RAGIndexer;
+  private readonly cache: EmbeddingCache;
+  private readonly fallbackHandler: FallbackHandler;
+  private readonly config: RAGOrchestratorConfig & {
+    defaultTopK: number;
+    defaultThreshold: number;
+    enableCache: boolean;
+    cacheTTL: number;
+  };
+  private indexedChunks: DocumentChunk[] = [];
 
   constructor(config: RAGOrchestratorConfig) {
     this.config = {
@@ -93,7 +98,7 @@ export class RAGOrchestrator {
    * @param documents Documents to index
    * @returns Indexed chunks with embeddings
    */
-  async indexDocuments(documents: RAGDocument[]): Promise<RAGChunk[]> {
+  async indexDocuments(documents: RAGDocument[]): Promise<DocumentChunk[]> {
     // Group documents by source for batch indexing
     const groupedBySource = documents.reduce((acc, doc) => {
       if (!acc[doc.source]) {
@@ -103,7 +108,7 @@ export class RAGOrchestrator {
       return acc;
     }, {} as Record<string, string[]>);
 
-    const allChunks: RAGChunk[] = [];
+    const allChunks: DocumentChunk[] = [];
 
     // Index each source group
     for (const [source, docs] of Object.entries(groupedBySource)) {
@@ -332,7 +337,7 @@ export class RAGOrchestrator {
     // Simple hash function (can upgrade to crypto.subtle.digest in production)
     let hash = 0;
     for (let i = 0; i < query.length; i++) {
-      const char = query.charCodeAt(i);
+      const char = query.codePointAt(i) ?? 0;
       hash = (hash << 5) - hash + char;
       hash = hash & hash; // Convert to 32-bit integer
     }
