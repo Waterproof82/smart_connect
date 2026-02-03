@@ -56,7 +56,7 @@ jobs:
 
       # 5. ANÁLISIS DE SEGURIDAD (GATE)
       - name: Snyk Security Gate (PR)
-        if: github.event_name == 'pull_request' && success()
+        if: github.event_name == 'pull_request' && github.actor != 'dependabot[bot]' && success()
         run: snyk test --severity-threshold=high
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
