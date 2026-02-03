@@ -42,7 +42,9 @@ export class ChatbotContainer {
     }
 
     if (!geminiApiKey) {
-      console.warn('⚠️ VITE_GEMINI_API_KEY not set. RAG features will be limited.');
+      throw new Error(
+        '❌ Missing VITE_GEMINI_API_KEY. RAG chatbot requires Gemini API key. Add it to your environment variables in Vercel.'
+      );
     }
 
     // Data Sources (responsible for external communication)
@@ -59,7 +61,7 @@ export class ChatbotContainer {
     // ===================================
     // 3. RAG SYSTEM (Phases 1+2+3 Integration)
     // ===================================
-    const ragIndexer = new RAGIndexer(geminiApiKey || 'mock-key');
+    const ragIndexer = new RAGIndexer(geminiApiKey);
     const embeddingCache = new EmbeddingCache({
       supabaseUrl,
       supabaseKey: supabaseAnonKey,
