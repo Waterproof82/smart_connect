@@ -15,9 +15,6 @@ import {
 } from '../data/repositories';
 import { GenerateResponseUseCase, SearchDocumentsUseCase } from '../domain/usecases';
 import { RAGOrchestrator } from '../domain/rag-orchestrator';
-import { RAGIndexer } from '../data/rag-indexer';
-import { EmbeddingCache } from '../data/embedding-cache';
-import { FallbackHandler } from '../domain/fallback-handler';
 
 /**
  * Container for all chatbot dependencies
@@ -61,18 +58,15 @@ export class ChatbotContainer {
     // ===================================
     // 3. RAG SYSTEM (Phases 1+2+3 Integration)
     // ===================================
-    const ragIndexer = new RAGIndexer(geminiApiKey);
-    const embeddingCache = new EmbeddingCache({
+    const ragOrchestrator = new RAGOrchestrator({
+      apiKey: geminiApiKey,
       supabaseUrl,
       supabaseKey: supabaseAnonKey,
-      ttlMs: 7 * 24 * 60 * 60 * 1000, // 7 days
+      defaultTopK: 5,
+      defaultThreshold: 0.7,
+      enableCache: true,
+      cacheTTL: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
-    const fallbackHandler = new FallbackHandler();
-    const ragOrchestrator = new RAGOrchestrator(
-      ragIndexer,
-      embeddingCache,
-      fallbackHandler
-    );
 
     // ===================================
     // 4. DOMAIN LAYER (Use Cases)
