@@ -86,12 +86,12 @@ export class SupabaseKnowledgeLoader {
 
     // Group documents by source
     for (const doc of data as SupabaseDocument[]) {
-      const source = doc.source || 'general';
+      const sourceType = this._mapSourceToCategory(doc.source);
       const content = doc.content;
 
-      if (source === 'qribar') {
+      if (sourceType === 'qribar') {
         result.qribar.push(content);
-      } else if (source === 'reviews') {
+      } else if (sourceType === 'reviews') {
         result.reviews.push(content);
       } else {
         result.general.push(content);
@@ -107,6 +107,24 @@ export class SupabaseKnowledgeLoader {
    */
   getStats(): LoaderStats {
     return { ...this.stats };
+  }
+
+  /**
+   * Map database source values to internal categories
+   * Database uses: qribar_product, nfc_reviews_product, automation_product, company_philosophy, contact_info
+   * Internal uses: qribar, reviews, general
+   */
+  private _mapSourceToCategory(source: string | null): 'qribar' | 'reviews' | 'general' {
+    if (!source) return 'general';
+
+    // QRIBAR products (carta digital, pedidos en mesa)
+    if (source.includes('qribar')) return 'qribar';
+
+    // Reviews/NFC products (tarjetas NFC, reputación online)
+    if (source.includes('reviews') || source.includes('nfc')) return 'reviews';
+
+    // Automation, company info, contact → general
+    return 'general';
   }
 
   /**

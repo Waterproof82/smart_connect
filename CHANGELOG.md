@@ -7,7 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- **SupabaseKnowledgeLoader Source Mapping:** Added intelligent mapping from database source values to internal categories
+  - Database uses: `qribar_product`, `nfc_reviews_product`, `automation_product`, `company_philosophy`, `contact_info`
+  - Mapper translates to internal categories: `qribar`, `reviews`, `general`
+  - Pattern matching: `includes('qribar')` → qribar, `includes('reviews'|'nfc')` → reviews, rest → general
+  - Fixes issue where all 13 documents were classified as "general"
+  - Expected distribution: qribar=3, reviews=3, general=7
+  - Location: `src/features/chatbot/data/supabase-knowledge-loader.ts` (new `_mapSourceToCategory()` method)
+
 ### Added
+- **Document Verification Script:** Node.js script to inspect Supabase documents from terminal
+  - Shows current document distribution by source
+  - Detects NULL or missing source values
+  - Provides recommendations for data quality fixes
+  - Location: `scripts/check-documents.mjs`
 - **SupabaseKnowledgeLoader:** Index-time document loading for in-memory search optimization
   - TDD implementation with 10 test cases (ALL PASSING ✅)
   - Loads documents from Supabase `documents` table at initialization

@@ -51,6 +51,6 @@ export default [
     },
   },
   {
-    ignores: ['dist', 'node_modules', '*.config.js', '*.config.ts', 'supabase/functions', 'src/features/chatbot/data/train_rag.js'],
+    ignores: ['dist', 'node_modules', '*.config.js', '*.config.ts', 'supabase/functions', 'src/features/chatbot/data/train_rag.js', 'scripts/**/*.mjs'],
   },
 ];

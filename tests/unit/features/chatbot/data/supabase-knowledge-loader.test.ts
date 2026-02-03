@@ -27,19 +27,19 @@ describe('SupabaseKnowledgeLoader', () => {
         { 
           id: '1', 
           content: 'QRIBAR es una carta digital QR que revoluciona restaurantes...', 
-          source: 'qribar',
+          source: 'qribar_product', // Real database value
           metadata: { category: 'features' }
         },
         { 
           id: '2', 
           content: 'Precios QRIBAR: Plan Básico $29/mes, Premium $49/mes...', 
-          source: 'qribar',
+          source: 'qribar_product', // Real database value
           metadata: { category: 'pricing' }
         },
         { 
           id: '3', 
           content: 'Sistema de gestión de reputación online con tarjetas NFC...', 
-          source: 'reviews',
+          source: 'nfc_reviews_product', // Real database value
           metadata: { category: 'features' }
         },
       ],
