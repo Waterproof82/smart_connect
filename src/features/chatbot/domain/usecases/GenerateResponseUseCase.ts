@@ -2,14 +2,13 @@
  * GenerateResponseUseCase
  * 
  * Business logic for generating AI responses with RAG.
- * Now delegates RAG logic to gemini-chat Edge Function.
+ * Now uses RAGOrchestrator for unified Phase 1+2+3 integration.
  * 
  * Follows Single Responsibility Principle (SOLID).
  */
 
 import { IChatRepository } from '../repositories/IChatRepository';
-import { IEmbeddingRepository } from '../repositories/IEmbeddingRepository';
-import { IDocumentRepository } from '../repositories/IDocumentRepository';
+import { RAGOrchestrator } from '../rag-orchestrator';
 
 
 export interface GenerateResponseInput {
@@ -31,8 +30,7 @@ export interface GenerateResponseOutput {
 export class GenerateResponseUseCase {
   constructor(
     private readonly chatRepository: IChatRepository,
-    private readonly embeddingRepository: IEmbeddingRepository,
-    private readonly documentRepository: IDocumentRepository
+    private readonly ragOrchestrator: RAGOrchestrator
   ) {}
 
   async execute(input: GenerateResponseInput): Promise<GenerateResponseOutput> {
@@ -50,38 +48,21 @@ export class GenerateResponseUseCase {
     let documentsFound = 0;
     let context = '';
 
-    // Detect if embedding provider is GeminiDataSource (remote RAG)
-    const isGemini =
-      (this.embeddingRepository as { geminiDataSource?: unknown }).geminiDataSource !== undefined;
-
-    if (isGemini) {
-      // Delegate all RAG to backend (Edge Function)
-      const response = await this.chatRepository.generateResponse({
-        userQuery,
-        conversationHistory,
-        temperature,
-        maxTokens: 1024,
-        abTestGroup,
-        // context is ignored, backend handles RAG
-      });
-      return {
-        response,
-        contextUsed: [],
-        documentsFound: 0,
-      };
-    }
-
-    // Local RAG (embedding + document search)
+    // Use RAG Orchestrator (Phase 1+2+3 integration)
     if (includeContext) {
-      const queryEmbedding = await this.embeddingRepository.generateEmbedding(userQuery);
-      const relevantDocs = await this.documentRepository.searchSimilarDocuments({
-        queryEmbedding,
-        limit: maxContextDocuments,
-        threshold,
+      const searchResult = await this.ragOrchestrator.search(userQuery, {
+        topK: maxContextDocuments,
+        similarityThreshold: threshold,
       });
-      contextUsed = relevantDocs.map(doc => doc.content);
-      documentsFound = relevantDocs.length;
-      context = contextUsed.join('\n\n');
+      
+      contextUsed = searchResult.chunks.map(chunk => chunk.content);
+      documentsFound = searchResult.totalFound;
+      
+      // Get enriched context with relevance scores
+      context = await this.ragOrchestrator.getContext(userQuery, {
+        topK: maxContextDocuments,
+        similarityThreshold: threshold,
+      });
     }
 
     const response = await this.chatRepository.generateResponse({

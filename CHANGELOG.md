@@ -5,6 +5,83 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- **ADR-006:** Architecture decision to maintain RAG in Flutter/Gemini instead of migrating to Python/LangChain
+  - Documented rationale for keeping current stack (Flutter + Gemini + MCP)
+  - Defined optimization roadmap in 4 phases (indexing, cache, fallbacks, monitoring)
+  - Established criteria for potential future migration to Python/LangChain
+  - Location: `docs/adr/006-rag-architecture-decision.md`
+- **RAG Indexer Phase 1:** ✅ COMPLETE - Document indexing with strategic chunking (TDD)
+  - Test suite with 13 test cases following TDD methodology (ALL PASSING ✅)
+  - TypeScript implementation with Gemini text-embedding-004 integration
+  - Chunking algorithm: 500 tokens per chunk, 50 tokens overlap
+  - Category mapping for business domains (QRIBAR → producto_digital, Reviews → reputacion_online)
+  - Gemini API mock for testing without real API calls
+  - Location: `src/features/chatbot/data/rag-indexer.ts`
+- **Embedding Cache Phase 2:** ✅ COMPLETE - Smart caching with TTL and Supabase backup (TDD)
+  - Test suite with 23 test cases following TDD methodology (ALL PASSING ✅)
+  - In-memory cache with configurable TTL (default 7 days)
+  - Supabase integration for persistent backup and restoration
+  - Pattern-based invalidation (glob support: `qribar_*`)
+  - Cache statistics (hits, misses, hit rate, memory usage)
+  - Automatic expiration and cleanup of stale entries
+  - Location: `src/features/chatbot/data/embedding-cache.ts`
+- **Fallback Handler Phase 3:** ✅ COMPLETE - Intelligent fallback responses (TDD)
+  - Test suite with 27 test cases following TDD methodology (ALL PASSING ✅)
+  - Context-aware intent detection (pricing, features, implementation, success stories, demo)
+  - Human escalation logic (confidence < 50%, urgent queries, implementation requests)
+  - Statistics tracking (total fallbacks, by category, escalation rate, average confidence)
+  - Action suggestions (contact, documentation, demo, testimonials)
+  - Personalization (user name, tone adaptation based on interactions)
+  - Predefined responses for QRIBAR, Reviews, and General categories
+  - Domain Layer implementation (zero external dependencies)
+  - Location: `src/features/chatbot/domain/fallback-handler.ts`
+- **RAG Orchestrator Integration:** ✅ COMPLETE - Unified Phases 1+2+3 coordination (TDD)
+  - Test suite with 18 integration test cases (ALL PASSING ✅)
+  - Coordinates RAGIndexer + EmbeddingCache + FallbackHandler
+  - Document indexing with intelligent grouping by source
+  - Semantic search with cosine similarity calculation
+  - Automatic fallback when no relevant results found (similarity < threshold)
+  - Query embedding caching for repeated searches
+  - Statistics tracking across all 3 phases (cache hits, fallback usage, memory)
+  - Cache invalidation by pattern (glob support)
+  - Location: `src/features/chatbot/domain/rag-orchestrator.ts`
+  - **Total Test Coverage:** 81 tests passing (100% success rate)
+    - RAGIndexer: 13/13 ✅
+    - EmbeddingCache: 23/23 ✅
+    - FallbackHandler: 27/27 ✅
+    - RAGOrchestrator: 18/18 ✅
+
+### Changed
+- **Jest Configuration:** Added ts-jest support for TypeScript testing with ES modules
+  - Created `jest.config.cjs` with ESM preset and proper module resolution
+  - Installed `ts-jest` and `@types/jest` dependencies
+  - Module path mapping configured (`@/` → `src/`)
+  - Test timeout increased to 30s for API calls
+- **GenerateResponseUseCase:** Integrated RAGOrchestrator for unified RAG workflow
+  - Replaced local embedding + document search logic with orchestrator calls
+  - Removed dependencies on IEmbeddingRepository and IDocumentRepository
+  - Now uses `orchestrator.search()` for semantic search
+  - Uses `orchestrator.getContext()` for enriched context with relevance scores
+  - Automatic fallback handling when no results found
+  - Location: `src/features/chatbot/domain/usecases/GenerateResponseUseCase.ts`
+- **Module Exports:** Exported RAG components from domain and data layers
+  - Domain index exports: FallbackHandler, RAGOrchestrator, and related types
+  - Data index exports: RAGIndexer, EmbeddingCache, and related types
+  - Enables clean imports for RAG system usage
+
+### Fixed
+- **RAGIndexer Category Inference:** Changed from exact match to substring matching
+  - Now uses `includes()` instead of exact `===` for category detection
+  - Fixes issue where sources like "qribar_features" didn't match "qribar"
+  - Location: `src/features/chatbot/data/rag-indexer.ts` (_inferCategory method)
+- **RAGOrchestrator Cache Invalidation:** Fixed method call for pattern-based invalidation
+  - Changed from `cache.invalidate(pattern)` to `cache.invalidateByPattern(pattern)`
+  - Aligns with EmbeddingCache API design
+  - Location: `src/features/chatbot/domain/rag-orchestrator.ts` (invalidateCache method)
+
 ## [0.3.1] - 2026-02-02
 
 ### Added

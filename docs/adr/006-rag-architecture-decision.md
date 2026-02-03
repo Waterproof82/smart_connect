@@ -1,0 +1,169 @@
+# ADR-006: Mantener RAG en Flutter/Gemini vs Migrar a Python/LangChain
+
+**Fecha:** 2026-02-03  
+**Estado:** Aceptado  
+
+---
+
+## Contexto
+
+Se evaluó migrar el sistema RAG actual (Flutter + Gemini + MCP Protocol) a una implementación basada en Python + LangChain + Gradio desplegada en Railway.
+
+### Situación Actual
+- RAG implementado en Flutter Web según `docs/context/chatbot_ia/GUIA_IMPLEMENTACION_RAG.md`
+- Gemini API como LLM principal (definido en `AGENTS.md`)
+- MCP Protocol para contexto empresarial (QRIBAR, Reviews)
+- Integración nativa con el stack actual de Flutter
+
+### Alternativa Propuesta
+- Python + LangChain + FAISS/ChromaDB
+- Gradio UI para interfaz rápida
+- Microservicio independiente en Railway
+- Mayor flexibilidad de modelos y embeddings
+
+---
+
+## Opciones Consideradas
+
+### Opción 1: Mantener RAG en Flutter/Gemini (Actual)
+**Pros:**
+- Stack unificado (Flutter Web para todo el frontend)
+- Zero infraestructura adicional ($0 extra)
+- Coherente con `AGENTS.md` (Gemini como cerebro IA)
+- Zero latencia de red adicional (todo en frontend)
+- TDD nativo en Dart
+
+**Contras:**
+- Menos flexibilidad para cambiar de modelo LLM
+- Ecosistema de herramientas RAG menos maduro que Python
+
+### Opción 2: Migrar a Python/LangChain
+**Pros:**
+- Ecosistema RAG maduro (FAISS, ChromaDB, LangChain)
+- Facilidad para experimentar con múltiples LLMs
+- Componentes reutilizables y bien documentados
+- Gradio para prototipado rápido
+
+**Contras:**
+- Nuevo servicio en Railway (+$10-15/mes)
+- Stack adicional (Python + dependencias)
+- Duplicación de esfuerzos (ya funciona en Flutter)
+- Mayor complejidad operativa (2 servicios vs 1)
+- Rompe la arquitectura definida en `AGENTS.md`
+
+---
+
+## Decisión
+
+Elegimos **Mantener RAG en Flutter/Gemini (Opción 1)**
+
+---
+
+## Justificación
+
+### 1. Alineación con Stack Oficial
+Según `AGENTS.md`:
+```yaml
+Dashboard & Chatbot: Flutter Web
+Cerebro IA: Gemini (Google AI Studio)
+Protocolo: MCP
+```
+Python/LangChain no está en el stack definido.
+
+### 2. Principio KISS (Keep It Simple)
+- **Operacional:** 1 servicio menos que mantener
+- **Económico:** $0 infraestructura adicional (Gemini ya contratado)
+- **Técnico:** Sin latencia extra de red
+
+### 3. Coherencia Arquitectónica
+`ARQUITECTURA.md` define claramente:
+- **Frontend (Flutter):** Dashboard + Chatbot RAG
+- **Backend (n8n):** Orquestador de leads
+- **LLM (Gemini):** Cerebro IA
+
+Añadir Python rompería esta separación limpia.
+
+### 4. Foco en Negocio
+El objetivo es **vender QRIBAR y Reviews**, no construir infraestructura experimental. El RAG actual ya cumple este propósito según `docs/context/chatbot_ia/GUIA_IMPLEMENTACION_RAG.md`.
+
+---
+
+## Consecuencias
+
+### Positivas
+1. **Mantenibilidad:** Stack único (Flutter + Dart)
+2. **Costos:** Sin gastos adicionales de Railway/Python
+3. **Performance:** Sin latencia de red adicional
+4. **TDD:** Tests unitarios/integración en Dart nativo
+5. **Seguridad:** Menor superficie de ataque (1 app vs 2 servicios)
+6. **Operaciones:** Menos complejidad de despliegue
+
+### Negativas
+1. **Flexibilidad de modelos:** 
+   - Dificulta cambiar a Claude/GPT en el futuro
+   - **Mitigación:** Gemini es suficiente para el caso de uso actual
+   
+2. **Experimentación:**
+   - Menos herramientas "out-of-the-box" que LangChain
+   - **Mitigación:** Flutter + Gemini SDK tiene capacidad suficiente
+   
+3. **Escalabilidad multi-modelo:**
+   - Complicado si necesitamos 3+ LLMs simultáneos
+   - **Mitigación:** Decisión reversible (ver Plan de Migración)
+
+---
+
+## Plan de Optimización
+
+En lugar de migrar, optimizar el RAG actual en 4 fases:
+
+### Fase 1: Mejora de Indexación
+- Chunking estratégico (overlap de 50 tokens)
+- Metadata: source, category, timestamp
+- Embeddings con text-embedding-004 (Gemini)
+
+### Fase 2: Caché de Embeddings
+- Storage: Hive (local) + Supabase (backup)
+- TTL: 7 días
+- Invalidation via webhook desde n8n
+
+### Fase 3: Fallback Responses
+- Respuestas predefinidas cuando RAG no encuentra
+- Contexto: QRIBAR, Reviews, Precios
+- Escalación: "Te conectamos con un humano?"
+
+### Fase 4: Monitoreo n8n
+- Workflow que reciba logs de consultas RAG
+- Análisis de sentimiento de respuestas
+- Alertas Telegram si calidad < 80%
+
+---
+
+## Criterios de Reversión
+
+Migrar a Python/LangChain **SOLO SI:**
+
+```yaml
+Triggers:
+  - Clientes activos: > 50 (actualmente: ~5)
+  - Consultas/día: > 1000 (actualmente: ~50)
+  - Multi-modelo: Necesidad de Gemini + Claude + GPT simultáneos
+  - Multi-tenant: RAG personalizado por cliente
+  - Fine-tuning: Embeddings custom por industria
+```
+
+---
+
+## Referencias
+
+- `AGENTS.md` → Stack oficial del proyecto
+- `ARQUITECTURA.md` → Visión completa del sistema
+- `docs/context/chatbot_ia/GUIA_IMPLEMENTACION_RAG.md` → Implementación actual
+- `docs/context/adr.md` → Formato de ADRs
+- `docs/CHATBOT_RAG_ARCHITECTURE.md` → Documentación técnica RAG
+
+---
+
+**Creado por:** AI Agent (Claude Sonnet 4.5)  
+**Requiere revisión de:** Lead Developer SmartConnect  
+**Próximo ADR:** 007-n8n-railway-production-deployment.md
