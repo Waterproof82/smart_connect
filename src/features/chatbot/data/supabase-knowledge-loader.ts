@@ -85,13 +85,15 @@ export class SupabaseKnowledgeLoader {
     }
 
     // Group documents by source
-    for (const doc of data as SupabaseDocument[]) {
+    const dataArray = data as SupabaseDocument[];
+    for (let i = 0; i < dataArray.length; i++) {
+      const doc = dataArray[i];
       const sourceType = this._mapSourceToCategory(doc.source);
       const content = doc.content;
 
       // Debug: Log first 3 documents to see source mapping
-      if (data.indexOf(doc) < 3) {
-        console.warn(`🔍 DEBUG Doc ${data.indexOf(doc) + 1}: source="${doc.source}" → mapped to "${sourceType}"`);
+      if (i < 3) {
+        console.warn(`🔍 DEBUG Doc ${i + 1}: source="${doc.source}" → mapped to "${sourceType}"`);
       }
 
       if (sourceType === 'qribar') {
