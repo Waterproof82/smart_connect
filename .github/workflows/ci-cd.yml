@@ -77,7 +77,7 @@ jobs:
         run: npm run build
       
       # 7. SUBIR ARTEFACTO (Opcional - para debugging)
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         if: success() && github.event_name == 'push'
         with:
           name: build-output
