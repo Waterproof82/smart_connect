@@ -527,7 +527,7 @@ describe('FallbackHandler - Error Handling', () => {
     // Arrange
     const context: FallbackContext = {
       query: 'Test query',
-      category: undefined as unknown,
+      category: undefined as unknown as string,
       ragResults: [],
       confidence: 0,
     };
