@@ -22,10 +22,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       
       # 1. SETUP DE ENTORNO
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: '24'
           cache: 'npm'
@@ -77,7 +77,7 @@ jobs:
         run: npm run build
       
       # 7. SUBIR ARTEFACTO (Opcional - para debugging)
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         if: success() && github.event_name == 'push'
         with:
           name: build-output
