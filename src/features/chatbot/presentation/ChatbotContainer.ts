@@ -14,6 +14,10 @@ import {
   DocumentRepositoryImpl 
 } from '../data/repositories';
 import { GenerateResponseUseCase, SearchDocumentsUseCase } from '../domain/usecases';
+import { RAGOrchestrator } from '../domain/rag-orchestrator';
+import { RAGIndexer } from '../data/rag-indexer';
+import { EmbeddingCache } from '../data/embedding-cache';
+import { FallbackHandler } from '../domain/fallback-handler';
 
 /**
  * Container for all chatbot dependencies
@@ -29,11 +33,16 @@ export class ChatbotContainer {
     // ===================================
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
     const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+    const geminiApiKey = import.meta.env.VITE_GEMINI_API_KEY || '';
 
     if (!supabaseUrl || !supabaseAnonKey) {
       throw new Error(
         '❌ Missing environment variables. Check your .env.local file: VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY'
       );
+    }
+
+    if (!geminiApiKey) {
+      console.warn('⚠️ VITE_GEMINI_API_KEY not set. RAG features will be limited.');
     }
 
     // Data Sources (responsible for external communication)
@@ -48,12 +57,27 @@ export class ChatbotContainer {
     const documentRepository = new DocumentRepositoryImpl(supabaseDataSource);
 
     // ===================================
-    // 3. DOMAIN LAYER (Use Cases)
+    // 3. RAG SYSTEM (Phases 1+2+3 Integration)
+    // ===================================
+    const ragIndexer = new RAGIndexer(geminiApiKey || 'mock-key');
+    const embeddingCache = new EmbeddingCache({
+      supabaseUrl,
+      supabaseKey: supabaseAnonKey,
+      ttlMs: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
+    const fallbackHandler = new FallbackHandler();
+    const ragOrchestrator = new RAGOrchestrator(
+      ragIndexer,
+      embeddingCache,
+      fallbackHandler
+    );
+
+    // ===================================
+    // 4. DOMAIN LAYER (Use Cases)
     // ===================================
     this.generateResponseUseCase = new GenerateResponseUseCase(
       chatRepository,
-      embeddingRepository,
-      documentRepository
+      ragOrchestrator
     );
 
     this.searchDocumentsUseCase = new SearchDocumentsUseCase(

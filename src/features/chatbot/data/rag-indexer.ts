@@ -12,7 +12,7 @@
  * docs/adr/006-rag-architecture-decision.md
  */
 
-import { GoogleGenerativeAI } from '@google/genai';
+import { GoogleGenAI } from '@google/genai';
 
 export interface ChunkMetadata {
   source: string;
@@ -33,7 +33,7 @@ export interface IndexDocumentsParams {
 }
 
 export class RAGIndexer {
-  private readonly genAI: GoogleGenerativeAI;
+  private readonly genAI: GoogleGenAI;
   private readonly embeddingModel;
   
   /**
@@ -47,7 +47,7 @@ export class RAGIndexer {
       throw new Error('Gemini API key cannot be empty');
     }
     
-    this.genAI = new GoogleGenerativeAI(geminiApiKey);
+    this.genAI = new GoogleGenAI({ apiKey: geminiApiKey });
     this.embeddingModel = this.genAI.getGenerativeModel({
       model: 'text-embedding-004',
     });

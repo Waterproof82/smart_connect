@@ -3,9 +3,9 @@
  * Used in tests to avoid real API calls
  */
 
-export class GoogleGenerativeAI {
-  constructor(apiKey: string) {
-    if (!apiKey || apiKey === 'invalid-key') {
+export class GoogleGenAI {
+  constructor(config: { apiKey: string }) {
+    if (!config.apiKey || config.apiKey === 'invalid-key') {
       // Simulate API key validation (throws in real usage)
     }
   }
