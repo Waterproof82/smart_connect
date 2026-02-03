@@ -56,10 +56,11 @@ updates:
     allow:
       - dependency-type: "all"
     
-    # Ignore specific dependencies (if needed)
-    # ignore:
-    #   - dependency-name: "package-name"
-    #     versions: ["x.x.x"]
+    # Ignore specific dependencies (breaking changes)
+    ignore:
+      # Tailwind CSS 4.x requires complete config migration
+      - dependency-name: "tailwindcss"
+        update-types: ["version-update:semver-major"]
   
   # Enable version updates for GitHub Actions
   - package-ecosystem: "github-actions"
