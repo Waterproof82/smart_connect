@@ -207,15 +207,59 @@ Deno.serve(async (req) => {
     console.log('✅ Supabase client initialized');
 
     // ===================================
-    // RAG: GENERATE QUERY EMBEDDING
+    // RAG: GENERATE QUERY EMBEDDING (with cache)
     // ===================================
     let queryEmbedding: number[] = [];
     let documents: any[] = [];
+    let cacheHit = false;
     
     try {
-      console.log('🧠 Generating embedding...');
-      queryEmbedding = await generateEmbedding(userQuery, geminiApiKey);
-      console.log('✅ Embedding generated:', queryEmbedding.length, 'dimensions');
+      // Check cache first
+      const cacheKey = `query:${userQuery}`;
+      console.log('🔍 Checking embedding cache...');
+      
+      const { data: cachedEmbedding, error: cacheError } = await supabase
+        .from('embedding_cache')
+        .select('embedding, timestamp, ttl')
+        .eq('key', cacheKey)
+        .maybeSingle();
+      
+      if (cachedEmbedding && !cacheError) {
+        // Check if cache entry is still valid (TTL not expired)
+        const now = Date.now();
+        const entryTtl = cachedEmbedding.ttl || (7 * 24 * 60 * 60 * 1000);
+        const isExpired = now - cachedEmbedding.timestamp > entryTtl;
+        
+        if (!isExpired && Array.isArray(cachedEmbedding.embedding)) {
+          queryEmbedding = cachedEmbedding.embedding;
+          cacheHit = true;
+          console.log('✅ Cache HIT - Using cached embedding');
+        } else {
+          console.log('⚠️ Cache MISS - Expired entry');
+        }
+      } else {
+        console.log('⚠️ Cache MISS - No entry found');
+      }
+      
+      // Generate embedding if not in cache
+      if (!cacheHit) {
+        console.log('🧠 Generating embedding...');
+        queryEmbedding = await generateEmbedding(userQuery, geminiApiKey);
+        console.log('✅ Embedding generated:', queryEmbedding.length, 'dimensions');
+        
+        // Store in cache (fire and forget)
+        supabase
+          .from('embedding_cache')
+          .upsert({
+            key: cacheKey,
+            embedding: queryEmbedding,
+            timestamp: Date.now(),
+            ttl: 7 * 24 * 60 * 60 * 1000, // 7 days
+            metadata: { source: 'gemini-chat', query_length: userQuery.length }
+          }, { onConflict: 'key' })
+          .then(() => console.log('✅ Embedding cached'))
+          .catch(err => console.warn('⚠️ Cache write failed:', err.message));
+      }
       
       // ===================================
       // RAG: VECTOR SEARCH
@@ -432,7 +476,8 @@ Pregunta: ${userQuery}`
         responseLength: aiResponse.length,
         rateLimitRemaining: rateLimit.remaining,
         abTestGroup,
-        promptVariant: selectedVariant.name
+        promptVariant: selectedVariant.name,
+        embeddingCacheHit: cacheHit
       }
     });
 
@@ -447,7 +492,8 @@ Pregunta: ${userQuery}`
         rateLimitRemaining: rateLimit.remaining,
         abTestGroup,
         promptVariant: selectedVariant.name,
-        responseTime
+        responseTime,
+        cacheHit
       }),
       { 
         status: 200, 
