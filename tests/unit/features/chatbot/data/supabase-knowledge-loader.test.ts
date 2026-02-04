@@ -3,7 +3,7 @@
  * 
  * Test suite for loading documents from Supabase for RAG indexing.
  * 
- * Refs: AGENTS.md Section 3 (TDD), ADR-006 (RAG optimization)
+ * Refs: AGENTS.md Section 3 (TDD), ADR-003 (RAG optimization)
  */
 
 import { describe, it, expect, beforeEach, jest } from '@jest/globals';

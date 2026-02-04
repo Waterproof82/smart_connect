@@ -29,7 +29,7 @@ describe('MessageEntity', () => {
 
     it('should accept custom ID and timestamp', () => {
       const customId = 'custom-id-123';
-      const customTimestamp = new Date('2026-01-01');
+      const customTimestamp = Date.now();
 
       const message = new MessageEntity({
         id: customId,
@@ -81,7 +81,7 @@ describe('MessageEntity', () => {
         id: 'test-id',
         role: 'user',
         content: 'Original',
-        timestamp: new Date('2026-01-01'),
+        timestamp: Date.now(),
       });
 
       const updated = original.withContent('Updated');

@@ -55,7 +55,7 @@ export class GenerateResponseUseCase {
         similarityThreshold: threshold,
       });
       
-      contextUsed = searchResult.chunks.map(chunk => chunk.content);
+      contextUsed = searchResult.chunks.map(chunk => chunk.text);
       documentsFound = searchResult.totalFound;
       
       // Get enriched context with relevance scores

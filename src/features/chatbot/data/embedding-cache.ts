@@ -1,7 +1,7 @@
 /**
  * Embedding Cache para RAG System
  * 
- * Clean Architecture: Data Layer
+ * Clean Architecture: Data Layer (Implementation)
  * 
  * Responsabilidad:
  * - Cachear embeddings generados para evitar regeneración
@@ -10,27 +10,30 @@
  * - Invalidación manual y por patrón
  * - Estadísticas de cache (hits, misses, hit rate)
  * 
- * Fase 2 de optimización según ADR-006
+ * Fase 2 de optimización según ADR-003
  * docs/adr/006-rag-architecture-decision.md
  */
 
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { 
+  IEmbeddingCache, 
+  CacheEntry as ICacheEntry,
+  CacheStats as ICacheStats
+} from '../domain/interfaces/IEmbeddingCache';
 
-export interface CacheEntry {
+// Internal cache entry with expiration tracking
+interface InternalCacheEntry {
   key: string;
   embedding: number[];
   timestamp: number;
+  expiresAt: number;
   metadata?: Record<string, unknown>;
   ttl?: number;
 }
 
-export interface CacheStats {
-  hits: number;
-  misses: number;
-  hitRate: number;
-  totalEntries: number;
-  memoryUsageBytes: number;
-}
+// Re-export interface types
+export type CacheEntry = ICacheEntry;
+export type CacheStats = ICacheStats;
 
 export interface EmbeddingCacheConfig {
   ttlMs: number;
@@ -39,8 +42,8 @@ export interface EmbeddingCacheConfig {
   supabaseKey?: string;
 }
 
-export class EmbeddingCache {
-  private readonly cache: Map<string, CacheEntry>;
+export class EmbeddingCache implements IEmbeddingCache {
+  private readonly cache: Map<string, InternalCacheEntry>;
   private readonly ttlMs: number;
   private stats: {
     hits: number;
@@ -102,7 +105,13 @@ export class EmbeddingCache {
 
       // Cache hit
       this.stats.hits++;
-      return entry;
+      return {
+        key: entry.key,
+        embedding: entry.embedding,
+        timestamp: entry.timestamp,
+        expiresAt: entry.expiresAt,
+        metadata: entry.metadata,
+      };
     }
 
     // Cache miss - try Supabase
@@ -139,12 +148,15 @@ export class EmbeddingCache {
       throw new Error('Embedding must be 768 dimensions');
     }
 
-    const entry: CacheEntry = {
+    const now = Date.now();
+    const ttl = customTtl ?? this.ttlMs;
+    const entry: InternalCacheEntry = {
       key,
       embedding,
-      timestamp: Date.now(),
+      timestamp: now,
+      expiresAt: now + ttl,
       metadata,
-      ttl: customTtl,
+      ttl,
     };
 
     // Store in local cache
@@ -172,6 +184,26 @@ export class EmbeddingCache {
     }
 
     return existed;
+  }
+
+  /**
+   * Delete entry from cache (IEmbeddingCache interface method)
+   * 
+   * @param key Cache key
+   */
+  async delete(key: string): Promise<void> {
+    await this.invalidate(key);
+  }
+
+  /**
+   * Check if cache has entry (IEmbeddingCache interface method)
+   * 
+   * @param key Cache key
+   * @returns true if entry exists and is valid
+   */
+  async has(key: string): Promise<boolean> {
+    const entry = await this.get(key);
+    return entry !== null;
   }
 
   /**
@@ -210,26 +242,37 @@ export class EmbeddingCache {
   /**
    * Get cache statistics
    */
-  getStats(): CacheStats {
+  getStats(): ICacheStats {
     const totalRequests = this.stats.hits + this.stats.misses;
     const hitRate = totalRequests > 0 ? this.stats.hits / totalRequests : 0;
 
-    // Calculate memory usage (approximate)
-    let memoryUsageBytes = 0;
+    // Calculate memory usage and timestamps
+    let memorySize = 0;
+    let oldestEntry: number | null = null;
+    let newestEntry: number | null = null;
+    
     for (const entry of this.cache.values()) {
       // 768 floats * 8 bytes + key + metadata overhead
-      memoryUsageBytes += 768 * 8 + entry.key.length * 2;
+      memorySize += 768 * 8 + entry.key.length * 2;
       if (entry.metadata) {
-        memoryUsageBytes += JSON.stringify(entry.metadata).length * 2;
+        memorySize += JSON.stringify(entry.metadata).length * 2;
+      }
+      
+      // Track oldest and newest
+      if (oldestEntry === null || entry.timestamp < oldestEntry) {
+        oldestEntry = entry.timestamp;
+      }
+      if (newestEntry === null || entry.timestamp > newestEntry) {
+        newestEntry = entry.timestamp;
       }
     }
 
     return {
-      hits: this.stats.hits,
-      misses: this.stats.misses,
-      hitRate,
       totalEntries: this.cache.size,
-      memoryUsageBytes,
+      hitRate,
+      memorySize,
+      oldestEntry,
+      newestEntry,
     };
   }
 
@@ -247,7 +290,7 @@ export class EmbeddingCache {
   /**
    * Sync entry to Supabase
    */
-  private async _syncToSupabase(entry: CacheEntry): Promise<void> {
+  private async _syncToSupabase(entry: InternalCacheEntry): Promise<void> {
     if (!this.supabaseClient) return;
 
     try {
@@ -259,6 +302,8 @@ export class EmbeddingCache {
           timestamp: entry.timestamp,
           metadata: entry.metadata,
           ttl: entry.ttl,
+        }, {
+          onConflict: 'key', // Specify unique column for upsert
         });
     } catch (error) {
       console.warn('Failed to sync to Supabase:', error);
@@ -293,16 +338,24 @@ export class EmbeddingCache {
       }
 
       // Restore to local cache
-      const entry: CacheEntry = {
+      const ttl = data.ttl ?? this.ttlMs;
+      const entry: InternalCacheEntry = {
         key: data.key,
         embedding: data.embedding,
         timestamp: data.timestamp,
-        metadata: data.metadata,
-        ttl: data.ttl,
+        expiresAt: data.timestamp + ttl,
+        metadata: data.metadata as Record<string, unknown> | undefined,
+        ttl,
       };
 
       this.cache.set(key, entry);
-      return entry;
+      return {
+        key: entry.key,
+        embedding: entry.embedding,
+        timestamp: entry.timestamp,
+        expiresAt: entry.expiresAt,
+        metadata: entry.metadata,
+      };
     } catch (error) {
       console.warn('Failed to restore from Supabase:', error);
       return null;

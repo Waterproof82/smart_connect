@@ -16,6 +16,8 @@ import {
 import { GenerateResponseUseCase, SearchDocumentsUseCase } from '../domain/usecases';
 import { RAGOrchestrator } from '../domain/rag-orchestrator';
 import { SupabaseKnowledgeLoader } from '../data/supabase-knowledge-loader';
+import { RAGIndexer } from '../data/rag-indexer';
+import { EmbeddingCache } from '../data/embedding-cache';
 
 /**
  * Container for all chatbot dependencies
@@ -64,14 +66,22 @@ export class ChatbotContainer {
     // ===================================
     // 3. RAG SYSTEM (Phases 1+2+3 Integration)
     // ===================================
-    this.ragOrchestrator = new RAGOrchestrator({
-      apiKey: geminiApiKey,
+    
+    // Instantiate concrete implementations (Data Layer)
+    const ragIndexer = new RAGIndexer(geminiApiKey);
+    const embeddingCache = new EmbeddingCache({
       supabaseUrl,
       supabaseKey: supabaseAnonKey,
+      ttlMs: 7 * 24 * 60 * 60 * 1000, // 7 days
+      enableSupabaseBackup: true,
+    });
+    
+    // Inject implementations into RAGOrchestrator (Domain Layer)
+    this.ragOrchestrator = new RAGOrchestrator({
+      indexer: ragIndexer,
+      cache: embeddingCache,
       defaultTopK: 5,
       defaultThreshold: 0.7,
-      enableCache: true,
-      cacheTTL: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
     // Knowledge Base Loader

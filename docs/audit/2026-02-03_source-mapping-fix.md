@@ -169,6 +169,6 @@
 
 ## References
 
-- **ADR-006:** RAG architecture decision (index-time loading strategy)
+- **ADR-003:** RAG architecture decision (index-time loading strategy)
 - **AGENTS.md Section 4.3:** Audit log protocol
 - **GitHub Commit:** [Pending - will be added after push]

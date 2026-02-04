@@ -14,17 +14,30 @@ import {
   RAGDocument, 
   RAGSearchOptions 
 } from '@/features/chatbot/domain/rag-orchestrator';
+import { RAGIndexer } from '@/features/chatbot/data/rag-indexer';
+import { EmbeddingCache } from '@/features/chatbot/data/embedding-cache';
 
 describe('RAGOrchestrator - Integration Tests', () => {
   let orchestrator: RAGOrchestrator;
+  let indexer: RAGIndexer;
+  let cache: EmbeddingCache;
   const mockApiKey = 'test-api-key-12345';
 
   beforeEach(() => {
+    // Create concrete implementations (Data Layer)
+    indexer = new RAGIndexer(mockApiKey);
+    cache = new EmbeddingCache({
+      ttlMs: 3600000,
+      supabaseUrl: process.env.VITE_SUPABASE_URL || '',
+      supabaseKey: process.env.VITE_SUPABASE_ANON_KEY || '',
+    });
+
+    // Inject dependencies into Domain Layer
     orchestrator = new RAGOrchestrator({
-      apiKey: mockApiKey,
+      indexer,
+      cache,
       defaultTopK: 3,
       defaultThreshold: 0.7,
-      enableCache: true,
     });
   });
 
@@ -110,7 +123,7 @@ describe('RAGOrchestrator - Integration Tests', () => {
         expect(result.totalFound).toBe(0);
       } else {
         expect(result.totalFound).toBeGreaterThan(0);
-        expect(result.chunks[0].content).toContain('QRIBAR');
+        expect(result.chunks[0].text).toContain('QRIBAR');
         expect(result.relevanceScores[0]).toBeGreaterThanOrEqual(0.3);
       }
     });
@@ -292,9 +305,9 @@ describe('RAGOrchestrator - Integration Tests', () => {
       const stats = orchestrator.getCacheStats();
 
       // Assert
-      expect(stats.hits).toBeGreaterThan(0);
-      expect(stats.misses).toBeGreaterThan(0);
+      expect(stats.totalEntries).toBeGreaterThan(0);
       expect(stats.hitRate).toBeGreaterThan(0);
+      expect(stats.memorySize).toBeGreaterThan(0);
     });
 
     test('MUST track fallback statistics', async () => {
@@ -326,8 +339,8 @@ describe('RAGOrchestrator - Integration Tests', () => {
         },
       ];
       await orchestrator.indexDocuments(documents);
-      const statsBefore = orchestrator.getCacheStats();
       await orchestrator.search('test query'); // Create query cache
+      const statsBefore = orchestrator.getCacheStats();
 
       // Act
       await orchestrator.invalidateCache('*'); // Invalidate all
