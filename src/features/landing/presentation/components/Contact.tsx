@@ -42,6 +42,7 @@ export const Contact: React.FC = () => {
       console.error('Please add it to Vercel Environment Variables');
       console.error('Current value:', webhookUrl || '(empty)');
     } else if (isDevelopment && webhookUrl) {
+      // eslint-disable-next-line no-console
       console.log('✅ Webhook URL configured:', webhookUrl.substring(0, 30) + '...');
     }
   }, []);

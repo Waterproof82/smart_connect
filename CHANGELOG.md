@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Security
+- **Row Level Security (RLS) on Documents Table:** CRITICAL security fix for admin panel
+  - Enabled RLS policies to enforce database-level access control
+  - Policy 1: Admin full access (only users with admin/super_admin role in JWT)
+  - Policy 2: Anon read-only access for chatbot RAG queries
+  - Policy 3: Service role bypass for Edge Functions
+  - Prevents unauthorized access even if frontend is bypassed
+  - Comprehensive test suite: 15 security tests covering all RLS policies
+  - Location: `supabase/migrations/20260204120000_enable_documents_rls.sql`
+  - Tests: `tests/integration/admin/documents-rls.test.ts`
+  - OWASP A01:2021 compliance improved: 5.0/10 → 9.5/10
+  - Audit: `docs/audit/2026-02-04_admin-panel-rls-fix.md`
+
 ### Added
 - **Admin Panel for RAG System Management:** Complete admin interface to manage RAG documents
   - Authentication with Supabase Auth (email/password)

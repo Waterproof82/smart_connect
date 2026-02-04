@@ -286,7 +286,7 @@ export class RAGOrchestrator {
   /**
    * Invalidate cache entries by pattern
    */
-  async invalidateCache(pattern: string) {
+  async invalidateCache(_pattern: string) {
     // Note: IEmbeddingCache doesn't support pattern invalidation
     // Use clear() for full cache reset or delete(key) for specific entries
     await this.cache.clear();

@@ -32,6 +32,20 @@ export const DocumentList: React.FC<DocumentListProps> = ({
   const [searchText, setSearchText] = useState<string>('');
   const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
 
+  // Handle Escape key for modal
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && selectedDocument) {
+        setSelectedDocument(null);
+      }
+    };
+
+    if (selectedDocument) {
+      document.addEventListener('keydown', handleEscape);
+      return () => document.removeEventListener('keydown', handleEscape);
+    }
+  }, [selectedDocument]);
+
   const loadDocuments = async () => {
     setIsLoading(true);
     setError(null);
@@ -252,20 +266,16 @@ export const DocumentList: React.FC<DocumentListProps> = ({
 
       {/* Modal for Full Content */}
       {selectedDocument && (
-        // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
-        <div 
-          className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4"
-          onClick={() => setSelectedDocument(null)}
+        <dialog
+          open
+          aria-labelledby="modal-title"
+          className="fixed inset-0 bg-transparent backdrop:bg-black/80 backdrop:backdrop-blur-sm flex items-center justify-center z-50 p-4 max-w-none w-full h-full"
         >
-          {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
-          <div 
-            className="bg-gray-900 border border-gray-800 rounded-lg max-w-4xl w-full max-h-[80vh] overflow-hidden flex flex-col"
-            onClick={(e) => e.stopPropagation()}
-          >
+          <div className="bg-gray-900 border border-gray-800 rounded-lg max-w-4xl w-full max-h-[80vh] overflow-hidden flex flex-col">
             {/* Modal Header */}
             <div className="flex items-center justify-between p-6 border-b border-gray-800">
               <div>
-                <h3 className="text-xl font-bold text-white">Document Content</h3>
+                <h3 id="modal-title" className="text-xl font-bold text-white">Document Content</h3>
                 <div className="flex gap-2 mt-2">
                   <span className="px-2 py-1 bg-blue-900/30 text-blue-400 rounded-full text-xs">
                     {selectedDocument.source}
@@ -303,7 +313,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
               </button>
             </div>
           </div>
-        </div>
+        </dialog>
       )}
     </div>
   );

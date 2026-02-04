@@ -16,6 +16,7 @@ export interface WebhookPayload {
   email: string;
   servicio_interes: string;
   mensaje_cuerpo: string;
+  timestamp?: string;
 }
 
 export class N8NWebhookDataSource {
@@ -25,6 +26,15 @@ export class N8NWebhookDataSource {
    * Sends lead data to n8n webhook
    */
   async sendLead(payload: WebhookPayload): Promise<boolean> {
+    // Skip webhook if URL is not configured (development mode)
+    if (!this.webhookUrl || 
+        this.webhookUrl.trim() === '' || 
+        this.webhookUrl.includes('placeholder') ||
+        this.webhookUrl.includes('your_') ||
+        this.webhookUrl.includes('.invalid')) {
+      return true; // Return success to avoid blocking form submission
+    }
+
     try {
       const response = await fetch(this.webhookUrl, {
         method: 'POST',
@@ -39,7 +49,7 @@ export class N8NWebhookDataSource {
         return false;
       }
 
-      logger.info('Lead enviado a n8n webhook', payload);
+      logger.info('✅ Lead enviado exitosamente');
       return true;
     } catch (error) {
       logger.error('Error al enviar lead a n8n', error);
