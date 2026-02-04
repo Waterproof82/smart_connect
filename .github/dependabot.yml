@@ -1,0 +1,81 @@
+# Dependabot Configuration
+# Automated dependency updates for security and maintenance
+# Documentation: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates
+
+version: 2
+updates:
+  # Enable version updates for npm
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+      time: "09:00"
+      timezone: "Europe/Madrid"
+    
+    # Limit number of open pull requests
+    open-pull-requests-limit: 5
+    
+    # Group minor and patch updates together
+    groups:
+      development-dependencies:
+        dependency-type: "development"
+        update-types:
+          - "minor"
+          - "patch"
+      
+      production-dependencies:
+        dependency-type: "production"
+        update-types:
+          - "minor"
+          - "patch"
+    
+    # Always update security vulnerabilities
+    # Major updates will be created individually
+    versioning-strategy: increase
+    
+    # Assignees and reviewers
+    assignees:
+      - "Waterproof82"
+    
+    # Labels for PRs
+    labels:
+      - "dependencies"
+      - "automated"
+    
+    # Commit message configuration
+    commit-message:
+      prefix: "chore"
+      prefix-development: "chore"
+      include: "scope"
+    
+    # Rebase strategy
+    rebase-strategy: "auto"
+    
+    # Allow Dependabot to update lockfiles
+    # even if there are existing PRs
+    allow:
+      - dependency-type: "all"
+    
+    # Ignore specific dependencies (breaking changes)
+    ignore:
+      # Tailwind CSS 4.x requires complete config migration
+      - dependency-name: "tailwindcss"
+        update-types: ["version-update:semver-major"]
+  
+  # Enable version updates for GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+      time: "09:00"
+      timezone: "Europe/Madrid"
+    
+    open-pull-requests-limit: 3
+    
+    labels:
+      - "dependencies"
+      - "github-actions"
+    
+    commit-message:
+      prefix: "ci"
+      include: "scope"

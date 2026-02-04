@@ -10,7 +10,8 @@ import { rateLimiter, RateLimitPresets } from '@shared/utils/rateLimiter';
 // ====================================
 // DEPENDENCY INJECTION
 // ====================================
-const webhookUrl = ENV.N8N_WEBHOOK_URL || 'http://localhost:5678/webhook-test/hot-lead-intake';
+// Use a placeholder for build time, validation happens at runtime
+const webhookUrl = ENV.N8N_WEBHOOK_URL || 'https://placeholder-webhook-url.invalid';
 const container = getLandingContainer(webhookUrl);
 
 interface FormData {
@@ -30,6 +31,14 @@ interface ValidationErrors {
 }
 
 export const Contact: React.FC = () => {
+  // Runtime validation of critical environment variables
+  useEffect(() => {
+    if (!ENV.N8N_WEBHOOK_URL || ENV.N8N_WEBHOOK_URL.includes('placeholder')) {
+      console.error('❌ CRITICAL: VITE_N8N_WEBHOOK_URL is not configured in production!');
+      console.error('Please add it to Vercel Environment Variables');
+    }
+  }, []);
+
   const [isVisible, setIsVisible] = useState(false);
   const [selectedService, setSelectedService] = useState('Selecciona una opción');
   const [formData, setFormData] = useState<FormData>({
@@ -150,7 +159,7 @@ export const Contact: React.FC = () => {
   };
 
   // Manejar envío del formulario usando Clean Architecture
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     
     if (!isFormValid()) return;
@@ -287,11 +296,12 @@ export const Contact: React.FC = () => {
       },
       { threshold: 0.1 }
     );
-    if (sectionRef.current) observer.observe(sectionRef.current);
+    const sectionNode = sectionRef.current;
+    if (sectionNode) observer.observe(sectionNode);
     
     return () => {
       globalThis.removeEventListener('hashchange', updateServiceFromURL);
-      if (sectionRef.current) observer.unobserve(sectionRef.current);
+      if (sectionNode) observer.unobserve(sectionNode);
     };
   }, []);
 

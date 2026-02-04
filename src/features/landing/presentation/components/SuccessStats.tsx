@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { TrendingUp, Heart, Star, Users } from 'lucide-react';
 
 interface StatProps {
@@ -14,11 +14,10 @@ interface StatProps {
 
 const StatCard: React.FC<StatProps> = ({ icon, label, value, suffix, color, isInView, delay }) => {
   const [count, setCount] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
   const animationRef = useRef<number | null>(null);
   const hasAnimated = useRef(false);
 
-  const animate = () => {
+  const animate = useCallback(() => {
     const duration = 2000;
     const start = performance.now();
     
@@ -35,7 +34,7 @@ const StatCard: React.FC<StatProps> = ({ icon, label, value, suffix, color, isIn
     };
     
     animationRef.current = requestAnimationFrame(step);
-  };
+  }, [value]);
 
   useEffect(() => {
     if (isInView && !hasAnimated.current) {
@@ -45,17 +44,11 @@ const StatCard: React.FC<StatProps> = ({ icon, label, value, suffix, color, isIn
       }, delay);
       return () => clearTimeout(timer);
     }
-  }, [isInView, value, delay]);
-
-  const handleMouseEnter = () => {
-    setIsHovered(true);
-  };
+  }, [isInView, value, delay, animate]);
 
   return (
-    <div 
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={() => setIsHovered(false)}
-      className={`glass-card p-8 rounded-[2.5rem] border border-white/5 group hover:border-blue-500/20 hover:bg-white/[0.05] transition-all duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)] cursor-default relative overflow-hidden ${
+    <div
+      className={`glass-card p-8 rounded-[2.5rem] border border-white/5 group hover:border-blue-500/20 hover:bg-white/[0.05] transition-all duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)] relative overflow-hidden ${
         isInView 
           ? 'opacity-100 translate-y-0 blur-0 scale-100' 
           : 'opacity-0 translate-y-20 blur-md scale-90'
@@ -66,7 +59,7 @@ const StatCard: React.FC<StatProps> = ({ icon, label, value, suffix, color, isIn
       
       <div className="flex flex-col items-center text-center relative z-10">
         <div className={`mb-6 w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500`}>
-          {React.cloneElement(icon as React.ReactElement<any>, { className: `w-8 h-8 ${isHovered ? 'animate-pulse' : ''}` })}
+          {React.cloneElement(icon as React.ReactElement<{ className?: string }>, { className: 'w-8 h-8' })}
         </div>
         
         <div className="text-5xl font-extrabold mb-3 tracking-tighter">
@@ -101,13 +94,14 @@ export const SuccessStats: React.FC = () => {
       }
     );
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
+    const currentSection = sectionRef.current;
+    if (currentSection) {
+      observer.observe(currentSection);
     }
 
     return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
+      if (currentSection) {
+        observer.unobserve(currentSection);
       }
     };
   }, []);
@@ -118,44 +112,48 @@ export const SuccessStats: React.FC = () => {
       label: "Aumento Ventas", 
       value: 45, 
       suffix: "%", 
-      color: "bg-emerald-500" 
+      color: "bg-emerald-500",
+      delay: 0
     },
     { 
       icon: <Heart className="text-rose-500" />, 
       label: "Satisfacción", 
       value: 98, 
       suffix: "%", 
-      color: "bg-rose-500" 
+      color: "bg-rose-500",
+      delay: 150
     },
     { 
       icon: <Star className="text-amber-500" />, 
       label: "Reseñas Google", 
       value: 1200, 
       suffix: "+", 
-      color: "bg-amber-500" 
+      color: "bg-amber-500",
+      delay: 300
     },
     { 
       icon: <Users className="text-blue-500" />, 
       label: "Clientes Felices", 
       value: 850, 
       suffix: "+", 
-      color: "bg-blue-500" 
+      color: "bg-blue-500",
+      delay: 450
     }
   ];
 
   return (
     <div className="container mx-auto px-6" ref={sectionRef}>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-        {stats.map((stat, idx) => (
+        {stats.map((stat) => (
           <StatCard 
-            key={idx}
+            key={stat.label}
             icon={stat.icon}
             label={stat.label}
             value={stat.value}
             suffix={stat.suffix}
             color={stat.color}
             isInView={isVisible}
-            delay={idx * 150}
+            delay={stat.delay}
           />
         ))}
       </div>

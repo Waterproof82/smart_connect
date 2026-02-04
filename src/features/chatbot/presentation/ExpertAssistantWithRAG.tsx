@@ -102,7 +102,7 @@ export const ExpertAssistant: React.FC = () => {
 
       // Log RAG context for debugging
       if (result.documentsFound > 0) {
-        console.log('✅ RAG Context Used:', {
+        console.warn('✅ RAG Context Used:', {
           documentsFound: result.documentsFound,
           contextLength: result.contextUsed.length,
           abTestGroup,
@@ -153,7 +153,7 @@ export const ExpertAssistant: React.FC = () => {
               </div>
             )}
             
-            {chatSessionRef.current.messages.map((m, i) => (
+            {chatSessionRef.current.messages.map((m, _i) => (
               <div key={m.id} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 <div className={`max-w-[80%] flex gap-3 ${m.role === 'user' ? 'flex-row-reverse' : ''}`}>
                   <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${m.role === 'user' ? 'bg-blue-600' : 'bg-white/5 border border-white/10'}`}>

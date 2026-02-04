@@ -2,6 +2,9 @@
 // A/B TESTING UTILITIES
 // ========================================
 // Helper functions for A/B testing implementation
+// Security: OWASP A02:2021 - Encrypted localStorage storage
+
+import { secureStorage } from './secureStorage';
 
 /**
  * Assigns users to A/B test groups with consistent assignment
@@ -24,7 +27,7 @@ export function assignTestGroup(
 function hashCode(str: string): number {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
-    const char = str.charCodeAt(i);
+    const char = str.codePointAt(i) ?? 0;
     hash = ((hash << 5) - hash) + char;
     hash = hash & hash; // Convert to 32-bit integer
   }
@@ -54,18 +57,19 @@ export const AB_TEST_CONFIG = {
 
 /**
  * Gets A/B test group for current session
+ * Security: Uses encrypted storage to protect user assignment data
  */
 export function getABTestGroup(): string {
-  // Try to get from localStorage first
-  const stored = localStorage.getItem('smartconnect_ab_test_group');
+  // Try to get from encrypted localStorage first
+  const stored = secureStorage.getItem('smartconnect_ab_test_group', 'local');
   if (stored) return stored;
   
   // Generate new assignment based on session ID
-  const sessionId = sessionStorage.getItem('chat_session_id') || 'anonymous';
+  const sessionId = secureStorage.getItem('chat_session_id', 'session') || 'anonymous';
   const group = assignTestGroup(sessionId, AB_TEST_CONFIG.PROMPT_VARIANTS.groups);
   
-  // Store for consistency
-  localStorage.setItem('smartconnect_ab_test_group', group);
+  // Store encrypted for consistency
+  secureStorage.setItem('smartconnect_ab_test_group', group, 'local');
   
   return group;
 }
@@ -74,5 +78,5 @@ export function getABTestGroup(): string {
  * Resets A/B test group assignment
  */
 export function resetABTestGroup(): void {
-  localStorage.removeItem('smartconnect_ab_test_group');
+  secureStorage.removeItem('smartconnect_ab_test_group', 'local');
 }

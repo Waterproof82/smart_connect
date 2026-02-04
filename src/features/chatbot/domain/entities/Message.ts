@@ -8,10 +8,10 @@
 export type MessageRole = 'user' | 'assistant';
 
 export interface Message {
-  public readonly id: number;
-  public readonly role: MessageRole;
-  public readonly content: string;
-  public readonly timestamp: Date;
+  readonly id: number;
+  readonly role: MessageRole;
+  readonly content: string;
+  readonly timestamp: Date;
 }
 
 export class MessageEntity implements Message {
@@ -21,7 +21,7 @@ export class MessageEntity implements Message {
   readonly timestamp: Date;
 
   constructor(params: {
-    id?: string;
+    id?: number;
     role: string;
     content: string;
     timestamp?: Date;
@@ -51,12 +51,8 @@ export class MessageEntity implements Message {
   /**
    * Static ID generator (can be called before constructor completes)
    */
-  private static generateIdStatic(): string {
-    if (typeof crypto !== 'undefined' && crypto.randomUUID) {
-      return crypto.randomUUID();
-    }
-    // Fallback for older browsers
-    return `msg-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
+  private static generateIdStatic(): number {
+    return Date.now() + Math.floor(Math.random() * 1000);
   }
 
   /**
@@ -84,7 +80,7 @@ export class MessageEntity implements Message {
   /**
    * Generate a unique ID (browser-compatible fallback)
    */
-  private generateId(): string {
+  private generateId(): number {
     return MessageEntity.generateIdStatic();
   }
 }

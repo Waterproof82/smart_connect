@@ -11,8 +11,8 @@
     ],
     "skipLibCheck": true,
     "types": [
-      "node",
-      "jest"
+  "node",
+  "jest"
     ],
     "moduleResolution": "bundler",
     "isolatedModules": true,
@@ -24,9 +24,13 @@
       "@core/*": ["./src/core/*"],
       "@features/*": ["./src/features/*"],
       "@shared/*": ["./src/shared/*"],
-      "@tests/*": ["./tests/*"]
     },
     "allowImportingTsExtensions": true,
     "noEmit": true
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "supabase/functions"
+  ]
 }

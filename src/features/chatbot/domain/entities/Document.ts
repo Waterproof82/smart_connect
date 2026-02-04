@@ -9,11 +9,11 @@ export interface DocumentMetadata {
   title?: string;
   category?: string;
   source?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface Document {
-  readonly id: number | string;
+  readonly id: number;
   readonly content: string;
   readonly metadata: DocumentMetadata;
   readonly embedding?: number[];
@@ -21,20 +21,20 @@ export interface Document {
 }
 
 export class DocumentEntity implements Document {
-  readonly id: number | string;
+  readonly id: number;
   readonly content: string;
   readonly metadata: DocumentMetadata;
   readonly embedding?: number[];
   readonly similarity?: number;
 
   constructor(params: {
-    id?: number | string;
+    id?: number;
     content: string;
     metadata?: DocumentMetadata;
     embedding?: number[];
     similarity?: number;
   }) {
-    this.id = params.id ?? `doc-${Math.random().toString(36).slice(2, 10)}`;
+    this.id = params.id ?? Math.floor(Math.random() * 1000000);
     this.content = params.content;
     this.metadata = params.metadata ?? {};
     this.embedding = params.embedding;

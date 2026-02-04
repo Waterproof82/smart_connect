@@ -11,7 +11,7 @@ import { ApiError } from '@core/domain/entities';
 export interface SupabaseDocument {
   id: string;
   content: string;
-  metadata: Record<string, any>;
+  metadata: Record<string, unknown>;
   embedding?: number[];
   similarity?: number;
 }
@@ -50,7 +50,7 @@ export class SupabaseDataSource {
     // Additional safety check: Filter results by tenant in application layer
     let results = data || [];
     if (params.tenantId) {
-      results = results.filter((doc: any) => 
+      results = results.filter((doc: SupabaseDocument) => 
         doc.metadata?.tenant_id === params.tenantId || 
         doc.metadata?.tenant_id === undefined // Allow public documents
       );
@@ -65,7 +65,7 @@ export class SupabaseDataSource {
   async storeDocument(document: {
     id?: string;
     content: string;
-    metadata?: Record<string, any>;
+    metadata?: Record<string, unknown>;
     embedding: number[];
   }): Promise<void> {
     const { error } = await this.supabase.from('documents').insert({

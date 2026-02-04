@@ -9,25 +9,23 @@
 
 
 import { SecurityLogger } from '@core/domain/usecases/SecurityLogger';
-import { ConsoleLogger } from '@core/domain/usecases/Logger';
 import { ENV } from '@shared/config/env.config';
 
 // Factory: Only instantiate SecurityLogger if envs are present
-function getSecurityLogger(): SecurityLogger | ConsoleLogger {
+function getSecurityLogger(): SecurityLogger {
   if (ENV.SUPABASE_URL && ENV.SUPABASE_ANON_KEY) {
     return new SecurityLogger();
   }
-  // Fallback: Only log to console, no Supabase
-  return new (class extends ConsoleLogger {
-    constructor() { super('[Security]'); }
-    async logSecurityEvent() { /* noop */ }
-    async logAuthFailure() { /* noop */ }
-    async logAuthSuccess() { /* noop */ }
-    async logRateLimitExceeded() { /* noop */ }
-    async logXSSAttempt() { /* noop */ }
-    async logSuspiciousQuery() { /* noop */ }
-    async logUnauthorizedAccess() { /* noop */ }
-  })();
+  // Fallback: Mock SecurityLogger with noop methods
+  return {
+    logSecurityEvent: async () => {},
+    logAuthFailure: async () => {},
+    logAuthSuccess: async () => {},
+    logRateLimitExceeded: async () => {},
+    logXSSAttempt: async () => {},
+    logSuspiciousQuery: async () => {},
+    logUnauthorizedAccess: async () => {},
+  } as unknown as SecurityLogger;
 }
 
 /**

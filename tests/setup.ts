@@ -12,7 +12,6 @@ process.env.CONTACT_EMAIL = 'jmaristia@gmail.com';
  * @description Global test configuration and mocks
  */
 
-import '@testing-library/jest-dom';
 import { randomUUID } from 'node:crypto';
 
 // Polyfill for crypto.randomUUID() in Node.js < 19
@@ -62,17 +61,25 @@ globalThis.IntersectionObserver = class IntersectionObserver {
   }
 } as any;
 
+// Mock window object for Node.js environment
+if (!globalThis.window) {
+  globalThis.window = {} as any;
+}
+
 // Mock window.matchMedia
-Object.defineProperty(globalThis.window, 'matchMedia', {
-  writable: true,
-  value: jest.fn().mockImplementation(query => ({
-    matches: false,
-    media: query,
-    onchange: null,
-    addListener: jest.fn(),
-    removeListener: jest.fn(),
-    addEventListener: jest.fn(),
-    removeEventListener: jest.fn(),
-    dispatchEvent: jest.fn(),
-  })),
-});
+if (!globalThis.window.matchMedia) {
+  Object.defineProperty(globalThis.window, 'matchMedia', {
+    writable: true,
+    value: jest.fn().mockImplementation(query => ({
+      matches: false,
+      media: query,
+      onchange: null,
+      addListener: jest.fn(),
+      removeListener: jest.fn(),
+      addEventListener: jest.fn(),
+      removeEventListener: jest.fn(),
+      dispatchEvent: jest.fn(),
+    })),
+  });
+}
+

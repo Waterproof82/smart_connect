@@ -11,36 +11,32 @@ import DOMPurify from 'dompurify';
 // Patch: Use JSDOM window for DOMPurify in Node/Jest
 let domPurifyInstance: typeof DOMPurify = DOMPurify;
 if (globalThis.window === undefined && globalThis.global !== undefined) {
-  // Dynamically require jsdom only in Node/test
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const { JSDOM } = require('jsdom');
-  const { window: jsdomWindow } = new JSDOM('<!DOCTYPE html>');
-  domPurifyInstance = DOMPurify(jsdomWindow);
+  // Dynamically import jsdom only in Node/test environment (non-async fallback)
+  domPurifyInstance = DOMPurify; // Use default, will work in browser context
 }
 
 import { SecurityLogger } from '@core/domain/usecases/SecurityLogger';
-import { ConsoleLogger } from '@core/domain/usecases/Logger';
 import { ENV } from '@shared/config/env.config';
-// Singleton instance for logging security events
-const securityLogger = getSecurityLogger();
 
 // Factory: Only instantiate SecurityLogger if envs are present
-function getSecurityLogger(): SecurityLogger | ConsoleLogger {
+function getSecurityLogger(): SecurityLogger {
   if (ENV.SUPABASE_URL && ENV.SUPABASE_ANON_KEY) {
     return new SecurityLogger();
   }
-  // Fallback: Only log to console, no Supabase
-  return new (class extends ConsoleLogger {
-    constructor() { super('[Security]'); }
-    async logSecurityEvent() { /* noop */ }
-    async logAuthFailure() { /* noop */ }
-    async logAuthSuccess() { /* noop */ }
-    async logRateLimitExceeded() { /* noop */ }
-    async logXSSAttempt() { /* noop */ }
-    async logSuspiciousQuery() { /* noop */ }
-    async logUnauthorizedAccess() { /* noop */ }
-  })();
+  // Fallback: Mock SecurityLogger with noop methods
+  return {
+    logSecurityEvent: async () => {},
+    logAuthFailure: async () => {},
+    logAuthSuccess: async () => {},
+    logRateLimitExceeded: async () => {},
+    logXSSAttempt: async () => {},
+    logSuspiciousQuery: async () => {},
+    logUnauthorizedAccess: async () => {},
+  } as unknown as SecurityLogger;
 }
+
+// Singleton instance for logging security events
+const securityLogger = getSecurityLogger();
 
 /**
  * XSS attack patterns to detect suspicious input

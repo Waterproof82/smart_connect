@@ -3,6 +3,8 @@
  * @module features/qribar/domain/entities
  */
 
+import { ValidationError } from '@core/domain/entities/Errors';
+
 export interface RestaurantProps {
   id: number;
   name: string;
@@ -20,7 +22,7 @@ export class Restaurant {
 
   static create(props: RestaurantProps): Restaurant {
     if (!props.name || props.name.trim().length === 0) {
-      throw new Error('Restaurant name cannot be empty');
+      throw new ValidationError('Restaurant name cannot be empty', 'name');
     }
 
     return new Restaurant(

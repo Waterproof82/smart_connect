@@ -4,9 +4,11 @@
  * 
  * HTTP client using native fetch API
  * Provides error handling and response transformation
+ * Now includes automatic retry logic for transient failures
  */
 
 import { NetworkError, ApiError } from '../../domain/entities/Errors';
+import { withRetry, isNetworkError } from '@shared/utils/retryLogic';
 import type { 
   IHttpClient, 
   HttpClientConfig, 
@@ -18,14 +20,32 @@ export class FetchHttpClient implements IHttpClient {
   private readonly baseURL: string;
   private readonly defaultHeaders: Record<string, string>;
   private readonly timeout: number;
+  private readonly enableRetry: boolean;
 
   constructor(config: HttpClientConfig = {}) {
     this.baseURL = config.baseURL || '';
     this.defaultHeaders = config.headers || {};
     this.timeout = config.timeout || 30000;
+    this.enableRetry = config.enableRetry ?? true; // Enable retry by default
   }
 
   async request<T = unknown>(config: HttpRequestConfig): Promise<HttpResponse<T>> {
+    // Wrap request in retry logic if enabled
+    if (this.enableRetry) {
+      return withRetry(
+        () => this.executeRequest<T>(config),
+        {
+          maxAttempts: 3,
+          baseDelay: 1000,
+          shouldRetry: isNetworkError,
+        }
+      );
+    }
+    
+    return this.executeRequest<T>(config);
+  }
+
+  private async executeRequest<T = unknown>(config: HttpRequestConfig): Promise<HttpResponse<T>> {
     const url = this.buildURL(config.url, config.params);
     const headers = { ...this.defaultHeaders, ...config.headers };
 

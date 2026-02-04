@@ -27,7 +27,7 @@ export class DocumentRepositoryImpl implements IDocumentRepository {
     return results.map(
       (doc) =>
         new DocumentEntity({
-          id: doc.id,
+          id: typeof doc.id === 'string' ? Number.parseInt(doc.id, 10) : doc.id,
           content: doc.content,
           metadata: doc.metadata,
           embedding: doc.embedding,
@@ -42,7 +42,7 @@ export class DocumentRepositoryImpl implements IDocumentRepository {
     }
 
     await this.supabaseDataSource.storeDocument({
-      id: document.id,
+      id: String(document.id),
       content: document.content,
       metadata: document.metadata,
       embedding: document.embedding,
@@ -50,14 +50,14 @@ export class DocumentRepositoryImpl implements IDocumentRepository {
   }
 
   async getDocumentById(id: number): Promise<Document | null> {
-    const doc = await this.supabaseDataSource.getDocumentById(id);
+    const doc = await this.supabaseDataSource.getDocumentById(String(id));
 
     if (!doc) {
       return null;
     }
 
     return new DocumentEntity({
-      id: doc.id,
+      id: typeof doc.id === 'string' ? Number.parseInt(doc.id, 10) : doc.id,
       content: doc.content,
       metadata: doc.metadata,
       embedding: doc.embedding,
