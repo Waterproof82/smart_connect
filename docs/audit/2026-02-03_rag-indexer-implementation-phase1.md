@@ -5,7 +5,7 @@
 **Operation:** RAG Indexer Implementation - Phase 1 (Indexing Optimization)
 
 ## Context
-Implementation of Phase 1 from ADR-006: Improve RAG indexing with strategic chunking, metadata, and Gemini embeddings.
+Implementation of Phase 1 from ADR-003: Improve RAG indexing with strategic chunking, metadata, and Gemini embeddings.
 
 ## Actions Performed
 
@@ -63,12 +63,12 @@ Created minimal implementation to pass tests:
 1. `src/features/chatbot/data/rag-indexer.ts` - Implementation
 2. `tests/unit/features/chatbot/data/rag-indexer.test.ts` - Test suite
 3. `jest.config.cjs` - Jest configuration
-4. `docs/adr/006-rag-architecture-decision.md` - ADR documentation
-5. `docs/audit/2026-02-03_adr-006-creation.md` - ADR creation audit
+4. `docs/adr/ADR-003-rag-architecture-decision.md` - ADR documentation
+5. `docs/audit/2026-02-03_adr-003-rag-architecture-creation.md` - ADR creation audit
 6. `docs/audit/2026-02-03_rag-indexer-implementation-phase1.md` - This file
 
 ### Modified Files:
-1. `CHANGELOG.md` - Added ADR-006 entry in [Unreleased] section
+1. `CHANGELOG.md` - Added ADR-003 entry in [Unreleased] section
 
 ## Technical Decisions
 

@@ -362,7 +362,7 @@ Time:        1.185 s
 1. Fine-tune similarity threshold based on user feedback
 2. Expand knowledge base with FAQ and tutorials
 3. Implement A/B testing for response variations
-4. Consider migration to Python/LangChain if complexity increases (per ADR-006)
+4. Consider migration to Python/LangChain if complexity increases (per ADR-003)
 
 ---
 
@@ -402,7 +402,7 @@ Time:        1.185 s
 
 ## References
 
-- **ADR-006:** `docs/adr/006-rag-architecture-decision.md`
+- **ADR-003:** `docs/adr/ADR-003-rag-architecture-decision.md`
 - **AGENTS.md:** Project guidelines and protocols
 - **CHANGELOG.md:** Version history
 - **Test Suite:** `tests/unit/features/chatbot/`

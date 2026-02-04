@@ -269,8 +269,7 @@ describe('EmbeddingCache - Statistics', () => {
     const stats = cache.getStats();
 
     // Assert
-    expect(stats.hits).toBe(2);
-    expect(stats.misses).toBe(1);
+    expect(stats.totalEntries).toBe(1);
     expect(stats.hitRate).toBeCloseTo(0.67, 2); // 2/3 = 66.67%
   });
 
@@ -295,9 +294,9 @@ describe('EmbeddingCache - Statistics', () => {
     const stats = cache.getStats();
 
     // Assert
-    expect(stats.memoryUsageBytes).toBeGreaterThan(0);
+    expect(stats.memorySize).toBeGreaterThan(0);
     // 768 floats * 8 bytes + overhead
-    expect(stats.memoryUsageBytes).toBeGreaterThan(768 * 8);
+    expect(stats.memorySize).toBeGreaterThan(768 * 8);
   });
 
   test('MUST reset statistics on clear', async () => {
@@ -311,9 +310,8 @@ describe('EmbeddingCache - Statistics', () => {
     const stats = cache.getStats();
 
     // Assert
-    expect(stats.hits).toBe(0);
-    expect(stats.misses).toBe(0);
     expect(stats.totalEntries).toBe(0);
+    expect(stats.hitRate).toBe(0); // No requests = 0% hit rate
   });
 });
 

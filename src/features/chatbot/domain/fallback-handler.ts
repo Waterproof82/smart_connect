@@ -11,7 +11,7 @@
  * - Tracking de estadísticas de fallback
  * - Personalización basada en usuario e historial
  * 
- * Fase 3 de optimización según ADR-006
+ * Fase 3 de optimización según ADR-003
  * docs/adr/006-rag-architecture-decision.md
  */
 

@@ -9,7 +9,7 @@
  * - Proporcionar estadísticas de carga
  * 
  * TDD: Implementación después de tests
- * Refs: AGENTS.md Section 3, ADR-006
+ * Refs: AGENTS.md Section 3, ADR-003
  */
 
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
@@ -86,8 +86,7 @@ export class SupabaseKnowledgeLoader {
 
     // Group documents by source
     const dataArray = data as SupabaseDocument[];
-    for (let i = 0; i < dataArray.length; i++) {
-      const doc = dataArray[i];
+    for (const doc of dataArray) {
       const sourceType = this._mapSourceToCategory(doc.source);
       const content = doc.content;
 

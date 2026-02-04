@@ -33,9 +33,11 @@ interface ValidationErrors {
 export const Contact: React.FC = () => {
   // Runtime validation of critical environment variables
   useEffect(() => {
-    if (!ENV.N8N_WEBHOOK_URL || ENV.N8N_WEBHOOK_URL.includes('placeholder')) {
+    console.log('🔍 ENV.N8N_WEBHOOK_URL:', ENV.N8N_WEBHOOK_URL);
+    if (!ENV.N8N_WEBHOOK_URL || ENV.N8N_WEBHOOK_URL.includes('placeholder') || ENV.N8N_WEBHOOK_URL.includes('localhost')) {
       console.error('❌ CRITICAL: VITE_N8N_WEBHOOK_URL is not configured in production!');
       console.error('Please add it to Vercel Environment Variables');
+      console.error('Current value:', ENV.N8N_WEBHOOK_URL || '(empty)');
     }
   }, []);
 
