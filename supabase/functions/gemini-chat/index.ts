@@ -106,12 +106,19 @@ Deno.serve(async (req) => {
 
   try {
     // ===================================
-    // SECURITY: Authorization Check
+    // SECURITY: Authorization Check (Accept anon key for public chatbot)
     // ===================================
     const authHeader = req.headers.get('Authorization');
-    if (!authHeader) {
+    const apiKeyHeader = req.headers.get('apikey');
+    
+    console.log('🔐 Auth headers:', { 
+      hasAuth: !!authHeader, 
+      hasApiKey: !!apiKeyHeader 
+    });
+    
+    if (!authHeader && !apiKeyHeader) {
       return new Response(
-        JSON.stringify({ error: 'Missing authorization header' }),
+        JSON.stringify({ error: 'Missing authorization or apikey header' }),
         { 
           status: 401, 
           headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
@@ -130,6 +137,13 @@ Deno.serve(async (req) => {
       abTestGroup = 'A' // Default to control group
     }: ChatRequest = await req.json();
 
+    console.log('📝 Request:', { 
+      queryLength: userQuery?.length, 
+      historyCount: conversationHistory.length,
+      maxDocuments,
+      similarityThreshold
+    });
+
     if (!userQuery || typeof userQuery !== 'string') {
       return new Response(
         JSON.stringify({ error: 'Invalid or missing userQuery parameter' }),
@@ -143,8 +157,10 @@ Deno.serve(async (req) => {
     // ===================================
     // RATE LIMITING (OWASP A04:2021)
     // ===================================
-    const userId = authHeader.split(' ')[1]?.substring(0, 10) || 'anonymous';
-    const rateLimit = checkRateLimit(userId);
+    // Use apikey or auth token for rate limiting
+    const rateLimitKey = (apiKeyHeader || authHeader?.split(' ')[1] || 'anonymous').substring(0, 10);
+    const userId = rateLimitKey; // User identifier for logging
+    const rateLimit = checkRateLimit(rateLimitKey);
     
     if (!rateLimit.allowed) {
       return new Response(
@@ -170,8 +186,14 @@ Deno.serve(async (req) => {
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
     const geminiApiKey = Deno.env.get('GEMINI_API_KEY');
 
+    console.log('⚙️ ENV check:', {
+      hasSupabaseUrl: !!supabaseUrl,
+      hasServiceKey: !!supabaseServiceKey,
+      hasGeminiKey: !!geminiApiKey
+    });
+
     if (!supabaseUrl || !supabaseServiceKey || !geminiApiKey) {
-      console.error('Missing required environment variables');
+      console.error('❌ Missing required environment variables');
       return new Response(
         JSON.stringify({ error: 'Service configuration error' }),
         { 
@@ -182,6 +204,7 @@ Deno.serve(async (req) => {
     }
 
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
+    console.log('✅ Supabase client initialized');
 
     // ===================================
     // RAG: GENERATE QUERY EMBEDDING
@@ -190,7 +213,9 @@ Deno.serve(async (req) => {
     let documents: any[] = [];
     
     try {
+      console.log('🧠 Generating embedding...');
       queryEmbedding = await generateEmbedding(userQuery, geminiApiKey);
+      console.log('✅ Embedding generated:', queryEmbedding.length, 'dimensions');
       
       // ===================================
       // RAG: VECTOR SEARCH
@@ -198,6 +223,7 @@ Deno.serve(async (req) => {
       // Convert embedding array to pgvector format string: [0.1,0.2,0.3]
       const embeddingString = `[${queryEmbedding.join(',')}]`;
       
+      console.log('🔍 Searching documents...');
       const { data: searchResults, error: searchError } = await supabase
         .rpc('match_documents', {
           query_embedding: embeddingString, // Send as string for pgvector cast
@@ -206,13 +232,14 @@ Deno.serve(async (req) => {
         });
 
       if (searchError) {
-        console.error('Vector search error:', searchError);
+        console.error('❌ Vector search error:', searchError);
         // Continue without documents (fallback to general knowledge)
       } else {
         documents = searchResults || [];
+        console.log('✅ Found', documents.length, 'documents');
       }
     } catch (error) {
-      console.error('RAG processing error:', error);
+      console.error('❌ RAG processing error:', error);
       // Continue without RAG - use general knowledge only
     }
 
@@ -306,9 +333,9 @@ Pregunta: ${userQuery}`
     // ===================================
     // GEMINI API CALL (Protected)
     // ===================================
-
+    console.log('🤖 Calling Gemini API...');
     const geminiResponse = await fetch(
-      'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent',
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent`,
       {
         method: 'POST',
         headers: { 
@@ -347,9 +374,12 @@ Pregunta: ${userQuery}`
 
     if (!geminiResponse.ok) {
       const errorText = await geminiResponse.text();
-      console.error('Gemini API error:', errorText);
+      console.error('❌ Gemini API error:', geminiResponse.status, errorText);
       return new Response(
-        JSON.stringify({ error: 'AI service temporarily unavailable' }),
+        JSON.stringify({ 
+          error: 'AI service temporarily unavailable',
+          details: errorText.substring(0, 200) // First 200 chars for debugging
+        }),
         { 
           status: 503, 
           headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
@@ -357,6 +387,7 @@ Pregunta: ${userQuery}`
       );
     }
 
+    console.log('✅ Gemini API responded');
     const geminiData: GeminiResponse = await geminiResponse.json();
     const aiResponse = geminiData.candidates?.[0]?.content?.parts?.[0]?.text || 'No response generated';
 

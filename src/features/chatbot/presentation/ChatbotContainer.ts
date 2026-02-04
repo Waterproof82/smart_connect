@@ -73,7 +73,7 @@ export class ChatbotContainer {
       supabaseUrl,
       supabaseKey: supabaseAnonKey,
       ttlMs: 7 * 24 * 60 * 60 * 1000, // 7 days
-      enableSupabaseBackup: true,
+      enableSupabaseBackup: false, // Disabled: Edge Function handles server-side cache
     });
     
     // Inject implementations into RAGOrchestrator (Domain Layer)
