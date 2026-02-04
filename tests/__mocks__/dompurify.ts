@@ -4,20 +4,20 @@
  */
 
 const mockDOMPurify = {
-  sanitize: (dirty: string, config?: any): string => {
+  sanitize: (dirty: string, _config?: unknown): string => {
     // Simple sanitization: remove HTML tags, keep text content
     if (!dirty) return '';
     
     // Remove HTML tags
-    let cleaned = dirty.replace(/<[^>]*>/g, '');
+    let cleaned = dirty.replaceAll(/<[^>]*>/g, '');
     
     // Decode HTML entities
     cleaned = cleaned
-      .replace(/&lt;/g, '<')
-      .replace(/&gt;/g, '>')
-      .replace(/&amp;/g, '&')
-      .replace(/&quot;/g, '"')
-      .replace(/&#x27;/g, "'");
+      .replaceAll('&lt;', '<')
+      .replaceAll('&gt;', '>')
+      .replaceAll('&amp;', '&')
+      .replaceAll('&quot;', '"')
+      .replaceAll('&#x27;', "'");
     
     return cleaned.trim();
   },
