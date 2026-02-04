@@ -2,12 +2,16 @@
 // Universal environment mode resolver for Node, Jest, Vite, etc.
 
 export function getEnvMode(): string {
+  // Vite environment (browser) - check import.meta.env first
+  if (typeof import.meta !== 'undefined' && import.meta.env?.MODE) {
+    return import.meta.env.MODE;
+  }
+  
+  // Node.js environment (scripts, tests)
   if (typeof process !== 'undefined' && process?.env?.NODE_ENV) {
     return process.env.NODE_ENV;
   }
-  // Fallback for browser/Vite
-  if (globalThis.window !== undefined && (globalThis as unknown as { VITE_MODE?: string }).VITE_MODE) {
-    return (globalThis as unknown as { VITE_MODE: string }).VITE_MODE;
-  }
-  return 'production'; // Default to production if unknown
+  
+  // Fallback to development for local dev (safer default than production)
+  return 'development';
 }
