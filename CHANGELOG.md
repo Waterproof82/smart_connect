@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Admin Panel for RAG System Management:** Complete admin interface to manage RAG documents
+  - Authentication with Supabase Auth (email/password)
+  - Role-based access control (admin/super_admin)
+  - Document list with filters (source, search text) and pagination (20 items/page)
+  - Statistics dashboard (total docs, by source, by category)
+  - Delete documents feature (super_admin only)
+  - OWASP security compliance (A01: Broken Access Control, A03: Injection, A07: Auth Failures)
+  - Clean Architecture implementation (Domain, Data, Presentation layers)
+  - 28 unit tests (all passing ✅)
+  - Location: `src/features/admin/`
+  - Access: `http://localhost:5173/admin`
+  - Documentation: `docs/ADMIN_PANEL.md`, `docs/adr/ADR-005-admin-panel-rag.md`
+
+- **React Router Integration:** Client-side routing for multi-page navigation
+  - Route `/` → Landing page (public)
+  - Route `/admin` → Admin panel (authenticated)
+  - Fallback route `*` → Redirect to home
+  - Package: `react-router-dom` v6
+  - Location: `src/main.tsx`
+
 ### Changed
 - **Clean Architecture Compliance:** Refactored chatbot feature to strict Clean Architecture with Dependency Inversion
   - Created domain interfaces (`IRAGIndexer`, `IEmbeddingCache`) to enforce dependency rule
