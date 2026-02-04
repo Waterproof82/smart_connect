@@ -10,18 +10,21 @@ import React, { useState, useEffect } from 'react';
 import { Document } from '../../domain/entities/Document';
 import { GetAllDocumentsUseCase } from '../../domain/usecases/GetAllDocumentsUseCase';
 import { DeleteDocumentUseCase } from '../../domain/usecases/DeleteDocumentUseCase';
+import { UpdateDocumentUseCase } from '../../domain/usecases/UpdateDocumentUseCase';
 import { AdminUser } from '../../domain/entities/AdminUser';
 import { PaginatedResult } from '../../domain/repositories/IDocumentRepository';
 
 interface DocumentListProps {
   getAllDocumentsUseCase: GetAllDocumentsUseCase;
   deleteDocumentUseCase: DeleteDocumentUseCase;
+  updateDocumentUseCase: UpdateDocumentUseCase;
   currentUser: AdminUser;
 }
 
 export const DocumentList: React.FC<DocumentListProps> = ({
   getAllDocumentsUseCase,
   deleteDocumentUseCase,
+  updateDocumentUseCase,
   currentUser,
 }) => {
   const [documents, setDocuments] = useState<PaginatedResult<Document> | null>(null);
@@ -31,12 +34,17 @@ export const DocumentList: React.FC<DocumentListProps> = ({
   const [sourceFilter, setSourceFilter] = useState<string>('');
   const [searchText, setSearchText] = useState<string>('');
   const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedContent, setEditedContent] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
 
   // Handle Escape key for modal
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && selectedDocument) {
         setSelectedDocument(null);
+        setIsEditing(false);
+        setEditedContent('');
       }
     };
 
@@ -80,11 +88,44 @@ export const DocumentList: React.FC<DocumentListProps> = ({
     }
 
     try {
-      await deleteDocumentUseCase.execute(documentId, currentUser);
+      await deleteDocumentUseCase.execute(String(documentId), currentUser);
       await loadDocuments(); // Reload list
     } catch (err) {
       alert(err instanceof Error ? err.message : 'Failed to delete document');
     }
+  };
+
+  const handleEdit = () => {
+    if (selectedDocument) {
+      setEditedContent(selectedDocument.content);
+      setIsEditing(true);
+    }
+  };
+
+  const handleSave = async () => {
+    if (!selectedDocument) return;
+
+    setIsSaving(true);
+    try {
+      await updateDocumentUseCase.execute(
+        String(selectedDocument.id),
+        editedContent,
+        currentUser
+      );
+      await loadDocuments(); // Reload list
+      setSelectedDocument(null);
+      setIsEditing(false);
+      setEditedContent('');
+    } catch (err) {
+      alert(err instanceof Error ? err.message : 'Failed to update document');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditing(false);
+    setEditedContent('');
   };
 
   const handleSearch = (e) => {
@@ -295,9 +336,18 @@ export const DocumentList: React.FC<DocumentListProps> = ({
 
             {/* Modal Content */}
             <div className="p-6 overflow-y-auto flex-1">
-              <pre className="text-sm text-gray-300 whitespace-pre-wrap font-mono leading-relaxed">
-                {selectedDocument.content}
-              </pre>
+              {isEditing ? (
+                <textarea
+                  value={editedContent}
+                  onChange={(e) => setEditedContent(e.target.value)}
+                  className="w-full h-full min-h-[400px] bg-gray-800 text-gray-300 rounded-md p-4 font-mono text-sm leading-relaxed resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  disabled={isSaving}
+                />
+              ) : (
+                <pre className="text-sm text-gray-300 whitespace-pre-wrap font-mono leading-relaxed">
+                  {selectedDocument.content}
+                </pre>
+              )}
             </div>
 
             {/* Modal Footer */}
@@ -305,12 +355,43 @@ export const DocumentList: React.FC<DocumentListProps> = ({
               <div className="text-xs text-gray-400">
                 Created: {selectedDocument.createdAt.toLocaleDateString()} {selectedDocument.createdAt.toLocaleTimeString()}
               </div>
-              <button
-                onClick={() => setSelectedDocument(null)}
-                className="px-4 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-600 transition-colors"
-              >
-                Close
-              </button>
+              <div className="flex gap-2">
+                {isEditing ? (
+                  <>
+                    <button
+                      onClick={handleCancelEdit}
+                      disabled={isSaving}
+                      className="px-4 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={handleSave}
+                      disabled={isSaving || !editedContent.trim()}
+                      className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {isSaving ? 'Saving...' : 'Save'}
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    {currentUser.canPerform('update') && (
+                      <button
+                        onClick={handleEdit}
+                        className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-500 transition-colors"
+                      >
+                        Edit
+                      </button>
+                    )}
+                    <button
+                      onClick={() => setSelectedDocument(null)}
+                      className="px-4 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-600 transition-colors"
+                    >
+                      Close
+                    </button>
+                  </>
+                )}
+              </div>
             </div>
           </div>
         </dialog>

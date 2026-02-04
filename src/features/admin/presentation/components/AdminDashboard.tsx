@@ -14,6 +14,7 @@ import { DocumentList } from './DocumentList';
 import { GetAllDocumentsUseCase } from '../../domain/usecases/GetAllDocumentsUseCase';
 import { GetDocumentStatsUseCase } from '../../domain/usecases/GetDocumentStatsUseCase';
 import { DeleteDocumentUseCase } from '../../domain/usecases/DeleteDocumentUseCase';
+import { UpdateDocumentUseCase } from '../../domain/usecases/UpdateDocumentUseCase';
 import { AdminUser } from '../../domain/entities/AdminUser';
 import { IAuthRepository } from '../../domain/repositories/IAuthRepository';
 
@@ -21,6 +22,7 @@ interface AdminDashboardProps {
   getAllDocumentsUseCase: GetAllDocumentsUseCase;
   getStatsUseCase: GetDocumentStatsUseCase;
   deleteDocumentUseCase: DeleteDocumentUseCase;
+  updateDocumentUseCase: UpdateDocumentUseCase;
   authRepository: IAuthRepository;
   currentUser: AdminUser;
   onLogout: () => void;
@@ -30,6 +32,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   getAllDocumentsUseCase,
   getStatsUseCase,
   deleteDocumentUseCase,
+  updateDocumentUseCase,
   authRepository,
   currentUser,
   onLogout,
@@ -92,6 +95,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         <DocumentList
           getAllDocumentsUseCase={getAllDocumentsUseCase}
           deleteDocumentUseCase={deleteDocumentUseCase}
+          updateDocumentUseCase={updateDocumentUseCase}
           currentUser={currentUser}
         />
       </main>

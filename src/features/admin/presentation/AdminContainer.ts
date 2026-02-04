@@ -11,6 +11,7 @@ import { SupabaseAuthRepository } from '../data/repositories/SupabaseAuthReposit
 import { GetAllDocumentsUseCase } from '../domain/usecases/GetAllDocumentsUseCase';
 import { GetDocumentStatsUseCase } from '../domain/usecases/GetDocumentStatsUseCase';
 import { DeleteDocumentUseCase } from '../domain/usecases/DeleteDocumentUseCase';
+import { UpdateDocumentUseCase } from '../domain/usecases/UpdateDocumentUseCase';
 import { LoginAdminUseCase } from '../domain/usecases/LoginAdminUseCase';
 
 let containerInstance: AdminContainer | null = null;
@@ -24,6 +25,7 @@ export class AdminContainer {
   public readonly getAllDocumentsUseCase: GetAllDocumentsUseCase;
   public readonly getDocumentStatsUseCase: GetDocumentStatsUseCase;
   public readonly deleteDocumentUseCase: DeleteDocumentUseCase;
+  public readonly updateDocumentUseCase: UpdateDocumentUseCase;
   public readonly loginAdminUseCase: LoginAdminUseCase;
 
   constructor(supabaseUrl: string, supabaseKey: string) {
@@ -35,6 +37,7 @@ export class AdminContainer {
     this.getAllDocumentsUseCase = new GetAllDocumentsUseCase(this.documentRepository);
     this.getDocumentStatsUseCase = new GetDocumentStatsUseCase(this.documentRepository);
     this.deleteDocumentUseCase = new DeleteDocumentUseCase(this.documentRepository);
+    this.updateDocumentUseCase = new UpdateDocumentUseCase(this.documentRepository);
     this.loginAdminUseCase = new LoginAdminUseCase(this.authRepository);
   }
 }

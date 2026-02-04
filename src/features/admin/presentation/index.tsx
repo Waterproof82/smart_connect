@@ -69,6 +69,7 @@ export const AdminPanel: React.FC = () => {
       getAllDocumentsUseCase={container.getAllDocumentsUseCase}
       getStatsUseCase={container.getDocumentStatsUseCase}
       deleteDocumentUseCase={container.deleteDocumentUseCase}
+      updateDocumentUseCase={container.updateDocumentUseCase}
       authRepository={container.authRepository}
       currentUser={currentUser}
       onLogout={handleLogout}

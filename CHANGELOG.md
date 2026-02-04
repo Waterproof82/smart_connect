@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Inline Document Editing with Automatic Embedding Regeneration:**
+  - Edit documents directly in preview modal without page reload
+  - Automatic vector embedding regeneration using Gemini API
+  - Permission-based Edit button visibility (super_admin only)
+  - Loading states during save operation (disabled buttons, "Saving..." text)
+  - Cache invalidation after update to prevent stale RAG responses
+  - Complete CRUD functionality: Create, Read, Update, Delete
+  - Location: `src/features/admin/domain/usecases/UpdateDocumentUseCase.ts`
+  - Tests: `tests/unit/features/admin/domain/usecases/UpdateDocumentUseCase.test.ts`
+  - Audit: `docs/audit/2026-01-30_document-inline-editing-implementation.md`
+
 ### Security
 - **Row Level Security (RLS) on Documents Table:** CRITICAL security fix for admin panel
   - Enabled RLS policies to enforce database-level access control

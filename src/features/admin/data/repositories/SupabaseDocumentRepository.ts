@@ -73,7 +73,18 @@ export class SupabaseDocumentRepository implements IDocumentRepository {
     // Mapear a entidades de dominio
     const documents = (data || []).map((row: Record<string, unknown>) => {
       // Validar embedding (debe ser array de 768 dimensiones o null)
-      const embedding = row.embedding as number[] | null;
+      let embedding = row.embedding as number[] | string | null;
+      
+      // Si el embedding es un string, parsearlo
+      if (typeof embedding === 'string') {
+        try {
+          embedding = JSON.parse(embedding);
+        } catch (e) {
+          console.error(`Failed to parse embedding for document ${row.id}:`, e);
+          embedding = null;
+        }
+      }
+      
       const validEmbedding = embedding && Array.isArray(embedding) && embedding.length === 768 
         ? embedding 
         : undefined;
@@ -117,7 +128,18 @@ export class SupabaseDocumentRepository implements IDocumentRepository {
     }
 
     // Validar embedding
-    const embedding = data.embedding as number[] | null;
+    let embedding = data.embedding as number[] | string | null;
+    
+    // Si el embedding es un string, parsearlo
+    if (typeof embedding === 'string') {
+      try {
+        embedding = JSON.parse(embedding);
+      } catch (e) {
+        console.error(`Failed to parse embedding for document ${id}:`, e);
+        embedding = null;
+      }
+    }
+    
     const validEmbedding = embedding && Array.isArray(embedding) && embedding.length === 768 
       ? embedding 
       : undefined;
@@ -182,10 +204,36 @@ export class SupabaseDocumentRepository implements IDocumentRepository {
   }
 
   async update(id: string, content: string): Promise<Document> {
+    // 1. Regenerar embedding con la Edge Function (usando session token)
+    let newEmbedding: number[] | undefined;
+    
+    try {
+      const { data: { session } } = await this.client.auth.getSession();
+      const token = session?.access_token;
+
+      const { data: embeddingData, error: embeddingError } = await this.client.functions.invoke(
+        'gemini-embedding',
+        {
+          body: { text: content },
+          headers: token ? { Authorization: `Bearer ${token}` } : {}
+        }
+      );
+
+      if (embeddingError) {
+        console.error('Failed to generate embedding:', embeddingError);
+      } else if (embeddingData?.embedding && Array.isArray(embeddingData.embedding)) {
+        newEmbedding = embeddingData.embedding;
+      }
+    } catch (error) {
+      console.error('Embedding generation error:', error);
+    }
+
+    // 2. Actualizar documento con nuevo embedding
     const { data, error } = await this.client
       .from('documents')
       .update({ 
         content,
+        embedding: newEmbedding || null,
         updated_at: new Date().toISOString(),
       })
       .eq('id', id)
@@ -196,8 +244,27 @@ export class SupabaseDocumentRepository implements IDocumentRepository {
       throw new Error(`Failed to update document: ${error.message}`);
     }
 
+    // 3. Invalidar cache de embedding si existe
+    if (newEmbedding) {
+      await this.client
+        .from('embedding_cache')
+        .delete()
+        .ilike('key', `%${id}%`);
+    }
+
     // Validar embedding
-    const embedding = data.embedding as number[] | null;
+    let embedding = data.embedding as number[] | string | null;
+    
+    // Si el embedding es un string, parsearlo
+    if (typeof embedding === 'string') {
+      try {
+        embedding = JSON.parse(embedding);
+      } catch (e) {
+        console.error(`Failed to parse embedding after update for document ${id}:`, e);
+        embedding = null;
+      }
+    }
+    
     const validEmbedding = embedding && Array.isArray(embedding) && embedding.length === 768 
       ? embedding 
       : undefined;

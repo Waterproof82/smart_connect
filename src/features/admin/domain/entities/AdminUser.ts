@@ -62,7 +62,7 @@ export class AdminUser {
   /**
    * Verifica si puede realizar una acción específica
    */
-  canPerform(action: 'read' | 'write' | 'delete'): boolean {
+  canPerform(action: 'read' | 'write' | 'delete' | 'update'): boolean {
     if (this.role === 'super_admin') {
       return true;
     }

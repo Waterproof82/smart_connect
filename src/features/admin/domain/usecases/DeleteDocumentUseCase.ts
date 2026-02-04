@@ -15,7 +15,7 @@ export class DeleteDocumentUseCase {
 
   async execute(documentId: string, user: AdminUser): Promise<void> {
     // Validar ID
-    if (!documentId || documentId.trim().length === 0) {
+    if (!documentId || typeof documentId !== 'string' || documentId.trim().length === 0) {
       throw new Error('Document ID is required');
     }
 
