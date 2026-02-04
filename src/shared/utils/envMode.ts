@@ -3,8 +3,9 @@
 
 export function getEnvMode(): string {
   // Vite environment (browser) - check import.meta.env first
-  if (typeof import.meta !== 'undefined' && import.meta.env?.MODE) {
-    return import.meta.env.MODE;
+  const viteMode = import.meta?.env?.MODE;
+  if (viteMode) {
+    return viteMode;
   }
   
   // Node.js environment (scripts, tests)
