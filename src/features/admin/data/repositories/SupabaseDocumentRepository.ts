@@ -15,6 +15,9 @@ import {
 } from '../../domain/repositories/IDocumentRepository';
 import { Document } from '../../domain/entities/Document';
 
+// Type alias for embedding data (can be array or JSON string from Supabase)
+type EmbeddingData = number[] | string | null;
+
 export class SupabaseDocumentRepository implements IDocumentRepository {
   private readonly client: SupabaseClient;
 
@@ -73,14 +76,15 @@ export class SupabaseDocumentRepository implements IDocumentRepository {
     // Mapear a entidades de dominio
     const documents = (data || []).map((row: Record<string, unknown>) => {
       // Validar embedding (debe ser array de 768 dimensiones o null)
-      let embedding = row.embedding as number[] | string | null;
+      let embedding: EmbeddingData = row.embedding as EmbeddingData;
       
       // Si el embedding es un string, parsearlo
       if (typeof embedding === 'string') {
         try {
-          embedding = JSON.parse(embedding);
+          embedding = JSON.parse(embedding) as number[];
         } catch (e) {
-          console.error(`Failed to parse embedding for document ${row.id}:`, e);
+          const docId = typeof row.id === 'string' || typeof row.id === 'number' ? row.id : 'unknown';
+          console.error(`Failed to parse embedding for document ${docId}:`, e);
           embedding = null;
         }
       }
@@ -128,12 +132,12 @@ export class SupabaseDocumentRepository implements IDocumentRepository {
     }
 
     // Validar embedding
-    let embedding = data.embedding as number[] | string | null;
+    let embedding: EmbeddingData = data.embedding as EmbeddingData;
     
     // Si el embedding es un string, parsearlo
     if (typeof embedding === 'string') {
       try {
-        embedding = JSON.parse(embedding);
+        embedding = JSON.parse(embedding) as number[];
       } catch (e) {
         console.error(`Failed to parse embedding for document ${id}:`, e);
         embedding = null;
@@ -253,12 +257,12 @@ export class SupabaseDocumentRepository implements IDocumentRepository {
     }
 
     // Validar embedding
-    let embedding = data.embedding as number[] | string | null;
+    let embedding: EmbeddingData = data.embedding as EmbeddingData;
     
     // Si el embedding es un string, parsearlo
     if (typeof embedding === 'string') {
       try {
-        embedding = JSON.parse(embedding);
+        embedding = JSON.parse(embedding) as number[];
       } catch (e) {
         console.error(`Failed to parse embedding after update for document ${id}:`, e);
         embedding = null;

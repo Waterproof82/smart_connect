@@ -32,19 +32,22 @@ describe('UpdateDocumentUseCase', () => {
       create: jest.fn(),
       update: jest.fn().mockResolvedValue(mockDocument),
       delete: jest.fn(),
-      getStats: jest.fn(),
+      countBySource: jest.fn(),
+      countByCategory: jest.fn(),
     };
 
     mockSuperAdmin = AdminUser.create({
       id: 'user1',
       email: 'admin@test.com',
       role: 'super_admin',
+      createdAt: new Date(),
     });
 
     mockRegularAdmin = AdminUser.create({
       id: 'user2',
       email: 'viewer@test.com',
       role: 'admin',
+      createdAt: new Date(),
     });
 
     updateDocumentUseCase = new UpdateDocumentUseCase(mockRepository);
