@@ -7,12 +7,12 @@
 import { getEnvMode } from '@shared/utils/envMode';
 
 // Direct access to Vite env vars (for browser/Vite builds)
-const viteEnv = import.meta?.env ?? {};
+const viteEnv = (typeof import.meta !== 'undefined' && import.meta.env) ? import.meta.env : {};
 
 const getEnvVar = (key: string, defaultValue?: string): string => {
-  // Browser/Vite environment
-  if (globalThis.window !== undefined) {
-    return viteEnv[key] || defaultValue || '';
+  // Browser/Vite environment - import.meta.env is injected by Vite
+  if (typeof import.meta !== 'undefined' && import.meta.env) {
+    return import.meta.env[key] || defaultValue || '';
   }
   
   // Node.js environment (scripts, tests)
