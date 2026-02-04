@@ -1,11 +1,11 @@
-# Audit Log: ADR-006 Creation
+# Audit Log: ADR-003 Creation (RAG Architecture)
 
 **Timestamp:** 2026-02-03 14:30:00 UTC  
 **Agent:** Claude Sonnet 4.5  
 **Operation:** Architecture Decision Record Creation
 
 ## Action Performed
-Created `docs/adr/006-rag-architecture-decision.md` documenting the decision to maintain the current RAG architecture (Flutter + Gemini + MCP) instead of migrating to Python/LangChain.
+Created `docs/adr/ADR-003-rag-architecture-decision.md` documenting the decision to maintain the current RAG architecture (Flutter + Gemini + MCP) instead of migrating to Python/LangChain.
 
 ## Rationale
 - Aligns with `AGENTS.md` official stack

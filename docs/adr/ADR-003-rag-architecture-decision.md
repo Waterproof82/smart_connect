@@ -1,4 +1,4 @@
-# ADR-006: Mantener RAG en Flutter/Gemini vs Migrar a Python/LangChain
+# ADR-003: RAG System Architecture - Flutter/Gemini vs Python/LangChain
 
 **Fecha:** 2026-02-03  
 **Estado:** Aceptado ✅ IMPLEMENTADO  
@@ -188,4 +188,4 @@ Triggers:
 
 **Creado por:** AI Agent (Claude Sonnet 4.5)  
 **Requiere revisión de:** Lead Developer SmartConnect  
-**Próximo ADR:** 007-n8n-railway-production-deployment.md
+**Próximo ADR:** ADR-004 (Supabase Backend as a Service)
