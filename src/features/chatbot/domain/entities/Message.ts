@@ -8,23 +8,23 @@
 export type MessageRole = 'user' | 'assistant';
 
 export interface Message {
-  readonly id: number;
+  readonly id: number | string;
   readonly role: MessageRole;
   readonly content: string;
-  readonly timestamp: Date;
+  readonly timestamp: Date | number;
 }
 
 export class MessageEntity implements Message {
-  readonly id: number;
+  readonly id: number | string;
   readonly role: MessageRole;
   readonly content: string;
-  readonly timestamp: Date;
+  readonly timestamp: Date | number;
 
   constructor(params: {
-    id?: number;
+    id?: number | string;
     role: string;
     content: string;
-    timestamp?: Date;
+    timestamp?: Date | number;
   }) {
     // Validate and assign role
     if (params.role !== 'user' && params.role !== 'assistant') {

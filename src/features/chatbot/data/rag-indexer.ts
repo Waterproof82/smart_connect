@@ -96,13 +96,13 @@ export class RAGIndexer implements IRAGIndexer {
         const embedding = await this._generateEmbedding(chunkText);
         
         chunks.push({
-          content: chunkText,
+          text: chunkText,
           embedding,
           metadata: {
             source,
-            timestamp: Date.now(),
             category: this._inferCategory(source),
             chunkIndex: startIndex + chunks.length,
+            totalChunks: 0, // Will be updated after loop
           },
         });
       } catch (error) {
@@ -112,6 +112,12 @@ export class RAGIndexer implements IRAGIndexer {
       // Si alcanzamos el final, no continuar
       if (end >= words.length) break;
     }
+    
+    // Update totalChunks for all chunks
+    const totalChunks = chunks.length;
+    chunks.forEach(chunk => {
+      chunk.metadata.totalChunks = totalChunks;
+    });
     
     return chunks;
   }

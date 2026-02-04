@@ -12,6 +12,7 @@ process.env.CONTACT_EMAIL = 'jmaristia@gmail.com';
  * @description Global test configuration and mocks
  */
 
+import '@testing-library/jest-dom';
 import { randomUUID } from 'node:crypto';
 
 // Polyfill for crypto.randomUUID() in Node.js < 19

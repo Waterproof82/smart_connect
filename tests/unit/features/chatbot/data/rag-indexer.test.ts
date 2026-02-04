@@ -162,8 +162,8 @@ describe('RAGIndexer - Document Indexing', () => {
 
     // Assert
     expect(chunks.length).toBeGreaterThan(0);
-    expect(chunks[0].content).toContain('€');
-    expect(chunks[0].content).toContain('🍕');
+    expect(chunks[0].text).toContain('€');
+    expect(chunks[0].text).toContain('🍕');
   });
 });
 

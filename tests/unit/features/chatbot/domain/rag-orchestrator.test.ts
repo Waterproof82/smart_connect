@@ -27,7 +27,7 @@ describe('RAGOrchestrator - Integration Tests', () => {
     // Create concrete implementations (Data Layer)
     indexer = new RAGIndexer(mockApiKey);
     cache = new EmbeddingCache({
-      defaultTTL: 3600000,
+      ttlMs: 3600000,
       supabaseUrl: process.env.VITE_SUPABASE_URL || '',
       supabaseKey: process.env.VITE_SUPABASE_ANON_KEY || '',
     });
@@ -123,7 +123,7 @@ describe('RAGOrchestrator - Integration Tests', () => {
         expect(result.totalFound).toBe(0);
       } else {
         expect(result.totalFound).toBeGreaterThan(0);
-        expect(result.chunks[0].content).toContain('QRIBAR');
+        expect(result.chunks[0].text).toContain('QRIBAR');
         expect(result.relevanceScores[0]).toBeGreaterThanOrEqual(0.3);
       }
     });

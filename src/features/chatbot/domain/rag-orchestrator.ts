@@ -253,7 +253,7 @@ export class RAGOrchestrator {
     const context = result.chunks
       .map((chunk, idx) => {
         const score = result.relevanceScores[idx];
-        return `[Relevancia: ${(score * 100).toFixed(1)}%]\n${chunk.content}`;
+        return `[Relevancia: ${(score * 100).toFixed(1)}%]\n${chunk.text}`;
       })
       .join('\n\n---\n\n');
 
@@ -287,7 +287,9 @@ export class RAGOrchestrator {
    * Invalidate cache entries by pattern
    */
   async invalidateCache(pattern: string) {
-    await this.cache.invalidateByPattern(pattern);
+    // Note: IEmbeddingCache doesn't support pattern invalidation
+    // Use clear() for full cache reset or delete(key) for specific entries
+    await this.cache.clear();
   }
 
   /**
