@@ -18,8 +18,8 @@
  * docs/adr/006-rag-architecture-decision.md
  */
 
-import { RAGIndexer, DocumentChunk } from '../data/rag-indexer';
-import { EmbeddingCache } from '../data/embedding-cache';
+import { IRAGIndexer, DocumentChunk } from './interfaces/IRAGIndexer';
+import { IEmbeddingCache } from './interfaces/IEmbeddingCache';
 import { 
   FallbackHandler, 
   FallbackContext, 
@@ -50,46 +50,35 @@ export interface RAGSearchResult {
 }
 
 export interface RAGOrchestratorConfig {
-  apiKey: string;
-  supabaseUrl?: string;
-  supabaseKey?: string;
+  indexer: IRAGIndexer;
+  cache: IEmbeddingCache;
+  fallbackHandler?: FallbackHandler;
   defaultTopK?: number;
   defaultThreshold?: number;
   enableCache?: boolean;
-  cacheTTL?: number;
 }
 
 export class RAGOrchestrator {
-  private readonly indexer: RAGIndexer;
-  private readonly cache: EmbeddingCache;
+  private readonly indexer: IRAGIndexer;
+  private readonly cache: IEmbeddingCache;
   private readonly fallbackHandler: FallbackHandler;
-  private readonly config: RAGOrchestratorConfig & {
+  private readonly config: {
     defaultTopK: number;
     defaultThreshold: number;
     enableCache: boolean;
-    cacheTTL: number;
   };
   private indexedChunks: DocumentChunk[] = [];
 
   constructor(config: RAGOrchestratorConfig) {
+    this.indexer = config.indexer;
+    this.cache = config.cache;
+    this.fallbackHandler = config.fallbackHandler ?? new FallbackHandler();
+    
     this.config = {
-      ...config,
       defaultTopK: config.defaultTopK ?? 5,
       defaultThreshold: config.defaultThreshold ?? 0.7,
       enableCache: config.enableCache ?? true,
-      cacheTTL: config.cacheTTL ?? 7 * 24 * 60 * 60 * 1000, // 7 days
     };
-
-    this.indexer = new RAGIndexer(config.apiKey);
-    
-    // EmbeddingCache expects config object with ttlMs
-    this.cache = new EmbeddingCache({
-      supabaseUrl: config.supabaseUrl,
-      supabaseKey: config.supabaseKey,
-      ttlMs: this.config.cacheTTL,
-    });
-    
-    this.fallbackHandler = new FallbackHandler();
   }
 
   /**
@@ -188,14 +177,14 @@ export class RAGOrchestrator {
         queryEmbedding = cached.embedding;
         cacheHit = true;
       } else {
-        queryEmbedding = await this.indexer['_generateEmbedding'](query);
+        queryEmbedding = await this.indexer.generateEmbedding(query);
         await this.cache.set(cacheKey, queryEmbedding, {
           query,
           timestamp: Date.now(),
         });
       }
     } else {
-      queryEmbedding = await this.indexer['_generateEmbedding'](query);
+      queryEmbedding = await this.indexer.generateEmbedding(query);
     }
 
     // Filter by category if specified

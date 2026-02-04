@@ -9,20 +9,14 @@
 import React, { useRef } from 'react';
 import { MenuPhone, MenuInfo } from './components';
 import { useQRIBAR, useIntersectionObserver } from './hooks';
-import { GetMenuItems } from '../domain/usecases/GetMenuItems';
-import { GetRestaurant } from '../domain/usecases/GetRestaurant';
-import { MenuRepositoryImpl } from '../data/repositories/MenuRepositoryImpl';
-import { MockMenuDataSource } from '../data/datasources/MockMenuDataSource';
-
-// Dependency Injection Setup
-const dataSource = new MockMenuDataSource();
-const repository = new MenuRepositoryImpl(dataSource);
-const getMenuItems = new GetMenuItems(repository);
-const getRestaurant = new GetRestaurant(repository);
+import { getQRIBARContainer } from './QRIBARContainer';
 
 export const QRIBARSection: React.FC = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const isVisible = useIntersectionObserver(sectionRef);
+  
+  // Get use cases from DI container
+  const { getMenuItems, getRestaurant } = getQRIBARContainer();
   
   // Execute business logic through use cases
   const { menuItems, restaurant, isLoading, error } = useQRIBAR(

@@ -1,38 +1,28 @@
 /**
  * RAG Indexer para documentos QRIBAR y Reviews
  * 
- * Clean Architecture: Data Layer
+ * Clean Architecture: Data Layer (Implementation)
  * 
  * Responsabilidad:
  * - Indexar documentos con chunking estratégico
  * - Generar embeddings usando Gemini text-embedding-004
  * - Asignar metadata (source, category, timestamp)
  * 
- * Fase 1 de optimización según ADR-006
+ * Fase 1 de optimización según ADR-003
  * docs/adr/006-rag-architecture-decision.md
  */
 
 import { GoogleGenAI } from '@google/genai';
+import type { 
+  IRAGIndexer, 
+  DocumentChunk, 
+  IndexDocumentsParams
+} from '../domain/interfaces/IRAGIndexer';
 
-export interface ChunkMetadata {
-  source: string;
-  timestamp: number;
-  category: string;
-  chunkIndex: number;
-}
+// Re-export types for backward compatibility
+export type { ChunkMetadata, DocumentChunk, IndexDocumentsParams } from '../domain/interfaces/IRAGIndexer';
 
-export interface DocumentChunk {
-  content: string;
-  embedding: number[];
-  metadata: ChunkMetadata;
-}
-
-export interface IndexDocumentsParams {
-  source: string;
-  documents: string[];
-}
-
-export class RAGIndexer {
+export class RAGIndexer implements IRAGIndexer {
   private readonly genAI: GoogleGenAI;
   
   /**
@@ -124,6 +114,16 @@ export class RAGIndexer {
     }
     
     return chunks;
+  }
+
+  /**
+   * Generate embedding for a single text (Public API for interface)
+   * 
+   * @param text Text to generate embedding for
+   * @returns Embedding vector
+   */
+  async generateEmbedding(text: string): Promise<number[]> {
+    return this._generateEmbedding(text);
   }
 
   /**

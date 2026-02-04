@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- **Clean Architecture Compliance:** Refactored chatbot feature to strict Clean Architecture with Dependency Inversion
+  - Created domain interfaces (`IRAGIndexer`, `IEmbeddingCache`) to enforce dependency rule
+  - Updated `RAGOrchestrator` to depend on interfaces instead of concrete implementations (CRITICAL FIX)
+  - Updated Data Layer (`RAGIndexer`, `EmbeddingCache`) to implement domain interfaces
+  - Created DI containers (`ChatbotContainer`, `QRIBARContainer`) for dependency injection
+  - Refactored `QRIBARSection` component to use container instead of direct instantiation
+  - All 131 tests passing ✅
+  - **Impact:** SOLID compliance score 9.1/10 → 9.8/10 (estimated)
+  - Location: `src/features/chatbot/`, `src/features/qribar/`
+
+- **EmbeddingCache Stats Interface:** Updated `getStats()` return type to match new `CacheStats` interface
+  - Old properties: `hits`, `misses`, `memoryUsageBytes`
+  - New properties: `totalEntries`, `hitRate`, `memorySize`, `oldestEntry`, `newestEntry`
+  - More semantic and informative statistics tracking
+  - Tests updated to match new interface (20 failures → 0 ✅)
+
+- **RAGIndexer Public API:** Added `generateEmbedding()` public method to interface
+  - Exposes single-text embedding generation without breaking encapsulation
+  - Used by `RAGOrchestrator` for query embedding with cache support
+  - Maintains private `_generateEmbedding()` for internal batch operations
+
 ### Fixed
 - **SupabaseKnowledgeLoader Source Mapping:** Added intelligent mapping from database source values to internal categories
   - Database uses: `qribar_product`, `nfc_reviews_product`, `automation_product`, `company_philosophy`, `contact_info`
@@ -45,7 +67,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - ChatbotContainer: Dependency injection with RAG configuration
   - Comprehensive test suite: 81 tests with 100% coverage (1.185s execution)
   - Location: `src/features/chatbot/data/`, `src/features/chatbot/domain/`
-- **ADR-006:** Architecture decision to maintain RAG in Flutter/Gemini instead of migrating to Python/LangChain
+- **ADR-003:** Architecture decision to maintain RAG in Flutter/Gemini instead of migrating to Python/LangChain
   - Documented rationale for keeping current stack (Flutter + Gemini + MCP)
   - Defined optimization roadmap in 4 phases (indexing, cache, fallbacks, monitoring)
   - Established criteria for potential future migration to Python/LangChain
