@@ -55,6 +55,33 @@
 - **Created:** `ADR-005-admin-panel-rag.md` - Architecture decision record
 - **Created:** `ADMIN_PANEL.md` - User guide and technical documentation
 
+### 7. Database Migrations
+- **Created:** `20260204100000_add_category_to_documents.sql`
+  - Added `category` column (TEXT, default 'general')
+  - Added `updated_at` column with auto-update trigger
+  - Initial category mapping: qribar→producto_digital, reviews→reputacion_online
+- **Created:** `20260204110000_fix_category_inference.sql`
+  - Fixed category logic to match RAGIndexer._inferCategory()
+  - Uses LOWER(source) LIKE pattern matching
+  - Ensures consistency between database and chatbot logic
+
+### 8. Bug Fixes & Improvements
+- **Fixed:** Source filter not working (exact match → ILIKE pattern)
+  - Changed `eq('source', filters.source)` → `ilike('source', %${filters.source}%)`
+  - Updated dropdown values to match actual sources in database
+- **Fixed:** Duplicate documents in database
+  - Created `scripts/clean-duplicates.mjs` script
+  - Removed 8 duplicate documents, kept 5 unique
+  - Uses content preview + source as uniqueness key
+- **Fixed:** All TypeScript and ESLint errors
+  - Replaced deprecated React.FormEvent with implicit typing
+  - Added htmlFor attributes to labels (accessibility)
+  - Used optional chaining for email validation
+  - Removed unnecessary non-null assertions
+  - Fixed test type annotations (replaced `any` with proper types)
+  - Updated imports to use `node:` prefix for built-in modules
+- **Removed:** Deprecated test file `tests/test_gemini_generate.js`
+
 ---
 
 ## Security Measures Implemented (OWASP)

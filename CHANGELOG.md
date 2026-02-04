@@ -28,6 +28,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Package: `react-router-dom` v6
   - Location: `src/main.tsx`
 
+- **Database Migrations for RAG System:**
+  - Added `category` column to documents table (producto_digital, reputacion_online, general)
+  - Added `updated_at` column with automatic timestamp trigger
+  - Fixed category inference logic to match chatbot's RAGIndexer
+  - Location: `supabase/migrations/`
+
+- **Duplicate Cleanup Script:** Tool to remove duplicate documents from knowledge base
+  - Identifies duplicates by content preview + source
+  - Interactive with 5-second confirmation
+  - Location: `scripts/clean-duplicates.mjs`
+
+### Fixed
+- **Source Filter in Admin Panel:** Changed from exact match to ILIKE pattern matching
+  - Now supports partial source name filtering
+  - Updated dropdown values to match actual database sources
+- **Category Inference Consistency:** Database migration now matches RAGIndexer logic
+  - Pattern: qribar→producto_digital, review→reputacion_online, default→general
+- **Duplicate Documents:** Removed 8 duplicate entries, keeping 5 unique documents
+- **TypeScript & ESLint Errors:** All compilation and linting errors resolved
+  - Replaced deprecated React.FormEvent with implicit typing
+  - Added accessibility attributes (htmlFor) to form labels
+  - Used optional chaining for safer null checks
+  - Removed unnecessary non-null assertions
+  - Fixed test type annotations (no `any` types)
+  - Updated Node.js imports to use `node:` prefix
+
+### Removed
+- Deprecated test file `tests/test_gemini_generate.js`
+
 ### Changed
 - **Clean Architecture Compliance:** Refactored chatbot feature to strict Clean Architecture with Dependency Inversion
   - Created domain interfaces (`IRAGIndexer`, `IEmbeddingCache`) to enforce dependency rule
