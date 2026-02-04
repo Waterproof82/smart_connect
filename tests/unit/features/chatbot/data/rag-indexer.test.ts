@@ -42,9 +42,9 @@ describe('RAGIndexer - Document Indexing', () => {
     
     // Verificar overlap entre chunks consecutivos
     if (chunks.length > 1) {
-      const firstChunkWords = chunks[0].content.split(' ');
+      const firstChunkWords = chunks[0].text.split(' ');
       const firstChunkEnd = firstChunkWords.slice(-10).join(' ');
-      const secondChunkStart = chunks[1].content.split(' ').slice(0, 10).join(' ');
+      const secondChunkStart = chunks[1].text.split(' ').slice(0, 10).join(' ');
       
       expect(secondChunkStart).toContain(firstChunkEnd.split(' ')[0]);
     }
@@ -84,22 +84,20 @@ describe('RAGIndexer - Document Indexing', () => {
     expect(chunks[0].metadata.category).toBe('reputacion_online');
   });
 
-  test('MUST add timestamp metadata to all chunks', async () => {
+  test('MUST add chunk index metadata to all chunks', async () => {
     // Arrange
     const doc = 'SmartConnect AI ofrece soluciones de automatización.';
-    const beforeIndexing = Date.now();
 
     // Act
     const chunks = await indexer.indexDocuments({
       source: 'qribar',
       documents: [doc],
     });
-    const afterIndexing = Date.now();
 
     // Assert
-    expect(chunks[0].metadata.timestamp).toBeDefined();
-    expect(chunks[0].metadata.timestamp).toBeGreaterThanOrEqual(beforeIndexing);
-    expect(chunks[0].metadata.timestamp).toBeLessThanOrEqual(afterIndexing);
+    expect(chunks[0].metadata.chunkIndex).toBeDefined();
+    expect(chunks[0].metadata.chunkIndex).toBeGreaterThanOrEqual(0);
+    expect(chunks[0].metadata.totalChunks).toBeGreaterThan(0);
   });
 
   test('MUST handle multiple documents in single indexing call', async () => {
