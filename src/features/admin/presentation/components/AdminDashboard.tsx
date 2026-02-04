@@ -7,6 +7,8 @@
  */
 
 import React from 'react';
+import { Link } from 'react-router-dom';
+import { Home } from 'lucide-react';
 import { StatsDashboard } from './StatsDashboard';
 import { DocumentList } from './DocumentList';
 import { GetAllDocumentsUseCase } from '../../domain/usecases/GetAllDocumentsUseCase';
@@ -47,9 +49,18 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       <header className="bg-gray-900 border-b border-gray-800 sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <div className="flex items-center">
-              <h1 className="text-xl font-bold text-white">SmartConnect Admin</h1>
-              <span className="ml-4 text-sm text-gray-400">RAG Document Management</span>
+            <div className="flex items-center gap-4">
+              <Link 
+                to="/"
+                className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
+                title="Back to Home"
+              >
+                <Home className="w-5 h-5" />
+              </Link>
+              <div className="flex items-center">
+                <h1 className="text-xl font-bold text-white">SmartConnect Admin</h1>
+                <span className="ml-4 text-sm text-gray-400">RAG Document Management</span>
+              </div>
             </div>
             <div className="flex items-center gap-4">
               <div className="text-sm text-gray-400">

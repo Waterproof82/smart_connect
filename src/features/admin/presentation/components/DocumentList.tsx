@@ -30,6 +30,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
   const [currentPage, setCurrentPage] = useState(1);
   const [sourceFilter, setSourceFilter] = useState<string>('');
   const [searchText, setSearchText] = useState<string>('');
+  const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
 
   const loadDocuments = async () => {
     setIsLoading(true);
@@ -172,8 +173,14 @@ export const DocumentList: React.FC<DocumentListProps> = ({
           <tbody className="divide-y divide-gray-800">
             {documents?.data.map((doc) => (
               <tr key={doc.id} className="hover:bg-gray-800/50">
-                <td className="px-6 py-4 text-sm text-gray-300 max-w-md truncate">
-                  {doc.getContentPreview(100)}
+                <td className="px-6 py-4 text-sm text-gray-300 max-w-md">
+                  <button
+                    onClick={() => setSelectedDocument(doc)}
+                    className="text-left hover:text-blue-400 transition-colors cursor-pointer w-full truncate"
+                    title="Click to view full content"
+                  >
+                    {doc.getContentPreview(100)}
+                  </button>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                   <span className="px-2 py-1 bg-blue-900/30 text-blue-400 rounded-full text-xs">
@@ -239,6 +246,62 @@ export const DocumentList: React.FC<DocumentListProps> = ({
             >
               Next
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* Modal for Full Content */}
+      {selectedDocument && (
+        // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
+        <div 
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+          onClick={() => setSelectedDocument(null)}
+        >
+          {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
+          <div 
+            className="bg-gray-900 border border-gray-800 rounded-lg max-w-4xl w-full max-h-[80vh] overflow-hidden flex flex-col"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="flex items-center justify-between p-6 border-b border-gray-800">
+              <div>
+                <h3 className="text-xl font-bold text-white">Document Content</h3>
+                <div className="flex gap-2 mt-2">
+                  <span className="px-2 py-1 bg-blue-900/30 text-blue-400 rounded-full text-xs">
+                    {selectedDocument.source}
+                  </span>
+                  <span className="px-2 py-1 bg-purple-900/30 text-purple-400 rounded-full text-xs">
+                    {selectedDocument.category}
+                  </span>
+                </div>
+              </div>
+              <button
+                onClick={() => setSelectedDocument(null)}
+                className="text-gray-400 hover:text-white text-2xl leading-none"
+              >
+                ×
+              </button>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-6 overflow-y-auto flex-1">
+              <pre className="text-sm text-gray-300 whitespace-pre-wrap font-mono leading-relaxed">
+                {selectedDocument.content}
+              </pre>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="flex items-center justify-between p-4 border-t border-gray-800 bg-gray-800/50">
+              <div className="text-xs text-gray-400">
+                Created: {selectedDocument.createdAt.toLocaleDateString()} {selectedDocument.createdAt.toLocaleTimeString()}
+              </div>
+              <button
+                onClick={() => setSelectedDocument(null)}
+                className="px-4 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-600 transition-colors"
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       )}
