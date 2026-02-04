@@ -91,11 +91,6 @@ export class SupabaseKnowledgeLoader {
       const sourceType = this._mapSourceToCategory(doc.source);
       const content = doc.content;
 
-      // Debug: Log first 3 documents to see source mapping
-      if (i < 3) {
-        console.warn(`🔍 DEBUG Doc ${i + 1}: source="${doc.source}" → mapped to "${sourceType}"`);
-      }
-
       if (sourceType === 'qribar') {
         result.qribar.push(content);
       } else if (sourceType === 'reviews') {

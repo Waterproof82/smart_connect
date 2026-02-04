@@ -110,16 +110,6 @@ export class ChatbotContainer {
       const documents = await this.knowledgeLoader.loadDocuments();
       const stats = this.knowledgeLoader.getStats();
 
-      // Debug: Log raw documents before indexing
-      console.warn('🔍 DEBUG: Raw documents loaded:', {
-        qribar: documents.qribar.length,
-        reviews: documents.reviews.length,
-        general: documents.general.length,
-      });
-      console.warn('🔍 DEBUG: First qribar doc:', documents.qribar[0]?.substring(0, 50));
-      console.warn('🔍 DEBUG: First reviews doc:', documents.reviews[0]?.substring(0, 50));
-      console.warn('🔍 DEBUG: First general doc:', documents.general[0]?.substring(0, 50));
-
       // Index documents by source
       if (documents.qribar.length > 0) {
         const qribarDocs = documents.qribar.map((content, idx) => ({
