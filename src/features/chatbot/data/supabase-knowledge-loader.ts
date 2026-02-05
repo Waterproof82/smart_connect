@@ -20,9 +20,7 @@ export interface SupabaseKnowledgeLoaderConfig {
 }
 
 export interface LoadedDocuments {
-  qribar: string[];
-  reviews: string[];
-  general: string[];
+  [source: string]: string[];
 }
 
 export interface LoaderStats {
@@ -71,12 +69,9 @@ export class SupabaseKnowledgeLoader {
       throw new Error(`Failed to load documents from Supabase: ${error.message}`);
     }
 
-    // Initialize result structure
-    const result: LoadedDocuments = {
-      qribar: [],
-      reviews: [],
-      general: [],
-    };
+
+    // Only initialize result if data exists
+    const result: LoadedDocuments = {};
 
     // Handle null or empty data
     if (!data || data.length === 0) {
@@ -84,18 +79,15 @@ export class SupabaseKnowledgeLoader {
       return result;
     }
 
-    // Group documents by source
+    // Group documents by all sources (dynamic)
     const dataArray = data as SupabaseDocument[];
     for (const doc of dataArray) {
-      const sourceType = this._mapSourceToCategory(doc.source);
+      const sourceStr = doc.source?.toLowerCase() || 'general';
       const content = doc.content;
-
-      if (sourceType === 'qribar') {
-        result.qribar.push(content);
-      } else if (sourceType === 'reviews') {
-        result.reviews.push(content);
-      } else {
-        result.general.push(content);
+      const sources = sourceStr.split(',').map(s => s.trim()).filter(Boolean);
+      for (const source of sources) {
+        if (!result[source]) result[source] = [];
+        result[source].push(content);
       }
     }
 
@@ -111,34 +103,19 @@ export class SupabaseKnowledgeLoader {
   }
 
   /**
-   * Map database source values to internal categories
-   * Database uses: qribar_product, nfc_reviews_product, automation_product, company_philosophy, contact_info
-   * Internal uses: qribar, reviews, general
-   */
-  private _mapSourceToCategory(source: string | null): 'qribar' | 'reviews' | 'general' {
-    if (!source) return 'general';
-
-    // QRIBAR products (carta digital, pedidos en mesa)
-    if (source.includes('qribar')) return 'qribar';
-
-    // Reviews/NFC products (tarjetas NFC, reputación online)
-    if (source.includes('reviews') || source.includes('nfc')) return 'reviews';
-
-    // Automation, company info, contact → general
-    return 'general';
-  }
-
-  /**
    * Update internal statistics
    */
   private _updateStats(docs: LoadedDocuments): void {
+    // Solo incluye sources presentes en docs
+    const bySource: Record<string, number> = {};
+    let total = 0;
+    for (const [source, arr] of Object.entries(docs)) {
+      bySource[source] = arr.length;
+      total += arr.length;
+    }
     this.stats = {
-      totalDocuments: docs.qribar.length + docs.reviews.length + docs.general.length,
-      bySource: {
-        qribar: docs.qribar.length,
-        reviews: docs.reviews.length,
-        general: docs.general.length,
-      },
+      totalDocuments: total,
+      bySource,
       lastLoadedAt: new Date(),
     };
   }

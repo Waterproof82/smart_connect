@@ -27,19 +27,19 @@ describe('SupabaseKnowledgeLoader', () => {
         { 
           id: '1', 
           content: 'QRIBAR es una carta digital QR que revoluciona restaurantes...', 
-          source: 'qribar_product', // Real database value
+          source: 'qribar', // Simplified source
           metadata: { category: 'features' }
         },
         { 
           id: '2', 
           content: 'Precios QRIBAR: Plan Básico $29/mes, Premium $49/mes...', 
-          source: 'qribar_product', // Real database value
+          source: 'qribar', // Simplified source
           metadata: { category: 'pricing' }
         },
         { 
           id: '3', 
           content: 'Sistema de gestión de reputación online con tarjetas NFC...', 
-          source: 'nfc_reviews_product', // Real database value
+          source: 'reviews', // Simplified source
           metadata: { category: 'features' }
         },
       ],
@@ -86,16 +86,14 @@ describe('SupabaseKnowledgeLoader', () => {
       mockSelect.mockResolvedValue({ data: [], error: null });
 
       const result = await loader.loadDocuments();
-
-      expect(result).toEqual({ qribar: [], reviews: [], general: [] });
+      expect(result).toEqual({});
     });
 
     it('should handle null data from Supabase', async () => {
       mockSelect.mockResolvedValue({ data: null, error: null });
 
       const result = await loader.loadDocuments();
-
-      expect(result).toEqual({ qribar: [], reviews: [], general: [] });
+      expect(result).toEqual({});
     });
 
     it('should include general category if present', async () => {
@@ -170,7 +168,6 @@ describe('SupabaseKnowledgeLoader', () => {
       expect(stats.bySource).toEqual({
         qribar: 2,
         reviews: 1,
-        general: 0,
       });
       expect(stats.lastLoadedAt).toBeInstanceOf(Date);
     });

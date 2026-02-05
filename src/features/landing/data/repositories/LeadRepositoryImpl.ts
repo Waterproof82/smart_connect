@@ -14,14 +14,15 @@ export class LeadRepositoryImpl implements ILeadRepository {
 
   async submitLead(lead: Lead): Promise<boolean> {
     // Convert domain entity to webhook payload
-    const payload = {
+    const webhookPayload = {
       nombre: lead.name,
       empresa: lead.company,
       email: lead.email,
       servicio_interes: lead.service,
       mensaje_cuerpo: lead.message,
+      timestamp: new Date().toISOString(),
     };
 
-    return await this.webhookDataSource.sendLead(payload);
+    return await this.webhookDataSource.sendLead(webhookPayload);
   }
 }

@@ -73,7 +73,7 @@ export class ChatbotContainer {
       supabaseUrl,
       supabaseKey: supabaseAnonKey,
       ttlMs: 7 * 24 * 60 * 60 * 1000, // 7 days
-      enableSupabaseBackup: true,
+      enableSupabaseBackup: false, // Disabled: Edge Function handles server-side cache
     });
     
     // Inject implementations into RAGOrchestrator (Domain Layer)
@@ -120,35 +120,17 @@ export class ChatbotContainer {
       const documents = await this.knowledgeLoader.loadDocuments();
       const stats = this.knowledgeLoader.getStats();
 
-      // Index documents by source
-      if (documents.qribar.length > 0) {
-        const qribarDocs = documents.qribar.map((content, idx) => ({
-          id: `qribar_${idx}`,
-          content,
-          source: 'qribar'
-        }));
-        await this.ragOrchestrator.indexDocuments(qribarDocs);
-        console.warn(`✅ Indexed ${documents.qribar.length} QRIBAR documents`);
-      }
-
-      if (documents.reviews.length > 0) {
-        const reviewsDocs = documents.reviews.map((content, idx) => ({
-          id: `reviews_${idx}`,
-          content,
-          source: 'reviews'
-        }));
-        await this.ragOrchestrator.indexDocuments(reviewsDocs);
-        console.warn(`✅ Indexed ${documents.reviews.length} Reviews documents`);
-      }
-
-      if (documents.general.length > 0) {
-        const generalDocs = documents.general.map((content, idx) => ({
-          id: `general_${idx}`,
-          content,
-          source: 'general'
-        }));
-        await this.ragOrchestrator.indexDocuments(generalDocs);
-        console.warn(`✅ Indexed ${documents.general.length} General documents`);
+      // Index all sources dynamically
+      for (const [source, docs] of Object.entries(documents)) {
+        if (docs.length > 0) {
+          const docsToIndex = docs.map((content, idx) => ({
+            id: `${source}_${idx}`,
+            content,
+            source
+          }));
+          await this.ragOrchestrator.indexDocuments(docsToIndex);
+          console.warn(`✅ Indexed ${docs.length} documents for source: ${source}`);
+        }
       }
 
       this.isKnowledgeBaseInitialized = true;

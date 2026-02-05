@@ -88,6 +88,223 @@ async function generateEmbedding(text: string, apiKey: string): Promise<number[]
 }
 
 // ========================================
+// RAG PROCESSING
+// ========================================
+async function processRAG(
+  userQuery: string,
+  supabase: any,
+  geminiApiKey: string,
+  similarityThreshold: number,
+  maxDocuments: number
+): Promise<{ queryEmbedding: number[]; documents: any[]; cacheHit: boolean }> {
+  let queryEmbedding: number[] = [];
+  let documents: any[] = [];
+  let cacheHit = false;
+
+  try {
+    // Check cache first
+    const cacheKey = `query:${userQuery}`;
+    console.log('🔍 Checking embedding cache...');
+    
+    const { data: cachedEmbedding, error: cacheError } = await supabase
+      .from('embedding_cache')
+      .select('embedding, timestamp, ttl')
+      .eq('key', cacheKey)
+      .maybeSingle();
+    
+    if (cachedEmbedding && !cacheError) {
+      const now = Date.now();
+      const entryTtl = cachedEmbedding.ttl || (7 * 24 * 60 * 60 * 1000);
+      const isExpired = now - cachedEmbedding.timestamp > entryTtl;
+      
+      if (!isExpired && Array.isArray(cachedEmbedding.embedding)) {
+        queryEmbedding = cachedEmbedding.embedding;
+        cacheHit = true;
+        console.log('✅ Cache HIT - Using cached embedding');
+      } else {
+        console.log('⚠️ Cache MISS - Expired entry');
+      }
+    } else {
+      console.log('⚠️ Cache MISS - No entry found');
+    }
+    
+    // Generate embedding if not in cache
+    if (!cacheHit) {
+      console.log('🧠 Generating embedding...');
+      queryEmbedding = await generateEmbedding(userQuery, geminiApiKey);
+      console.log('✅ Embedding generated:', queryEmbedding.length, 'dimensions');
+      
+      // Store in cache (fire and forget)
+      supabase
+        .from('embedding_cache')
+        .upsert({
+          key: cacheKey,
+          embedding: queryEmbedding,
+          timestamp: Date.now(),
+          ttl: 7 * 24 * 60 * 60 * 1000,
+          metadata: { source: 'gemini-chat', query_length: userQuery.length }
+        }, { onConflict: 'key' })
+        .then(() => console.log('✅ Embedding cached'))
+        .catch(err => console.warn('⚠️ Cache write failed:', err.message));
+    }
+    
+    // Vector search
+    const embeddingString = `[${queryEmbedding.join(',')}]`;
+    console.log('🔍 Searching documents...');
+    
+    const { data: searchResults, error: searchError } = await supabase
+      .rpc('match_documents', {
+        query_embedding: embeddingString,
+        match_threshold: similarityThreshold,
+        match_count: maxDocuments
+      });
+
+    if (searchError) {
+      console.error('❌ Vector search error:', searchError);
+    } else {
+      documents = searchResults || [];
+      console.log('✅ Found', documents.length, 'documents');
+    }
+  } catch (error) {
+    console.error('❌ RAG processing error:', error);
+  }
+
+  return { queryEmbedding, documents, cacheHit };
+}
+
+// ========================================
+// GEMINI API CALL
+// ========================================
+async function callGemini(
+  systemPrompt: string,
+  userQuery: string,
+  geminiApiKey: string
+): Promise<string> {
+  console.log('🤖 Calling Gemini API...');
+  
+  const response = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent`,
+    {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json',
+        'x-goog-api-key': geminiApiKey
+      },
+      body: JSON.stringify({
+        contents: [
+          {
+            parts: [
+              {
+                text: `${systemPrompt}\n\nUser Question: ${userQuery}`
+              }
+            ]
+          }
+        ],
+        generationConfig: {
+          temperature: 0.7,
+          maxOutputTokens: 1024,
+          topP: 0.95,
+          topK: 40
+        },
+        safetySettings: [
+          {
+            category: 'HARM_CATEGORY_HARASSMENT',
+            threshold: 'BLOCK_MEDIUM_AND_ABOVE'
+          },
+          {
+            category: 'HARM_CATEGORY_HATE_SPEECH',
+            threshold: 'BLOCK_MEDIUM_AND_ABOVE'
+          }
+        ]
+      })
+    }
+  );
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error('❌ Gemini API error:', response.status, errorText);
+    throw new Error(`Gemini API error: ${response.status}`);
+  }
+
+  console.log('✅ Gemini API responded');
+  const data: GeminiResponse = await response.json();
+  return data.candidates?.[0]?.content?.parts?.[0]?.text || 'No response generated';
+}
+
+// ========================================
+// PROMPT VARIANTS
+// ========================================
+function getPromptVariant(
+  abTestGroup: string,
+  context: string,
+  historyText: string
+): { name: string; prompt: string } {
+  const promptVariants = {
+    'A': {
+      name: 'Control - Standard Prompt',
+      prompt: `You are an expert assistant for SmartConnect AI, a business accelerator agency specializing in:
+
+**Core Products:**
+- 🍽️ QRiBar: Digital menu system for restaurants with QR-based ordering
+- ⭐ NFC Review Cards: Reputation management tools (like Tapstar) for Google Reviews & Instagram
+- 🤖 Marketing Automation: Lead capture and nurturing with n8n workflows
+
+**Business Model:** Agencia-Escuela approach
+- Build real products for local businesses
+- Focus on immediate value delivery
+- Scale through automation and AI
+
+Context from Knowledge Base:
+${context}
+
+Previous Conversation:
+${historyText}
+
+Guidelines:
+- Be helpful, professional, and concise
+- Reference the context when answering
+- If the answer isn't in the context, use general knowledge but acknowledge the limitation
+- For product inquiries, explain benefits and ROI
+- For technical questions, provide clear, actionable guidance`
+    },
+    'B': {
+      name: 'Concise - Direct & Actionable',
+      prompt: `You are SmartConnect AI's expert assistant. Products: QRiBar (digital menus), NFC Review Cards (reputation), n8n automation.
+
+Context: ${context}
+History: ${historyText}
+
+Rules:
+- Maximum 80 words per response
+- Start with direct answer
+- Include pricing when known
+- Use bullet points for options
+- End with clear next step if applicable`
+    },
+    'C': {
+      name: 'Conversational - Friendly & Detailed',
+      prompt: `¡Hola! Soy tu asistente experto de SmartConnect AI. Somos una agencia-escuela que ayuda a negocios locales a crecer con tecnología.
+
+**Nuestros productos estrella:**
+🍽️ **QRiBar:** Cartas digitales con pedidos desde la mesa
+⭐ **Tarjetas NFC Reseñas:** Más reviews en Google e Instagram  
+🤖 **Automatización n8n:** Captación y nutrición de leads
+
+Contexto disponible: ${context}
+Conversación anterior: ${historyText}
+
+Mi estilo:
+- Tono cercano pero profesional
+- Explico beneficios y ROI claramente
+- Ofrezco ejemplos prácticos
+- Respondo preguntas follow-up sin problema`
+    }
+  };
+
+  return promptVariants[abTestGroup as keyof typeof promptVariants] || promptVariants['A'];
+}
+
+// ========================================
 // MAIN HANDLER
 // ========================================
 Deno.serve(async (req) => {
@@ -106,12 +323,19 @@ Deno.serve(async (req) => {
 
   try {
     // ===================================
-    // SECURITY: Authorization Check
+    // SECURITY: Authorization Check (Accept anon key for public chatbot)
     // ===================================
     const authHeader = req.headers.get('Authorization');
-    if (!authHeader) {
+    const apiKeyHeader = req.headers.get('apikey');
+    
+    console.log('🔐 Auth headers:', { 
+      hasAuth: !!authHeader, 
+      hasApiKey: !!apiKeyHeader 
+    });
+    
+    if (!authHeader && !apiKeyHeader) {
       return new Response(
-        JSON.stringify({ error: 'Missing authorization header' }),
+        JSON.stringify({ error: 'Missing authorization or apikey header' }),
         { 
           status: 401, 
           headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
@@ -130,6 +354,13 @@ Deno.serve(async (req) => {
       abTestGroup = 'A' // Default to control group
     }: ChatRequest = await req.json();
 
+    console.log('📝 Request:', { 
+      queryLength: userQuery?.length, 
+      historyCount: conversationHistory.length,
+      maxDocuments,
+      similarityThreshold
+    });
+
     if (!userQuery || typeof userQuery !== 'string') {
       return new Response(
         JSON.stringify({ error: 'Invalid or missing userQuery parameter' }),
@@ -143,8 +374,10 @@ Deno.serve(async (req) => {
     // ===================================
     // RATE LIMITING (OWASP A04:2021)
     // ===================================
-    const userId = authHeader.split(' ')[1]?.substring(0, 10) || 'anonymous';
-    const rateLimit = checkRateLimit(userId);
+    // Use apikey or auth token for rate limiting
+    const rateLimitKey = (apiKeyHeader || authHeader?.split(' ')[1] || 'anonymous').substring(0, 10);
+    const userId = rateLimitKey; // User identifier for logging
+    const rateLimit = checkRateLimit(rateLimitKey);
     
     if (!rateLimit.allowed) {
       return new Response(
@@ -170,8 +403,14 @@ Deno.serve(async (req) => {
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
     const geminiApiKey = Deno.env.get('GEMINI_API_KEY');
 
+    console.log('⚙️ ENV check:', {
+      hasSupabaseUrl: !!supabaseUrl,
+      hasServiceKey: !!supabaseServiceKey,
+      hasGeminiKey: !!geminiApiKey
+    });
+
     if (!supabaseUrl || !supabaseServiceKey || !geminiApiKey) {
-      console.error('Missing required environment variables');
+      console.error('❌ Missing required environment variables');
       return new Response(
         JSON.stringify({ error: 'Service configuration error' }),
         { 
@@ -182,183 +421,40 @@ Deno.serve(async (req) => {
     }
 
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
+    console.log('✅ Supabase client initialized');
 
     // ===================================
-    // RAG: GENERATE QUERY EMBEDDING
+    // RAG: PROCESSING
     // ===================================
-    let queryEmbedding: number[] = [];
-    let documents: any[] = [];
-    
-    try {
-      queryEmbedding = await generateEmbedding(userQuery, geminiApiKey);
-      
-      // ===================================
-      // RAG: VECTOR SEARCH
-      // ===================================
-      // Convert embedding array to pgvector format string: [0.1,0.2,0.3]
-      const embeddingString = `[${queryEmbedding.join(',')}]`;
-      
-      const { data: searchResults, error: searchError } = await supabase
-        .rpc('match_documents', {
-          query_embedding: embeddingString, // Send as string for pgvector cast
-          match_threshold: similarityThreshold,
-          match_count: maxDocuments
-        });
-
-      if (searchError) {
-        console.error('Vector search error:', searchError);
-        // Continue without documents (fallback to general knowledge)
-      } else {
-        documents = searchResults || [];
-      }
-    } catch (error) {
-      console.error('RAG processing error:', error);
-      // Continue without RAG - use general knowledge only
-    }
+    const { documents, cacheHit } = await processRAG(
+      userQuery,
+      supabase,
+      geminiApiKey,
+      similarityThreshold,
+      maxDocuments
+    );
 
     // ===================================
-    // RAG: BUILD CONTEXT
+    // BUILD CONTEXT & HISTORY
     // ===================================
     const context = documents && documents.length > 0
       ? documents.map((doc: any) => `[${doc.source || 'Knowledge Base'}]: ${doc.content}`).join('\n\n')
       : 'No specific context available. Using general knowledge about SmartConnect AI.';
 
-    // ===================================
-    // BUILD CONVERSATION HISTORY
-    // ===================================
     const historyText = conversationHistory
-      .slice(-5) // Last 5 messages only
+      .slice(-5)
       .map(msg => `${msg.role === 'user' ? 'User' : 'Assistant'}: ${msg.content}`)
       .join('\n');
 
     // ===================================
-    // A/B TESTING: PROMPT VARIANTS
+    // GET PROMPT VARIANT
     // ===================================
-    const promptVariants = {
-      'A': {
-        name: 'Control - Standard Prompt',
-        prompt: `You are an expert assistant for SmartConnect AI, a business accelerator agency specializing in:
-
-**Core Products:**
-- 🍽️ QRiBar: Digital menu system for restaurants with QR-based ordering
-- ⭐ NFC Review Cards: Reputation management tools (like Tapstar) for Google Reviews & Instagram
-- 🤖 Marketing Automation: Lead capture and nurturing with n8n workflows
-
-**Business Model:** Agencia-Escuela approach
-- Build real products for local businesses
-- Focus on immediate value delivery
-- Scale through automation and AI
-
-Context from Knowledge Base:
-${context}
-
-Previous Conversation:
-${historyText}
-
-Guidelines:
-- Be helpful, professional, and concise
-- Reference the context when answering
-- If the answer isn't in the context, use general knowledge but acknowledge the limitation
-- For product inquiries, explain benefits and ROI
-- For technical questions, provide clear, actionable guidance`
-      },
-      'B': {
-        name: 'Concise - Direct & Actionable',
-        prompt: `You are SmartConnect AI's expert assistant. Products: QRiBar (digital menus), NFC Review Cards (reputation), n8n automation.
-
-Context: ${context}
-History: ${historyText}
-
-Rules:
-- Maximum 80 words per response
-- Start with direct answer
-- Include pricing when known
-- Use bullet points for options
-- End with clear next step if applicable
-
-User: ${userQuery}`
-      },
-      'C': {
-        name: 'Conversational - Friendly & Detailed',
-        prompt: `¡Hola! Soy tu asistente experto de SmartConnect AI. Somos una agencia-escuela que ayuda a negocios locales a crecer con tecnología.
-
-**Nuestros productos estrella:**
-🍽️ **QRiBar:** Cartas digitales con pedidos desde la mesa
-⭐ **Tarjetas NFC Reseñas:** Más reviews en Google e Instagram  
-🤖 **Automatización n8n:** Captación y nutrición de leads
-
-Contexto disponible: ${context}
-Conversación anterior: ${historyText}
-
-Mi estilo:
-- Tono cercano pero profesional
-- Explico beneficios y ROI claramente
-- Ofrezco ejemplos prácticos
-- Respondo preguntas follow-up sin problema
-
-Pregunta: ${userQuery}`
-      }
-    };
-
-    const selectedVariant = promptVariants[abTestGroup as keyof typeof promptVariants] || promptVariants['A'];
-    const systemPrompt = selectedVariant.prompt;
+    const selectedVariant = getPromptVariant(abTestGroup, context, historyText);
 
     // ===================================
-    // GEMINI API CALL (Protected)
+    // GEMINI API CALL
     // ===================================
-
-    const geminiResponse = await fetch(
-      'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent',
-      {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'x-goog-api-key': geminiApiKey
-        },
-        body: JSON.stringify({
-          contents: [
-            {
-              parts: [
-                {
-                  text: `${systemPrompt}\n\nUser Question: ${userQuery}`
-                }
-              ]
-            }
-          ],
-          generationConfig: {
-            temperature: 0.7,
-            maxOutputTokens: 1024,
-            topP: 0.95,
-            topK: 40
-          },
-          safetySettings: [
-            {
-              category: 'HARM_CATEGORY_HARASSMENT',
-              threshold: 'BLOCK_MEDIUM_AND_ABOVE'
-            },
-            {
-              category: 'HARM_CATEGORY_HATE_SPEECH',
-              threshold: 'BLOCK_MEDIUM_AND_ABOVE'
-            }
-          ]
-        })
-      }
-    );
-
-    if (!geminiResponse.ok) {
-      const errorText = await geminiResponse.text();
-      console.error('Gemini API error:', errorText);
-      return new Response(
-        JSON.stringify({ error: 'AI service temporarily unavailable' }),
-        { 
-          status: 503, 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-        }
-      );
-    }
-
-    const geminiData: GeminiResponse = await geminiResponse.json();
-    const aiResponse = geminiData.candidates?.[0]?.content?.parts?.[0]?.text || 'No response generated';
+    const aiResponse = await callGemini(selectedVariant.prompt, userQuery, geminiApiKey);
 
     // ===================================
     // A/B TESTING: METRICS TRACKING
@@ -401,7 +497,8 @@ Pregunta: ${userQuery}`
         responseLength: aiResponse.length,
         rateLimitRemaining: rateLimit.remaining,
         abTestGroup,
-        promptVariant: selectedVariant.name
+        promptVariant: selectedVariant.name,
+        embeddingCacheHit: cacheHit
       }
     });
 
@@ -416,7 +513,8 @@ Pregunta: ${userQuery}`
         rateLimitRemaining: rateLimit.remaining,
         abTestGroup,
         promptVariant: selectedVariant.name,
-        responseTime
+        responseTime,
+        cacheHit
       }),
       { 
         status: 200, 

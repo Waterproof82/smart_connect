@@ -105,8 +105,7 @@ export class LeadEntity implements Lead {
     
     for (const pattern of dangerousPatterns) {
       if (pattern.test(this.message)) {
-        // XSS attempt detected - return validation error
-        // TODO: Add security logging when circular dependency is resolved
+        // XSS attempt detected - security logging handled by sanitizer.ts
         return 'El mensaje contiene caracteres o código no permitido';
       }
     }
@@ -165,6 +164,7 @@ export class LeadEntity implements Lead {
       email: this.email,
       servicio_interes: this.service,
       mensaje_cuerpo: sanitizedMessage,
+      timestamp: new Date().toISOString(),
     };
   }
 }
