@@ -38,7 +38,6 @@ export class ChatbotContainer {
     // ===================================
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
     const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
-    const geminiApiKey = import.meta.env.VITE_GEMINI_API_KEY || '';
 
     if (!supabaseUrl || !supabaseAnonKey) {
       throw new Error(
@@ -46,13 +45,8 @@ export class ChatbotContainer {
       );
     }
 
-    if (!geminiApiKey) {
-      throw new Error(
-        '❌ Missing VITE_GEMINI_API_KEY. RAG chatbot requires Gemini API key. Add it to your environment variables in Vercel.'
-      );
-    }
-
     // Data Sources (responsible for external communication)
+    // GeminiDataSource encapsula la llamada a la Edge Function, la clave nunca viaja al frontend
     const geminiDataSource = new GeminiDataSource(supabaseUrl, supabaseAnonKey);
     const supabaseDataSource = new SupabaseDataSource(supabaseUrl, supabaseAnonKey);
 
@@ -68,7 +62,10 @@ export class ChatbotContainer {
     // ===================================
     
     // Instantiate concrete implementations (Data Layer)
-    const ragIndexer = new RAGIndexer(geminiApiKey);
+    // El indexador ya no se inicializa en el frontend con la clave Gemini
+    // Si se requiere indexación, debe hacerse desde el backend/Edge Function
+    // const ragIndexer = new RAGIndexer(geminiApiKey); // ELIMINADO
+    const ragIndexer = undefined;
     const embeddingCache = new EmbeddingCache({
       supabaseUrl,
       supabaseKey: supabaseAnonKey,
