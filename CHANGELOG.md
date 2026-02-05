@@ -1,3 +1,6 @@
+## [Unreleased]
+### Changed
+- SupabaseKnowledgeLoader ahora solo incluye sources presentes en los datos (no inicializa con qribar/reviews/general vacíos). Esto evita mostrar sources con valor 0 en la UI y estadísticas.
 # Changelog
 
 All notable changes to this project will be documented in this file.

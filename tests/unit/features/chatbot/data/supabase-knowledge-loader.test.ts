@@ -86,16 +86,14 @@ describe('SupabaseKnowledgeLoader', () => {
       mockSelect.mockResolvedValue({ data: [], error: null });
 
       const result = await loader.loadDocuments();
-
-      expect(result).toEqual({ qribar: [], reviews: [], general: [] });
+      expect(result).toEqual({});
     });
 
     it('should handle null data from Supabase', async () => {
       mockSelect.mockResolvedValue({ data: null, error: null });
 
       const result = await loader.loadDocuments();
-
-      expect(result).toEqual({ qribar: [], reviews: [], general: [] });
+      expect(result).toEqual({});
     });
 
     it('should include general category if present', async () => {
@@ -170,7 +168,6 @@ describe('SupabaseKnowledgeLoader', () => {
       expect(stats.bySource).toEqual({
         qribar: 2,
         reviews: 1,
-        general: 0,
       });
       expect(stats.lastLoadedAt).toBeInstanceOf(Date);
     });

@@ -70,7 +70,7 @@ export class SupabaseKnowledgeLoader {
     }
 
 
-    // Initialize result structure (dynamic sources)
+    // Only initialize result if data exists
     const result: LoadedDocuments = {};
 
     // Handle null or empty data
@@ -106,6 +106,7 @@ export class SupabaseKnowledgeLoader {
    * Update internal statistics
    */
   private _updateStats(docs: LoadedDocuments): void {
+    // Solo incluye sources presentes en docs
     const bySource: Record<string, number> = {};
     let total = 0;
     for (const [source, arr] of Object.entries(docs)) {
