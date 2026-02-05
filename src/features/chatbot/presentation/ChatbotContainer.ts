@@ -17,6 +17,16 @@ import { GenerateResponseUseCase, SearchDocumentsUseCase } from '../domain/useca
 import { RAGOrchestrator } from '../domain/rag-orchestrator';
 import { SupabaseKnowledgeLoader } from '../data/supabase-knowledge-loader';
 import { RAGIndexer } from '../data/rag-indexer';
+import type { IRAGIndexer, DocumentChunk, IndexDocumentsParams } from '../domain/interfaces/IRAGIndexer';
+// Stub seguro para frontend: nunca permite embeddings ni indexación
+const FrontendRAGIndexerStub: IRAGIndexer = {
+  indexDocuments: async (_params: IndexDocumentsParams): Promise<DocumentChunk[]> => {
+    throw new Error('RAG indexer is not available in the frontend. Indexing must be done server-side.');
+  },
+  generateEmbedding: async (_text: string): Promise<number[]> => {
+    throw new Error('Embedding generation is not available in the frontend.');
+  }
+};
 import { EmbeddingCache } from '../data/embedding-cache';
 
 /**
@@ -65,7 +75,7 @@ export class ChatbotContainer {
     // El indexador ya no se inicializa en el frontend con la clave Gemini
     // Si se requiere indexación, debe hacerse desde el backend/Edge Function
     // const ragIndexer = new RAGIndexer(geminiApiKey); // ELIMINADO
-    const ragIndexer = undefined;
+    const ragIndexer = FrontendRAGIndexerStub;
     const embeddingCache = new EmbeddingCache({
       supabaseUrl,
       supabaseKey: supabaseAnonKey,
