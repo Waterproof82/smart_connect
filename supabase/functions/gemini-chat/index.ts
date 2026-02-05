@@ -17,6 +17,7 @@ interface ChatRequest {
   maxDocuments?: number;
   similarityThreshold?: number;
   abTestGroup?: string; // 'A', 'B', 'C', etc.
+  source?: string; // Nuevo: permite filtrar por source
 }
 
 interface GeminiResponse {
@@ -305,6 +306,41 @@ Mi estilo:
 }
 
 // ========================================
+// FASE A: Extracción de etiquetas con LLM pequeño
+async function extractMetadataTags(userQuery: string, geminiApiKey: string): Promise<string[]> {
+  const prompt = `Extrae las etiquetas clave para filtrar documentos en una base de datos. Ejemplo:
+Pregunta: "¿Qué precio tienen las copas?"
+Respuesta: ["copas"]
+Pregunta: "¿Qué platos hay en el menú?"
+Respuesta: ["menú", "platos"]
+Pregunta: "¿Qué opinan los clientes?"
+Respuesta: ["reviews", "opiniones"]
+Pregunta: "${userQuery}"
+Respuesta:`;
+  const response = await fetch(
+    'https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent',
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-goog-api-key': geminiApiKey
+      },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: { temperature: 0.2, maxOutputTokens: 32 }
+      })
+    }
+  );
+  if (!response.ok) return [];
+  const data = await response.json();
+  const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+  try {
+    const tags = JSON.parse(text.replace(/'/g, '"'));
+    return Array.isArray(tags) ? tags : [];
+  } catch { return []; }
+}
+
+// ========================================
 // MAIN HANDLER
 // ========================================
 Deno.serve(async (req) => {
@@ -351,7 +387,8 @@ Deno.serve(async (req) => {
       conversationHistory = [], 
       maxDocuments = 3, 
       similarityThreshold = 0.3,
-      abTestGroup = 'A' // Default to control group
+      abTestGroup = 'A', // Default to control group
+      source = undefined
     }: ChatRequest = await req.json();
 
     console.log('📝 Request:', { 
@@ -424,15 +461,27 @@ Deno.serve(async (req) => {
     console.log('✅ Supabase client initialized');
 
     // ===================================
+    // FASE A: Extraer etiquetas/metadata con LLM pequeño
+    const metadataTags = await extractMetadataTags(userQuery, geminiApiKey);
+    console.log('🔎 Etiquetas extraídas por IA:', metadataTags);
+
     // RAG: PROCESSING
     // ===================================
-    const { documents, cacheHit } = await processRAG(
+    let { documents, cacheHit } = await processRAG(
       userQuery,
       supabase,
       geminiApiKey,
       similarityThreshold,
       maxDocuments
     );
+
+    // FASE B: Filtrado duro por metadatos
+    if (metadataTags.length > 0) {
+      documents = documents.filter((doc: any) =>
+        metadataTags.some(tag => (doc.source || '').toLowerCase().includes(tag.toLowerCase()))
+      );
+      console.log(`🔎 Filtrando documentos por metadatos:`, metadataTags, documents.length, 'encontrados');
+    }
 
     // ===================================
     // BUILD CONTEXT & HISTORY

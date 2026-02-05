@@ -13,7 +13,22 @@ import {
   EmbeddingRepositoryImpl, 
   DocumentRepositoryImpl 
 } from '../data/repositories';
-import { GenerateResponseUseCase } from '../domain/usecases';
+// Versión frontend segura: solo usa el chatRepository (GeminiDataSource)
+class FrontendGenerateResponseUseCase {
+  constructor(private readonly chatRepository: any) {}
+  async execute(input: any) {
+    const { userQuery, conversationHistory = [], temperature = 0.7, abTestGroup } = input;
+    const response = await this.chatRepository.generateResponse({
+      userQuery,
+      conversationHistory,
+      temperature,
+      maxTokens: 1024,
+      abTestGroup,
+      context: '', // El contexto se maneja en backend/edge
+    });
+    return { response, contextUsed: [], documentsFound: 0 };
+  }
+}
 import { RAGOrchestrator } from '../domain/rag-orchestrator';
 import { SupabaseKnowledgeLoader } from '../data/supabase-knowledge-loader';
 import { RAGIndexer } from '../data/rag-indexer';
@@ -98,10 +113,7 @@ export class ChatbotContainer {
     // ===================================
     // 4. DOMAIN LAYER (Use Cases)
     // ===================================
-    this.generateResponseUseCase = new GenerateResponseUseCase(
-      chatRepository,
-      this.ragOrchestrator
-    );
+    this.generateResponseUseCase = new FrontendGenerateResponseUseCase(chatRepository);
 
   }
 
