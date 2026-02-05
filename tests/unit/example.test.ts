@@ -8,8 +8,5 @@ describe('Example Test Suite', () => {
     expect(true).toBe(true);
   });
 
-  // Write your tests HERE before implementation
-  // Step 1: Write test (RED)
-  // Step 2: Implement minimal code to pass (GREEN)
-  // Step 3: Refactor for quality (REFACTOR)
+  // MOVED TO _to_delete
 });

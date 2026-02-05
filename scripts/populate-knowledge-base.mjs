@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import * as dotenv from 'dotenv';
-import * as path from 'path';
-import { fileURLToPath } from 'url';
+import * as path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -37,7 +37,7 @@ Beneficios para el restaurante:
 - Compatible con cualquier smartphone
 
 Precio: Desde 29€/mes con setup incluido`,
-    source: 'qribar_product'
+    source: 'qribar'
   },
   {
     content: `Las Tarjetas NFC de Reseñas de SmartConnect AI son una herramienta de reputación online inspirada en Tapstar. Permiten:
@@ -55,7 +55,7 @@ Casos de uso ideales:
 El cliente solo necesita acercar su móvil a la tarjeta (tap) y automáticamente se abre Google Reviews o Instagram.
 
 Precio: 45€ por tarjeta + configuración inicial gratuita`,
-    source: 'nfc_reviews_product'
+    source: 'reviews'
   },
   {
     content: `SmartConnect AI ofrece Automatizaciones de Marketing usando n8n en servidor propio. Servicios incluidos:
@@ -76,7 +76,7 @@ Flujo típico:
 Ideal para: Negocios que reciben muchos leads pero pierden oportunidades por falta de seguimiento rápido.
 
 Precio: Desde 99€/mes según complejidad de workflows`,
-    source: 'automation_product'
+    source: 'general'
   },
   {
     content: `SmartConnect AI sigue el modelo de Agencia-Escuela:
@@ -93,7 +93,7 @@ Stack tecnológico:
 - Cloud: VPS propio + Supabase
 
 Filosofía: Transformar negocios tradicionales en negocios digitales potenciados por IA`,
-    source: 'company_philosophy'
+    source: 'general'
   },
   {
     content: `Información de contacto de SmartConnect AI:
@@ -115,7 +115,7 @@ Todos los proyectos incluyen:
 - Capacitación en uso del sistema
 - 1 mes de soporte incluido
 - Actualizaciones de seguridad`,
-    source: 'contact_info'
+    source: 'general'
   }
 ];
 
@@ -189,4 +189,4 @@ async function populateKnowledgeBase() {
   console.log(`📊 Total documents in database: ${count}`);
 }
 
-populateKnowledgeBase().catch(console.error);
+await populateKnowledgeBase();

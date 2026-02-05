@@ -37,7 +37,7 @@ export interface RAGSearchOptions {
   topK?: number;
   similarityThreshold?: number;
   useCache?: boolean;
-  category?: string;
+  source?: string; // Filter by source instead of category
 }
 
 export interface RAGSearchResult {
@@ -115,7 +115,6 @@ export class RAGOrchestrator {
           const cacheKey = `chunk_${chunk.metadata.source}_${chunk.metadata.chunkIndex}`;
           await this.cache.set(cacheKey, chunk.embedding, {
             source: chunk.metadata.source,
-            category: chunk.metadata.category,
             chunkIndex: chunk.metadata.chunkIndex,
           });
         }
@@ -142,14 +141,14 @@ export class RAGOrchestrator {
       topK = this.config.defaultTopK,
       similarityThreshold = this.config.defaultThreshold,
       useCache = this.config.enableCache,
-      category,
+      source,
     } = options;
 
     // Handle empty query BEFORE generating embedding
     if (!query || query.trim().length === 0) {
       const fallbackContext: FallbackContext = {
         query: query || '',
-        category: category || 'general',
+        category: source || 'general',
         ragResults: [],
         confidence: 0,
       };
@@ -187,10 +186,10 @@ export class RAGOrchestrator {
       queryEmbedding = await this.indexer.generateEmbedding(query);
     }
 
-    // Filter by category if specified
+    // Filter by source if specified
     let candidates = this.indexedChunks;
-    if (category) {
-      candidates = candidates.filter(chunk => chunk.metadata.category === category);
+    if (source) {
+      candidates = candidates.filter(chunk => chunk.metadata.source === source);
     }
 
     // Calculate cosine similarity for all chunks
@@ -212,7 +211,7 @@ export class RAGOrchestrator {
     if (usedFallback) {
       const fallbackContext: FallbackContext = {
         query,
-        category: category || 'general',
+        category: source || 'general', // Use source as category for fallback
         ragResults: [],
         confidence: 0,
       };
@@ -286,7 +285,7 @@ export class RAGOrchestrator {
   /**
    * Invalidate cache entries by pattern
    */
-  async invalidateCache(pattern: string) {
+  async invalidateCache(_pattern: string) {
     // Note: IEmbeddingCache doesn't support pattern invalidation
     // Use clear() for full cache reset or delete(key) for specific entries
     await this.cache.clear();

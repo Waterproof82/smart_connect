@@ -38,7 +38,6 @@ describe('RAGIndexer - Document Indexing', () => {
     // Assert
     expect(chunks.length).toBeGreaterThan(1);
     expect(chunks[0].metadata.source).toBe('qribar');
-    expect(chunks[0].metadata.category).toBe('producto_digital');
     
     // Verificar overlap entre chunks consecutivos
     if (chunks.length > 1) {
@@ -81,7 +80,7 @@ describe('RAGIndexer - Document Indexing', () => {
     });
 
     // Assert
-    expect(chunks[0].metadata.category).toBe('reputacion_online');
+    expect(chunks[0].metadata.source).toBe('reviews');
   });
 
   test('MUST add chunk index metadata to all chunks', async () => {
@@ -174,31 +173,31 @@ describe('RAGIndexer - Category Inference', () => {
     indexer = new RAGIndexer('test-key');
   });
 
-  test('MUST map qribar source to producto_digital category', async () => {
+  test('MUST preserve qribar source in metadata', async () => {
     const chunks = await indexer.indexDocuments({
       source: 'qribar',
       documents: ['test doc'],
     });
     
-    expect(chunks[0].metadata.category).toBe('producto_digital');
+    expect(chunks[0].metadata.source).toBe('qribar');
   });
 
-  test('MUST map reviews source to reputacion_online category', async () => {
+  test('MUST preserve reviews source in metadata', async () => {
     const chunks = await indexer.indexDocuments({
       source: 'reviews',
       documents: ['test doc'],
     });
     
-    expect(chunks[0].metadata.category).toBe('reputacion_online');
+    expect(chunks[0].metadata.source).toBe('reviews');
   });
 
-  test('MUST map unknown source to general category', async () => {
+  test('MUST preserve general source in metadata', async () => {
     const chunks = await indexer.indexDocuments({
-      source: 'unknown_source',
+      source: 'general',
       documents: ['test doc'],
     });
     
-    expect(chunks[0].metadata.category).toBe('general');
+    expect(chunks[0].metadata.source).toBe('general');
   });
 });
 

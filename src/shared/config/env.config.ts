@@ -7,7 +7,7 @@
 import { getEnvMode } from '@shared/utils/envMode';
 
 // Direct access to Vite env vars (for browser/Vite builds)
-const viteEnv = import.meta?.env ?? {};
+const _viteEnv = import.meta?.env ?? {};
 
 const getEnvVar = (key: string, defaultValue?: string): string => {
   // Browser/Vite environment - import.meta.env is injected by Vite
@@ -31,7 +31,7 @@ function getGeminiApiKey(): string {
 
 export const ENV = {
   GEMINI_API_KEY: getGeminiApiKey(),
-  N8N_WEBHOOK_URL: getEnvVar('VITE_N8N_WEBHOOK_URL', getEnvMode() === 'development' ? 'http://localhost:5678/webhook-test/hot-lead-intake' : ''),
+  N8N_WEBHOOK_URL: getEnvVar('VITE_N8N_WEBHOOK_URL', ''), // Empty string disables webhook in development
   GOOGLE_SHEETS_ID: getEnvVar('VITE_GOOGLE_SHEETS_ID', ''),
   CONTACT_EMAIL: getEnvVar('VITE_CONTACT_EMAIL', ''),
   SUPABASE_URL: getEnvVar('VITE_SUPABASE_URL', ''),

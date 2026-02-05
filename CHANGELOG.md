@@ -1,3 +1,6 @@
+## [Unreleased]
+### Changed
+- SupabaseKnowledgeLoader ahora solo incluye sources presentes en los datos (no inicializa con qribar/reviews/general vacíos). Esto evita mostrar sources con valor 0 en la UI y estadísticas.
 # Changelog
 
 All notable changes to this project will be documented in this file.
@@ -6,6 +9,110 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+### Added
+- **Tag-Based Source Editor in Document Modal:**
+  - Inline source editing with tag UI (add/remove with × button)
+  - Support for multiple sources (array-based, ready for future backend)
+  - Keyboard shortcuts: Enter to add tag, Escape to cancel edit
+  - Auto-lowercase normalization and duplicate prevention
+  - Visual hints for common sources (qribar, reviews, general)
+  - Location: `src/features/admin/presentation/components/DocumentList.tsx`
+  - Audit: `docs/audit/2026-02-04_source-tag-editor-implementation.md`
+
+### Changed
+- **Simplified Source Classification System:**
+  - Removed category field from chunk metadata (use source directly)
+  - Simplified from 5 complex sources to 3 direct labels: `qribar`, `reviews`, `general`
+  - Removed `_mapSourceToCategory()` from SupabaseKnowledgeLoader (18 lines)
+  - Removed `_inferCategory()` from RAGIndexer (15 lines)
+  - Updated RAGSearchOptions: `category?: string` → `source?: string` 
+  - Direct source filtering in RAG pipeline without intermediate mapping
+  - Total code reduction: ~33 lines of mapping logic
+  - All 174 unit tests passing after refactor
+  - Location: `src/features/chatbot/data/`, `src/features/chatbot/domain/`
+  - Audit: `docs/audit/2026-01-29_source-simplification-refactor.md`
+
+### Removed
+- **Documents by Category Statistics Card:**
+  - Removed redundant "Documents by Category" dashboard card
+  - After source simplification, category equals source (duplicate information)
+  - Location: `src/features/admin/presentation/components/StatsDashboard.tsx`
+
+### Added
+- **Inline Document Editing with Automatic Embedding Regeneration:**
+  - Edit documents directly in preview modal without page reload
+  - Automatic vector embedding regeneration using Gemini API
+  - Permission-based Edit button visibility (super_admin only)
+  - Loading states during save operation (disabled buttons, "Saving..." text)
+  - Cache invalidation after update to prevent stale RAG responses
+  - Complete CRUD functionality: Create, Read, Update, Delete
+  - Location: `src/features/admin/domain/usecases/UpdateDocumentUseCase.ts`
+  - Tests: `tests/unit/features/admin/domain/usecases/UpdateDocumentUseCase.test.ts`
+  - Audit: `docs/audit/2026-01-30_document-inline-editing-implementation.md`
+
+### Security
+- **Row Level Security (RLS) on Documents Table:** CRITICAL security fix for admin panel
+  - Enabled RLS policies to enforce database-level access control
+  - Policy 1: Admin full access (only users with admin/super_admin role in JWT)
+  - Policy 2: Anon read-only access for chatbot RAG queries
+  - Policy 3: Service role bypass for Edge Functions
+  - Prevents unauthorized access even if frontend is bypassed
+  - Comprehensive test suite: 15 security tests covering all RLS policies
+  - Location: `supabase/migrations/20260204120000_enable_documents_rls.sql`
+  - Tests: `tests/integration/admin/documents-rls.test.ts`
+  - OWASP A01:2021 compliance improved: 5.0/10 → 9.5/10
+  - Audit: `docs/audit/2026-02-04_admin-panel-rls-fix.md`
+
+### Added
+- **Admin Panel for RAG System Management:** Complete admin interface to manage RAG documents
+  - Authentication with Supabase Auth (email/password)
+  - Role-based access control (admin/super_admin)
+  - Document list with filters (source, search text) and pagination (20 items/page)
+  - Statistics dashboard (total docs, by source, by category)
+  - Delete documents feature (super_admin only)
+  - OWASP security compliance (A01: Broken Access Control, A03: Injection, A07: Auth Failures)
+  - Clean Architecture implementation (Domain, Data, Presentation layers)
+  - 28 unit tests (all passing ✅)
+  - Location: `src/features/admin/`
+  - Access: `http://localhost:5173/admin`
+  - Documentation: `docs/ADMIN_PANEL.md`, `docs/adr/ADR-005-admin-panel-rag.md`
+
+- **React Router Integration:** Client-side routing for multi-page navigation
+  - Route `/` → Landing page (public)
+  - Route `/admin` → Admin panel (authenticated)
+  - Fallback route `*` → Redirect to home
+  - Package: `react-router-dom` v6
+  - Location: `src/main.tsx`
+
+- **Database Migrations for RAG System:**
+  - Added `category` column to documents table (producto_digital, reputacion_online, general)
+  - Added `updated_at` column with automatic timestamp trigger
+  - Fixed category inference logic to match chatbot's RAGIndexer
+  - Location: `supabase/migrations/`
+
+- **Duplicate Cleanup Script:** Tool to remove duplicate documents from knowledge base
+  - Identifies duplicates by content preview + source
+  - Interactive with 5-second confirmation
+  - Location: `scripts/clean-duplicates.mjs`
+
+### Fixed
+- **Source Filter in Admin Panel:** Changed from exact match to ILIKE pattern matching
+  - Now supports partial source name filtering
+  - Updated dropdown values to match actual database sources
+- **Category Inference Consistency:** Database migration now matches RAGIndexer logic
+  - Pattern: qribar→producto_digital, review→reputacion_online, default→general
+- **Duplicate Documents:** Removed 8 duplicate entries, keeping 5 unique documents
+- **TypeScript & ESLint Errors:** All compilation and linting errors resolved
+  - Replaced deprecated React.FormEvent with implicit typing
+  - Added accessibility attributes (htmlFor) to form labels
+  - Used optional chaining for safer null checks
+  - Removed unnecessary non-null assertions
+  - Fixed test type annotations (no `any` types)
+  - Updated Node.js imports to use `node:` prefix
+
+### Removed
+- Deprecated test file `tests/test_gemini_generate.js`
 
 ### Changed
 - **Clean Architecture Compliance:** Refactored chatbot feature to strict Clean Architecture with Dependency Inversion

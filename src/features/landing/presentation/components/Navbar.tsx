@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
-import { Cpu, ChevronDown, Code2, Settings2, Smartphone, Utensils } from 'lucide-react';
+import { Cpu, ChevronDown, Code2, Settings2, Smartphone, Utensils, Shield } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 interface NavbarProps {
   scrolled: boolean;
@@ -117,6 +118,13 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
 
           <a href="#exito" className="hover:text-white transition-colors">Éxito</a>
           <a href="#contacto" className="hover:text-white transition-colors">Contacto</a>
+          <Link 
+            to="/admin"
+            className="flex items-center gap-2 text-gray-300 hover:text-blue-400 transition-colors"
+          >
+            <Shield className="w-4 h-4" />
+            <span>Admin</span>
+          </Link>
         </div>
       </div>
     </nav>

@@ -162,10 +162,17 @@ Deno.serve(async (req) => {
         keyPrefix: GEMINI_API_KEY?.substring(0, 15) || 'N/A',
         keySuffix: GEMINI_API_KEY?.substring(GEMINI_API_KEY.length - 5) || 'N/A'
       };
+      return new Response(
+        JSON.stringify(data),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
     }
 
+    // Extraer el embedding del formato de Gemini
+    const embedding = data.embedding?.values || [];
+
     return new Response(
-      JSON.stringify(data),
+      JSON.stringify({ embedding }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   } catch (error) {
