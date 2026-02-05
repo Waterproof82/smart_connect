@@ -117,21 +117,9 @@ export class ChatbotContainer {
       const documents = await this.knowledgeLoader.loadDocuments();
       const stats = this.knowledgeLoader.getStats();
 
-      // Index all sources dynamically
-      for (const [source, docs] of Object.entries(documents)) {
-        if (docs.length > 0) {
-          const docsToIndex = docs.map((content, idx) => ({
-            id: `${source}_${idx}`,
-            content,
-            source
-          }));
-          await this.ragOrchestrator.indexDocuments(docsToIndex);
-          console.warn(`✅ Indexed ${docs.length} documents for source: ${source}`);
-        }
-      }
-
+      // Ya no se indexan documentos en el frontend. Solo se cargan y se muestran estadísticas.
       this.isKnowledgeBaseInitialized = true;
-      console.warn(`✅ Knowledge base initialized: ${stats.totalDocuments} total documents`);
+      console.warn(`✅ Knowledge base loaded: ${stats.totalDocuments} total documents`);
       console.warn(`📊 By source:`, stats.bySource);
     } catch (error) {
       console.error('❌ Failed to initialize knowledge base:', error);
