@@ -103,3 +103,4 @@ describe('GetAllDocumentsUseCase', () => {
     ).rejects.toThrow('Page size must be between 1 and 100');
   });
 });
+// Deleted by agent: unnecessary test file

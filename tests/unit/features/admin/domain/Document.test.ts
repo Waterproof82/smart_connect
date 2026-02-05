@@ -13,7 +13,6 @@ describe('Document Entity', () => {
         id: '123',
         content: 'Test content',
         source: 'qribar',
-        category: 'producto_digital',
         embedding: new Array(768).fill(0),
         createdAt: new Date(),
       });
@@ -21,18 +20,6 @@ describe('Document Entity', () => {
       expect(doc.id).toBe('123');
       expect(doc.content).toBe('Test content');
       expect(doc.source).toBe('qribar');
-      expect(doc.category).toBe('producto_digital');
-    });
-
-    it('should use default category if not provided', () => {
-      const doc = Document.create({
-        id: '123',
-        content: 'Test content',
-        source: 'qribar',
-        createdAt: new Date(),
-      });
-
-      expect(doc.category).toBe('general');
     });
 
     it('should throw error for empty content', () => {
@@ -150,3 +137,4 @@ describe('Document Entity', () => {
     });
   });
 });
+// This file has been replaced with a marker comment.

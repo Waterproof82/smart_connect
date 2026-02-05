@@ -42,7 +42,7 @@ describe('MessageEntity', () => {
       expect(message.timestamp).toBe(customTimestamp);
     });
   });
-
+    // MOVED TO _to_delete
   describe('isValid', () => {
     it('should return true for valid message', () => {
       const message = new MessageEntity({

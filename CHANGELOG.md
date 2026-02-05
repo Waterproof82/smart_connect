@@ -8,6 +8,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Tag-Based Source Editor in Document Modal:**
+  - Inline source editing with tag UI (add/remove with × button)
+  - Support for multiple sources (array-based, ready for future backend)
+  - Keyboard shortcuts: Enter to add tag, Escape to cancel edit
+  - Auto-lowercase normalization and duplicate prevention
+  - Visual hints for common sources (qribar, reviews, general)
+  - Location: `src/features/admin/presentation/components/DocumentList.tsx`
+  - Audit: `docs/audit/2026-02-04_source-tag-editor-implementation.md`
+
+### Changed
+- **Simplified Source Classification System:**
+  - Removed category field from chunk metadata (use source directly)
+  - Simplified from 5 complex sources to 3 direct labels: `qribar`, `reviews`, `general`
+  - Removed `_mapSourceToCategory()` from SupabaseKnowledgeLoader (18 lines)
+  - Removed `_inferCategory()` from RAGIndexer (15 lines)
+  - Updated RAGSearchOptions: `category?: string` → `source?: string` 
+  - Direct source filtering in RAG pipeline without intermediate mapping
+  - Total code reduction: ~33 lines of mapping logic
+  - All 174 unit tests passing after refactor
+  - Location: `src/features/chatbot/data/`, `src/features/chatbot/domain/`
+  - Audit: `docs/audit/2026-01-29_source-simplification-refactor.md`
+
+### Removed
+- **Documents by Category Statistics Card:**
+  - Removed redundant "Documents by Category" dashboard card
+  - After source simplification, category equals source (duplicate information)
+  - Location: `src/features/admin/presentation/components/StatsDashboard.tsx`
+
+### Added
 - **Inline Document Editing with Automatic Embedding Regeneration:**
   - Edit documents directly in preview modal without page reload
   - Automatic vector embedding regeneration using Gemini API

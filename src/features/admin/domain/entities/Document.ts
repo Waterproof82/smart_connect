@@ -10,7 +10,6 @@ export interface DocumentProps {
   id: string;
   content: string;
   source: string;
-  category?: string;
   embedding?: number[];
   createdAt: Date;
   updatedAt?: Date;
@@ -22,7 +21,6 @@ export class Document {
     public readonly id: string,
     public readonly content: string,
     public readonly source: string,
-    public readonly category: string,
     public readonly embedding: number[] | null,
     public readonly createdAt: Date,
     public readonly updatedAt: Date | null,
@@ -39,7 +37,6 @@ export class Document {
       props.id,
       props.content,
       props.source,
-      props.category || 'general',
       props.embedding || null,
       props.createdAt,
       props.updatedAt || null,
@@ -93,7 +90,6 @@ export class Document {
       this.id,
       newContent,
       this.source,
-      this.category,
       this.embedding,
       this.createdAt,
       new Date(),

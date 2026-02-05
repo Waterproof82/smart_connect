@@ -62,7 +62,7 @@ describe('RAGOrchestrator - Integration Tests', () => {
       expect(chunks.length).toBeGreaterThan(0);
       expect(chunks[0].embedding).toBeDefined();
       expect(chunks[0].embedding.length).toBe(768); // Gemini dimension
-      expect(chunks[0].metadata.category).toBe('producto_digital'); // qribar → producto_digital
+      expect(chunks[0].metadata.source).toBe('qribar_features');
     });
 
     test('MUST handle multiple documents from different sources', async () => {
@@ -84,9 +84,9 @@ describe('RAGOrchestrator - Integration Tests', () => {
       const chunks = await orchestrator.indexDocuments(documents);
 
       // Assert
-      const categories = [...new Set(chunks.map(c => c.metadata.category))];
-      expect(categories).toContain('producto_digital'); // qribar
-      expect(categories).toContain('reputacion_online'); // reviews
+      const sources = [...new Set(chunks.map(c => c.metadata.source))];
+      expect(sources).toContain('qribar_features');
+      expect(sources).toContain('reviews_service');
     });
   });
 
@@ -141,11 +141,11 @@ describe('RAGOrchestrator - Integration Tests', () => {
       expect(result2.cacheHit).toBe(true); // Second time (cached)
     });
 
-    test('MUST filter by category when specified', async () => {
+    test('MUST filter by source when specified', async () => {
       // Arrange
       const query = 'servicio';
       const options: RAGSearchOptions = {
-        category: 'reputacion_online',
+        source: 'reviews_service',
         similarityThreshold: 0.3, // Lower threshold for random embeddings
       };
 
@@ -156,7 +156,7 @@ describe('RAGOrchestrator - Integration Tests', () => {
       // With random embeddings, may not find high similarity
       if (result.totalFound > 0) {
         result.chunks.forEach(chunk => {
-          expect(chunk.metadata.category).toBe('reputacion_online');
+          expect(chunk.metadata.source).toBe('reviews_service');
         });
       } else {
         // Fallback used due to low similarity

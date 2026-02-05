@@ -15,6 +15,7 @@ import { GetAllDocumentsUseCase } from '../../domain/usecases/GetAllDocumentsUse
 import { GetDocumentStatsUseCase } from '../../domain/usecases/GetDocumentStatsUseCase';
 import { DeleteDocumentUseCase } from '../../domain/usecases/DeleteDocumentUseCase';
 import { UpdateDocumentUseCase } from '../../domain/usecases/UpdateDocumentUseCase';
+import { CreateDocumentUseCase } from '../../domain/usecases/CreateDocumentUseCase';
 import { AdminUser } from '../../domain/entities/AdminUser';
 import { IAuthRepository } from '../../domain/repositories/IAuthRepository';
 
@@ -23,6 +24,7 @@ interface AdminDashboardProps {
   getStatsUseCase: GetDocumentStatsUseCase;
   deleteDocumentUseCase: DeleteDocumentUseCase;
   updateDocumentUseCase: UpdateDocumentUseCase;
+  createDocumentUseCase: CreateDocumentUseCase;
   authRepository: IAuthRepository;
   currentUser: AdminUser;
   onLogout: () => void;
@@ -33,10 +35,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   getStatsUseCase,
   deleteDocumentUseCase,
   updateDocumentUseCase,
+  createDocumentUseCase,
   authRepository,
   currentUser,
   onLogout,
 }) => {
+  const [statsKey, setStatsKey] = React.useState(0);
+
   const handleLogout = async () => {
     try {
       await authRepository.logout();
@@ -44,6 +49,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     } catch (err) {
       console.error('Logout failed:', err);
     }
+  };
+
+  const refreshStats = () => {
+    setStatsKey(prev => prev + 1);
   };
 
   return (
@@ -85,7 +94,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <StatsDashboard getStatsUseCase={getStatsUseCase} />
+        <StatsDashboard key={statsKey} getStatsUseCase={getStatsUseCase} />
         
         <div className="mb-6">
           <h2 className="text-2xl font-bold text-white mb-2">Documents</h2>
@@ -96,7 +105,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           getAllDocumentsUseCase={getAllDocumentsUseCase}
           deleteDocumentUseCase={deleteDocumentUseCase}
           updateDocumentUseCase={updateDocumentUseCase}
+          createDocumentUseCase={createDocumentUseCase}
           currentUser={currentUser}
+          onDocumentChange={refreshStats}
         />
       </main>
     </div>

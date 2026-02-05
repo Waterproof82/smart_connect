@@ -12,6 +12,7 @@ import { GetAllDocumentsUseCase } from '../domain/usecases/GetAllDocumentsUseCas
 import { GetDocumentStatsUseCase } from '../domain/usecases/GetDocumentStatsUseCase';
 import { DeleteDocumentUseCase } from '../domain/usecases/DeleteDocumentUseCase';
 import { UpdateDocumentUseCase } from '../domain/usecases/UpdateDocumentUseCase';
+import { CreateDocumentUseCase } from '../domain/usecases/CreateDocumentUseCase';
 import { LoginAdminUseCase } from '../domain/usecases/LoginAdminUseCase';
 
 let containerInstance: AdminContainer | null = null;
@@ -26,6 +27,7 @@ export class AdminContainer {
   public readonly getDocumentStatsUseCase: GetDocumentStatsUseCase;
   public readonly deleteDocumentUseCase: DeleteDocumentUseCase;
   public readonly updateDocumentUseCase: UpdateDocumentUseCase;
+  public readonly createDocumentUseCase: CreateDocumentUseCase;
   public readonly loginAdminUseCase: LoginAdminUseCase;
 
   constructor(supabaseUrl: string, supabaseKey: string) {
@@ -38,6 +40,7 @@ export class AdminContainer {
     this.getDocumentStatsUseCase = new GetDocumentStatsUseCase(this.documentRepository);
     this.deleteDocumentUseCase = new DeleteDocumentUseCase(this.documentRepository);
     this.updateDocumentUseCase = new UpdateDocumentUseCase(this.documentRepository);
+    this.createDocumentUseCase = new CreateDocumentUseCase(this.documentRepository);
     this.loginAdminUseCase = new LoginAdminUseCase(this.authRepository);
   }
 }

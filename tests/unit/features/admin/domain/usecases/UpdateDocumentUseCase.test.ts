@@ -21,7 +21,6 @@ describe('UpdateDocumentUseCase', () => {
       id: '123',
       content: 'Old content',
       source: 'test',
-      category: 'test',
       createdAt: new Date(),
       updatedAt: new Date(),
     });
@@ -34,6 +33,8 @@ describe('UpdateDocumentUseCase', () => {
       delete: jest.fn(),
       countBySource: jest.fn(),
       countByCategory: jest.fn(),
+      count: jest.fn(),
+      generateEmbedding: jest.fn(),
     };
 
     mockSuperAdmin = AdminUser.create({
@@ -58,7 +59,7 @@ describe('UpdateDocumentUseCase', () => {
       await updateDocumentUseCase.execute('123', 'New content', mockSuperAdmin);
 
       expect(mockRepository.getById).toHaveBeenCalledWith('123');
-      expect(mockRepository.update).toHaveBeenCalledWith('123', 'New content');
+      expect(mockRepository.update).toHaveBeenCalledWith('123', 'New content', undefined);
     });
 
     it('should throw error if document ID is empty', async () => {
@@ -110,7 +111,7 @@ describe('UpdateDocumentUseCase', () => {
 
       await updateDocumentUseCase.execute('123', contentWithWhitespace, mockSuperAdmin);
 
-      expect(mockRepository.update).toHaveBeenCalledWith('123', contentWithWhitespace);
+      expect(mockRepository.update).toHaveBeenCalledWith('123', contentWithWhitespace, undefined);
     });
 
     it('should throw error for only whitespace content', async () => {

@@ -18,12 +18,11 @@ export class GetDocumentStatsUseCase {
   constructor(private readonly documentRepository: IDocumentRepository) {}
 
   async execute(): Promise<DocumentStats> {
-    const [bySource, byCategory] = await Promise.all([
+    const [totalDocuments, bySource, byCategory] = await Promise.all([
+      this.documentRepository.count(),
       this.documentRepository.countBySource(),
       this.documentRepository.countByCategory(),
     ]);
-
-    const totalDocuments = Object.values(bySource).reduce((sum, count) => sum + count, 0);
 
     return {
       totalDocuments,

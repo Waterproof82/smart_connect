@@ -51,6 +51,8 @@ El sistema RAG contiene documentos en Supabase que alimentan el chatbot experto.
 │  • GetAllDocumentsUseCase                      │
 │  • GetDocumentStatsUseCase                     │
 │  • DeleteDocumentUseCase (con auth)            │
+│  • UpdateDocumentUseCase (con re-embedding)    │
+│  • CreateDocumentUseCase (auto-embedding)      │
 │  • LoginAdminUseCase                           │
 │                                                 │
 │  Repositories (Interfaces):                    │
@@ -225,6 +227,8 @@ interface PaginationOptions {
 - ✅ **Document Entity:** 11 tests (validaciones, embedding)
 - ✅ **GetAllDocumentsUseCase:** 5 tests (filtros, paginación)
 - ✅ **DeleteDocumentUseCase:** 4 tests (seguridad OWASP A01)
+- ✅ **UpdateDocumentUseCase:** 8 tests (edición inline, re-embedding)
+- ✅ **CreateDocumentUseCase:** 10 tests (auto-embedding, validaciones)
 
 ### Tests de Seguridad Críticos
 
@@ -242,12 +246,37 @@ it('should PREVENT regular admin from deleting documents', async () => {
 
 ---
 
+## Decisiones Técnicas Adicionales
+
+### 4. CreateDocumentUseCase con Auto-Embedding
+
+**Problema:** Los documentos creados manualmente no tenían embeddings, rompiendo el flujo RAG.
+
+**Solución:** CreateDocumentUseCase genera embedding **ANTES** de persistir:
+
+```typescript
+// ✅ CORRECTO: Atomicidad garantizada
+const embedding = await repository.generateEmbedding(content);
+if (!embedding) throw new Error('Embedding generation failed');
+const doc = Document.create({ content, embedding });
+await repository.create(doc);
+```
+
+**Beneficios:**
+- **Consistencia:** Todos los documentos tienen embedding desde creación
+- **Validación:** Content + Source validados antes de llamar Gemini API
+- **Seguridad OWASP A01:** Solo `super_admin` puede crear documentos
+- **Atomicidad:** Si falla el embedding, no se crea el documento
+
+---
+
 ## Roadmap Futuro
 
-### Fase 2 (Opcional)
+### ~~Fase 2~~ → **COMPLETADO (2026-02-04)**
 
-- [ ] **Editar documentos inline**
-- [ ] **Re-generar embeddings** tras edición
+- [x] **Editar documentos inline** ✅ UpdateDocumentUseCase
+- [x] **Re-generar embeddings** tras edición ✅ Auto-regeneración
+- [x] **Crear nuevos documentos** ✅ CreateDocumentUseCase
 - [ ] **Audit log** de cambios (quién, cuándo, qué)
 - [ ] **Búsqueda avanzada** con filtros múltiples
 - [ ] **Exportar/Importar** documentos (JSON/CSV)

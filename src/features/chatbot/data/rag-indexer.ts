@@ -100,7 +100,6 @@ export class RAGIndexer implements IRAGIndexer {
           embedding,
           metadata: {
             source,
-            category: this._inferCategory(source),
             chunkIndex: startIndex + chunks.length,
             totalChunks: 0, // Will be updated after loop
           },
@@ -149,27 +148,5 @@ export class RAGIndexer implements IRAGIndexer {
     } catch (error) {
       throw new Error(`Gemini API error: ${error}`);
     }
-  }
-
-  /**
-   * Infiere categoría según source
-   * 
-   * Mapeo:
-   * - qribar -> producto_digital
-   * - reviews -> reputacion_online
-   * - default -> general
-   */
-  private _inferCategory(source: string): string {
-    const lowerSource = source.toLowerCase();
-    
-    if (lowerSource.includes('qribar')) {
-      return 'producto_digital';
-    }
-    
-    if (lowerSource.includes('review')) {
-      return 'reputacion_online';
-    }
-    
-    return 'general';
   }
 }

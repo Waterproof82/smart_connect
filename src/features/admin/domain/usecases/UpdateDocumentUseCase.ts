@@ -12,7 +12,7 @@ import { AdminUser } from '../entities/AdminUser';
 export class UpdateDocumentUseCase {
   constructor(private readonly documentRepository: IDocumentRepository) {}
 
-  async execute(documentId: string, newContent: string, user: AdminUser): Promise<void> {
+  async execute(documentId: string, newContent: string, user: AdminUser, newSource?: string): Promise<void> {
     // Validar ID
     if (!documentId || typeof documentId !== 'string' || documentId.trim().length === 0) {
       throw new Error('Document ID is required');
@@ -27,6 +27,11 @@ export class UpdateDocumentUseCase {
       throw new Error('Content exceeds maximum length (10000 characters)');
     }
 
+    // Validar source si se proporciona
+    if (newSource?.trim().length === 0) {
+      throw new Error('Source cannot be empty string');
+    }
+
     // Verificar permisos (OWASP A01: Broken Access Control)
     if (!user.canPerform('update')) {
       throw new Error('Insufficient permissions to update documents');
@@ -39,6 +44,6 @@ export class UpdateDocumentUseCase {
     }
 
     // Actualizar documento (el repositorio se encargará de regenerar el embedding)
-    await this.documentRepository.update(documentId, newContent);
+    await this.documentRepository.update(documentId, newContent, newSource);
   }
 }

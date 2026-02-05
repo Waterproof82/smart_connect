@@ -44,6 +44,11 @@ export interface IDocumentRepository {
   getById(id: string): Promise<Document | null>;
 
   /**
+   * Cuenta el total de documentos (únicos)
+   */
+  count(): Promise<number>;
+
+  /**
    * Cuenta los documentos por fuente
    */
   countBySource(): Promise<Record<string, number>>;
@@ -59,12 +64,20 @@ export interface IDocumentRepository {
   delete(id: string): Promise<void>;
 
   /**
-   * Actualiza el contenido de un documento
+   * Actualiza el contenido y source de un documento
    */
-  update(id: string, content: string): Promise<Document>;
+  update(id: string, content: string, source?: string): Promise<Document>;
 
   /**
    * Crea un nuevo documento
    */
   create(document: Omit<Document, 'id' | 'createdAt' | 'updatedAt'>): Promise<Document>;
+
+  /**
+   * Genera un embedding vectorial para el contenido dado
+   * @param content - Texto a vectorizar
+   * @returns Array de 768 números (Gemini text-embedding-004)
+   * @throws Error si la API de Gemini falla
+   */
+  generateEmbedding(content: string): Promise<number[]>;
 }
