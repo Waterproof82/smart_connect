@@ -1,201 +1,106 @@
 // supabase/functions/gemini-rag-orchestrator/index.ts
 
-export default async function handler(req: Request): Promise<Response> {
-  const corsHeaders = {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, Authorization",
-  };
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+};
 
-  if (req.method === "OPTIONS") {
-    return new Response(null, { status: 200, headers: corsHeaders });
-  }
+export default async function handler(req: Request): Promise<Response> {
+  if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
   const startTotal = Date.now();
   const timings: Record<string, number> = {};
+  const authHeader = req.headers.get("Authorization")!;
 
   try {
-    let userQuery: string | undefined;
-    try {
-      const body = await req.json();
-      userQuery = body.userQuery;
-    } catch (e) {
-      return new Response(
-        JSON.stringify({ success: false, error: "Invalid JSON body" }),
-        { status: 400, headers: corsHeaders }
-      );
-    }
+    const { userQuery } = await req.json();
+    if (!userQuery) throw new Error("userQuery required");
 
-    if (!userQuery) {
-      return new Response(
-        JSON.stringify({ success: false, error: "userQuery required" }),
-        { status: 400, headers: corsHeaders }
-      );
-    }
-
-    console.log("🚀 RAG Orchestrator started");
-    console.log(`Query: "${userQuery}"`);
-
-    // ✅ Obtén la URL base del servidor
     const baseUrl = new URL(req.url).origin;
 
-    // ============================================================================
-    // PASO 1: CLASIFICAR QUERY
-    // ============================================================================
-    console.log("📊 Step 1: Classifying query...");
-    let t = Date.now();
+    // Helper centralizado para llamadas internas
+    const apiCall = async (endpoint: string, body: object, timeout = 8000) => {
+      const controller = new AbortController();
+      const id = setTimeout(() => controller.abort(), timeout);
+      
+      const res = await fetch(`${baseUrl}/functions/v1/${endpoint}`, {
+        method: "POST",
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": authHeader // Importante para llamadas entre funciones
+        },
+        body: JSON.stringify(body),
+        signal: controller.signal,
+      });
+      
+      clearTimeout(id);
+      if (!res.ok) throw new Error(`Error en ${endpoint}: ${res.statusText}`);
+      return res.json();
+    };
 
-    const classifyRes = await fetch(`${baseUrl}/functions/v1/gemini-classify-query`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userQuery }),
+    // --- PASO 1: CLASIFICAR ---
+    const t1 = Date.now();
+    const classification = await apiCall("gemini-classify-query", { userQuery });
+    timings.classification = Date.now() - t1;
+
+    // --- PASOS 2 Y 3: FILTRADO Y EMBEDDING EN PARALELO ---
+    // Ganamos tiempo ejecutando ambos procesos simultáneamente
+    const t23 = Date.now();
+    const [filterData, embeddingData] = await Promise.all([
+      apiCall("filter-documents", { metadata_filters: classification.metadata_filters }),
+      apiCall("gemini-embedding", { text: userQuery })
+    ]);
+    timings.filter_and_embedding = Date.now() - t23;
+
+    // --- PASO 4: BÚSQUEDA SEMÁNTICA ---
+// --- PASO 4: BÚSQUEDA SEMÁNTICA ---
+    const t4 = Date.now();
+    const semanticData = await apiCall("semantic-search", {
+      embedding: embeddingData.embedding,
+      document_ids: filterData.documents?.map((d: any) => d.id) || [],
     });
+    // Extraemos los documentos aquí para usarlos en el siguiente paso
+    const foundDocuments = semanticData.documents || []; 
+    timings.semantic = Date.now() - t4;
 
-    const classification = await classifyRes.json();
-    timings.classification = Date.now() - t;
-
-    console.log("✅ Classification:", classification.intent);
-
-    // ============================================================================
-    // PASO 2: FILTRAR DOCUMENTOS
-    // ============================================================================
-    console.log("🔍 Step 2: Filtering documents...");
-    t = Date.now();
-
-    const filterRes = await fetch(`${baseUrl}/functions/v1/filter-documents`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ metadata_filters: classification.metadata_filters }),
+    // --- PASO 5: RERANKING ---
+    const t5 = Date.now();
+    const rerankData = await apiCall("gemini-rerank", {
+      userQuery,
+      documents: foundDocuments, // CORREGIDO: Antes decía semanticDocuments
     });
-
-    const filterData = await filterRes.json();
-    const filteredDocuments = filterData.documents || [];
-    const documentIds = filteredDocuments.map((d: any) => d.id);
-    timings.filtering = Date.now() - t;
-
-    console.log(`✅ Filtered: ${filteredDocuments.length} documents`);
-
-    // ============================================================================
-    // PASO 3: GENERAR EMBEDDING
-    // ============================================================================
-    console.log("🔄 Step 3: Generating embedding...");
-    t = Date.now();
-
-    const embeddingRes = await fetch(`${baseUrl}/functions/v1/gemini-embedding`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text: userQuery }),
-    });
-
-    const embeddingData = await embeddingRes.json();
-    const embedding = embeddingData.embedding || [];
-    timings.embedding = Date.now() - t;
-
-    console.log("✅ Embedding generated");
-
-    // ============================================================================
-    // PASO 4: BÚSQUEDA SEMÁNTICA
-    // ============================================================================
-    console.log("🔎 Step 4: Semantic search...");
-    t = Date.now();
-
-    const semanticRes = await fetch(`${baseUrl}/functions/v1/semantic-search`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        embedding: embedding,
-        document_ids: documentIds,
-      }),
-    });
-
-    const semanticData = await semanticRes.json();
-    const semanticDocuments = semanticData.documents || [];
-    timings.semantic = Date.now() - t;
-
-    console.log(`✅ Semantic search: ${semanticDocuments.length} results`);
-
-    // ============================================================================
-    // PASO 5: RERANKING
-    // ============================================================================
-    console.log("🎯 Step 5: Reranking...");
-    t = Date.now();
-
-    const rerankRes = await fetch(`${baseUrl}/functions/v1/gemini-rerank`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        userQuery,
-        documents: semanticDocuments,
-      }),
-    });
-
-    const rerankData = await rerankRes.json();
     const topDocuments = rerankData.documents || [];
-    timings.reranking = Date.now() - t;
+    timings.reranking = Date.now() - t5;
 
-    console.log(`✅ Reranking: ${topDocuments.length} top documents`);
-
-    // ============================================================================
-    // PASO 6: GENERAR RESPUESTA
-    // ============================================================================
-    console.log("💬 Step 6: Generating response...");
-    t = Date.now();
-
-    const chatRes = await fetch(`${baseUrl}/functions/v1/gemini-chat`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        userQuery,
-        documents: topDocuments,
-      }),
-    });
-
-    const chatData = await chatRes.json();
-    const finalResponse = chatData.response || "No response";
-    timings.generation = Date.now() - t;
+    // --- PASO 6: GENERAR RESPUESTA ---
+    const t6 = Date.now();
+    const chatData = await apiCall("gemini-chat", {
+      userQuery,
+      documents: topDocuments,
+    }, 15000); // Más tiempo para la generación final
+    timings.generation = Date.now() - t6;
 
     timings.total = Date.now() - startTotal;
 
-    console.log("✅ All steps complete");
-    console.log("⏱️ Timings:", timings);
-
-    // ============================================================================
-    // RETORNA RESPUESTA COMPLETA
-    // ============================================================================
     return new Response(
       JSON.stringify({
         success: true,
         data: {
-          response: finalResponse,
-          documents: topDocuments.map((d: any) => ({
-            source: d.source,
-            content: d.content,
-            relevance_score: d.relevance_score,
-          })),
-          metadata: {
-            ...timings,
-            documents_filtered: filteredDocuments.length,
-            documents_semantic: semanticDocuments.length,
-            documents_reranked: topDocuments.length,
-          },
+          response: chatData.response,
+          documents: topDocuments,
+          metadata: { ...timings }
         },
       }),
-      {
-        status: 200,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      }
+      { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
-  } catch (error) {
-    let msg = "Unknown error";
-    if (error instanceof Error) {
-      msg = error.message;
-    } else if (typeof error === "string") {
-      msg = error;
-    }
-    console.error("❌ Error:", msg);
+
+  } catch (error: any) {
+    console.error("❌ Orchestrator Error:", error.message);
+    const status = error.name === 'AbortError' ? 408 : 500;
     return new Response(
-      JSON.stringify({ success: false, error: msg }),
-      { status: 500, headers: corsHeaders }
+      JSON.stringify({ success: false, error: error.message }),
+      { status, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
 }

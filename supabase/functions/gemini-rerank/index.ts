@@ -1,98 +1,115 @@
 // supabase/functions/gemini-rerank/index.ts
 
-export default async function handler(req: Request): Promise<Response> {
-  const corsHeaders = {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, Authorization",
-  };
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+};
 
-  if (req.method === "OPTIONS") {
-    return new Response(null, { status: 200, headers: corsHeaders });
-  }
+export default async function handler(req: Request): Promise<Response> {
+  if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
   try {
     const { userQuery, documents } = await req.json();
 
     if (!userQuery || !documents || documents.length === 0) {
-      return new Response(
-        JSON.stringify({ error: "userQuery and documents required" }),
-        { status: 400, headers: corsHeaders }
-      );
+      return new Response(JSON.stringify({ documents: [] }), { 
+        status: 200, 
+        headers: { ...corsHeaders, "Content-Type": "application/json" } 
+      });
     }
 
-    // @ts-ignore
-    const geminiKey = Deno.env.get("GEMINI_API_KEY");
-
+    const geminiKey = (globalThis as any).Deno.env.get("GEMINI_API_KEY");
+    
+    // Limitamos a los top 10 de la búsqueda semántica para no exceder la ventana de contexto
     const docsToRerank = documents.slice(0, 10);
     const documentsText = docsToRerank
-      .map((doc: any, idx: number) => `Document ${idx + 1}:\n${doc.content}`)
+      .map((doc: any, idx: number) => `ID: ${idx}\nContent: ${doc.content}`)
       .join("\n\n---\n\n");
 
     const response = await fetch(
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent",
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-goog-api-key": geminiKey,
+          "x-goog-api-key": geminiKey!,
         },
         body: JSON.stringify({
           contents: [{
             parts: [{
-              text: `You are a document relevance scorer. Score how well each document answers the user's question.
-
-Question: "${userQuery}"
-
-Documents:
-${documentsText}
-
-For each document, provide:
-1. Relevance score (0.0 to 1.0)
-2. Brief reasoning
-
-IMPORTANT: Return ONLY valid JSON:
-{
-  "rankings": [
-    { "document_index": 0, "relevance_score": 0.98, "reasoning": "..." },
-    { "document_index": 1, "relevance_score": 0.85, "reasoning": "..." }
-  ]
-}`
+              text: `You are a Reranking expert. Your task is to evaluate the relevance of documents to a query.
+              
+              Query: "${userQuery}"
+              
+              Documents to evaluate:
+              ${documentsText}
+              
+              Instructions:
+              - Assign a relevance_score (0.0 to 1.0).
+              - Provide a very brief reasoning.
+              - Return valid JSON with the exact structure below.`
             }]
           }],
           generationConfig: {
-            temperature: 0.2,
-            maxOutputTokens: 500,
+            temperature: 0.1,
+            maxOutputTokens: 1000,
+            responseMimeType: "application/json",
+            responseSchema: {
+              type: "object",
+              properties: {
+                rankings: {
+                  type: "array",
+                  items: {
+                    type: "object",
+                    properties: {
+                      document_index: { type: "number" },
+                      relevance_score: { type: "number" },
+                      reasoning: { type: "string" }
+                    },
+                    required: ["document_index", "relevance_score", "reasoning"]
+                  }
+                }
+              }
+            }
           }
         })
       }
     );
 
+    if (!response.ok) {
+      const err = await response.text();
+      console.error("[rerank] Gemini API error:", err);
+      // Fallback: Si Gemini falla, devolvemos los documentos originales sin rerank
+      return new Response(JSON.stringify({ documents: documents.slice(0, 3), fallback: true }), {
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "application/json" }
+      });
+    }
+
     const data = await response.json();
-    const responseText = data.candidates[0]?.content?.parts[0]?.text || "{}";
-    const jsonString = responseText
-      .replace(/```json\n?/g, "")
-      .replace(/```\n?/g, "")
-      .trim();
+    const result = data.candidates?.[0]?.content?.parts?.[0]?.text;
+    const parsed = JSON.parse(result || '{"rankings":[]}');
 
-    const parsed = JSON.parse(jsonString);
-
+    // Mapeo y ordenación por score
     const ranked = (parsed.rankings || [])
-      .filter((rank: any) => rank.relevance_score > 0.5)
-      .slice(0, 3)
       .map((rank: any) => ({
         ...docsToRerank[rank.document_index],
         relevance_score: rank.relevance_score,
         rerank_reason: rank.reasoning,
-      }));
+      }))
+      .sort((a: any, b: any) => b.relevance_score - a.relevance_score)
+      .filter((doc: any) => doc.relevance_score > 0.4) // Filtro de calidad
+      .slice(0, 5); // Nos quedamos con los 5 mejores para el chat final
 
     return new Response(JSON.stringify({ documents: ranked }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
-  } catch (error) {
-    const msg = error instanceof Error ? error.message : "Unknown error";
-    return new Response(JSON.stringify({ error: msg }), {
+
+  } catch (error: any) {
+    console.error("[rerank] Error fatal:", error.message);
+    return new Response(JSON.stringify({ error: error.message, documents: [] }), {
       status: 500,
       headers: corsHeaders,
     });
