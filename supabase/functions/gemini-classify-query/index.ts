@@ -11,6 +11,7 @@ export default async function handler(req: Request): Promise<Response> {
     return new Response(null, { status: 200, headers: corsHeaders });
   }
 
+  let timeoutId: number | undefined = undefined;
   try {
     const { userQuery } = await req.json();
 
@@ -26,19 +27,25 @@ export default async function handler(req: Request): Promise<Response> {
     console.log("[classify] GEMINI_API_KEY exists:", !!geminiKey);
     console.log("[classify] userQuery:", userQuery);
 
-    console.log("[classify] Fetching Gemini API...");
-    const response = await fetch(
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-goog-api-key": geminiKey,
-        },
-        body: JSON.stringify({
-          contents: [{
-            parts: [{
-              text: `Analyze this query and extract metadata.
+    // Implement timeout with AbortController
+    const controller = new AbortController();
+    timeoutId = setTimeout(() => controller.abort(), 8000); // 8 segundos
+
+    let response;
+    try {
+      console.log("[classify] Fetching Gemini API...");
+      response = await fetch(
+        "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-goog-api-key": geminiKey,
+          },
+          body: JSON.stringify({
+            contents: [{
+              parts: [{
+                text: `Analyze this query and extract metadata.
 
 Available tags: copas, bebidas, comida, precios, horarios, ubicacion, menu, promociones
 
@@ -54,15 +61,29 @@ Return ONLY valid JSON:
   },
   "confidence": 0.95
 }`
-            }]
-          }],
-          generationConfig: {
-            temperature: 0.0,
-            maxOutputTokens: 200,
-          }
-        })
+              }]
+            }],
+            generationConfig: {
+              temperature: 0.0,
+              maxOutputTokens: 200,
+            }
+          }),
+          signal: controller.signal
+        }
+      );
+      clearTimeout(timeoutId);
+    } catch (error) {
+      clearTimeout(timeoutId);
+      if (error.name === 'AbortError') {
+        console.log("[classify] Gemini API fetch aborted due to timeout");
+        return new Response(JSON.stringify({ error: 'Gemini tardó demasiado' }), {
+          status: 408,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        });
       }
-    );
+      throw error;
+    }
+
     console.log("[classify] Gemini API responded, status:", response.status);
 
     const data = await response.json();
@@ -76,6 +97,7 @@ Return ONLY valid JSON:
       headers: { ...corsHeaders, "Content-Type": "application/json" }
     });
   } catch (error) {
+    if (timeoutId) clearTimeout(timeoutId);
     const msg = error instanceof Error ? error.message : "Unknown error";
     return new Response(JSON.stringify({ error: msg }), {
       status: 500,
