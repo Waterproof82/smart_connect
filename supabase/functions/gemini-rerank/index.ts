@@ -1,4 +1,4 @@
-// supabase/functions/gemini-chat/index.ts
+// supabase/functions/gemini-rerank/index.ts
 
 export default async function handler(req: Request): Promise<Response> {
   const corsHeaders = {
@@ -14,7 +14,7 @@ export default async function handler(req: Request): Promise<Response> {
   try {
     const { userQuery, documents } = await req.json();
 
-    if (!userQuery || !documents) {
+    if (!userQuery || !documents || documents.length === 0) {
       return new Response(
         JSON.stringify({ error: "userQuery and documents required" }),
         { status: 400, headers: corsHeaders }
@@ -24,13 +24,10 @@ export default async function handler(req: Request): Promise<Response> {
     // @ts-ignore
     const geminiKey = Deno.env.get("GEMINI_API_KEY");
 
-    const context = documents
-      .map((d: any) => `- ${d.content}`)
-      .join("\n");
-
-    const responseText = context.length > 0
-      ? `Answer using ONLY this context:\n${context}`
-      : "No relevant documents found. Answer based on general knowledge.";
+    const docsToRerank = documents.slice(0, 10);
+    const documentsText = docsToRerank
+      .map((doc: any, idx: number) => `Document ${idx + 1}:\n${doc.content}`)
+      .join("\n\n---\n\n");
 
     const response = await fetch(
       "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
@@ -43,24 +40,53 @@ export default async function handler(req: Request): Promise<Response> {
         body: JSON.stringify({
           contents: [{
             parts: [{
-              text: `You are a helpful restaurant assistant.
-${responseText}
+              text: `You are a document relevance scorer. Score how well each document answers the user's question.
 
-Question: "${userQuery}"`
+Question: "${userQuery}"
+
+Documents:
+${documentsText}
+
+For each document, provide:
+1. Relevance score (0.0 to 1.0)
+2. Brief reasoning
+
+IMPORTANT: Return ONLY valid JSON:
+{
+  "rankings": [
+    { "document_index": 0, "relevance_score": 0.98, "reasoning": "..." },
+    { "document_index": 1, "relevance_score": 0.85, "reasoning": "..." }
+  ]
+}`
             }]
           }],
           generationConfig: {
-            temperature: 0.7,
-            maxOutputTokens: 256,
+            temperature: 0.2,
+            maxOutputTokens: 500,
           }
         })
       }
     );
 
     const data = await response.json();
-    const finalResponse = data.candidates[0]?.content?.parts[0]?.text || "No response";
+    const responseText = data.candidates[0]?.content?.parts[0]?.text || "{}";
+    const jsonString = responseText
+      .replace(/```json\n?/g, "")
+      .replace(/```\n?/g, "")
+      .trim();
 
-    return new Response(JSON.stringify({ response: finalResponse }), {
+    const parsed = JSON.parse(jsonString);
+
+    const ranked = (parsed.rankings || [])
+      .filter((rank: any) => rank.relevance_score > 0.5)
+      .slice(0, 3)
+      .map((rank: any) => ({
+        ...docsToRerank[rank.document_index],
+        relevance_score: rank.relevance_score,
+        rerank_reason: rank.reasoning,
+      }));
+
+    return new Response(JSON.stringify({ documents: ranked }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });

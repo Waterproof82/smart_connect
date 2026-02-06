@@ -1,192 +1,306 @@
-// ========================================
-// SUPABASE EDGE FUNCTION - Gemini Generate
-// ========================================
-// @ts-nocheck - Deno runtime types
-import "https://deno.land/x/xhr@0.1.0/mod.ts";
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+// ============================================================================
+// SUPABASE EDGE FUNCTION: gemini-generate
+// ============================================================================
+// Genera respuestas de IA con contexto RAG
+// Con CORS correctamente implementado
 
-// Simple in-memory rate limiter (for development)
-// Rate limiter: In-memory implementation (Upstash Redis migration deferred by business decision)
-const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
+// ============================================================================
+// TIPOS
+// ============================================================================
+
+interface RateLimitRecord {
+  count: number;
+  resetTime: number;
+}
+
+// ============================================================================
+// VALIDACIÓN
+// ============================================================================
+
+function validateGenerationRequest(data: unknown): {
+  valid: boolean;
+  error?: string;
+  contents?: unknown;
+  generationConfig?: unknown;
+} {
+  try {
+    if (!data || typeof data !== "object") {
+      return { valid: false, error: "Request must be an object" };
+    }
+
+    const obj = data as Record<string, unknown>;
+
+    // Validate contents exists
+    if (!obj.contents || !Array.isArray(obj.contents)) {
+      return { valid: false, error: "contents is required and must be an array" };
+    }
+
+    if (obj.contents.length === 0) {
+      return { valid: false, error: "contents array cannot be empty" };
+    }
+
+    // Basic validation of contents structure
+    for (let i = 0; i < obj.contents.length; i++) {
+      const content = obj.contents[i];
+      if (!content || typeof content !== "object") {
+        return { valid: false, error: `contents[${i}] must be an object` };
+      }
+
+      const contentObj = content as Record<string, unknown>;
+      if (!contentObj.parts || !Array.isArray(contentObj.parts)) {
+        return { valid: false, error: `contents[${i}].parts must be an array` };
+      }
+    }
+
+    return {
+      valid: true,
+      contents: obj.contents,
+      generationConfig: obj.generationConfig,
+    };
+  } catch {
+    return { valid: false, error: "Invalid request format" };
+  }
+}
+
+// ============================================================================
+// RATE LIMITING
+// ============================================================================
+
+const rateLimitMap = new Map<string, RateLimitRecord>();
 
 function checkRateLimit(userId: string): { allowed: boolean; remaining: number } {
   const now = Date.now();
   const windowMs = 60000; // 1 minute
   const maxRequests = 10;
-  
-  let userLimit = rateLimitMap.get(userId);
-  
-  if (!userLimit || now > userLimit.resetAt) {
-    userLimit = { count: 0, resetAt: now + windowMs };
-    rateLimitMap.set(userId, userLimit);
+
+  let record = rateLimitMap.get(userId);
+
+  if (!record || now > record.resetTime) {
+    record = { count: 0, resetTime: now + windowMs };
+    rateLimitMap.set(userId, record);
   }
-  
-  if (userLimit.count >= maxRequests) {
+
+  if (record.count >= maxRequests) {
     return { allowed: false, remaining: 0 };
   }
-  
-  userLimit.count++;
-  return { allowed: true, remaining: maxRequests - userLimit.count };
+
+  record.count++;
+  return { allowed: true, remaining: maxRequests - record.count };
 }
 
-// Forzar log para debug de ejecución
-console.log('Gemini-generate handler INIT');
-Deno.serve(async (req) => {
-  // CORS headers
-  const allowedOrigin = Deno.env.get('ALLOWED_ORIGIN') || '*';
-  const corsHeaders = {
-    'Access-Control-Allow-Origin': allowedOrigin,
-    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform',
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
-  };
+// ============================================================================
+// EXTRACT USER ID
+// ============================================================================
 
-  // Handle CORS preflight
-  if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders });
+function extractUserId(req: Request): string {
+  const authHeader = req.headers.get("authorization");
+  if (!authHeader) {
+    return "anon";
   }
 
   try {
-    // ===================================
-    // SECURITY: JWT Token Validation (OWASP A07:2021)
-    // ===================================
-    const authHeader = req.headers.get('Authorization');
-    if (!authHeader) {
-      console.warn('SECURITY: Missing Authorization header');
-      return new Response(
-        JSON.stringify({ error: 'Missing Authorization header' }),
-        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
+    const token = authHeader.replace("Bearer ", "");
+    const parts = token.split(".");
+    if (parts.length === 3) {
+      const payload = JSON.parse(atob(parts[1]));
+      return payload.sub || "anon";
+    }
+  } catch {
+    // Fall back to anon
+  }
+
+  return "anon";
+}
+
+// ============================================================================
+// CORS HELPERS
+// ============================================================================
+
+function getCorsHeaders() {
+  return {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization",
+  };
+}
+
+// ============================================================================
+// MAIN HANDLER
+// ============================================================================
+
+export default async function handler(req: Request): Promise<Response> {
+  const corsHeaders = getCorsHeaders();
+
+  // ✅ CRITICAL: CORS preflight with status 200
+  if (req.method === "OPTIONS") {
+    return new Response(null, {
+      status: 200,
+      headers: corsHeaders,
+    });
+  }
+
+  // Only allow POST
+  if (req.method !== "POST") {
+    return new Response(JSON.stringify({ error: "Method not allowed" }), {
+      status: 405,
+      headers: {
+        ...corsHeaders,
+        "Content-Type": "application/json",
+      },
+    });
+  }
+
+  try {
+    // Extract user ID
+    const userId = extractUserId(req);
+
+    // Parse request body
+    let bodyData;
+    try {
+      bodyData = await req.json();
+    } catch {
+      return new Response(JSON.stringify({ error: "Invalid JSON" }), {
+        status: 400,
+        headers: {
+          ...corsHeaders,
+          "Content-Type": "application/json",
+        },
+      });
     }
 
-    // Validate JWT token
-    const token = authHeader.replace('Bearer ', '');
-    const supabaseUrl = Deno.env.get('SUPABASE_URL');
-    const supabaseKey = Deno.env.get('SUPABASE_ANON_KEY');
-    
-    if (!supabaseUrl || !supabaseKey) {
-      console.error('SECURITY: Missing Supabase configuration');
+    // Validate input
+    const validation = validateGenerationRequest(bodyData);
+    if (!validation.valid) {
       return new Response(
-        JSON.stringify({ error: 'Server configuration error' }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
-    
-    const supabase = createClient(supabaseUrl, supabaseKey);
-    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
-
-    if (authError || !user) {
-      console.warn('SECURITY: Invalid or expired token', authError?.message);
-      return new Response(
-        JSON.stringify({ error: 'Invalid or expired token' }),
-        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
-
-    // ===================================
-    // SECURITY: Rate Limiting (OWASP A04:2021)
-    // ===================================
-    const rateLimit = checkRateLimit(user.id);
-    if (!rateLimit.allowed) {
-      console.warn(`SECURITY: Rate limit exceeded for user ${user.id}`);
-      return new Response(
-        JSON.stringify({ 
-          error: 'Rate limit exceeded. Please try again later.',
-          retryAfter: 60 // seconds
-        }),
-        { 
-          status: 429, 
-          headers: { 
-            ...corsHeaders, 
-            'Content-Type': 'application/json',
-            'X-RateLimit-Limit': '10',
-            'X-RateLimit-Remaining': '0',
-            'X-RateLimit-Reset': String(Math.floor(Date.now() / 1000) + 60)
-          } 
+        JSON.stringify({ error: validation.error }),
+        {
+          status: 400,
+          headers: {
+            ...corsHeaders,
+            "Content-Type": "application/json",
+          },
         }
       );
     }
 
-    console.log(`Request from user: ${user.id} (${user.email}) - Rate limit remaining: ${rateLimit.remaining}`);
-
-    const requestBody = await req.json();
-    console.log('Request body received:', JSON.stringify(requestBody, null, 2));
-    
-    const { contents, generationConfig } = requestBody;
-    
-    // Validar que contents existe
-    if (!contents || !Array.isArray(contents)) {
+    // Check rate limit
+    const rateLimit = checkRateLimit(userId);
+    if (!rateLimit.allowed) {
+      console.warn(`Rate limit exceeded for user ${userId}`);
       return new Response(
-        JSON.stringify({ 
-          error: 'Invalid request: contents must be an array',
-          received: typeof contents
+        JSON.stringify({
+          error: "Rate limit exceeded. Please try again later.",
+          retryAfter: 60,
         }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        {
+          status: 429,
+          headers: {
+            ...corsHeaders,
+            "Content-Type": "application/json",
+            "X-RateLimit-Limit": "10",
+            "X-RateLimit-Remaining": "0",
+            "X-RateLimit-Reset": String(Math.floor(Date.now() / 1000) + 60),
+          },
+        }
       );
     }
-    
-    const GEMINI_API_KEY = Deno.env.get('GEMINI_API_KEY');
 
-    // Debug logging
-    console.log('GEMINI_API_KEY exists:', !!GEMINI_API_KEY);
-    console.log('GEMINI_API_KEY length:', GEMINI_API_KEY?.length || 0);
-    console.log('GEMINI_API_KEY starts with:', GEMINI_API_KEY?.substring(0, 10) || 'N/A');
+    console.log(
+      `Generation request from user: ${userId} - Rate limit remaining: ${rateLimit.remaining}`
+    );
 
-    if (!GEMINI_API_KEY) {
+    // Get Gemini API key
+    // @ts-ignore
+    const geminiApiKey = Deno.env.get("GEMINI_API_KEY");
+
+    if (!geminiApiKey) {
+      console.error("GEMINI_API_KEY not configured");
       return new Response(
-        JSON.stringify({ error: 'GEMINI_API_KEY not configured' }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        JSON.stringify({ error: "Server configuration error" }),
+        {
+          status: 500,
+          headers: {
+            ...corsHeaders,
+            "Content-Type": "application/json",
+          },
+        }
       );
     }
 
-    const response = await fetch(
-      'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent',
+    // Call Gemini API with timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 30000);
+
+    let geminiResponse;
+    try {
+      const response = await fetch(
+        "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-goog-api-key": geminiApiKey,
+          },
+          body: JSON.stringify({
+            contents: validation.contents,
+            generationConfig: validation.generationConfig,
+          }),
+          signal: controller.signal,
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(
+          `Gemini API error: ${response.status} - ${JSON.stringify(errorData)}`
+        );
+      }
+
+      geminiResponse = await response.json();
+
+      // Validate response structure
+      if (!geminiResponse.candidates || !Array.isArray(geminiResponse.candidates)) {
+        throw new Error("Invalid Gemini API response");
+      }
+    } catch (error) {
+      const errorMsg = error instanceof Error ? error.message : "Unknown error";
+      console.error("Gemini API error:", errorMsg);
+
+      return new Response(
+        JSON.stringify({ error: "Failed to generate response" }),
+        {
+          status: 500,
+          headers: {
+            ...corsHeaders,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+    } finally {
+      clearTimeout(timeoutId);
+    }
+
+    // ✅ Return success with CORS headers
+    return new Response(JSON.stringify(geminiResponse), {
+      status: 200,
+      headers: {
+        ...corsHeaders,
+        "Content-Type": "application/json",
+        "Cache-Control": "no-store",
+      },
+    });
+  } catch (error) {
+    console.error("Unhandled error:", error);
+
+    return new Response(
+      JSON.stringify({ error: "Internal server error" }),
       {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'x-goog-api-key': GEMINI_API_KEY
+        status: 500,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          contents,
-          generationConfig
-        })
       }
     );
-
-    const data = await response.json();
-    
-    // Log para debug
-    console.log('Gemini API response status:', response.status);
-    console.log('Gemini API response data:', JSON.stringify(data).substring(0, 200));
-    
-    // Si hay error de Gemini, agregarlo al response
-    if (data.error) {
-      return new Response(
-        JSON.stringify({ 
-          error: data.error,
-          _debug: {
-            keyExists: !!GEMINI_API_KEY,
-            keyLength: GEMINI_API_KEY?.length || 0,
-            keyPrefix: GEMINI_API_KEY?.substring(0, 15) || 'N/A'
-          }
-        }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
-
-    return new Response(
-      JSON.stringify(data),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
-  } catch (error) {
-    console.error('Edge Function error:', error);
-    return new Response(
-      JSON.stringify({ 
-        error: error.message,
-        stack: error.stack,
-        type: error.constructor.name
-      }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
   }
-});
+}

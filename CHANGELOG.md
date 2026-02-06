@@ -23,6 +23,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Location: `src/features/admin/presentation/components/DocumentList.tsx`
   - Audit: `docs/audit/2026-02-04_source-tag-editor-implementation.md`
 
+- **Hybrid Self-Querying Pipeline in RAGOrchestrator:**
+  - Added `hybridSelfQueryingPipeline` method to `RAGOrchestrator` (domain layer).
+  - Combines LLM-based intent extraction, metadata filtering, semantic search, and reranking.
+  - Optimizes context for LLM prompt injection, reducing noise and improving answer relevance.
+  - Location: `src/features/chatbot/domain/rag-orchestrator.ts`, `llm-intent-extractor.ts`
+  - Audit: `docs/audit/2026-02-05_rag-hybrid-self-querying-implementation.md`
+
 ### Changed
 - **Simplified Source Classification System:**
   - Removed category field from chunk metadata (use source directly)

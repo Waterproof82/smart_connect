@@ -1,6 +1,1 @@
-/**
- * Data Sources Export
- */
-
-export * from './GeminiDataSource';
-export * from './SupabaseDataSource';
+export { supabaseClient } from './supabase-client';

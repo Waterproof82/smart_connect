@@ -1,4 +1,4 @@
-// supabase/functions/gemini-embedding/index.ts
+// supabase/functions/semantic-search/index.ts
 
 export default async function handler(req: Request): Promise<Response> {
   const corsHeaders = {
@@ -12,37 +12,48 @@ export default async function handler(req: Request): Promise<Response> {
   }
 
   try {
-    const { text } = await req.json();
+    const { embedding, document_ids } = await req.json();
 
-    if (!text || typeof text !== "string") {
+    if (!embedding || !document_ids || document_ids.length === 0) {
       return new Response(
-        JSON.stringify({ error: "text is required" }),
+        JSON.stringify({ error: "embedding and document_ids required" }),
         { status: 400, headers: corsHeaders }
       );
     }
 
     // @ts-ignore
-    const geminiKey = Deno.env.get("GEMINI_API_KEY");
+    const supabaseUrl = Deno.env.get("SUPABASE_URL");
+    // @ts-ignore
+    const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
 
     const response = await fetch(
-      "https://generativelanguage.googleapis.com/v1beta/models/text-embedding-004:embedContent",
+      `${supabaseUrl}/rest/v1/rpc/match_documents_filtered`,
       {
         method: "POST",
         headers: {
+          "apikey": supabaseKey,
+          "Authorization": `Bearer ${supabaseKey}`,
           "Content-Type": "application/json",
-          "x-goog-api-key": geminiKey,
         },
         body: JSON.stringify({
-          model: "models/text-embedding-004",
-          content: { parts: [{ text }] },
+          query_embedding: embedding,
+          document_ids: document_ids,
+          match_threshold: 0.5,
+          match_count: 10,
         }),
       }
     );
 
-    const data = await response.json();
-    const embedding = data.embedding?.values || [];
+    if (!response.ok) {
+      throw new Error(`RPC error: ${response.statusText}`);
+    }
 
-    return new Response(JSON.stringify({ embedding }), {
+    const data = await response.json();
+    const sorted = (data || []).sort(
+      (a: any, b: any) => (b.similarity || 0) - (a.similarity || 0)
+    );
+
+    return new Response(JSON.stringify({ documents: sorted }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });

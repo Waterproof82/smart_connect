@@ -5,30 +5,16 @@ import { Hero } from '@features/landing/presentation/components/Hero';
 import { Features } from '@features/landing/presentation/components/Features';
 import { SuccessStats } from '@features/landing/presentation/components/SuccessStats';
 import { Contact } from '@features/landing/presentation/components/Contact';
-import { ExpertAssistant } from '@features/chatbot/presentation';
-import { getChatbotContainer } from '@features/chatbot/presentation/ChatbotContainer';
+
+// Lazy load ExpertAssistant to avoid SSR/DOM issues
+const ExpertAssistant = React.lazy(() =>
+  import('@features/chatbot/presentation/components/ExpertAssistant').then(mod => ({ default: mod.ExpertAssistant }))
+);
+
+
 
 const App: React.FC = () => {
   const [scrolled, setScrolled] = React.useState(false);
-  const [isKnowledgeBaseReady, setIsKnowledgeBaseReady] = React.useState(false);
-
-  // Initialize knowledge base from Supabase on app startup
-  React.useEffect(() => {
-    const initKnowledgeBase = async () => {
-      try {
-        const container = getChatbotContainer();
-        await container.initializeKnowledgeBase();
-        setIsKnowledgeBaseReady(true);
-        console.warn('✅ Knowledge base loaded and ready');
-      } catch (error) {
-        console.error('⚠️ Knowledge base initialization failed, using fallback mode:', error);
-        // Allow app to continue - fallback mode will use query-time Supabase RPC
-        setIsKnowledgeBaseReady(true);
-      }
-    };
-
-    initKnowledgeBase();
-  }, []);
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -45,10 +31,12 @@ const App: React.FC = () => {
       <Features />
       <SuccessStats />
       <Contact />
-      
-      {/* AI Chatbot Assistant - Only render when knowledge base is ready */}
-      {isKnowledgeBaseReady && <ExpertAssistant />}
-      
+
+      {/* AI Chatbot Assistant - Render always */}
+      <React.Suspense fallback={<div className="text-center py-8">Cargando asistente...</div>}>
+        <ExpertAssistant />
+      </React.Suspense>
+
       {/* Footer */}
       <footer className="bg-black/50 py-8 text-center text-gray-400">
         <p>© 2026 SmartConnect AI. Todos los derechos reservados.</p>
