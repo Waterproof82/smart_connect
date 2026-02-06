@@ -27,7 +27,7 @@ export class ChatbotContainer {
 
       // ✅ UNA SOLA LLAMADA
       const response = await fetch(
-        `${supabaseUrl}/functions/v1/gemini-rag-orchestrator`,
+        `${supabaseUrl}/functions/v1/rag-v2`,
         {
           method: 'POST',
           headers: {
