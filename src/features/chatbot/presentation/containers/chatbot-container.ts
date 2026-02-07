@@ -25,14 +25,15 @@ export class ChatbotContainer {
       const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
       const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-      // ✅ UNA SOLA LLAMADA
+// ✅ UNA SOLA LLAMADA (ARREGLADA PARA LOCAL)
       const response = await fetch(
-        `${supabaseUrl}/functions/v1/rag-v2`,
+        'http://localhost:54321/functions/v1/rag-v2', // <--- URL FIJA LOCAL
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${anonKey}`,
+            // PEGA TU CLAVE LOCAL 'ANON' AQUÍ DEBAJO (la que empieza por eyJ...) 👇
+            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR5c2plZHZ1anZzbXJ6enJtZXNyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk1NDE5NjIsImV4cCI6MjA4NTExNzk2Mn0.wwEaxcanylAFKY1x6NNNlewEcQPby0zdo9Q93qqe3dM', 
           },
           body: JSON.stringify({ userQuery }),
         }

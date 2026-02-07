@@ -1,42 +1,49 @@
--- Update match_documents to accept text/json array and cast to vector
--- This allows Supabase JS to send number[] arrays from Edge Functions
+-- 1. ACTIVAR LA EXTENSIÓN (Lo primero de todo)
+CREATE EXTENSION IF NOT EXISTS vector WITH SCHEMA public;
 
-DROP FUNCTION IF EXISTS match_documents(vector, float, int);
+-- 2. CREAR LA TABLA (Con todas las columnas necesarias incluidas)
+CREATE TABLE IF NOT EXISTS public.documents (
+  id uuid primary key default gen_random_uuid(),
+  content text,
+  source text,
+  embedding vector(768), -- Para Gemini
+  is_public boolean default true,
+  category text, -- Agregada directamente aquí
+  updated_at timestamptz default now(), -- Agregada directamente aquí
+  created_at timestamptz default now()
+);
 
-CREATE OR REPLACE FUNCTION match_documents(
-  query_embedding text, -- Changed from vector(768) to text
-  match_threshold float DEFAULT 0.3,
-  match_count int DEFAULT 5
-)
-RETURNS TABLE (
-  id UUID,
-  content TEXT,
-  source TEXT,
+-- 3. CREAR ÍNDICE DE BÚSQUEDA (Opcional, mejora velocidad)
+CREATE INDEX IF NOT EXISTS documents_embedding_idx 
+ON public.documents 
+USING ivfflat (embedding vector_cosine_ops) 
+WITH (lists = 100);
+
+-- 4. CREAR LA FUNCIÓN DE BÚSQUEDA (RAG)
+CREATE OR REPLACE FUNCTION match_documents (
+  query_embedding vector(768),
+  match_threshold float,
+  match_count int,
+  filter jsonb default '{}'
+) RETURNS TABLE (
+  id uuid,
+  content text,
+  source text,
   similarity float
 )
 LANGUAGE plpgsql
 AS $$
-DECLARE
-  embedding_vector vector(768);
 BEGIN
-  -- Cast text to vector (handles both [1,2,3] string and JSON array)
-  embedding_vector := query_embedding::vector(768);
-  
   RETURN QUERY
   SELECT
     documents.id,
     documents.content,
     documents.source,
-    1 - (documents.embedding <=> embedding_vector) AS similarity
+    1 - (documents.embedding <=> query_embedding) AS similarity
   FROM public.documents
-  WHERE documents.embedding IS NOT NULL
-    AND 1 - (documents.embedding <=> embedding_vector) > match_threshold
-  ORDER BY documents.embedding <=> embedding_vector
+  WHERE 1 - (documents.embedding <=> query_embedding) > match_threshold
+  AND (filter = '{}'::jsonb OR documents.source ILIKE ('%' || (filter->>'source') || '%'))
+  ORDER BY documents.embedding <=> query_embedding
   LIMIT match_count;
 END;
 $$;
-
--- Grant execute permissions to all roles
-GRANT EXECUTE ON FUNCTION match_documents(text, float, int) TO anon;
-GRANT EXECUTE ON FUNCTION match_documents(text, float, int) TO authenticated;
-GRANT EXECUTE ON FUNCTION match_documents(text, float, int) TO service_role;

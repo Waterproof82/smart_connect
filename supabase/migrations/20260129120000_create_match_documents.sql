@@ -1,4 +1,6 @@
 -- Create match_documents function for vector similarity search
+CREATE EXTENSION IF NOT EXISTS vector WITH SCHEMA public;
+
 CREATE OR REPLACE FUNCTION match_documents(
   query_embedding vector(768),
   match_threshold float DEFAULT 0.3,

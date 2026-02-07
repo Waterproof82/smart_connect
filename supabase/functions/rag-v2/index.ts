@@ -1,4 +1,4 @@
-// supabase/functions/gemini-rag-orchestrator/index.ts
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -7,34 +7,35 @@ const corsHeaders = {
 };
 
 export default async function handler(req: Request): Promise<Response> {
-  if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+  // 1. GESTIÓN DE PERMISOS (CORS) - ¡Esto arregla el error del Chat!
+  if (req.method === "OPTIONS") {
+      return new Response("ok", { headers: corsHeaders });
+  }
 
   try {
     const { userQuery } = await req.json();
-    if (!userQuery) throw new Error("userQuery required");
+    console.log(`🚀 [1] Chat pregunta: "${userQuery}"`);
 
-    // @ts-ignore
-    const geminiKey = Deno.env.get("GEMINI_API_KEY");
-    // @ts-ignore
-    const supabaseUrl = Deno.env.get("SUPABASE_URL");
-    // @ts-ignore
-    const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
-
-    if (!geminiKey || !supabaseUrl || !supabaseKey) throw new Error("Faltan variables de entorno");
-
-    console.log(`🚀 [Orchestrator] Procesando: "${userQuery}"`);
-
-    // 1. CLASIFICACIÓN (Gemini)
-    const classifyRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: `Return JSON. Query: "${userQuery}". Format: {"intent": "general", "metadata_filters": {}}` }] }],
-        generationConfig: { responseMimeType: "application/json" }
-      })
-    });
+    // --- CONFIGURACIÓN A FUEGO (HARDCODED) ---
+    // Usamos host.docker.internal para conectar Docker con tu PC
+    const supabaseUrl = "http://host.docker.internal:54321";
     
-    // 2. EMBEDDING (Gemini)
+    // 👇👇👇 PEGA AQUÍ TU CLAVE 'SERVICE_ROLE' (La que empieza por eyJ...) 👇👇👇
+    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR5c2plZHZ1anZzbXJ6enJtZXNyIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2OTU0MTk2MiwiZXhwIjoyMDg1MTE3OTYyfQ.dvFZakaCz8ZXVM1iSHI3o314UFVkExz8AX1U-GMWTiw";
+
+    // 👇👇👇 PEGA AQUÍ TU CLAVE DE GOOGLE GEMINI (AIzaSy...) 👇👇👇
+    const geminiKey = "AIzaSyBXsqQ4Py0DR9Zh5NmQImwyc28EDObMg1M";
+
+    // Chequeo de seguridad para que no se te olvide
+    if (supabaseKey.includes("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR5c2plZHZ1anZzbXJ6enJtZXNyIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2OTU0MTk2MiwiZXhwIjoyMDg1MTE3OTYyfQ.dvFZakaCz8ZXVM1iSHI3o314UFVkExz8AX1U-GMWTiw") || geminiKey.includes("AIzaSyBXsqQ4Py0DR9Zh5NmQImwyc28EDObMg1M")) {
+        throw new Error("⚠️ ¡FALTAN LAS CLAVES EN EL CÓDIGO! Edita el archivo index.ts");
+    }
+
+    // Inicializamos cliente
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    // --- PASO A: EMBEDDING (GEMINI) ---
+    console.log("🧠 [2] Llamando a Gemini...");
     const embedRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/text-embedding-004:embedContent?key=${geminiKey}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -43,51 +44,51 @@ export default async function handler(req: Request): Promise<Response> {
         content: { parts: [{ text: userQuery }] }
       })
     });
-
-    const [classData, embedData] = await Promise.all([classifyRes.json(), embedRes.json()]);
-    const classification = JSON.parse(classData.candidates?.[0]?.content?.parts?.[0]?.text || "{}");
+    
+    if (!embedRes.ok) {
+        const errText = await embedRes.text();
+        throw new Error(`Error Gemini Embedding: ${embedRes.status} - ${errText}`);
+    }
+    
+    const embedData = await embedRes.json();
     const embedding = embedData.embedding.values;
+    console.log("✅ [3] Embedding OK.");
 
-    // 3. BÚSQUEDA (Supabase RPC)
-    const dbRes = await fetch(`${supabaseUrl}/rest/v1/rpc/match_documents`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "apikey": supabaseKey, "Authorization": `Bearer ${supabaseKey}` },
-      body: JSON.stringify({
+    // --- PASO B: SUPABASE ---
+    console.log("🗄️ [4] Buscando en base de datos...");
+    const { data: documents, error: dbError } = await supabase.rpc('match_documents', {
         query_embedding: embedding,
         match_threshold: 0.3,
-        match_count: 6,
-        filter: classification.metadata_filters || {}
-      })
+        match_count: 5,
     });
 
-    let documents = [];
-    if (dbRes.ok) documents = await dbRes.json();
-    else {
-        // Fallback texto simple
-        console.warn("⚠️ Fallback texto simple");
-        const textRes = await fetch(`${supabaseUrl}/rest/v1/documents?select=content,source&content=ilike.%${userQuery}%&limit=5`, {
-             headers: { "apikey": supabaseKey, "Authorization": `Bearer ${supabaseKey}` }
-        });
-        if (textRes.ok) documents = await textRes.json();
-    }
+    if (dbError) throw new Error(`Error Base de Datos: ${dbError.message}`);
+    console.log(`✅ [5] Encontrados: ${documents?.length || 0} docs.`);
 
-    // 4. CHAT (Gemini)
-    const context = documents.map((d: any) => d.content).join("\n\n");
+    // --- PASO C: RESPUESTA FINAL ---
+    const context = documents?.map((d: any) => d.content).join("\n\n") || "No info";
+    
+    console.log("🤖 [6] Generando respuesta...");
     const chatRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        contents: [{ parts: [{ text: `Context: ${context}\nUser: "${userQuery}"\nAnswer (be helpful, use markdown):` }] }]
+        contents: [{ parts: [{ text: `Contexto:\n${context}\n\nPregunta: "${userQuery}"\nRespuesta útil:` }] }]
       })
     });
+
     const chatData = await chatRes.json();
-    
+    const finalText = chatData.candidates?.[0]?.content?.parts?.[0]?.text || "Error generando texto";
+
+    console.log("🏁 [7] ¡EXITO! Respondiendo al chat.");
+
     return new Response(JSON.stringify({ 
-        response: chatData.candidates?.[0]?.content?.parts?.[0]?.text || "Error", 
+        response: finalText, 
         documents 
     }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
 
   } catch (e: any) {
-    return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsHeaders });
+    console.error("🔥 [ERROR]:", e.message);
+    return new Response(JSON.stringify({ response: `Error técnico: ${e.message}` }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
   }
 }

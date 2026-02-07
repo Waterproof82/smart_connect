@@ -374,7 +374,7 @@ export class SupabaseDocumentRepository implements IDocumentRepository {
       id: data.id,
       content: data.content,
       source: data.source,
-      category: data.category,
+     // category: data.category,
       embedding: validEmbedding,
       createdAt: new Date(data.created_at),
       updatedAt: data.updated_at ? new Date(data.updated_at) : undefined,
