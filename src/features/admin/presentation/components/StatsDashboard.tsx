@@ -62,12 +62,14 @@ export const StatsDashboard: React.FC<StatsDashboardProps> = ({ getStatsUseCase 
       <div className="bg-gradient-to-br from-purple-900/30 to-purple-800/20 border border-purple-700/50 rounded-lg p-6">
         <p className="text-sm text-gray-400 mb-3">Documents by Source</p>
         <div className="space-y-2">
-          {Object.entries(stats.bySource).map(([source, count]) => (
-            <div key={source} className="flex items-center justify-between text-sm">
-              <span className="text-gray-300 capitalize">{source}</span>
-              <span className="text-white font-semibold">{count}</span>
-            </div>
-          ))}
+          {Object.entries(stats.bySource)
+            .sort((a, b) => b[1] - a[1])
+            .map(([source, count]) => (
+              <div key={source} className="flex items-center justify-between text-sm">
+                <span className="text-gray-300 capitalize">{source}</span>
+                <span className="text-white font-semibold">{count}</span>
+              </div>
+            ))}
         </div>
       </div>
     </div>

@@ -10,6 +10,7 @@ import React, { useState, useEffect } from 'react';
 import { Document } from '../../domain/entities/Document';
 import { GetAllDocumentsUseCase } from '../../domain/usecases/GetAllDocumentsUseCase';
 import { DeleteDocumentUseCase } from '../../domain/usecases/DeleteDocumentUseCase';
+import { Trash2 } from 'lucide-react';
 import { UpdateDocumentUseCase } from '../../domain/usecases/UpdateDocumentUseCase';
 import { CreateDocumentUseCase } from '../../domain/usecases/CreateDocumentUseCase';
 import { AdminUser } from '../../domain/entities/AdminUser';
@@ -418,13 +419,14 @@ export const DocumentList: React.FC<DocumentListProps> = ({
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
                   {doc.createdAt.toLocaleDateString()}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm">
-                  {currentUser.canPerform('delete') && (
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-center">
+                  {currentUser.canPerform('edit') && (
                     <button
                       onClick={() => handleDelete(doc.id)}
-                      className="text-red-400 hover:text-red-300 focus:outline-none"
+                      className="text-red-400 hover:text-red-300 focus:outline-none flex items-center justify-center mx-auto"
+                      title="Delete document"
                     >
-                      Delete
+                      <Trash2 className="w-5 h-5" />
                     </button>
                   )}
                 </td>
