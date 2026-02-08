@@ -32,12 +32,19 @@ export class SearchDocumentsUseCase {
   async execute(input: SearchDocumentsInput): Promise<SearchDocumentsOutput> {
     const { query, limit = 5, threshold = 0.3 } = input;
 
-    // 1. Generate embedding for the search query
-    const queryEmbedding = await this.embeddingRepository.generateEmbedding(
-      query
-    );
+    // Buscar el embedding ya existente en Supabase
+    // Asumimos que hay un método getEmbeddingByText en embeddingRepository
+    const queryEmbedding = await this.embeddingRepository.getEmbeddingByText(query);
 
-    // 2. Search for similar documents
+    if (!queryEmbedding || queryEmbedding.length !== 768) {
+      return {
+        documents: [],
+        query,
+        totalFound: 0,
+      };
+    }
+
+    // Buscar documentos similares usando el embedding
     const documents = await this.documentRepository.searchSimilarDocuments({
       queryEmbedding,
       limit,
