@@ -45,10 +45,6 @@ export class SupabaseDocumentRepository implements IDocumentRepository {
       query = query.ilike('source', `%${filters.source}%`);
     }
 
-    if (filters?.category) {
-      query = query.eq('category', filters.category);
-    }
-
     if (filters?.searchText) {
       query = query.ilike('content', `%${filters.searchText}%`);
     }
@@ -194,23 +190,8 @@ export class SupabaseDocumentRepository implements IDocumentRepository {
     return counts;
   }
 
-  async countByCategory(): Promise<Record<string, number>> {
-    const { data, error } = await this.client
-      .from('documents')
-      .select('category');
 
-    if (error) {
-      throw new Error(`Failed to count by category: ${error.message}`);
-    }
-
-    const counts: Record<string, number> = {};
-    (data || []).forEach((row: Record<string, unknown>) => {
-      const category = (row.category as string) || 'general';
-      counts[category] = (counts[category] || 0) + 1;
-    });
-
-    return counts;
-  }
+  // countByCategory removed: use countBySource for all stats
 
   async delete(id: string): Promise<void> {
     const { error } = await this.client
@@ -239,12 +220,17 @@ async update(id: string, content: string, source?: string): Promise<Document> {
   );
 
   // 2. Preparar payload (Usamos created_at para marcar la edición)
-  const updateData: any = {
+  interface UpdateData {
+    content: string;
+    embedding: number[] | null;
+    created_at: string;
+    source?: string;
+  }
+  const updateData: UpdateData = {
     content,
-    embedding: embeddingData?.embedding || null,
-    created_at: new Date().toISOString() 
+    embedding: embeddingData?.embedding ?? null,
+    created_at: new Date().toISOString()
   };
-
   if (source !== undefined) {
     updateData.source = source;
   }
@@ -268,66 +254,57 @@ async update(id: string, content: string, source?: string): Promise<Document> {
 /**
  * Método privado para convertir la fila de la DB a la Entidad Document
  */
-private mapToDomain(row: any): Document {
+private mapToDomain(row: Record<string, unknown>): Document {
   let embedding: number[] | undefined;
-  
   if (typeof row.embedding === 'string') {
     try {
       embedding = JSON.parse(row.embedding);
-    } catch (e) {
+    } catch {
       embedding = undefined;
     }
   } else if (Array.isArray(row.embedding)) {
-    embedding = row.embedding;
+    embedding = row.embedding as number[];
   }
 
   // Validar dimensiones del embedding
-  const validEmbedding = embedding && embedding.length === 768 ? embedding : undefined;
+  const validEmbedding = embedding?.length === 768 ? embedding : undefined;
 
   return Document.create({
-    id: row.id,
-    content: row.content,
-    source: row.source,
+    id: row.id as string,
+    content: row.content as string,
+    source: row.source as string,
     embedding: validEmbedding,
-    createdAt: new Date(row.created_at),
-    updatedAt: new Date(row.created_at), // Usamos created_at como updatedAt
-    metadata: row.metadata || {},
+    createdAt: new Date(row.created_at as string),
+    updatedAt: new Date(row.created_at as string), // Usamos created_at como updatedAt
+    metadata: (row.metadata as Record<string, unknown>) || {},
   });
 }
 
-  async generateEmbedding(content: string): Promise<number[]> {
-    try {
-      // Obtener el token de sesión actual
-      const { data: { session } } = await this.client.auth.getSession();
-      const token = session?.access_token;
+async generateEmbedding(content: string): Promise<number[]> {
+  const { data: { session } } = await this.client.auth.getSession();
+  
+  // Forzamos la obtención de las llaves del entorno
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+  const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-      // Llamar a la Edge Function con autenticación
-      const { data: embeddingData, error: embeddingError } = await this.client.functions.invoke(
-        'gemini-embedding',
-        {
-          body: { text: content },
-          headers: token ? { Authorization: `Bearer ${token}` } : undefined,
-        }
-      );
+  const response = await fetch(`${supabaseUrl}/functions/v1/gemini-embedding`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'apikey': anonKey, // ESTO abre la puerta del Gateway
+      'Authorization': `Bearer ${session?.access_token}` // ESTO valida tu rol admin
+    },
+    body: JSON.stringify({ text: content })
+  });
 
-      if (embeddingError) {
-        throw new Error(`Edge Function error: ${embeddingError.message}`);
-      }
-
-      const embedding = embeddingData?.embedding;
-
-      if (!embedding || !Array.isArray(embedding) || embedding.length !== 768) {
-        throw new Error('Invalid embedding format from Edge Function');
-      }
-
-      return embedding;
-    } catch (error) {
-      console.error('Failed to generate embedding:', error);
-      throw error instanceof Error 
-        ? error 
-        : new Error('Unknown error generating embedding');
-    }
+  if (!response.ok) {
+    const err = await response.json();
+    throw new Error(err.error || 'Error en la autenticación de la función');
   }
+
+  const data = await response.json();
+  return data.embedding;
+}
 
   async create(document: Omit<Document, 'id' | 'createdAt' | 'updatedAt'>): Promise<Document> {
     const { data, error } = await this.client
@@ -355,7 +332,6 @@ private mapToDomain(row: any): Document {
       id: data.id,
       content: data.content,
       source: data.source,
-      category: data.category,
       embedding: validEmbedding,
       createdAt: new Date(data.created_at),
       updatedAt: data.created_at ? new Date(data.created_at) : undefined,
