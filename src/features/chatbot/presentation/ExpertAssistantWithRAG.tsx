@@ -78,14 +78,15 @@ export const ExpertAssistant: React.FC = () => {
     setIsLoading(true);
 
     try {
-      // Llamar al endpoint Edge Function gemini-chat
+      // Llamar al endpoint Edge Function gemini-chat (actualizado)
       const response = await fetch(
-        'https://smart-connect-syzyeoq60.functions.supabase.co/gemini-chat',
+        'https://tysjedvujvsmrzzrmesr.functions.supabase.co/gemini-chat',
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            // Puedes agregar Authorization si es necesario
+            'apikey': process.env.VITE_SUPABASE_ANON_KEY || '',
+            'Authorization': `Bearer ${process.env.VITE_SUPABASE_ANON_KEY || ''}`
           },
           body: JSON.stringify({
             userQuery: sanitizedInput,

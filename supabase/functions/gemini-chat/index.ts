@@ -309,7 +309,8 @@ Mi estilo:
 // ========================================
 Deno.serve(async (req) => {
   // CORS headers
-  const allowedOrigin = Deno.env.get('ALLOWED_ORIGIN') || '*';
+  // CORS: Permitir dominio frontend en producción
+  const allowedOrigin = 'https://smart-connect-83d3dos9d-joses-projects-b4268445.vercel.app';
   const corsHeaders = {
     'Access-Control-Allow-Origin': allowedOrigin,
     'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform',
