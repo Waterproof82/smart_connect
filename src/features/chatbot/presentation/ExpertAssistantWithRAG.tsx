@@ -78,34 +78,42 @@ export const ExpertAssistant: React.FC = () => {
     setIsLoading(true);
 
     try {
-      // Build conversation history from current session (last 5 messages for context)
-      const conversationHistory = chatSessionRef.current.messages
-        .slice(-5) // Last 5 messages
-        .map(msg => ({
-          role: msg.role,
-          content: msg.content,
-        }));
-
-      // Use GenerateResponseUseCase (Clean Architecture approach)
-      const result = await container.generateResponseUseCase.execute({
-        userQuery: sanitizedInput, // ✅ Use sanitized input
-        conversationHistory, // ✅ Pass conversation context
-        abTestGroup, // ✅ Pass A/B test group
-      });
-
+      // Llamar al endpoint Edge Function gemini-chat (actualizado)
+      const response = await fetch(
+        'https://tysjedvujvsmrzzrmesr.functions.supabase.co/gemini-chat',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': import.meta.env.VITE_SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`
+          },
+          body: JSON.stringify({
+            userQuery: sanitizedInput,
+            conversationHistory: chatSessionRef.current.messages.slice(-5).map(msg => ({
+              role: msg.role,
+              content: msg.content,
+            })),
+            abTestGroup,
+            maxDocuments: 3,
+            similarityThreshold: 0.3,
+          })
+        }
+      );
+      const data = await response.json();
+      let aiResponse = data.response || 'No se encontró respuesta.';
       // Add assistant message to session
       const assistantEntity = new MessageEntity({
         role: 'assistant',
-        content: result.response,
+        content: aiResponse,
       });
       chatSessionRef.current = chatSessionRef.current.addMessage(assistantEntity);
-
       // Log RAG context for debugging
-      if (result.documentsFound > 0) {
+      if (data.documentsUsed > 0) {
         console.warn('✅ RAG Context Used:', {
-          documentsFound: result.documentsFound,
-          contextLength: result.contextUsed.length,
+          documentsFound: data.documentsUsed,
           abTestGroup,
+          sources: data.sources,
         });
       }
     } catch (error) {

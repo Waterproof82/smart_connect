@@ -26,7 +26,7 @@ const getEnvVar = (key: string, defaultValue?: string): string => {
 
 // Universal getter for GEMINI_API_KEY
 function getGeminiApiKey(): string {
-  return getEnvVar('VITE_GEMINI_API_KEY') || getEnvVar('GEMINI_API_KEY') || '';
+  return getEnvVar('GEMINI_API_KEY') || '';
 }
 
 export const ENV = {

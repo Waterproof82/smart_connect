@@ -1,4 +1,7 @@
 ## [Unreleased]
+### Security
+- Removed: Eliminated all usage and exposure of `VITE_GEMINI_API_KEY` in the frontend. Now only `GEMINI_API_KEY` is used server-side (backend/edge functions). The frontend never exposes or requires the Gemini API key. Updated `.env.example` and documentation accordingly. (2026-02-05)
+## [Unreleased]
 ### Changed
 - SupabaseKnowledgeLoader ahora solo incluye sources presentes en los datos (no inicializa con qribar/reviews/general vacíos). Esto evita mostrar sources con valor 0 en la UI y estadísticas.
 # Changelog

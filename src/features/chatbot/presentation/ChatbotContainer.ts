@@ -17,6 +17,16 @@ import { GenerateResponseUseCase, SearchDocumentsUseCase } from '../domain/useca
 import { RAGOrchestrator } from '../domain/rag-orchestrator';
 import { SupabaseKnowledgeLoader } from '../data/supabase-knowledge-loader';
 import { RAGIndexer } from '../data/rag-indexer';
+import type { IRAGIndexer, DocumentChunk, IndexDocumentsParams } from '../domain/interfaces/IRAGIndexer';
+// Stub seguro para frontend: nunca permite embeddings ni indexación
+const FrontendRAGIndexerStub: IRAGIndexer = {
+  indexDocuments: async (_params: IndexDocumentsParams): Promise<DocumentChunk[]> => {
+    throw new Error('RAG indexer is not available in the frontend. Indexing must be done server-side.');
+  },
+  generateEmbedding: async (_text: string): Promise<number[]> => {
+    throw new Error('Embedding generation is not available in the frontend.');
+  }
+};
 import { EmbeddingCache } from '../data/embedding-cache';
 
 /**
@@ -38,7 +48,6 @@ export class ChatbotContainer {
     // ===================================
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
     const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
-    const geminiApiKey = import.meta.env.VITE_GEMINI_API_KEY || '';
 
     if (!supabaseUrl || !supabaseAnonKey) {
       throw new Error(
@@ -46,13 +55,8 @@ export class ChatbotContainer {
       );
     }
 
-    if (!geminiApiKey) {
-      throw new Error(
-        '❌ Missing VITE_GEMINI_API_KEY. RAG chatbot requires Gemini API key. Add it to your environment variables in Vercel.'
-      );
-    }
-
     // Data Sources (responsible for external communication)
+    // GeminiDataSource encapsula la llamada a la Edge Function, la clave nunca viaja al frontend
     const geminiDataSource = new GeminiDataSource(supabaseUrl, supabaseAnonKey);
     const supabaseDataSource = new SupabaseDataSource(supabaseUrl, supabaseAnonKey);
 
@@ -68,7 +72,10 @@ export class ChatbotContainer {
     // ===================================
     
     // Instantiate concrete implementations (Data Layer)
-    const ragIndexer = new RAGIndexer(geminiApiKey);
+    // El indexador ya no se inicializa en el frontend con la clave Gemini
+    // Si se requiere indexación, debe hacerse desde el backend/Edge Function
+    // const ragIndexer = new RAGIndexer(geminiApiKey); // ELIMINADO
+    const ragIndexer = FrontendRAGIndexerStub;
     const embeddingCache = new EmbeddingCache({
       supabaseUrl,
       supabaseKey: supabaseAnonKey,
@@ -120,21 +127,9 @@ export class ChatbotContainer {
       const documents = await this.knowledgeLoader.loadDocuments();
       const stats = this.knowledgeLoader.getStats();
 
-      // Index all sources dynamically
-      for (const [source, docs] of Object.entries(documents)) {
-        if (docs.length > 0) {
-          const docsToIndex = docs.map((content, idx) => ({
-            id: `${source}_${idx}`,
-            content,
-            source
-          }));
-          await this.ragOrchestrator.indexDocuments(docsToIndex);
-          console.warn(`✅ Indexed ${docs.length} documents for source: ${source}`);
-        }
-      }
-
+      // Ya no se indexan documentos en el frontend. Solo se cargan y se muestran estadísticas.
       this.isKnowledgeBaseInitialized = true;
-      console.warn(`✅ Knowledge base initialized: ${stats.totalDocuments} total documents`);
+      console.warn(`✅ Knowledge base loaded: ${stats.totalDocuments} total documents`);
       console.warn(`📊 By source:`, stats.bySource);
     } catch (error) {
       console.error('❌ Failed to initialize knowledge base:', error);
