@@ -85,8 +85,8 @@ export const ExpertAssistant: React.FC = () => {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'apikey': process.env.VITE_SUPABASE_ANON_KEY || '',
-            'Authorization': `Bearer ${process.env.VITE_SUPABASE_ANON_KEY || ''}`
+            'apikey': import.meta.env.VITE_SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`
           },
           body: JSON.stringify({
             userQuery: sanitizedInput,
