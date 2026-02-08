@@ -99,7 +99,7 @@ export class SupabaseDocumentRepository implements IDocumentRepository {
         source: row.source as string,
         embedding: validEmbedding,
         createdAt: new Date(row.created_at as string),
-        updatedAt: row.updated_at ? new Date(row.updated_at as string) : undefined,
+        updatedAt: row.created_at ? new Date(row.created_at as string) : undefined,
         metadata: (row.metadata as Record<string, unknown>) || {},
       });
     });
@@ -153,7 +153,7 @@ export class SupabaseDocumentRepository implements IDocumentRepository {
       source: data.source,
       embedding: validEmbedding,
       createdAt: new Date(data.created_at),
-      updatedAt: new Date(data.updated_at),
+      updatedAt: new Date(data.created_at),
       metadata: data.metadata || {},
     });
   }
@@ -223,96 +223,77 @@ export class SupabaseDocumentRepository implements IDocumentRepository {
     }
   }
 
-  async update(id: string, content: string, source?: string): Promise<Document> {
-    // 1. Regenerar embedding con la Edge Function (usando session token)
-    let newEmbedding: number[] | undefined;
-    
-    try {
-      const { data: { session } } = await this.client.auth.getSession();
-      const token = session?.access_token;
+// ... (resto de la clase)
 
-      const { data: embeddingData, error: embeddingError } = await this.client.functions.invoke(
-        'gemini-embedding',
-        {
-          body: { text: content },
-          headers: token ? { Authorization: `Bearer ${token}` } : {}
-        }
-      );
+async update(id: string, content: string, source?: string): Promise<Document> {
+  const { data: { session } } = await this.client.auth.getSession();
+  const token = session?.access_token;
 
-      if (embeddingError) {
-        console.error('Failed to generate embedding:', embeddingError);
-      } else if (embeddingData?.embedding && Array.isArray(embeddingData.embedding)) {
-        newEmbedding = embeddingData.embedding;
-      }
-    } catch (error) {
-      console.error('Embedding generation error:', error);
+  // 1. Generar embedding (Seguro con Anon Key + JWT)
+  const { data: embeddingData } = await this.client.functions.invoke(
+    'gemini-embedding',
+    {
+      body: { text: content },
+      headers: token ? { Authorization: `Bearer ${token}` } : {}
     }
+  );
 
-    // 2. Preparar datos a actualizar
-    const updateData: { content: string; embedding: number[] | null; updated_at: string; source?: string } = {
-      content,
-      embedding: newEmbedding || null,
-      updated_at: new Date().toISOString(),
-    };
+  // 2. Preparar payload (Usamos created_at para marcar la edición)
+  const updateData: any = {
+    content,
+    embedding: embeddingData?.embedding || null,
+    created_at: new Date().toISOString() 
+  };
 
-    // Solo actualizar source si se proporciona
-    if (source !== undefined) {
-      updateData.source = source;
-      console.log('📝 Updating source to:', source);
-    }
-
-    console.log('🔄 Update payload:', { id, hasEmbedding: !!newEmbedding, source: updateData.source });
-
-    // 3. Actualizar documento
-    const { data, error } = await this.client
-      .from('documents')
-      .update(updateData)
-      .eq('id', id)
-      .select()
-      .single();
-
-    if (error) {
-      console.error('❌ Supabase update error:', error);
-      throw new Error(`Failed to update document: ${error.message}`);
-    }
-
-    console.log('✅ Document updated in DB:', data);
-
-    // 3. Invalidar cache de embedding si existe
-    if (newEmbedding) {
-      await this.client
-        .from('embedding_cache')
-        .delete()
-        .ilike('key', `%${id}%`);
-    }
-
-    // Validar embedding
-    let embedding: EmbeddingData = data.embedding as EmbeddingData;
-    
-    // Si el embedding es un string, parsearlo
-    if (typeof embedding === 'string') {
-      try {
-        embedding = JSON.parse(embedding) as number[];
-      } catch (e) {
-        console.error(`Failed to parse embedding after update for document ${id}:`, e);
-        embedding = null;
-      }
-    }
-    
-    const validEmbedding = embedding && Array.isArray(embedding) && embedding.length === 768 
-      ? embedding 
-      : undefined;
-
-    return Document.create({
-      id: data.id,
-      content: data.content,
-      source: data.source,
-      embedding: validEmbedding,
-      createdAt: new Date(data.created_at),
-      updatedAt: new Date(data.updated_at),
-      metadata: data.metadata || {},
-    });
+  if (source !== undefined) {
+    updateData.source = source;
   }
+
+  // 3. Update en Supabase
+  const { data, error } = await this.client
+    .from('documents')
+    .update(updateData)
+    .eq('id', id)
+    .select()
+    .single();
+
+  if (error) {
+    throw new Error(`Failed to update document: ${error.message}`);
+  }
+
+  // 4. Retornar usando el nuevo método mapeador
+  return this.mapToDomain(data);
+}
+
+/**
+ * Método privado para convertir la fila de la DB a la Entidad Document
+ */
+private mapToDomain(row: any): Document {
+  let embedding: number[] | undefined;
+  
+  if (typeof row.embedding === 'string') {
+    try {
+      embedding = JSON.parse(row.embedding);
+    } catch (e) {
+      embedding = undefined;
+    }
+  } else if (Array.isArray(row.embedding)) {
+    embedding = row.embedding;
+  }
+
+  // Validar dimensiones del embedding
+  const validEmbedding = embedding && embedding.length === 768 ? embedding : undefined;
+
+  return Document.create({
+    id: row.id,
+    content: row.content,
+    source: row.source,
+    embedding: validEmbedding,
+    createdAt: new Date(row.created_at),
+    updatedAt: new Date(row.created_at), // Usamos created_at como updatedAt
+    metadata: row.metadata || {},
+  });
+}
 
   async generateEmbedding(content: string): Promise<number[]> {
     try {
@@ -377,7 +358,7 @@ export class SupabaseDocumentRepository implements IDocumentRepository {
       category: data.category,
       embedding: validEmbedding,
       createdAt: new Date(data.created_at),
-      updatedAt: data.updated_at ? new Date(data.updated_at) : undefined,
+      updatedAt: data.created_at ? new Date(data.created_at) : undefined,
       metadata: data.metadata || {},
     });
   }
