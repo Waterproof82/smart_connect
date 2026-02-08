@@ -80,7 +80,7 @@ export const ExpertAssistant: React.FC = () => {
     try {
       // Llamar al endpoint Edge Function gemini-chat
       const response = await fetch(
-        '/supabase/functions/v1/gemini-chat',
+        'https://smart-connect-syzyeoq60.functions.supabase.co/gemini-chat',
         {
           method: 'POST',
           headers: {
