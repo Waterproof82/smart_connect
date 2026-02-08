@@ -62,12 +62,13 @@ export class AdminUser {
   /**
    * Verifica si puede realizar una acción específica
    */
-  canPerform(action: 'read' | 'write' | 'delete' | 'update' | 'create'): boolean {
-    if (this.role === 'super_admin') {
-      return true;
-    }
-
-    // Admin regular solo puede leer
-    return action === 'read';
+canPerform(action: 'read' | 'write' | 'delete' | 'update' | 'create' | 'edit'): boolean {
+  if (this.role === 'super_admin') {
+    return true;
   }
+
+  // Allow admin to edit and delete, matching UI
+  const allowedActions = ['read', 'update', 'create', 'edit', 'delete'];
+  return allowedActions.includes(action);
+}
 }

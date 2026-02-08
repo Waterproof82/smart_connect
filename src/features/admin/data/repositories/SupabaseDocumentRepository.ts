@@ -45,10 +45,6 @@ export class SupabaseDocumentRepository implements IDocumentRepository {
       query = query.ilike('source', `%${filters.source}%`);
     }
 
-    if (filters?.category) {
-      query = query.eq('category', filters.category);
-    }
-
     if (filters?.searchText) {
       query = query.ilike('content', `%${filters.searchText}%`);
     }
@@ -99,7 +95,7 @@ export class SupabaseDocumentRepository implements IDocumentRepository {
         source: row.source as string,
         embedding: validEmbedding,
         createdAt: new Date(row.created_at as string),
-        updatedAt: row.updated_at ? new Date(row.updated_at as string) : undefined,
+        updatedAt: row.created_at ? new Date(row.created_at as string) : undefined,
         metadata: (row.metadata as Record<string, unknown>) || {},
       });
     });
@@ -153,7 +149,7 @@ export class SupabaseDocumentRepository implements IDocumentRepository {
       source: data.source,
       embedding: validEmbedding,
       createdAt: new Date(data.created_at),
-      updatedAt: new Date(data.updated_at),
+      updatedAt: new Date(data.created_at),
       metadata: data.metadata || {},
     });
   }
@@ -194,23 +190,8 @@ export class SupabaseDocumentRepository implements IDocumentRepository {
     return counts;
   }
 
-  async countByCategory(): Promise<Record<string, number>> {
-    const { data, error } = await this.client
-      .from('documents')
-      .select('category');
 
-    if (error) {
-      throw new Error(`Failed to count by category: ${error.message}`);
-    }
-
-    const counts: Record<string, number> = {};
-    (data || []).forEach((row: Record<string, unknown>) => {
-      const category = (row.category as string) || 'general';
-      counts[category] = (counts[category] || 0) + 1;
-    });
-
-    return counts;
-  }
+  // countByCategory removed: use countBySource for all stats
 
   async delete(id: string): Promise<void> {
     const { error } = await this.client
@@ -223,130 +204,107 @@ export class SupabaseDocumentRepository implements IDocumentRepository {
     }
   }
 
-  async update(id: string, content: string, source?: string): Promise<Document> {
-    // 1. Regenerar embedding con la Edge Function (usando session token)
-    let newEmbedding: number[] | undefined;
-    
-    try {
-      const { data: { session } } = await this.client.auth.getSession();
-      const token = session?.access_token;
+// ... (resto de la clase)
 
-      const { data: embeddingData, error: embeddingError } = await this.client.functions.invoke(
-        'gemini-embedding',
-        {
-          body: { text: content },
-          headers: token ? { Authorization: `Bearer ${token}` } : {}
-        }
-      );
+async update(id: string, content: string, source?: string): Promise<Document> {
+  const { data: { session } } = await this.client.auth.getSession();
+  const token = session?.access_token;
 
-      if (embeddingError) {
-        console.error('Failed to generate embedding:', embeddingError);
-      } else if (embeddingData?.embedding && Array.isArray(embeddingData.embedding)) {
-        newEmbedding = embeddingData.embedding;
-      }
-    } catch (error) {
-      console.error('Embedding generation error:', error);
+  // 1. Generar embedding (Seguro con Anon Key + JWT)
+  const { data: embeddingData } = await this.client.functions.invoke(
+    'gemini-embedding',
+    {
+      body: { text: content },
+      headers: token ? { Authorization: `Bearer ${token}` } : {}
     }
+  );
 
-    // 2. Preparar datos a actualizar
-    const updateData: { content: string; embedding: number[] | null; updated_at: string; source?: string } = {
-      content,
-      embedding: newEmbedding || null,
-      updated_at: new Date().toISOString(),
-    };
-
-    // Solo actualizar source si se proporciona
-    if (source !== undefined) {
-      updateData.source = source;
-      console.log('📝 Updating source to:', source);
-    }
-
-    console.log('🔄 Update payload:', { id, hasEmbedding: !!newEmbedding, source: updateData.source });
-
-    // 3. Actualizar documento
-    const { data, error } = await this.client
-      .from('documents')
-      .update(updateData)
-      .eq('id', id)
-      .select()
-      .single();
-
-    if (error) {
-      console.error('❌ Supabase update error:', error);
-      throw new Error(`Failed to update document: ${error.message}`);
-    }
-
-    console.log('✅ Document updated in DB:', data);
-
-    // 3. Invalidar cache de embedding si existe
-    if (newEmbedding) {
-      await this.client
-        .from('embedding_cache')
-        .delete()
-        .ilike('key', `%${id}%`);
-    }
-
-    // Validar embedding
-    let embedding: EmbeddingData = data.embedding as EmbeddingData;
-    
-    // Si el embedding es un string, parsearlo
-    if (typeof embedding === 'string') {
-      try {
-        embedding = JSON.parse(embedding) as number[];
-      } catch (e) {
-        console.error(`Failed to parse embedding after update for document ${id}:`, e);
-        embedding = null;
-      }
-    }
-    
-    const validEmbedding = embedding && Array.isArray(embedding) && embedding.length === 768 
-      ? embedding 
-      : undefined;
-
-    return Document.create({
-      id: data.id,
-      content: data.content,
-      source: data.source,
-      embedding: validEmbedding,
-      createdAt: new Date(data.created_at),
-      updatedAt: new Date(data.updated_at),
-      metadata: data.metadata || {},
-    });
+  // 2. Preparar payload (Usamos created_at para marcar la edición)
+  interface UpdateData {
+    content: string;
+    embedding: number[] | null;
+    created_at: string;
+    source?: string;
+  }
+  const updateData: UpdateData = {
+    content,
+    embedding: embeddingData?.embedding ?? null,
+    created_at: new Date().toISOString()
+  };
+  if (source !== undefined) {
+    updateData.source = source;
   }
 
-  async generateEmbedding(content: string): Promise<number[]> {
-    try {
-      // Obtener el token de sesión actual
-      const { data: { session } } = await this.client.auth.getSession();
-      const token = session?.access_token;
+  // 3. Update en Supabase
+  const { data, error } = await this.client
+    .from('documents')
+    .update(updateData)
+    .eq('id', id)
+    .select()
+    .single();
 
-      // Llamar a la Edge Function con autenticación
-      const { data: embeddingData, error: embeddingError } = await this.client.functions.invoke(
-        'gemini-embedding',
-        {
-          body: { text: content },
-          headers: token ? { Authorization: `Bearer ${token}` } : undefined,
-        }
-      );
-
-      if (embeddingError) {
-        throw new Error(`Edge Function error: ${embeddingError.message}`);
-      }
-
-      const embedding = embeddingData?.embedding;
-
-      if (!embedding || !Array.isArray(embedding) || embedding.length !== 768) {
-        throw new Error('Invalid embedding format from Edge Function');
-      }
-
-      return embedding;
-    } catch (error) {
-      console.error('Failed to generate embedding:', error);
-      throw error instanceof Error 
-        ? error 
-        : new Error('Unknown error generating embedding');
-    }
+  if (error) {
+    throw new Error(`Failed to update document: ${error.message}`);
   }
+
+  // 4. Retornar usando el nuevo método mapeador
+  return this.mapToDomain(data);
+}
+
+/**
+ * Método privado para convertir la fila de la DB a la Entidad Document
+ */
+private mapToDomain(row: Record<string, unknown>): Document {
+  let embedding: number[] | undefined;
+  if (typeof row.embedding === 'string') {
+    try {
+      embedding = JSON.parse(row.embedding);
+    } catch {
+      embedding = undefined;
+    }
+  } else if (Array.isArray(row.embedding)) {
+    embedding = row.embedding as number[];
+  }
+
+  // Validar dimensiones del embedding
+  const validEmbedding = embedding?.length === 768 ? embedding : undefined;
+
+  return Document.create({
+    id: row.id as string,
+    content: row.content as string,
+    source: row.source as string,
+    embedding: validEmbedding,
+    createdAt: new Date(row.created_at as string),
+    updatedAt: new Date(row.created_at as string), // Usamos created_at como updatedAt
+    metadata: (row.metadata as Record<string, unknown>) || {},
+  });
+}
+
+async generateEmbedding(content: string): Promise<number[]> {
+  const { data: { session } } = await this.client.auth.getSession();
+  
+  // Forzamos la obtención de las llaves del entorno
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+  const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+  const response = await fetch(`${supabaseUrl}/functions/v1/gemini-embedding`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'apikey': anonKey, // ESTO abre la puerta del Gateway
+      'Authorization': `Bearer ${session?.access_token}` // ESTO valida tu rol admin
+    },
+    body: JSON.stringify({ text: content })
+  });
+
+  if (!response.ok) {
+    const err = await response.json();
+    throw new Error(err.error || 'Error en la autenticación de la función');
+  }
+
+  const data = await response.json();
+  return data.embedding;
+}
 
   async create(document: Omit<Document, 'id' | 'createdAt' | 'updatedAt'>): Promise<Document> {
     const { data, error } = await this.client
@@ -374,10 +332,9 @@ export class SupabaseDocumentRepository implements IDocumentRepository {
       id: data.id,
       content: data.content,
       source: data.source,
-      category: data.category,
       embedding: validEmbedding,
       createdAt: new Date(data.created_at),
-      updatedAt: data.updated_at ? new Date(data.updated_at) : undefined,
+      updatedAt: data.created_at ? new Date(data.created_at) : undefined,
       metadata: data.metadata || {},
     });
   }

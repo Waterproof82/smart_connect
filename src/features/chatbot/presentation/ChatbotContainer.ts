@@ -13,7 +13,7 @@ import {
   EmbeddingRepositoryImpl, 
   DocumentRepositoryImpl 
 } from '../data/repositories';
-import { GenerateResponseUseCase } from '../domain/usecases';
+import { GenerateResponseUseCase, SearchDocumentsUseCase } from '../domain/usecases';
 import { RAGOrchestrator } from '../domain/rag-orchestrator';
 import { SupabaseKnowledgeLoader } from '../data/supabase-knowledge-loader';
 import { RAGIndexer } from '../data/rag-indexer';
@@ -35,6 +35,7 @@ import { EmbeddingCache } from '../data/embedding-cache';
 export class ChatbotContainer {
   // Use Cases (exposed to UI layer)
   public readonly generateResponseUseCase: GenerateResponseUseCase;
+  public readonly searchDocumentsUseCase: SearchDocumentsUseCase;
   
   // RAG System
   private readonly ragOrchestrator: RAGOrchestrator;
@@ -63,6 +64,7 @@ export class ChatbotContainer {
     // 2. DATA LAYER (Repository Implementations)
     // ===================================
     const chatRepository = new ChatRepositoryImpl(geminiDataSource);
+    const embeddingRepository = new EmbeddingRepositoryImpl(geminiDataSource);
     const documentRepository = new DocumentRepositoryImpl(supabaseDataSource);
 
     // ===================================
@@ -103,6 +105,10 @@ export class ChatbotContainer {
       this.ragOrchestrator
     );
 
+    this.searchDocumentsUseCase = new SearchDocumentsUseCase(
+      embeddingRepository,
+      documentRepository
+    );
   }
 
   /**

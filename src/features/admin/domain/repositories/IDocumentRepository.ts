@@ -11,7 +11,6 @@ import { Document } from '../entities/Document';
 
 export interface DocumentFilters {
   source?: string;
-  category?: string;
   searchText?: string;
   hasEmbedding?: boolean;
 }
@@ -52,11 +51,6 @@ export interface IDocumentRepository {
    * Cuenta los documentos por fuente
    */
   countBySource(): Promise<Record<string, number>>;
-
-  /**
-   * Cuenta los documentos por categoría
-   */
-  countByCategory(): Promise<Record<string, number>>;
 
   /**
    * Elimina un documento por ID
