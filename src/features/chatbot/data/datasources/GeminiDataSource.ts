@@ -9,6 +9,7 @@
 
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { ApiError } from '@core/domain/entities';
+import { ragLogger, LogLevel } from '../../shared/rag-logger';
 
 export interface GeminiChatResponse {
   response: string;
@@ -18,7 +19,7 @@ export interface GeminiChatResponse {
 }
 
 export class GeminiDataSource {
-  private readonly supabase: SupabaseClient;
+  public readonly supabase: SupabaseClient;
 
   constructor(supabaseUrl: string, supabaseAnonKey: string) {
     this.supabase = createClient(supabaseUrl, supabaseAnonKey);
@@ -29,7 +30,9 @@ export class GeminiDataSource {
    * Note: gemini-chat handles embeddings internally for RAG
    * This method is kept for interface compatibility
    */
-  async generateEmbedding(_text: string): Promise<number[]> {
+  async generateEmbedding(text: string): Promise<number[]> {
+    ragLogger.logEmbeddingOperation(text, 'generate');
+    
     // For now, return empty array as gemini-chat handles embeddings internally
     // This could be updated to call a dedicated embedding endpoint if needed
     console.warn('generateEmbedding called but gemini-chat handles embeddings internally');
@@ -49,6 +52,13 @@ export class GeminiDataSource {
     temperature?: number;
     maxTokens?: number;
   }): Promise<string> {
+    ragLogger.log(LogLevel.DEBUG, 'GEMINI_DATASOURCE', 'GENERATION', 'Initiating AI response generation', {
+      promptLength: params.prompt.length,
+      hasConversationHistory: !!params.conversationHistory?.length,
+      temperature: params.temperature,
+      maxTokens: params.maxTokens
+    });
+
     const { data, error } = await this.supabase.functions.invoke(
       'gemini-chat',
       {
@@ -62,11 +72,19 @@ export class GeminiDataSource {
     );
 
     if (error) {
+      ragLogger.log(LogLevel.ERROR, 'GEMINI_DATASOURCE', 'GENERATION', 'Edge Function call failed', {
+        error: error.message,
+        prompt: params.prompt.substring(0, 100)
+      });
       console.error('Edge Function error:', error);
       throw new ApiError(`Response generation failed: ${error.message}`, 500);
     }
 
     if (data?.error) {
+      ragLogger.log(LogLevel.ERROR, 'GEMINI_DATASOURCE', 'GENERATION', 'Gemini API error', {
+        error: data.error,
+        prompt: params.prompt.substring(0, 100)
+      });
       console.error('Gemini API error:', data.error);
       throw new ApiError(
         `AI service error: ${data.error}`,
@@ -77,11 +95,22 @@ export class GeminiDataSource {
     const responseText = data?.response;
 
     if (!responseText) {
+      ragLogger.log(LogLevel.ERROR, 'GEMINI_DATASOURCE', 'GENERATION', 'Invalid response format', {
+        data,
+        prompt: params.prompt.substring(0, 100)
+      });
       console.error('Invalid response format:', data);
       throw new ApiError('Invalid response format from AI service', 500);
     }
 
     // Log RAG statistics
+    ragLogger.logDocumentSearch('Gemini response received', {
+      documentsUsed: data.documentsUsed,
+      sources: data.sources,
+      responseLength: responseText.length,
+      rateLimitRemaining: data.rateLimitRemaining
+    }, []);
+
     if (data.documentsUsed > 0) {
       console.warn(`✅ RAG: Used ${data.documentsUsed} documents from knowledge base`);
     }

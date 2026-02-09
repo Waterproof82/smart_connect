@@ -216,7 +216,7 @@ describe('RAGOrchestrator - Integration Tests', () => {
 
       // Act
       const result = await orchestrator.search(query, {
-        category: 'qribar',
+        source: 'qribar',
         similarityThreshold: 0.95, // Very high threshold to force fallback
       });
 

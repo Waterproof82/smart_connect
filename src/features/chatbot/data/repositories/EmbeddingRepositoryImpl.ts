@@ -12,7 +12,7 @@ export class EmbeddingRepositoryImpl implements IEmbeddingRepository {
 
   constructor(private readonly geminiDataSource: GeminiDataSource) {}
 
-  async generateEmbedding(text: string): Promise<number[]> {
+  async generateEmbedding(_text: string): Promise<number[]> {
     // No se usa en frontend
     throw new Error('Embedding generation is not available in the frontend.');
   }

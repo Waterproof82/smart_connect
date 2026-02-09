@@ -10,6 +10,7 @@ import {
 } from '../../domain/repositories/IDocumentRepository';
 import { Document, DocumentEntity } from '../../domain/entities/Document';
 import { SupabaseDataSource } from '../datasources/SupabaseDataSource';
+import { ragLogger } from '../../shared/rag-logger';
 
 export class DocumentRepositoryImpl implements IDocumentRepository {
   constructor(private readonly supabaseDataSource: SupabaseDataSource) {}
@@ -17,6 +18,14 @@ export class DocumentRepositoryImpl implements IDocumentRepository {
   async searchSimilarDocuments(
     params: SearchDocumentsParams
   ): Promise<Document[]> {
+    ragLogger.logDocumentSearch('DocumentRepository: Starting search', {
+      params: {
+        hasQueryEmbedding: !!params.queryEmbedding,
+        threshold: params.threshold ?? 0.3,
+        limit: params.limit ?? 5
+      }
+    });
+
     const results = await this.supabaseDataSource.searchSimilarDocuments({
       queryEmbedding: params.queryEmbedding,
       matchThreshold: params.threshold ?? 0.3,
@@ -24,7 +33,7 @@ export class DocumentRepositoryImpl implements IDocumentRepository {
     });
 
     // Map to domain entities
-    return results.map(
+    const mappedResults = results.map(
       (doc) =>
         new DocumentEntity({
           id: typeof doc.id === 'string' ? Number.parseInt(doc.id, 10) : doc.id,
@@ -34,6 +43,20 @@ export class DocumentRepositoryImpl implements IDocumentRepository {
           similarity: doc.similarity,
         })
     );
+
+    ragLogger.logDocumentSearch('DocumentRepository: Mapping completed', {
+      originalResults: results.length,
+      mappedResults: mappedResults.length,
+      mappingDetails: mappedResults.slice(0, 3).map(doc => ({
+        id: doc.id,
+        hasEmbedding: !!doc.embedding,
+        similarity: doc.similarity,
+        contentLength: doc.content?.length,
+        metadataKeys: Object.keys(doc.metadata || {})
+      }))
+    }, mappedResults);
+
+    return mappedResults;
   }
 
   async storeDocument(document: Document): Promise<void> {
