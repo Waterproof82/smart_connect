@@ -12,6 +12,5 @@
  */
 
 export { ExpertAssistant } from './ExpertAssistantWithRAG';
-export { getChatbotContainer, resetChatbotContainer } from './ChatbotContainer';
-export type { ChatbotContainer } from './ChatbotContainer';
+export { getChatbotContainer } from './ChatbotContainer';
 

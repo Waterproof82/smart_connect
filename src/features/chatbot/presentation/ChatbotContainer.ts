@@ -16,3 +16,6 @@ export function createChatbotContainer(supabase: SupabaseClient) {
     generateResponseUseCase,
   };
 }
+
+// Alias export for compatibility with barrel
+export { createChatbotContainer as getChatbotContainer };
