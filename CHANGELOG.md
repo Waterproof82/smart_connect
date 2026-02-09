@@ -1,4 +1,6 @@
 ## [Unreleased]
+### Removed
+- Removed unused `category` and `timestamp` metadata fields from RAG indexer interfaces and implementation. These fields were present in comments and types but not used in the actual RAG flow. Codebase is now minimal and only includes metadata required for production RAG operation. (2026-02-06)
 ### Security
 - Removed: Eliminated all usage and exposure of `VITE_GEMINI_API_KEY` in the frontend. Now only `GEMINI_API_KEY` is used server-side (backend/edge functions). The frontend never exposes or requires the Gemini API key. Updated `.env.example` and documentation accordingly. (2026-02-05)
 ## [Unreleased]

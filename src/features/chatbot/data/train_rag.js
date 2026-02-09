@@ -66,7 +66,7 @@ Beneficios:
 ✓ Aumenta pedidos con fotos atractivas
 ✓ Reduce errores en pedidos`,
     metadata: {
-      category: 'producto',
+
       service: 'qribar',
       tags: ['menu', 'restaurante', 'qr', 'hosteleria', 'digital'],
       priority: 'high'
@@ -105,7 +105,7 @@ PROMOCIÓN LANZAMIENTO:
 • Setup gratuito (valor 199€)
 • 50% descuento primer mes`,
     metadata: {
-      category: 'precio',
+
       service: 'qribar',
       tags: ['precio', 'planes', 'coste', 'tarifa'],
       priority: 'high'
@@ -155,7 +155,7 @@ Ventajas vs Zapier/Make:
 ✓ Alojamiento en tu servidor o nuestro
 ✓ Personalización ilimitada`,
     metadata: {
-      category: 'producto',
+
       service: 'n8n',
       tags: ['automatizacion', 'workflow', 'integracion', 'zapier'],
       priority: 'high'
@@ -201,7 +201,7 @@ SERVICIOS ADICIONALES:
 • Migración desde Zapier/Make: 299€
 • Formación adicional: 99€/sesión (2h)`,
     metadata: {
-      category: 'precio',
+
       service: 'n8n',
       tags: ['precio', 'automatizacion', 'coste', 'implementacion'],
       priority: 'high'
@@ -245,7 +245,7 @@ Personalización:
 • Material PVC premium
 • Durabilidad: +5 años`,
     metadata: {
-      category: 'producto',
+
       service: 'tap-to-review',
       tags: ['reseñas', 'nfc', 'google', 'reputacion'],
       priority: 'high'
@@ -291,7 +291,7 @@ SERVICIOS ADICIONALES:
 • Optimización perfil Google Business: 99€
 • Gestión de reseñas negativas: 149€`,
     metadata: {
-      category: 'precio',
+
       service: 'tap-to-review',
       tags: ['precio', 'tarjetas', 'nfc', 'coste'],
       priority: 'high'
@@ -331,7 +331,7 @@ GARANTÍAS:
 ✓ Soporte técnico incluido primer mes
 ✓ Actualizaciones gratuitas de por vida`,
     metadata: {
-      category: 'proceso',
+
       service: 'general',
       tags: ['implementacion', 'tiempos', 'proceso', 'garantia'],
       priority: 'medium'
@@ -358,7 +358,7 @@ Tarjetas NFC vs Otros Métodos:
 • vs QR code estático: Experiencia más fluida
 • vs Agencias de reseñas: 80% más económico`,
     metadata: {
-      category: 'competencia',
+
       service: 'general',
       tags: ['comparativa', 'competencia', 'alternativas'],
       priority: 'medium'
@@ -395,7 +395,7 @@ Recursos de Ayuda:
 • Comunidad: community.smartconnect-ai.com
 • Webinars mensuales gratuitos`,
     metadata: {
-      category: 'soporte',
+
       service: 'general',
       tags: ['soporte', 'contacto', 'ayuda'],
       priority: 'medium'
@@ -431,7 +431,7 @@ Resultados (3 meses):
 • Reservas directas +60%
 • Aparecen en top 10 hoteles de la zona`,
     metadata: {
-      category: 'casos_exito',
+
       service: 'general',
       tags: ['caso exito', 'testimonios', 'resultados', 'roi'],
       priority: 'high'
@@ -520,27 +520,37 @@ async function trainRAG() {
 
   for (let i = 0; i < knowledgeBase.length; i++) {
     const doc = knowledgeBase[i];
-    
+    // Generar metadata robusta: solo 'source' y otros campos útiles, nunca 'service'
+    let metadata = { ...doc.metadata };
+    // Si existe 'service', lo mapea a 'source' y lo elimina
+    if (metadata.service) {
+      metadata.source = metadata.service;
+      delete metadata.service;
+    }
+    // Si no hay 'source', lo pone como 'manual'
+    if (!metadata.source) {
+      metadata.source = 'manual';
+    }
+
     try {
       console.log(`📄 Procesando documento ${i + 1}/${knowledgeBase.length}...`);
-      console.log(`   Servicio: ${doc.metadata.service}`);
-      console.log(`   Categoría: ${doc.metadata.category}`);
-      
+      console.log(`   Source: ${metadata.source}`);
+
       // Generar embedding
       console.log(`   🧠 Generando embedding...`);
       const embedding = await generateEmbedding(doc.content);
       console.log(`   ✅ Embedding generado (${embedding.length} dimensiones)`);
-      
+
       // Insertar en Supabase
       console.log(`   💾 Insertando en Supabase...`);
-      await insertDocument(doc.content, doc.metadata, embedding);
+      await insertDocument(doc.content, metadata, embedding);
       console.log(`   ✅ Documento insertado correctamente\n`);
-      
+
       successCount++;
-      
+
       // Delay para no saturar la API de Gemini
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
+
     } catch (error) {
       console.error(`   ❌ Error procesando documento ${i + 1}:`, error.message, '\n');
       errorCount++;

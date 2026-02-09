@@ -14,20 +14,8 @@ const App: React.FC = () => {
 
   // Initialize knowledge base from Supabase on app startup
   React.useEffect(() => {
-    const initKnowledgeBase = async () => {
-      try {
-        const container = getChatbotContainer();
-        await container.initializeKnowledgeBase();
-        setIsKnowledgeBaseReady(true);
-        console.warn('✅ Knowledge base loaded and ready');
-      } catch (error) {
-        console.error('⚠️ Knowledge base initialization failed, using fallback mode:', error);
-        // Allow app to continue - fallback mode will use query-time Supabase RPC
-        setIsKnowledgeBaseReady(true);
-      }
-    };
-
-    initKnowledgeBase();
+    // Knowledge base initialization removed (no longer needed)
+    setIsKnowledgeBaseReady(true);
   }, []);
 
   React.useEffect(() => {

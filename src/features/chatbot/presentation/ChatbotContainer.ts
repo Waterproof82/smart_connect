@@ -15,8 +15,6 @@ import {
 } from '../data/repositories';
 import { GenerateResponseUseCase, SearchDocumentsUseCase } from '../domain/usecases';
 import { RAGOrchestrator } from '../domain/rag-orchestrator';
-import { SupabaseKnowledgeLoader } from '../data/supabase-knowledge-loader';
-import { RAGIndexer } from '../data/rag-indexer';
 import type { IRAGIndexer, DocumentChunk, IndexDocumentsParams } from '../domain/interfaces/IRAGIndexer';
 // Stub seguro para frontend: nunca permite embeddings ni indexación
 const FrontendRAGIndexerStub: IRAGIndexer = {
@@ -39,8 +37,8 @@ export class ChatbotContainer {
   
   // RAG System
   private readonly ragOrchestrator: RAGOrchestrator;
-  private readonly knowledgeLoader: SupabaseKnowledgeLoader;
-  private isKnowledgeBaseInitialized = false;
+  // Removed knowledgeLoader and related logic (no longer used)
+  private readonly isKnowledgeBaseInitialized = false;
 
   constructor() {
     // ===================================
@@ -91,11 +89,7 @@ export class ChatbotContainer {
       defaultThreshold: 0.7,
     });
 
-    // Knowledge Base Loader
-    this.knowledgeLoader = new SupabaseKnowledgeLoader({
-      supabaseUrl,
-      supabaseKey: supabaseAnonKey,
-    });
+    // Knowledge Base Loader removed (no longer used)
 
     // ===================================
     // 4. DOMAIN LAYER (Use Cases)
@@ -116,26 +110,7 @@ export class ChatbotContainer {
    * This loads all documents at startup for in-memory search optimization
    * Performance: Reduces query latency from 800ms to 150ms
    */
-  async initializeKnowledgeBase(): Promise<void> {
-    if (this.isKnowledgeBaseInitialized) {
-      console.warn('✅ Knowledge base already initialized');
-      return;
-    }
-
-    try {
-      console.warn('📚 Loading knowledge base from Supabase...');
-      const documents = await this.knowledgeLoader.loadDocuments();
-      const stats = this.knowledgeLoader.getStats();
-
-      // Ya no se indexan documentos en el frontend. Solo se cargan y se muestran estadísticas.
-      this.isKnowledgeBaseInitialized = true;
-      console.warn(`✅ Knowledge base loaded: ${stats.totalDocuments} total documents`);
-      console.warn(`📊 By source:`, stats.bySource);
-    } catch (error) {
-      console.error('❌ Failed to initialize knowledge base:', error);
-      throw new Error('Knowledge base initialization failed. Chatbot will use fallback mode.');
-    }
-  }
+  // initializeKnowledgeBase removed (no longer used)
 
   /**
    * Check if knowledge base is ready

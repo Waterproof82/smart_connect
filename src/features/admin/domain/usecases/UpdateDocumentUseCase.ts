@@ -12,7 +12,13 @@ import { AdminUser } from '../entities/AdminUser';
 export class UpdateDocumentUseCase {
   constructor(private readonly documentRepository: IDocumentRepository) {}
 
-  async execute(documentId: string, newContent: string, user: AdminUser, newSource?: string): Promise<void> {
+  async execute(
+    documentId: string,
+    newContent: string,
+    user: AdminUser,
+    newSource?: string,
+    newMetadata?: Record<string, unknown>
+  ): Promise<void> {
     // Validar ID
     if (!documentId || typeof documentId !== 'string' || documentId.trim().length === 0) {
       throw new Error('Document ID is required');
@@ -44,6 +50,6 @@ export class UpdateDocumentUseCase {
     }
 
     // Actualizar documento (el repositorio se encargará de regenerar el embedding)
-    await this.documentRepository.update(documentId, newContent, newSource);
+    await this.documentRepository.update(documentId, newContent, newSource, newMetadata);
   }
 }

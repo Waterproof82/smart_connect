@@ -6,7 +6,7 @@
  * Responsabilidad:
  * - Indexar documentos con chunking estratégico
  * - Generar embeddings usando Gemini text-embedding-004
- * - Asignar metadata (source, category, timestamp)
+ * - Asignar metadata (source)
  * 
  * Fase 1 de optimización según ADR-003
  * docs/adr/006-rag-architecture-decision.md
