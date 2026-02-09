@@ -9,7 +9,6 @@
 
 export interface ChunkMetadata {
   source: string;
-  category?: string;
   chunkIndex: number;
   totalChunks: number;
 }
@@ -23,7 +22,6 @@ export interface DocumentChunk {
 export interface IndexDocumentsParams {
   source: string;
   documents: string[];
-  category?: string;
 }
 
 /**
