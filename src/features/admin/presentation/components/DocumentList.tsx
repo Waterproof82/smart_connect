@@ -191,18 +191,23 @@ export const DocumentList: React.FC<DocumentListProps> = ({
       const newSource = editedSources.length > 0 
         ? editedSources.join(', ') 
         : undefined;
-      
-      // Only allow console.warn/error for debugging
+
+      // --- Robust metadata: siempre debe incluir source ---
+      let safeMetadata = { ...(selectedDocument.metadata || {}) };
+      if (newSource) {
+        safeMetadata.source = newSource;
+      } else if (!safeMetadata.source) {
+        safeMetadata.source = 'manual';
+      }
 
       await updateDocumentUseCase.execute(
         String(selectedDocument.id),
         editedContent,
         currentUser,
-        newSource
+        newSource,
+        safeMetadata
       );
-      
-      // Only allow console.warn/error for debugging
-      
+
       // Reload list AND close modal to force fresh data on next open
       await loadDocuments();
       await loadAvailableSources(); // Reload sources for dropdown
@@ -255,10 +260,14 @@ export const DocumentList: React.FC<DocumentListProps> = ({
 
     setIsCreating(true);
     try {
+      // --- Robust metadata: siempre debe incluir source ---
+      let safeMetadata = { ...(newDocument.metadata || {}) };
+      safeMetadata.source = finalSource;
+
       await createDocumentUseCase.execute(
         newDocument.content,
         finalSource,
-        newDocument.metadata,
+        safeMetadata,
         currentUser
       );
 

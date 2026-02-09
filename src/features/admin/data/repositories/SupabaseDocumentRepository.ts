@@ -206,7 +206,7 @@ export class SupabaseDocumentRepository implements IDocumentRepository {
 
 // ... (resto de la clase)
 
-async update(id: string, content: string, source?: string): Promise<Document> {
+async update(id: string, content: string, source?: string, metadata?: Record<string, unknown>): Promise<Document> {
   const { data: { session } } = await this.client.auth.getSession();
   const token = session?.access_token;
 
@@ -220,11 +220,13 @@ async update(id: string, content: string, source?: string): Promise<Document> {
   );
 
   // 2. Preparar payload (Usamos created_at para marcar la edición)
+
   interface UpdateData {
     content: string;
     embedding: number[] | null;
     created_at: string;
     source?: string;
+    metadata?: Record<string, unknown>;
   }
   const updateData: UpdateData = {
     content,
@@ -233,6 +235,9 @@ async update(id: string, content: string, source?: string): Promise<Document> {
   };
   if (source !== undefined) {
     updateData.source = source;
+  }
+  if (metadata !== undefined) {
+    updateData.metadata = metadata;
   }
 
   // 3. Update en Supabase
