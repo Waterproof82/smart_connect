@@ -16,7 +16,7 @@ export class GoogleGenAI {
         throw new Error('Empty text provided');
       }
       
-      // Simulate text-embedding-004 output (768 dimensions)
+      // Simulate gemini-embedding-001 output (768 dimensions)
       const mockEmbedding = Array.from(
         { length: 768 },
         () => Math.random() * 2 - 1 // Random values between -1 and 1

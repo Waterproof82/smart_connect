@@ -155,7 +155,7 @@ SmartConnect AI sigue los principios de **Clean Architecture** (Uncle Bob) con s
 ┌─────────────────▼─────────────────────────────────────────────────────────────┐
 │                      🤖 GOOGLE GEMINI API                                      │
 │  ┌─────────────────────────────────────┐  ┌──────────────────────────────┐   │
-│  │  text-embedding-004                 │  │  gemini-2.0-flash-exp        │   │
+│  │  gemini-embedding-001               │  │  gemini-2.0-flash-exp        │   │
 │  │  - Input: Text string               │  │  - Input: Prompt + Context   │   │
 │  │  - Output: 768-dim embedding        │  │  - Output: AI response       │   │
 │  │  - Free: 1,500 requests/day         │  │  - Free: 1,500 requests/day  │   │
@@ -331,7 +331,7 @@ React Component
             ❌ API KEY EXPUESTA EN EL NAVEGADOR
             
 DevTools Network Tab:
-Request URL: https://generativelanguage.googleapis.com/v1beta/models/text-embedding-004:embedContent?key=AIzaSy***[EXPUESTA]
+Request URL: https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:embedContent?key=AIzaSy***[EXPUESTA]
                                                                                                             ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
                                                                                                             ❌ VISIBLE EN EL NAVEGADOR
 ```
@@ -423,7 +423,7 @@ Request Headers:
 - **Tecnologías:** pgvector, RLS policies
 
 ### 5. **AI Layer** (Gemini API)
-- **Modelos:** text-embedding-004, gemini-2.0-flash-exp
+- **Modelos:** gemini-embedding-001, gemini-2.0-flash-exp
 - **Responsabilidad:** Generación de embeddings y respuestas
 - **Tecnologías:** Google Generative AI
 

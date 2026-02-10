@@ -172,17 +172,16 @@ export class EmbeddingCache implements IEmbeddingCache {
    * Invalidate single cache entry
    * 
    * @param key Cache key to invalidate
-   * @returns true if entry was removed, false if not found
    */
-  async invalidate(key: string): Promise<boolean> {
-    const existed = this.cache.has(key);
-    this.cache.delete(key);
+  async invalidate(keyPattern: string): Promise<boolean> {
+    // Simple implementation: only supports exact key match
+    const existed = this.cache.has(keyPattern);
+    this.cache.delete(keyPattern);
 
     // Delete from Supabase if enabled
     if (this.enableSupabaseBackup && existed) {
-      await this._deleteFromSupabase(key);
+      await this._deleteFromSupabase(keyPattern);
     }
-
     return existed;
   }
 

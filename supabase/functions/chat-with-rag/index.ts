@@ -108,7 +108,7 @@ serve(async (req) => {
           return `[Documento ${idx + 1} - Relevancia: ${similarity}%]\nFuente: ${doc.source || 'Desconocida'}\nContenido: ${doc.content}\n`
         })
         .join('\n---\n\n')
-      prompt = `Eres un asistente que responde preguntas basándose ÚNICAMENTE en el contexto proporcionado.\n\nREGLAS IMPORTANTES:\n1. Responde SOLO con información del contexto\n2. Si el contexto no contiene la respuesta, di "No tengo información sobre eso en mi base de conocimiento"\n3. Cita las fuentes cuando sea relevante (ej: "Según el Documento 1...")\n4. Sé conciso, directo y preciso\n5. NO inventes información que no esté en el contexto\n\nCONTEXTO:\n${contextBlocks}\n\n---\n\nPREGUNTA DEL USUARIO:\n${query}\n\nRESPUESTA:`
+      prompt = `Eres un asistente que responde preguntas basándose ÚNICAMENTE en el contexto proporcionado.\n\nREGLAS IMPORTANTES:\n1. Responde SOLO con información del contexto\n2. Si el contexto no contiene la respuesta, di "No tengo información sobre eso en mi base de conocimiento"\n3. Sé conciso, directo y preciso\n4. NO inventes información que no esté en el contexto\n\nCONTEXTO:\n${contextBlocks}\n\n---\n\nPREGUNTA DEL USUARIO:\n${query}\n\nRESPUESTA:`
     } else {
       // No relevant documents found
       prompt = `No encontré información relevante en mi base de conocimiento para responder: "${query}"\n\nPor favor reformula tu pregunta o pregunta sobre otro tema.`

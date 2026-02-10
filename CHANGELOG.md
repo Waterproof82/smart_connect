@@ -1,4 +1,11 @@
 ## [Unreleased]
+### Changed
+- Updated RAG documentation to reflect the new Gemini API endpoints (`v1beta/models/gemini-2.5-flash:generateContent` and `gemini-embedding-001`).
+- Removed all references to document citation in chatbot responses and prompts.
+- Updated all checklists and environment variable examples to clarify that `GEMINI_API_KEY` must never be exposed in the frontend.
+- Added explicit security warning in documentation about Gemini API key usage.
+- Improved prompt examples to match the new RAG flow and business requirements.
+## [Unreleased]
 ### Removed
 - Removed unused `category` and `timestamp` metadata fields from RAG indexer interfaces and implementation. These fields were present in comments and types but not used in the actual RAG flow. Codebase is now minimal and only includes metadata required for production RAG operation. (2026-02-06)
 ### Security
@@ -171,7 +178,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Loading indicators for UX feedback during initialization
   - Location: `src/App.tsx`, `src/features/chatbot/presentation/ChatbotContainer.ts`
 - **RAG System Complete Integration (Phases 1+2+3):** Production-ready deployment
-  - RAGIndexer: Document chunking + Gemini embeddings (768-dim, text-embedding-004)
+  - RAGIndexer: Document chunking + Gemini embeddings (768-dim, gemini-embedding-001)
   - EmbeddingCache: In-memory cache + Supabase backup (7-day TTL)
   - FallbackHandler: Intent detection + human escalation (confidence < 50%)
   - RAGOrchestrator: Unified semantic search orchestration
@@ -186,7 +193,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Location: `docs/adr/006-rag-architecture-decision.md`
 - **RAG Indexer Phase 1:** ✅ COMPLETE - Document indexing with strategic chunking (TDD)
   - Test suite with 13 test cases following TDD methodology (ALL PASSING ✅)
-  - TypeScript implementation with Gemini text-embedding-004 integration
+  - TypeScript implementation with Gemini gemini-embedding-001 integration
   - Chunking algorithm: 500 tokens per chunk, 50 tokens overlap
   - Category mapping for business domains (QRIBAR → producto_digital, Reviews → reputacion_online)
   - Gemini API mock for testing without real API calls

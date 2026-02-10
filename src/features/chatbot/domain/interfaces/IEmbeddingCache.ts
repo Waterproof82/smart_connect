@@ -70,4 +70,12 @@ export interface IEmbeddingCache {
    * @returns true if entry exists and is valid
    */
   has(key: string): Promise<boolean>;
+  
+    /**
+     * Invalidate cache entries matching the key pattern
+     * 
+     * @param keyPattern Pattern to match cache keys
+     * @returns Promise that resolves when invalidation is complete
+     */
+    invalidate?(keyPattern: string): Promise<boolean>;
 }

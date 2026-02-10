@@ -61,8 +61,8 @@ Implementar un chatbot experto con arquitectura RAG (Retrieval-Augmented Generat
     │  • text-embedding-004│
     │    (768 dimensions)  │
     │                      │
-    │  • gemini-2.0-flash  │
-    │    -exp              │
+    │  • gemini-2.5-flash  │
+    │    (v1beta/models/gemini-2.5-flash:generateContent) │
     └──────────────────────┘
 ```
 
@@ -86,7 +86,7 @@ const { data, error } = await supabase.functions.invoke('gemini-embedding', {
 
 // Edge Function: gemini-embedding/index.ts
 const response = await fetch(
-  'https://generativelanguage.googleapis.com/v1/models/text-embedding-004:embedContent',
+  'https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:embedContent',
   {
     method: 'POST',
     headers: { 
@@ -94,7 +94,7 @@ const response = await fetch(
       'x-goog-api-key': GEMINI_API_KEY  // ✅ Protegida en servidor
     },
     body: JSON.stringify({
-      model: 'models/text-embedding-004',
+      model: 'gemini-embedding-001',
       content: { parts: [{ text: "¿Cuánto cuesta QRIBAR?" }] }
     })
   }
@@ -164,22 +164,7 @@ $$;
 // Frontend: RAGService.generateWithRAG()
 const context = relevantDocs.map(doc => doc.content).join('\n\n');
 
-const systemPrompt = `Eres el Asistente Experto de SmartConnect AI. 
-
-TUS SERVICIOS PRINCIPALES:
-1. QRIBAR: Menús digitales interactivos para restaurantes y bares
-2. Automatización n8n: Flujos de trabajo inteligentes para empresas
-3. Tarjetas Tap-to-Review NFC: Sistema para aumentar reseñas en Google Maps
-
-INFORMACIÓN DE LA BASE DE CONOCIMIENTO:
-${context}
-
-INSTRUCCIONES:
-- Responde SIEMPRE en español
-- Sé profesional, conciso y entusiasta
-- Si la información está en la base de conocimiento, úsala
-- Si no sabes algo, reconócelo y ofrece contactar al equipo
-- Mantén respuestas bajo 150 palabras`;
+const systemPrompt = `Eres el Asistente Experto de SmartConnect AI.\n\nTUS SERVICIOS PRINCIPALES:\n1. QRIBAR: Menús digitales interactivos para restaurantes y bares\n2. Automatización n8n: Flujos de trabajo inteligentes para empresas\n3. Tarjetas Tap-to-Review NFC: Sistema para aumentar reseñas en Google Maps\n\nINFORMACIÓN DE LA BASE DE CONOCIMIENTO:\n${context}\n\nINSTRUCCIONES:\n- Responde SIEMPRE en español\n- Sé profesional, conciso y entusiasta\n- Usa solo la información de la base de conocimiento proporcionada\n- No cites ni hagas referencia a ningún documento ni número de documento\n- Si no sabes algo, reconócelo y ofrece contactar al equipo\n- Mantén respuestas bajo 150 palabras`;
 ```
 
 ### 5. **Generate AI Response**
@@ -203,7 +188,7 @@ const { data, error } = await supabase.functions.invoke('gemini-generate', {
 
 // Edge Function: gemini-generate/index.ts
 const response = await fetch(
-  'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent',
+  'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent',
   {
     method: 'POST',
     headers: { 
@@ -351,7 +336,7 @@ Deno.serve(async (req) => {
 
     // Llamada a Gemini API
     const response = await fetch(
-      'https://generativelanguage.googleapis.com/v1/models/text-embedding-004:embedContent',
+      'https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:embedContent',
       {
         method: 'POST',
         headers: { 
@@ -359,7 +344,7 @@ Deno.serve(async (req) => {
           'x-goog-api-key': GEMINI_API_KEY  // ✅ API key en servidor
         },
         body: JSON.stringify({
-          model: 'models/text-embedding-004',
+          model: 'gemini-embedding-001',
           content: { parts: [{ text }] }
         })
       }
@@ -419,7 +404,7 @@ Deno.serve(async (req) => {
 
     // Llamada a Gemini API
     const response = await fetch(
-      'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent',
+      'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent',
       {
         method: 'POST',
         headers: { 
@@ -511,7 +496,7 @@ const knowledgeBase = [
 // Función para generar embedding
 async function generateEmbedding(text) {
   const response = await fetch(
-    'https://generativelanguage.googleapis.com/v1/models/text-embedding-004:embedContent',
+    'https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:embedContent',
     {
       method: 'POST',
       headers: { 
@@ -519,7 +504,7 @@ async function generateEmbedding(text) {
         'x-goog-api-key': GEMINI_API_KEY
       },
       body: JSON.stringify({
-        model: 'models/text-embedding-004',
+        model: 'gemini-embedding-001',
         content: { parts: [{ text }] }
       })
     }
@@ -805,6 +790,7 @@ LIMIT 3;
 
 #### Frontend
 - [ ] Variables de entorno configuradas (`.env.local`)
+  - [ ] **NO incluir nunca la Gemini API Key en el frontend**
 - [ ] Supabase client inicializado
 - [ ] Componente `ExpertAssistantWithRAG.tsx` integrado
 - [ ] Testing manual de flujo completo:
@@ -906,7 +892,7 @@ FROM documents
 LIMIT 5;
 
 -- Si es necesario, re-entrenar con el modelo correcto
--- text-embedding-004 = 768 dimensiones
+-- gemini-embedding-001 = 768 dimensiones
 ```
 
 ---
