@@ -9,6 +9,7 @@
 import React, { useState, useEffect } from 'react';
 import { Login } from './components/Login';
 import { AdminDashboard } from './components/AdminDashboard';
+import UnauthorizedErrorPage from './components/errors/UnauthorizedErrorPage';
 import { getAdminContainer } from './AdminContainer';
 import { AdminUser } from '../domain/entities/AdminUser';
 import { AuthSession } from '../domain/repositories/IAuthRepository';
@@ -53,14 +54,9 @@ export const AdminPanel: React.FC = () => {
     );
   }
 
-  // Not authenticated - show login
+  // Not authenticated - show unauthorized error page
   if (!currentUser) {
-    return (
-      <Login
-        loginUseCase={container.loginAdminUseCase}
-        onLoginSuccess={handleLoginSuccess}
-      />
-    );
+    return <UnauthorizedErrorPage />;
   }
 
   // Authenticated - show dashboard
