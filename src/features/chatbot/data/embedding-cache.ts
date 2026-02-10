@@ -14,7 +14,8 @@
  * docs/adr/006-rag-architecture-decision.md
  */
 
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { SupabaseClient, createClient } from '@supabase/supabase-js';
+import { supabase } from '../../../shared/supabaseClient';
 import { 
   IEmbeddingCache, 
   CacheEntry as ICacheEntry,
@@ -49,7 +50,7 @@ export class EmbeddingCache implements IEmbeddingCache {
     hits: number;
     misses: number;
   };
-  private readonly supabaseClient?: SupabaseClient;
+  private readonly supabaseClient: SupabaseClient = supabase;
   private readonly enableSupabaseBackup: boolean;
 
   constructor(config: EmbeddingCacheConfig) {
