@@ -4,15 +4,12 @@ import { createChatbotContainer } from './ChatbotContainer';
 import { MessageEntity, ChatSessionEntity } from '../domain/entities';
 import { sanitizeInput } from '@shared/utils/sanitizer';
 import { rateLimiter, RateLimitPresets } from '@shared/utils/rateLimiter';
-import { createClient } from '@supabase/supabase-js';
+import { supabase } from '@shared/supabaseClient';
 
 // ====================================
 // DEPENDENCY INJECTION
 // ====================================
-const supabase = createClient(
-  import.meta.env.VITE_SUPABASE_URL,
-  import.meta.env.VITE_SUPABASE_ANON_KEY
-);
+// supabase instance is now imported from shared/supabaseClient
 const container = createChatbotContainer(supabase);
 
 // ====================================

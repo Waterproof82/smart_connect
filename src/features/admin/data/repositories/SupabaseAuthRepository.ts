@@ -6,7 +6,8 @@
  * Implementación del repositorio de autenticación usando Supabase Auth.
  */
 
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { SupabaseClient } from '@supabase/supabase-js';
+import { supabase } from '@shared/supabaseClient';
 import { 
   IAuthRepository, 
   LoginCredentials, 
@@ -15,11 +16,9 @@ import {
 import { AdminUser } from '../../domain/entities/AdminUser';
 
 export class SupabaseAuthRepository implements IAuthRepository {
-  private readonly client: SupabaseClient;
+  private readonly client: SupabaseClient = supabase;
 
-  constructor(supabaseUrl: string, supabaseKey: string) {
-    this.client = createClient(supabaseUrl, supabaseKey);
-  }
+
 
   async login(credentials: LoginCredentials): Promise<AuthSession> {
     // Autenticar con Supabase
