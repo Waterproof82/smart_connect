@@ -76,27 +76,27 @@ export const Login: React.FC<LoginProps> = ({ loginUseCase, onLoginSuccess }) =>
                 name="email"
                 type="email"
                 autoComplete="email"
-                <div>
-                  <label htmlFor="email" className="block text-xs font-semibold text-gray-400 uppercase mb-1 ml-1">
-                    Email
-                  </label>
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    autoComplete="email"
-                    required
-                    className="appearance-none relative block w-full px-4 py-3 border border-gray-700 placeholder-gray-500 text-white bg-gray-900/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm transition-all"
-                    placeholder="admin@ejemplo.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    disabled={isLoading}
-                  />
-                </div>
-                <div>
-                  <label htmlFor="password" className="block text-xs font-semibold text-gray-400 uppercase mb-1 ml-1">
-                    Contraseña
-                  </label>
+                required
+                className="appearance-none relative block w-full px-4 py-3 border border-gray-700 placeholder-gray-500 text-white bg-gray-900/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm transition-all"
+                placeholder="admin@ejemplo.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={isLoading}
+              />
+            </div>
+            <div>
+              <label htmlFor="password" className="block text-xs font-semibold text-gray-400 uppercase mb-1 ml-1">
+                Contraseña
+              </label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                autoComplete="current-password"
+                required
+                className="appearance-none relative block w-full px-4 py-3 border border-gray-700 placeholder-gray-500 text-white bg-gray-900/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm transition-all"
+                placeholder="••••••••"
+                value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={isLoading}
               />
