@@ -58,7 +58,7 @@ serve(async (req) => {
     if (!geminiKey) throw new Error('Missing GEMINI_API_KEY')
 
 const response = await fetch(
-  `https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:embedContent?key=${geminiKey}`,
+  `https://generativelanguage.googleapis.com/v1/models/text-embedding-004:embedContent?key=${geminiKey}`,
   {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

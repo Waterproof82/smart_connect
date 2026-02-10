@@ -68,14 +68,13 @@ describeIfConfigured('RAG Chatbot E2E Flow', () => {
 
     // Step 2: Search similar documents
 
-    const { data: docs, error: searchError } = await supabase.rpc(
-      'match_documents',
-      [
-        JSON.stringify(embData.embedding.values),
-        0.3,
-        3
-      ]
-    );
+    // Call match_documents with positional arguments matching SQL signature
+    const { data: docs, error: searchError } = await supabase.rpc('match_documents', [
+      embData.embedding.values,
+      0.3,
+      3,
+      '' // filter_source as empty string
+    ]);
     if (searchError || !docs) {
       console.error('❌ match_documents error:', { searchError, docs });
       return expect(searchError).toBeNull();

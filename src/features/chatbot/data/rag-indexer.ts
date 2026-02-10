@@ -141,7 +141,7 @@ export class RAGIndexer implements IRAGIndexer {
   private async _generateEmbedding(text: string): Promise<number[]> {
     try {
       const result = await this.genAI.models.embedContent({
-        model: 'gemini-embedding-001',
+        model: 'gemini-embedding-004',
         contents: text,
       });
       return result.embeddings[0].values;
