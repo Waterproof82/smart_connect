@@ -131,6 +131,17 @@ describe('RAGOrchestrator - Integration Tests', () => {
     test('MUST use cache on second identical query', async () => {
       // Arrange
       const query = '¿Qué es QRIBAR?';
+      const documents: RAGDocument[] = [
+        {
+          id: 'qribar_001',
+          content: 'QRIBAR es una carta digital innovadora para restaurantes.',
+          source: 'qribar_features',
+        },
+      ];
+      // Mock generateEmbedding to always return the same vector
+      const deterministicEmbedding = new Array(768).fill(0.5);
+      jest.spyOn(orchestrator['indexer'], 'generateEmbedding').mockResolvedValue(deterministicEmbedding);
+      await orchestrator.indexDocuments(documents);
 
       // Act
       const result1 = await orchestrator.search(query);

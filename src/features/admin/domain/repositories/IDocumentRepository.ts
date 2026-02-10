@@ -70,7 +70,7 @@ export interface IDocumentRepository {
   /**
    * Genera un embedding vectorial para el contenido dado
    * @param content - Texto a vectorizar
-   * @returns Array de 768 números (Gemini text-embedding-004)
+  * @returns Array de 768 números (Gemini gemini-embedding-001)
    * @throws Error si la API de Gemini falla
    */
   generateEmbedding(content: string): Promise<number[]>;

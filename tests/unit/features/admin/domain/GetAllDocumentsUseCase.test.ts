@@ -17,10 +17,11 @@ describe('GetAllDocumentsUseCase', () => {
       getAll: jest.fn(),
       getById: jest.fn(),
       countBySource: jest.fn(),
-      countByCategory: jest.fn(),
       delete: jest.fn(),
       update: jest.fn(),
       create: jest.fn(),
+      count: jest.fn(),
+      generateEmbedding: jest.fn(),
     };
 
     useCase = new GetAllDocumentsUseCase(mockRepository);

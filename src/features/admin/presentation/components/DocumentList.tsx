@@ -67,7 +67,12 @@ export const DocumentList: React.FC<DocumentListProps> = ({
   // Create Modal State
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
-  const [newDocument, setNewDocument] = useState({
+  type NewDocument = {
+    content: string;
+    source: string;
+    metadata: Record<string, unknown>;
+  };
+  const [newDocument, setNewDocument] = useState<NewDocument>({
     content: '',
     source: '',
     metadata: {},
@@ -193,7 +198,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
         : undefined;
 
       // --- Robust metadata: siempre debe incluir source ---
-      let safeMetadata = { ...(selectedDocument.metadata || {}) };
+      let safeMetadata = selectedDocument.metadata ? { ...selectedDocument.metadata } : {};
       if (newSource) {
         safeMetadata.source = newSource;
       } else if (!safeMetadata.source) {
@@ -261,7 +266,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
     setIsCreating(true);
     try {
       // --- Robust metadata: siempre debe incluir source ---
-      let safeMetadata = { ...(newDocument.metadata || {}) };
+      let safeMetadata = newDocument.metadata ? { ...newDocument.metadata } : {};
       safeMetadata.source = finalSource;
 
       await createDocumentUseCase.execute(

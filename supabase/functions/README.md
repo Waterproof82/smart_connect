@@ -12,7 +12,7 @@ These Edge Functions act as a secure proxy layer between the React frontend and 
 - **Endpoint:** `/functions/v1/gemini-embedding`
 - **Method:** POST
 - **Purpose:** Generate 768-dimensional embeddings for RAG vector search
-- **Model:** `text-embedding-004`
+- **Model:** `gemini-embedding-001`
 
 **Request Body:**
 ```json

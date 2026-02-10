@@ -6,7 +6,6 @@ import { Features } from '@features/landing/presentation/components/Features';
 import { SuccessStats } from '@features/landing/presentation/components/SuccessStats';
 import { Contact } from '@features/landing/presentation/components/Contact';
 import { ExpertAssistant } from '@features/chatbot/presentation';
-import { getChatbotContainer } from '@features/chatbot/presentation/ChatbotContainer';
 
 const App: React.FC = () => {
   const [scrolled, setScrolled] = React.useState(false);

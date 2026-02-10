@@ -1,15 +1,19 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { X, Send, User, Bot, Sparkles, Loader2, MessageSquare } from 'lucide-react';
-import { getChatbotContainer } from './ChatbotContainer';
+import { createChatbotContainer } from './ChatbotContainer';
 import { MessageEntity, ChatSessionEntity } from '../domain/entities';
 import { sanitizeInput } from '@shared/utils/sanitizer';
 import { rateLimiter, RateLimitPresets } from '@shared/utils/rateLimiter';
-import { getABTestGroup } from '@shared/utils/abTestUtils';
+import { createClient } from '@supabase/supabase-js';
 
 // ====================================
 // DEPENDENCY INJECTION
 // ====================================
-const container = getChatbotContainer();
+const supabase = createClient(
+  import.meta.env.VITE_SUPABASE_URL,
+  import.meta.env.VITE_SUPABASE_ANON_KEY
+);
+const container = createChatbotContainer(supabase);
 
 // ====================================
 // COMPONENT
@@ -21,7 +25,7 @@ export const ExpertAssistant: React.FC = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   
   // A/B Testing: Assign user to test group
-  const abTestGroup = getABTestGroup();
+  // const abTestGroup = getABTestGroup();
   
   // Use domain entities for chat session management
   const chatSessionRef = useRef(new ChatSessionEntity());
@@ -31,6 +35,38 @@ export const ExpertAssistant: React.FC = () => {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [chatSessionRef.current.messages, isLoading]);
+
+  const handleSendMessage = async (message: string) => {
+    setIsLoading(true);
+    
+    try {
+      const response = await container.generateResponseUseCase.execute({
+        userQuery: message,
+        conversationHistory: chatSessionRef.current.messages,
+        useRAG: true,
+        ragOptions: {
+          topK: 5,
+          threshold: 0.7,
+          source: null,
+        },
+      });
+
+      const assistantEntity = new MessageEntity({
+        role: 'assistant',
+        content: response,
+      });
+      chatSessionRef.current = chatSessionRef.current.addMessage(assistantEntity);
+    } catch (error) {
+      console.error('Error:', error);
+      const errorEntity = new MessageEntity({
+        role: 'assistant',
+        content: 'Hubo un error al conectar con el asistente. Por favor, intenta de nuevo.',
+      });
+      chatSessionRef.current = chatSessionRef.current.addMessage(errorEntity);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
@@ -74,58 +110,8 @@ export const ExpertAssistant: React.FC = () => {
     });
     chatSessionRef.current = chatSessionRef.current.addMessage(userEntity);
     
-    // Force re-render
-    setIsLoading(true);
-
-    try {
-      // Llamar al endpoint Edge Function gemini-chat (actualizado)
-      const response = await fetch(
-        'https://tysjedvujvsmrzzrmesr.functions.supabase.co/gemini-chat',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'apikey': import.meta.env.VITE_SUPABASE_ANON_KEY,
-            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`
-          },
-          body: JSON.stringify({
-            userQuery: sanitizedInput,
-            conversationHistory: chatSessionRef.current.messages.slice(-5).map(msg => ({
-              role: msg.role,
-              content: msg.content,
-            })),
-            abTestGroup,
-            maxDocuments: 3,
-            similarityThreshold: 0.3,
-          })
-        }
-      );
-      const data = await response.json();
-      let aiResponse = data.response || 'No se encontró respuesta.';
-      // Add assistant message to session
-      const assistantEntity = new MessageEntity({
-        role: 'assistant',
-        content: aiResponse,
-      });
-      chatSessionRef.current = chatSessionRef.current.addMessage(assistantEntity);
-      // Log RAG context for debugging
-      if (data.documentsUsed > 0) {
-        console.warn('✅ RAG Context Used:', {
-          documentsFound: data.documentsUsed,
-          abTestGroup,
-          sources: data.sources,
-        });
-      }
-    } catch (error) {
-      console.error('❌ AI Error:', error);
-      const errorEntity = new MessageEntity({
-        role: 'assistant',
-        content: 'Hubo un error al conectar con el asistente. Por favor, intenta de nuevo.',
-      });
-      chatSessionRef.current = chatSessionRef.current.addMessage(errorEntity);
-    } finally {
-      setIsLoading(false);
-    }
+    // Use the new handleSendMessage function
+    await handleSendMessage(sanitizedInput);
   };
 
   return (

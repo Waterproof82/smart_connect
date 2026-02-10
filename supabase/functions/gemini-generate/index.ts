@@ -139,15 +139,17 @@ Deno.serve(async (req) => {
     }
 
     const response = await fetch(
-      'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent',
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`,
       {
         method: 'POST',
         headers: { 
-          'Content-Type': 'application/json',
-          'x-goog-api-key': GEMINI_API_KEY
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          contents,
+          contents: contents.map(c => ({
+            role: (typeof c.role === 'string' && (c.role === 'user' || c.role === 'model')) ? c.role : 'user',
+            parts: Array.isArray(c.parts) ? c.parts : [{ text: String(c.parts) }]
+          })),
           generationConfig
         })
       }

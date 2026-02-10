@@ -119,11 +119,14 @@ npm install @supabase/supabase-js
 
 Crea `.env.local` en la raíz del proyecto:
 
+
 ```env
-REACT_APP_GEMINI_API_KEY=tu_gemini_api_key
-REACT_APP_SUPABASE_URL=https://xxxxx.supabase.co
-REACT_APP_SUPABASE_ANON_KEY=tu_anon_key_aqui
+VITE_SUPABASE_URL=https://xxxxx.supabase.co
+VITE_SUPABASE_ANON_KEY=tu_anon_key_aqui
+# GEMINI_API_KEY solo en backend/Edge Functions (NO exponer en frontend)
 ```
+
+⚠️ **IMPORTANTE:** NUNCA expongas la Gemini API Key (`GEMINI_API_KEY`) en el frontend ni en archivos accesibles al navegador. Solo debe estar en el entorno seguro del backend o configurada como secret en Supabase Edge Functions.
 
 ⚠️ **IMPORTANTE**: Añade `.env.local` a `.gitignore`
 
@@ -401,9 +404,9 @@ ORDER BY usage_count DESC;
 1. Sube tu código a GitHub
 2. Conecta con Vercel: [vercel.com/new](https://vercel.com/new)
 3. Configura las variables de entorno:
-   - `REACT_APP_GEMINI_API_KEY`
-   - `REACT_APP_SUPABASE_URL`
-   - `REACT_APP_SUPABASE_ANON_KEY`
+   - `VITE_SUPABASE_URL`
+   - `VITE_SUPABASE_ANON_KEY`
+   - (GEMINI_API_KEY solo en backend/Edge Functions)
 4. Deploy automático
 
 ### Opción 2: Netlify

@@ -83,6 +83,6 @@ GRANT EXECUTE ON FUNCTION clean_expired_embedding_cache() TO service_role;
 
 COMMENT ON TABLE public.embedding_cache IS 'Persistent cache for Gemini embeddings (768-dim vectors). Used as backup for in-memory cache in RAG system (ADR-003 Phase 2).';
 COMMENT ON COLUMN public.embedding_cache.key IS 'Unique cache key (format: source_hash)';
-COMMENT ON COLUMN public.embedding_cache.embedding IS '768-dimensional vector from Gemini text-embedding-004';
+COMMENT ON COLUMN public.embedding_cache.embedding IS '768-dimensional vector from Gemini gemini-embedding-001';
 COMMENT ON COLUMN public.embedding_cache.timestamp IS 'Unix timestamp in milliseconds';
 COMMENT ON COLUMN public.embedding_cache.ttl IS 'Time-to-live in milliseconds (default: 7 days = 604800000ms)';

@@ -4,7 +4,7 @@
  * Fase 1: Mejora de Indexación
  * - Chunking estratégico con overlap de 50 tokens
  * - Metadata: source, category, timestamp
- * - Embeddings con text-embedding-004 (Gemini)
+ * - Embeddings con gemini-embedding-001 (Gemini)
  * 
  * ADR: docs/adr/006-rag-architecture-decision.md
  * Clean Architecture: Data Layer Test
@@ -63,7 +63,7 @@ describe('RAGIndexer - Document Indexing', () => {
     // Assert
     expect(chunks.length).toBeGreaterThan(0);
     expect(chunks[0].embedding).toBeDefined();
-    expect(chunks[0].embedding.length).toBe(768); // text-embedding-004 dimensions
+    expect(chunks[0].embedding.length).toBe(768); // gemini-embedding-001 dimensions
     expect(chunks[0].embedding.every(val => typeof val === 'number')).toBe(true);
   });
 

@@ -5,7 +5,7 @@
  * 
  * Responsabilidad:
  * - Indexar documentos con chunking estratégico
- * - Generar embeddings usando Gemini text-embedding-004
+ * - Generar embeddings usando Gemini gemini-embedding-001
  * - Asignar metadata (source)
  * 
  * Fase 1 de optimización según ADR-003
@@ -132,7 +132,7 @@ export class RAGIndexer implements IRAGIndexer {
   }
 
   /**
-   * Genera embedding usando Gemini text-embedding-004
+  * Genera embedding usando Gemini gemini-embedding-001
    * 
    * @param text Texto a convertir en embedding
    * @returns Vector de 768 dimensiones
@@ -141,7 +141,7 @@ export class RAGIndexer implements IRAGIndexer {
   private async _generateEmbedding(text: string): Promise<number[]> {
     try {
       const result = await this.genAI.models.embedContent({
-        model: 'text-embedding-004',
+        model: 'gemini-embedding-004',
         contents: text,
       });
       return result.embeddings[0].values;

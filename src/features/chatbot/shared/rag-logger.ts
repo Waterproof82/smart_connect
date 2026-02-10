@@ -19,7 +19,7 @@ export interface RAGLogEntry {
   component: string;
   phase: 'INDEXING' | 'SEARCH' | 'CACHE' | 'FALLBACK' | 'GENERATION';
   action: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   duration?: number;
 }
 
@@ -65,7 +65,7 @@ export class RAGLogger {
     component: string, 
     phase: RAGLogEntry['phase'], 
     action: string, 
-    metadata?: Record<string, any>
+    metadata?: Record<string, unknown>
   ): void {
     if (!this.config.enabled || !this._shouldLog(level)) {
       return;
@@ -99,12 +99,14 @@ export class RAGLogger {
     this.log(LogLevel.INFO, 'DOCUMENT_REPOSITORY', 'SEARCH', 'Document search initiated', {
       query: query.substring(0, 100) + (query.length > 100 ? '...' : ''),
       options,
-      resultCount: results?.length || 0,
-      topResults: results?.slice(0, 3).map((r: any) => ({
-        id: r.id,
-        similarity: r.similarity,
-        source: r.metadata?.source
-      }))
+      resultCount: Array.isArray(results) ? results.length : 0,
+      topResults: Array.isArray(results)
+        ? results.slice(0, 3).map((r: { id: string; similarity: number; metadata?: { source?: string } }) => ({
+            id: r.id,
+            similarity: r.similarity,
+            source: r.metadata?.source
+          }))
+        : []
     });
   }
 
@@ -137,7 +139,7 @@ export class RAGLogger {
    * Log RAG phase transitions
    */
   logPhaseTransition(fromPhase: string, toPhase: string, context?: any): void {
-    this.log(LogLevel.DEBUG, 'RAG_ORCHESTRATOR', 'SEARCH', `Phase transition: ${fromPhase} → ${toPhase}`, context);
+    this.log(LogLevel.DEBUG, 'RAG_ORCHESTRATOR', 'SEARCH', `Phase transition: ${fromPhase} → ${toPhase}`, context as Record<string, unknown>);
   }
 
   /**
@@ -147,8 +149,12 @@ export class RAGLogger {
     this.log(LogLevel.WARN, 'FALLBACK_HANDLER', 'FALLBACK', 'Fallback activated', {
       reason,
       query: query.substring(0, 100),
-      fallbackType: fallbackResponse?.category,
-      shouldEscalate: fallbackResponse?.shouldEscalate
+      fallbackType: (fallbackResponse && typeof fallbackResponse === 'object' && 'category' in fallbackResponse)
+        ? (fallbackResponse as { category?: string }).category
+        : undefined,
+      shouldEscalate: (fallbackResponse && typeof fallbackResponse === 'object' && 'shouldEscalate' in fallbackResponse)
+        ? (fallbackResponse as { shouldEscalate?: boolean }).shouldEscalate
+        : undefined
     });
   }
 
@@ -207,11 +213,16 @@ export class RAGLogger {
    */
   getPerformanceStats(): any {
     const phases = ['INDEXING', 'SEARCH', 'CACHE', 'FALLBACK', 'GENERATION'] as const;
-    const stats: any = {};
+    const stats: Record<string, {
+      count: number;
+      avgDuration: number;
+      minDuration: number;
+      maxDuration: number;
+    }> = {};
 
     phases.forEach(phase => {
       const phaseLogs = this.getLogsByPhase(phase);
-      const durations = phaseLogs.filter(log => log.duration).map(log => log.duration!);
+      const durations = phaseLogs.filter(log => log.duration).map(log => log.duration);
       
       stats[phase] = {
         count: phaseLogs.length,
@@ -239,10 +250,8 @@ export class RAGLogger {
 
     switch (entry.level) {
       case LogLevel.DEBUG:
-        console.debug(`${prefix}: ${entry.action}${durationStr}${metadataStr}`);
         break;
       case LogLevel.INFO:
-        console.info(`${prefix}: ${entry.action}${durationStr}${metadataStr}`);
         break;
       case LogLevel.WARN:
         console.warn(`${prefix}: ${entry.action}${durationStr}${metadataStr}`);

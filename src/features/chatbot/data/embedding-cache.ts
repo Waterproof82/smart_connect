@@ -169,21 +169,38 @@ export class EmbeddingCache implements IEmbeddingCache {
   }
 
   /**
-   * Invalidate single cache entry
-   * 
-   * @param key Cache key to invalidate
-   * @returns true if entry was removed, false if not found
+   * Invalidate cache entries by key or pattern
+   *
+   * @param keyPattern Cache key or glob pattern
+   * @returns true if any entry was invalidated
    */
-  async invalidate(key: string): Promise<boolean> {
-    const existed = this.cache.has(key);
-    this.cache.delete(key);
-
-    // Delete from Supabase if enabled
-    if (this.enableSupabaseBackup && existed) {
-      await this._deleteFromSupabase(key);
+  async invalidate(keyPattern: string): Promise<boolean> {
+    // If exact key exists, invalidate it
+    if (this.cache.has(keyPattern)) {
+      this.cache.delete(keyPattern);
+      if (this.enableSupabaseBackup) {
+        await this._deleteFromSupabase(keyPattern);
+      }
+      return true;
     }
 
-    return existed;
+    // Otherwise, treat as glob pattern
+    const regex = this._globToRegex(keyPattern);
+    let found = false;
+    const keysToDelete: string[] = [];
+    for (const key of this.cache.keys()) {
+      if (regex.test(key)) {
+        keysToDelete.push(key);
+      }
+    }
+    for (const key of keysToDelete) {
+      this.cache.delete(key);
+      if (this.enableSupabaseBackup) {
+        await this._deleteFromSupabase(key);
+      }
+      found = true;
+    }
+    return found;
   }
 
   /**
