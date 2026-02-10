@@ -28,10 +28,10 @@ const App: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#020408] text-white">
       <Navbar scrolled={scrolled} />
-      <Hero />
-      <Features />
-      <SuccessStats />
-      <Contact />
+      <section id="inicio"><Hero /></section>
+      <section id="soluciones"><Features /></section>
+      <section id="exito"><SuccessStats /></section>
+      <section id="contacto"><Contact /></section>
       
       {/* AI Chatbot Assistant - Only render when knowledge base is ready */}
       {isKnowledgeBaseReady && <ExpertAssistant />}

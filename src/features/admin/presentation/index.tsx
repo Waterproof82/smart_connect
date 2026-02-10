@@ -17,6 +17,7 @@ import { AuthSession } from '../domain/repositories/IAuthRepository';
 export const AdminPanel: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<AdminUser | null>(null);
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+  const [generalError, setGeneralError] = useState<string | null>(null);
 
   const container = getAdminContainer();
 
@@ -27,14 +28,18 @@ export const AdminPanel: React.FC = () => {
         const user = await container.authRepository.getCurrentUser();
         setCurrentUser(user);
       } catch (err) {
-        console.error('Auth check failed:', err);
+        // If error is a general error (not just unauthenticated), set error state
+        if (err && typeof err === 'object' && 'code' in err && err.code === 'NOT_FOUND') {
+          setGeneralError('NOT_FOUND');
+        } else {
+          setCurrentUser(null);
+        }
       } finally {
         setIsCheckingAuth(false);
       }
     };
-
     checkAuth();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleLoginSuccess = (session: AuthSession) => {
@@ -45,6 +50,7 @@ export const AdminPanel: React.FC = () => {
     setCurrentUser(null);
   };
 
+
   // Loading state
   if (isCheckingAuth) {
     return (
@@ -54,9 +60,19 @@ export const AdminPanel: React.FC = () => {
     );
   }
 
-  // Not authenticated - show unauthorized error page
-  if (!currentUser) {
+  // General error (e.g., 404)
+  if (generalError) {
     return <UnauthorizedErrorPage />;
+  }
+
+  // Not authenticated - show login
+  if (!currentUser) {
+    return (
+      <Login
+        loginUseCase={container.loginAdminUseCase}
+        onLoginSuccess={handleLoginSuccess}
+      />
+    );
   }
 
   // Authenticated - show dashboard
