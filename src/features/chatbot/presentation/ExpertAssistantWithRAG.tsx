@@ -4,7 +4,6 @@ import { createChatbotContainer } from './ChatbotContainer';
 import { MessageEntity, ChatSessionEntity } from '../domain/entities';
 import { sanitizeInput } from '@shared/utils/sanitizer';
 import { rateLimiter, RateLimitPresets } from '@shared/utils/rateLimiter';
-import { getABTestGroup } from '@shared/utils/abTestUtils';
 import { createClient } from '@supabase/supabase-js';
 
 // ====================================
@@ -26,7 +25,7 @@ export const ExpertAssistant: React.FC = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   
   // A/B Testing: Assign user to test group
-  const abTestGroup = getABTestGroup();
+  // const abTestGroup = getABTestGroup();
   
   // Use domain entities for chat session management
   const chatSessionRef = useRef(new ChatSessionEntity());

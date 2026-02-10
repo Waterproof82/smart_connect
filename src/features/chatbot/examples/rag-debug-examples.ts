@@ -28,12 +28,6 @@ export function enableDetailedRAGLogging() {
 export function getRAGPerformanceInsights() {
   const stats = ragLogger.getPerformanceStats();
   
-  console.log('=== RAG Performance Insights ===');
-  console.log('INDEXING Phase:', stats.INDEXING);
-  console.log('SEARCH Phase:', stats.SEARCH);
-  console.log('CACHE Phase:', stats.CACHE);
-  console.log('FALLBACK Phase:', stats.FALLBACK);
-  console.log('GENERATION Phase:', stats.GENERATION);
   
   return stats;
 }
@@ -53,8 +47,6 @@ export function analyzeSearchPatterns() {
     commonIssues: identifyCommonIssues(searchLogs, fallbackLogs)
   };
   
-  console.log('=== Search Pattern Analysis ===');
-  console.log(JSON.stringify(analysis, null, 2));
   
   return analysis;
 }
@@ -70,10 +62,7 @@ export function exportRecentLogs(hours = 1) {
     new Date(log.timestamp).getTime() > cutoffTime
   );
   
-  const exportedLogs = ragLogger.exportLogs();
   
-  console.log(`=== Last ${hours} hours of RAG logs ===`);
-  console.log(exportedLogs);
   
   return recentLogs;
 }
@@ -102,7 +91,7 @@ export function monitorDocumentEffectiveness() {
   // Analyze top performing sources
   vectorLogs.forEach(log => {
     if (log.metadata?.topResults) {
-      log.metadata.topResults.forEach((result: any) => {
+      log.metadata.topResults.forEach((result: { source: string }) => {
         if (!documentStats.topPerformingSources[result.source]) {
           documentStats.topPerformingSources[result.source] = 0;
         }
@@ -111,8 +100,6 @@ export function monitorDocumentEffectiveness() {
     }
   });
   
-  console.log('=== Document Effectiveness Analysis ===');
-  console.log(JSON.stringify(documentStats, null, 2));
   
   return documentStats;
 }
@@ -120,7 +107,7 @@ export function monitorDocumentEffectiveness() {
 /**
  * Helper: Identify common issues from logs
  */
-function identifyCommonIssues(searchLogs: any[], fallbackLogs: any[]) {
+function identifyCommonIssues(searchLogs: unknown[], fallbackLogs: unknown[]) {
   const issues = {
     emptyQueries: 0,
     lowConfidenceSearches: 0,
@@ -148,13 +135,9 @@ export function createRAGMonitor() {
   return {
     onQueryStart: (query: string) => {
       ragLogger.startOperation();
-      console.log(`🔍 RAG Query: ${query.substring(0, 50)}...`);
     },
     
     onQueryComplete: (result: any) => {
-      const stats = ragLogger.getPerformanceStats();
-      console.log(`✅ RAG Complete in ${stats.GENERATION.avgDuration?.toFixed(2)}ms`);
-      console.log(`📊 Found ${result.documentsFound} documents, Cache: ${result.cacheHit ? 'HIT' : 'MISS'}`);
     },
     
     onFallback: (reason: string) => {
@@ -170,22 +153,3 @@ export function createRAGMonitor() {
     }
   };
 }
-
-// Usage example:
-/*
-const monitor = createRAGMonitor();
-
-// Before a query:
-monitor.onQueryStart("¿Cómo funciona QRIBAR?");
-
-// After a query:
-monitor.onQueryComplete({
-  documentsFound: 3,
-  cacheHit: false,
-  response: "QRIBAR es una carta digital..."
-});
-
-// Get comprehensive report:
-const report = monitor.getSummary();
-console.log(report);
-*/

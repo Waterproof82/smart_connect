@@ -4,7 +4,6 @@
  * Clean Architecture: Data Layer
  * 
  * Responsabilidad:
- * - Llamar a la Edge Function 'chat-with-rag' que maneja todo el flujo RAG
  * - Fallback a Gemini directo si RAG falla
  * - Logging de métricas de performance
  * 
@@ -41,10 +40,8 @@ export class ChatRepositoryImpl implements IChatRepository {
 
     // ========================================================================
     // LLAMADA A EDGE FUNCTION: chat-with-rag
-    // Todo el flujo RAG (embedding, search, prompt, generation) en servidor
     // ========================================================================
     try {
-      const startTime = Date.now();
 
       const { data, error } = await this.supabase.functions.invoke('chat-with-rag', {
         body: {
@@ -59,7 +56,6 @@ export class ChatRepositoryImpl implements IChatRepository {
         },
       });
 
-      const totalTime = Date.now() - startTime;
 
       if (error) {
         console.error('[ChatRepository] RAG function error:', error);
@@ -67,12 +63,12 @@ export class ChatRepositoryImpl implements IChatRepository {
       }
 
       // Log performance metrics
-      console.log('[ChatRepository] RAG Performance:', {
-        documentsFound: data.metadata?.documentsFound ?? 0,
-        cacheHit: data.metadata?.cacheHit ?? false,
-        timings: data.metadata?.timings,
-        totalTimeMs: totalTime,
-      });
+      // console.log('[ChatRepository] RAG Performance:', {
+      //   documentsFound: data.metadata?.documentsFound ?? 0,
+      //   cacheHit: data.metadata?.cacheHit ?? false,
+      //   timings: data.metadata?.timings,
+      //   totalTimeMs: totalTime,
+      // });
 
       // Optional: Handle sources for citation UI
       if (data.metadata?.sources && data.metadata.sources.length > 0) {
@@ -132,7 +128,7 @@ export class ChatRepositoryImpl implements IChatRepository {
       }
 
       return data.candidates[0].content.parts
-        .map((part: any) => part.text)
+        .map((part: { text: string }) => part.text)
         .join('');
 
     } catch (error) {
@@ -146,8 +142,7 @@ export class ChatRepositoryImpl implements IChatRepository {
    * 
    * @private
    */
-  private _handleSources(sources: Array<{ source: string; similarity: number }>) {
-    console.log('[ChatRepository] Sources used:', sources);
+  private _handleSources(_sources: Array<{ source: string; similarity: number }>) {
     
     // Optional: Emit event for UI to show sources/citations
     // Example:
