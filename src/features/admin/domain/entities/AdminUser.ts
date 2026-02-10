@@ -68,7 +68,10 @@ export class AdminUser {
     if (this.role === 'super_admin') {
       return true;
     }
-    // 'admin' solo puede leer
-    return action === 'read';
+    // 'admin' puede leer, editar, actualizar y borrar
+    if (this.role === 'admin') {
+      return ['read', 'edit', 'update', 'delete'].includes(action);
+    }
+    return false;
   }
 }
