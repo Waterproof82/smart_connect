@@ -32,8 +32,8 @@ export class AdminContainer {
 
   constructor(supabaseUrl: string, supabaseKey: string) {
     // Initialize repositories
-    this.documentRepository = new SupabaseDocumentRepository(supabaseUrl, supabaseKey);
-    this.authRepository = new SupabaseAuthRepository(supabaseUrl, supabaseKey);
+    this.documentRepository = new SupabaseDocumentRepository();
+    this.authRepository = new SupabaseAuthRepository();
 
     // Initialize use cases
     this.getAllDocumentsUseCase = new GetAllDocumentsUseCase(this.documentRepository);

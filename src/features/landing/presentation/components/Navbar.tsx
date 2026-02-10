@@ -37,12 +37,20 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
       icon: <Utensils className="w-5 h-5 text-amber-500" />,
       title: 'QR iBar',
       desc: 'Menús digitales HOSTELERÍA',
-      href: '#qribar'
+      href: 'https://qribar.es',
+      external: true
     }
   ];
 
-  const handleDropdownLinkClick = () => {
+  const handleDropdownLinkClick = (e?: React.MouseEvent<HTMLAnchorElement>) => {
     setIsDropdownOpen(false);
+    if (e?.currentTarget?.hash) {
+      const target = document.querySelector(e.currentTarget.hash);
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
   };
 
   return (
@@ -96,28 +104,47 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
               <div className="w-[280px] glass-card border border-white/10 rounded-[2rem] p-4 shadow-2xl">
                 <div className="grid gap-2">
                   {solutions.map((item) => (
-                    <a 
-                      key={item.id} 
-                      href={item.href}
-                      onClick={handleDropdownLinkClick}
-                      className="flex items-center gap-4 p-3 rounded-2xl hover:bg-white/5 transition-colors group/item"
-                    >
-                      <div className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center group-hover/item:scale-110 transition-transform">
-                        {item.icon}
-                      </div>
-                      <div>
-                        <p className="text-white text-xs font-bold">{item.title}</p>
-                        <p className="text-[10px] text-gray-500 font-medium">{item.desc}</p>
-                      </div>
-                    </a>
+                    item.external ? (
+                      <a
+                        key={item.id}
+                        href={item.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-4 p-3 rounded-2xl hover:bg-white/5 transition-colors group/item"
+                        onClick={() => setIsDropdownOpen(false)}
+                      >
+                        <div className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center group-hover/item:scale-110 transition-transform">
+                          {item.icon}
+                        </div>
+                        <div>
+                          <p className="text-white text-xs font-bold">{item.title}</p>
+                          <p className="text-[10px] text-gray-500 font-medium">{item.desc}</p>
+                        </div>
+                      </a>
+                    ) : (
+                      <a
+                        key={item.id}
+                        href={item.href}
+                        onClick={handleDropdownLinkClick}
+                        className="flex items-center gap-4 p-3 rounded-2xl hover:bg-white/5 transition-colors group/item"
+                      >
+                        <div className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center group-hover/item:scale-110 transition-transform">
+                          {item.icon}
+                        </div>
+                        <div>
+                          <p className="text-white text-xs font-bold">{item.title}</p>
+                          <p className="text-[10px] text-gray-500 font-medium">{item.desc}</p>
+                        </div>
+                      </a>
+                    )
                   ))}
                 </div>
               </div>
             </div>
           </div>
 
-          <a href="#exito" className="hover:text-white transition-colors">Éxito</a>
-          <a href="#contacto" className="hover:text-white transition-colors">Contacto</a>
+          <a href="#exito" className="hover:text-white transition-colors" onClick={handleDropdownLinkClick}>Éxito</a>
+          <a href="#contacto" className="hover:text-white transition-colors" onClick={handleDropdownLinkClick}>Contacto</a>
           <Link 
             to="/admin"
             className="flex items-center gap-2 text-gray-300 hover:text-blue-400 transition-colors"

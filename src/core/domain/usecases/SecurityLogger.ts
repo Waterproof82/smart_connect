@@ -8,8 +8,9 @@
  */
 
 import { ConsoleLogger } from './Logger';
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
-import { ENV } from '@shared/config/env.config';
+import { SupabaseClient } from '@supabase/supabase-js';
+import { supabase } from '../../../shared/supabaseClient';
+
 
 export type SecurityEventType =
   | 'AUTH_FAILURE'
@@ -36,13 +37,13 @@ interface SecurityLogEntry extends SecurityEvent {
 }
 
 export class SecurityLogger extends ConsoleLogger {
-  private readonly supabase: SupabaseClient;
+  private readonly supabase: SupabaseClient = supabase;
 
   constructor() {
     super('[Security]');
     // Initialize Supabase client with anon key
     // RLS policies ensure only service role can read logs
-    this.supabase = createClient(ENV.SUPABASE_URL, ENV.SUPABASE_ANON_KEY);
+    // supabase instance is now imported from shared/supabaseClient
   }
 
   /**

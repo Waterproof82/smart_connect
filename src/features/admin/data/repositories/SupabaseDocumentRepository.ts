@@ -6,7 +6,8 @@
  * Implementación del repositorio de documentos usando Supabase.
  */
 
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { SupabaseClient } from '@supabase/supabase-js';
+import { supabase } from '@shared/supabaseClient';
 import { 
   IDocumentRepository, 
   DocumentFilters, 
@@ -19,11 +20,9 @@ import { Document } from '../../domain/entities/Document';
 type EmbeddingData = number[] | string | null;
 
 export class SupabaseDocumentRepository implements IDocumentRepository {
-  private readonly client: SupabaseClient;
+  private readonly client: SupabaseClient = supabase;
 
-  constructor(supabaseUrl: string, supabaseKey: string) {
-    this.client = createClient(supabaseUrl, supabaseKey);
-  }
+
 
   async getAll(
     filters?: DocumentFilters,

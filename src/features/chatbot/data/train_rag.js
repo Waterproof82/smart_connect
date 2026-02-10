@@ -4,7 +4,7 @@
 // Este script genera embeddings y los inserta en Supabase
 // Ejecutar: node train_rag.js
 
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from '@supabase/supabase-js'; // Node.js context, not using shared client
 import fetch from 'node-fetch';
 import dotenv from 'dotenv';
 import { fileURLToPath } from 'node:url';
@@ -32,7 +32,7 @@ if (!GEMINI_API_KEY || !SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
   process.exit(1);
 }
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
+const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY); // Service key, do not use shared client
 
 // ========================================
 // BASE DE CONOCIMIENTO
