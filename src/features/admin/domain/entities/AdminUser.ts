@@ -10,7 +10,7 @@
 export interface AdminUserProps {
   id: string;
   email: string;
-  role: 'admin' | 'super_admin';
+  role: 'admin' | 'super_admin' | 'anonymous';
   createdAt: Date;
   lastLogin?: Date;
 }
@@ -19,7 +19,7 @@ export class AdminUser {
   private constructor(
     public readonly id: string,
     public readonly email: string,
-    public readonly role: 'admin' | 'super_admin',
+    public readonly role: 'admin' | 'super_admin' | 'anonymous',
     public readonly createdAt: Date,
     public readonly lastLogin?: Date
   ) {
@@ -47,7 +47,7 @@ export class AdminUser {
       throw new Error('Invalid email format');
     }
 
-    if (!['admin', 'super_admin'].includes(this.role)) {
+    if (!['admin', 'super_admin', 'anonymous'].includes(this.role)) {
       throw new Error('Invalid role');
     }
   }
@@ -71,6 +71,10 @@ export class AdminUser {
     // 'admin' puede leer, editar, actualizar y borrar
     if (this.role === 'admin') {
       return ['read', 'edit', 'update', 'delete'].includes(action);
+    }
+    // 'anonymous' solo puede leer (usar el chatbot)
+    if (this.role === 'anonymous') {
+      return action === 'read';
     }
     return false;
   }

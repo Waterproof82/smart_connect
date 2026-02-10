@@ -58,7 +58,7 @@ serve(async (req) => {
     if (!geminiKey) throw new Error('Missing GEMINI_API_KEY')
 
 const response = await fetch(
-  `https://generativelanguage.googleapis.com/v1/models/text-embedding-004:embedContent?key=${geminiKey}`,
+  `https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:embedContent?key=${geminiKey}`,
   {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -92,10 +92,10 @@ const response = await fetch(
       throw new Error('Invalid embedding response')
     }
 
-    // Recortar a 768 dimensiones y devolver en el formato esperado por los tests
+    // Recortar a 768 dimensiones
     const embedding768 = data.embedding.values.slice(0, 768)
     return new Response(
-      JSON.stringify({ embedding: { values: embedding768 } }),
+      JSON.stringify({ embedding: embedding768 }),
       { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
 
