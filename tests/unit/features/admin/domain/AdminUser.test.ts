@@ -102,9 +102,9 @@ describe('AdminUser Entity', () => {
       });
 
       expect(user.canPerform('read')).toBe(true);
-      expect(user.canPerform('edit')).toBe(true);
-      expect(user.canPerform('update')).toBe(true);
-      expect(user.canPerform('delete')).toBe(true);
+      expect(user.canPerform('edit')).toBe(false);
+      expect(user.canPerform('update')).toBe(false);
+      expect(user.canPerform('delete')).toBe(false);
       expect(user.canPerform('write')).toBe(false);
       expect(user.canPerform('create')).toBe(false);
     });

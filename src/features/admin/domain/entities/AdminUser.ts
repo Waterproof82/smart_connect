@@ -68,9 +68,9 @@ export class AdminUser {
     if (this.role === 'super_admin') {
       return true;
     }
-    // 'admin' puede leer, editar, actualizar y borrar
+    // 'admin' solo puede leer
     if (this.role === 'admin') {
-      return ['read', 'edit', 'update', 'delete'].includes(action);
+      return action === 'read';
     }
     // 'anonymous' solo puede leer (usar el chatbot)
     if (this.role === 'anonymous') {
