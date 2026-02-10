@@ -1,3 +1,11 @@
+# [Unreleased]
+### Added
+- Anonymous access allowed for chat-with-rag Edge Function (role 'anon' supported).
+### Changed
+- Role normalization: JWT 'anon' is mapped to 'anonymous' internally for permission logic.
+### Fixed
+- Fixed error handling to properly return custom HTTP errors (401, etc).
+- Fixed useless assignment to 'prompt' and improved cacheHit condition in embedding logic.
 ## [Unreleased]
 ### Changed
 - Updated RAG documentation to reflect the new Gemini API endpoints (`v1beta/models/gemini-2.5-flash:generateContent` and `gemini-embedding-001`).
