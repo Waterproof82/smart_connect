@@ -60,26 +60,6 @@ class EmbeddingCache {
 // ============================================================================
 // MAIN HANDLER
 // ============================================================================
-Fuente: ${doc.source || 'Desconocida'}
-Contenido: ${doc.content}
-`
-REGLAS IMPORTANTES:
-1. Responde SOLO con información del contexto
-2. Si el contexto no contiene la respuesta, di "No tengo información sobre eso en mi base de conocimiento"
-3. Cita las fuentes cuando sea relevante (ej: "Según el Documento 1...")
-4. Sé conciso, directo y preciso
-5. NO inventes información que no esté en el contexto
-
-CONTEXTO:
-${contextBlocks}
-
-
-PREGUNTA DEL USUARIO:
-${query}
-
-RESPUESTA:`
-
-Por favor reformula tu pregunta o pregunta sobre otro tema.`
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
@@ -302,9 +282,9 @@ function returnError(status, message) {
 function hashString(str: string): string {
   let hash = 0
   for (let i = 0; i < str.length; i++) {
-    const char = str.charCodeAt(i)
-    hash = ((hash << 5) - hash) + char
-    hash = hash & hash
+    const codePoint = str.codePointAt(i) ?? 0;
+    hash = ((hash << 5) - hash) + codePoint;
+    hash = hash & hash;
   }
   return Math.abs(hash).toString(36)
 }

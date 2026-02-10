@@ -32,7 +32,6 @@ describe('UpdateDocumentUseCase', () => {
       update: jest.fn().mockResolvedValue(mockDocument),
       delete: jest.fn(),
       countBySource: jest.fn(),
-      countByCategory: jest.fn(),
       count: jest.fn(),
       generateEmbedding: jest.fn(),
     };

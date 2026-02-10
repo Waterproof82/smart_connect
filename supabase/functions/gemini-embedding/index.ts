@@ -92,10 +92,10 @@ const response = await fetch(
       throw new Error('Invalid embedding response')
     }
 
-    // Recortar a 768 dimensiones
+    // Recortar a 768 dimensiones y devolver en el formato esperado por los tests
     const embedding768 = data.embedding.values.slice(0, 768)
     return new Response(
-      JSON.stringify({ embedding: embedding768 }),
+      JSON.stringify({ embedding: { values: embedding768 } }),
       { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
 

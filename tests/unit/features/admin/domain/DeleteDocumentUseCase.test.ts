@@ -25,7 +25,6 @@ describe('DeleteDocumentUseCase', () => {
 			getById: jest.fn(),
 			count: jest.fn(),
 			countBySource: jest.fn(),
-			countByCategory: jest.fn(),
 			delete: jest.fn(),
 			update: jest.fn(),
 			create: jest.fn(),

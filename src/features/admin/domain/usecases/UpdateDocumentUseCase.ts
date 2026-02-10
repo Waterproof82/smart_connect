@@ -50,6 +50,6 @@ export class UpdateDocumentUseCase {
     }
 
     // Actualizar documento (el repositorio se encargará de regenerar el embedding)
-    await this.documentRepository.update(documentId, newContent, newSource, newMetadata);
+    await this.documentRepository.update(documentId, newContent, newSource);
   }
 }

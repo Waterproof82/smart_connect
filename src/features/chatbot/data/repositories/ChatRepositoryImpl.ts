@@ -1,17 +1,6 @@
 /**
- * ChatRepositoryImpl - Optimized for Server-Side RAG
- * 
- * Clean Architecture: Data Layer
- * 
- * Responsabilidad:
- * - Fallback a Gemini directo si RAG falla
- * - Logging de métricas de performance
- * 
- * Benefits:
- * - Single API call (vs multiple roundtrips)
- * - Lower latency (~1s vs ~2-4s)
- * - Better caching (server-side)
- * - Simplified frontend logic
+ * ChatRepositoryImpl - Clean Architecture: Data Layer
+ * Fallback a Gemini directo si RAG falla
  */
 
 import { SupabaseClient } from '@supabase/supabase-js';
@@ -62,15 +51,9 @@ export class ChatRepositoryImpl implements IChatRepository {
         throw new Error(`RAG failed: ${error.message}`);
       }
 
-      // Log performance metrics
-      // console.log('[ChatRepository] RAG Performance:', {
-      //   documentsFound: data.metadata?.documentsFound ?? 0,
-      //   cacheHit: data.metadata?.cacheHit ?? false,
-      //   timings: data.metadata?.timings,
-      //   totalTimeMs: totalTime,
-      // });
+      // (Opcional) Aquí puedes loguear métricas si lo necesitas
 
-      // Optional: Handle sources for citation UI
+      // (Opcional) Manejo de fuentes para UI de citas
       if (data.metadata?.sources && data.metadata.sources.length > 0) {
         this._handleSources(data.metadata.sources);
       }
@@ -79,9 +62,7 @@ export class ChatRepositoryImpl implements IChatRepository {
 
     } catch (error) {
       console.error('[ChatRepository] RAG error:', error);
-      
       // Fallback: Gemini directo si RAG falla
-      console.warn('[ChatRepository] Falling back to non-RAG response');
       return this._generateWithoutRAG(userQuery, conversationHistory, temperature, maxTokens);
     }
   }
@@ -97,44 +78,38 @@ export class ChatRepositoryImpl implements IChatRepository {
     temperature: number,
     maxTokens: number
   ): Promise<string> {
-    try {
-      const { data, error } = await this.supabase.functions.invoke('gemini-generate', {
-        body: {
-          contents: [
-            ...history.map(msg => ({
-              role: msg.role,
-              parts: [{ text: msg.content }]
-            })),
-            {
-              role: 'user',
-              parts: [{ text: query }]
-            }
-          ],
-          generationConfig: {
-            temperature,
-            maxOutputTokens: maxTokens,
-            topK: 40,
-            topP: 0.95,
-          },
+    const { data, error } = await this.supabase.functions.invoke('gemini-generate', {
+      body: {
+        contents: [
+          ...history.map(msg => ({
+            role: msg.role,
+            parts: [{ text: msg.content }]
+          })),
+          {
+            role: 'user',
+            parts: [{ text: query }]
+          }
+        ],
+        generationConfig: {
+          temperature,
+          maxOutputTokens: maxTokens,
+          topK: 40,
+          topP: 0.95,
         },
-      });
+      },
+    });
 
-      if (error) {
-        throw new Error(`Gemini generation failed: ${error.message}`);
-      }
-
-      if (!data.candidates?.[0]?.content?.parts) {
-        throw new Error('Invalid response from Gemini');
-      }
-
-      return data.candidates[0].content.parts
-        .map((part: { text: string }) => part.text)
-        .join('');
-
-    } catch (error) {
-      console.error('[ChatRepository] Gemini direct call error:', error);
-      throw error;
+    if (error) {
+      throw new Error(`Gemini generation failed: ${error.message}`);
     }
+
+    if (!data.candidates?.[0]?.content?.parts) {
+      throw new Error('Invalid response from Gemini');
+    }
+
+    return data.candidates[0].content.parts
+      .map((part: { text: string }) => part.text)
+      .join('');
   }
 
   /**
@@ -143,11 +118,6 @@ export class ChatRepositoryImpl implements IChatRepository {
    * @private
    */
   private _handleSources(_sources: Array<{ source: string; similarity: number }>) {
-    
-    // Optional: Emit event for UI to show sources/citations
-    // Example:
-    // window.dispatchEvent(new CustomEvent('rag-sources', { detail: sources }));
-    
-    // Or store in global state (Redux, Zustand, etc.)
+    // (Opcional) Implementa manejo de fuentes si tu UI lo requiere
   }
 }
