@@ -135,7 +135,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
 
   // --- Logic Handlers ---
 
-  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSearch = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     setCurrentPage(1);
     loadDocuments();
@@ -233,18 +233,23 @@ export const DocumentList: React.FC<DocumentListProps> = ({
   const renderMobileCard = (doc: Document) => (
     <div 
       key={doc.id} 
-      className="bg-gray-900 border border-gray-800 rounded-xl p-4 active:scale-[0.99] transition-transform outline-none focus:ring-2 focus:ring-blue-500"
-      role="button"
-      tabIndex={0}
-      onClick={() => { setSelectedDocument(doc); setIsEditing(false); }}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          setSelectedDocument(doc);
-          setIsEditing(false);
-        }
-      }}
+      className="relative bg-gray-900 border border-gray-800 rounded-xl p-4 active:scale-[0.99] transition-transform outline-none focus:ring-2 focus:ring-blue-500"
     >
+      <button
+        type="button"
+        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+        aria-label="View details"
+        onClick={() => { setSelectedDocument(doc); setIsEditing(false); }}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            setSelectedDocument(doc);
+            setIsEditing(false);
+          }
+        }}
+        tabIndex={0}
+        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}
+      />
       <div className="flex justify-between items-start mb-3">
         <div className="flex flex-wrap gap-1">
           {doc.source.split(',').slice(0, 2).map(s => <SourceTag key={s} source={s} />)}
@@ -442,7 +447,17 @@ export const DocumentList: React.FC<DocumentListProps> = ({
       {/* View/Edit Modal */}
       {selectedDocument && (
         <div className="fixed inset-0 z-50 flex items-center justify-center sm:p-4">
-          <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={() => setSelectedDocument(null)} />
+          <button
+            type="button"
+            className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+            aria-label="Cerrar modal"
+            tabIndex={0}
+            onClick={() => setSelectedDocument(null)}
+            onKeyDown={e => {
+              if (e.key === 'Enter' || e.key === ' ') setSelectedDocument(null);
+            }}
+            style={{ cursor: 'pointer' }}
+          />
           <div className="relative bg-gray-900 w-full h-full sm:h-auto sm:max-h-[85vh] sm:rounded-xl sm:border border-gray-800 flex flex-col max-w-4xl shadow-2xl">
             
             {/* Modal Header */}

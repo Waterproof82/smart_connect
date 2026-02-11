@@ -30,7 +30,7 @@ export class AdminContainer {
   public readonly createDocumentUseCase: CreateDocumentUseCase;
   public readonly loginAdminUseCase: LoginAdminUseCase;
 
-  constructor(supabaseUrl: string, supabaseKey: string) {
+  constructor(_supabaseUrl: string, _supabaseKey: string) {
     // Initialize repositories
     this.documentRepository = new SupabaseDocumentRepository();
     this.authRepository = new SupabaseAuthRepository();
