@@ -6,51 +6,8 @@ import { UpdateDocumentUseCase } from '../../domain/usecases/UpdateDocumentUseCa
 import { CreateDocumentUseCase } from '../../domain/usecases/CreateDocumentUseCase';
 import { AdminUser } from '../../domain/entities/AdminUser';
 import { PaginatedResult } from '../../domain/repositories/IDocumentRepository';
-import { Trash2, Edit2, Search, Filter, Plus, X, Calendar, Database, ChevronLeft, ChevronRight } from 'lucide-react';
-
-// --- Utility: Color Generator ---
-const getSourceColor = (source: string): string => {
-  let hash = 5381;
-  for (let i = 0; i < source.length; i++) {
-    const code = source.codePointAt(i) ?? 0;
-    hash = ((hash << 5) + hash) + code;
-  }
-  const hue = (hash % 360 + 360) % 360;
-  const sat = 65 + ((hash >> 8) % 15);
-  const light = 50 + ((hash >> 16) % 10);
-  return `hsl(${hue}, ${sat}%, ${light}%)`;
-};
-
-// --- Sub-Component: Source Tag ---
-const SourceTag: React.FC<{ source: string; onRemove?: () => void }> = ({ source, onRemove }) => {
-  const trimmed = source.trim();
-  const color = getSourceColor(trimmed);
-  return (
-    <span 
-      className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium mr-1 mb-1"
-      style={{
-        backgroundColor: `${color}15`,
-        color: color,
-        border: `1px solid ${color}40`
-      }}
-    >
-      {trimmed}
-      {onRemove && (
-        <button 
-          onClick={(e) => {
-            e.stopPropagation();
-            onRemove();
-          }}
-          className="ml-1.5 hover:text-white focus:outline-none cursor-pointer"
-          type="button"
-          aria-label={`Remove tag ${trimmed}`}
-        >
-          <X className="w-3 h-3" />
-        </button>
-      )}
-    </span>
-  );
-};
+import { Search, Filter, Plus, Database, ChevronLeft, ChevronRight, Edit2, X } from 'lucide-react';
+import { SourceTag, DocumentCard, DocumentTable } from './document';
 
 interface DocumentListProps {
   getAllDocumentsUseCase: GetAllDocumentsUseCase;
@@ -229,57 +186,16 @@ export const DocumentList: React.FC<DocumentListProps> = ({
     setEditedSources(prev => prev.filter(x => x !== tagToRemove));
   };
 
-  // Helper to render Mobile Card (reduces nesting)
-  const renderMobileCard = (doc: Document) => (
-    <div 
-      key={doc.id} 
-      className="relative bg-gray-900 border border-gray-800 rounded-xl p-4 active:scale-[0.99] transition-transform outline-none focus:ring-2 focus:ring-blue-500"
-    >
-      <button
-        type="button"
-        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-        aria-label="View details"
-        onClick={() => { setSelectedDocument(doc); setIsEditing(false); }}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            setSelectedDocument(doc);
-            setIsEditing(false);
-          }
-        }}
-        tabIndex={0}
-        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}
-      />
-      <div className="flex justify-between items-start mb-3">
-        <div className="flex flex-wrap gap-1">
-          {doc.source.split(',').slice(0, 2).map(s => <SourceTag key={s} source={s} />)}
-          {doc.source.split(',').length > 2 && <span className="text-xs text-gray-500 self-center">+more</span>}
-        </div>
-        <span className="text-xs text-gray-500 flex items-center gap-1 shrink-0">
-          <Calendar className="w-3 h-3" />
-          {doc.createdAt.toLocaleDateString()}
-        </span>
-      </div>
-      
-      <p className="text-gray-300 text-sm line-clamp-3 mb-4 leading-relaxed">
-        {doc.content}
-      </p>
-
-      <div className="flex justify-between items-center border-t border-gray-800 pt-3 mt-2">
-         <span className="text-xs text-blue-400 font-medium">Tap to view details</span>
-         {currentUser.canPerform('edit') && (
-           <button 
-             onClick={(e) => handleDelete(doc.id, e)}
-             className="p-2 text-red-400 bg-red-900/10 rounded-lg hover:bg-red-900/30 z-10"
-             aria-label="Delete document"
-             type="button"
-           >
-             <Trash2 className="w-4 h-4" />
-           </button>
-         )}
-      </div>
-    </div>
-  );
+  // Handler para ver documento
+  const handleViewDocument = (doc: Document) => {
+    setSelectedDocument(doc);
+    setIsEditing(false);
+  };
+  // Handler para editar documento
+  const handleEditDocument = (doc: Document) => {
+    setSelectedDocument(doc);
+    handleEditOpen(doc);
+  };
 
   // --- Render ---
 
@@ -346,65 +262,28 @@ export const DocumentList: React.FC<DocumentListProps> = ({
         <>
           {/* Mobile View: Cards */}
           <div className="grid grid-cols-1 gap-4 md:hidden">
-            {documents?.data.map(renderMobileCard)}
+            {documents?.data.map(doc => (
+              <DocumentCard
+                key={doc.id}
+                doc={doc}
+                onView={() => handleViewDocument(doc)}
+                onDelete={currentUser.canPerform('edit') ? (e) => handleDelete(doc.id, e) : undefined}
+                canEdit={currentUser.canPerform('edit')}
+              />
+            ))}
           </div>
 
           {/* Desktop View: Table */}
           <div className="hidden md:block bg-gray-900 border border-gray-800 rounded-xl overflow-hidden shadow-sm">
-            <table className="min-w-full divide-y divide-gray-800">
-              <thead className="bg-gray-800/50">
-                <tr>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Content Preview</th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Source</th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Created</th>
-                  <th className="px-6 py-4 text-center text-xs font-semibold text-gray-400 uppercase tracking-wider">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-800">
-                {documents?.data.map((doc) => (
-                  <tr key={doc.id} className="hover:bg-gray-800/40 transition-colors group">
-                    <td className="px-6 py-4 text-sm text-gray-300 max-w-md">
-                      <button 
-                        onClick={() => { setSelectedDocument(doc); setIsEditing(false); }} 
-                        className="text-left hover:text-blue-400 transition-colors line-clamp-2 w-full"
-                      >
-                        {doc.getContentPreview(120)}
-                      </button>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex flex-wrap gap-1 max-w-[200px]">
-                        {doc.source.split(',').map(s => <SourceTag key={s} source={s} />)}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {doc.createdAt.toLocaleDateString()}
-                    </td>
-                    <td className="px-6 py-4 text-center">
-                      <div className="flex justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button 
-                          onClick={() => { setSelectedDocument(doc); handleEditOpen(doc); }} 
-                          className="p-1.5 text-blue-400 hover:bg-blue-900/30 rounded" 
-                          aria-label="Edit document"
-                          type="button"
-                        >
-                           <Edit2 className="w-4 h-4" />
-                        </button>
-                        {currentUser.canPerform('edit') && (
-                          <button 
-                            onClick={(e) => handleDelete(doc.id, e)} 
-                            className="p-1.5 text-red-400 hover:bg-red-900/30 rounded" 
-                            aria-label="Delete document"
-                            type="button"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            {documents?.data && (
+              <DocumentTable
+                documents={documents.data}
+                onView={handleViewDocument}
+                onEdit={handleEditDocument}
+                onDelete={handleDelete}
+                canEdit={currentUser.canPerform('edit')}
+              />
+            )}
           </div>
 
           {documents?.data.length === 0 && (

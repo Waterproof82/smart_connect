@@ -1,4 +1,6 @@
 # [Unreleased]
+### Changed
+- Refactored `DocumentList.tsx` to use modular components (`SourceTag`, `DocumentCard`, `DocumentTable`, `DocumentModal`). Improved readability, maintainability, and compliance with Clean Architecture, SOLID principles, and OWASP guidelines. (2026-02-11)
 ### Added
 - Anonymous access allowed for chat-with-rag Edge Function (role 'anon' supported).
 ### Changed
