@@ -2,8 +2,10 @@ import React from 'react';
 import { Calendar, Trash2 } from 'lucide-react';
 import { SourceTag } from './SourceTag';
 
+import { Document } from '../../../domain/entities/Document';
+
 interface DocumentCardProps {
-  doc: any;
+  doc: Document;
   onView: () => void;
   onDelete?: (e: React.MouseEvent) => void;
   canEdit: boolean;
