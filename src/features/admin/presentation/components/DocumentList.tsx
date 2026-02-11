@@ -1,7 +1,3 @@
-  // Extraer función para evitar anidación profunda
-  const handleRemoveSource = (source: string) => {
-    setEditedSources(prev => prev.filter(x => x !== source));
-  };
 import React, { useState, useEffect, useCallback } from 'react';
 import { Document } from '../../domain/entities/Document';
 import { GetAllDocumentsUseCase } from '../../domain/usecases/GetAllDocumentsUseCase';
@@ -41,8 +37,11 @@ const SourceTag: React.FC<{ source: string; onRemove?: () => void }> = ({ source
       {trimmed}
       {onRemove && (
         <button 
-          onClick={onRemove} 
-          className="ml-1.5 hover:text-white focus:outline-none"
+          onClick={(e) => {
+            e.stopPropagation();
+            onRemove();
+          }}
+          className="ml-1.5 hover:text-white focus:outline-none cursor-pointer"
           type="button"
           aria-label={`Remove tag ${trimmed}`}
         >
@@ -70,7 +69,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
   currentUser,
   onDocumentChange,
 }) => {
-  // --- State ---
+  // --- States ---
   const [documents, setDocuments] = useState<PaginatedResult<Document> | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -81,11 +80,11 @@ export const DocumentList: React.FC<DocumentListProps> = ({
   const [searchText, setSearchText] = useState<string>('');
   const [availableSources, setAvailableSources] = useState<string[]>([]);
 
-  // Selection & Editing
+  // Editing & Selection
   const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState('');
-  const [editedSources, setEditedSources] = useState<string[]>([]);
+  const [editedSources, setEditedSources] = useState<string[]>([]); // State for editing tags
   const [newSourceInput, setNewSourceInput] = useState('');
   const [isSaving, setIsSaving] = useState(false);
 
@@ -95,7 +94,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
   const [newDocument, setNewDocument] = useState({ content: '', source: '', metadata: {} });
   const [customSource, setCustomSource] = useState('');
 
-  // --- Data Loading Handlers (Memoized) ---
+  // --- Memoized Load Functions (Fixes useEffect dependencies) ---
   const loadDocuments = useCallback(async () => {
     setIsLoading(true);
     setError(null);
@@ -122,13 +121,8 @@ export const DocumentList: React.FC<DocumentListProps> = ({
   }, [getAllDocumentsUseCase]);
 
   // --- Effects ---
-  useEffect(() => { 
-    loadDocuments(); 
-  }, [loadDocuments]);
-
-  useEffect(() => { 
-    loadAvailableSources(); 
-  }, [loadAvailableSources]);
+  useEffect(() => { loadDocuments(); }, [loadDocuments]);
+  useEffect(() => { loadAvailableSources(); }, [loadAvailableSources]);
   
   useEffect(() => {
     if (selectedDocument) {
@@ -139,9 +133,9 @@ export const DocumentList: React.FC<DocumentListProps> = ({
     return () => { document.body.style.overflow = 'unset'; };
   }, [selectedDocument]);
 
-  // --- Actions ---
-  // Usar SyntheticEvent para evitar deprecation de FormEventHandler
-  const handleSearch = (e: React.SyntheticEvent<HTMLFormElement>) => {
+  // --- Logic Handlers ---
+
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setCurrentPage(1);
     loadDocuments();
@@ -150,6 +144,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
   const handleDelete = async (id: string, e?: React.MouseEvent) => {
     e?.stopPropagation();
     if (!confirm('Are you sure you want to delete this document?')) return;
+    
     try {
       await deleteDocumentUseCase.execute(id, currentUser);
       await loadDocuments();
@@ -210,8 +205,8 @@ export const DocumentList: React.FC<DocumentListProps> = ({
     }
   };
 
-  // Helper to reduce nesting depth in JSX
-  const handleAddTagInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  // --- Tag Logic Helpers ---
+  const handleAddTagInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
       const val = newSourceInput.trim();
@@ -224,11 +219,62 @@ export const DocumentList: React.FC<DocumentListProps> = ({
 
   const handleManualAddTag = () => {
     const val = newSourceInput.trim();
-    if (val) {
+    if (val && !editedSources.includes(val)) {
       setEditedSources([...editedSources, val]);
       setNewSourceInput('');
     }
   };
+
+  const handleRemoveTag = (tagToRemove: string) => {
+    setEditedSources(prev => prev.filter(x => x !== tagToRemove));
+  };
+
+  // Helper to render Mobile Card (reduces nesting)
+  const renderMobileCard = (doc: Document) => (
+    <div 
+      key={doc.id} 
+      className="bg-gray-900 border border-gray-800 rounded-xl p-4 active:scale-[0.99] transition-transform outline-none focus:ring-2 focus:ring-blue-500"
+      role="button"
+      tabIndex={0}
+      onClick={() => { setSelectedDocument(doc); setIsEditing(false); }}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          setSelectedDocument(doc);
+          setIsEditing(false);
+        }
+      }}
+    >
+      <div className="flex justify-between items-start mb-3">
+        <div className="flex flex-wrap gap-1">
+          {doc.source.split(',').slice(0, 2).map(s => <SourceTag key={s} source={s} />)}
+          {doc.source.split(',').length > 2 && <span className="text-xs text-gray-500 self-center">+more</span>}
+        </div>
+        <span className="text-xs text-gray-500 flex items-center gap-1 shrink-0">
+          <Calendar className="w-3 h-3" />
+          {doc.createdAt.toLocaleDateString()}
+        </span>
+      </div>
+      
+      <p className="text-gray-300 text-sm line-clamp-3 mb-4 leading-relaxed">
+        {doc.content}
+      </p>
+
+      <div className="flex justify-between items-center border-t border-gray-800 pt-3 mt-2">
+         <span className="text-xs text-blue-400 font-medium">Tap to view details</span>
+         {currentUser.canPerform('edit') && (
+           <button 
+             onClick={(e) => handleDelete(doc.id, e)}
+             className="p-2 text-red-400 bg-red-900/10 rounded-lg hover:bg-red-900/30 z-10"
+             aria-label="Delete document"
+             type="button"
+           >
+             <Trash2 className="w-4 h-4" />
+           </button>
+         )}
+      </div>
+    </div>
+  );
 
   // --- Render ---
 
@@ -237,7 +283,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
   return (
     <div className="space-y-6">
       
-      {/* --- Action Bar --- */}
+      {/* Action Bar */}
       <div className="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center bg-gray-900/50 p-4 rounded-xl border border-gray-800">
         <form onSubmit={handleSearch} className="w-full md:w-auto flex flex-col md:flex-row gap-3 flex-1 max-w-3xl">
           <div className="relative w-full md:w-48">
@@ -288,66 +334,17 @@ export const DocumentList: React.FC<DocumentListProps> = ({
         )}
       </div>
 
-      {/* --- Content Display --- */}
+      {/* Content Display */}
       {isLoading && !documents ? (
         <div className="text-center py-20 text-gray-500 animate-pulse">Loading knowledge base...</div>
       ) : (
         <>
-          {/* Mobile View: Cards (< 768px) */}
+          {/* Mobile View: Cards */}
           <div className="grid grid-cols-1 gap-4 md:hidden">
-            {documents?.data.map((doc) => (
-              <div
-                key={doc.id}
-                className="relative bg-gray-900 border border-gray-800 rounded-xl p-4 w-full"
-              >
-                {/* Botón eliminar superpuesto */}
-                {currentUser.canPerform('edit') && (
-                  <button
-                    onClick={(e) => handleDelete(doc.id, e)}
-                    className="absolute top-2 right-2 p-2 text-red-400 bg-red-900/10 rounded-lg hover:bg-red-900/30 z-10"
-                    aria-label="Delete document"
-                    tabIndex={0}
-                    onClickCapture={e => e.stopPropagation()}
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                )}
-                {/* Tarjeta clickeable */}
-                <button
-                  type="button"
-                  className="block w-full text-left focus:outline-none"
-                  style={{ background: 'none', border: 'none', padding: 0 }}
-                  onClick={() => { setSelectedDocument(doc); setIsEditing(false); }}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      e.preventDefault();
-                      setSelectedDocument(doc);
-                      setIsEditing(false);
-                    }
-                  }}
-                >
-                  <div className="flex justify-between items-start mb-3">
-                    <div className="flex flex-wrap gap-1">
-                      {doc.source.split(',').slice(0, 2).map(s => <SourceTag key={s} source={s} />)}
-                      {doc.source.split(',').length > 2 && <span className="text-xs text-gray-500 self-center">+more</span>}
-                    </div>
-                    <span className="text-xs text-gray-500 flex items-center gap-1 shrink-0">
-                      <Calendar className="w-3 h-3" />
-                      {doc.createdAt.toLocaleDateString()}
-                    </span>
-                  </div>
-                  <p className="text-gray-300 text-sm line-clamp-3 mb-4 leading-relaxed">
-                    {doc.content}
-                  </p>
-                  <div className="flex justify-between items-center border-t border-gray-800 pt-3 mt-2">
-                    <span className="text-xs text-blue-400 font-medium">Tap to view details</span>
-                  </div>
-                </button>
-              </div>
-            ))}
+            {documents?.data.map(renderMobileCard)}
           </div>
 
-          {/* Desktop View: Table (>= 768px) */}
+          {/* Desktop View: Table */}
           <div className="hidden md:block bg-gray-900 border border-gray-800 rounded-xl overflow-hidden shadow-sm">
             <table className="min-w-full divide-y divide-gray-800">
               <thead className="bg-gray-800/50">
@@ -362,7 +359,10 @@ export const DocumentList: React.FC<DocumentListProps> = ({
                 {documents?.data.map((doc) => (
                   <tr key={doc.id} className="hover:bg-gray-800/40 transition-colors group">
                     <td className="px-6 py-4 text-sm text-gray-300 max-w-md">
-                      <button onClick={() => { setSelectedDocument(doc); setIsEditing(false); }} className="text-left hover:text-blue-400 transition-colors line-clamp-2 w-full">
+                      <button 
+                        onClick={() => { setSelectedDocument(doc); setIsEditing(false); }} 
+                        className="text-left hover:text-blue-400 transition-colors line-clamp-2 w-full"
+                      >
                         {doc.getContentPreview(120)}
                       </button>
                     </td>
@@ -376,11 +376,21 @@ export const DocumentList: React.FC<DocumentListProps> = ({
                     </td>
                     <td className="px-6 py-4 text-center">
                       <div className="flex justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button onClick={() => { setSelectedDocument(doc); handleEditOpen(doc); }} className="p-1.5 text-blue-400 hover:bg-blue-900/30 rounded" aria-label="Edit document">
+                        <button 
+                          onClick={() => { setSelectedDocument(doc); handleEditOpen(doc); }} 
+                          className="p-1.5 text-blue-400 hover:bg-blue-900/30 rounded" 
+                          aria-label="Edit document"
+                          type="button"
+                        >
                            <Edit2 className="w-4 h-4" />
                         </button>
                         {currentUser.canPerform('edit') && (
-                          <button onClick={() => handleDelete(doc.id)} className="p-1.5 text-red-400 hover:bg-red-900/30 rounded" aria-label="Delete document">
+                          <button 
+                            onClick={(e) => handleDelete(doc.id, e)} 
+                            className="p-1.5 text-red-400 hover:bg-red-900/30 rounded" 
+                            aria-label="Delete document"
+                            type="button"
+                          >
                             <Trash2 className="w-4 h-4" />
                           </button>
                         )}
@@ -401,7 +411,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
         </>
       )}
 
-      {/* --- Pagination --- */}
+      {/* Pagination */}
       {documents && documents.totalPages > 1 && (
         <div className="flex items-center justify-between pt-4 border-t border-gray-800/50">
           <span className="text-sm text-gray-500 hidden sm:block">
@@ -412,6 +422,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
               onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
               disabled={currentPage === 1}
               className="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1 text-sm"
+              type="button"
             >
               <ChevronLeft className="w-4 h-4" /> Prev
             </button>
@@ -420,6 +431,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
               onClick={() => setCurrentPage(p => Math.min(documents.totalPages, p + 1))}
               disabled={currentPage === documents.totalPages}
               className="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1 text-sm"
+              type="button"
             >
               Next <ChevronRight className="w-4 h-4" />
             </button>
@@ -427,20 +439,10 @@ export const DocumentList: React.FC<DocumentListProps> = ({
         </div>
       )}
 
-      {/* --- View/Edit Modal --- */}
+      {/* View/Edit Modal */}
       {selectedDocument && (
         <div className="fixed inset-0 z-50 flex items-center justify-center sm:p-4">
-          <button
-            type="button"
-            className="absolute inset-0 bg-black/80 backdrop-blur-sm"
-            aria-label="Cerrar modal"
-            tabIndex={0}
-            onClick={() => setSelectedDocument(null)}
-            onKeyDown={e => {
-              if (e.key === 'Enter' || e.key === ' ') setSelectedDocument(null);
-            }}
-            style={{ cursor: 'pointer' }}
-          />
+          <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={() => setSelectedDocument(null)} />
           <div className="relative bg-gray-900 w-full h-full sm:h-auto sm:max-h-[85vh] sm:rounded-xl sm:border border-gray-800 flex flex-col max-w-4xl shadow-2xl">
             
             {/* Modal Header */}
@@ -448,7 +450,12 @@ export const DocumentList: React.FC<DocumentListProps> = ({
               <h3 className="text-lg font-bold text-white flex items-center gap-2">
                 {isEditing ? 'Edit Document' : 'Document Details'}
               </h3>
-              <button onClick={() => setSelectedDocument(null)} className="p-2 hover:bg-gray-800 rounded-lg text-gray-400 hover:text-white" aria-label="Close modal">
+              <button 
+                onClick={() => setSelectedDocument(null)} 
+                className="p-2 hover:bg-gray-800 rounded-lg text-gray-400 hover:text-white" 
+                aria-label="Close modal"
+                type="button"
+              >
                 <X className="w-6 h-6" />
               </button>
             </div>
@@ -461,22 +468,35 @@ export const DocumentList: React.FC<DocumentListProps> = ({
                      <label htmlFor="edit-tags-input" className="text-xs font-medium text-gray-400 uppercase mb-2 block">Sources</label>
                      <div className="flex flex-wrap gap-2 mb-2">
                        {editedSources.map(s => (
-                         <SourceTag key={s} source={s} onRemove={() => handleRemoveSource(s)} />
+                         <SourceTag 
+                            key={s} 
+                            source={s} 
+                            onRemove={() => handleRemoveTag(s)} 
+                         />
                        ))}
                      </div>
                      <div className="flex gap-2">
+                       {/* Dropdown for Sources using Datalist */}
                        <input 
                          id="edit-tags-input"
                          type="text" 
+                         list="available-sources-list"
                          className="flex-1 bg-gray-900 border border-gray-600 rounded px-3 py-1.5 text-sm text-white focus:ring-1 focus:ring-blue-500"
-                         placeholder="Add tag..."
+                         placeholder="Select or type tag..."
                          value={newSourceInput}
                          onChange={(e) => setNewSourceInput(e.target.value)}
-                         onKeyDown={handleAddTagInput}
+                         onKeyDown={handleAddTagInputKeyDown}
                        />
+                       <datalist id="available-sources-list">
+                         {availableSources.map(source => (
+                           <option key={source} value={source} />
+                         ))}
+                       </datalist>
+                       
                        <button 
                          onClick={handleManualAddTag}
                          className="px-3 py-1 bg-gray-700 text-white text-xs rounded hover:bg-gray-600"
+                         type="button"
                        >
                          Add
                        </button>
@@ -511,19 +531,41 @@ export const DocumentList: React.FC<DocumentListProps> = ({
             <div className="p-4 border-t border-gray-800 bg-gray-900/95 flex justify-end gap-3 sticky bottom-0">
                {isEditing ? (
                  <>
-                   <button onClick={() => setIsEditing(false)} className="px-4 py-2 text-gray-300 hover:text-white" disabled={isSaving}>Cancel</button>
-                   <button onClick={handleSave} disabled={isSaving} className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 disabled:opacity-50">
+                   <button 
+                      onClick={() => setIsEditing(false)} 
+                      className="px-4 py-2 text-gray-300 hover:text-white" 
+                      disabled={isSaving}
+                      type="button"
+                   >
+                      Cancel
+                   </button>
+                   <button 
+                      onClick={handleSave} 
+                      disabled={isSaving} 
+                      className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 disabled:opacity-50"
+                      type="button"
+                   >
                      {isSaving ? 'Saving...' : 'Save Changes'}
                    </button>
                  </>
                ) : (
                  <>
                    {currentUser.canPerform('update') && (
-                     <button onClick={() => handleEditOpen(selectedDocument)} className="flex items-center gap-2 px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700">
+                     <button 
+                        onClick={() => handleEditOpen(selectedDocument)} 
+                        className="flex items-center gap-2 px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700"
+                        type="button"
+                     >
                        <Edit2 className="w-4 h-4" /> Edit
                      </button>
                    )}
-                   <button onClick={() => setSelectedDocument(null)} className="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600">Close</button>
+                   <button 
+                      onClick={() => setSelectedDocument(null)} 
+                      className="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600"
+                      type="button"
+                   >
+                      Close
+                   </button>
                  </>
                )}
             </div>
@@ -531,14 +573,14 @@ export const DocumentList: React.FC<DocumentListProps> = ({
         </div>
       )}
 
-      {/* --- Create Modal --- */}
+      {/* Create Modal */}
       {showCreateModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center sm:p-4">
           <div className="absolute inset-0 bg-black/90 backdrop-blur-sm" />
           <div className="relative bg-gray-900 w-full h-full sm:h-auto sm:max-h-[90vh] sm:rounded-xl border border-gray-800 flex flex-col max-w-4xl">
              <div className="flex justify-between p-5 border-b border-gray-800">
                 <h3 className="text-xl font-bold text-white">New Document</h3>
-                <button onClick={() => setShowCreateModal(false)} className="text-gray-400 hover:text-white" aria-label="Close modal"><X className="w-6 h-6"/></button>
+                <button onClick={() => setShowCreateModal(false)} className="text-gray-400 hover:text-white" aria-label="Close modal" type="button"><X className="w-6 h-6"/></button>
              </div>
              <div className="flex-1 overflow-y-auto p-5 space-y-5">
                 {/* Source Selection */}
@@ -581,11 +623,12 @@ export const DocumentList: React.FC<DocumentListProps> = ({
                 </div>
              </div>
              <div className="p-5 border-t border-gray-800 flex justify-end gap-3">
-                <button onClick={() => setShowCreateModal(false)} className="px-5 py-2.5 text-gray-300 hover:bg-gray-800 rounded-lg">Cancel</button>
+                <button onClick={() => setShowCreateModal(false)} className="px-5 py-2.5 text-gray-300 hover:bg-gray-800 rounded-lg" type="button">Cancel</button>
                 <button 
                   onClick={handleCreate} 
                   disabled={isCreating} 
                   className="px-5 py-2.5 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium disabled:opacity-50"
+                  type="button"
                 >
                   {isCreating ? 'Creating...' : 'Create Document'}
                 </button>
