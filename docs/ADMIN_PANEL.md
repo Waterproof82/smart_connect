@@ -301,9 +301,9 @@ USING (true);
 
 ## Roadmap Futuro
 
-### Fase 2
-- [ ] **Editar documentos** inline
-- [ ] **Re-generar embeddings** tras edición
+### Fase 2 (Completado ✅)
+- [x] **Editar documentos** inline
+- [x] **Re-generar embeddings** tras edición
 - [ ] **Audit log** de cambios
 
 ### Fase 3

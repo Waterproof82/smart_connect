@@ -12,7 +12,7 @@ Un ADR (Architecture Decision Record) documenta una decisión arquitectónica im
 |----|--------|--------|-------|
 | [ADR-001](ADR-001-clean-architecture.md) | Adopción de Clean Architecture con Scope Rule | Aceptado | 2026-01-26 |
 | [ADR-002](ADR-002-n8n-webhook-contact-form.md) | n8n Webhook para Formulario de Contacto | Aceptado | 2026-02-04 |
-| [ADR-003](ADR-003-rag-architecture-decision.md) | RAG System Architecture - Flutter/Gemini vs Python/LangChain | Aceptado | 2026-02-03 |
+| [ADR-003](ADR-003-rag-architecture-decision.md) | RAG System Architecture - React/Gemini vs Python/LangChain | Aceptado | 2026-02-03 |
 | [ADR-004](ADR-004-supabase-backend-as-a-service.md) | Supabase como Backend as a Service | Aceptado | 2026-02-04 |
 
 
