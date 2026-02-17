@@ -6,7 +6,7 @@
 ## Contexto
 
 SmartConnect AI es un ecosistema multi-módulo que integra:
-- Landing Page (Next.js con SEO)
+- Landing Page (React + Vite con SEO)
 - Chatbot RAG con IA (Gemini)
 - Sistema de Lead Scoring con n8n
 - Producto QRIBAR (carta digital)
@@ -48,7 +48,7 @@ Elegimos **Clean Architecture con Scope Rule (Shared + Local)**
 ## Justificación
 
 - **Testabilidad TDD**: La inversión de dependencias permite mockear infraestructura fácilmente. El Domain Layer es 100% testeable sin dependencias externas.
-- **Independencia de Frameworks**: La lógica de negocio (Use Cases, Entities) no depende de React, Next.js o Flutter. Podemos cambiar el framework de UI sin reescribir las reglas de negocio.
+- **Independencia de Frameworks**: La lógica de negocio (Use Cases, Entities) no depende de React ni ningún framework de UI. Podemos cambiar el framework de UI sin reescribir las reglas de negocio.
 - **Scope Rule**: La separación Shared/Local evita el anti-patrón de "feature folders que importan entre sí". El código común vive en `core/` y `shared/`, el código específico en `features/`.
 - **OWASP Compliance**: La capa Domain valida reglas de negocio antes de llegar a Data. La capa Data centraliza validaciones de seguridad (ej: sanitización de inputs en datasources).
 - **Escalabilidad del Equipo**: Nuevos desarrolladores pueden trabajar en una feature sin afectar otras. Las interfaces del Domain actúan como contrato.

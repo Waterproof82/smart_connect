@@ -1,26 +1,3 @@
-# [Unreleased]
-### Added
-- Anonymous access allowed for chat-with-rag Edge Function (role 'anon' supported).
-### Changed
-- Role normalization: JWT 'anon' is mapped to 'anonymous' internally for permission logic.
-### Fixed
-- Fixed error handling to properly return custom HTTP errors (401, etc).
-- Fixed useless assignment to 'prompt' and improved cacheHit condition in embedding logic.
-## [Unreleased]
-### Changed
-- Updated RAG documentation to reflect the new Gemini API endpoints (`v1beta/models/gemini-2.5-flash:generateContent` and `gemini-embedding-001`).
-- Removed all references to document citation in chatbot responses and prompts.
-- Updated all checklists and environment variable examples to clarify that `GEMINI_API_KEY` must never be exposed in the frontend.
-- Added explicit security warning in documentation about Gemini API key usage.
-- Improved prompt examples to match the new RAG flow and business requirements.
-## [Unreleased]
-### Removed
-- Removed unused `category` and `timestamp` metadata fields from RAG indexer interfaces and implementation. These fields were present in comments and types but not used in the actual RAG flow. Codebase is now minimal and only includes metadata required for production RAG operation. (2026-02-06)
-### Security
-- Removed: Eliminated all usage and exposure of `VITE_GEMINI_API_KEY` in the frontend. Now only `GEMINI_API_KEY` is used server-side (backend/edge functions). The frontend never exposes or requires the Gemini API key. Updated `.env.example` and documentation accordingly. (2026-02-05)
-## [Unreleased]
-### Changed
-- SupabaseKnowledgeLoader ahora solo incluye sources presentes en los datos (no inicializa con qribar/reviews/general vacíos). Esto evita mostrar sources con valor 0 en la UI y estadísticas.
 # Changelog
 
 All notable changes to this project will be documented in this file.
@@ -30,7 +7,46 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Security
+- **RLS Policies for Documents Table (2026-02-17):**
+  - Refined RLS policies for `documents` table
+  - SELECT: Public access (anon can read for chatbot RAG)
+  - INSERT/UPDATE/DELETE: Only authenticated users with admin/super_admin role
+  - All 11 integration tests passing
+  - Tests: `tests/integration/admin/documents-rls.test.ts`
+
+### Fixed
+- Anonymous UPDATE/DELETE operations now correctly blocked by RLS
+- Admin access properly configured via JWT user_metadata role field
+
+### Changed
+- Updated RAG documentation to reflect the new Gemini API endpoints (`v1beta/models/gemini-2.5-flash:generateContent` and `gemini-embedding-001`).
+- Removed all references to document citation in chatbot responses and prompts.
+- Updated all checklists and environment variable `GEMINI_API examples to clarify that_KEY` must never be exposed in the frontend.
+- Added explicit security warning in documentation about Gemini API key usage.
+- Improved prompt examples to match the new RAG flow and business requirements.
+
 ### Added
+- Anonymous access allowed for chat-with-rag Edge Function (role 'anon' supported).
+
+### Changed
+- Role normalization: JWT 'anon' is mapped to 'anonymous' internally for permission logic.
+
+### Fixed
+- Fixed error handling to properly return custom HTTP errors (401, etc).
+- Fixed useless assignment to 'prompt' and improved cacheHit condition in embedding logic.
+
+### Removed
+- Removed unused `category` and `timestamp` metadata fields from RAG indexer interfaces and implementation.
+- Removed all usage and exposure of `VITE_GEMINI_API_KEY` in the frontend.
+
+### Changed
+- Refactored `DocumentList.tsx` to use modular components (`SourceTag`, `DocumentCard`, `DocumentTable`, `DocumentModal`). Improved readability, maintainability, and compliance with Clean Architecture, SOLID principles, and OWASP guidelines.
+
+### Changed
+- SupabaseKnowledgeLoader ahora solo incluye sources presentes en los datos (no inicializa con qribar/reviews/general vacíos).
+
+## [0.3.3] - 2026-02-11
 - **Tag-Based Source Editor in Document Modal:**
   - Inline source editing with tag UI (add/remove with × button)
   - Support for multiple sources (array-based, ready for future backend)

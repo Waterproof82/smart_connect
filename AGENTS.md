@@ -13,7 +13,7 @@ Antes de cualquier tarea, el agente debe cargar contexto en este orden:
   - `adr.md` → Cómo crear Architecture Decision Records
   - `readme_testing.md` → Estrategia de testing y TDD
   - `security_agent.md` → Protocolos de seguridad OWASP
-  - `chatbot_ia/GUIA_IMPLEMENTACION_RAG.md` → RAG chatbot implementation
+- 📄 **`docs/GUIA_IMPLEMENTACION_RAG.md`** → RAG chatbot implementation
 
 ### 2️⃣ **ARQUITECTURA GENERAL** (Si es necesario)
 - 📄 **`ARQUITECTURA.md`** → Visión completa del sistema (solo si necesitas entender el big picture)
@@ -42,14 +42,14 @@ El objetivo es transformar negocios mediante soluciones técnicas que aporten va
 ## 🏗️ ARQUITECTURA HÍBRIDA & STACK
 El proyecto sigue un modelo de alto rendimiento y escalabilidad:
 
-1. **Landing Page (SEO Frontend):** - **Stack:** Next.js + TypeScript + Tailwind CSS.
+1. **Landing Page (SEO Frontend):** - **Stack:** React + Vite + TypeScript + Tailwind CSS.
    - **Misión:** Indexación SEO máxima y landing de conversión para campañas de Facebook/Google.
-2. **Dashboard & Chatbot (App Frontend):** - **Stack:** Flutter Web.
+2. **Dashboard & Chatbot (App Frontend):** - **Stack:** React + Vite + TypeScript.
    - **Misión:** Panel de administración y Chatbot experto con arquitectura RAG.
-3. **Orquestador (Automation Backend):** - **Stack:** n8n en Docker (VPS propio).
+3. **Orquestador (Automation Backend):** - **Stack:** n8n en Railway/VPS propio.
    - **Misión:** Gestión de leads, análisis de sentimiento y notificaciones.
 4. **Cerebro IA:** - **API:** Gemini (Google AI Studio) - Pago por uso.
-   - **Protocolo:** MCP (Model Context Protocol) para conexión de datos.
+   - **Infraestructura:** Supabase (PostgreSQL + pgvector + Edge Functions).
 
 ---
 

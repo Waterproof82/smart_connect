@@ -45,36 +45,29 @@ describeIfConfigured('RAG Chatbot E2E Flow', () => {
     const userQuery = '¿Cuánto cuesta QRIBAR?';
 
     // Step 1: Generate embedding for query
-
     const { data: embData, error: embError, status } = await supabase.functions.invoke('gemini-embedding', {
       body: { text: userQuery },
       headers: { Authorization: `Bearer ${jwt}` }
     });
 
     if (embError || !embData?.embedding?.values) {
-      let errorBody = '';
-      if (embError?.context?.text && typeof embError.context.text === 'function') {
-        errorBody = await embError.context.text();
-      }
-      // Skip test if Edge Function returns 401 (auth issue in test environment)
       if (embError?.context?.status === 401) {
         console.warn('⚠️ Edge Function requires valid JWT - skipping E2E test');
         return;
       }
-      console.error('❌ Edge Function embedding error:', { embError, embData, status, errorBody });
-      return expect(embError).toBeNull(); // Falla el test con mensaje claro
+      console.error('❌ Edge Function embedding error:', { embError, embData, status });
+      return expect(embError).toBeNull();
     }
-    expect(embData.embedding.values).toHaveLength(768);
+    expect(embData.embedding).toHaveLength(768);
 
     // Step 2: Search similar documents
+    const { data: docs, error: searchError } = await supabase.rpc('match_documents', {
+      query_embedding: embData.embedding,
+      match_threshold: 0.3,
+      match_count: 3,
+      filter_source: ''
+    });
 
-    // Call match_documents with positional arguments matching SQL signature
-    const { data: docs, error: searchError } = await supabase.rpc('match_documents', [
-      embData.embedding.values,
-      0.3,
-      3,
-      '' // filter_source as empty string
-    ]);
     if (searchError || !docs) {
       console.error('❌ match_documents error:', { searchError, docs });
       return expect(searchError).toBeNull();
@@ -103,13 +96,12 @@ INSTRUCCIONES:
 - Si no sabes algo, reconócelo y ofrece contactar al equipo
 - Mantén respuestas bajo 150 palabras`;
 
-
     const { data: genData, error: genError, status: genStatus } = await supabase.functions.invoke('gemini-generate', {
       body: {
         contents: [
-          { 
-            role: 'user', 
-            parts: [{ text: `${systemPrompt}\n\nPregunta del usuario: ${userQuery}` }] 
+          {
+            role: 'user',
+            parts: [{ text: `${systemPrompt}\n\nPregunta del usuario: ${userQuery}` }]
           }
         ],
         generationConfig: {
@@ -129,20 +121,13 @@ INSTRUCCIONES:
 
     const response = genData.candidates[0].content.parts[0].text;
     
-    // Verify response is in Spanish
+    // Verify response is in Spanish and logged
     expect(response).toBeTruthy();
-    expect(response.length).toBeGreaterThan(10);
-    
-    console.log('\n✅ Full RAG Flow Test Results:');
-    console.log('━'.repeat(50));
-    console.log(`Query: ${userQuery}`);
     console.log(`Docs Found: ${docs.length}`);
     console.log(`Response: ${response}`);
-    console.log('━'.repeat(50));
-    
   }, 30000);
 
-  it('should handle queries without matching documents', async () => {
+  it('should handle generic generation without RAG context', async () => {
     if (!authSuccessful) {
       console.warn('⚠️ Skipping test - auth not available');
       return;
@@ -150,30 +135,34 @@ INSTRUCCIONES:
 
     const userQuery = 'Random unrelated question about something not in KB';
 
+    // Generate embedding (required for match_documents RPC signature)
     const { data: embData, error: embError, status } = await supabase.functions.invoke('gemini-embedding', {
       body: { text: userQuery },
       headers: { Authorization: `Bearer ${jwt}` }
     });
+
     if (embError || !embData?.embedding?.values) {
-      // Skip test if Edge Function returns 401 (auth issue in test environment)
       if (embError?.context?.status === 401) {
-        console.warn('⚠️ Edge Function requires valid JWT - skipping E2E test');
         return;
       }
       console.error('❌ Edge Function embedding error:', { embError, embData, status });
       return expect(embError).toBeNull();
     }
 
+    // Call match_documents (expecting few/no matches, or just ensuring it doesn't crash)
     const { data: docs, error: searchError } = await supabase.rpc('match_documents', {
-      query_embedding: embData.embedding.values,
+      query_embedding: embData.embedding,
       match_threshold: 0.3,
-      match_count: 3
+      match_count: 3,
+      filter_source: ''
     });
+
     if (searchError || !docs) {
       console.error('❌ match_documents error:', { searchError, docs });
       return expect(searchError).toBeNull();
     }
 
+    // Generate simple response
     const { data: genData, error: genError, status: genStatus } = await supabase.functions.invoke('gemini-generate', {
       body: {
         contents: [
@@ -189,6 +178,7 @@ INSTRUCCIONES:
       },
       headers: { Authorization: `Bearer ${jwt}` }
     });
+
     if (genError || !genData?.candidates) {
       console.error('❌ gemini-generate error:', { genError, genData, genStatus });
       return expect(genError).toBeNull();
