@@ -11,21 +11,21 @@ Fecha: 2026-01-30
 - [x] Variables de entorno y secretos protegidos
 - [x] No hay claves/API expuestas en frontend ni repo
 
- - [x] Landing (Next.js) desplegada en Vercel/Netlify/hosting
-- [ ] Dashboard/Chatbot (Flutter Web) desplegado y accesible
-- [ ] n8n backend en VPS propio (Docker, HTTPS, firewall)
-- [ ] Edge Functions desplegadas en Supabase
-- [ ] Dominios y HTTPS configurados
+ - [x] Landing (React + Vite) desplegada en Vercel/Netlify/hosting
+ - [x] Dashboard/Chatbot (React + Vite) desplegado y accesible
+ - [ ] n8n backend en VPS propio (Docker, HTTPS, firewall)
+ - [x] Edge Functions desplegadas en Supabase
+ - [ ] Dominios y HTTPS configurados
 
 ## 4. Integraciones
  - [x] Webhooks (n8n, Telegram, email, Google Sheets) probados
-- [ ] Chatbot RAG funcional (ver `docs/context/chatbot_ia/GUIA_IMPLEMENTACION_RAG.md`)
-- [ ] Integración QRIBAR y Reviews validada
+ - [x] Chatbot RAG funcional (ver `docs/GUIA_IMPLEMENTACION_RAG.md`)
+ - [ ] Integración QRIBAR y Reviews validada
 
 ## 5. Versionado y Documentación
-- [x] Versiones actualizadas en pubspec.yaml, build.gradle, Info.plist
-- [x] CHANGELOG.md actualizado (Keep a Changelog)
-- [x] Registro de operación en `docs/audit/` (timestamp + descripción)
+ - [x] Versiones actualizadas en package.json
+ - [x] CHANGELOG.md actualizado (Keep a Changelog)
+ - [x] Registro de operación en `docs/audit/` (timestamp + descripción)
 
 - [ ] Logs y backups activos para n8n y Supabase
 - [x] Notificaciones de leads calientes probadas

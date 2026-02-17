@@ -22,7 +22,7 @@ SmartConnect AI requiere una infraestructura backend que soporte:
 ### Restricciones
 - **Presupuesto limitado:** Modelo de pago por uso, free tier generoso
 - **Equipo pequeño:** 1-2 desarrolladores full-stack, sin DevOps dedicado
-- **Stack tecnológico:** TypeScript/Flutter con preferencia por herramientas modernas
+- **Stack tecnológico:** TypeScript/React con preferencia por herramientas modernas
 - **Escalabilidad:** Inicialmente 10-50 usuarios, proyección a 500+ en 6 meses
 - **Seguridad:** Cumplimiento OWASP Top 10:2021, certificación SOC 2
 

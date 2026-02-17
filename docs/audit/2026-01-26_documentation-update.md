@@ -100,10 +100,9 @@
 ### 4.1. Protocolo de Versionado ✅
 - [x] `package.json` updated to `0.2.0`
 - [x] Version follows Semantic Versioning (major.minor.patch)
-- [ ] `android/app/build.gradle` - N/A (Flutter project, not in current scope)
-- [ ] `ios/Runner/Info.plist` - N/A (Flutter project, not in current scope)
+- [x] N/A - React/Vite project (no Android/iOS files)
 
-**Note:** The document mentions Flutter (Android/iOS) versioning, but this is a React/Vite project. Only `package.json` applies.
+**Note:** This is a React/Vite project. Only `package.json` applies.
 
 ### 4.2. Protocolo de `CHANGELOG.md` ✅
 - [x] File created following Keep a Changelog 1.1.0

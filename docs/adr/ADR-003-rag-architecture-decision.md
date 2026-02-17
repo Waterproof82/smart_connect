@@ -1,38 +1,35 @@
-# ADR-003: RAG System Architecture - Flutter/Gemini vs Python/LangChain
+# ADR-003: RAG System Architecture - React/Gemini vs Python/LangChain
 
 **Fecha:** 2026-02-03  
 **Estado:** Aceptado ✅ IMPLEMENTADO  
-**Última Actualización:** 2026-02-03 (Fases 1-4 completadas)  
+**Última Actualización:** 2026-02-17 (Nota: Flutter nunca existió - el stack es React + Vite + TypeScript)  
 
 ---
 
 ## Contexto
 
-Se evaluó migrar el sistema RAG actual (Flutter + Gemini + MCP Protocol) a una implementación basada en Python + LangChain + Gradio desplegada en Railway.
+Se evaluó migrar el sistema RAG actual (React + Gemini) a una implementación basada en Python + LangChain + Gradio desplegada en Railway.
 
 ### Situación Actual
-- RAG implementado en Flutter Web según `docs/context/chatbot_ia/GUIA_IMPLEMENTACION_RAG.md`
-- Gemini API como LLM principal (definido en `AGENTS.md`)
-- MCP Protocol para contexto empresarial (QRIBAR, Reviews)
-- Integración nativa con el stack actual de Flutter
+- RAG implementado en React + Vite + TypeScript
+- Gemini API como LLM principal
+- Supabase para almacenamiento y Edge Functions
 
 ### Alternativa Propuesta
 - Python + LangChain + FAISS/ChromaDB
 - Gradio UI para interfaz rápida
 - Microservicio independiente en Railway
-- Mayor flexibilidad de modelos y embeddings
 
 ---
 
 ## Opciones Consideradas
 
-### Opción 1: Mantener RAG en Flutter/Gemini (Actual)
+### Opción 1: Mantener RAG en React/Gemini (Actual)
 **Pros:**
-- Stack unificado (Flutter Web para todo el frontend)
+- Stack unificado (React + Vite para todo el frontend)
 - Zero infraestructura adicional ($0 extra)
-- Coherente con `AGENTS.md` (Gemini como cerebro IA)
-- Zero latencia de red adicional (todo en frontend)
-- TDD nativo en Dart
+- Coherente con el stack actual (Gemini como cerebro IA)
+- Zero latencia de red adicional (Edge Functions en Supabase)
 
 **Contras:**
 - Menos flexibilidad para cambiar de modelo LLM
@@ -48,7 +45,7 @@ Se evaluó migrar el sistema RAG actual (Flutter + Gemini + MCP Protocol) a una 
 **Contras:**
 - Nuevo servicio en Railway (+$10-15/mes)
 - Stack adicional (Python + dependencias)
-- Duplicación de esfuerzos (ya funciona en Flutter)
+- Duplicación de esfuerzos (ya funciona en React)
 - Mayor complejidad operativa (2 servicios vs 1)
 - Rompe la arquitectura definida en `AGENTS.md`
 
@@ -56,33 +53,28 @@ Se evaluó migrar el sistema RAG actual (Flutter + Gemini + MCP Protocol) a una 
 
 ## Decisión
 
-Elegimos **Mantener RAG en Flutter/Gemini (Opción 1)**
+Elegimos **Mantener RAG en React/Gemini (Opción 1)**
 
 ---
 
 ## Justificación
 
 ### 1. Alineación con Stack Oficial
-Según `AGENTS.md`:
-```yaml
-Dashboard & Chatbot: Flutter Web
-Cerebro IA: Gemini (Google AI Studio)
-Protocolo: MCP
-```
-Python/LangChain no está en el stack definido.
+El stack actual define:
+- **Frontend (React + Vite):** Dashboard + Chatbot RAG
+- **Backend (Supabase):** Edge Functions + PostgreSQL
+- **LLM (Gemini):** Cerebro IA
 
 ### 2. Principio KISS (Keep It Simple)
 - **Operacional:** 1 servicio menos que mantener
 - **Económico:** $0 infraestructura adicional (Gemini ya contratado)
-- **Técnico:** Sin latencia extra de red
+- **Técnico:** Edge Functions con baja latencia
 
 ### 3. Coherencia Arquitectónica
 `ARQUITECTURA.md` define claramente:
-- **Frontend (Flutter):** Dashboard + Chatbot RAG
+- **Frontend (React):** Dashboard + Chatbot RAG
 - **Backend (n8n):** Orquestador de leads
 - **LLM (Gemini):** Cerebro IA
-
-Añadir Python rompería esta separación limpia.
 
 ### 4. Foco en Negocio
 El objetivo es **vender QRIBAR y Reviews**, no construir infraestructura experimental. El RAG implementado según las 4 fases de optimización cumple perfectamente este propósito con 81 tests passing y 100% coverage.
@@ -92,12 +84,11 @@ El objetivo es **vender QRIBAR y Reviews**, no construir infraestructura experim
 ## Consecuencias
 
 ### Positivas
-1. **Mantenibilidad:** Stack único (Flutter + Dart)
+1. **Mantenibilidad:** Stack único (React + TypeScript)
 2. **Costos:** Sin gastos adicionales de Railway/Python
-3. **Performance:** Sin latencia de red adicional
-4. **TDD:** Tests unitarios/integración en Dart nativo
-5. **Seguridad:** Menor superficie de ataque (1 app vs 2 servicios)
-6. **Operaciones:** Menos complejidad de despliegue
+3. **Performance:** Edge Functions con baja latencia
+4. **Seguridad:** API keys protegidas en servidor (Edge Functions)
+5. **Operaciones:** Menos complejidad de despliegue
 
 ### Negativas
 1. **Flexibilidad de modelos:** 
@@ -106,7 +97,7 @@ El objetivo es **vender QRIBAR y Reviews**, no construir infraestructura experim
    
 2. **Experimentación:**
    - Menos herramientas "out-of-the-box" que LangChain
-   - **Mitigación:** Flutter + Gemini SDK tiene capacidad suficiente
+   - **Mitigación:** Gemini + React tiene capacidad suficiente
    
 3. **Escalabilidad multi-modelo:**
    - Complicado si necesitamos 3+ LLMs simultáneos

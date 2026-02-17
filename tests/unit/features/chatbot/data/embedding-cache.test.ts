@@ -10,6 +10,33 @@
  * Clean Architecture: Data Layer Test
  */
 
+const createMockQueryBuilder = () => {
+  const mock = {
+    select: jest.fn().mockReturnThis(),
+    insert: jest.fn().mockResolvedValue({ data: null, error: null }),
+    upsert: jest.fn().mockResolvedValue({ data: null, error: null }),
+    delete: jest.fn().mockReturnThis(),
+    eq: jest.fn().mockReturnThis(),
+    ilike: jest.fn().mockReturnThis(),
+    neq: jest.fn().mockReturnThis(),
+    order: jest.fn().mockReturnThis(),
+    single: jest.fn().mockResolvedValue({ data: null, error: null }),
+  };
+  return mock;
+};
+
+jest.mock('@supabase/supabase-js', () => ({
+  createClient: jest.fn(() => ({
+    from: jest.fn(() => createMockQueryBuilder()),
+  })),
+}));
+
+jest.mock('@/shared/supabaseClient', () => ({
+  supabase: {
+    from: jest.fn(() => createMockQueryBuilder()),
+  },
+}));
+
 import { EmbeddingCache } from '@/features/chatbot/data/embedding-cache';
 
 describe('EmbeddingCache - Core Functionality', () => {
