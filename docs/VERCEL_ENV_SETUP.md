@@ -119,9 +119,9 @@ VITE_GOOGLE_SHEETS_ID=1ozjw4PGtBQZc1KFWlUxahz9qRmBOZDvVR6UyoIGBHl0
 
 VITE_GEMINI_API_KEY=your_gemini_api_key_here
 
-VITE_SUPABASE_URL=https://tysjedvujvsmrzzrmesr.supabase.co
+VITE_SUPABASE_URL=https://your-project.supabase.co
 
-VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR5c2plZHZ1anZzbXJ6enJtZXNyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk1NDE5NjIsImV4cCI6MjA4NTExNzk2Mn0.wwEaxcanylAFKY1x6NNNlewEcQPby0zdo9Q93qqe3dM
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key_here
 ```
 
 **¡Importante!** Copia cada valor COMPLETO, sin espacios al principio o final.

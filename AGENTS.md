@@ -16,7 +16,14 @@ Antes de cualquier tarea, el agente debe cargar contexto en este orden:
 - 📄 **`docs/GUIA_IMPLEMENTACION_RAG.md`** → RAG chatbot implementation
 
 ### 2️⃣ **ARQUITECTURA GENERAL** (Si es necesario)
-- 📄 **`ARQUITECTURA.md`** → Visión completa del sistema (solo si necesitas entender el big picture)
+- 📄 **`ARQUITECTURA.md`** → Visión completa del sistema
+- 📂 **`docs/slides/`** → Presentaciones visuales de flujos:
+  - `01-sistema-completo.md` → Vista general del ecosistema
+  - `02-flujo-usuario.md` → Journey del usuario
+  - `03-flujo-chatbot-rag.md` → Cómo el chatbot responde
+  - `04-flujo-autenticacion.md` → Login y roles
+  - `05-flujo-seguridad-rls.md` → Políticas de acceso
+  - `06-arquitectura-tecnica.md` → Stack tecnológico
 
 ### 3️⃣ **DOCUMENTACIÓN TÉCNICA** (Según tarea)
 - 📂 **`docs/`** → Guías específicas:
