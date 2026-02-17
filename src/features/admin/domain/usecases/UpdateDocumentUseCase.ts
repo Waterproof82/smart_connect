@@ -17,7 +17,7 @@ export class UpdateDocumentUseCase {
     newContent: string,
     user: AdminUser,
     newSource?: string,
-    newMetadata?: Record<string, unknown>
+    _newMetadata?: Record<string, unknown>
   ): Promise<void> {
     // Validar ID
     if (!documentId || typeof documentId !== 'string' || documentId.trim().length === 0) {

@@ -54,7 +54,7 @@ export class DocumentRepositoryImpl implements IDocumentRepository {
         contentLength: doc.content?.length,
         metadataKeys: Object.keys(doc.metadata || {})
       }))
-    }, mappedResults);
+    }, mappedResults as unknown as Record<string, unknown>[]);
 
     return mappedResults;
   }

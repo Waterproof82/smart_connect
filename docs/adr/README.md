@@ -1,6 +1,6 @@
 # Architecture Decision Records (ADR)
 
-Este directorio contiene los registros de decisiones arquitectónicas del proyecto **QRiBar Cocina**.
+Este directorio contiene los registros de decisiones arquitectónicas del proyecto **SmartConnect AI**.
 
 ## ¿Qué es un ADR?
 

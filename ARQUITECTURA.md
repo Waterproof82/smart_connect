@@ -379,6 +379,30 @@ Request Headers:
 }
 ```
 
+### Políticas RLS - Tabla `documents` (2026-02-17)
+
+| Operación | Anónimo (anon) | Usuario Auth | Admin/Super Admin |
+|-----------|----------------|-------------|------------------|
+| SELECT    | ✅ Permitido   | ✅ Permitido | ✅ Permitido     |
+| INSERT    | ❌ Bloqueado  | ❌ Bloqueado | ✅ Permitido     |
+| UPDATE    | ❌ Bloqueado  | ❌ Bloqueado | ✅ Permitido     |
+| DELETE    | ❌ Bloqueado  | ❌ Bloqueado | ✅ Permitido     |
+
+**Política de SELECT (pública):**
+```sql
+CREATE POLICY public_read_documents ON documents
+FOR SELECT TO public USING (true);
+```
+
+**Políticas de ADMIN (INSERT/UPDATE/DELETE):**
+```sql
+CREATE POLICY admin_insert_documents ON documents
+FOR INSERT TO authenticated
+USING ((auth.jwt()->'user_metadata'->>'role') IN ('admin', 'super_admin'))
+WITH CHECK ((auth.jwt()->'user_metadata'->>'role') IN ('admin', 'super_admin'));
+```
+```
+
 ### Resultado de match_documents
 
 ```json

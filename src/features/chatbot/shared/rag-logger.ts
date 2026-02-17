@@ -95,7 +95,7 @@ export class RAGLogger {
   /**
    * Log document search operation
    */
-  logDocumentSearch(query: string, options: any, results?: any): void {
+  logDocumentSearch(query: string, options: Record<string, unknown>, results?: Record<string, unknown>[]): void {
     this.log(LogLevel.INFO, 'DOCUMENT_REPOSITORY', 'SEARCH', 'Document search initiated', {
       query: query.substring(0, 100) + (query.length > 100 ? '...' : ''),
       options,
@@ -138,14 +138,14 @@ export class RAGLogger {
   /**
    * Log RAG phase transitions
    */
-  logPhaseTransition(fromPhase: string, toPhase: string, context?: any): void {
+  logPhaseTransition(fromPhase: string, toPhase: string, context?: Record<string, unknown>): void {
     this.log(LogLevel.DEBUG, 'RAG_ORCHESTRATOR', 'SEARCH', `Phase transition: ${fromPhase} → ${toPhase}`, context as Record<string, unknown>);
   }
 
   /**
    * Log fallback activation
    */
-  logFallback(reason: string, query: string, fallbackResponse?: any): void {
+  logFallback(reason: string, query: string, fallbackResponse?: Record<string, unknown>): void {
     this.log(LogLevel.WARN, 'FALLBACK_HANDLER', 'FALLBACK', 'Fallback activated', {
       reason,
       query: query.substring(0, 100),
@@ -211,7 +211,7 @@ export class RAGLogger {
   /**
    * Get performance statistics
    */
-  getPerformanceStats(): any {
+  getPerformanceStats(): Record<string, { count: number; avgDuration: number; minDuration: number; maxDuration: number }> {
     const phases = ['INDEXING', 'SEARCH', 'CACHE', 'FALLBACK', 'GENERATION'] as const;
     const stats: Record<string, {
       count: number;
