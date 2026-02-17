@@ -34,11 +34,10 @@ describeIfConfigured('Documents Table - RLS Policies', () => {
     // Create test document using service role
     const { data, error } = await serviceClient
       .from('documents')
-      .insert({
+.insert({
         content: 'Test document for RLS policies',
         source: 'security-test',
-        embedding: new Array(768).fill(0.1),
-        category: 'general'
+        embedding: new Array(768).fill(0.1)
       })
       .select()
       .single();
@@ -76,7 +75,7 @@ describeIfConfigured('Documents Table - RLS Policies', () => {
     test('should deny anonymous INSERT on documents', async () => {
       const { data, error } = await anonClient
         .from('documents')
-        .insert({
+.insert({
           content: 'Unauthorized insert attempt',
           source: 'security-test-attack',
           embedding: new Array(768).fill(0.1)
@@ -157,7 +156,7 @@ describeIfConfigured('Documents Table - RLS Policies', () => {
     test('should deny non-admin INSERT on documents', async () => {
       const { data, error } = await normalUserClient
         .from('documents')
-        .insert({
+.insert({
           content: 'Unauthorized insert by normal user',
           source: 'security-test-attack',
           embedding: new Array(768).fill(0.1)
@@ -217,11 +216,10 @@ describeIfConfigured('Documents Table - RLS Policies', () => {
     test('should allow admin INSERT on documents', async () => {
       const { data, error } = await adminClient
         .from('documents')
-        .insert({
+.insert({
           content: 'Admin inserted document',
           source: 'admin-security-test',
-          embedding: new Array(768).fill(0.2),
-          category: 'general'
+          embedding: new Array(768).fill(0.2)
         })
         .select()
         .single();
@@ -259,11 +257,10 @@ describeIfConfigured('Documents Table - RLS Policies', () => {
       // Create temporary document to delete
       const { data: tempDoc } = await adminClient
         .from('documents')
-        .insert({
+.insert({
           content: 'Temporary document for delete test',
           source: 'admin-security-test',
-          embedding: new Array(768).fill(0.3),
-          category: 'general'
+          embedding: new Array(768).fill(0.3)
         })
         .select()
         .single();
