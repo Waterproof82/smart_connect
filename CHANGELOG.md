@@ -8,6 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Security
+- **Supabase Cryptographic Infrastructure Rotation (2026-02-17):**
+  - Migrated from Legacy key system to modern ECDSA (P-256) algorithm
+  - Replaced old JWT format (`eyJ...`) with new `sb_publishable` and `sb_secret` keys
+  - Renewed Gemini API key in Supabase secrets
+  - Verified all Edge Functions (gemini-embedding, gemini-generate, chat-with-rag) with new keys
+  - Confirmed RLS policies intact and functional
+  - All 11 integration tests passing
+  - Audit: `docs/audit/2026-02-17_cryptographic-infrastructure-rotation.md`
+
 - **RLS Policies for Documents Table (2026-02-17):**
   - Refined RLS policies for `documents` table
   - SELECT: Public access (anon can read for chatbot RAG)

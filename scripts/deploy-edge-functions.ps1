@@ -1,4 +1,4 @@
-﻿# SmartConnect AI - Edge Functions Deployment
+# SmartConnect AI - Edge Functions Deployment
 param([string]$Function = "all", [switch]$SkipSecrets, [switch]$DryRun)
 
 Write-Host "`n SUPABASE EDGE FUNCTIONS DEPLOYMENT`n" -ForegroundColor Cyan
@@ -28,9 +28,10 @@ Get-Content ".env.local" | ForEach-Object {
 
 $GEMINI_KEY = $env["GEMINI_API_KEY"]
 $SUPABASE_URL = $env["VITE_SUPABASE_URL"]
+$ANON_KEY = $env["VITE_SUPABASE_ANON_KEY"]
 $SERVICE_KEY = $env["SUPABASE_SERVICE_ROLE_KEY"]
 
-if (-not $GEMINI_KEY -or -not $SUPABASE_URL -or -not $SERVICE_KEY) {
+if (-not $GEMINI_KEY -or -not $SUPABASE_URL -or -not $SERVICE_KEY -or -not $ANON_KEY) {
     Write-Host " Missing required env vars" -ForegroundColor Red
     exit 1
 }
@@ -41,6 +42,7 @@ if (-not $SkipSecrets -and -not $DryRun) {
     Write-Host " Setting secrets..." -ForegroundColor Yellow
     supabase secrets set GEMINI_API_KEY="$GEMINI_KEY" --project-ref tysjedvujvsmrzzrmesr
     supabase secrets set SUPABASE_URL="$SUPABASE_URL" --project-ref tysjedvujvsmrzzrmesr
+    supabase secrets set SUPABASE_ANON_KEY="$ANON_KEY" --project-ref tysjedvujvsmrzzrmesr
     supabase secrets set SUPABASE_SERVICE_ROLE_KEY="$SERVICE_KEY" --project-ref tysjedvujvsmrzzrmesr
     supabase secrets set ALLOWED_ORIGIN="*" --project-ref tysjedvujvsmrzzrmesr
     Write-Host " Secrets configured`n" -ForegroundColor Green
