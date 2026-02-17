@@ -1,8 +1,9 @@
 import { createClient } from '@supabase/supabase-js';
 
-// Configuración de Supabase
-const SUPABASE_URL = 'https://tysjedvujvsmrzzrmesr.supabase.co';
-const SUPABASE_SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR5c2plZHZ1anZzbXJ6enJtZXNyIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2OTU0MTk2MiwiZXhwIjoyMDg1MTE3OTYyfQ.dvFZakaCz8ZXVM1iSHI3o314UFVkExz8AX1U-GMWTiw';
+// Configuración de Supabase - USAR VARIABLES DE ENTORNO
+// NO hardcodear claves en archivos versionados
+const SUPABASE_URL = process.env.SUPABASE_URL || 'https://your-project.supabase.co';
+const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || 'your-service-role-key-here';
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
 
