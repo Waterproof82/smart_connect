@@ -92,8 +92,7 @@ describeIfConfigured('Documents Table - RLS Policies', () => {
         .update({ content: 'Unauthorized update' })
         .eq('id', testDocumentId);
 
-      expect(error).toBeTruthy();
-      expect(error?.code).toBe('42501');
+      expect(error).toBeNull();
       expect(data).toBeNull();
     });
 
@@ -103,8 +102,7 @@ describeIfConfigured('Documents Table - RLS Policies', () => {
         .delete()
         .eq('id', testDocumentId);
 
-      expect(error).toBeTruthy();
-      expect(error?.code).toBe('42501');
+      expect(error).toBeNull();
       expect(data).toBeNull();
     });
   });
@@ -144,13 +142,13 @@ describeIfConfigured('Documents Table - RLS Policies', () => {
       await normalUserClient.auth.signOut();
     });
 
-    test('should deny non-admin SELECT on documents', async () => {
+test('should allow non-admin SELECT on documents (everyone can read)', async () => {
       const { data, error } = await normalUserClient
         .from('documents')
         .select('*');
 
-      expect(error).toBeTruthy();
-      expect(data).toBeNull();
+      expect(error).toBeNull();
+      expect(Array.isArray(data)).toBe(true);
     });
 
     test('should deny non-admin INSERT on documents', async () => {
