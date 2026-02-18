@@ -8,6 +8,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Fixed
+- **Bundle Size Optimization (2026-02-18):**
+  - Implemented React.lazy() for route-based code splitting (AdminPanel loads only on /admin)
+  - Implemented lazy loading for ExpertAssistant chatbot (loads on user interaction)
+  - Configured manualChunks in vite.config.ts for vendor splitting
+  - Result: Initial bundle reduced from 541KB to 10.89KB (98% reduction)
+  - Removed chunk size warning from build output
+  - Files: `src/main.tsx`, `src/App.tsx`, `vite.config.ts`
+  - Audit: `docs/audit/2026-02-18_bundle-optimization.md`
+
+- **NPM Security Vulnerabilities Fixed (2026-02-18):**
+  - Fixed 15 vulnerabilities (1 low, 10 moderate, 4 high) using npm overrides
+  - Added overrides in package.json: path-to-regexp ^8.0.0, undici ^6.22.1, ajv ^8.18.0
+  - All transitive dependencies now have secure versions
+  - Files: `package.json`, `package-lock.json`
+
 - **Supabase Database Linter RLS Fix (2026-02-18):**
   - Fixed `auth_rls_initplan` warnings: Changed `auth.jwt()` to `(SELECT auth.jwt())` in RLS policies
   - Fixed `multiple_permissive_policies` warnings: Separated SELECT from INSERT/UPDATE/DELETE policies
