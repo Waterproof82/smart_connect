@@ -6,7 +6,6 @@
  */
 
 import { supabase } from '@shared/supabaseClient';
-import { ENV } from '@shared/config/env.config';
 
 export interface AppSettings {
   n8nWebhookUrl: string;

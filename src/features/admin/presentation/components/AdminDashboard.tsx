@@ -111,7 +111,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         <div className="md:flex md:items-center md:justify-between mb-2">
           <div>
             <h2 className="text-2xl font-bold text-white">Knowledge Base</h2>
-            <p className="text-gray-400 text-sm mt-1">Manage documents and embeddings</p>
+            <p className="text-gray-400 text-sm mt-1">Chatbot RAG - Manage documents and embeddings</p>
           </div>
         </div>
 

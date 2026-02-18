@@ -75,6 +75,6 @@ const documents = await container.getAllDocumentsUseCase.execute();
 2. AdminPanel verifica sesión
 3. Si NO auth → Login
 4. Login → Supabase Auth
-5. Verificar role en user_metadata
+5. Verificar email === 'admin@smartconnect.ai' (único admin)
 6. Si válido → AdminDashboard
 ```

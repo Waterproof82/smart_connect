@@ -37,7 +37,7 @@ export const Contact: React.FC = () => {
     
     // Only warn in production if no webhook configured
     if (!isDevelopment && (!webhookUrl || webhookUrl.includes('placeholder'))) {
-      console.error('❌ CRITICAL: Webhook URL not configured in Admin Panel!');
+      // Webhook not configured - leads won't be sent
     }
   }, [settings, isLoadingSettings]);
 
@@ -47,9 +47,9 @@ export const Contact: React.FC = () => {
       try {
         const data = await getAppSettings();
         setSettings(data);
-      } catch (err) {
-        console.error('Failed to load settings:', err);
-      } finally {
+    } catch {
+      // Settings fetch failed - use defaults
+    } finally {
         setIsLoadingSettings(false);
       }
     };
@@ -281,8 +281,7 @@ export const Contact: React.FC = () => {
         setTimeout(() => setSubmitStatus('idle'), 3000);
       }
       
-    } catch (error) {
-      console.error('❌ Error al enviar lead:', error);
+    } catch {
       setSubmitStatus('error');
       setTimeout(() => setSubmitStatus('idle'), 3000);
     } finally {

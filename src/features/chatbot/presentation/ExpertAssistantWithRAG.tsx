@@ -72,8 +72,7 @@ export const ExpertAssistant: React.FC = () => {
         content: response,
       });
       chatSessionRef.current = chatSessionRef.current.addMessage(assistantEntity);
-    } catch (error) {
-      console.error('Error:', error);
+    } catch {
       const errorEntity = new MessageEntity({
         role: 'assistant',
         content: 'Hubo un error al conectar con el asistente. Por favor, intenta de nuevo.',
@@ -105,9 +104,8 @@ export const ExpertAssistant: React.FC = () => {
     let sanitizedInput: string;
     try {
       sanitizedInput = sanitizeInput(input.trim(), 'chatbot_message', 4000);
-    } catch (error) {
+    } catch {
       // Input validation failed (too long or invalid)
-      console.error('❌ Input validation failed:', error);
       const errorEntity = new MessageEntity({
         role: 'assistant',
         content: 'Tu mensaje es demasiado largo. Máximo 4000 caracteres.',

@@ -147,4 +147,18 @@ El agente debe registrar cada operación que realice (generación, refactorizaci
 * **Idioma:** Inglés.
 * **Contenido:** El registro debe incluir la fecha y hora (timestamp) y una descripción de la acción (ej. *Refactored class 'X' to apply SRP.*).
 
+### 4.4. Protocolo de Supabase Database Lint
+
+Al ejecutar el linter de Supabase, pueden aparecer warnings que requieren acciones manuales:
+
+**Configuración manual (Dashboard de Supabase):**
+- **Leaked Password Protection:** Ir a Authentication > Providers > Email y habilitar "Enable leaked password protection"
+
+**Warnings conocidos (no críticos):**
+- **Extension in public:** La extensión `vector` en schema `public` es aceptable en Supabase
+- **Auth allow anonymous sign_ins:** Son intencionales para permitir el chatbot RAG y landing page:
+  - `documents`: SELECT público para chatbot
+  - `app_settings`: SELECT público para landing page
+  - `security_logs`: Solo admins y service_role
+
 **¿Entendido? Confirma para comenzar con el primer paso del desarrollo.**

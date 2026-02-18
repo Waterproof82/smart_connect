@@ -21,10 +21,10 @@
 │  2. GENERATE EMBEDDING (Gemini)                                            │
 └─────────────────────────────────────────────────────────────────────────────┘
 
-                    ┌───────────────────────────┐
-                    │  text-embedding-004      │
-                    │  (768 dimensiones)        │
-                    └───────────┬───────────────┘
+                     ┌───────────────────────────┐
+                     │  gemini-embedding-001     │
+                     │  (768 dimensiones)        │
+                     └───────────┬───────────────┘
                                 │
                     ┌───────────▼─────────────┐
                     │  Query Embedding        │
@@ -117,7 +117,46 @@
 
 ---
 
-## Arquitectura de Componentes
+## 3 Supabase Edge Functions
+
+| Función | Propósito | Modelo Gemini |
+|---------|-----------|---------------|
+| `gemini-embedding` | Generar embeddings (búsqueda + admin) | gemini-embedding-001 |
+| `gemini-generate` | Generar respuesta simple | gemini-2.5-flash |
+| `chat-with-rag` | Pipeline RAG completo | gemini-2.5-flash |
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                     SUPABASE EDGE FUNCTIONS (Deno)                          │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│   ┌─────────────────────────┐   ┌─────────────────────────┐                 │
+│   │   gemini-embedding      │   │    gemini-generate      │                 │
+│   │   ───────────────────    │   │   ─────────────────     │                 │
+│   │   Input: text           │   │   Input: contents[]     │                 │
+│   │   Output: vector[768]  │   │   Output: text response │                 │
+│   │   Usos:                │   │   Usos:                 │                 │
+│   │   • Búsqueda RAG       │   │   • Chat simple         │                 │
+│   │   • Crear documento    │   │   • Fallback            │                 │
+│   │   • Actualizar doc     │   │                         │                 │
+│   └───────────┬─────────────┘   └───────────┬─────────────┘                 │
+│               │                             │                                 │
+│               └──────────────┬──────────────┘                                 │
+│                              │                                                │
+│                              ▼                                                │
+│   ┌─────────────────────────────────────────────────────┐                   │
+│   │                  chat-with-rag                       │                   │
+│   │   ─────────────────────────────────────────────────  │                   │
+│   │   Input: user query                                 │                   │
+│   │   Output: contextual response                        │                   │
+│   │   Flujo:                                            │                   │
+│   │   1. Generate query embedding (gemini-embedding)   │                   │
+│   │   2. Vector search (match_documents)                │                   │
+│   │   3. Generate with context (gemini-2.5-flash)       │                   │
+│   └─────────────────────────────────────────────────────┘                   │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -141,13 +180,16 @@
                                     │
                                     ▼
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                     SUPABASE EDGE FUNCTIONS                                │
+│                     SUPABASE EDGE FUNCTIONS (Deno)                          │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│  ┌───────────────────────┐  ┌───────────────────────────────────────────┐ │
-│  │  gemini-embedding     │  │  chat-with-rag                           │ │
-│  │  - Generate embedding │  │  - Full RAG pipeline                     │ │
-│  │  - API key protected  │  │  - Cache integration                    │ │
-│  └───────────────────────┘  └───────────────────────────────────────────┘ │
+│  ┌───────────────────────┐  ┌───────────────────────┐  ┌────────────────┐ │
+│  │  gemini-embedding     │  │  gemini-generate      │  │ chat-with-rag │ │
+│  │  ─────────────────    │  │  ─────────────────    │  │ ────────────── │ │
+│  │  Input: text          │  │  Input: contents[]    │  │ Input: query   │ │
+│  │  Output: vector[768] │  │  Output: text         │  │ Output: text   │ │
+│  │  • Búsqueda RAG      │  │  • Chat simple        │  │ • Full RAG     │ │
+│  │  • Admin crear doc   │  │  • Fallback           │  │ • + contexto   │ │
+│  └───────────────────────┘  └───────────────────────┘  └────────────────┘ │
 └─────────────────────────────────────────────────────────────────────────────┘
                                     │
                                     ▼

@@ -7,6 +7,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- **Supabase Database Linter RLS Fix (2026-02-18):**
+  - Fixed `auth_rls_initplan` warnings: Changed `auth.jwt()` to `(SELECT auth.jwt())` in RLS policies
+  - Fixed `multiple_permissive_policies` warnings: Separated SELECT from INSERT/UPDATE/DELETE policies
+  - Unified SELECT policies to single policy per role/action combination
+  - Removed duplicate admin policies from previous migrations
+  - Migrations: `20260219130000_fix_linter_warnings.sql`, `20260219140000_fix_duplicate_policies.sql`, `20260219150000_unify_select_policies.sql`, `20260219160000_remove_duplicate_admin_policies.sql`
+  - Audit: `docs/audit/2026-02-18_supabase-linter-rls-fix.md`
+
+- **Supabase Database Linter Function Fix (2026-02-18):**
+  - Fixed function search_path warnings for `match_documents`, `match_documents_by_source`, `insert_document_with_embedding`, `batch_insert_document`
+  - Added `SET search_path = public` to all function definitions
+  - Fixed return types to match documents table schema
+  - Migrations: `20260219120000_final_function_fix.sql`
+  - Audit: `docs/audit/2026-02-18_supabase-linter-fix.md`
+
+- **Edge Function Configuration Fix (2026-02-18):**
+  - Fixed `config.toml` entrypoint for `chat-with-rag` function (was pointing to `gemini-generate/index.ts`)
+  - Set `verify_jwt = false` to allow anonymous access for chatbot RAG
+  - Function now working correctly
+
+- **AGENTS.md Documentation Update:**
+  - Added Section 4.4: Protocolo de Supabase Database Lint
+  - Documented known warnings and manual configuration requirements
+
+### Security
+- **Supabase Database Linter Compliance:**
+  - All schema errors resolved
+  - Known warnings documented as intentional:
+    - `extension_in_public`: vector extension required in public schema
+    - `auth_allow_anonymous_sign_ins`: Required for chatbot RAG and landing page
+    - `auth_leaked_password_protection`: Requires Supabase Pro Plan ($25/mo)
+
 ### Added
 - **Dynamic Settings Management System:**
   - Created `app_settings` table in Supabase for configurable values
