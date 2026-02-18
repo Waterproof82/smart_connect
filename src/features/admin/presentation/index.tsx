@@ -89,6 +89,8 @@ export const AdminPanel: React.FC = () => {
       deleteDocumentUseCase={container.deleteDocumentUseCase}
       updateDocumentUseCase={container.updateDocumentUseCase}
       createDocumentUseCase={container.createDocumentUseCase}
+      getSettingsUseCase={container.getSettingsUseCase}
+      updateSettingsUseCase={container.updateSettingsUseCase}
       authRepository={container.authRepository}
       currentUser={currentUser}
       onLogout={handleLogout}
@@ -101,3 +103,4 @@ export { Login } from './components/Login';
 export { AdminDashboard } from './components/AdminDashboard';
 export { DocumentList } from './components/DocumentList';
 export { StatsDashboard } from './components/StatsDashboard';
+export { SettingsPanel } from './components/SettingsPanel';
