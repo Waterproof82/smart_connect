@@ -39,25 +39,17 @@ const cache = new EmbeddingCache()
 // ============================================================================
 // MAIN HANDLER
 serve(async (req) => {
-  console.log('[RAG] === START ===')
-  console.log('[RAG] Method:', req.method)
-  console.log('[RAG] Headers:', JSON.stringify(Object.fromEntries(req.headers.entries())))
-  
   if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders })
 
   const startTime = Date.now()
 
   try {
-    console.log('[RAG] Parsing request...')
     // 2️⃣ PARSE REQUEST (must be first to catch body parsing errors)
     const { query, conversationHistory, topK, threshold, source } = await parseRequest(req)
-    console.log('[RAG] Query parsed:', query.substring(0, 30))
 
     // 1️⃣ AUTHENTICATION
-    console.log('[RAG] Authenticating...')
     const { supabase, user } = await authenticateRequest(req)
-    console.log('[RAG] Auth done, user:', user.id)
-
+ 
     const geminiKey = Deno.env.get('GEMINI_API_KEY')
     if (!geminiKey) throw new Error('Missing GEMINI_API_KEY')
 
@@ -90,11 +82,8 @@ serve(async (req) => {
       searchError = result.error
     }
     
-    console.log('[RAG] Search results:', JSON.stringify({ count: searchResults?.length, error: searchError }))
-    
     if (searchError) throw new Error(`Vector search failed: ${searchError.message}`)
     const searchTime = Date.now() - searchStartTime
-    console.log(`[RAG] Found ${searchResults?.length || 0} relevant documents (${searchTime}ms)`)
 
     // 5️⃣ CONSTRUCT PROMPT WITH RAG CONTEXT
     let prompt
@@ -201,9 +190,8 @@ async function getQueryEmbedding(query: string, cache: EmbeddingCache, geminiKey
   let cacheHit = Array.isArray(queryEmbedding) && queryEmbedding.length > 0
 
   if (cacheHit) {
-    console.log('[RAG] Cache hit - using cached embedding')
+    // Using cached embedding
   } else {
-    console.log('[RAG] Cache miss - generating embedding')
     const embResponse = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:embedContent?key=${geminiKey}`,
       { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ content: { parts: [{ text: query }] } }) }

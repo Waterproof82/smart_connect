@@ -35,7 +35,6 @@ export class GeminiDataSource {
     
     // For now, return empty array as gemini-chat handles embeddings internally
     // This could be updated to call a dedicated embedding endpoint if needed
-    console.warn('generateEmbedding called but gemini-chat handles embeddings internally');
     return [];
   }
 
@@ -76,7 +75,6 @@ export class GeminiDataSource {
         error: error.message,
         prompt: params.prompt.substring(0, 100)
       });
-      console.error('Edge Function error:', error);
       throw new ApiError(`Response generation failed: ${error.message}`, 500);
     }
 
@@ -85,7 +83,6 @@ export class GeminiDataSource {
         error: data.error,
         prompt: params.prompt.substring(0, 100)
       });
-      console.error('Gemini API error:', data.error);
       throw new ApiError(
         `AI service error: ${data.error}`,
         503
@@ -99,7 +96,6 @@ export class GeminiDataSource {
         data,
         prompt: params.prompt.substring(0, 100)
       });
-      console.error('Invalid response format:', data);
       throw new ApiError('Invalid response format from AI service', 500);
     }
 
@@ -110,10 +106,6 @@ export class GeminiDataSource {
       responseLength: responseText.length,
       rateLimitRemaining: data.rateLimitRemaining
     }, []);
-
-    if (data.documentsUsed > 0) {
-      console.warn(`✅ RAG: Used ${data.documentsUsed} documents from knowledge base`);
-    }
 
     return responseText;
   }
