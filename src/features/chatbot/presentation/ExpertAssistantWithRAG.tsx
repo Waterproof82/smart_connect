@@ -19,7 +19,26 @@ export const ExpertAssistant: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [whatsappPhone, setWhatsappPhone] = useState<string>('');
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  // Fetch WhatsApp number from settings
+  useEffect(() => {
+    const fetchWhatsApp = async () => {
+      const { data } = await supabase
+        .from('app_settings')
+        .select('whatsapp_phone')
+        .eq('id', 'global')
+        .single();
+      
+      if (data?.whatsapp_phone) {
+        // Remove any non-digit characters except +
+        const cleanPhone = data.whatsapp_phone.replace(/[^\d+]/g, '');
+        setWhatsappPhone(cleanPhone);
+      }
+    };
+    fetchWhatsApp();
+  }, []);
   
   // A/B Testing: Assign user to test group
   // const abTestGroup = getABTestGroup();
@@ -192,10 +211,10 @@ export const ExpertAssistant: React.FC = () => {
       <div className="flex items-center gap-3">
         {/* WhatsApp Button */}
         <a 
-          href="https://wa.me/1234567890"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-4 bg-[#25D366] hover:bg-[#1ebc57] text-white px-6 py-3 rounded-full shadow-2xl transition-all active:scale-95 border border-white/10 group overflow-hidden relative"
+          href={whatsappPhone ? `https://wa.me/${whatsappPhone}` : '#'}
+          target={whatsappPhone ? "_blank" : undefined}
+          rel={whatsappPhone ? "noopener noreferrer" : undefined}
+          className={`flex items-center gap-4 bg-[#25D366] hover:bg-[#1ebc57] text-white px-6 py-3 rounded-full shadow-2xl transition-all active:scale-95 border border-white/10 group overflow-hidden relative ${!whatsappPhone ? 'opacity-50 cursor-not-allowed' : ''}`}
         >
           <div className="relative z-10">
             <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform">

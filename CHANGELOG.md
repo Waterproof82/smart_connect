@@ -7,6 +7,56 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Dynamic Settings Management System:**
+  - Created `app_settings` table in Supabase for configurable values
+  - Fields: `n8n_webhook_url`, `contact_email`, `whatsapp_phone`, `physical_address`
+  - RLS policies: Admin full access, Anon read-only (landing), Service role bypass
+  - Location: `supabase/migrations/20260218000000_create_app_settings.sql`
+  - Audit: `docs/audit/2026-02-18_dynamic_settings_system.md`
+
+- **Admin Panel Settings Section:**
+  - New SettingsPanel component for managing contact info and webhook URL
+  - Clean Architecture: Domain entity, Repository interface, Use cases
+  - Fields editable: Contact email, WhatsApp, Address, n8n webhook URL
+  - Location: `src/features/admin/`
+  - Components: `SettingsPanel.tsx`, `Settings.ts`, `ISettingsRepository.ts`, `GetSettingsUseCase.ts`, `UpdateSettingsUseCase.ts`
+
+- **Landing Page Dynamic Settings:**
+  - Contact section now reads data from Supabase instead of hardcoded values
+  - Fetches: contact email, WhatsApp phone, physical address
+  - Location: `src/features/landing/presentation/components/Contact.tsx`
+  - Service: `src/shared/services/settingsService.ts`
+
+- **WhatsApp Button Dynamic Integration:**
+  - Chatbot WhatsApp button now uses phone number from database
+  - Falls back to disabled state if no number configured
+  - Location: `src/features/chatbot/presentation/ExpertAssistantWithRAG.tsx`
+
+### Changed
+- **Environment Variables Cleanup:**
+  - Removed deprecated ENV variables: `VITE_CONTACT_EMAIL`, `VITE_N8N_WEBHOOK_URL`, `VITE_GOOGLE_SHEETS_ID`
+  - Settings now managed entirely in Supabase database
+  - Only kept: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `GEMINI_API_KEY`
+  - Updated: `.env.local`, `.env.example`, `env.config.ts`, `vite-env.d.ts`
+
+- **Settings Service Refactoring:**
+  - Removed unused fields: `n8n_notification_email`, `google_sheets_id`
+  - These are configured internally in n8n workflow, not in our app
+  - Updated: Domain entities, Repository, Use cases, UI components
+
+### Security
+- **RLS Policies for app_settings:**
+  - Anon: SELECT only (for landing page)
+  - Authenticated (admin/super_admin): Full CRUD
+  - Service role: Full access (for Edge Functions)
+
+### Removed
+- **Database Columns:**
+  - Dropped `n8n_notification_email` and `google_sheets_id` from app_settings
+  - These are configured in n8n workflow, not in our app
+  - Location: `supabase/migrations/20260218100000_drop_unused_settings_columns.sql`
+
 ### Security
 - **Supabase Cryptographic Infrastructure Rotation (2026-02-17):**
   - Migrated from Legacy key system to modern ECDSA (P-256) algorithm

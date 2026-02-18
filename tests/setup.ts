@@ -27,9 +27,8 @@ if (!globalThis.crypto.randomUUID) {
 }
 
 // Mock environment variables
+// Note: Settings are now fetched from Supabase database, not ENV
 // No need to mock VITE_GEMINI_API_KEY, fallback is handled in env.config.ts
-process.env.VITE_N8N_WEBHOOK_URL = 'https://test-webhook.com';
-process.env.VITE_GOOGLE_SHEETS_ID = 'test-sheet-id';
 
 // Mock DOMPurify for Node.js environment
 jest.mock('dompurify', () => {
