@@ -17,6 +17,21 @@ export default defineConfig(() => {
       },
       plugins: [react()],
 
+      // Code splitting configuration
+      build: {
+        rollupOptions: {
+          output: {
+            // Manual chunks para dividir vendors y reducir bundle principal
+            manualChunks: {
+              // React core - se carga una sola vez
+              'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+              // Supabase client
+              'vendor-supabase': ['@supabase/supabase-js'],
+            }
+          }
+        }
+      },
+
       resolve: {
         alias: {
           '@': fileURLToPath(new URL('./src', import.meta.url)),
