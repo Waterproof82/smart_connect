@@ -68,6 +68,62 @@ Implementar un chatbot experto con arquitectura RAG (Retrieval-Augmented Generat
 
 ---
 
+## 🏢 Flujo de Administración de Documentos
+
+El Admin Panel permite crear, actualizar y eliminar documentos del conocimiento RAG. La generación de embeddings se realiza automáticamente al crear/actualizar documentos.
+
+### Flujo: Crear Nuevo Documento
+
+```
+Admin Panel → CreateDocumentUseCase → SupabaseDocumentRepository.generateEmbedding() → gemini-embedding Edge Function → Guardar en DB
+```
+
+### 1. Admin crea documento en el Panel
+
+```typescript
+// Frontend: AdminDashboard.tsx
+const content = "QRIBAR es el sistema de carta digital de SmartConnect...";
+await createDocumentUseCase.execute({
+  content,
+  metadata: { source: 'qribar', category: 'product' }
+});
+```
+
+### 2. Generate Document Embedding
+
+```typescript
+// Repository: SupabaseDocumentRepository.generateEmbedding()
+const { data, error } = await supabase.functions.invoke('gemini-embedding', {
+  body: { text: content }
+});
+
+// Edge Function: gemini-embedding/index.ts (misma función que para búsqueda)
+// Retorna: { embedding: { values: [0.123, -0.456, ..., 0.234] } } (768 dimensiones)
+```
+
+### 3. Guardar documento con embedding
+
+```typescript
+// Repository: SupabaseDocumentRepository.create()
+const { data, error } = await supabase
+  .from('documents')
+  .insert({
+    content: content,
+    metadata: metadata,
+    embedding: embeddingData.embedding.values  // Array de 768 números
+  });
+```
+
+### Resumen: Usos de `gemini-embedding`
+
+| Caso | Cuándo se usa | Endpoint |
+|------|---------------|----------|
+| **Búsqueda RAG** | Usuario hace pregunta | `gemini-embedding` → generar embedding de query |
+| **Crear documento** | Admin crea nuevo documento | `gemini-embedding` → generar embedding del contenido |
+| **Actualizar documento** | Admin edita documento existente | `gemini-embedding` → regenerar embedding |
+
+---
+
 ## 🔄 Flujo de Procesamiento RAG
 
 ### 1. **User Query** (Entrada del Usuario)

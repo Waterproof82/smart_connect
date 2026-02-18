@@ -157,6 +157,30 @@ src/
 
 ---
 
+## 7. Supabase Database Linter ✅
+
+**Date:** 2026-02-18
+
+### Schema Errors
+- ✅ All resolved via migrations
+
+### Known Warnings (Intentional)
+| Warning | Status | Reason |
+|---------|--------|--------|
+| `extension_in_public` | ⚠️ Acceptable | vector extension must be in public schema for pgvector |
+| `auth_allow_anonymous_sign_ins` (documents) | ⚠️ Intentional | Chatbot RAG needs read access |
+| `auth_allow_anonymous_sign_ins` (app_settings) | ⚠️ Intentional | Landing page needs read access |
+| `auth_allow_anonymous_sign_ins` (security_logs) | ⚠️ Intentional | Only admins can read |
+| `auth_leaked_password_protection` | ⚠️ Pro Plan | Requires Supabase Pro ($25/mo) |
+
+### Functions Fixed
+- `match_documents` - Added `SET search_path = public`
+- `match_documents_by_source` - Added `SET search_path = public`
+- `insert_document_with_embedding` - Added `SET search_path = public`
+- `batch_insert_document` - Added `SET search_path = public`
+
+---
+
 ## Conclusion
 
 The project follows Clean Architecture with proper separation of concerns, SOLID principles are applied throughout, and OWASP security guidelines are implemented. All 167 tests pass.

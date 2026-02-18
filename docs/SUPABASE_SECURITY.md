@@ -23,30 +23,51 @@ The Supabase Anonymous Key (`VITE_SUPABASE_ANON_KEY`) is **intentionally public*
 
 **Purpose:** Stores embedded documents for RAG chatbot (menu items, FAQs, product info, etc.)
 
+**Security Model:**
+- **SELECT (Read):** Público (anon) - necesario para el chatbot RAG
+- **INSERT/UPDATE/DELETE:** Solo admin@smartconnect.ai (verificado por email en JWT)
+
 **Required Policies:**
 
 ```sql
 -- Enable RLS
 ALTER TABLE documents ENABLE ROW LEVEL SECURITY;
 
--- Policy 1: Allow public read access (chatbot access)
+-- Policy 1: Public read access (chatbot RAG needs to read documents)
 CREATE POLICY public_read_documents
 ON documents
 FOR SELECT
 TO public
 USING (true);
 
--- Policy 2: Allow authenticated users with admin/super_admin role to INSERT
-CREATE POLICY admin_insert_documents
+-- Policy 2: Admin full access (specific email only - most secure)
+-- Only admin@smartconnect.ai can INSERT/UPDATE/DELETE
+CREATE POLICY admin_full_access_documents
 ON documents
-FOR INSERT
+FOR ALL
 TO authenticated
 USING (
-  (auth.jwt() -> 'user_metadata' ->> 'role') = ANY (ARRAY['admin'::text, 'super_admin'::text])
+  (auth.jwt() ->> 'email') = 'admin@smartconnect.ai'
 )
 WITH CHECK (
-  (auth.jwt() -> 'user_metadata' ->> 'role') = ANY (ARRAY['admin'::text, 'super_admin'::text])
+  (auth.jwt() ->> 'email') = 'admin@smartconnect.ai'
 );
+
+-- Policy 3: Service role bypass (for Edge Functions)
+CREATE POLICY service_role_full_access_documents
+ON documents
+FOR ALL
+TO service_role
+USING (true);
+```
+
+**Access Matrix:**
+| Operation | Anonymous (anon) | admin@smartconnect.ai | Other Authenticated | Service Role |
+|-----------|------------------|----------------------|--------------------|--------------|
+| SELECT    | ✅ Allowed       | ✅ Allowed           | ✅ Allowed        | ✅ Allowed   |
+| INSERT    | ❌ Blocked       | ✅ Allowed           | ❌ Blocked        | ✅ Allowed   |
+| UPDATE    | ❌ Blocked       | ✅ Allowed           | ❌ Blocked        | ✅ Allowed   |
+| DELETE    | ❌ Blocked       | ✅ Allowed           | ❌ Blocked        | ✅ Allowed   |
 
 -- Policy 3: Allow authenticated users with admin/super_admin role to UPDATE
 CREATE POLICY admin_update_documents
@@ -54,29 +75,82 @@ ON documents
 FOR UPDATE
 TO authenticated
 USING (
-  (auth.jwt() -> 'user_metadata' ->> 'role') = ANY (ARRAY['admin'::text, 'super_admin'::text])
+  (auth.jwt() -> 'app_metadata' ->> 'role') = ANY (ARRAY['admin'::text, 'super_admin'::text])
 )
 WITH CHECK (
-  (auth.jwt() -> 'user_metadata' ->> 'role') = ANY (ARRAY['admin'::text, 'super_admin'::text])
+  (auth.jwt() -> 'app_metadata' ->> 'role') = ANY (ARRAY['admin'::text, 'super_admin'::text])
 );
-
--- Policy 4: Allow authenticated users with admin/super_admin role to DELETE
-CREATE POLICY admin_delete_documents
-ON documents
-FOR DELETE
-TO authenticated
-USING (
-  (auth.jwt() -> 'user_metadata' ->> 'role') = ANY (ARRAY['admin'::text, 'super_admin'::text])
-);
-```
 
 **Access Matrix:**
-| Operation | Anonymous (anon) | Authenticated (user) | Admin/Super Admin |
-|-----------|------------------|---------------------|------------------|
-| SELECT    | ✅ Allowed       | ✅ Allowed          | ✅ Allowed       |
-| INSERT    | ❌ Blocked       | ❌ Blocked          | ✅ Allowed       |
-| UPDATE    | ❌ Blocked       | ❌ Blocked          | ✅ Allowed       |
-| DELETE    | ❌ Blocked       | ❌ Blocked          | ✅ Allowed       |
+| Operation | Anonymous (anon) | admin@smartconnect.ai | Other Authenticated | Service Role |
+|-----------|------------------|----------------------|--------------------|--------------|
+| SELECT    | ✅ Allowed       | ✅ Allowed           | ✅ Allowed        | ✅ Allowed   |
+| INSERT    | ❌ Blocked       | ✅ Allowed           | ❌ Blocked        | ✅ Allowed   |
+| UPDATE    | ❌ Blocked       | ✅ Allowed           | ❌ Blocked        | ✅ Allowed   |
+| DELETE    | ❌ Blocked       | ✅ Allowed           | ❌ Blocked        | ✅ Allowed   |
+
+> ⚠️ **SEGURIDAD SIMPLIFICADA**: En lugar de usar roles (app_metadata), verificamos el email específico del admin en el JWT.
+> - El email en JWT está verificado por Supabase Auth (no modificable)
+> - Solo admin@smartconnect.ai tiene acceso de escritura
+> - Cualquier usuario puede LEER (necesario para el chatbot RAG)
+
+### Cómo Gestionar el Admin
+
+**Solo existe un admin:** admin@smartconnect.ai
+
+Para cambiar la contraseña o gestionar este usuario:
+1. Ir a Supabase Dashboard → Authentication → Users
+2. Buscar admin@smartconnect.ai
+3. Gestionar usuario (reset password, etc.)
+
+> ❌ **NO crear más admins** - El sistema está diseñado para un solo administrador.
+
+const supabaseAdmin = createClient(
+  process.env.SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!  // ⚠️ Solo en servidor
+);
+
+// Crear usuario y asignar rol en app_metadata
+const { data, error } = await supabaseAdmin.auth.admin.createUser({
+  email: 'admin@smartconnect.ai',
+  password: 'secure-password',
+  email_confirm: true,
+  app_metadata: {
+    role: 'super_admin'  // ✅ Se guarda en app_metadata
+  }
+});
+
+// O actualizar usuario existente
+await supabaseAdmin.auth.admin.updateUser(userId, {
+  app_metadata: { role: 'admin' }
+});
+```
+
+```python
+# Python (usando supabase-py)
+from supabase import create_client, Client
+
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
+
+supabase.auth.admin.update_user(
+  user_id,
+  {"app_metadata": {"role": "admin"}}
+)
+```
+
+> ❌ **NUNCA** hagas esto en el cliente:
+> ```typescript
+> // ❌ INSEGURO - user_metadata es editable por el usuario
+> await supabase.auth.signUp({
+>   email: 'admin@test.com',
+>   password: 'password',
+>   options: {
+>     data: {
+>       role: 'admin'  // Se guarda en user_metadata - INSEGURO!
+>     }
+>   }
+> })
+> ```
 
 #### B. `security_logs` Table (To be created)
 

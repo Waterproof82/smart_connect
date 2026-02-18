@@ -14,7 +14,7 @@
 │  │                    React + Vite + TypeScript                         │  │
 │  ├─────────────────────────────────────────────────────────────────────┤  │
 │  │  • Landing Page (SEO)        │  • Admin Panel (CRUD)               │  │
-│  │  • Chatbot RAG (IA)          │  • QRIBAR Section                   │  │
+│  │  • Chatbot RAG (IA)          │                                     │  │
 │  │  • Tailwind CSS              │  • React Router DOM                 │  │
 │  └─────────────────────────────────────────────────────────────────────┘  │
 └─────────────────────────────────────────────────────────────────────────────┘
@@ -30,7 +30,7 @@
 │  ├───────────────────────┤            ├───────────────────────┤          │
 │  │ • PostgreSQL          │            │ • Webhook receiver    │          │
 │  │ • pgvector            │            │ • AI Agent            │          │
-│  │ • Edge Functions     │            │ • Lead scoring        │          │
+│  │ • Edge Functions      │            │ • Lead scoring        │          │
 │  │ • Auth + RLS          │            │ • Telegram notify     │          │
 │  │ • Storage             │            │ • Email sender        │          │
 │  │ • Realtime            │            │ • Google Sheets       │          │
@@ -42,8 +42,8 @@
 │                           EXTERNAL APIS                                    │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │  ┌───────────────────────┐  ┌───────────────────────┐  ┌────────────────┐│
-│  │   Gemini API          │  │   Google AI Studio   │  │  Google Sheets ││
-│  │   (LLM + Embeddings)  │  │   (API Keys)         │  │  (CRM)         ││
+│  │   Gemini API          │  │   Google AI Studio    │  │  Google Sheets ││
+│  │   (LLM + Embeddings)  │  │   (API Keys)          │  │  (CRM)         ││
 │  └───────────────────────┘  └───────────────────────┘  └────────────────┘│
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -68,8 +68,8 @@
 │  │                           │                                          │  │
 │  │                           ▼                                          │  │
 │  │                  ┌─────────────────┐                                 │  │
-│  │                  │  Supabase JS   │                                 │  │
-│  │                  │  Client SDK    │                                 │  │
+│  │                  │  Supabase JS    │                                 │  │
+│  │                  │  Client SDK     │                                 │  │
 │  │                  └────────┬────────┘                                 │  │
 │  └───────────────────────────│──────────────────────────────────────────┘  │
 │                              │                                              │
@@ -77,7 +77,7 @@
                                 │
                     ┌───────────▼─────────────┐
                     │   HTTPS (REST/WS)       │
-                    │   ANON_KEY (public)      │
+                    │   ANON_KEY (public)     │
                     └───────────┬─────────────┘
                                 │
 ┌───────────────────────────────▼──────────────────────────────────────────────┐
@@ -88,10 +88,12 @@
 │  │   │  PostgreSQL  │  │ Edge Funcs   │  │     Auth + RLS       │  │   │
 │  │   │  • documents │  │ • gemini-    │  │  • JWT validation    │  │   │
 │  │   │  • users     │  │   embedding  │  │  • Role checking     │  │   │
-│  │   │  • logs      │  │ • chat-     │  │  • Session manage    │  │   │
-│  │   │              │  │   with-rag  │  │                      │  │   │
+│  │   │  • logs      │  │ • chat-      │  │  • Session manage    │  │   │
+│  │   │  • app_     │  │   with-rag   │  │                      │  │   │
+│  │   │    settings │  │ • gemini-    │  │                      │  │   │
+│  │   │             │  │   generate   │  │                      │  │   │
 │  │   └──────┬───────┘  └──────┬───────┘  └──────────┬───────────┘  │   │
-│  │          │                 │                      │              │   │
+│  │          │                 │                     │              │   │
 │  │          │    ┌────────────┼────────────┐        │              │   │
 │  │          ▼    ▼            ▼            ▼        ▼              │   │
 │  │   ┌─────────────────────────────────────────────────────────┐   │   │
@@ -103,16 +105,16 @@
 └──────────────────────────────────────────────────────────────────────────────┘
                                 │
                     ┌───────────▼─────────────┐
-                    │   SERVICE_ROLE_KEY     │
-                    │   (server-side only)   │
+                    │   SERVICE_ROLE_KEY      │
+                    │   (server-side only)    │
                     └───────────┬─────────────┘
                                 │
 ┌───────────────────────────────▼──────────────────────────────────────────────┐
 │                         EXTERNAL APIS                                        │
-│  ┌──────────────────────┐    ┌──────────────────────┐                      │
-│  │   Gemini API         │    │   Google AI Studio   │                      │
-│  │   (LLM + Embedding)  │◄───│   (API Keys)         │                      │
-│  └──────────────────────┘    └──────────────────────┘                      │
+│  ┌──────────────────────┐    ┌──────────────────────┐                        │
+│  │   Gemini API         │    │   Google AI Studio   │                        │
+│  │   (LLM + Embedding)  │◄───│   (API Keys)         │                        │
+│  └──────────────────────┘    └──────────────────────┘                        │
 └──────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -131,13 +133,15 @@
 │  │  VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIs... (PUBLIC)          │  │
 │  └─────────────────────────────────────────────────────────────────────┘  │
 │                                                                         │
-│  SUPABASE (Dashboard > Edge Functions > Settings)                       │
+│  BACKEND/SCRIPTS (.env.local)                                           │
 │  ┌─────────────────────────────────────────────────────────────────────┐  │
-│  │  GEMINI_API_KEY=AIzaSy... (PROTECTED - server only)                │  │
+│  │  GEMINI_API_KEY=AIzaSy... (PROTECTED)                              │  │
 │  │  SUPABASE_URL=https://xxx.supabase.co                              │  │
 │  │  SUPABASE_SERVICE_ROLE_KEY=eyJhbGci... (PROTECTED)                │  │
 │  └─────────────────────────────────────────────────────────────────────┘  │
 │                                                                         │
+│  NOTE: Contact settings now managed in Supabase (app_settings table)    │
+│        Admin Panel → Configuración                                       │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -165,26 +169,42 @@ smart-connect/
 │   │   │   ├── data/            # RAG Indexer, Embedding cache
 │   │   │   └── presentation/    # Chat UI components
 │   │   │
+│   │   ├── landing/             # Landing page + Contact form
+│   │   │   ├── domain/          # Lead entity, Use Cases
+│   │   │   ├── data/            # Webhook datasource
+│   │   │   └── presentation/    # React components
+│   │   │
 │   │   └── qribar/              # QRIBAR digital menu
+│   │       ├── domain/          # Menu, Restaurant entities
+│   │       ├── data/            # Repository implementations
+│   │       └── presentation/    # React components, hooks
 │   │
-│   └── shared/                  # Shared utilities
-│       └── utils/               # Sanitizer, formatters
+│   ├── shared/                  # Shared utilities
+│   │   ├── config/              # Environment config
+│   │   ├── services/            # Settings service (app_settings)
+│   │   ├── utils/               # Sanitizer, formatters
+│   │   └── supabaseClient.ts    # Supabase client
+│   │
+│   └── features/                # Entry points
+│       └── App.tsx              # Main app with routing
 │
 ├── supabase/
-│   └── migrations/              # Database migrations
+│   ├── migrations/              # Database migrations
+│   │   └── app_settings.sql    # Dynamic settings table
+│   └── functions/              # Edge Functions (gemini-*, chat-with-rag)
 │
 ├── tests/
-│   ├── unit/                    # Unit tests
-│   ├── integration/             # Integration tests
-│   └── e2e/                     # E2E tests
+│   ├── unit/                   # Unit tests
+│   ├── integration/            # Integration tests
+│   └── e2e/                   # E2E tests
 │
 ├── docs/
-│   ├── slides/                  # This folder
-│   ├── adr/                     # Architecture Decision Records
-│   ├── audit/                   # Operation logs
-│   └── context/                  # Agent guides
+│   ├── slides/                 # This folder
+│   ├── adr/                   # Architecture Decision Records
+│   ├── audit/                 # Operation logs
+│   └── context/               # Agent guides
 │
-└── package.json                  # Dependencies
+└── package.json                # Dependencies
 ```
 
 ---

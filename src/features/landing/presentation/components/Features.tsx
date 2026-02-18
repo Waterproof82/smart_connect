@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState, useRef } from 'react';
-import { Code2, Settings2, Smartphone, ArrowUpRight } from 'lucide-react';
+import { Code2, Settings2, Smartphone, Utensils, ArrowUpRight } from 'lucide-react';
 
 const solutions = [
   {
@@ -23,6 +23,15 @@ const solutions = [
     title: 'Tarjetas Tap-to-Review',
     description: 'Hardware físico con alma digital. Tarjetas NFC elegantes que permiten a tus clientes dejar reseñas positivas al instante con un solo toque.',
     serviceValue: 'Tarjetas NFC Reseñas'
+  },
+  {
+    id: 'qribar',
+    icon: <Utensils className="w-6 h-6 text-amber-500" />,
+    title: 'QRIBAR',
+    description: 'Menú digital interactivo para restaurantes y hostelería. Tus clientes escanean un QR y acceden a tu carta desde el móvil, sin descargar nada.',
+    serviceValue: 'QRIBAR',
+    external: true,
+    href: 'https://qribar.es'
   }
 ];
 
@@ -95,10 +104,15 @@ export const Features: React.FC = () => {
             style={{ transitionDelay: `${(idx * 150) + 400}ms` }}
             >
               <a 
-                href={`#contacto?servicio=${encodeURIComponent(item.serviceValue)}`}
+                href={item.external && item.href 
+                  ? item.href 
+                  : `#contacto?servicio=${encodeURIComponent(item.serviceValue)}`
+                }
+                target={item.external ? "_blank" : undefined}
+                rel={item.external ? "noopener noreferrer" : undefined}
                 className="inline-flex items-center gap-2 text-sm font-bold text-blue-400 group-hover:text-blue-300 transition-colors relative"
               >
-                <span>Saber más</span>
+                <span>{item.external ? 'Visitar' : 'Saber más'}</span>
                 <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                 
                 {/* Línea decorativa que se expande */}

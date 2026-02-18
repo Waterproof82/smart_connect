@@ -16,13 +16,14 @@ CREATE TABLE IF NOT EXISTS public.app_settings (
 ALTER TABLE public.app_settings ENABLE ROW LEVEL SECURITY;
 
 -- Policy: Admin full access (authenticated users with admin role)
+-- SECURITY: Use app_metadata (server-side only), NOT user_metadata (editable by users)
 CREATE POLICY "Admin full access to app_settings"
 ON public.app_settings
 FOR ALL
 TO authenticated
 USING (
     COALESCE(
-        (auth.jwt() -> 'user_metadata' ->> 'role')::text,
+        (auth.jwt() -> 'app_metadata' ->> 'role')::text,
         ''
     ) IN ('admin', 'super_admin')
 );

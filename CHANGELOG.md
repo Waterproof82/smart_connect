@@ -7,6 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- **Supabase Database Linter Fixes (2026-02-18):**
+  - Fixed function search_path warnings for `match_documents`, `match_documents_by_source`, `insert_document_with_embedding`, `batch_insert_document`
+  - Added `SET search_path = public` to all function definitions
+  - Fixed return types to match documents table schema
+  - Migrations: `20260219120000_final_function_fix.sql`
+  - Audit: `docs/audit/2026-02-18_supabase-linter-fix.md`
+
+- **Edge Function Configuration Fix (2026-02-18):**
+  - Fixed `config.toml` entrypoint for `chat-with-rag` function (was pointing to `gemini-generate/index.ts`)
+  - Set `verify_jwt = false` to allow anonymous access for chatbot RAG
+  - Function now working correctly
+
+- **AGENTS.md Documentation Update:**
+  - Added Section 4.4: Protocolo de Supabase Database Lint
+  - Documented known warnings and manual configuration requirements
+
+### Security
+- **Supabase Database Linter Compliance:**
+  - All schema errors resolved
+  - Known warnings documented as intentional:
+    - `extension_in_public`: vector extension required in public schema
+    - `auth_allow_anonymous_sign_ins`: Required for chatbot RAG and landing page
+    - `auth_leaked_password_protection`: Requires Supabase Pro Plan ($25/mo)
+
 ### Added
 - **Dynamic Settings Management System:**
   - Created `app_settings` table in Supabase for configurable values

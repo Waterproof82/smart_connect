@@ -90,7 +90,7 @@ enum Role {
    ↓
 4. Login → Supabase Auth (email/password)
    ↓
-5. Verificar user_metadata.role === 'admin' | 'super_admin'
+5. Verificar email === 'admin@smartconnect.ai' (único admin)
    ↓
 6. Si válido → AdminDashboard
    ↓

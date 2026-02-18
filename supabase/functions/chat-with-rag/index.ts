@@ -39,18 +39,24 @@ const cache = new EmbeddingCache()
 // ============================================================================
 // MAIN HANDLER
 serve(async (req) => {
+  console.log('[RAG] === START ===')
+  console.log('[RAG] Method:', req.method)
+  console.log('[RAG] Headers:', JSON.stringify(Object.fromEntries(req.headers.entries())))
+  
   if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders })
 
   const startTime = Date.now()
 
   try {
-    // 1️⃣ AUTHENTICATION
-    const { supabase, user } = await authenticateRequest(req)
-
-    // 2️⃣ PARSE REQUEST
+    console.log('[RAG] Parsing request...')
+    // 2️⃣ PARSE REQUEST (must be first to catch body parsing errors)
     const { query, conversationHistory, topK, threshold, source } = await parseRequest(req)
+    console.log('[RAG] Query parsed:', query.substring(0, 30))
 
-    console.log(`[RAG] User ${user.id} query: "${query.substring(0, 100)}..."`)
+    // 1️⃣ AUTHENTICATION
+    console.log('[RAG] Authenticating...')
+    const { supabase, user } = await authenticateRequest(req)
+    console.log('[RAG] Auth done, user:', user.id)
 
     const geminiKey = Deno.env.get('GEMINI_API_KEY')
     if (!geminiKey) throw new Error('Missing GEMINI_API_KEY')
@@ -60,12 +66,32 @@ serve(async (req) => {
 
     // 4️⃣ VECTOR SIMILARITY SEARCH
     const searchStartTime = Date.now()
-    const { data: searchResults, error: searchError } = await supabase.rpc('match_documents', {
-      query_embedding: queryEmbedding,
-      match_threshold: threshold,
-      match_count: topK,
-      filter_source: source
-    })
+    
+    // Pass embedding as array directly (Supabase RPC handles JSON arrays)
+    let searchResults = []
+    let searchError = null
+    
+    if (source) {
+      const result = await supabase.rpc('match_documents_by_source', {
+        query_embedding: queryEmbedding,
+        source_filter: source,
+        match_threshold: threshold,
+        match_count: topK
+      })
+      searchResults = result.data || []
+      searchError = result.error
+    } else {
+      const result = await supabase.rpc('match_documents', {
+        query_embedding: queryEmbedding,
+        match_threshold: threshold,
+        match_count: topK
+      })
+      searchResults = result.data || []
+      searchError = result.error
+    }
+    
+    console.log('[RAG] Search results:', JSON.stringify({ count: searchResults?.length, error: searchError }))
+    
     if (searchError) throw new Error(`Vector search failed: ${searchError.message}`)
     const searchTime = Date.now() - searchStartTime
     console.log(`[RAG] Found ${searchResults?.length || 0} relevant documents (${searchTime}ms)`)
@@ -152,10 +178,19 @@ async function authenticateRequest(req) {
 }
 
 async function parseRequest(req) {
-  const body = await req.json()
-  const { query, conversationHistory = [], topK = 5, threshold = 0.7, source = null } = body
-  if (!query || typeof query !== 'string') returnError(400, 'Missing or invalid "query"')
-  return { query, conversationHistory, topK, threshold, source }
+  try {
+    const body = await req.json()
+    const { query, conversationHistory = [], topK = 5, threshold = 0.7, source = null } = body
+    if (!query || typeof query !== 'string') {
+      throw new Error('Missing or invalid "query"')
+    }
+    return { query, conversationHistory, topK, threshold, source }
+  } catch (err) {
+    if (err instanceof SyntaxError) {
+      throw new Error('Invalid JSON body')
+    }
+    throw err
+  }
 }
 
 async function getQueryEmbedding(query: string, cache: EmbeddingCache, geminiKey: string) {

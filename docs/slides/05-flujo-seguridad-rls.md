@@ -46,7 +46,29 @@
 
 ---
 
-## RLS Policies Applied
+## Tables with RLS
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         TABLES WITH RLS                                    │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│  documents:                                                               │
+│  • SELECT: public (anon + authenticated) - for chatbot RAG             │
+│  • ALL: admin@smartconnect.ai only                                        │
+│  • service_role: full access                                             │
+│                                                                         │
+│  app_settings:                                                            │
+│  • SELECT: public (anon) - for landing page contact info                │
+│  • ALL: admin@smartconnect.ai only                                        │
+│  • service_role: full access                                             │
+│                                                                         │
+│  security_logs:                                                           │
+│  • SELECT: admin@smartconnect.ai only                                     │
+│  • ALL: service_role only                                                │
+│                                                                         │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -142,46 +164,38 @@
 -- Enable RLS on documents table
 ALTER TABLE public.documents ENABLE ROW LEVEL SECURITY;
 
--- 1. SELECT: Public read (chatbot access)
-CREATE POLICY public_read_documents
+-- 1. SELECT: Public read (chatbot RAG access - anonymous)
+CREATE POLICY "Anon read access for chatbot"
 ON public.documents
 FOR SELECT
-TO public
+TO anon
 USING (true);
 
--- 2. INSERT: Only admins
-CREATE POLICY admin_insert_documents
+-- 2. SELECT: Authenticated read (for logged in users)
+CREATE POLICY "Authenticated read access"
 ON public.documents
-FOR INSERT
+FOR SELECT
 TO authenticated
-WITH CHECK (
-  (auth.jwt() -> 'user_metadata' ->> 'role') 
-  IN ('admin', 'super_admin')
-);
+USING (true);
 
--- 3. UPDATE: Only admins
-CREATE POLICY admin_update_documents
+-- 3. INSERT/UPDATE/DELETE: Only admin@smartconnect.ai (email verified in JWT)
+CREATE POLICY "Admin full access to documents"
 ON public.documents
-FOR UPDATE
+FOR ALL
 TO authenticated
 USING (
-  (auth.jwt() -> 'user_metadata' ->> 'role') 
-  IN ('admin', 'super_admin')
+  (auth.jwt() ->> 'email') = 'admin@smartconnect.ai'
 )
 WITH CHECK (
-  (auth.jwt() -> 'user_metadata' ->> 'role') 
-  IN ('admin', 'super_admin')
+  (auth.jwt() ->> 'email') = 'admin@smartconnect.ai'
 );
 
--- 4. DELETE: Only admins
-CREATE POLICY admin_delete_documents
+-- 4. Service role bypass (for Edge Functions)
+CREATE POLICY "Service role full access documents"
 ON public.documents
-FOR DELETE
-TO authenticated
-USING (
-  (auth.jwt() -> 'user_metadata' ->> 'role') 
-  IN ('admin', 'super_admin')
-);
+FOR ALL
+TO service_role
+USING (true);
 ```
 
 ---
