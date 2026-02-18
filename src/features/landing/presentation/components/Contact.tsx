@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Mail, MapPin, Send, MessageSquare, Sparkles, CheckCircle2 } from 'lucide-react';
 import { getAppSettings, AppSettings } from '@shared/services/settingsService';
-import { getLandingContainer, LandingContainer } from '../LandingContainer';
+import { getLandingContainer } from '../LandingContainer';
 import { LeadEntity } from '../../domain/entities';
 import { sanitizeInput, isValidEmail } from '@shared/utils/sanitizer';
 import { rateLimiter, RateLimitPresets } from '@shared/utils/rateLimiter';
@@ -38,9 +38,6 @@ export const Contact: React.FC = () => {
     // Only warn in production if no webhook configured
     if (!isDevelopment && (!webhookUrl || webhookUrl.includes('placeholder'))) {
       console.error('❌ CRITICAL: Webhook URL not configured in Admin Panel!');
-    } else if (webhookUrl && !webhookUrl.includes('placeholder')) {
-      // eslint-disable-next-line no-console
-      console.log('✅ Webhook URL configured:', webhookUrl.substring(0, 30) + '...');
     }
   }, [settings, isLoadingSettings]);
 
