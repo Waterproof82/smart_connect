@@ -98,6 +98,39 @@ Some dependencies may require specific versions due to compatibility:
 
 ---
 
+## 7. NPM Overrides
+
+When transitive dependencies have security vulnerabilities that cannot be fixed by updating direct dependencies, use npm overrides in `package.json`:
+
+```json
+"overrides": {
+  "path-to-regexp": "^8.0.0",
+  "undici": "^6.22.1",
+  "ajv": "^8.18.0"
+}
+```
+
+### Override Guidelines
+
+- **Use sparingly:** Overrides should be a last resort when:
+  - The vulnerable package has no fixed version available
+  - The parent dependency hasn't updated to a secure version
+  - Breaking changes prevent a simple update
+
+- **Verify compatibility:** Test thoroughly after adding overrides
+- **Document rationale:** Add comments explaining why the override is needed
+- **Review quarterly:** Check if overrides can be removed in next review
+
+### Recent Overrides Applied
+
+| Date | Override | Vulnerabilities Fixed | Reason |
+|------|----------|----------------------|--------|
+| 2026-02-18 | `path-to-regexp: ^8.0.0` | HIGH (ReDoS) | @vercel/node transitive dependency |
+| 2026-02-18 | `undici: ^6.22.1` | HIGH (DoS) | @vercel/node transitive dependency |
+| 2026-02-18 | `ajv: ^8.18.0` | MODERATE (ReDoS) | eslint transitive dependency |
+
+---
+
 ## 7. New Dependency Approval
 
 Before adding a new dependency:
@@ -139,5 +172,5 @@ npm install <package>@<version>
 
 **Status:** 🟢 ACTIVE  
 **Owner:** DevOps Team + Security Lead  
-**Last Review:** 2026-01-28  
+**Last Review:** 2026-02-18  
 **Next Review:** 2026-04-28 (Quarterly)

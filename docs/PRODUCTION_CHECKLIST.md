@@ -1,6 +1,6 @@
 # ✅ SmartConnect AI – Production Readiness Checklist
 
-Fecha: 2026-01-30
+Fecha: 2026-02-18
 
 ## 1. Testing y QA
 - [x] Todos los tests unitarios, integración y e2e pasan correctamente
@@ -31,9 +31,30 @@ Fecha: 2026-01-30
 - [x] Notificaciones de leads calientes probadas
 
 ## 7. Checklist Final
-- [x] Sin datos sensibles en el repo
-- [x] SEO y rendimiento de la landing validados
-- [x] Smoke test de todos los flujos de usuario
+ - [x] Sin datos sensibles en el repo
+ - [x] SEO y rendimiento de la landing validados
+ - [x] Smoke test de todos los flujos de usuario
+
+## 8. Bundle Size & Performance
+ - [x] Initial bundle < 500KB (use `npm run build` to verify)
+ - [x] Code-splitting implemented for lazy loading routes
+ - [x] Vendor chunks separated (React, Supabase)
+ - [x] No build warnings about chunk sizes
+
+### Build Output Expectations
+```
+dist/assets/index-*.js           ~11 KB    ← Landing principal
+dist/assets/vendor-react-*.js    ~48 KB    ← React core
+dist/assets/vendor-supabase-*.js ~170 KB   ← Supabase client
+dist/assets/index-admin-*.js     ~52 KB    ← Admin (lazy)
+dist/assets/index-chatbot-*.js  ~262 KB    ← Chatbot (lazy)
+```
+
+### Run Performance Check
+```bash
+npm run build
+# Verify no warnings about chunk size > 500KB
+```
 
 ---
 
