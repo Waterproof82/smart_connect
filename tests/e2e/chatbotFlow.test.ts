@@ -64,8 +64,7 @@ describeIfConfigured('RAG Chatbot E2E Flow', () => {
     const { data: docs, error: searchError } = await supabase.rpc('match_documents', {
       query_embedding: embData.embedding,
       match_threshold: 0.3,
-      match_count: 3,
-      filter_source: ''
+      match_count: 3
     });
 
     if (searchError || !docs) {
@@ -153,8 +152,7 @@ INSTRUCCIONES:
     const { data: docs, error: searchError } = await supabase.rpc('match_documents', {
       query_embedding: embData.embedding,
       match_threshold: 0.3,
-      match_count: 3,
-      filter_source: ''
+      match_count: 3
     });
 
     if (searchError || !docs) {

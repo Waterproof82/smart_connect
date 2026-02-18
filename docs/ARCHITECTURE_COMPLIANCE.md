@@ -120,11 +120,11 @@ src/
 
 ## 4. Testing ✅
 
-- **167 tests passing** (100% pass rate)
+- **165 tests passing** (98.8% pass rate)
 - Unit tests for domain entities
 - Unit tests for use cases
 - Integration tests for RLS policies
-- E2E tests for chatbot flow
+- E2E tests require Edge Functions deployment (2 tests skipped in CI)
 
 ---
 
