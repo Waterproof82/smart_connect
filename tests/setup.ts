@@ -2,18 +2,14 @@
 import * as dotenv from 'dotenv';
 dotenv.config({ path: '.env.local' });
 
-// Mock environment variables for Node/Jest compatibility (fallback if not in .env.local)
-process.env.SUPABASE_URL = process.env.SUPABASE_URL || 'https://tysjedvujvsmrzzrmesr.supabase.co';
-process.env.SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR5c2plZHZ1anZzbXJ6enJtZXNyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk1NDE5NjIsImV4cCI6MjA4NTExNzk2Mn0.wwEaxcanylAFKY1x6NNNlewEcQPby0zdo9Q93qqe3dM';
-// Also set VITE_ prefixed versions for consistency with Vite env
-process.env.VITE_SUPABASE_URL = process.env.SUPABASE_URL;
-process.env.VITE_SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
-// SECURITY: Do NOT commit real API keys. Use a placeholder for tests only.
-// The real key should be set in .env.local (gitignored) for local/dev.
-process.env.GEMINI_API_KEY = 'test-api-key';
-process.env.N8N_WEBHOOK_URL = '';
-process.env.GOOGLE_SHEETS_ID = '';
-process.env.CONTACT_EMAIL = 'jmaristia@gmail.com';
+// Set VITE_ prefixed versions for consistency with Vite env (if not already set)
+if (!process.env.VITE_SUPABASE_URL && process.env.SUPABASE_URL) {
+  process.env.VITE_SUPABASE_URL = process.env.SUPABASE_URL;
+}
+if (!process.env.VITE_SUPABASE_ANON_KEY && process.env.SUPABASE_ANON_KEY) {
+  process.env.VITE_SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
+}
+
 /**
  * Jest Setup File
  * @description Global test configuration and mocks
@@ -31,9 +27,8 @@ if (!globalThis.crypto.randomUUID) {
 }
 
 // Mock environment variables
+// Note: Settings are now fetched from Supabase database, not ENV
 // No need to mock VITE_GEMINI_API_KEY, fallback is handled in env.config.ts
-process.env.VITE_N8N_WEBHOOK_URL = 'https://test-webhook.com';
-process.env.VITE_GOOGLE_SHEETS_ID = 'test-sheet-id';
 
 // Mock DOMPurify for Node.js environment
 jest.mock('dompurify', () => {

@@ -49,7 +49,6 @@ export class N8NWebhookDataSource {
         return false;
       }
 
-      logger.info('✅ Lead enviado exitosamente');
       return true;
     } catch (error) {
       logger.error('Error al enviar lead a n8n', error);

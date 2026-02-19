@@ -7,7 +7,114 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- **Bundle Size Optimization (2026-02-18):**
+  - Implemented React.lazy() for route-based code splitting (AdminPanel loads only on /admin)
+  - Implemented lazy loading for ExpertAssistant chatbot (loads on user interaction)
+  - Configured manualChunks in vite.config.ts for vendor splitting
+  - Result: Initial bundle reduced from 541KB to 10.89KB (98% reduction)
+  - Removed chunk size warning from build output
+  - Files: `src/main.tsx`, `src/App.tsx`, `vite.config.ts`
+  - Audit: `docs/audit/2026-02-18_bundle-optimization.md`
+
+- **NPM Security Vulnerabilities Fixed (2026-02-18):**
+  - Fixed 15 vulnerabilities (1 low, 10 moderate, 4 high) using npm overrides
+  - Added overrides in package.json: path-to-regexp ^8.0.0, undici ^6.22.1, ajv ^8.18.0
+  - All transitive dependencies now have secure versions
+  - Files: `package.json`, `package-lock.json`
+
+- **Supabase Database Linter RLS Fix (2026-02-18):**
+  - Fixed `auth_rls_initplan` warnings: Changed `auth.jwt()` to `(SELECT auth.jwt())` in RLS policies
+  - Fixed `multiple_permissive_policies` warnings: Separated SELECT from INSERT/UPDATE/DELETE policies
+  - Unified SELECT policies to single policy per role/action combination
+  - Removed duplicate admin policies from previous migrations
+  - Migrations: `20260219130000_fix_linter_warnings.sql`, `20260219140000_fix_duplicate_policies.sql`, `20260219150000_unify_select_policies.sql`, `20260219160000_remove_duplicate_admin_policies.sql`
+  - Audit: `docs/audit/2026-02-18_supabase-linter-rls-fix.md`
+
+- **Supabase Database Linter Function Fix (2026-02-18):**
+  - Fixed function search_path warnings for `match_documents`, `match_documents_by_source`, `insert_document_with_embedding`, `batch_insert_document`
+  - Added `SET search_path = public` to all function definitions
+  - Fixed return types to match documents table schema
+  - Migrations: `20260219120000_final_function_fix.sql`
+  - Audit: `docs/audit/2026-02-18_supabase-linter-fix.md`
+
+- **Edge Function Configuration Fix (2026-02-18):**
+  - Fixed `config.toml` entrypoint for `chat-with-rag` function (was pointing to `gemini-generate/index.ts`)
+  - Set `verify_jwt = false` to allow anonymous access for chatbot RAG
+  - Function now working correctly
+
+- **AGENTS.md Documentation Update:**
+  - Added Section 4.4: Protocolo de Supabase Database Lint
+  - Documented known warnings and manual configuration requirements
+
 ### Security
+- **Supabase Database Linter Compliance:**
+  - All schema errors resolved
+  - Known warnings documented as intentional:
+    - `extension_in_public`: vector extension required in public schema
+    - `auth_allow_anonymous_sign_ins`: Required for chatbot RAG and landing page
+    - `auth_leaked_password_protection`: Requires Supabase Pro Plan ($25/mo)
+
+### Added
+- **Dynamic Settings Management System:**
+  - Created `app_settings` table in Supabase for configurable values
+  - Fields: `n8n_webhook_url`, `contact_email`, `whatsapp_phone`, `physical_address`
+  - RLS policies: Admin full access, Anon read-only (landing), Service role bypass
+  - Location: `supabase/migrations/20260218000000_create_app_settings.sql`
+  - Audit: `docs/audit/2026-02-18_dynamic_settings_system.md`
+
+- **Admin Panel Settings Section:**
+  - New SettingsPanel component for managing contact info and webhook URL
+  - Clean Architecture: Domain entity, Repository interface, Use cases
+  - Fields editable: Contact email, WhatsApp, Address, n8n webhook URL
+  - Location: `src/features/admin/`
+  - Components: `SettingsPanel.tsx`, `Settings.ts`, `ISettingsRepository.ts`, `GetSettingsUseCase.ts`, `UpdateSettingsUseCase.ts`
+
+- **Landing Page Dynamic Settings:**
+  - Contact section now reads data from Supabase instead of hardcoded values
+  - Fetches: contact email, WhatsApp phone, physical address
+  - Location: `src/features/landing/presentation/components/Contact.tsx`
+  - Service: `src/shared/services/settingsService.ts`
+
+- **WhatsApp Button Dynamic Integration:**
+  - Chatbot WhatsApp button now uses phone number from database
+  - Falls back to disabled state if no number configured
+  - Location: `src/features/chatbot/presentation/ExpertAssistantWithRAG.tsx`
+
+### Changed
+- **Environment Variables Cleanup:**
+  - Removed deprecated ENV variables: `VITE_CONTACT_EMAIL`, `VITE_N8N_WEBHOOK_URL`, `VITE_GOOGLE_SHEETS_ID`
+  - Settings now managed entirely in Supabase database
+  - Only kept: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `GEMINI_API_KEY`
+  - Updated: `.env.local`, `.env.example`, `env.config.ts`, `vite-env.d.ts`
+
+- **Settings Service Refactoring:**
+  - Removed unused fields: `n8n_notification_email`, `google_sheets_id`
+  - These are configured internally in n8n workflow, not in our app
+  - Updated: Domain entities, Repository, Use cases, UI components
+
+### Security
+- **RLS Policies for app_settings:**
+  - Anon: SELECT only (for landing page)
+  - Authenticated (admin/super_admin): Full CRUD
+  - Service role: Full access (for Edge Functions)
+
+### Removed
+- **Database Columns:**
+  - Dropped `n8n_notification_email` and `google_sheets_id` from app_settings
+  - These are configured in n8n workflow, not in our app
+  - Location: `supabase/migrations/20260218100000_drop_unused_settings_columns.sql`
+
+### Security
+- **Supabase Cryptographic Infrastructure Rotation (2026-02-17):**
+  - Migrated from Legacy key system to modern ECDSA (P-256) algorithm
+  - Replaced old JWT format (`eyJ...`) with new `sb_publishable` and `sb_secret` keys
+  - Renewed Gemini API key in Supabase secrets
+  - Verified all Edge Functions (gemini-embedding, gemini-generate, chat-with-rag) with new keys
+  - Confirmed RLS policies intact and functional
+  - All 11 integration tests passing
+  - Audit: `docs/audit/2026-02-17_cryptographic-infrastructure-rotation.md`
+
 - **RLS Policies for Documents Table (2026-02-17):**
   - Refined RLS policies for `documents` table
   - SELECT: Public access (anon can read for chatbot RAG)

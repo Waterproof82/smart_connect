@@ -1,11 +1,24 @@
 
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { Navbar } from '@features/landing/presentation/components/Navbar';
 import { Hero } from '@features/landing/presentation/components/Hero';
 import { Features } from '@features/landing/presentation/components/Features';
 import { SuccessStats } from '@features/landing/presentation/components/SuccessStats';
 import { Contact } from '@features/landing/presentation/components/Contact';
-import { ExpertAssistant } from '@features/chatbot/presentation';
+
+// Lazy loading para el Chatbot - solo se carga cuando el usuario interactúa
+// Esto reduce significativamente el initial bundle size
+const ExpertAssistant = lazy(() => 
+  import('@features/chatbot/presentation').then(module => ({ 
+    default: module.ExpertAssistant 
+  }))
+);
+
+const ChatbotLoading = () => (
+  <div className="fixed bottom-4 right-4 w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center shadow-lg">
+    <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-white"></div>
+  </div>
+);
 
 const App: React.FC = () => {
   const [scrolled, setScrolled] = React.useState(false);
@@ -33,8 +46,12 @@ const App: React.FC = () => {
       <section id="exito"><SuccessStats /></section>
       <section id="contacto"><Contact /></section>
       
-      {/* AI Chatbot Assistant - Only render when knowledge base is ready */}
-      {isKnowledgeBaseReady && <ExpertAssistant />}
+      {/* AI Chatbot Assistant - Always visible */}
+      {isKnowledgeBaseReady && (
+        <Suspense fallback={<ChatbotLoading />}>
+          <ExpertAssistant />
+        </Suspense>
+      )}
       
       {/* Footer */}
       <footer className="bg-black/50 py-8 text-center text-gray-400">

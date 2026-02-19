@@ -3,11 +3,14 @@ import { Link } from 'react-router-dom';
 import { Home, LogOut, User } from 'lucide-react';
 import { StatsDashboard } from './StatsDashboard';
 import { DocumentList } from './DocumentList';
+import { SettingsPanel } from './SettingsPanel';
 import { GetAllDocumentsUseCase } from '../../domain/usecases/GetAllDocumentsUseCase';
 import { GetDocumentStatsUseCase } from '../../domain/usecases/GetDocumentStatsUseCase';
 import { DeleteDocumentUseCase } from '../../domain/usecases/DeleteDocumentUseCase';
 import { UpdateDocumentUseCase } from '../../domain/usecases/UpdateDocumentUseCase';
 import { CreateDocumentUseCase } from '../../domain/usecases/CreateDocumentUseCase';
+import { GetSettingsUseCase } from '../../domain/usecases/GetSettingsUseCase';
+import { UpdateSettingsUseCase } from '../../domain/usecases/UpdateSettingsUseCase';
 import { AdminUser } from '../../domain/entities/AdminUser';
 import { IAuthRepository } from '../../domain/repositories/IAuthRepository';
 
@@ -17,6 +20,8 @@ interface AdminDashboardProps {
   deleteDocumentUseCase: DeleteDocumentUseCase;
   updateDocumentUseCase: UpdateDocumentUseCase;
   createDocumentUseCase: CreateDocumentUseCase;
+  getSettingsUseCase: GetSettingsUseCase;
+  updateSettingsUseCase: UpdateSettingsUseCase;
   authRepository: IAuthRepository;
   currentUser: AdminUser;
   onLogout: () => void;
@@ -28,6 +33,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   deleteDocumentUseCase,
   updateDocumentUseCase,
   createDocumentUseCase,
+  getSettingsUseCase,
+  updateSettingsUseCase,
   authRepository,
   currentUser,
   onLogout,
@@ -104,7 +111,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         <div className="md:flex md:items-center md:justify-between mb-2">
           <div>
             <h2 className="text-2xl font-bold text-white">Knowledge Base</h2>
-            <p className="text-gray-400 text-sm mt-1">Manage documents and embeddings</p>
+            <p className="text-gray-400 text-sm mt-1">Chatbot RAG - Manage documents and embeddings</p>
           </div>
         </div>
 
@@ -115,6 +122,19 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           createDocumentUseCase={createDocumentUseCase}
           currentUser={currentUser}
           onDocumentChange={refreshStats}
+        />
+
+        {/* Settings Section */}
+        <div className="md:flex md:items-center md:justify-between mb-2 mt-8">
+          <div>
+            <h2 className="text-2xl font-bold text-white">Configuración</h2>
+            <p className="text-gray-400 text-sm mt-1">Parámetros globales de la aplicación</p>
+          </div>
+        </div>
+
+        <SettingsPanel
+          getSettingsUseCase={getSettingsUseCase}
+          updateSettingsUseCase={updateSettingsUseCase}
         />
       </main>
     </div>

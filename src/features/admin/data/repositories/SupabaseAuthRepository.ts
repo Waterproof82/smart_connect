@@ -4,6 +4,9 @@
  * Clean Architecture: Data Layer
  * 
  * Implementación del repositorio de autenticación usando Supabase Auth.
+ * 
+ * SECURITY: Verifica email específico (admin@smartconnect.ai) en lugar de roles.
+ * El email en JWT está verificado por Supabase Auth y no puede ser modificado por el usuario.
  */
 
 import { SupabaseClient } from '@supabase/supabase-js';
@@ -15,10 +18,10 @@ import {
 } from '../../domain/repositories/IAuthRepository';
 import { AdminUser } from '../../domain/entities/AdminUser';
 
+const ADMIN_EMAIL = 'admin@smartconnect.ai';
+
 export class SupabaseAuthRepository implements IAuthRepository {
   private readonly client: SupabaseClient = supabase;
-
-
 
   async login(credentials: LoginCredentials): Promise<AuthSession> {
     // Autenticar con Supabase
@@ -31,20 +34,21 @@ export class SupabaseAuthRepository implements IAuthRepository {
       throw new Error('Authentication failed');
     }
 
-    // Verificar que el usuario tiene rol de admin en metadata
-    const role = authData.user.user_metadata?.role as string;
-    
-    if (!role || !['admin', 'super_admin'].includes(role)) {
-      // Cerrar sesión si no es admin
+    // SECURITY: Verificar email específico del admin
+    // El email en JWT está verificado por Supabase Auth
+    const email = authData.user.email;
+
+    if (email !== ADMIN_EMAIL) {
+      // Cerrar sesión si no es el admin
       await this.client.auth.signOut();
       throw new Error('Insufficient permissions');
     }
 
-    // Crear entidad AdminUser
+    // Crear entidad AdminUser con rol de super_admin
     const adminUser = AdminUser.create({
       id: authData.user.id,
-      email: authData.user.email || '',
-      role: role as 'admin' | 'super_admin',
+      email: email,
+      role: 'super_admin', // El único admin tiene acceso completo
       createdAt: new Date(authData.user.created_at),
       lastLogin: new Date(),
     });
@@ -75,17 +79,17 @@ export class SupabaseAuthRepository implements IAuthRepository {
       return null;
     }
 
-    // Verificar rol
-    const role = user.user_metadata?.role as string;
-    
-    if (!role || !['admin', 'super_admin'].includes(role)) {
+    // SECURITY: Verificar email específico del admin
+    const email = user.email;
+
+    if (email !== ADMIN_EMAIL) {
       return null;
     }
 
     return AdminUser.create({
       id: user.id,
-      email: user.email || '',
-      role: role as 'admin' | 'super_admin',
+      email: email,
+      role: 'super_admin',
       createdAt: new Date(user.created_at),
       lastLogin: new Date(),
     });

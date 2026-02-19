@@ -396,10 +396,11 @@ FOR SELECT TO public USING (true);
 
 **Políticas de ADMIN (INSERT/UPDATE/DELETE):**
 ```sql
+-- SECURITY: Verify specific admin email (more secure than roles)
 CREATE POLICY admin_insert_documents ON documents
 FOR INSERT TO authenticated
-USING ((auth.jwt()->'user_metadata'->>'role') IN ('admin', 'super_admin'))
-WITH CHECK ((auth.jwt()->'user_metadata'->>'role') IN ('admin', 'super_admin'));
+USING ((auth.jwt()->>'email') = 'admin@smartconnect.ai')
+WITH CHECK ((auth.jwt()->>'email') = 'admin@smartconnect.ai');
 ```
 ```
 

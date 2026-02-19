@@ -29,8 +29,6 @@ function checkRateLimit(userId: string): { allowed: boolean; remaining: number }
   return { allowed: true, remaining: maxRequests - userLimit.count };
 }
 
-// Forzar log para debug de ejecución
-console.log('Gemini-generate handler INIT');
 Deno.serve(async (req) => {
   // CORS headers
   const allowedOrigin = Deno.env.get('ALLOWED_ORIGIN') || '*';
@@ -106,10 +104,9 @@ Deno.serve(async (req) => {
       );
     }
 
-    console.log(`Request from user: ${user.id} (${user.email}) - Rate limit remaining: ${rateLimit.remaining}`);
+    console.log(`Request from user: ${user.id} - Rate limit remaining: ${rateLimit.remaining}`);
 
     const requestBody = await req.json();
-    console.log('Request body received:', JSON.stringify(requestBody, null, 2));
     
     const { contents, generationConfig } = requestBody;
     
@@ -125,11 +122,6 @@ Deno.serve(async (req) => {
     }
     
     const GEMINI_API_KEY = Deno.env.get('GEMINI_API_KEY');
-
-    // Debug logging
-    console.log('GEMINI_API_KEY exists:', !!GEMINI_API_KEY);
-    console.log('GEMINI_API_KEY length:', GEMINI_API_KEY?.length || 0);
-    console.log('GEMINI_API_KEY starts with:', GEMINI_API_KEY?.substring(0, 10) || 'N/A');
 
     if (!GEMINI_API_KEY) {
       return new Response(
@@ -156,10 +148,6 @@ Deno.serve(async (req) => {
     );
 
     const data = await response.json();
-    
-    // Log para debug
-    console.log('Gemini API response status:', response.status);
-    console.log('Gemini API response data:', JSON.stringify(data).substring(0, 200));
     
     // Si hay error de Gemini, agregarlo al response
     if (data.error) {

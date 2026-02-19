@@ -1,18 +1,11 @@
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Mail, MapPin, Send, MessageSquare, Sparkles, CheckCircle2 } from 'lucide-react';
-import { ENV } from '@shared/config/env.config';
+import { getAppSettings, AppSettings } from '@shared/services/settingsService';
 import { getLandingContainer } from '../LandingContainer';
 import { LeadEntity } from '../../domain/entities';
 import { sanitizeInput, isValidEmail } from '@shared/utils/sanitizer';
 import { rateLimiter, RateLimitPresets } from '@shared/utils/rateLimiter';
-
-// ====================================
-// DEPENDENCY INJECTION
-// ====================================
-// Use a placeholder for build time, validation happens at runtime
-const webhookUrl = ENV.N8N_WEBHOOK_URL || 'https://placeholder-webhook-url.invalid';
-const container = getLandingContainer(webhookUrl);
 
 interface FormData {
   name: string;
@@ -31,21 +24,45 @@ interface ValidationErrors {
 }
 
 export const Contact: React.FC = () => {
-  // Runtime validation of critical environment variables
+  // Settings from database
+  const [settings, setSettings] = useState<AppSettings | null>(null);
+  const [isLoadingSettings, setIsLoadingSettings] = useState(true);
+  
+  // Runtime validation of webhook URL (from BBDD only)
   useEffect(() => {
-    const isDevelopment = import.meta.env.DEV;
-    const webhookUrl = ENV.N8N_WEBHOOK_URL;
+    if (isLoadingSettings || !settings) return;
     
-    // Only warn in production or if URL is truly missing
+    const isDevelopment = import.meta.env.DEV;
+    const webhookUrl = settings.n8nWebhookUrl;
+    
+    // Only warn in production if no webhook configured
     if (!isDevelopment && (!webhookUrl || webhookUrl.includes('placeholder'))) {
-      console.error('❌ CRITICAL: VITE_N8N_WEBHOOK_URL is not configured in production!');
-      console.error('Please add it to Vercel Environment Variables');
-      console.error('Current value:', webhookUrl || '(empty)');
-    } else if (isDevelopment && webhookUrl) {
-      // eslint-disable-next-line no-console
-      console.log('✅ Webhook URL configured:', webhookUrl.substring(0, 30) + '...');
+      // Webhook not configured - leads won't be sent
     }
+  }, [settings, isLoadingSettings]);
+
+  // Fetch settings from Supabase
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const data = await getAppSettings();
+        setSettings(data);
+    } catch {
+      // Settings fetch failed - use defaults
+    } finally {
+        setIsLoadingSettings(false);
+      }
+    };
+    fetchSettings();
   }, []);
+
+  // Create container dynamically when settings are loaded
+  // Uses webhook URL from BBDD only
+  const container = useMemo(() => {
+    if (isLoadingSettings || !settings) return null;
+    const webhookUrl = settings.n8nWebhookUrl || 'https://placeholder-webhook-url.invalid';
+    return getLandingContainer(webhookUrl);
+  }, [settings, isLoadingSettings]);
 
   const [isVisible, setIsVisible] = useState(false);
   const [selectedService, setSelectedService] = useState('Selecciona una opción');
@@ -214,6 +231,16 @@ export const Contact: React.FC = () => {
       const lead = new LeadEntity(sanitizedData);
 
       // Use SubmitLeadUseCase (Clean Architecture approach)
+      if (!container) {
+        setValidationErrors({
+          ...validationErrors,
+          message: 'Sistema cargando. Por favor, intenta en unos segundos.',
+        });
+        setSubmitStatus('error');
+        setIsSubmitting(false);
+        return;
+      }
+      
       const result = await container.submitLeadUseCase.execute(lead);
 
       if (result.success) {
@@ -254,8 +281,7 @@ export const Contact: React.FC = () => {
         setTimeout(() => setSubmitStatus('idle'), 3000);
       }
       
-    } catch (error) {
-      console.error('❌ Error al enviar lead:', error);
+    } catch {
       setSubmitStatus('error');
       setTimeout(() => setSubmitStatus('idle'), 3000);
     } finally {
@@ -342,25 +368,28 @@ export const Contact: React.FC = () => {
                 id: 'contact-email',
                 icon: <Mail className="w-6 h-6" />, 
                 title: "Email Directo", 
-                value: "hola@smartconnect.ai", 
+                value: settings?.contactEmail || "Cargando...", 
                 desc: "Respondemos en menos de 2 horas",
-                color: "text-blue-500"
+                color: "text-blue-500",
+                loading: isLoadingSettings
               },
               { 
                 id: 'contact-whatsapp',
                 icon: <MessageSquare className="w-6 h-6" />, 
                 title: "WhatsApp Business", 
-                value: "+34 600 000 000", 
+                value: settings?.whatsappPhone || "Disponible pronto", 
                 desc: "Soporte técnico inmediato",
-                color: "text-emerald-500"
+                color: "text-emerald-500",
+                loading: isLoadingSettings
               },
               { 
                 id: 'contact-location',
                 icon: <MapPin className="w-6 h-6" />, 
-                title: "Oficinas Centrales", 
-                value: "Madrid, España", 
+                title: "Nuestras Oficinas", 
+                value: settings?.physicalAddress || "Madrid, España", 
                 desc: "Hub Tecnológico de Innovación",
-                color: "text-purple-500"
+                color: "text-purple-500",
+                loading: isLoadingSettings
               }
             ].map((item) => (
               <div key={item.id} className="glass-card p-8 rounded-3xl border border-white/5 flex gap-6 group hover:border-white/10 transition-all">
@@ -369,7 +398,7 @@ export const Contact: React.FC = () => {
                 </div>
                 <div>
                   <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">{item.title}</p>
-                  <h4 className="text-xl font-bold mb-1">{item.value}</h4>
+                  <h4 className={`text-xl font-bold mb-1 ${item.loading ? 'animate-pulse' : ''}`}>{item.value}</h4>
                   <p className="text-sm text-gray-500">{item.desc}</p>
                 </div>
               </div>
@@ -530,14 +559,19 @@ export const Contact: React.FC = () => {
 
                 <button 
                   type="submit"
-                  disabled={!isFormValid() || isSubmitting}
+                  disabled={!isFormValid() || isSubmitting || isLoadingSettings}
                   className={`w-full py-5 rounded-2xl font-bold flex items-center justify-center gap-3 transition-all shadow-xl active:scale-[0.98] group ${
-                    isFormValid() && !isSubmitting
+                    isFormValid() && !isSubmitting && !isLoadingSettings
                       ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-blue-600/20 cursor-pointer'
                       : 'bg-gray-600/30 text-gray-500 cursor-not-allowed shadow-none'
                   }`}
                 >
-                  {isSubmitting ? (
+                  {isLoadingSettings ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      Cargando...
+                    </>
+                  ) : isSubmitting ? (
                     <>
                       <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                       Enviando...
