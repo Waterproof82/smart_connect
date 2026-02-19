@@ -6,8 +6,8 @@
   "overrides": {
     "path-to-regexp": "^8.0.0",
     "undici": "^6.22.1",
-    "qs": "^6.14.2",
-    "minimatch": "^10.2.1",
+    "qs": "6.14.2",
+    "minimatch": "10.2.1",
     "glob": "^13.0.0",
     "zod": "^3.25.0"
   },
