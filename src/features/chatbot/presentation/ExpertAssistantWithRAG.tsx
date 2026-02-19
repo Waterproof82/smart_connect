@@ -243,7 +243,7 @@ export const ExpertAssistant: React.FC = () => {
           </div>
           <div className="text-left hidden sm:block">
             <p className="text-[11px] font-bold leading-none mb-0.5">Asistente Experto</p>
-            <p className={`text-[9px] font-medium ${isOpen ? 'text-blue-100' : 'text-gray-500'}`}>QRIBAR & Reputación</p>
+            <p className={`text-[9px] font-medium ${isOpen ? 'text-blue-100' : 'text-gray-500'}`}>¿Preguntas?</p>
           </div>
         </button>
       </div>
