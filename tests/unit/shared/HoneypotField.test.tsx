@@ -7,16 +7,16 @@
  */
 
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { HoneypotField } from '../../../src/shared/components/HoneypotField';
 
 describe('HoneypotField', () => {
   it('should render hidden input field', () => {
     const mockOnChange = jest.fn();
     
-    render(<HoneypotField value="" onChange={mockOnChange} />);
+    const { getByLabelText } = render(<HoneypotField value="" onChange={mockOnChange} />);
     
-    const input = screen.getByLabelText('Website (leave blank)');
+    const input = getByLabelText('Website (leave blank)');
     expect(input).toBeInTheDocument();
     expect(input).toHaveAttribute('type', 'text');
   });
@@ -33,9 +33,9 @@ describe('HoneypotField', () => {
   it('should have tab-index -1 to prevent keyboard navigation', () => {
     const mockOnChange = jest.fn();
     
-    render(<HoneypotField value="" onChange={mockOnChange} />);
+    const { getByLabelText } = render(<HoneypotField value="" onChange={mockOnChange} />);
     
-    const input = screen.getByLabelText('Website (leave blank)');
+    const input = getByLabelText('Website (leave blank)');
     expect(input).toHaveAttribute('tabindex', '-1');
   });
 
@@ -55,18 +55,18 @@ describe('HoneypotField', () => {
   it('should have autocomplete off to avoid browser autofill', () => {
     const mockOnChange = jest.fn();
     
-    render(<HoneypotField value="" onChange={mockOnChange} />);
+    const { getByLabelText } = render(<HoneypotField value="" onChange={mockOnChange} />);
     
-    const input = screen.getByLabelText('Website (leave blank)');
+    const input = getByLabelText('Website (leave blank)');
     expect(input).toHaveAttribute('autocomplete', 'off');
   });
 
   it('should call onChange when value changes', () => {
     const mockOnChange = jest.fn();
     
-    render(<HoneypotField value="" onChange={mockOnChange} />);
+    const { getByLabelText } = render(<HoneypotField value="" onChange={mockOnChange} />);
     
-    const input = screen.getByLabelText('Website (leave blank)');
+    const input = getByLabelText('Website (leave blank)');
     
     // Simulate bot filling the field using fireEvent
     const { fireEvent } = require('@testing-library/react');
@@ -78,9 +78,9 @@ describe('HoneypotField', () => {
   it('should render with provided value', () => {
     const mockOnChange = jest.fn();
     
-    render(<HoneypotField value="test-value" onChange={mockOnChange} />);
+    const { getByLabelText } = render(<HoneypotField value="test-value" onChange={mockOnChange} />);
     
-    const input = screen.getByLabelText('Website (leave blank)');
+    const input = getByLabelText('Website (leave blank)');
     expect(input).toHaveValue('test-value');
   });
 });

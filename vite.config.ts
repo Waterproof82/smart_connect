@@ -8,7 +8,6 @@ export default defineConfig(() => {
         port: 5173,
         host: '0.0.0.0',
         proxy: {
-          // Proxy /api/* al servidor de funciones en desarrollo
           '/api': {
             target: 'http://localhost:3001',
             changeOrigin: true
@@ -17,16 +16,27 @@ export default defineConfig(() => {
       },
       plugins: [react()],
 
-      // Code splitting configuration
       build: {
         rollupOptions: {
           output: {
-            // Manual chunks para dividir vendors y reducir bundle principal
-            manualChunks: {
-              // React core - se carga una sola vez
-              'vendor-react': ['react', 'react-dom', 'react-router-dom'],
-              // Supabase client
-              'vendor-supabase': ['@supabase/supabase-js'],
+            manualChunks: (id) => {
+              if (id.includes('node_modules')) {
+                if (id.includes('@supabase')) {
+                  return 'vendor-supabase';
+                }
+                if (id.includes('@google/generativeai')) {
+                  return 'vendor-ai';
+                }
+                if (id.includes('react') || id.includes('scheduler')) {
+                  return 'vendor-react';
+                }
+              }
+              if (id.includes('features/chatbot')) {
+                return 'chatbot';
+              }
+              if (id.includes('features/landing')) {
+                return 'landing';
+              }
             }
           }
         }

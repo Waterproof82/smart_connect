@@ -47,7 +47,7 @@ export default [
       }],
       '@typescript-eslint/ban-ts-comment': 'warn',
       'no-console': ['warn', { allow: ['warn', 'error'] }],
-      'no-undef': 'off', // TypeScript handles this
+      'no-undef': 'off',
     },
   },
   {

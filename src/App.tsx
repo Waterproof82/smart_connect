@@ -23,7 +23,6 @@ const ChatbotLoading = () => (
 const App: React.FC = () => {
   const [scrolled, setScrolled] = React.useState(false);
   const [isKnowledgeBaseReady, setIsKnowledgeBaseReady] = React.useState(false);
-  const [showChatbot, setShowChatbot] = React.useState(false);
 
   // Initialize knowledge base from Supabase on app startup
   React.useEffect(() => {
@@ -39,37 +38,16 @@ const App: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Load chatbot only when user scrolls to bottom or clicks CTA
-  React.useEffect(() => {
-    const handleScrollToBottom = () => {
-      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 500) {
-        setShowChatbot(true);
-      }
-    };
-    window.addEventListener('scroll', handleScrollToBottom);
-    return () => window.removeEventListener('scroll', handleScrollToBottom);
-  }, []);
-
   return (
     <div className="min-h-screen bg-[#020408] text-white">
       <Navbar scrolled={scrolled} />
       <section id="inicio"><Hero /></section>
       <section id="soluciones"><Features /></section>
       <section id="exito"><SuccessStats /></section>
-      <section id="contacto"><Contact />
-        {/* CTA to load chatbot */}
-        <div className="text-center mt-8">
-          <button 
-            onClick={() => setShowChatbot(true)}
-            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg font-semibold transition-colors"
-          >
-            Chatea con nuestro Asistente IA
-          </button>
-        </div>
-      </section>
+      <section id="contacto"><Contact /></section>
       
-      {/* AI Chatbot Assistant - Lazy loaded on interaction */}
-      {isKnowledgeBaseReady && showChatbot && (
+      {/* AI Chatbot Assistant - Always visible */}
+      {isKnowledgeBaseReady && (
         <Suspense fallback={<ChatbotLoading />}>
           <ExpertAssistant />
         </Suspense>
