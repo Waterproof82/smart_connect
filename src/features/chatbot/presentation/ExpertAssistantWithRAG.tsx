@@ -33,7 +33,7 @@ export const ExpertAssistant: React.FC = () => {
       
       if (data?.whatsapp_phone) {
         // Remove any non-digit characters except +
-        const cleanPhone = data.whatsapp_phone.replace(/[^\d+]/g, '');
+        const cleanPhone = data.whatsapp_phone.replaceAll(/[^\d+]/g, '');
         setWhatsappPhone(cleanPhone);
       }
     };
@@ -212,7 +212,7 @@ export const ExpertAssistant: React.FC = () => {
           href={whatsappPhone ? `https://wa.me/${whatsappPhone}` : '#'}
           target={whatsappPhone ? "_blank" : undefined}
           rel={whatsappPhone ? "noopener noreferrer" : undefined}
-          className={`flex items-center gap-4 bg-[#25D366] hover:bg-[#1ebc57] text-white px-6 py-3 rounded-full shadow-2xl transition-all active:scale-95 border border-white/10 group overflow-hidden relative ${!whatsappPhone ? 'opacity-50 cursor-not-allowed' : ''}`}
+          className={`flex items-center gap-4 bg-[#25D366] hover:bg-[#1ebc57] text-white px-6 py-3 rounded-full shadow-2xl transition-all active:scale-95 border border-white/10 group overflow-hidden relative${whatsappPhone ? '' : ' opacity-50 cursor-not-allowed'}`}
         >
           <div className="relative z-10">
             <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform">
