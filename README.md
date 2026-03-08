@@ -1,7 +1,51 @@
 # 🚀 SmartConnect AI - Business Accelerator
 
-## 📋 Estructura del Proyecto
+## 📚 Documentación y Guías Clave
 
+- [Guía de Implementación RAG](docs/GUIA_IMPLEMENTACION_RAG.md)
+- [Arquitectura Chatbot RAG](docs/CHATBOT_RAG_ARCHITECTURE.md)
+- [Despliegue Edge Functions (Supabase)](docs/EDGE_FUNCTIONS_DEPLOYMENT.md)
+- [Testing Edge Functions](docs/EDGE_FUNCTIONS_TESTING.md)
+- [Integración Webhook Contacto (n8n)](docs/CONTACT_FORM_WEBHOOK.md)
+- [Checklist de Producción](docs/PRODUCTION_CHECKLIST.md)
+- [Seguridad Supabase y OWASP](docs/SUPABASE_SECURITY.md)
+- [Guía Logging RAG](docs/RAG_LOGGING_GUIDE.md)
+- [Panel de Administración](docs/ADMIN_PANEL.md)
+- [Política de Dependencias](docs/DEPENDENCY_POLICY.md)
+- [Cumplimiento Arquitectura](docs/ARCHITECTURE_COMPLIANCE.md)
+- [Setup Entorno Vercel](docs/VERCEL_ENV_SETUP.md)
+
+## Admin Access Credentials
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    ADMIN PANEL ACCESS                                       │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  URL:  /admin                                                              │
+│                                                                             │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │  Email:    admin@smartconnect.ai                                     │   │
+│  │  Password: bigSchool                                                 │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                             │
+│  ⚠️  IMPORTANTE: Estas credenciales son de producción.                     │
+│      No compartir.                                                          │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+
+## 🏗️ Arquitectura y Flujos Principales
+
+- **RAG Chatbot:** Arquitectura basada en Supabase + Gemini, con Edge Functions para embeddings y generación segura (ver: [RAG](docs/CHATBOT_RAG_ARCHITECTURE.md), [Guía RAG](docs/GUIA_IMPLEMENTACION_RAG.md)).
+- **Webhook Contacto:** Automatización de leads vía n8n, análisis de temperatura y notificaciones (ver: [Webhook](docs/CONTACT_FORM_WEBHOOK.md)).
+- **Edge Functions:** Serverless functions en Supabase para IA y seguridad (ver: [Edge Functions](docs/EDGE_FUNCTIONS_DEPLOYMENT.md)).
+- **Panel Admin:** Gestión de documentos y usuarios con roles (ver: [Admin Panel](docs/ADMIN_PANEL.md)).
+- **Checklist Producción:** Validación de seguridad, tests, integraciones y rendimiento antes de deploy (ver: [Checklist](docs/PRODUCTION_CHECKLIST.md)).
+- **Logging RAG:** Trazabilidad completa del flujo de IA y búsquedas (ver: [Logging](docs/RAG_LOGGING_GUIDE.md)).
+
+---
 ```
 smart-connect/
 ├── src/
@@ -65,13 +109,15 @@ smart-connect/
    - Data sources (API, Local Storage)
    - Modelos de datos
 
+
 ## 🛠️ Stack Tecnológico
 
-- **Frontend:** Next.js + TypeScript + Tailwind CSS
+- **Frontend:** React + Vite + TypeScript + Tailwind CSS
 - **Testing:** Jest + React Testing Library
 - **Build:** Vite
 - **AI:** Gemini (Google AI Studio)
 - **Automation:** n8n (Docker)
+
 
 ## 📦 Comandos Disponibles
 
@@ -93,6 +139,7 @@ npm run lint            # Linter
 npm run type-check      # Verificación de tipos TypeScript
 ```
 
+
 ## 🧪 Metodología TDD
 
 ### Red → Green → Refactor
@@ -103,12 +150,18 @@ npm run type-check      # Verificación de tipos TypeScript
 
 Ver `/tests/README.md` para más detalles.
 
+
 ## 🔐 Seguridad (OWASP Top 10)
+
+- Políticas RLS y validación de roles en Supabase ([ver guía](docs/SUPABASE_SECURITY.md))
+- Mitigaciones OWASP Top 10 ([ver contexto](docs/context/security_agent.md))
+- Edge Functions para ocultar claves y lógica sensible
 
 - ✅ Variables de entorno validadas (`env.config.ts`)
 - ✅ Sanitización de inputs
 - ✅ Headers de seguridad
 - ✅ Validación de datos sensibles
+
 
 ## 🚀 Getting Started
 
@@ -133,6 +186,7 @@ npm test
 npm run dev
 ```
 
+
 ## 📚 Path Aliases
 
 ```typescript
@@ -141,7 +195,12 @@ import { Hero } from '@features/landing/presentation'; // Feature
 import { Lead } from '@core/domain/entities';          // Core
 ```
 
-## 🎓 Filosofía del Proyecto
+
+## 📝 Versionado, Changelog y Auditoría
+
+- Versionado y changelog siguiendo [Keep a Changelog](https://keepachangelog.com/) ([ver CHANGELOG.md](CHANGELOG.md))
+- Cada cambio relevante se documenta en `docs/audit/` con timestamp y descripción
+- Protocolo de actualización de versiones en `package.json`, `CHANGELOG.md` y archivos de plataforma
 
 Este proyecto sigue las mejores prácticas:
 - Clean Architecture
@@ -151,4 +210,6 @@ Este proyecto sigue las mejores prácticas:
 
 ---
 
-**¿Preguntas? Consulta AGENTS.md para el contexto completo del proyecto.**
+---
+
+**¿Preguntas? Consulta [AGENTS.md](AGENTS.md) para el contexto completo del proyecto y flujos de trabajo del agente.**
