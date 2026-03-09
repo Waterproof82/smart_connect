@@ -20,3 +20,18 @@ if (!supabaseUrl || !supabaseAnonKey) {
 }
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+// Clear stale sessions that cause "Refresh Token Not Found" errors
+supabase.auth.onAuthStateChange((event, session) => {
+  if (event === 'TOKEN_REFRESHED' && !session) {
+    // Token refresh failed - clear the corrupted session
+    supabase.auth.signOut();
+  }
+});
+
+// Handle initial session recovery failure
+supabase.auth.getSession().then(({ error }) => {
+  if (error?.message?.includes('Refresh Token')) {
+    supabase.auth.signOut();
+  }
+});
