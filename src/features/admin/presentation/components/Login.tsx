@@ -5,8 +5,11 @@
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { LoginAdminUseCase } from '../../domain/usecases/LoginAdminUseCase';
 import { AuthSession } from '../../domain/repositories/IAuthRepository';
+import { loginSchema, LoginFormData } from '../schemas/loginSchema';
 
 interface LoginProps {
   loginUseCase: LoginAdminUseCase;
@@ -15,39 +18,39 @@ interface LoginProps {
 
 export const Login: React.FC<LoginProps> = ({ loginUseCase, onLoginSuccess }) => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
 
-  // Se especifica el tipo de evento sobre el elemento Form para evitar advertencias
-  const handleSubmit = async (e: React.BaseSyntheticEvent) => {
-    e.preventDefault();
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: { email: '', password: '' },
+  });
+
+  const onSubmit = async ({ email, password }: LoginFormData) => {
     setError(null);
-    setIsLoading(true);
-
     try {
       const session = await loginUseCase.execute({ email, password });
       onLoginSuccess(session);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Authentication failed');
-    } finally {
-      setIsLoading(false);
     }
   };
 
   return (
     <div className="relative min-h-screen bg-[#020408] flex items-center justify-center px-4">
-      
-      {/* Botón Volver - Arriba a la izquierda con ajuste para móviles */}
+
+      {/* Back button */}
       <button
         onClick={() => navigate(-1)}
         className="absolute top-4 left-4 sm:top-8 sm:left-8 flex items-center text-sm font-medium text-gray-400 hover:text-white transition-colors group z-10"
       >
-        <svg 
-          className="mr-2 h-5 w-5 transition-transform group-hover:-translate-x-1" 
-          fill="none" 
-          viewBox="0 0 24 24" 
+        <svg
+          className="mr-2 h-5 w-5 transition-transform group-hover:-translate-x-1"
+          fill="none"
+          viewBox="0 0 24 24"
           stroke="currentColor"
         >
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -65,7 +68,7 @@ export const Login: React.FC<LoginProps> = ({ loginUseCase, onLoginSuccess }) =>
           </p>
         </div>
 
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
           <div className="rounded-md shadow-sm space-y-4">
             <div>
               <label htmlFor="email" className="block text-xs font-semibold text-gray-400 uppercase mb-1 ml-1">
@@ -73,15 +76,12 @@ export const Login: React.FC<LoginProps> = ({ loginUseCase, onLoginSuccess }) =>
               </label>
               <input
                 id="email"
-                name="email"
                 type="email"
                 autoComplete="email"
-                required
                 className="appearance-none relative block w-full px-4 py-3 border border-gray-700 placeholder-gray-500 text-white bg-gray-900/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm transition-all"
                 placeholder="admin@ejemplo.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                disabled={isLoading}
+                disabled={isSubmitting}
+                {...register('email')}
               />
             </div>
             <div>
@@ -90,15 +90,12 @@ export const Login: React.FC<LoginProps> = ({ loginUseCase, onLoginSuccess }) =>
               </label>
               <input
                 id="password"
-                name="password"
                 type="password"
                 autoComplete="current-password"
-                required
                 className="appearance-none relative block w-full px-4 py-3 border border-gray-700 placeholder-gray-500 text-white bg-gray-900/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm transition-all"
                 placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                disabled={isLoading}
+                disabled={isSubmitting}
+                {...register('password')}
               />
             </div>
           </div>
@@ -111,10 +108,10 @@ export const Login: React.FC<LoginProps> = ({ loginUseCase, onLoginSuccess }) =>
 
           <button
             type="submit"
-            disabled={isLoading}
+            disabled={isSubmitting}
             className="group relative w-full flex justify-center py-3.5 px-4 border border-transparent text-sm font-bold rounded-xl text-white bg-blue-600 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#020408] focus:ring-blue-500 disabled:opacity-50 transition-all shadow-lg shadow-blue-900/20"
           >
-            {isLoading ? (
+            {isSubmitting ? (
               <span className="flex items-center">
                 <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>

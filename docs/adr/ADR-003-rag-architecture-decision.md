@@ -107,26 +107,16 @@ El objetivo es **vender QRIBAR y Reviews**, no construir infraestructura experim
 
 ## Plan de Optimización
 
-✅ **COMPLETADO** - Las 4 fases fueron implementadas y desplegadas en producción:
+⚠️ **SUPERSEDED (2026-03-09)** - The 4-phase client-side optimization was replaced by a simpler server-side architecture. The files below were deleted as dead code. The RAG pipeline now runs entirely in the `chat-with-rag` Edge Function.
 
-### Fase 1: Mejora de Indexación ✅ COMPLETE
-**Implementación:** `src/features/chatbot/data/rag-indexer.ts`
-- Chunking estratégico: 500 tokens por chunk, overlap de 50 tokens
-- Metadata enriquecida: source, category, timestamp, chunkIndex
-- Embeddings con text-embedding-004 (Gemini 768-dim)
-- Category mapping: QRIBAR → producto_digital, Reviews → reputacion_online
-- Tests: 13/13 passing ✅
+### Fase 1: Mejora de Indexación ❌ REMOVED
+**Deleted:** `src/features/chatbot/data/rag-indexer.ts` — Replaced by admin panel document management with auto-embedding
 
-### Fase 2: Caché de Embeddings ✅ COMPLETE
-**Implementación:** `src/features/chatbot/data/embedding-cache.ts`
-- Storage in-memory (Map) + Supabase backup
-- TTL: 7 días (configurable por entry)
-- Invalidación por patrón (glob support: `qribar_*`)
-- Estadísticas: hits, misses, hit rate, memory usage
-- Tests: 23/23 passing ✅
+### Fase 2: Caché de Embeddings ❌ REMOVED
+**Deleted:** `src/features/chatbot/data/embedding-cache.ts` — Replaced by in-memory cache in `chat-with-rag` Edge Function (1h TTL)
 
-### Fase 3: Fallback Responses ✅ COMPLETE
-**Implementación:** `src/features/chatbot/domain/fallback-handler.ts`
+### Fase 3: Fallback Responses ❌ REMOVED
+**Deleted:** `src/features/chatbot/domain/fallback-handler.ts` — Fallback now handled by `ChatRepositoryImpl` (falls back to `gemini-generate` if RAG fails)
 - Intent detection: pricing, features, implementation, success_stories, demo
 - Respuestas contextuales por categoría (QRIBAR, Reviews, General)
 - Escalación automática: confidence < 50%, queries urgentes, implementación

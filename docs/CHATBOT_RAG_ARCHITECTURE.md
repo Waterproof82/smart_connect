@@ -15,10 +15,10 @@ Implementar un chatbot experto con arquitectura RAG (Retrieval-Augmented Generat
 │  ┌────────────────────────────────────────────────────────┐      │
 │  │  ExpertAssistantWithRAG.tsx                             │      │
 │  │  ┌──────────────────────────────────────────────────┐  │      │
-│  │  │  RAGService Class                                 │  │      │
-│  │  │  • generateEmbedding(text)                       │  │      │
-│  │  │  • searchSimilarDocs(query)                      │  │      │
-│  │  │  • generateWithRAG(userQuery)                    │  │      │
+│  │  │  ChatbotContainer → GenerateResponseUseCase        │  │      │
+│  │  │  → ChatRepositoryImpl                            │  │      │
+│  │  │  • invoke('chat-with-rag') → Full RAG pipeline   │  │      │
+│  │  │  • invoke('gemini-generate') → Fallback          │  │      │
 │  │  └──────────────────────────────────────────────────┘  │      │
 │  └────────────────────────────────────────────────────────┘      │
 └───────────────────────┬──────────────────────────┬───────────────┘
@@ -58,7 +58,7 @@ Implementar un chatbot experto con arquitectura RAG (Retrieval-Augmented Generat
     │   Gemini API         │
     │   (Google AI)        │
     │                      │
-    │  • text-embedding-004│
+    │  • embedding-001     │
     │    (768 dimensions)  │
     │                      │
     │  • gemini-2.5-flash  │
@@ -135,7 +135,7 @@ Usuario: "¿Cuánto cuesta QRIBAR?"
 ### 2. **Generate Query Embedding**
 
 ```typescript
-// Frontend: RAGService.generateEmbedding()
+// Edge Function: chat-with-rag (step 1 - embedding)
 const { data, error } = await supabase.functions.invoke('gemini-embedding', {
   body: { text: "¿Cuánto cuesta QRIBAR?" }
 });
@@ -162,7 +162,7 @@ const response = await fetch(
 ### 3. **Vector Similarity Search**
 
 ```typescript
-// Frontend: RAGService.searchSimilarDocs()
+// Edge Function: chat-with-rag (step 2 - vector search)
 const { data, error } = await supabase.rpc('match_documents', {
   query_embedding: [0.123, -0.456, 0.789, ..., 0.234],
   match_threshold: 0.3,  // Mínimo 30% de similitud
@@ -217,7 +217,7 @@ $$;
 ### 4. **Build Context Prompt**
 
 ```typescript
-// Frontend: RAGService.generateWithRAG()
+// Edge Function: chat-with-rag (step 3 - context + generation)
 const context = relevantDocs.map(doc => doc.content).join('\n\n');
 
 const systemPrompt = `Eres el Asistente Experto de SmartConnect AI.\n\nTUS SERVICIOS PRINCIPALES:\n1. QRIBAR: Menús digitales interactivos para restaurantes y bares\n2. Automatización n8n: Flujos de trabajo inteligentes para empresas\n3. Tarjetas Tap-to-Review NFC: Sistema para aumentar reseñas en Google Maps\n\nINFORMACIÓN DE LA BASE DE CONOCIMIENTO:\n${context}\n\nINSTRUCCIONES:\n- Responde SIEMPRE en español\n- Sé profesional, conciso y entusiasta\n- Usa solo la información de la base de conocimiento proporcionada\n- No cites ni hagas referencia a ningún documento ni número de documento\n- Si no sabes algo, reconócelo y ofrece contactar al equipo\n- Mantén respuestas bajo 150 palabras`;
@@ -360,7 +360,7 @@ import "https://deno.land/x/xhr@0.1.0/mod.ts";
 Deno.serve(async (req) => {
   // CORS headers
   const corsHeaders = {
-    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Origin': '<origin-whitelist>',  // smart-connect-olive.vercel.app + localhost
     'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
   };
@@ -430,7 +430,7 @@ import "https://deno.land/x/xhr@0.1.0/mod.ts";
 Deno.serve(async (req) => {
   // CORS headers
   const corsHeaders = {
-    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Origin': '<origin-whitelist>',  // smart-connect-olive.vercel.app + localhost
     'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
   };
@@ -495,9 +495,11 @@ Deno.serve(async (req) => {
 
 ---
 
-## 🚀 Entrenamiento del RAG (Training Pipeline)
+## 🚀 Gestión de Documentos RAG (Admin Panel)
 
-### Script: `train_rag.js`
+> **Nota:** El script `train_rag.js` fue eliminado. Los documentos se gestionan desde el Admin Panel (`/admin`), que genera embeddings automáticamente al crear/editar documentos via la Edge Function `gemini-embedding`.
+
+### Ejemplo histórico del script (referencia):
 
 ```javascript
 import { createClient } from '@supabase/supabase-js';
@@ -930,7 +932,7 @@ const { data } = await supabase.rpc('match_documents', {
 ```typescript
 // Añadir headers completos en Edge Function
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Origin': '<origin-whitelist>',  // smart-connect-olive.vercel.app + localhost
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
 };

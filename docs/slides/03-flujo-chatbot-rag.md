@@ -55,7 +55,7 @@
 
                     ┌─────────────────────────┐
                     │  match_documents()      │
-                    │  similarity > 0.7       │
+                    │  similarity > 0.4       │
                     │  top_k = 5              │
                     └───────────┬─────────────┘
                                 │
@@ -161,21 +161,8 @@
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                           FRONTEND (React)                                 │
-└─────────────────────────────────────────────────────────────────────────────┘
-                                    │
-                                    ▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                     RAGOrchestrator                                        │
-├─────────────────────────────────────────────────────────────────────────────┤
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌────────────┐  │
-│  │ InputHandler │─►│RAGIndexer   │─►│VectorSearch  │─►│ GeminiLLM │  │
-│  └──────────────┘  └──────────────┘  └──────────────┘  └────────────┘  │
-│         │                 │                 │                 │           │
-│         ▼                 ▼                 ▼                 ▼           │
-│  ┌──────────────────────────────────────────────────────────────────┐    │
-│  │                     EMBEDDING CACHE                               │    │
-│  │              (In-Memory + Supabase backup)                       │    │
-│  └──────────────────────────────────────────────────────────────────┘    │
+│  ExpertAssistantWithRAG → ChatbotContainer → GenerateResponseUseCase       │
+│  → ChatRepositoryImpl → supabase.functions.invoke('chat-with-rag')        │
 └─────────────────────────────────────────────────────────────────────────────┘
                                     │
                                     ▼
@@ -187,8 +174,8 @@
 │  │  ─────────────────    │  │  ─────────────────    │  │ ────────────── │ │
 │  │  Input: text          │  │  Input: contents[]    │  │ Input: query   │ │
 │  │  Output: vector[768] │  │  Output: text         │  │ Output: text   │ │
-│  │  • Búsqueda RAG      │  │  • Chat simple        │  │ • Full RAG     │ │
-│  │  • Admin crear doc   │  │  • Fallback           │  │ • + contexto   │ │
+│  │  • Admin crear doc   │  │  • Chat simple        │  │ • Full RAG     │ │
+│  │  • Admin editar doc  │  │  • Fallback           │  │   pipeline     │ │
 │  └───────────────────────┘  └───────────────────────┘  └────────────────┘ │
 └─────────────────────────────────────────────────────────────────────────────┘
                                     │
@@ -198,9 +185,10 @@
 ├─────────────────────────────────────────────────────────────────────────────┤
 │  ┌───────────────────────┐  ┌───────────────────────────────────────────┐ │
 │  │  documents table      │  │  match_documents() function              │ │
-│  │  - content (text)     │  │  - Vector similarity search             │ │
-│  │  - embedding (vector)│  │  - pgvector index                       │ │
-│  │  - metadata (jsonb)  │  │  - Threshold filtering                 │ │
+│  │  - content (text)     │  │  - Vector similarity search (coseno)    │ │
+│  │  - embedding (vector)│  │  - pgvector IVFFlat index               │ │
+│  │  - source (text)     │  │  - Threshold > 0.4                      │ │
+│  │  - metadata (jsonb)  │  │  match_documents_by_source() (ILIKE)    │ │
 │  └───────────────────────┘  └───────────────────────────────────────────┘ │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```

@@ -30,11 +30,8 @@ SmartConnect AI sigue los principios de **Clean Architecture** (Uncle Bob) con s
 │  ┌─────────────────────────────────────────────────────────────────────────┐   │
 │  │  Use Cases (Business Logic Orchestration)                               │   │
 │  │  ✅ GenerateResponseUseCase                                              │   │
-│  │     - execute(userQuery, conversationHistory)                           │   │
-│  │     - Orchestrates: search docs → build context → generate response     │   │
-│  │  ✅ SearchDocumentsUseCase                                               │   │
-│  │     - execute(query, limit, threshold)                                  │   │
-│  │     - Logic: generate embedding → search similar docs                   │   │
+│  │     - execute(userQuery, conversationHistory, ragOptions)              │   │
+│  │     - Delegates to ChatRepositoryImpl → chat-with-rag Edge Function    │   │
 │  └─────────────────────────────────────────────────────────────────────────┘   │
 │  ┌─────────────────────────────────────────────────────────────────────────┐   │
 │  │  Entities (Domain Objects)                                              │   │
@@ -45,8 +42,6 @@ SmartConnect AI sigue los principios de **Clean Architecture** (Uncle Bob) con s
 │  ┌─────────────────────────────────────────────────────────────────────────┐   │
 │  │  Repository Interfaces (Contracts)                                      │   │
 │  │  ✅ IChatRepository                                                      │   │
-│  │  ✅ IEmbeddingRepository                                                 │   │
-│  │  ✅ IDocumentRepository                                                  │   │
 │  └─────────────────────────────────────────────────────────────────────────┘   │
 └──────────────────────────────────┲──────────────────────────────────────────────┘
                                    ┃ Implements
@@ -57,17 +52,8 @@ SmartConnect AI sigue los principios de **Clean Architecture** (Uncle Bob) con s
 │  ┌─────────────────────────────────────────────────────────────────────────┐   │
 │  │  Repository Implementations                                             │   │
 │  │  ✅ ChatRepositoryImpl (implements IChatRepository)                      │   │
-│  │  ✅ EmbeddingRepositoryImpl (implements IEmbeddingRepository)            │   │
-│  │  ✅ DocumentRepositoryImpl (implements IDocumentRepository)              │   │
-│  └─────────────────────────────────────────────────────────────────────────┘   │
-│  ┌─────────────────────────────────────────────────────────────────────────┐   │
-│  │  Data Sources (External Communication)                                  │   │
-│  │  ✅ GeminiDataSource                                                     │   │
-│  │     - generateEmbedding() → Supabase Edge Function                      │   │
-│  │     - generateResponse() → Supabase Edge Function                       │   │
-│  │  ✅ SupabaseDataSource                                                   │   │
-│  │     - searchSimilarDocuments() → PostgreSQL pgvector                    │   │
-│  │     - storeDocument() → PostgreSQL INSERT                               │   │
+│  │     - invoke('chat-with-rag') → RAG pipeline (Edge Function)           │   │
+│  │     - invoke('gemini-generate') → Fallback without RAG                  │   │
 │  └─────────────────────────────────────────────────────────────────────────┘   │
 └─────────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -79,7 +65,7 @@ SmartConnect AI sigue los principios de **Clean Architecture** (Uncle Bob) con s
 | **S**ingle Responsibility | Each class has one reason to change (e.g., `MessageEntity` only handles message data, `GenerateResponseUseCase` only orchestrates RAG) |
 | **O**pen/Closed | Repository interfaces allow extension (new data sources) without modifying existing code |
 | **L**iskov Substitution | All repository implementations can replace their interfaces without breaking functionality |
-| **I**nterface Segregation | Small, focused interfaces (`IChatRepository`, `IEmbeddingRepository`, `IDocumentRepository`) instead of one large interface |
+| **I**nterface Segregation | Small, focused interfaces (`IChatRepository` for chatbot, `IDocumentRepository` for admin) per feature |
 | **D**ependency Inversion | High-level modules (Use Cases) depend on abstractions (Repository Interfaces), not concrete implementations |
 
 ---
@@ -97,17 +83,15 @@ SmartConnect AI sigue los principios de **Clean Architecture** (Uncle Bob) con s
 │  │  │  ┌────────────────────────────────────────────────────────────────┐ │ │ │
 │  │  │  │  ChatbotContainer (Dependency Injection)                        │ │ │ │
 │  │  │  │  - generateResponseUseCase.execute()                            │ │ │ │
-│  │  │  │  - searchDocumentsUseCase.execute()                             │ │ │ │
 │  │  │  └────────────────────────────────────────────────────────────────┘ │ │ │
 │  │  │  ┌────────────────────────────────────────────────────────────────┐ │ │ │
 │  │  │  │  Domain Layer (Business Logic)                                  │ │ │ │
 │  │  │  │  - GenerateResponseUseCase                                      │ │ │ │
-│  │  │  │  - IChatRepository, IEmbeddingRepository, IDocumentRepository  │ │ │ │
+│  │  │  │  - IChatRepository                                              │ │ │ │
 │  │  │  └────────────────────────────────────────────────────────────────┘ │ │ │
 │  │  │  ┌────────────────────────────────────────────────────────────────┐ │ │ │
 │  │  │  │  Data Layer (Infrastructure)                                    │ │ │ │
-│  │  │  │  - ChatRepositoryImpl, EmbeddingRepositoryImpl                  │ │ │ │
-│  │  │  │  - GeminiDataSource, SupabaseDataSource                         │ │ │ │
+│  │  │  │  - ChatRepositoryImpl → Edge Functions (chat-with-rag)          │ │ │ │
 │  │  │  └────────────────────────────────────────────────────────────────┘ │ │ │
 │  │  └─────────────────────────────────────────────────────────────────────┘ │ │
 │  └───────────────────────────────────────────────────────────────────────────┘ │
@@ -155,7 +139,7 @@ SmartConnect AI sigue los principios de **Clean Architecture** (Uncle Bob) con s
 ┌─────────────────▼─────────────────────────────────────────────────────────────┐
 │                      🤖 GOOGLE GEMINI API                                      │
 │  ┌─────────────────────────────────────┐  ┌──────────────────────────────┐   │
-│  │  gemini-embedding-001               │  │  gemini-2.0-flash-exp        │   │
+│  │  gemini-embedding-001               │  │  gemini-2.5-flash             │   │
 │  │  - Input: Text string               │  │  - Input: Prompt + Context   │   │
 │  │  - Output: 768-dim embedding        │  │  - Output: AI response       │   │
 │  │  - Free: 1,500 requests/day         │  │  - Free: 1,500 requests/day  │   │
@@ -178,113 +162,44 @@ React Component (handleSend)
     └─> container.generateResponseUseCase.execute({
             userQuery: userMessage,
             conversationHistory: chatSessionRef.current.messages,
-            maxDocuments: 3,
-            similarityThreshold: 0.3
+            useRAG: true,
+            ragOptions: { topK: 5, threshold: 0.4 }
         })
         │
         ┌───────────────────────────────────────────────────────────┐
         │  DOMAIN LAYER: GenerateResponseUseCase                    │
         └───────────────────────────────────────────────────────────┘
         │
-        ├─> embeddingRepository.generateEmbedding(userQuery)
-        │       │
-        │       ┌───────────────────────────────────────────────────┐
-        │       │  DATA LAYER: EmbeddingRepositoryImpl              │
-        │       └───────────────────────────────────────────────────┘
-        │       │
-        │       └─> geminiDataSource.generateEmbedding(userQuery)
-        │               │
-        │               ┌───────────────────────────────────────────┐
-        │               │  DATA SOURCE: GeminiDataSource            │
-        │               └───────────────────────────────────────────┘
-        │               │
-        │               └─> supabase.functions.invoke('gemini-embedding', { body: { text } })
-        │                       │
-        │                       └─> Supabase Edge Function (Deno)
-        │                               │
-        │                               └─> POST https://generativelanguage.googleapis.com/...
-        │                                   Header: x-goog-api-key: {GEMINI_API_KEY from Deno.env}
-        │                                   Body: { content: { parts: [{ text }] } }
-        │                                       │
-        │                                       └─> Returns: { embedding: { values: [768 floats] } }
-        │
-        ├─> documentRepository.searchSimilarDocuments({
-        │       queryEmbedding: embedding,
-        │       threshold: 0.3,
-        │       limit: 3
-        │   })
-        │       │
-        │       ┌───────────────────────────────────────────────────┐
-        │       │  DATA LAYER: DocumentRepositoryImpl              │
-        │       └───────────────────────────────────────────────────┘
-        │       │
-        │       └─> supabaseDataSource.searchSimilarDocuments({
-        │               queryEmbedding: embedding,
-        │               matchThreshold: 0.3,
-        │               matchCount: 3
-        │           })
-        │               │
-        │               ┌───────────────────────────────────────────┐
-        │               │  DATA SOURCE: SupabaseDataSource          │
-        │               └───────────────────────────────────────────┘
-        │               │
-        │               └─> supabase.rpc('match_documents', {
-        │                       query_embedding: embedding,
-        │                       match_threshold: 0.3,
-        │                       match_count: 3
-        │                   })
-        │                       │
-        │                       └─> PostgreSQL Function (SECURITY INVOKER)
-        │                               │
-        │                               └─> SELECT * FROM documents
-        │                                   WHERE 1 - (embedding <=> query_embedding) > match_threshold
-        │                                   ORDER BY similarity DESC
-        │                                   LIMIT match_count
-        │                                       │
-        │                                       └─> Returns: [
-        │                                             { id, content, metadata, similarity },
-        │                                             ...
-        │                                           ]
-        │                                           │
-        │                                           └─> Map to DocumentEntity[]
-        │
         └─> chatRepository.generateResponse({
-                systemPrompt: "Eres el Asistente...",
-                userQuery: userMessage,
-                context: relevantDocs.map(d => d.content).join('\n\n'),
-                conversationHistory: []
+                userQuery, conversationHistory, useRAG: true,
+                ragOptions: { topK: 5, threshold: 0.4 }
             })
                 │
                 ┌───────────────────────────────────────────────────┐
                 │  DATA LAYER: ChatRepositoryImpl                   │
                 └───────────────────────────────────────────────────┘
                 │
-                └─> geminiDataSource.generateResponse({...})
+                └─> supabase.functions.invoke('chat-with-rag', {
+                        body: { query, conversationHistory, topK: 5, threshold: 0.4 }
+                    })
                         │
-                        └─> supabase.functions.invoke('gemini-generate', {
-                                body: {
-                                    contents: [
-                                        { parts: [{ text: systemPrompt + context + userQuery }] }
-                                    ],
-                                    generationConfig: { temperature: 0.7, maxOutputTokens: 500 }
-                                }
-                            })
+                        └─> EDGE FUNCTION: chat-with-rag (Deno)
                                 │
-                                └─> Supabase Edge Function (Deno)
-                                        │
-                                        └─> POST https://generativelanguage.googleapis.com/...
-                                            Header: x-goog-api-key: {GEMINI_API_KEY from Deno.env}
-                                            Body: { contents, generationConfig }
-                                                │
-                                                └─> Returns: {
-                                                      candidates: [{
-                                                        content: {
-                                                          parts: [{
-                                                            text: "QRIBAR tiene un costo único de $200 USD..."
-                                                          }]
-                                                        }
-                                                      }]
-                                                    }
+                                ├─ 1️⃣ Generate query embedding
+                                │   └─> POST gemini-embedding-001 → [768 floats]
+                                │
+                                ├─ 2️⃣ Vector similarity search
+                                │   └─> supabase.rpc('match_documents', {
+                                │           query_embedding, match_threshold: 0.4, match_count: 5
+                                │       })
+                                │       └─> PostgreSQL: 1 - (embedding <=> query) > 0.4
+                                │           → Returns top 5 similar documents
+                                │
+                                ├─ 3️⃣ Build context prompt with retrieved documents
+                                │
+                                └─ 4️⃣ Generate response
+                                    └─> POST gemini-2.5-flash:generateContent
+                                        → Returns contextual AI response
 ```
 
 ### 2️⃣ Respuesta mostrada al usuario
@@ -498,14 +413,14 @@ WITH CHECK ((auth.jwt()->>'email') = 'admin@smartconnect.ai');
 - **Responsabilidad:** UI, manejo de estado, eventos del usuario
 - **Tecnologías:** React, TypeScript, Tailwind CSS
 
-### 2. **Service Layer** (Client-Side)
-- **Clase:** `RAGService`
-- **Responsabilidad:** Orquestación de llamadas a Supabase
+### 2. **Domain Layer** (Client-Side)
+- **Clase:** `GenerateResponseUseCase` → `ChatRepositoryImpl`
+- **Responsabilidad:** Orquestación de llamadas a Edge Functions
 - **Tecnologías:** Supabase Client SDK
 
 ### 3. **Serverless Layer** (Edge Functions)
-- **Funciones:** `gemini-embedding`, `gemini-generate`
-- **Responsabilidad:** Proxy seguro a Gemini API
+- **Funciones:** `chat-with-rag`, `gemini-embedding`, `gemini-generate`
+- **Responsabilidad:** Pipeline RAG completo y proxy seguro a Gemini API
 - **Tecnologías:** Deno, Supabase Edge Functions
 
 ### 4. **Data Layer** (PostgreSQL)
@@ -514,7 +429,7 @@ WITH CHECK ((auth.jwt()->>'email') = 'admin@smartconnect.ai');
 - **Tecnologías:** pgvector, RLS policies
 
 ### 5. **AI Layer** (Gemini API)
-- **Modelos:** gemini-embedding-001, gemini-2.0-flash-exp
+- **Modelos:** gemini-embedding-001, gemini-2.5-flash
 - **Responsabilidad:** Generación de embeddings y respuestas
 - **Tecnologías:** Google Generative AI
 
@@ -564,7 +479,7 @@ WITH CHECK ((auth.jwt()->>'email') = 'admin@smartconnect.ai');
 - ✅ **Total:** < 2 segundos
 
 ### Precisión RAG
-- Similarity threshold: 0.3 (30%)
+- Similarity threshold: 0.4 (40%)
 - Top K documents: 5
 - Expected relevance: > 70%
 
@@ -594,8 +509,13 @@ smart-connect/
 │   │
 │   ├── 📂 features/                  # 🎯 LOCAL SCOPE - Features Independientes
 │   │   ├── 📂 landing/              # Landing Page (SEO)
-│   │   │   └── presentation/
-│   │   │       └── components/      # Navbar, Hero, Features, Stats, Contact
+│   │   │   ├── presentation/
+│   │   │   │   ├── components/      # Navbar, Hero, Features, Stats, Contact
+│   │   │   │   └── schemas/         # Zod validation schemas (contactSchema)
+│   │   │   └── domain/
+│   │   │       ├── entities/        # LeadEntity (domain validation + webhook payload)
+│   │   │       ├── usecases/        # SubmitLeadUseCase
+│   │   │       └── repositories/    # ILeadRepository
 │   │   │
 │   │   ├── 📂 qribar/               # 🍔 QRIBAR - Producto Estrella
 │   │   │   ├── presentation/        # UI Components
@@ -604,8 +524,8 @@ smart-connect/
 │   │   │
 │   │   ├── 📂 chatbot/              # 🤖 Asistente Experto RAG
 │   │   │   ├── presentation/        # ExpertAssistant Component
-│   │   │   ├── domain/              # Conversation Logic, RAG
-│   │   │   └── data/                # Gemini API Integration (train_rag.js)
+│   │   │   ├── domain/              # Conversation Logic, Entities
+│   │   │   └── data/                # ChatRepositoryImpl → Edge Functions
 │   │
 │   ├── 📂 shared/                    # 🔄 SHARED SCOPE - Utilidades Comunes
 │   │   ├── components/              # DashboardPreview, etc.
@@ -620,8 +540,9 @@ smart-connect/
 │
 ├── 📂 supabase/                      # 🚀 Supabase Infrastructure
 │   └── functions/                   # Edge Functions (Deno)
+│       ├── chat-with-rag/           # Full RAG pipeline
 │       ├── gemini-embedding/        # Embedding generation
-│       └── gemini-generate/         # Response generation
+│       └── gemini-generate/         # Response generation (fallback)
 │
 ├── 📂 tests/                         # 🧪 Testing - TDD
 │   ├── unit/                        # Unit Tests
@@ -729,8 +650,7 @@ secureStorage.clear();
 - ✅ TypeScript generics for type safety
 
 **Integration:**
-- Used in `abTestUtils.ts` for A/B test assignments
-- Protects session IDs and group assignments at rest
+- Used in `secureStorage` for encrypted client-side data at rest
 
 ---
 
@@ -1020,7 +940,8 @@ gh run watch 21622007642
 **Pending (Optional Low Priority):**
 - ⏳ Performance monitoring (Sentry/LogRocket)
 - ⏳ Request/response logging middleware
-- ⏳ Client-side rate limiting
+- ✅ Client-side rate limiting (per-session in Contact form + chatbot)
+- ✅ Form validation with Zod schemas + React Hook Form (Contact, Login, Settings)
 - ⏳ Caching layer for frequent data
 
 ---
@@ -1061,4 +982,4 @@ gh run watch 21622007642
 
 ---
 
-*Diagrama actualizado: 2026-02-03*
+*Diagrama actualizado: 2026-03-09*

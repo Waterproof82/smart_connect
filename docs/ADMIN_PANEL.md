@@ -147,19 +147,21 @@ async execute(documentId: string, user: AdminUser): Promise<void> {
 
 ### A03: Injection ✅
 
-**Protección implementada:**
+**Protección implementada (Defense in Depth):**
+
+1. **Presentation Layer:** Zod schemas + React Hook Form (`loginSchema.ts`, `settingsSchema.ts`)
+2. **Domain Layer:** `LoginAdminUseCase._validateCredentials()` (server-side validation)
 
 ```typescript
-// LoginAdminUseCase.ts
+// Presentation: loginSchema.ts (Zod)
+export const loginSchema = z.object({
+  email: z.string().min(1, 'El email es requerido').email('Formato de email inválido'),
+  password: z.string().min(1, 'La contraseña es requerida'),
+});
+
+// Domain: LoginAdminUseCase.ts
 private validateCredentials(credentials: LoginCredentials): void {
-  // Sanitizar email
-  const sanitizedEmail = credentials.email.trim().toLowerCase();
-  if (sanitizedEmail !== credentials.email) {
-    throw new Error('Invalid email format');
-  }
-  
-  // Validar formato
-  if (!credentials.email.includes('@')) {
+  if (!credentials.email?.includes('@')) {
     throw new Error('Invalid email format');
   }
 }

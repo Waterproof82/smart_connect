@@ -49,9 +49,9 @@ El objetivo es transformar negocios mediante soluciones técnicas que aporten va
 ## 🏗️ ARQUITECTURA HÍBRIDA & STACK
 El proyecto sigue un modelo de alto rendimiento y escalabilidad:
 
-1. **Landing Page (SEO Frontend):** - **Stack:** React + Vite + TypeScript + Tailwind CSS.
+1. **Landing Page (SEO Frontend):** - **Stack:** React + Vite + TypeScript + Tailwind CSS + Zod + React Hook Form.
    - **Misión:** Indexación SEO máxima y landing de conversión para campañas de Facebook/Google.
-2. **Dashboard & Chatbot (App Frontend):** - **Stack:** React + Vite + TypeScript.
+2. **Dashboard & Chatbot (App Frontend):** - **Stack:** React + Vite + TypeScript + Zod + React Hook Form.
    - **Misión:** Panel de administración y Chatbot experto con arquitectura RAG.
 3. **Orquestador (Automation Backend):** - **Stack:** n8n en Railway/VPS propio.
    - **Misión:** Gestión de leads, análisis de sentimiento y notificaciones.
@@ -75,8 +75,8 @@ Se aplican los estándares de calidad del Máster de Desarrollo con IA:
 ---
 
 ## 🔄 FLUJO DEL LEAD (Pipeline)
-1. **Captación:** Botones con asuntos predefinidos en la Landing de Next.js.
-2. **Chatbot RAG:** El bot en Flutter responde dudas usando el índice de QRIBAR o Reviews.
+1. **Captación:** Botones con asuntos predefinidos en la Landing (React + Vite).
+2. **Chatbot RAG:** El bot en React responde dudas usando embeddings vectoriales (pgvector + Gemini) sobre QRIBAR, NFC y servicios.
 3. **Análisis n8n:** Recepción de email -> Agente IA analiza "Temperatura" y sentimiento.
 4. **Registro:** Guardado automático en Google Sheets con actualización de estados.
 5. **Cierre:** Lead Caliente -> Notificación Telegram + Email HTML con botón de llamada (Webhook tracking).
@@ -103,7 +103,7 @@ Se aplican los estándares de calidad del Máster de Desarrollo con IA:
 - **Testing/TDD** → `docs/context/readme_testing.md`
 - **Seguridad** → `docs/context/security_agent.md`
 - **ADR** → `docs/context/adr.md`
-- **Chatbot RAG** → `docs/context/chatbot_ia/GUIA_IMPLEMENTACION_RAG.md`
+- **Chatbot RAG** → `docs/GUIA_IMPLEMENTACION_RAG.md`
 - **Webhook/n8n** → `docs/CONTACT_FORM_WEBHOOK.md`
 - **Edge Functions** → `docs/EDGE_FUNCTIONS_DEPLOYMENT.md`
 
