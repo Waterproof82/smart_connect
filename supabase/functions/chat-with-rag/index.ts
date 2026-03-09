@@ -3,9 +3,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.7'
 
 const ALLOWED_ORIGINS = [
-  'https://smartconnect.ai',
-  'https://www.smartconnect.ai',
-  'https://smart-connect-landing.vercel.app',
+  'https://smart-connect-olive.vercel.app',
   'http://localhost:5173',
   'http://localhost:3000',
 ]

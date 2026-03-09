@@ -32,9 +32,7 @@ function checkRateLimit(userId: string): { allowed: boolean; remaining: number }
 Deno.serve(async (req) => {
   // CORS headers
   const ALLOWED_ORIGINS = [
-    'https://smartconnect.ai',
-    'https://www.smartconnect.ai',
-    'https://smart-connect-landing.vercel.app',
+    'https://smart-connect-olive.vercel.app',
     'http://localhost:5173',
     'http://localhost:3000',
   ];
