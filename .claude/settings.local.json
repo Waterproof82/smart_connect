@@ -17,7 +17,10 @@
       "mcp__supabase__deploy_edge_function",
       "Bash(npx:*)",
       "mcp__supabase__list_edge_functions",
-      "Bash(gh pr:*)"
+      "Bash(gh pr:*)",
+      "Bash(xargs grep:*)",
+      "Bash(grep:*)",
+      "Bash(xargs cat:*)"
     ]
   }
 }
