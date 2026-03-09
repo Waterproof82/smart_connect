@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - 2026-03-09
 
+### Added
+- **Zod + React Hook Form:** Implemented type-safe form validation with Zod schemas and React Hook Form across all 3 forms (Contact, Login, Settings)
+  - `contactSchema.ts`: 5 fields with regex, DOMPurify XSS detection, and length constraints
+  - `loginSchema.ts`: Email + password validation
+  - `settingsSchema.ts`: URL, email, phone (E.164), and address validation
+- **CI/CD section in README:** Added pipeline diagram and description (GitHub Actions + Snyk + Dependabot + Vercel)
+
 ### Changed
 - **RAG threshold lowered (0.7 → 0.4):** Reduced similarity threshold across chat-with-rag Edge Function, ChatRepositoryImpl, and ExpertAssistantWithRAG to improve document retrieval for short queries
 - **match_documents_by_source ILIKE:** Changed source filter from exact match (`=`) to partial match (`ILIKE`) to support comma-separated sources (e.g., `"nfc, qribar"`)

@@ -20,7 +20,8 @@
       "Bash(gh pr:*)",
       "Bash(xargs grep:*)",
       "Bash(grep:*)",
-      "Bash(xargs cat:*)"
+      "Bash(xargs cat:*)",
+      "Bash(npm install:*)"
     ]
   }
 }

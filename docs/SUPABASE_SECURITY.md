@@ -265,7 +265,7 @@ Modify the existing function to support tenant filtering:
 ```sql
 CREATE OR REPLACE FUNCTION match_documents(
   query_embedding vector(768),
-  match_threshold float DEFAULT 0.7,
+  match_threshold float DEFAULT 0.4,
   match_count int DEFAULT 5,
   tenant_id text DEFAULT NULL
 )

@@ -5,12 +5,13 @@ The RAG logging system provides detailed visibility into the complete RAG (Retri
 
 ## Key Features
 
-### 1. Comprehensive Logging Coverage
-- **SupabaseDataSource**: Vector similarity searches, tenant filtering, document retrieval
-- **DocumentRepositoryImpl**: Metadata filtering, result mapping, search statistics
-- **GeminiDataSource**: Embedding operations, Edge Function calls, AI responses
-- **RAGOrchestrator**: Phase transitions, cache operations, similarity calculations
-- **GenerateResponseUseCase**: Complete flow with timing and context usage
+### 1. Logging Coverage
+
+> **Note (2026-03-09):** The old client-side RAG classes (SupabaseDataSource, DocumentRepositoryImpl, GeminiDataSource, RAGOrchestrator, rag-logger) were removed. The RAG pipeline now runs entirely server-side in the `chat-with-rag` Edge Function. Logging is handled via `console.log/error` in Edge Functions, visible in the Supabase Dashboard > Functions > Logs.
+
+- **chat-with-rag Edge Function**: Embedding generation, vector search, context assembly, response generation
+- **gemini-embedding Edge Function**: Embedding requests for admin document management
+- **GenerateResponseUseCase**: Client-side flow orchestration
 
 ### 2. Log Levels
 - `DEBUG`: Detailed operations, transitions, cache hits/misses

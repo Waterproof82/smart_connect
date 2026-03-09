@@ -123,14 +123,96 @@ smart-connect/
    - Modelos de datos
 
 
+## 🤖 Sistema RAG (Retrieval-Augmented Generation)
+
+El chatbot utiliza una arquitectura **RAG vectorial** para responder preguntas basándose exclusivamente en la base de conocimiento del negocio:
+
+```
+┌──────────────┐     ┌──────────────────┐     ┌─────────────────┐     ┌──────────────┐
+│  Usuario     │────▶│  chat-with-rag   │────▶│  pgvector        │────▶│  Gemini API  │
+│  (query)     │     │  (Edge Function) │     │  (similarity     │     │  (respuesta  │
+│              │◀────│                  │◀────│   search)        │◀────│   generada)  │
+└──────────────┘     └──────────────────┘     └─────────────────┘     └──────────────┘
+```
+
+**Flujo:**
+1. El usuario envía una pregunta al chatbot
+2. La Edge Function `chat-with-rag` genera un **embedding vectorial** (768 dimensiones) de la query usando `gemini-embedding-001`
+3. Se realiza una **búsqueda por similitud coseno** contra los documentos almacenados en PostgreSQL con `pgvector`
+4. Los documentos más relevantes (threshold > 0.4) se inyectan como contexto en el prompt
+5. `gemini-2.5-flash` genera una respuesta basada **únicamente** en el contexto recuperado
+
+**Componentes clave:**
+- **Embeddings:** Modelo `gemini-embedding-001` → vectores de 768 dimensiones
+- **Vector Store:** Supabase PostgreSQL + extensión `pgvector` con índice IVFFlat
+- **Funciones SQL:** `match_documents` y `match_documents_by_source` (búsqueda por similitud coseno)
+- **Edge Functions:** `chat-with-rag`, `gemini-embedding`, `gemini-generate` (serverless en Deno)
+- **Admin Panel:** Gestión de documentos con generación automática de embeddings al crear/editar
+
+## 📬 Automatización de Leads (n8n)
+
+El formulario de contacto de la landing page dispara un **webhook n8n** que ejecuta un pipeline de análisis y clasificación automática:
+
+```
+┌────────────┐     ┌─────────────────┐     ┌──────────────────┐     ┌──────────────┐
+│ Formulario │────▶│  n8n Webhook    │────▶│  Gemini AI       │────▶│ Parse + Lead │
+│ (Landing)  │     │  hot-lead-intake│     │  Analysis        │     │ Scoring      │
+└────────────┘     └─────────────────┘     └──────────────────┘     └──────┬───────┘
+                                                                           │
+                                                              ┌────────────┴────────────┐
+                                                              │                         │
+                                                         Hot Lead?                 Cold Lead
+                                                              │                         │
+                                                    ┌─────────┴─────────┐               │
+                                                    │                   │               │
+                                               ┌────▼─────┐    ┌───────▼──────┐  ┌─────▼──────┐
+                                               │ Email    │    │  Telegram    │  │  Google   │
+                                               │ VIP HTML │    │  Alert      │  │  Sheets   │
+                                               └──────────┘    └──────────────┘  └────────────┘
+```
+
+**Flujo:**
+1. El usuario envía el formulario de contacto (nombre, empresa, email, servicio, mensaje)
+2. El webhook n8n recibe los datos y los envía a **Gemini 2.5 Flash** para clasificación
+3. La IA analiza el lead y devuelve: temperatura (Alta/Media/Baja), sentimiento, palabras clave y nivel de confianza
+4. Si es **Hot Lead** (Alta): se envía email HTML VIP + alerta Telegram instantánea
+5. Todos los leads se registran en **Google Sheets** con el análisis completo
+6. El webhook responde al frontend con el resultado del procesamiento
+
+**Stack de automatización:** n8n + Gemini AI + Gmail + Telegram Bot + Google Sheets
+
 ## 🛠️ Stack Tecnológico
 
 - **Frontend:** React + Vite + TypeScript + Tailwind CSS
+- **Forms:** Zod + React Hook Form (validación type-safe con schemas declarativos)
+- **Backend:** Supabase (PostgreSQL + pgvector + Edge Functions + RLS)
+- **IA:** Gemini API (embedding-001 + 2.5-flash) — Arquitectura RAG vectorial
 - **Testing:** Jest + React Testing Library
 - **Build:** Vite
-- **AI:** Gemini (Google AI Studio)
 - **Automation:** n8n (Docker)
+- **CI/CD:** GitHub Actions + Snyk + Vercel
 
+## 🔄 CI/CD Pipeline
+
+```
+Push/PR to main
+    ↓
+┌─────────────────────────────────────────────┐
+│ GitHub Actions (.github/workflows/ci-cd.yml)│
+├─────────────────────────────────────────────┤
+│ 1. npm ci                                   │
+│ 2. Lint + Type Check                        │
+│ 3. Snyk Security Gate (PRs)                 │
+│    Snyk Monitor (push to main)              │
+│ 4. Vite Build                               │
+└──────────────────┬──────────────────────────┘
+                   ↓ ✅ All passed
+         Vercel Auto-Deploy
+```
+
+- **Snyk** → Escaneo de vulnerabilidades en dependencias (`--severity-threshold=high`)
+- **Dependabot** → PRs automáticos para actualización de dependencias (`.github/dependabot.yml`)
+- **Vercel** → Deploy automático a producción tras pipeline exitoso
 
 ## 📦 Comandos Disponibles
 
@@ -171,7 +253,8 @@ Ver `/tests/README.md` para más detalles.
 - Edge Functions para ocultar claves y lógica sensible
 
 - ✅ Variables de entorno validadas (`env.config.ts`)
-- ✅ Sanitización de inputs
+- ✅ Sanitización de inputs (DOMPurify + sanitizer.ts)
+- ✅ Validación de formularios con Zod schemas + React Hook Form
 - ✅ Headers de seguridad
 - ✅ Validación de datos sensibles
 

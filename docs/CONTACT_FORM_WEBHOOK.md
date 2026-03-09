@@ -68,7 +68,7 @@ Webhook n8n (https://tu-n8n.com/webhook/contact)
 
 **Endpoint:**
 ```
-https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash-exp:generateContent
+https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent
 ```
 
 **Headers:**
@@ -251,102 +251,73 @@ return {
 
 ---
 
-### 5. Modificar Componente React (Contact.tsx)
+### 5. Componente React (Contact.tsx)
 
-#### 5.1. Actualizar Estado y Handler
+El formulario usa **Zod + React Hook Form** para validación type-safe y **LeadEntity** (domain layer) para lógica de negocio.
+
+#### 5.1. Zod Schema (Presentation Layer)
 
 ```tsx
-const [formData, setFormData] = useState({
-  name: '',
-  email: '',
-  phone: '',
-  company: '',
-  subject: 'qribar',
-  message: ''
+// src/features/landing/presentation/schemas/contactSchema.ts
+import { z } from 'zod';
+import DOMPurify from 'dompurify';
+
+export const contactSchema = z.object({
+  name: z.string().trim().min(1, 'El nombre es requerido')
+    .regex(/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]{2,50}$/, 'Solo letras y espacios (2-50 caracteres)'),
+  company: z.string().trim().min(1, 'La empresa es requerida')
+    .regex(/^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ\s&'.,\-]{2,100}$/, 'Nombre de empresa válido (2-100 caracteres)'),
+  email: z.string().trim().min(1, 'El email es requerido')
+    .regex(/^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/, 'Formato de email inválido'),
+  service: z.string().min(1, 'Debes seleccionar un servicio')
+    .refine((val) => val !== 'Selecciona una opción', { message: 'Debes seleccionar un servicio' }),
+  message: z.string().trim().min(1, 'El mensaje es requerido')
+    .refine((val) => !DANGEROUS_PATTERNS.some((p) => p.test(val)), 'Contenido no permitido')
+    .refine((val) => DOMPurify.sanitize(val, { ALLOWED_TAGS: [] }).length >= 10, 'Mínimo 10 caracteres')
+    .refine((val) => DOMPurify.sanitize(val, { ALLOWED_TAGS: [] }).length <= 1000, 'Máximo 1000 caracteres'),
 });
-const [isSubmitting, setIsSubmitting] = useState(false);
-const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setIsSubmitting(true);
-  setSubmitStatus('idle');
+export type ContactFormData = z.infer<typeof contactSchema>;
+```
 
-  try {
-    const response = await fetch(import.meta.env.VITE_N8N_WEBHOOK_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        ...formData,
-        timestamp: new Date().toISOString()
-      })
-    });
+#### 5.2. React Hook Form Integration
 
-    if (!response.ok) throw new Error('Failed to send message');
+```tsx
+// Contact.tsx - uses useForm + zodResolver
+const {
+  register,
+  handleSubmit,
+  reset,
+  formState: { errors, isSubmitting, isValid, touchedFields },
+} = useForm<ContactFormData>({
+  resolver: zodResolver(contactSchema),
+  mode: 'onBlur',
+  reValidateMode: 'onChange',
+});
 
-    setSubmitStatus('success');
-    setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      company: '',
-      subject: 'qribar',
-      message: ''
-    });
-
-  } catch (error) {
-    console.error('Error submitting form:', error);
-    setSubmitStatus('error');
-  } finally {
-    setIsSubmitting(false);
-  }
+const onSubmit = async (data: ContactFormData) => {
+  // Rate limiting (OWASP A04:2021)
+  // Input sanitization (OWASP A03:2021)
+  // LeadEntity creation with sanitized data
+  // SubmitLeadUseCase execution (Clean Architecture)
 };
 ```
 
-#### 5.2. Actualizar JSX del Formulario
+#### 5.3. Arquitectura de Validación (Defense in Depth)
 
-```tsx
-<form onSubmit={handleSubmit} className="space-y-6">
-  {/* Campos existentes... */}
-
-  {/* Botón de Envío */}
-  <button
-    type="submit"
-    disabled={isSubmitting}
-    className={`w-full py-3 px-6 rounded-lg font-semibold transition-all ${
-      isSubmitting
-        ? 'bg-gray-400 cursor-not-allowed'
-        : 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700'
-    } text-white`}
-  >
-    {isSubmitting ? (
-      <span className="flex items-center justify-center">
-        <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-        </svg>
-        Enviando...
-      </span>
-    ) : (
-      '📨 Enviar Mensaje'
-    )}
-  </button>
-
-  {/* Mensajes de Estado */}
-  {submitStatus === 'success' && (
-    <div className="p-4 bg-green-50 border border-green-200 rounded-lg text-green-700">
-      ✅ ¡Mensaje enviado! Te contactaremos pronto.
-    </div>
-  )}
-
-  {submitStatus === 'error' && (
-    <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
-      ❌ Error al enviar. Por favor, intenta de nuevo.
-    </div>
-  )}
-</form>
+```
+┌──────────────────────────────────────────────────────┐
+│ Presentation Layer (Zod + React Hook Form)           │
+│ - contactSchema: validación instantánea en UI        │
+│ - Feedback visual (errores/éxito por campo)          │
+├──────────────────────────────────────────────────────┤
+│ Domain Layer (LeadEntity)                            │
+│ - validate(): validación de negocio (defense-in-depth)│
+│ - toWebhookPayload(): transformación + DOMPurify     │
+├──────────────────────────────────────────────────────┤
+│ Use Case Layer (SubmitLeadUseCase)                   │
+│ - Orquesta validación + envío al webhook             │
+└──────────────────────────────────────────────────────┘
 ```
 
 ---
