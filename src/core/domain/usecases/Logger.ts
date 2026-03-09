@@ -29,11 +29,13 @@ export class ConsoleLogger implements ILogger {
   debug(message: string, ...args: unknown[]): void {
     // Only log in development or test
     if (getEnvMode() !== 'production') {
+      // eslint-disable-next-line no-console
       console.debug(`${this.prefix} ${message}`, ...args);
     }
   }
 
   info(message: string, ...args: unknown[]): void {
+    // eslint-disable-next-line no-console
     console.info(`${this.prefix} ${message}`, ...args);
   }
 

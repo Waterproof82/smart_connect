@@ -225,10 +225,18 @@ supabase secrets set GEMINI_API_KEY="AIzaSy..."
 Las Edge Functions ya incluyen headers CORS. Si persiste:
 1. Verifica que el código de las funciones tenga:
 ```typescript
+const ALLOWED_ORIGINS = [
+  'https://smart-connect-olive.vercel.app',
+  'http://localhost:5173',
+  'http://localhost:3000',
+]
+const origin = req.headers.get('origin') || ''
+const allowedOrigin = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0]
+
 return new Response(JSON.stringify(data), {
-  headers: { 
+  headers: {
     "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": "*" // Cambiar a tu dominio en producción
+    "Access-Control-Allow-Origin": allowedOrigin
   }
 });
 ```

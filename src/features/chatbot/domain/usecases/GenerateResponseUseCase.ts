@@ -9,28 +9,7 @@
  * @requires IChatRepository - Repository para interacturar con el modelo de chat
  */
 
-import { IChatRepository } from '../repositories/IChatRepository';
-
-/**
- * Parámetros de ejecución para GenerateResponseUseCase
- */
-export interface GenerateResponseParams {
-  /** Consulta del usuario */
-  userQuery: string;
-  /** Historial de conversación previo */
-  conversationHistory?: Array<{ role: string; content: string }>;
-  /** Si debe usar RAG (búsqueda de documentos) - por defecto true */
-  useRAG?: boolean;
-  /** Opciones específicas de RAG */
-  ragOptions?: {
-    /** Número de documentos a recuperar */
-    topK?: number;
-    /** Threshold de similitud (0-1) */
-    threshold?: number;
-    /** Filtrar por fuente específica */
-    source?: string;
-  };
-}
+import { IChatRepository, GenerateResponseParams } from '../repositories/IChatRepository';
 
 /**
  * Caso de uso para generar respuestas del chatbot
