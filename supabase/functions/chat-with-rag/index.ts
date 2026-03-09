@@ -135,7 +135,7 @@ serve(async (req) => {
     )
     const geminiData = await geminiResponse.json()
     if (!geminiResponse.ok || !geminiData.candidates?.[0]?.content) {
-      console.error('[RAG] Gemini error:', geminiData)
+      console.error('[RAG] Gemini error, status:', geminiResponse.status)
       throw new Error(`Response generation failed: ${geminiData.error?.message || 'Unknown error'}`)
     }
     const generatedText = geminiData.candidates[0].content.parts.map(p => p.text).join('')

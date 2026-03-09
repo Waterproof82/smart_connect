@@ -99,17 +99,17 @@ const response = await fetch(
     try {
       data = JSON.parse(raw)
     } catch {
-      console.error('Raw Gemini response:', raw)
+      console.error('Invalid JSON from Gemini, status:', response.status)
       throw new Error('Invalid JSON from Gemini')
     }
 
     if (!response.ok) {
-      console.error('Gemini error:', data)
-      throw new Error(data.error?.message || 'Gemini error')
+      console.error('Gemini API error, status:', response.status)
+      throw new Error('Gemini API error')
     }
 
     if (!data.embedding?.values) {
-      console.error('Unexpected Gemini payload:', data)
+      console.error('Unexpected Gemini embedding payload structure')
       throw new Error('Invalid embedding response')
     }
 
