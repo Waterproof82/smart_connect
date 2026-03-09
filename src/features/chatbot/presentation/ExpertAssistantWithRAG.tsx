@@ -33,10 +33,7 @@ export const ExpertAssistant: React.FC = () => {
     };
     fetchWhatsApp();
   }, []);
-  
-  // A/B Testing: Assign user to test group
-  // const abTestGroup = getABTestGroup();
-  
+
   // Use domain entities for chat session management
   const chatSessionRef = useRef(new ChatSessionEntity());
 

@@ -68,6 +68,13 @@ serve(async (req) => {
       )
     }
 
+    if (text.length > 10000) {
+      return new Response(
+        JSON.stringify({ error: 'Text too long (max 10000 characters)' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
     const geminiKey = Deno.env.get('GEMINI_API_KEY')
     if (!geminiKey) throw new Error('Missing GEMINI_API_KEY')
 
@@ -116,7 +123,7 @@ const response = await fetch(
   } catch (err) {
     console.error('Edge crash:', err)
     return new Response(
-      JSON.stringify({ error: err.message }),
+      JSON.stringify({ error: 'Embedding generation failed' }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
   }

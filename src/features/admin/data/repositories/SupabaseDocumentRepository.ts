@@ -8,6 +8,7 @@
 
 import { SupabaseClient } from '@supabase/supabase-js';
 import { supabase } from '@shared/supabaseClient';
+import { ENV } from '@shared/config/env.config';
 import { 
   IDocumentRepository, 
   DocumentFilters, 
@@ -266,9 +267,8 @@ private mapToDomain(row: Record<string, unknown>): Document {
 async generateEmbedding(content: string): Promise<number[]> {
   const { data: { session } } = await this.client.auth.getSession();
   
-  // Forzamos la obtención de las llaves del entorno
-  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-  const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+  const supabaseUrl = ENV.SUPABASE_URL;
+  const anonKey = ENV.SUPABASE_ANON_KEY;
 
   const response = await fetch(`${supabaseUrl}/functions/v1/gemini-embedding`, {
     method: 'POST',

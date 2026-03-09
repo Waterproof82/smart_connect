@@ -12,7 +12,7 @@ export { ConsoleLogger, LogLevel } from './Logger';
 
 // Export SecurityLogger after Logger is resolved
 export { SecurityLogger } from './SecurityLogger';
-export type { SecurityEvent, SecurityEventType } from './SecurityLogger';
+export type { SecurityEvent, SecurityEventType, ISecurityLogPersistence } from './SecurityLogger';
 
 // Export factory for safe instantiation
 export { createSecurityLogger } from './NoOpSecurityLogger';
