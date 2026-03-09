@@ -198,17 +198,9 @@ export class SupabaseDocumentRepository implements IDocumentRepository {
 // ... (resto de la clase)
 
 async update(id: string, content: string, source?: string, metadata?: Record<string, unknown>): Promise<Document> {
-  const { data: { session } } = await this.client.auth.getSession();
-  const token = session?.access_token;
-
-  // 1. Generar embedding (Seguro con Anon Key + JWT)
-  const { data: embeddingData } = await this.client.functions.invoke(
-    'gemini-embedding',
-    {
-      body: { text: content },
-      headers: token ? { Authorization: `Bearer ${token}` } : {}
-    }
-  );
+  // 1. Generate embedding using the same auth pattern as generateEmbedding()
+  const embedding = await this.generateEmbedding(content);
+  const embeddingData = { embedding };
 
   // 2. Preparar payload (Usamos created_at para marcar la edición)
 
