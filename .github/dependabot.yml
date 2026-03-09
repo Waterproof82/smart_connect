@@ -61,6 +61,16 @@ updates:
       # Tailwind CSS 4.x requires complete config migration
       - dependency-name: "tailwindcss"
         update-types: ["version-update:semver-major"]
+      # ESLint 10.x has breaking changes (removed eslintrc, new API)
+      - dependency-name: "eslint"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@eslint/js"
+        update-types: ["version-update:semver-major"]
+      # Jest 30.x has breaking changes (new config format, dropped Node 16)
+      - dependency-name: "jest"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "jest-environment-jsdom"
+        update-types: ["version-update:semver-major"]
   
   # Enable version updates for GitHub Actions
   - package-ecosystem: "github-actions"
