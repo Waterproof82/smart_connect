@@ -195,101 +195,105 @@ export class SupabaseDocumentRepository implements IDocumentRepository {
     }
   }
 
-// ... (resto de la clase)
+  async update(id: string, content: string, source?: string, metadata?: Record<string, unknown>): Promise<Document> {
+    // 1. Generate embedding using the same auth pattern as generateEmbedding()
+    const embedding = await this.generateEmbedding(content);
+    const embeddingData = { embedding };
 
-async update(id: string, content: string, source?: string, metadata?: Record<string, unknown>): Promise<Document> {
-  // 1. Generate embedding using the same auth pattern as generateEmbedding()
-  const embedding = await this.generateEmbedding(content);
-  const embeddingData = { embedding };
+    // 2. Preparar payload (Usamos created_at para marcar la edición)
+    interface UpdateData {
+      content: string;
+      embedding: number[] | null;
+      created_at: string;
+      source?: string;
+      metadata?: Record<string, unknown>;
+    }
+    const updateData: UpdateData = {
+      content,
+      embedding: embeddingData?.embedding ?? null,
+      created_at: new Date().toISOString()
+    };
+    if (source !== undefined) {
+      updateData.source = source;
+    }
+    if (metadata !== undefined) {
+      updateData.metadata = metadata;
+    }
 
-  // 2. Preparar payload (Usamos created_at para marcar la edición)
+    // 3. Update en Supabase
+    const { data, error } = await this.client
+      .from('documents')
+      .update(updateData)
+      .eq('id', id)
+      .select()
+      .single();
 
-  interface UpdateData {
-    content: string;
-    embedding: number[] | null;
-    created_at: string;
-    source?: string;
-    metadata?: Record<string, unknown>;
-  }
-  const updateData: UpdateData = {
-    content,
-    embedding: embeddingData?.embedding ?? null,
-    created_at: new Date().toISOString()
-  };
-  if (source !== undefined) {
-    updateData.source = source;
-  }
-  if (metadata !== undefined) {
-    updateData.metadata = metadata;
-  }
+    if (error) {
+      throw new Error(`Failed to update document: ${error.message}`);
+    }
 
-  // 3. Update en Supabase
-  const { data, error } = await this.client
-    .from('documents')
-    .update(updateData)
-    .eq('id', id)
-    .select()
-    .single();
-
-  if (error) {
-    throw new Error(`Failed to update document: ${error.message}`);
-  }
-
-  // 4. Retornar usando el nuevo método mapeador
-  return this.mapToDomain(data);
-}
-
-/**
- * Método privado para convertir la fila de la DB a la Entidad Document
- */
-private mapToDomain(row: Record<string, unknown>): Document {
-  const validEmbedding = parseEmbedding(row.embedding as EmbeddingData, row.id as string);
-
-  return Document.create({
-    id: row.id as string,
-    content: row.content as string,
-    source: row.source as string,
-    embedding: validEmbedding,
-    createdAt: new Date(row.created_at as string),
-    updatedAt: new Date(row.created_at as string), // Usamos created_at como updatedAt
-    metadata: (row.metadata as Record<string, unknown>) || {},
-  });
-}
-
-async generateEmbedding(content: string): Promise<number[]> {
-  const { data: { session } } = await this.client.auth.getSession();
-
-  if (!session?.access_token) {
-    throw new Error('No active session - please log in again');
+    // 4. Retornar usando el nuevo método mapeador
+    return this.mapToDomain(data);
   }
 
-  const supabaseUrl = ENV.SUPABASE_URL;
-  const anonKey = ENV.SUPABASE_ANON_KEY;
+  /**
+   * Método privado para convertir la fila de la DB a la Entidad Document
+   */
+  private mapToDomain(row: Record<string, unknown>): Document {
+    const validEmbedding = parseEmbedding(row.embedding as EmbeddingData, row.id as string);
 
-  const response = await fetch(`${supabaseUrl}/functions/v1/gemini-embedding`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'apikey': anonKey,
-      'Authorization': `Bearer ${session.access_token}`,
-    },
-    body: JSON.stringify({ text: content })
-  });
-
-  const text = await response.text();
-
-  if (!response.ok) {
-    let errorMsg = `Embedding failed (${response.status})`;
-    try {
-      const err = JSON.parse(text);
-      errorMsg = err.error || errorMsg;
-    } catch { /* non-JSON error body */ }
-    throw new Error(errorMsg);
+    return Document.create({
+      id: row.id as string,
+      content: row.content as string,
+      source: row.source as string,
+      embedding: validEmbedding,
+      createdAt: new Date(row.created_at as string),
+      updatedAt: new Date(row.created_at as string), // Usamos created_at como updatedAt
+      metadata: (row.metadata as Record<string, unknown>) || {},
+    });
   }
 
-  const data = JSON.parse(text);
-  return data.embedding;
-}
+  async generateEmbedding(content: string): Promise<number[]> {
+    const { data: { session } } = await this.client.auth.getSession();
+
+    if (!session?.access_token) {
+      throw new Error('No active session - please log in again');
+    }
+
+    // Use env vars or fallback to production URL
+    let supabaseUrl = ENV.SUPABASE_URL;
+    let anonKey = ENV.SUPABASE_ANON_KEY;
+    
+    if (!supabaseUrl) {
+      // Fallback for dev environments where env vars aren't loaded
+      supabaseUrl = 'https://tysjedvujvsmrzzrmesr.supabase.co';
+      anonKey = 'sb_publishable_aIjL5SDhuNg7D0Hi9d9hOA_4XMROc4q';
+    }
+
+    const response = await fetch(`${supabaseUrl}/functions/v1/gemini-embedding`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': anonKey,
+        'Authorization': `Bearer ${session.access_token}`,
+      },
+      body: JSON.stringify({ text: content })
+    });
+
+    const text = await response.text();
+
+    if (!response.ok) {
+      let errorMsg = `Embedding failed (${response.status})`;
+      try {
+        const err = JSON.parse(text);
+        errorMsg = err.error || errorMsg;
+      } catch { /* non-JSON error body */ }
+      throw new Error(errorMsg);
+    }
+
+    const data = JSON.parse(text);
+    return data.embedding;
+  }
 
   async create(document: Omit<Document, 'id' | 'createdAt' | 'updatedAt'>): Promise<Document> {
     const { data, error } = await this.client
