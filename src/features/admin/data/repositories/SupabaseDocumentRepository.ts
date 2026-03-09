@@ -8,6 +8,7 @@
 
 import { SupabaseClient } from '@supabase/supabase-js';
 import { supabase } from '@shared/supabaseClient';
+import { ENV } from '@shared/config/env.config';
 import { 
   IDocumentRepository, 
   DocumentFilters, 
@@ -18,6 +19,28 @@ import { Document } from '../../domain/entities/Document';
 
 // Type alias for embedding data (can be array or JSON string from Supabase)
 type EmbeddingData = number[] | string | null;
+
+/**
+ * Parses embedding data from Supabase (may come as JSON string or array).
+ * Returns validated 768-dimension array or undefined.
+ */
+function parseEmbedding(raw: EmbeddingData, docId?: string | number): number[] | undefined {
+  let embedding: EmbeddingData = raw;
+
+  if (typeof embedding === 'string') {
+    try {
+      embedding = JSON.parse(embedding) as number[];
+    } catch (e) {
+      console.error(`Failed to parse embedding for document ${docId ?? 'unknown'}:`, e);
+      return undefined;
+    }
+  }
+
+  if (embedding && Array.isArray(embedding) && embedding.length === 768) {
+    return embedding;
+  }
+  return undefined;
+}
 
 export class SupabaseDocumentRepository implements IDocumentRepository {
   private readonly client: SupabaseClient = supabase;
@@ -70,23 +93,7 @@ export class SupabaseDocumentRepository implements IDocumentRepository {
 
     // Mapear a entidades de dominio
     const documents = (data || []).map((row: Record<string, unknown>) => {
-      // Validar embedding (debe ser array de 768 dimensiones o null)
-      let embedding: EmbeddingData = row.embedding as EmbeddingData;
-      
-      // Si el embedding es un string, parsearlo
-      if (typeof embedding === 'string') {
-        try {
-          embedding = JSON.parse(embedding) as number[];
-        } catch (e) {
-          const docId = typeof row.id === 'string' || typeof row.id === 'number' ? row.id : 'unknown';
-          console.error(`Failed to parse embedding for document ${docId}:`, e);
-          embedding = null;
-        }
-      }
-      
-      const validEmbedding = embedding && Array.isArray(embedding) && embedding.length === 768 
-        ? embedding 
-        : undefined;
+      const validEmbedding = parseEmbedding(row.embedding as EmbeddingData, row.id as string);
 
       return Document.create({
         id: row.id as string,
@@ -125,22 +132,7 @@ export class SupabaseDocumentRepository implements IDocumentRepository {
       throw new Error(`Failed to fetch document: ${error.message}`);
     }
 
-    // Validar embedding
-    let embedding: EmbeddingData = data.embedding as EmbeddingData;
-    
-    // Si el embedding es un string, parsearlo
-    if (typeof embedding === 'string') {
-      try {
-        embedding = JSON.parse(embedding) as number[];
-      } catch (e) {
-        console.error(`Failed to parse embedding for document ${id}:`, e);
-        embedding = null;
-      }
-    }
-    
-    const validEmbedding = embedding && Array.isArray(embedding) && embedding.length === 768 
-      ? embedding 
-      : undefined;
+    const validEmbedding = parseEmbedding(data.embedding as EmbeddingData, id);
 
     return Document.create({
       id: data.id,
@@ -203,112 +195,105 @@ export class SupabaseDocumentRepository implements IDocumentRepository {
     }
   }
 
-// ... (resto de la clase)
+  async update(id: string, content: string, source?: string, metadata?: Record<string, unknown>): Promise<Document> {
+    // 1. Generate embedding using the same auth pattern as generateEmbedding()
+    const embedding = await this.generateEmbedding(content);
+    const embeddingData = { embedding };
 
-async update(id: string, content: string, source?: string, metadata?: Record<string, unknown>): Promise<Document> {
-  const { data: { session } } = await this.client.auth.getSession();
-  const token = session?.access_token;
-
-  // 1. Generar embedding (Seguro con Anon Key + JWT)
-  const { data: embeddingData } = await this.client.functions.invoke(
-    'gemini-embedding',
-    {
-      body: { text: content },
-      headers: token ? { Authorization: `Bearer ${token}` } : {}
+    // 2. Preparar payload (Usamos created_at para marcar la edición)
+    interface UpdateData {
+      content: string;
+      embedding: number[] | null;
+      created_at: string;
+      source?: string;
+      metadata?: Record<string, unknown>;
     }
-  );
-
-  // 2. Preparar payload (Usamos created_at para marcar la edición)
-
-  interface UpdateData {
-    content: string;
-    embedding: number[] | null;
-    created_at: string;
-    source?: string;
-    metadata?: Record<string, unknown>;
-  }
-  const updateData: UpdateData = {
-    content,
-    embedding: embeddingData?.embedding ?? null,
-    created_at: new Date().toISOString()
-  };
-  if (source !== undefined) {
-    updateData.source = source;
-  }
-  if (metadata !== undefined) {
-    updateData.metadata = metadata;
-  }
-
-  // 3. Update en Supabase
-  const { data, error } = await this.client
-    .from('documents')
-    .update(updateData)
-    .eq('id', id)
-    .select()
-    .single();
-
-  if (error) {
-    throw new Error(`Failed to update document: ${error.message}`);
-  }
-
-  // 4. Retornar usando el nuevo método mapeador
-  return this.mapToDomain(data);
-}
-
-/**
- * Método privado para convertir la fila de la DB a la Entidad Document
- */
-private mapToDomain(row: Record<string, unknown>): Document {
-  let embedding: number[] | undefined;
-  if (typeof row.embedding === 'string') {
-    try {
-      embedding = JSON.parse(row.embedding);
-    } catch {
-      embedding = undefined;
+    const updateData: UpdateData = {
+      content,
+      embedding: embeddingData?.embedding ?? null,
+      created_at: new Date().toISOString()
+    };
+    if (source !== undefined) {
+      updateData.source = source;
     }
-  } else if (Array.isArray(row.embedding)) {
-    embedding = row.embedding as number[];
+    if (metadata !== undefined) {
+      updateData.metadata = metadata;
+    }
+
+    // 3. Update en Supabase
+    const { data, error } = await this.client
+      .from('documents')
+      .update(updateData)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) {
+      throw new Error(`Failed to update document: ${error.message}`);
+    }
+
+    // 4. Retornar usando el nuevo método mapeador
+    return this.mapToDomain(data);
   }
 
-  // Validar dimensiones del embedding
-  const validEmbedding = embedding?.length === 768 ? embedding : undefined;
+  /**
+   * Método privado para convertir la fila de la DB a la Entidad Document
+   */
+  private mapToDomain(row: Record<string, unknown>): Document {
+    const validEmbedding = parseEmbedding(row.embedding as EmbeddingData, row.id as string);
 
-  return Document.create({
-    id: row.id as string,
-    content: row.content as string,
-    source: row.source as string,
-    embedding: validEmbedding,
-    createdAt: new Date(row.created_at as string),
-    updatedAt: new Date(row.created_at as string), // Usamos created_at como updatedAt
-    metadata: (row.metadata as Record<string, unknown>) || {},
-  });
-}
-
-async generateEmbedding(content: string): Promise<number[]> {
-  const { data: { session } } = await this.client.auth.getSession();
-  
-  // Forzamos la obtención de las llaves del entorno
-  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-  const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-
-  const response = await fetch(`${supabaseUrl}/functions/v1/gemini-embedding`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'apikey': anonKey, // ESTO abre la puerta del Gateway
-      'Authorization': `Bearer ${session?.access_token}` // ESTO valida tu rol admin
-    },
-    body: JSON.stringify({ text: content })
-  });
-
-  if (!response.ok) {
-    const err = await response.json();
-    throw new Error(err.error || 'Error en la autenticación de la función');
+    return Document.create({
+      id: row.id as string,
+      content: row.content as string,
+      source: row.source as string,
+      embedding: validEmbedding,
+      createdAt: new Date(row.created_at as string),
+      updatedAt: new Date(row.created_at as string), // Usamos created_at como updatedAt
+      metadata: (row.metadata as Record<string, unknown>) || {},
+    });
   }
 
-  const data = await response.json();
-  return data.embedding;
-}
+  async generateEmbedding(content: string): Promise<number[]> {
+    const { data: { session } } = await this.client.auth.getSession();
+
+    if (!session?.access_token) {
+      throw new Error('No active session - please log in again');
+    }
+
+    // Use env vars or fallback to production URL
+    let supabaseUrl = ENV.SUPABASE_URL;
+    let anonKey = ENV.SUPABASE_ANON_KEY;
+    
+    if (!supabaseUrl) {
+      // Fallback for dev environments where env vars aren't loaded
+      supabaseUrl = 'https://tysjedvujvsmrzzrmesr.supabase.co';
+      anonKey = 'sb_publishable_aIjL5SDhuNg7D0Hi9d9hOA_4XMROc4q';
+    }
+
+    const response = await fetch(`${supabaseUrl}/functions/v1/gemini-embedding`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': anonKey,
+        'Authorization': `Bearer ${session.access_token}`,
+      },
+      body: JSON.stringify({ text: content })
+    });
+
+    const text = await response.text();
+
+    if (!response.ok) {
+      let errorMsg = `Embedding failed (${response.status})`;
+      try {
+        const err = JSON.parse(text);
+        errorMsg = err.error || errorMsg;
+      } catch { /* non-JSON error body */ }
+      throw new Error(errorMsg);
+    }
+
+    const data = JSON.parse(text);
+    return data.embedding;
+  }
 
   async create(document: Omit<Document, 'id' | 'createdAt' | 'updatedAt'>): Promise<Document> {
     const { data, error } = await this.client
@@ -326,11 +311,7 @@ async generateEmbedding(content: string): Promise<number[]> {
       throw new Error(`Failed to create document: ${error.message}`);
     }
 
-    // Validar embedding
-    const embedding = data.embedding as number[] | null;
-    const validEmbedding = embedding && Array.isArray(embedding) && embedding.length === 768 
-      ? embedding 
-      : undefined;
+    const validEmbedding = parseEmbedding(data.embedding as EmbeddingData, data.id);
 
     return Document.create({
       id: data.id,

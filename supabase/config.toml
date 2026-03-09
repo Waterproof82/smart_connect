@@ -1,7 +1,12 @@
 
+[functions.gemini-embedding]
+enabled = true
+verify_jwt = false
+import_map = "./functions/gemini-embedding/deno.json"
+
 [functions.gemini-generate]
 enabled = true
-verify_jwt = true
+verify_jwt = false
 import_map = "./functions/gemini-generate/deno.json"
 
 [functions.chat-with-rag]

@@ -11,10 +11,12 @@
 
 import { SupabaseClient } from '@supabase/supabase-js';
 import { supabase } from '@shared/supabaseClient';
-import { 
-  IAuthRepository, 
-  LoginCredentials, 
-  AuthSession 
+import {
+  IAuthRepository,
+  LoginCredentials,
+  AuthSession,
+  AuthEvent,
+  AuthSubscription,
 } from '../../domain/repositories/IAuthRepository';
 import { AdminUser } from '../../domain/entities/AdminUser';
 
@@ -76,6 +78,10 @@ export class SupabaseAuthRepository implements IAuthRepository {
     const { data: { user }, error } = await this.client.auth.getUser();
 
     if (error || !user) {
+      // Clear stale session if refresh token is invalid
+      if (error?.message?.includes('Refresh Token')) {
+        await this.client.auth.signOut();
+      }
       return null;
     }
 
@@ -98,5 +104,11 @@ export class SupabaseAuthRepository implements IAuthRepository {
   async isAuthenticated(): Promise<boolean> {
     const user = await this.getCurrentUser();
     return user !== null;
+  }
+
+  onAuthStateChange(callback: (event: AuthEvent) => void): { data: { subscription: AuthSubscription } } {
+    return this.client.auth.onAuthStateChange((event) => {
+      callback(event as AuthEvent);
+    });
   }
 }
