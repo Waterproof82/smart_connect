@@ -234,7 +234,7 @@ React Component (handleSend)
         │                       match_count: 3
         │                   })
         │                       │
-        │                       └─> PostgreSQL Function (SECURITY DEFINER)
+        │                       └─> PostgreSQL Function (SECURITY INVOKER)
         │                               │
         │                               └─> SELECT * FROM documents
         │                                   WHERE 1 - (embedding <=> query_embedding) > match_threshold

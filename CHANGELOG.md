@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased] - 2026-03-09
 
 ### Security
+- **CORS origin cleanup:** Removed unused placeholder domains (`smartconnect.ai`, `www.smartconnect.ai`, `smart-connect-landing.vercel.app`); only `smart-connect-olive.vercel.app` + localhost remain
+- **insert_document SECURITY INVOKER:** Changed from `SECURITY DEFINER` (bypassed RLS) to `SECURITY INVOKER` (respects RLS policies)
+- **anon grants hardened:** Revoked INSERT/UPDATE/DELETE/TRUNCATE from `anon` role on all tables; `anon` now has only SELECT on `documents` and `app_settings`, zero access to `security_logs`
+- **RLS policy performance:** Optimized `admin_insert_security_logs` to use `(SELECT auth.jwt())` subselect instead of re-evaluating per row
 - **RLS security_logs fix:** Changed INSERT policy from `WITH CHECK (true)` (any authenticated user) to email-based check (`admin@smartconnect.ai` only)
 - **Edge Functions JWT validation:** All functions now do internal JWT validation (verify_jwt=false in config.toml, but function code validates session via `getUser()`)
 - **CORS hardening (OWASP A05):** Replaced wildcard `*` with origin whitelist in 4 Edge Functions (chat-with-rag, gemini-generate, gemini-embedding, test-log)
@@ -20,6 +24,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Phone validation:** Added 20-char input max and 15-digit max per E.164 in `isValidPhone()`
 - **RLS bypass fix (OWASP A01):** Revoked EXECUTE on `insert_document`, `insert_document_with_embedding`, `batch_insert_document` from PUBLIC/anon/authenticated; granted only to service_role
 - **Unused indexes cleanup:** Dropped 5 unused indexes (idx_documents_source, idx_documents_embedding, idx_security_logs_type, idx_security_logs_user_id, idx_security_logs_severity)
+
+### Removed
+- **Orphan function:** Dropped `update_embedding_cache_updated_at()` trigger function (referenced non-existent `embedding_cache` table)
 
 ### Fixed
 - **Critical Syntax Bug:** Moved `update()`, `mapToDomain()`, and `generateEmbedding()` methods INSIDE the `SupabaseDocumentRepository` class (were incorrectly defined outside the class)
