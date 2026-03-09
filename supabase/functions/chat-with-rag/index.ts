@@ -159,7 +159,7 @@ serve(async (req) => {
   } catch (err) {
     if (err instanceof Response) return err
     console.error('[RAG] Error:', err)
-    return new Response(JSON.stringify({ error: err?.message || 'Internal server error' }), { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
+    return new Response(JSON.stringify({ error: 'Internal server error' }), { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
   }
 })
 
@@ -224,10 +224,6 @@ async function getQueryEmbedding(query: string, cache: EmbeddingCache, geminiKey
   }
 
   return { queryEmbedding, cacheHit, embeddingTime: Date.now() - startTime }
-}
-
-function returnError(status, message) {
-  throw new Response(JSON.stringify({ error: message }), { status, headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
 }
 
 function hashString(str: string) {

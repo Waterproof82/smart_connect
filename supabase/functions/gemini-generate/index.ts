@@ -121,10 +121,7 @@ Deno.serve(async (req) => {
     // Validar que contents existe
     if (!contents || !Array.isArray(contents)) {
       return new Response(
-        JSON.stringify({ 
-          error: 'Invalid request: contents must be an array',
-          received: typeof contents
-        }),
+        JSON.stringify({ error: 'Invalid request: contents must be an array' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
@@ -133,7 +130,7 @@ Deno.serve(async (req) => {
 
     if (!GEMINI_API_KEY) {
       return new Response(
-        JSON.stringify({ error: 'GEMINI_API_KEY not configured' }),
+        JSON.stringify({ error: 'Server configuration error' }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
