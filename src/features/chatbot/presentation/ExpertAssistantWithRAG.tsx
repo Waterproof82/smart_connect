@@ -53,7 +53,7 @@ export const ExpertAssistant: React.FC = () => {
         useRAG: true,
         ragOptions: {
           topK: 5,
-          threshold: 0.7,
+          threshold: 0.4,
           source: null,
         },
       });

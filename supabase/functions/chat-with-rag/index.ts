@@ -181,7 +181,7 @@ async function authenticateRequest(req) {
 async function parseRequest(req) {
   try {
     const body = await req.json()
-    const { query, conversationHistory = [], topK = 5, threshold = 0.7, source = null } = body
+    const { query, conversationHistory = [], topK = 5, threshold = 0.4, source = null } = body
     if (!query || typeof query !== 'string') {
       throw new Error('Missing or invalid "query"')
     }
