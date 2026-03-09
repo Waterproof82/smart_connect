@@ -21,14 +21,13 @@ export const AdminPanel: React.FC = () => {
 
   const container = getAdminContainer();
 
-  // Check authentication on mount
+  // Check authentication on mount and listen for session changes
   useEffect(() => {
     const checkAuth = async () => {
       try {
         const user = await container.authRepository.getCurrentUser();
         setCurrentUser(user);
       } catch (err) {
-        // If error is a general error (not just unauthenticated), set error state
         if (err && typeof err === 'object' && 'code' in err && err.code === 'NOT_FOUND') {
           setGeneralError('NOT_FOUND');
         } else {
@@ -39,6 +38,17 @@ export const AdminPanel: React.FC = () => {
       }
     };
     checkAuth();
+
+    // Listen for auth state changes (e.g., token refresh failures, sign-outs)
+    const { data: { subscription } } = container.authRepository.onAuthStateChange((event) => {
+      if (event === 'SIGNED_OUT' || event === 'TOKEN_REFRESHED') {
+        if (event === 'SIGNED_OUT') {
+          setCurrentUser(null);
+        }
+      }
+    });
+
+    return () => subscription.unsubscribe();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

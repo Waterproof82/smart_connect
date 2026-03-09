@@ -19,6 +19,12 @@ export interface AuthSession {
   expiresAt: Date;
 }
 
+export type AuthEvent = 'SIGNED_IN' | 'SIGNED_OUT' | 'TOKEN_REFRESHED' | 'USER_UPDATED';
+
+export interface AuthSubscription {
+  unsubscribe(): void;
+}
+
 export interface IAuthRepository {
   /**
    * Autentica un usuario administrador
@@ -39,4 +45,9 @@ export interface IAuthRepository {
    * Verifica si hay una sesión activa
    */
   isAuthenticated(): Promise<boolean>;
+
+  /**
+   * Listens for auth state changes (sign-in, sign-out, token refresh)
+   */
+  onAuthStateChange(callback: (event: AuthEvent) => void): { data: { subscription: AuthSubscription } };
 }
