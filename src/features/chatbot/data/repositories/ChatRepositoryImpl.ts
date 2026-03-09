@@ -40,7 +40,7 @@ export class ChatRepositoryImpl implements IChatRepository {
             parts: [{ text: msg.content }]
           })),
           topK: ragOptions.topK ?? 5,
-          threshold: ragOptions.threshold ?? 0.7,
+          threshold: ragOptions.threshold ?? 0.4,
           source: ragOptions.source ?? null,
         },
       });
