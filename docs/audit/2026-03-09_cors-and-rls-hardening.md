@@ -16,7 +16,7 @@
 - Removed `https://www.smartconnect.ai` (unused placeholder domain)
 - Removed `https://smart-connect-landing.vercel.app` (old Vercel project name)
 - Added `https://smart-connect-olive.vercel.app` (current production domain)
-- All 4 functions redeployed via Supabase CLI
+- All 3 functions redeployed via Supabase CLI (test-log later deleted as dead code)
 
 **Final ALLOWED_ORIGINS:**
 ```

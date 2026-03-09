@@ -1,33 +1,20 @@
 
 import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Mail, MapPin, Send, MessageSquare, Sparkles, CheckCircle2 } from 'lucide-react';
 import { getAppSettings, AppSettings } from '@shared/services/settingsService';
 import { getLandingContainer } from '../LandingContainer';
 import { LeadEntity } from '../../domain/entities';
 import { sanitizeInput, isValidEmail } from '@shared/utils/sanitizer';
 import { rateLimiter, RateLimitPresets } from '@shared/utils/rateLimiter';
-
-interface FormData {
-  name: string;
-  company: string;
-  email: string;
-  service: string;
-  message: string;
-}
-
-interface ValidationErrors {
-  name: string;
-  company: string;
-  email: string;
-  service: string;
-  message: string;
-}
+import { contactSchema, ContactFormData } from '../schemas/contactSchema';
 
 export const Contact: React.FC = () => {
   // Settings from database
   const [settings, setSettings] = useState<AppSettings | null>(null);
   const [isLoadingSettings, setIsLoadingSettings] = useState(true);
-  
+
   // Fetch settings from Supabase
   useEffect(() => {
     const fetchSettings = async () => {
@@ -52,240 +39,127 @@ export const Contact: React.FC = () => {
   }, [settings, isLoadingSettings]);
 
   const [isVisible, setIsVisible] = useState(false);
-  const [selectedService, setSelectedService] = useState('Selecciona una opción');
-  const [formData, setFormData] = useState<FormData>({
-    name: '',
-    company: '',
-    email: '',
-    service: '',
-    message: ''
-  });
-  const [touched, setTouched] = useState<Record<keyof FormData, boolean>>({
-    name: false,
-    company: false,
-    email: false,
-    service: false,
-    message: false
-  });
-  const [validationErrors, setValidationErrors] = useState<ValidationErrors>({
-    name: '',
-    company: '',
-    email: '',
-    service: '',
-    message: ''
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const sectionRef = useRef<HTMLDivElement>(null);
   const nameInputRef = useRef<HTMLInputElement>(null);
 
-  // Use LeadEntity for validation
-  const createLeadEntity = (): LeadEntity => {
-    return new LeadEntity({
-      name: formData.name,
-      company: formData.company,
-      email: formData.email,
-      service: formData.service,
-      message: formData.message,
-    });
-  };
+  const {
+    register,
+    handleSubmit,
+    watch,
+    reset,
+    setValue,
+    formState: { errors, isSubmitting, isValid, touchedFields },
+  } = useForm<ContactFormData>({
+    resolver: zodResolver(contactSchema),
+    defaultValues: {
+      name: '',
+      company: '',
+      email: '',
+      service: '',
+      message: '',
+    },
+    mode: 'onBlur',
+    reValidateMode: 'onChange',
+  });
 
-  // Validations using LeadEntity
-  const validateField = (field: keyof FormData, value: string): string => {
-    const tempLead = new LeadEntity({
-      ...formData,
-      [field]: value,
-    });
-
-    switch (field) {
-      case 'name': return tempLead.validateName();
-      case 'company': return tempLead.validateCompany();
-      case 'email': return tempLead.validateEmail();
-      case 'service': return tempLead.validateService();
-      case 'message': return tempLead.validateMessage();
-      default: return '';
-    }
-  };
-
-  // Verificar si un campo es válido
-  const isFieldValid = (field: keyof FormData): boolean => {
-    return touched[field] && !validationErrors[field] && formData[field].trim() !== '';
-  };
-
-  // Verificar si un campo tiene error
-  const hasFieldError = (field: keyof FormData): boolean => {
-    return touched[field] && !!validationErrors[field];
-  };
-
-  // Manejar cambio de campo
-  const handleFieldChange = (field: keyof FormData, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-    const error = validateField(field, value);
-    setValidationErrors(prev => ({ ...prev, [field]: error }));
-  };
-
-  // Manejar blur (cuando el usuario sale del campo)
-  const handleFieldBlur = (field: keyof FormData) => {
-    setTouched(prev => ({ ...prev, [field]: true }));
-  };
+  const messageValue = watch('message');
+  const serviceValue = watch('service');
 
   // CSS class helper for validated form fields
-  const getFieldClassName = (field: keyof FormData, extra = ''): string => {
+  const getFieldClassName = (field: keyof ContactFormData, extra = ''): string => {
     const base = `w-full border rounded-2xl py-4 px-6 outline-none transition-all text-sm ${extra}`.trim();
-    if (hasFieldError(field)) {
+    if (touchedFields[field] && errors[field]) {
       return `${base} bg-red-500/10 border-red-500/50 focus:border-red-500`;
     }
-    if (isFieldValid(field)) {
+    if (touchedFields[field] && !errors[field]) {
       return `${base} bg-blue-500/10 border-blue-500/50 focus:border-blue-500`;
     }
     return `${base} bg-white/5 border-white/10 focus:border-blue-500/50`;
   };
 
-  // Validar que todos los campos estén completos y sin errores
-  const isFormValid = () => {
-    const lead = createLeadEntity();
-    return lead.isValid();
-  };
-
-  // Manejar envío del formulario usando Clean Architecture
-  const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    
-    if (!isFormValid()) return;
-
-    // ✅ Security: Rate limiting (OWASP A04:2021 - Insecure Design)
-    // Note: Using email as identifier - can be enhanced with IP detection
-    const userIdentifier = formData.email || 'anonymous';
+  const onSubmit = async (data: ContactFormData) => {
+    // Rate limiting (OWASP A04:2021 - Insecure Design)
+    const userIdentifier = data.email || 'anonymous';
     const isAllowed = await rateLimiter.checkLimit(userIdentifier, RateLimitPresets.CONTACT_FORM);
 
     if (!isAllowed) {
-      setValidationErrors({
-        ...validationErrors,
-        message: 'Has enviado demasiados formularios. Por favor, espera una hora.',
-      });
       setSubmitStatus('error');
       return;
     }
 
-    setIsSubmitting(true);
     setSubmitStatus('idle');
 
     try {
-      // ✅ Security: Sanitize all inputs (OWASP A03:2021 - Injection)
+      // Sanitize all inputs (OWASP A03:2021 - Injection)
       const sanitizedData = {
-        name: sanitizeInput(formData.name, 'contact_name', 100),
-        company: sanitizeInput(formData.company, 'contact_company', 100),
-        email: sanitizeInput(formData.email, 'contact_email', 255),
-        service: sanitizeInput(formData.service, 'contact_service', 100),
-        message: sanitizeInput(formData.message, 'contact_message', 2000),
+        name: sanitizeInput(data.name, 'contact_name', 100),
+        company: sanitizeInput(data.company, 'contact_company', 100),
+        email: sanitizeInput(data.email, 'contact_email', 255),
+        service: sanitizeInput(data.service, 'contact_service', 100),
+        message: sanitizeInput(data.message, 'contact_message', 2000),
       };
 
       // Double-check email format after sanitization
       if (!isValidEmail(sanitizedData.email)) {
-        setValidationErrors({
-          ...validationErrors,
-          email: 'Email inválido',
-        });
         setSubmitStatus('error');
-        setIsSubmitting(false);
         return;
       }
 
       // Create lead entity with sanitized data
       const lead = new LeadEntity(sanitizedData);
 
-      // Use SubmitLeadUseCase (Clean Architecture approach)
       if (!container) {
-        setValidationErrors({
-          ...validationErrors,
-          message: 'Sistema cargando. Por favor, intenta en unos segundos.',
-        });
         setSubmitStatus('error');
-        setIsSubmitting(false);
         return;
       }
-      
+
       const result = await container.submitLeadUseCase.execute(lead);
 
       if (result.success) {
         setSubmitStatus('success');
-        
-        // Resetear formulario después de 3 segundos
         setTimeout(() => {
-          setFormData({
-            name: '',
-            company: '',
-            email: '',
-            service: '',
-            message: ''
-          });
-          setSelectedService('Selecciona una opción');
-          setTouched({
-            name: false,
-            company: false,
-            email: false,
-            service: false,
-            message: false
-          });
-          setValidationErrors({
-            name: '',
-            company: '',
-            email: '',
-            service: '',
-            message: ''
-          });
+          reset();
           setSubmitStatus('idle');
         }, 3000);
       } else {
-        // Handle validation errors from use case
-        if (result.errors) {
-          setValidationErrors(result.errors);
-        }
         setSubmitStatus('error');
         setTimeout(() => setSubmitStatus('idle'), 3000);
       }
-      
+
     } catch {
       setSubmitStatus('error');
       setTimeout(() => setSubmitStatus('idle'), 3000);
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
   useEffect(() => {
-    setFormData(prev => ({ ...prev, service: selectedService }));
-  }, [selectedService]);
-
-  useEffect(() => {
-    // Función para hacer scroll y focus
+    // Scroll and focus helper
     const scrollAndFocus = () => {
-      sectionRef.current?.scrollIntoView({ 
-        behavior: 'smooth', 
-        block: 'start' 
+      sectionRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
       });
       setTimeout(() => {
         nameInputRef.current?.focus();
       }, 800);
     };
 
-    // Función para leer parámetro de servicio de la URL
+    // Read service parameter from URL
     const updateServiceFromURL = () => {
       const hash = globalThis.location.hash;
       if (!hash.includes('?')) return;
-      
+
       const params = new URLSearchParams(hash.split('?')[1]);
       const servicio = params.get('servicio');
       if (!servicio) return;
-      
-      setSelectedService(decodeURIComponent(servicio));
+
+      setValue('service', decodeURIComponent(servicio), { shouldValidate: true });
       setTimeout(scrollAndFocus, 100);
     };
 
-    // Ejecutar al montar
     updateServiceFromURL();
 
-    // Escuchar cambios en el hash
     globalThis.addEventListener('hashchange', updateServiceFromURL);
 
     const observer = new IntersectionObserver(
@@ -296,18 +170,20 @@ export const Contact: React.FC = () => {
     );
     const sectionNode = sectionRef.current;
     if (sectionNode) observer.observe(sectionNode);
-    
+
     return () => {
       globalThis.removeEventListener('hashchange', updateServiceFromURL);
       if (sectionNode) observer.unobserve(sectionNode);
     };
-  }, []);
+  }, [setValue]);
+
+  const { ref: nameRegRef, ...nameRegProps } = register('name');
 
   return (
     <div className="relative py-24 overflow-hidden" ref={sectionRef}>
       {/* Background Decorators */}
       <div className="absolute top-1/2 left-0 w-[400px] h-[400px] bg-blue-600/10 blur-[120px] rounded-full -translate-y-1/2 -ml-32"></div>
-      
+
       <div className="container mx-auto px-6 relative z-10">
         <div className={`text-center max-w-3xl mx-auto mb-20 transition-all duration-1000 ${
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
@@ -328,29 +204,29 @@ export const Contact: React.FC = () => {
             isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'
           }`}>
             {[
-              { 
+              {
                 id: 'contact-email',
-                icon: <Mail className="w-6 h-6" />, 
-                title: "Email Directo", 
-                value: settings?.contactEmail || "Cargando...", 
+                icon: <Mail className="w-6 h-6" />,
+                title: "Email Directo",
+                value: settings?.contactEmail || "Cargando...",
                 desc: "Respondemos en menos de 2 horas",
                 color: "text-blue-500",
                 loading: isLoadingSettings
               },
-              { 
+              {
                 id: 'contact-whatsapp',
-                icon: <MessageSquare className="w-6 h-6" />, 
-                title: "WhatsApp Business", 
-                value: settings?.whatsappPhone || "Disponible pronto", 
+                icon: <MessageSquare className="w-6 h-6" />,
+                title: "WhatsApp Business",
+                value: settings?.whatsappPhone || "Disponible pronto",
                 desc: "Soporte técnico inmediato",
                 color: "text-emerald-500",
                 loading: isLoadingSettings
               },
-              { 
+              {
                 id: 'contact-location',
-                icon: <MapPin className="w-6 h-6" />, 
-                title: "Nuestras Oficinas", 
-                value: settings?.physicalAddress || "Madrid, España", 
+                icon: <MapPin className="w-6 h-6" />,
+                title: "Nuestras Oficinas",
+                value: settings?.physicalAddress || "Madrid, España",
                 desc: "Hub Tecnológico de Innovación",
                 color: "text-purple-500",
                 loading: isLoadingSettings
@@ -374,26 +250,27 @@ export const Contact: React.FC = () => {
             isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'
           }`}>
             <div className="glass-card p-10 rounded-[3rem] border border-white/5 shadow-2xl relative overflow-hidden">
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label htmlFor="contact-name" className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Nombre Completo</label>
-                    <input 
+                    <input
                       id="contact-name"
-                      ref={nameInputRef}
-                      type="text" 
-                      value={formData.name}
-                      onChange={(e) => handleFieldChange('name', e.target.value)}
-                      onBlur={() => handleFieldBlur('name')}
+                      type="text"
                       placeholder="Ej. Juan Pérez"
                       className={getFieldClassName('name')}
+                      ref={(e) => {
+                        nameRegRef(e);
+                        (nameInputRef as React.MutableRefObject<HTMLInputElement | null>).current = e;
+                      }}
+                      {...nameRegProps}
                     />
-                    {touched.name && validationErrors.name && (
+                    {touchedFields.name && errors.name && (
                       <p className="text-xs text-red-400 ml-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                        ⚠️ {validationErrors.name}
+                        ⚠️ {errors.name.message}
                       </p>
                     )}
-                    {isFieldValid('name') && (
+                    {touchedFields.name && !errors.name && (
                       <p className="text-xs text-blue-400 ml-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
                         ✓ Campo válido
                       </p>
@@ -401,21 +278,19 @@ export const Contact: React.FC = () => {
                   </div>
                   <div className="space-y-2">
                     <label htmlFor="contact-company" className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Empresa</label>
-                    <input 
+                    <input
                       id="contact-company"
                       type="text"
-                      value={formData.company}
-                      onChange={(e) => handleFieldChange('company', e.target.value)}
-                      onBlur={() => handleFieldBlur('company')}
                       placeholder="Ej. Restaurante L'Escale"
                       className={getFieldClassName('company')}
+                      {...register('company')}
                     />
-                    {touched.company && validationErrors.company && (
+                    {touchedFields.company && errors.company && (
                       <p className="text-xs text-red-400 ml-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                        ⚠️ {validationErrors.company}
+                        ⚠️ {errors.company.message}
                       </p>
                     )}
-                    {isFieldValid('company') && (
+                    {touchedFields.company && !errors.company && (
                       <p className="text-xs text-blue-400 ml-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
                         ✓ Campo válido
                       </p>
@@ -425,21 +300,19 @@ export const Contact: React.FC = () => {
 
                 <div className="space-y-2">
                   <label htmlFor="contact-email" className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Correo Electrónico</label>
-                  <input 
+                  <input
                     id="contact-email"
                     type="email"
-                    value={formData.email}
-                    onChange={(e) => handleFieldChange('email', e.target.value)}
-                    onBlur={() => handleFieldBlur('email')}
                     placeholder="juan@empresa.com"
                     className={getFieldClassName('email')}
+                    {...register('email')}
                   />
-                  {touched.email && validationErrors.email && (
+                  {touchedFields.email && errors.email && (
                     <p className="text-xs text-red-400 ml-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                      ⚠️ {validationErrors.email}
+                      ⚠️ {errors.email.message}
                     </p>
                   )}
-                  {isFieldValid('email') && (
+                  {touchedFields.email && !errors.email && (
                     <p className="text-xs text-blue-400 ml-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
                       ✓ Campo válido
                     </p>
@@ -448,28 +321,23 @@ export const Contact: React.FC = () => {
 
                 <div className="space-y-2">
                   <label htmlFor="contact-service" className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Servicio de Interés</label>
-                  <select 
+                  <select
                     id="contact-service"
-                    value={selectedService}
-                    onChange={(e) => {
-                      setSelectedService(e.target.value);
-                      handleFieldChange('service', e.target.value);
-                    }}
-                    onBlur={() => handleFieldBlur('service')}
                     className={getFieldClassName('service', 'appearance-none')}
+                    {...register('service')}
                   >
-                    <option className="bg-[#0d0d1e]" value="Selecciona una opción">Selecciona una opción</option>
-                    <option className="bg-[#0d0d1e]">QRIBAR - Menú Digital</option>
-                    <option className="bg-[#0d0d1e]">Automatización n8n</option>
-                    <option className="bg-[#0d0d1e]">Tarjetas NFC Reseñas</option>
-                    <option className="bg-[#0d0d1e]">Consultoría IA</option>
+                    <option className="bg-[#0d0d1e]" value="">Selecciona una opción</option>
+                    <option className="bg-[#0d0d1e]" value="QRIBAR - Menú Digital">QRIBAR - Menú Digital</option>
+                    <option className="bg-[#0d0d1e]" value="Automatización n8n">Automatización n8n</option>
+                    <option className="bg-[#0d0d1e]" value="Tarjetas NFC Reseñas">Tarjetas NFC Reseñas</option>
+                    <option className="bg-[#0d0d1e]" value="Consultoría IA">Consultoría IA</option>
                   </select>
-                  {touched.service && validationErrors.service && (
+                  {touchedFields.service && errors.service && (
                     <p className="text-xs text-red-400 ml-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                      ⚠️ {validationErrors.service}
+                      ⚠️ {errors.service.message}
                     </p>
                   )}
-                  {isFieldValid('service') && (
+                  {touchedFields.service && !errors.service && serviceValue && (
                     <p className="text-xs text-blue-400 ml-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
                       ✓ Campo válido
                     </p>
@@ -478,32 +346,30 @@ export const Contact: React.FC = () => {
 
                 <div className="space-y-2">
                   <label htmlFor="contact-message" className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">
-                    Mensaje {formData.message.length > 0 && (
-                      <span className="text-gray-600">({formData.message.length}/1000)</span>
+                    Mensaje {messageValue.length > 0 && (
+                      <span className="text-gray-600">({messageValue.length}/1000)</span>
                     )}
                   </label>
-                  <textarea 
+                  <textarea
                     id="contact-message"
-                    value={formData.message}
-                    onChange={(e) => handleFieldChange('message', e.target.value)}
-                    onBlur={() => handleFieldBlur('message')}
                     rows={4}
                     placeholder="Cuéntanos brevemente sobre tu proyecto..."
                     className={getFieldClassName('message', 'resize-none')}
+                    {...register('message')}
                   ></textarea>
-                  {touched.message && validationErrors.message && (
+                  {touchedFields.message && errors.message && (
                     <p className="text-xs text-red-400 ml-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                      ⚠️ {validationErrors.message}
+                      ⚠️ {errors.message.message}
                     </p>
                   )}
-                  {isFieldValid('message') && (
+                  {touchedFields.message && !errors.message && (
                     <p className="text-xs text-blue-400 ml-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
                       ✓ Campo válido
                     </p>
                   )}
                 </div>
 
-                {/* Mensajes de estado */}
+                {/* Status messages */}
                 {submitStatus === 'success' && (
                   <div className="flex items-center gap-3 bg-emerald-500/10 border border-emerald-500/30 rounded-2xl py-4 px-6 animate-in fade-in slide-in-from-top-2 duration-500">
                     <CheckCircle2 className="w-5 h-5 text-emerald-400" />
@@ -521,11 +387,11 @@ export const Contact: React.FC = () => {
                   </div>
                 )}
 
-                <button 
+                <button
                   type="submit"
-                  disabled={!isFormValid() || isSubmitting || isLoadingSettings}
+                  disabled={!isValid || isSubmitting || isLoadingSettings}
                   className={`w-full py-5 rounded-2xl font-bold flex items-center justify-center gap-3 transition-all shadow-xl active:scale-[0.98] group ${
-                    isFormValid() && !isSubmitting && !isLoadingSettings
+                    isValid && !isSubmitting && !isLoadingSettings
                       ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-blue-600/20 cursor-pointer'
                       : 'bg-gray-600/30 text-gray-500 cursor-not-allowed shadow-none'
                   }`}

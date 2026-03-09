@@ -48,7 +48,7 @@
 
 ### Edge Functions Deployed
 
-All 4 Edge Functions redeployed to production with security fixes:
+All 3 Edge Functions redeployed to production with security fixes (test-log deleted as dead code):
 - `chat-with-rag`
 - `gemini-generate`
 - `gemini-embedding`
