@@ -260,14 +260,11 @@ export class SupabaseDocumentRepository implements IDocumentRepository {
       throw new Error('No active session - please log in again');
     }
 
-    // Use env vars or fallback to production URL
-    let supabaseUrl = ENV.SUPABASE_URL;
-    let anonKey = ENV.SUPABASE_ANON_KEY;
-    
-    if (!supabaseUrl) {
-      // Fallback for dev environments where env vars aren't loaded
-      supabaseUrl = 'https://tysjedvujvsmrzzrmesr.supabase.co';
-      anonKey = 'sb_publishable_aIjL5SDhuNg7D0Hi9d9hOA_4XMROc4q';
+    const supabaseUrl = ENV.SUPABASE_URL;
+    const anonKey = ENV.SUPABASE_ANON_KEY;
+
+    if (!supabaseUrl || !anonKey) {
+      throw new Error('Missing Supabase configuration (VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY)');
     }
 
     const response = await fetch(`${supabaseUrl}/functions/v1/gemini-embedding`, {
