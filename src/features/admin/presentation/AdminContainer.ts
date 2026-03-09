@@ -36,7 +36,7 @@ export class AdminContainer {
   public readonly getSettingsUseCase: GetSettingsUseCase;
   public readonly updateSettingsUseCase: UpdateSettingsUseCase;
 
-  constructor(_supabaseUrl: string, _supabaseKey: string) {
+  constructor() {
     // Initialize repositories
     this.documentRepository = new SupabaseDocumentRepository();
     this.authRepository = new SupabaseAuthRepository();
@@ -59,14 +59,7 @@ export class AdminContainer {
  */
 export function getAdminContainer(): AdminContainer {
   if (!containerInstance) {
-    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-    const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-
-    if (!supabaseUrl || !supabaseKey) {
-      throw new Error('Missing Supabase configuration');
-    }
-
-    containerInstance = new AdminContainer(supabaseUrl, supabaseKey);
+    containerInstance = new AdminContainer();
   }
 
   return containerInstance;

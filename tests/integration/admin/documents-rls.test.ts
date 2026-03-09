@@ -92,8 +92,9 @@ describeIfConfigured('Documents Table - RLS Policies', () => {
         .update({ content: 'Unauthorized update' })
         .eq('id', testDocumentId);
 
-      expect(error).toBeNull();
-      expect(data).toBeNull();
+      // anon role has no UPDATE grant on documents table (revoked in security audit)
+      expect(error).not.toBeNull();
+      expect(error?.code).toBe('42501');
     });
 
     test('should deny anonymous DELETE on documents', async () => {
@@ -102,8 +103,9 @@ describeIfConfigured('Documents Table - RLS Policies', () => {
         .delete()
         .eq('id', testDocumentId);
 
-      expect(error).toBeNull();
-      expect(data).toBeNull();
+      // anon role has no DELETE grant on documents table (revoked in security audit)
+      expect(error).not.toBeNull();
+      expect(error?.code).toBe('42501');
     });
   });
 

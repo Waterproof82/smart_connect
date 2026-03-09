@@ -8,6 +8,19 @@ import { supabase } from '@shared/supabaseClient';
 import { getAppSettings } from '@shared/services/settingsService';
 
 // ====================================
+// SESSION IDENTIFIER (per-tab rate limiting)
+// ====================================
+function getSessionIdentifier(): string {
+  const key = 'sc_chat_session_id';
+  let sessionId = sessionStorage.getItem(key);
+  if (!sessionId) {
+    sessionId = `s_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
+    sessionStorage.setItem(key, sessionId);
+  }
+  return sessionId;
+}
+
+// ====================================
 // DEPENDENCY INJECTION
 // ====================================
 const container = createChatbotContainer(supabase);
@@ -77,9 +90,8 @@ export const ExpertAssistant: React.FC = () => {
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
 
-    // ✅ Security: Rate limiting (OWASP A04:2021 - Insecure Design)
-    // Note: Using 'anonymous' identifier - can be enhanced with actual user ID or IP
-    const userIdentifier = 'anonymous';
+    // ✅ Security: Rate limiting per session (OWASP A04:2021 - Insecure Design)
+    const userIdentifier = getSessionIdentifier();
     const isAllowed = await rateLimiter.checkLimit(userIdentifier, RateLimitPresets.CHATBOT);
 
     if (!isAllowed) {
