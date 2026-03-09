@@ -258,7 +258,11 @@ private mapToDomain(row: Record<string, unknown>): Document {
 
 async generateEmbedding(content: string): Promise<number[]> {
   const { data: { session } } = await this.client.auth.getSession();
-  
+
+  if (!session?.access_token) {
+    throw new Error('No active session - please log in again');
+  }
+
   const supabaseUrl = ENV.SUPABASE_URL;
   const anonKey = ENV.SUPABASE_ANON_KEY;
 
@@ -266,18 +270,24 @@ async generateEmbedding(content: string): Promise<number[]> {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'apikey': anonKey, // ESTO abre la puerta del Gateway
-      'Authorization': `Bearer ${session?.access_token}` // ESTO valida tu rol admin
+      'apikey': anonKey,
+      'Authorization': `Bearer ${session.access_token}`,
     },
     body: JSON.stringify({ text: content })
   });
 
+  const text = await response.text();
+
   if (!response.ok) {
-    const err = await response.json();
-    throw new Error(err.error || 'Error en la autenticación de la función');
+    let errorMsg = `Embedding failed (${response.status})`;
+    try {
+      const err = JSON.parse(text);
+      errorMsg = err.error || errorMsg;
+    } catch { /* non-JSON error body */ }
+    throw new Error(errorMsg);
   }
 
-  const data = await response.json();
+  const data = JSON.parse(text);
   return data.embedding;
 }
 
