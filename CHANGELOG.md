@@ -5,6 +5,38 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased] - 2026-03-09
+
+### Security
+- **CORS hardening (OWASP A05):** Replaced wildcard `*` with origin whitelist in 4 Edge Functions (chat-with-rag, gemini-generate, gemini-embedding, test-log)
+- **API key exposure (OWASP A02):** Moved Gemini API key from URL param `?key=` to header `x-goog-api-key` in 3 Edge Functions
+- **Error information leakage (OWASP A05):** Removed stack traces, debug info, and API key prefix from error responses in gemini-generate
+- **Input validation (OWASP A03):** Added query max 2000 chars and history max 20 messages in chat-with-rag
+- **Encryption fallback (OWASP A02):** Removed hardcoded encryption key in secureStorage.ts; data left unencrypted if env var not set
+- **URL sanitization:** `sanitizeURL()` no longer prepends `https://` to unknown protocols, returns empty string
+- **Email validation:** Added 254-char max per RFC 5321 in `isValidEmail()`
+- **Phone validation:** Added 20-char input max and 15-digit max per E.164 in `isValidPhone()`
+- **RLS bypass fix (OWASP A01):** Revoked EXECUTE on `insert_document`, `insert_document_with_embedding`, `batch_insert_document` from PUBLIC/anon/authenticated; granted only to service_role
+- **Unused indexes cleanup:** Dropped 5 unused indexes (idx_documents_source, idx_documents_embedding, idx_security_logs_type, idx_security_logs_user_id, idx_security_logs_severity)
+
+### Fixed
+- **Logger:** `debug()` now uses `console.debug()` and `info()` uses `console.info()` (both were incorrectly using `console.warn()`)
+- **SecurityLogger:** INFO-level events now use `console.info()` instead of `console.warn()`
+- **Clean Architecture violation:** ExpertAssistantWithRAG now uses `getAppSettings()` service instead of direct Supabase query
+
+### Changed
+- **DRY - parseEmbedding():** Extracted shared function in SupabaseDocumentRepository replacing 4 duplicated embedding parsing blocks
+- **DRY - createSecurityLogger():** Created `NoOpSecurityLogger.ts` with Proxy pattern, replacing 2 duplicated mock SecurityLogger objects in sanitizer.ts and rateLimiter.ts
+
+### Removed
+- Deleted `train_rag.js` (617-line orphaned Node.js script, replaced by Edge Functions)
+- Deleted `example.test.ts` (placeholder test with no assertions)
+- Deleted `abTestUtils.ts` (zero imports across codebase)
+- Deleted `circuitBreaker.ts` (zero imports across codebase)
+- Deleted `20260308000000_fix_embedding_cache_anon_rls.sql` (referenced non-existent table)
+- Removed dependencies: `express`, `cors`, `node-fetch`
+- Moved `dotenv` to devDependencies
+- Cleaned `shared/types/index.ts` placeholder export
 
 ### Changed
 - Updated `README.md` to reflect latest implementations and documentation from `docs/` (RAG, Edge Functions, Webhook, Security, Production Checklist, Logging, Admin Panel, Dependency Policy, Architecture Compliance, Vercel setup).

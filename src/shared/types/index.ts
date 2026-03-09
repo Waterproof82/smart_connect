@@ -3,4 +3,5 @@
  * @module shared/types
  */
 
-export const placeholder = true;
+// Add shared type definitions here as needed
+export {};

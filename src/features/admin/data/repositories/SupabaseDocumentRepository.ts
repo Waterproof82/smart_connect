@@ -19,6 +19,28 @@ import { Document } from '../../domain/entities/Document';
 // Type alias for embedding data (can be array or JSON string from Supabase)
 type EmbeddingData = number[] | string | null;
 
+/**
+ * Parses embedding data from Supabase (may come as JSON string or array).
+ * Returns validated 768-dimension array or undefined.
+ */
+function parseEmbedding(raw: EmbeddingData, docId?: string | number): number[] | undefined {
+  let embedding: EmbeddingData = raw;
+
+  if (typeof embedding === 'string') {
+    try {
+      embedding = JSON.parse(embedding) as number[];
+    } catch (e) {
+      console.error(`Failed to parse embedding for document ${docId ?? 'unknown'}:`, e);
+      return undefined;
+    }
+  }
+
+  if (embedding && Array.isArray(embedding) && embedding.length === 768) {
+    return embedding;
+  }
+  return undefined;
+}
+
 export class SupabaseDocumentRepository implements IDocumentRepository {
   private readonly client: SupabaseClient = supabase;
 
@@ -70,23 +92,7 @@ export class SupabaseDocumentRepository implements IDocumentRepository {
 
     // Mapear a entidades de dominio
     const documents = (data || []).map((row: Record<string, unknown>) => {
-      // Validar embedding (debe ser array de 768 dimensiones o null)
-      let embedding: EmbeddingData = row.embedding as EmbeddingData;
-      
-      // Si el embedding es un string, parsearlo
-      if (typeof embedding === 'string') {
-        try {
-          embedding = JSON.parse(embedding) as number[];
-        } catch (e) {
-          const docId = typeof row.id === 'string' || typeof row.id === 'number' ? row.id : 'unknown';
-          console.error(`Failed to parse embedding for document ${docId}:`, e);
-          embedding = null;
-        }
-      }
-      
-      const validEmbedding = embedding && Array.isArray(embedding) && embedding.length === 768 
-        ? embedding 
-        : undefined;
+      const validEmbedding = parseEmbedding(row.embedding as EmbeddingData, row.id as string);
 
       return Document.create({
         id: row.id as string,
@@ -125,22 +131,7 @@ export class SupabaseDocumentRepository implements IDocumentRepository {
       throw new Error(`Failed to fetch document: ${error.message}`);
     }
 
-    // Validar embedding
-    let embedding: EmbeddingData = data.embedding as EmbeddingData;
-    
-    // Si el embedding es un string, parsearlo
-    if (typeof embedding === 'string') {
-      try {
-        embedding = JSON.parse(embedding) as number[];
-      } catch (e) {
-        console.error(`Failed to parse embedding for document ${id}:`, e);
-        embedding = null;
-      }
-    }
-    
-    const validEmbedding = embedding && Array.isArray(embedding) && embedding.length === 768 
-      ? embedding 
-      : undefined;
+    const validEmbedding = parseEmbedding(data.embedding as EmbeddingData, id);
 
     return Document.create({
       id: data.id,
@@ -259,19 +250,7 @@ async update(id: string, content: string, source?: string, metadata?: Record<str
  * Método privado para convertir la fila de la DB a la Entidad Document
  */
 private mapToDomain(row: Record<string, unknown>): Document {
-  let embedding: number[] | undefined;
-  if (typeof row.embedding === 'string') {
-    try {
-      embedding = JSON.parse(row.embedding);
-    } catch {
-      embedding = undefined;
-    }
-  } else if (Array.isArray(row.embedding)) {
-    embedding = row.embedding as number[];
-  }
-
-  // Validar dimensiones del embedding
-  const validEmbedding = embedding?.length === 768 ? embedding : undefined;
+  const validEmbedding = parseEmbedding(row.embedding as EmbeddingData, row.id as string);
 
   return Document.create({
     id: row.id as string,
@@ -326,11 +305,7 @@ async generateEmbedding(content: string): Promise<number[]> {
       throw new Error(`Failed to create document: ${error.message}`);
     }
 
-    // Validar embedding
-    const embedding = data.embedding as number[] | null;
-    const validEmbedding = embedding && Array.isArray(embedding) && embedding.length === 768 
-      ? embedding 
-      : undefined;
+    const validEmbedding = parseEmbedding(data.embedding as EmbeddingData, data.id);
 
     return Document.create({
       id: data.id,

@@ -31,7 +31,15 @@ function checkRateLimit(userId: string): { allowed: boolean; remaining: number }
 
 Deno.serve(async (req) => {
   // CORS headers
-  const allowedOrigin = Deno.env.get('ALLOWED_ORIGIN') || '*';
+  const ALLOWED_ORIGINS = [
+    'https://smartconnect.ai',
+    'https://www.smartconnect.ai',
+    'https://smart-connect-landing.vercel.app',
+    'http://localhost:5173',
+    'http://localhost:3000',
+  ];
+  const origin = req.headers.get('origin') || '';
+  const allowedOrigin = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
   const corsHeaders = {
     'Access-Control-Allow-Origin': allowedOrigin,
     'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform',
@@ -131,11 +139,12 @@ Deno.serve(async (req) => {
     }
 
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`,
+      'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent',
       {
         method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json'
+        headers: {
+          'Content-Type': 'application/json',
+          'x-goog-api-key': GEMINI_API_KEY,
         },
         body: JSON.stringify({
           contents: contents.map(c => ({
@@ -152,14 +161,7 @@ Deno.serve(async (req) => {
     // Si hay error de Gemini, agregarlo al response
     if (data.error) {
       return new Response(
-        JSON.stringify({ 
-          error: data.error,
-          _debug: {
-            keyExists: !!GEMINI_API_KEY,
-            keyLength: GEMINI_API_KEY?.length || 0,
-            keyPrefix: GEMINI_API_KEY?.substring(0, 15) || 'N/A'
-          }
-        }),
+        JSON.stringify({ error: 'Generation failed' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
@@ -171,11 +173,7 @@ Deno.serve(async (req) => {
   } catch (error) {
     console.error('Edge Function error:', error);
     return new Response(
-      JSON.stringify({ 
-        error: error.message,
-        stack: error.stack,
-        type: error.constructor.name
-      }),
+      JSON.stringify({ error: 'Internal server error' }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }

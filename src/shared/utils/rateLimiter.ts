@@ -8,25 +8,7 @@
  */
 
 
-import { SecurityLogger } from '@core/domain/usecases/SecurityLogger';
-import { ENV } from '@shared/config/env.config';
-
-// Factory: Only instantiate SecurityLogger if envs are present
-function getSecurityLogger(): SecurityLogger {
-  if (ENV.SUPABASE_URL && ENV.SUPABASE_ANON_KEY) {
-    return new SecurityLogger();
-  }
-  // Fallback: Mock SecurityLogger with noop methods
-  return {
-    logSecurityEvent: async () => {},
-    logAuthFailure: async () => {},
-    logAuthSuccess: async () => {},
-    logRateLimitExceeded: async () => {},
-    logXSSAttempt: async () => {},
-    logSuspiciousQuery: async () => {},
-    logUnauthorizedAccess: async () => {},
-  } as unknown as SecurityLogger;
-}
+import { createSecurityLogger } from '@core/domain/usecases/NoOpSecurityLogger';
 
 /**
  * Rate limit configuration
@@ -108,7 +90,7 @@ export class RateLimiter {
     // Check if limit exceeded
     if (entry.timestamps.length >= finalConfig.maxRequests) {
       // Log security event
-      getSecurityLogger().logRateLimitExceeded({
+      createSecurityLogger().logRateLimitExceeded({
         userId: identifier,
         endpoint: 'rate-limit',
         limit: finalConfig.maxRequests,

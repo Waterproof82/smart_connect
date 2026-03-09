@@ -73,7 +73,7 @@ export class SecurityLogger extends ConsoleLogger {
     } else if (securityLog.severity === 'WARNING') {
       console.warn('🔒 SECURITY WARNING:', formattedLog);
     } else {
-      console.warn('🔒 SECURITY EVENT:', formattedLog);
+      console.info('🔒 SECURITY EVENT:', formattedLog);
     }
 
     // Persist to database
