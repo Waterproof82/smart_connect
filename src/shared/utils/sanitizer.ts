@@ -15,28 +15,10 @@ if (globalThis.window === undefined && globalThis.global !== undefined) {
   domPurifyInstance = DOMPurify; // Use default, will work in browser context
 }
 
-import { SecurityLogger } from '@core/domain/usecases/SecurityLogger';
-import { ENV } from '@shared/config/env.config';
-
-// Factory: Only instantiate SecurityLogger if envs are present
-function getSecurityLogger(): SecurityLogger {
-  if (ENV.SUPABASE_URL && ENV.SUPABASE_ANON_KEY) {
-    return new SecurityLogger();
-  }
-  // Fallback: Mock SecurityLogger with noop methods
-  return {
-    logSecurityEvent: async () => {},
-    logAuthFailure: async () => {},
-    logAuthSuccess: async () => {},
-    logRateLimitExceeded: async () => {},
-    logXSSAttempt: async () => {},
-    logSuspiciousQuery: async () => {},
-    logUnauthorizedAccess: async () => {},
-  } as unknown as SecurityLogger;
-}
+import { createSecurityLogger } from '@core/domain/usecases/NoOpSecurityLogger';
 
 // Singleton instance for logging security events
-const securityLogger = getSecurityLogger();
+const securityLogger = createSecurityLogger();
 
 /**
  * XSS attack patterns to detect suspicious input
@@ -154,6 +136,7 @@ export function sanitizeHTML(
  * @returns true if valid email format
  */
 export function isValidEmail(email: string): boolean {
+  if (!email || email.length > 254) return false; // RFC 5321 max length
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 }
@@ -165,12 +148,10 @@ export function isValidEmail(email: string): boolean {
  * @returns true if valid phone format
  */
 export function isValidPhone(phone: string): boolean {
-  // Accepts: +1234567890, 123-456-7890, (123) 456-7890, 10+ digits only
   if (typeof phone !== 'string') return false;
+  if (phone.length > 20) return false; // Max raw input length
   const digits = phone.replaceAll(/\D/g, '');
-  if (digits.length < 10) return false;
-  // Accepts: +1234567890, 123-456-7890, (123) 456-7890
-  // Further simplified regex: matches +1234567890, 1234567890, 123-456-7890, (123)4567890
+  if (digits.length < 10 || digits.length > 15) return false; // ITU-T E.164
   const phoneRegex = /^\+?\d{10,15}$|^\d{10,15}$/;
   return phoneRegex.test(digits) || phoneRegex.test(phone);
 }
@@ -199,8 +180,8 @@ export function sanitizeURL(url: string): string {
   // Only allow http, https, mailto, tel
   const validProtocols = ['http://', 'https://', 'mailto:', 'tel:'];
   if (!validProtocols.some(protocol => lowerUrl.startsWith(protocol))) {
-    // Assume https if no protocol
-    return `https://${url}`;
+    // Reject unknown protocols instead of blindly prepending https://
+    return '';
   }
 
   return url;

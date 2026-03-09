@@ -5,11 +5,11 @@ import { MessageEntity, ChatSessionEntity } from '../domain/entities';
 import { sanitizeInput } from '@shared/utils/sanitizer';
 import { rateLimiter, RateLimitPresets } from '@shared/utils/rateLimiter';
 import { supabase } from '@shared/supabaseClient';
+import { getAppSettings } from '@shared/services/settingsService';
 
 // ====================================
 // DEPENDENCY INJECTION
 // ====================================
-// supabase instance is now imported from shared/supabaseClient
 const container = createChatbotContainer(supabase);
 
 // ====================================
@@ -22,27 +22,18 @@ export const ExpertAssistant: React.FC = () => {
   const [whatsappPhone, setWhatsappPhone] = useState<string>('');
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Fetch WhatsApp number from settings
+  // Fetch WhatsApp number from settings (via shared service, not direct Supabase)
   useEffect(() => {
     const fetchWhatsApp = async () => {
-      const { data } = await supabase
-        .from('app_settings')
-        .select('whatsapp_phone')
-        .eq('id', 'global')
-        .single();
-      
-      if (data?.whatsapp_phone) {
-        // Remove any non-digit characters except +
-        const cleanPhone = data.whatsapp_phone.replaceAll(/[^\d+]/g, '');
+      const settings = await getAppSettings();
+      if (settings.whatsappPhone) {
+        const cleanPhone = settings.whatsappPhone.replaceAll(/[^\d+]/g, '');
         setWhatsappPhone(cleanPhone);
       }
     };
     fetchWhatsApp();
   }, []);
-  
-  // A/B Testing: Assign user to test group
-  // const abTestGroup = getABTestGroup();
-  
+
   // Use domain entities for chat session management
   const chatSessionRef = useRef(new ChatSessionEntity());
 

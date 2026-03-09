@@ -8,9 +8,14 @@
  */
 
 import { ConsoleLogger } from './Logger';
-import { SupabaseClient } from '@supabase/supabase-js';
-import { supabase } from '../../../shared/supabaseClient';
 
+/**
+ * Interface for persisting security logs (Dependency Inversion Principle).
+ * Domain layer defines the contract; infrastructure implements it.
+ */
+export interface ISecurityLogPersistence {
+  insert(log: Record<string, unknown>): Promise<{ error: { message: string } | null }>;
+}
 
 export type SecurityEventType =
   | 'AUTH_FAILURE'
@@ -37,13 +42,11 @@ interface SecurityLogEntry extends SecurityEvent {
 }
 
 export class SecurityLogger extends ConsoleLogger {
-  private readonly supabase: SupabaseClient = supabase;
+  private readonly persistence?: ISecurityLogPersistence;
 
-  constructor() {
+  constructor(persistence?: ISecurityLogPersistence) {
     super('[Security]');
-    // Initialize Supabase client with anon key
-    // RLS policies ensure only service role can read logs
-    // supabase instance is now imported from shared/supabaseClient
+    this.persistence = persistence;
   }
 
   /**
@@ -73,7 +76,7 @@ export class SecurityLogger extends ConsoleLogger {
     } else if (securityLog.severity === 'WARNING') {
       console.warn('🔒 SECURITY WARNING:', formattedLog);
     } else {
-      console.warn('🔒 SECURITY EVENT:', formattedLog);
+      console.info('🔒 SECURITY EVENT:', formattedLog);
     }
 
     // Persist to database
@@ -245,8 +248,10 @@ export class SecurityLogger extends ConsoleLogger {
    * - Sensitive data is sanitized before storage
    */
   private async sendToDatabase(log: SecurityLogEntry): Promise<void> {
+    if (!this.persistence) return;
+
     try {
-      const { error } = await this.supabase.from('security_logs').insert({
+      const { error } = await this.persistence.insert({
         event_type: log.type,
         user_id: log.userId || null,
         ip_address: log.ip || null,
@@ -258,12 +263,10 @@ export class SecurityLogger extends ConsoleLogger {
       });
 
       if (error) {
-        console.error('❌ Failed to persist security log to database:', error.message);
-        // Don't throw - logging should never break app flow
+        console.error('Failed to persist security log to database:', error.message);
       }
     } catch (err) {
-      console.error('❌ Exception while persisting security log:', err);
-      // Don't throw - logging should never break app flow
+      console.error('Exception while persisting security log:', err);
     }
   }
 

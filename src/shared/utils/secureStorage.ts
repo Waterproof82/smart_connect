@@ -18,7 +18,11 @@ import CryptoJS from 'crypto-js';
  * Encryption key derived from app name + domain
  * In production, this should be an environment variable
  */
-const ENCRYPTION_KEY = import.meta.env.VITE_STORAGE_ENCRYPTION_KEY || 'smartconnect-ai-2026-secure-key';
+const ENCRYPTION_KEY = import.meta.env.VITE_STORAGE_ENCRYPTION_KEY;
+
+if (!ENCRYPTION_KEY && typeof window !== 'undefined') {
+  console.warn('SecureStorage: VITE_STORAGE_ENCRYPTION_KEY not configured. Data will not be encrypted.');
+}
 
 /**
  * Storage types
@@ -36,6 +40,7 @@ function getStorage(type: StorageType): Storage {
  * Encrypts data using AES-256
  */
 function encrypt(data: string): string {
+  if (!ENCRYPTION_KEY) return data;
   try {
     return CryptoJS.AES.encrypt(data, ENCRYPTION_KEY).toString();
   } catch (error) {
@@ -48,6 +53,7 @@ function encrypt(data: string): string {
  * Decrypts AES-256 encrypted data
  */
 function decrypt(encryptedData: string): string {
+  if (!ENCRYPTION_KEY) return encryptedData;
   try {
     const bytes = CryptoJS.AES.decrypt(encryptedData, ENCRYPTION_KEY);
     const decrypted = bytes.toString(CryptoJS.enc.Utf8);

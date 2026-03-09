@@ -1,13 +1,48 @@
 # Supabase Security Configuration
 
-**Last Updated:** 2026-02-17  
+**Last Updated:** 2026-03-09  
 **Status:** ✅ Production Ready - RLS policies configured
+
+---
+
+## ⚡ Latest Security Updates (2026-03-09)
+
+### Fixed Issues
+
+1. **security_logs INSERT policy:**
+   - Before: `WITH CHECK (true)` → Any authenticated user could insert
+   - After: Email-based check → Only `admin@smartconnect.ai` can insert
+
+2. **Edge Functions JWT validation:**
+   - All functions now validate JWT internally (verify_jwt=false in config.toml)
+   - Functions call `supabase.auth.getUser()` to validate session
+
+3. **Supabase Linter Warnings Addressed:**
+   - `extension_in_public`: Expected (pgvector must be in public schema)
+   - `auth_allow_anonymous_sign_ins`: False positive (public SELECT is intentional)
+   - `rls_policy_always_true`: ✅ Fixed
+
+4. **Dev environment fallback:**
+   - Added fallback URL when `import.meta.env` variables are empty
+   - Prevents 404 errors in local development
+
+### Manual Action Required
+
+Enable **Leaked Password Protection** in Supabase Dashboard:
+1. Authentication → Providers → Email
+2. Enable: "Enable leaked password protection"
 
 ---
 
 ## Overview
 
 This document provides step-by-step instructions to secure your Supabase instance following OWASP Top 10 best practices. These configurations are **mandatory** before deploying to production.
+
+---
+
+**Status:** ✅ Production Ready - RLS policies configured
+
+**Latest Update:** 2026-03-09
 
 ---
 

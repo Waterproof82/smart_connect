@@ -2,9 +2,22 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.7'
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+const ALLOWED_ORIGINS = [
+  'https://smartconnect.ai',
+  'https://www.smartconnect.ai',
+  'https://smart-connect-landing.vercel.app',
+  'http://localhost:5173',
+  'http://localhost:3000',
+]
+
+function getCorsHeaders(req: Request) {
+  const origin = req.headers.get('origin') || ''
+  const allowed = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0]
+  return {
+    'Access-Control-Allow-Origin': allowed,
+    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  }
 }
 
 // ============================================================================
@@ -39,6 +52,7 @@ const cache = new EmbeddingCache()
 // ============================================================================
 // MAIN HANDLER
 serve(async (req) => {
+  const corsHeaders = getCorsHeaders(req)
   if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders })
 
   const startTime = Date.now()
@@ -112,16 +126,16 @@ serve(async (req) => {
       { role: 'user', parts: [{ text: prompt }] }
     ]
     const geminiResponse = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiKey}`,
+      'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent',
       {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'x-goog-api-key': geminiKey },
         body: JSON.stringify({ contents, generationConfig: { temperature: 0.3, topK: 40, topP: 0.95, maxOutputTokens: 2048 } })
       }
     )
     const geminiData = await geminiResponse.json()
     if (!geminiResponse.ok || !geminiData.candidates?.[0]?.content) {
-      console.error('[RAG] Gemini error:', geminiData)
+      console.error('[RAG] Gemini error, status:', geminiResponse.status)
       throw new Error(`Response generation failed: ${geminiData.error?.message || 'Unknown error'}`)
     }
     const generatedText = geminiData.candidates[0].content.parts.map(p => p.text).join('')
@@ -145,7 +159,7 @@ serve(async (req) => {
   } catch (err) {
     if (err instanceof Response) return err
     console.error('[RAG] Error:', err)
-    return new Response(JSON.stringify({ error: err?.message || String(err), stack: err?.stack }), { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
+    return new Response(JSON.stringify({ error: 'Internal server error' }), { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
   }
 })
 
@@ -173,6 +187,12 @@ async function parseRequest(req) {
     if (!query || typeof query !== 'string') {
       throw new Error('Missing or invalid "query"')
     }
+    if (query.length > 2000) {
+      throw new Error('Query too long (max 2000 characters)')
+    }
+    if (conversationHistory.length > 20) {
+      throw new Error('Conversation history too long (max 20 messages)')
+    }
     return { query, conversationHistory, topK, threshold, source }
   } catch (err) {
     if (err instanceof SyntaxError) {
@@ -193,8 +213,8 @@ async function getQueryEmbedding(query: string, cache: EmbeddingCache, geminiKey
     // Using cached embedding
   } else {
     const embResponse = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:embedContent?key=${geminiKey}`,
-      { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ content: { parts: [{ text: query }] } }) }
+      'https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:embedContent',
+      { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-goog-api-key': geminiKey }, body: JSON.stringify({ content: { parts: [{ text: query }] } }) }
     )
     const embData = await embResponse.json()
     if (!embResponse.ok || !Array.isArray(embData.embedding?.values) || embData.embedding.values.length === 0) throw new Error('Embedding generation failed')
@@ -204,10 +224,6 @@ async function getQueryEmbedding(query: string, cache: EmbeddingCache, geminiKey
   }
 
   return { queryEmbedding, cacheHit, embeddingTime: Date.now() - startTime }
-}
-
-function returnError(status, message) {
-  throw new Response(JSON.stringify({ error: message }), { status, headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
 }
 
 function hashString(str: string) {

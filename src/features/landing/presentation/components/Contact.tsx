@@ -28,19 +28,6 @@ export const Contact: React.FC = () => {
   const [settings, setSettings] = useState<AppSettings | null>(null);
   const [isLoadingSettings, setIsLoadingSettings] = useState(true);
   
-  // Runtime validation of webhook URL (from BBDD only)
-  useEffect(() => {
-    if (isLoadingSettings || !settings) return;
-    
-    const isDevelopment = import.meta.env.DEV;
-    const webhookUrl = settings.n8nWebhookUrl;
-    
-    // Only warn in production if no webhook configured
-    if (!isDevelopment && (!webhookUrl || webhookUrl.includes('placeholder'))) {
-      // Webhook not configured - leads won't be sent
-    }
-  }, [settings, isLoadingSettings]);
-
   // Fetch settings from Supabase
   useEffect(() => {
     const fetchSettings = async () => {
@@ -142,39 +129,16 @@ export const Contact: React.FC = () => {
     setTouched(prev => ({ ...prev, [field]: true }));
   };
 
-  // Obtener clase CSS para input según estado de validación
-  const getInputClassName = (field: keyof FormData): string => {
-    const baseClasses = 'w-full border rounded-2xl py-4 px-6 outline-none transition-all text-sm';
+  // CSS class helper for validated form fields
+  const getFieldClassName = (field: keyof FormData, extra = ''): string => {
+    const base = `w-full border rounded-2xl py-4 px-6 outline-none transition-all text-sm ${extra}`.trim();
     if (hasFieldError(field)) {
-      return `${baseClasses} bg-red-500/10 border-red-500/50 focus:border-red-500`;
+      return `${base} bg-red-500/10 border-red-500/50 focus:border-red-500`;
     }
     if (isFieldValid(field)) {
-      return `${baseClasses} bg-blue-500/10 border-blue-500/50 focus:border-blue-500`;
+      return `${base} bg-blue-500/10 border-blue-500/50 focus:border-blue-500`;
     }
-    return `${baseClasses} bg-white/5 border-white/10 focus:border-blue-500/50`;
-  };
-
-  // Obtener clase CSS para select/textarea
-  const getSelectClassName = (field: keyof FormData): string => {
-    const baseClasses = 'w-full border rounded-2xl py-4 px-6 outline-none transition-all text-sm';
-    if (hasFieldError(field)) {
-      return `${baseClasses} bg-red-500/10 border-red-500/50 focus:border-red-500 appearance-none`;
-    }
-    if (isFieldValid(field)) {
-      return `${baseClasses} bg-blue-500/10 border-blue-500/50 focus:border-blue-500 appearance-none`;
-    }
-    return `${baseClasses} bg-white/5 border-white/10 focus:border-blue-500/50 appearance-none`;
-  };
-
-  const getTextareaClassName = (field: keyof FormData): string => {
-    const baseClasses = 'w-full border rounded-2xl py-4 px-6 outline-none transition-all text-sm resize-none';
-    if (hasFieldError(field)) {
-      return `${baseClasses} bg-red-500/10 border-red-500/50 focus:border-red-500`;
-    }
-    if (isFieldValid(field)) {
-      return `${baseClasses} bg-blue-500/10 border-blue-500/50 focus:border-blue-500`;
-    }
-    return `${baseClasses} bg-white/5 border-white/10 focus:border-blue-500/50`;
+    return `${base} bg-white/5 border-white/10 focus:border-blue-500/50`;
   };
 
   // Validar que todos los campos estén completos y sin errores
@@ -422,7 +386,7 @@ export const Contact: React.FC = () => {
                       onChange={(e) => handleFieldChange('name', e.target.value)}
                       onBlur={() => handleFieldBlur('name')}
                       placeholder="Ej. Juan Pérez"
-                      className={getInputClassName('name')}
+                      className={getFieldClassName('name')}
                     />
                     {touched.name && validationErrors.name && (
                       <p className="text-xs text-red-400 ml-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
@@ -444,7 +408,7 @@ export const Contact: React.FC = () => {
                       onChange={(e) => handleFieldChange('company', e.target.value)}
                       onBlur={() => handleFieldBlur('company')}
                       placeholder="Ej. Restaurante L'Escale"
-                      className={getInputClassName('company')}
+                      className={getFieldClassName('company')}
                     />
                     {touched.company && validationErrors.company && (
                       <p className="text-xs text-red-400 ml-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
@@ -468,7 +432,7 @@ export const Contact: React.FC = () => {
                     onChange={(e) => handleFieldChange('email', e.target.value)}
                     onBlur={() => handleFieldBlur('email')}
                     placeholder="juan@empresa.com"
-                    className={getInputClassName('email')}
+                    className={getFieldClassName('email')}
                   />
                   {touched.email && validationErrors.email && (
                     <p className="text-xs text-red-400 ml-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
@@ -492,7 +456,7 @@ export const Contact: React.FC = () => {
                       handleFieldChange('service', e.target.value);
                     }}
                     onBlur={() => handleFieldBlur('service')}
-                    className={getSelectClassName('service')}
+                    className={getFieldClassName('service', 'appearance-none')}
                   >
                     <option className="bg-[#0d0d1e]" value="Selecciona una opción">Selecciona una opción</option>
                     <option className="bg-[#0d0d1e]">QRIBAR - Menú Digital</option>
@@ -525,7 +489,7 @@ export const Contact: React.FC = () => {
                     onBlur={() => handleFieldBlur('message')}
                     rows={4}
                     placeholder="Cuéntanos brevemente sobre tu proyecto..."
-                    className={getTextareaClassName('message')}
+                    className={getFieldClassName('message', 'resize-none')}
                   ></textarea>
                   {touched.message && validationErrors.message && (
                     <p className="text-xs text-red-400 ml-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
