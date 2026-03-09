@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased] - 2026-03-09
 
 ### Security
+- **RLS security_logs fix:** Changed INSERT policy from `WITH CHECK (true)` (any authenticated user) to email-based check (`admin@smartconnect.ai` only)
+- **Edge Functions JWT validation:** All functions now do internal JWT validation (verify_jwt=false in config.toml, but function code validates session via `getUser()`)
 - **CORS hardening (OWASP A05):** Replaced wildcard `*` with origin whitelist in 4 Edge Functions (chat-with-rag, gemini-generate, gemini-embedding, test-log)
 - **API key exposure (OWASP A02):** Moved Gemini API key from URL param `?key=` to header `x-goog-api-key` in 3 Edge Functions
 - **Error information leakage (OWASP A05):** Removed stack traces, debug info, and API key prefix from error responses in gemini-generate
@@ -20,6 +22,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Unused indexes cleanup:** Dropped 5 unused indexes (idx_documents_source, idx_documents_embedding, idx_security_logs_type, idx_security_logs_user_id, idx_security_logs_severity)
 
 ### Fixed
+- **Critical Syntax Bug:** Moved `update()`, `mapToDomain()`, and `generateEmbedding()` methods INSIDE the `SupabaseDocumentRepository` class (were incorrectly defined outside the class)
+- **Supabase Functions 404 Fix:** Added `gemini-embedding` to `config.toml` with `verify_jwt=false`; created missing `deno.json` import map
+- **Dev Server URL Fallback:** Added fallback URL in `generateEmbedding()` when `import.meta.env` variables are empty (common in dev environments)
 - **Logger:** `debug()` now uses `console.debug()` and `info()` uses `console.info()` (both were incorrectly using `console.warn()`)
 - **SecurityLogger:** INFO-level events now use `console.info()` instead of `console.warn()`
 - **Clean Architecture violation:** ExpertAssistantWithRAG now uses `getAppSettings()` service instead of direct Supabase query

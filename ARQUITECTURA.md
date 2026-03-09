@@ -355,9 +355,75 @@ DevTools Network Tab:
 Request URL: https://tysjedvujvsmrzzrmesr.supabase.co/functions/v1/gemini-embedding
 Request Headers:
   Authorization: Bearer eyJhbGciOiJI... (Supabase ANON_KEY, pública y segura)
-                         ↑↑↑↑↑↑↑↑↑↑↑↑
+                         ↑↑↑↑↑↑↑↑↑↑↑
                          ✅ NO EXPONE GEMINI_API_KEY
 ```
+
+---
+
+### 🛡️ Edge Functions Security (2026-03-09)
+
+Todas las Edge Functions implementan seguridad multi-capa:
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    SEGURIDAD EN CAPAS                            │
+├─────────────────────────────────────────────────────────────────┤
+│ 1. Gateway (config.toml)                                         │
+│    verify_jwt = false (validación interna en cada función)      │
+│                                                                  │
+│ 2. Función (código)                                             │
+│    - Validación de Authorization header                         │
+│    - Supabase auth.getUser() para validar sesión               │
+│    - Verificación de email específico (admin@smartconnect.ai) │
+│                                                                  │
+│ 3. RLS (Base de datos)                                         │
+│    - SELECT: público (anon + authenticated)                    │
+│    - INSERT/UPDATE/DELETE: solo admin@smartconnect.ai         │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+**Configuración actual:**
+```toml
+# supabase/config.toml
+[functions.gemini-embedding]
+enabled = true
+verify_jwt = false  # Validación interna
+
+[functions.gemini-generate]
+enabled = true
+verify_jwt = false
+
+[functions.chat-with-rag]
+enabled = true
+verify_jwt = false
+```
+
+**Validación interna en cada función:**
+```typescript
+// gemini-embedding/index.ts
+const authHeader = req.headers.get('Authorization')
+if (!authHeader) return 401
+
+const supabase = createClient(..., { global: { headers: { Authorization: authHeader } } })
+const { data: { user }, error } = await supabase.auth.getUser()
+if (error || !user) return 401
+// ✅ Usuario autenticado
+```
+
+---
+
+### 📋 RLS Policies - Estado Actual
+
+| Tabla | SELECT | INSERT | UPDATE | DELETE |
+|-------|--------|--------|--------|--------|
+| `documents` | ✅ Público | ❌ Solo admin | ❌ Solo admin | ❌ Solo admin |
+| `app_settings` | ✅ Público | ❌ Solo admin | ❌ Solo admin | ❌ Solo admin |
+| `security_logs` | ❌ Solo admin | ❌ Solo admin | ❌ Solo admin | ❌ Solo admin |
+
+**Warnings de Supabase Linter (no críticos):**
+- `extension_in_public`: Esperado (pgvector debe estar en public)
+- `auth_allow_anonymous_sign_ins`: Falso positivo (SELECT público es intencional para chatbot/landing)
 
 ---
 
