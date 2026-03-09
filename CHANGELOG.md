@@ -7,6 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - 2026-03-09
 
+### Changed
+- **RAG threshold lowered (0.7 → 0.4):** Reduced similarity threshold across chat-with-rag Edge Function, ChatRepositoryImpl, and ExpertAssistantWithRAG to improve document retrieval for short queries
+- **match_documents_by_source ILIKE:** Changed source filter from exact match (`=`) to partial match (`ILIKE`) to support comma-separated sources (e.g., `"nfc, qribar"`)
+- **Rate limiter per-session:** Replaced shared `'anonymous'` rate limit identifier with per-tab session ID using `sessionStorage`
+
+### Removed
+- **Dead code cleanup (old RAG architecture):** Removed 13 unused files from chatbot feature that were replaced by Edge Function approach:
+  - `EmbeddingRepositoryImpl`, `DocumentRepositoryImpl`, `GeminiDataSource`, `SupabaseDataSource` (data layer)
+  - `RAGOrchestrator`, `FallbackHandler`, `SearchDocumentsUseCase` (domain layer)
+  - `IEmbeddingRepository`, `IDocumentRepository`, `IRAGIndexer`, `IEmbeddingCache` (interfaces)
+  - `rag-indexer`, `embedding-cache`, `rag-logger` (shared/utilities)
+  - 4 corresponding test files
+- **test-log Edge Function:** Deleted unused test stub Edge Function
+- **ab_test_dashboard.sql:** Deleted orphaned analytics SQL referencing non-existent tables
+- **GEMINI_API_KEY from frontend ENV:** Removed secret key exposure from client-side config (only used in Edge Functions via `Deno.env`)
+
+### Fixed
+- **Hardcoded credentials removed (OWASP A02):** Removed fallback Supabase URL and anon key hardcoded in `SupabaseDocumentRepository.generateEmbedding()`; now throws if env vars are missing
+- **AdminContainer unused params:** Removed `_supabaseUrl` and `_supabaseKey` constructor params that were never used
+
+### Security
+- **Security headers (OWASP A05):** Added `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: strict-origin-when-cross-origin` to all 3 Edge Functions (chat-with-rag, gemini-embedding, gemini-generate)
+
 ### Security
 - **CORS origin cleanup:** Removed unused placeholder domains (`smartconnect.ai`, `www.smartconnect.ai`, `smart-connect-landing.vercel.app`); only `smart-connect-olive.vercel.app` + localhost remain
 - **insert_document SECURITY INVOKER:** Changed from `SECURITY DEFINER` (bypassed RLS) to `SECURITY INVOKER` (respects RLS policies)

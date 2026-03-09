@@ -8,6 +8,12 @@ const ALLOWED_ORIGINS = [
   'http://localhost:3000',
 ]
 
+const SECURITY_HEADERS = {
+  'X-Content-Type-Options': 'nosniff',
+  'X-Frame-Options': 'DENY',
+  'Referrer-Policy': 'strict-origin-when-cross-origin',
+}
+
 function getCorsHeaders(req: Request) {
   const origin = req.headers.get('origin') || ''
   const allowed = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0]
@@ -15,6 +21,7 @@ function getCorsHeaders(req: Request) {
     'Access-Control-Allow-Origin': allowed,
     'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    ...SECURITY_HEADERS,
   }
 }
 

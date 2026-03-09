@@ -3,5 +3,3 @@
  */
 
 export * from './ChatRepositoryImpl';
-export * from './EmbeddingRepositoryImpl';
-export * from './DocumentRepositoryImpl';
