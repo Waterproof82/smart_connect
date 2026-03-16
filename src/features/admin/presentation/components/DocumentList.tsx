@@ -289,7 +289,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
 
       {/* Content Display */}
       {isLoading && !documents ? (
-        <div className="text-center py-20 text-gray-500 animate-pulse">Loading knowledge base...</div>
+        <div className="text-center py-20 text-gray-500 animate-pulse" role="status" aria-live="polite">Loading knowledge base...</div>
       ) : (
         <>
           {/* Mobile View: Cards */}

@@ -35,7 +35,7 @@ export const StatsDashboard: React.FC<StatsDashboardProps> = ({ getStatsUseCase 
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8" role="status" aria-live="polite">
         {[1, 2].map((i) => (
           <div key={i} className="bg-gray-800/50 border border-gray-700/50 rounded-lg p-6 animate-pulse">
             <div className="h-4 w-24 bg-gray-700 rounded mb-3" />
