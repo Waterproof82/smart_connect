@@ -1,18 +1,19 @@
 /**
  * useIntersectionObserver Hook
  * @module shared/hooks
- * 
+ *
  * Reusable hook for scroll animations
  * Follows SRP: Single responsibility - handle intersection observation
  */
 
-import { useEffect, useState, RefObject } from 'react';
+import { useEffect, useState, useRef, RefObject } from 'react';
 
 export const useIntersectionObserver = (
   ref: RefObject<HTMLElement | null>,
   options?: IntersectionObserverInit
 ): boolean => {
   const [isVisible, setIsVisible] = useState(false);
+  const optionsRef = useRef(options);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -21,7 +22,7 @@ export const useIntersectionObserver = (
           setIsVisible(true);
         }
       },
-      { threshold: 0.1, ...options }
+      { threshold: 0.1, ...optionsRef.current }
     );
 
     const currentRef = ref.current;
@@ -34,7 +35,7 @@ export const useIntersectionObserver = (
         observer.unobserve(currentRef);
       }
     };
-  }, [ref, options]);
+  }, [ref]);
 
   return isVisible;
 };

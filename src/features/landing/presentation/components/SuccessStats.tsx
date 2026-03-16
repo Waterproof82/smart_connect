@@ -55,7 +55,7 @@ const StatCard: React.FC<StatProps> = ({ icon, label, value, suffix, color, isIn
 
   return (
     <div
-      className={`glass-card p-8 rounded-[2.5rem] border border-[var(--color-border)] group hover:border-blue-500/20 hover:bg-white/[0.05] transition-all duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)] relative overflow-hidden min-w-0 ${
+      className={`glass-card p-8 rounded-[2.5rem] border border-[var(--color-border)] group hover:border-[var(--color-accent-border)] hover:bg-white/[0.05] transition-all duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)] relative overflow-hidden min-w-0 ${
         isInView 
           ? 'opacity-100 translate-y-0 blur-0 scale-100' 
           : 'opacity-0 translate-y-20 blur-md scale-90'
@@ -69,14 +69,14 @@ const StatCard: React.FC<StatProps> = ({ icon, label, value, suffix, color, isIn
           {React.cloneElement(icon as React.ReactElement<{ className?: string }>, { className: 'w-8 h-8' })}
         </div>
         
-        <div className="text-5xl font-extrabold mb-3 tracking-tighter" role="status" aria-live="polite" aria-label={`${label}: ${count}${suffix}`}>
-          <span className="text-blue-400">{count}</span>
-          <span className="text-blue-500">{suffix}</span>
+        <div className="text-5xl font-extrabold mb-3 tracking-tighter" aria-label={`${label}: ${value}${suffix}`}>
+          <span className="text-[var(--color-primary)]">{count}</span>
+          <span className="text-[var(--color-icon-blue)]">{suffix}</span>
         </div>
         
         <p className="text-muted text-xs font-bold uppercase tracking-[0.2em] text-wrap">{label}</p>
         
-        <div className={`mt-6 h-[2px] bg-blue-500/50 transition-all duration-1000 ease-out ${isInView ? 'w-full opacity-100' : 'w-0 opacity-0'}`}
+        <div className={`mt-6 h-[2px] bg-[var(--color-accent)]/50 transition-all duration-1000 ease-out ${isInView ? 'w-full opacity-100' : 'w-0 opacity-0'}`}
              style={{ transitionDelay: `${delay + 500}ms` }}
         ></div>
       </div>
@@ -90,35 +90,35 @@ export const SuccessStats: React.FC = () => {
 
   const stats = [
     { 
-      icon: <TrendingUp className="text-emerald-500" />, 
-      label: "Aumento Ventas", 
-      value: 45, 
-      suffix: "%", 
-      color: "bg-emerald-500",
+      icon: <TrendingUp className="text-[var(--color-icon-emerald)]" />,
+      label: "Aumento Ventas",
+      value: 45,
+      suffix: "%",
+      color: "bg-[var(--color-icon-emerald)]",
       delay: 0
     },
     { 
-      icon: <Heart className="text-rose-500" />, 
-      label: "Satisfacción", 
-      value: 98, 
-      suffix: "%", 
-      color: "bg-rose-500",
+      icon: <Heart className="text-[var(--color-icon-rose)]" />,
+      label: "Satisfacción",
+      value: 98,
+      suffix: "%",
+      color: "bg-[var(--color-icon-rose)]",
       delay: 150
     },
     { 
-      icon: <Star className="text-amber-500" />, 
-      label: "Reseñas Google", 
-      value: 1200, 
-      suffix: "+", 
-      color: "bg-amber-500",
+      icon: <Star className="text-[var(--color-icon-amber)]" />,
+      label: "Reseñas Google",
+      value: 1200,
+      suffix: "+",
+      color: "bg-[var(--color-icon-amber)]",
       delay: 300
     },
     { 
-      icon: <Users className="text-blue-500" />, 
-      label: "Clientes Felices", 
-      value: 850, 
-      suffix: "+", 
-      color: "bg-blue-500",
+      icon: <Users className="text-[var(--color-icon-blue)]" />,
+      label: "Clientes Felices",
+      value: 850,
+      suffix: "+",
+      color: "bg-[var(--color-icon-blue)]",
       delay: 450
     }
   ];

@@ -77,10 +77,10 @@ export const AdminPanel: React.FC = () => {
         {noIndexHelmet}
         <div className="flex flex-col items-center gap-4">
           <div className="relative">
-            <div className="w-12 h-12 border-4 border-indigo-500/30 rounded-full"></div>
-            <div className="absolute top-0 left-0 w-12 h-12 border-4 border-indigo-500 rounded-full border-t-transparent animate-spin"></div>
+            <div className="w-12 h-12 border-4 border-[var(--color-accent-border)] rounded-full"></div>
+            <div className="absolute top-0 left-0 w-12 h-12 border-4 border-[var(--color-primary)] rounded-full border-t-transparent animate-spin"></div>
           </div>
-          <p className="text-indigo-300 text-sm font-medium animate-pulse">Verificando autenticación...</p>
+          <p className="text-[var(--color-primary)] text-sm font-medium animate-pulse">Verificando autenticación...</p>
         </div>
       </div>
     );
