@@ -213,7 +213,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
       {actionError && (
         <div className="p-3 bg-red-900/20 border border-red-500/50 rounded-lg text-sm text-red-400 flex items-center justify-between">
           <span>{actionError}</span>
-          <button onClick={() => setActionError(null)} className="text-red-400 hover:text-red-300 ml-4" type="button">
+          <button onClick={() => setActionError(null)} className="text-red-400 hover:text-red-300 ml-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400 rounded" type="button">
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -503,11 +503,11 @@ export const DocumentList: React.FC<DocumentListProps> = ({
       {showCreateModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center sm:p-4">
           <div className="absolute inset-0 bg-black/90 backdrop-blur-sm cursor-pointer" onClick={() => setShowCreateModal(false)} />
-          <div className="relative bg-gray-900 w-full h-full sm:h-auto sm:max-h-[90vh] sm:rounded-xl border border-gray-800 flex flex-col max-w-4xl">
-             <div className="flex justify-between p-5 border-b border-gray-800">
+           <div className="relative bg-gray-900 w-full h-full sm:h-auto sm:max-h-[90vh] sm:rounded-xl border border-gray-800 flex flex-col max-w-4xl">
+              <div className="flex justify-between p-5 border-b border-gray-800">
                 <h3 className="text-xl font-bold text-white">New Document</h3>
-                <button onClick={() => setShowCreateModal(false)} className="text-gray-400 hover:text-white" aria-label="Close modal" type="button"><X className="w-6 h-6"/></button>
-             </div>
+                <button onClick={() => setShowCreateModal(false)} className="text-gray-400 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 rounded-lg p-1" aria-label="Close modal" type="button"><X className="w-6 h-6"/></button>
+              </div>
              <div className="flex-1 overflow-y-auto p-5 space-y-5">
                 {/* Source Selection */}
                 <div>
@@ -548,12 +548,12 @@ export const DocumentList: React.FC<DocumentListProps> = ({
                    />
                 </div>
              </div>
-             <div className="p-5 border-t border-gray-800 flex justify-end gap-3">
-                <button onClick={() => setShowCreateModal(false)} className="px-5 py-2.5 text-gray-300 hover:bg-gray-800 rounded-lg" type="button">Cancel</button>
+              <div className="p-5 border-t border-gray-800 flex justify-end gap-3">
+                <button onClick={() => setShowCreateModal(false)} className="px-5 py-2.5 text-gray-300 hover:bg-gray-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 rounded-lg" type="button">Cancel</button>
                 <button 
                   onClick={handleCreate} 
                   disabled={isCreating} 
-                  className="px-5 py-2.5 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium disabled:opacity-50"
+                  className="px-5 py-2.5 bg-green-600 hover:bg-green-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-400 text-white rounded-lg font-medium disabled:opacity-50"
                   type="button"
                 >
                   {isCreating ? 'Creating...' : 'Create Document'}

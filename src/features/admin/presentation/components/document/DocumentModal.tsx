@@ -49,7 +49,7 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({
         <h3 className="text-lg font-bold text-white flex items-center gap-2">
           {isEditing ? 'Edit Document' : 'Document Details'}
         </h3>
-        <button onClick={onClose} className="p-2 hover:bg-gray-800 rounded-lg text-gray-400 hover:text-white" aria-label="Close modal" type="button">
+        <button onClick={onClose} className="p-2 hover:bg-gray-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 rounded-lg text-gray-400 hover:text-white" aria-label="Close modal" type="button">
           <X className="w-6 h-6" />
         </button>
       </div>
@@ -130,11 +130,11 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({
       <div className="p-4 border-t border-gray-800 bg-gray-900/95 flex justify-end gap-3 sticky bottom-0">
         {isEditing ? (
           <>
-            <button onClick={onClose} className="px-4 py-2 text-gray-300 hover:text-white" disabled={isSaving} type="button">Cancel</button>
-            <button onClick={onSave} disabled={isSaving} className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 disabled:opacity-50" type="button">{isSaving ? 'Saving...' : 'Save Changes'}</button>
+            <button onClick={onClose} className="px-4 py-2 text-gray-300 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 disabled:opacity-50" disabled={isSaving} type="button">Cancel</button>
+            <button onClick={onSave} disabled={isSaving} className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 disabled:opacity-50" type="button">{isSaving ? 'Saving...' : 'Save Changes'}</button>
           </>
         ) : (
-          <button onClick={onClose} className="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600" type="button">Close</button>
+          <button onClick={onClose} className="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400" type="button">Close</button>
         )}
       </div>
     </div>
