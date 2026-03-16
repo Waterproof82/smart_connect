@@ -26,7 +26,7 @@ export const QRIBARSection: React.FC = () => {
 
   if (error) {
     return (
-      <div className="container mx-auto px-6 py-20 text-center">
+      <div className="container mx-auto px-6 py-20 text-center" role="alert">
         <p className="text-red-500">Error loading menu: {error}</p>
       </div>
     );
@@ -34,14 +34,14 @@ export const QRIBARSection: React.FC = () => {
 
   if (isLoading || !restaurant) {
     return (
-      <div className="container mx-auto px-6 py-20 text-center">
+      <div className="container mx-auto px-6 py-20 text-center" role="status" aria-live="polite">
         <p className="text-gray-400">Loading menu...</p>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto px-6 grid lg:grid-cols-2 gap-20 items-center" ref={sectionRef}>
+    <div className="container mx-auto px-6 grid lg:grid-cols-2 gap-20 items-center" ref={sectionRef} role="region" aria-label="QRIBAR - Menú digital">
       <div className="order-2 lg:order-1">
         <MenuPhone 
           restaurant={restaurant}

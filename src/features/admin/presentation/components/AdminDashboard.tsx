@@ -21,6 +21,9 @@ export const AdminDashboard: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-sc-dark pb-10">
+      <a href="#admin-main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:bg-blue-600 focus:text-white focus:px-4 focus:py-2 focus:rounded-lg focus:text-sm focus:font-bold">
+        Saltar al contenido principal
+      </a>
       <header className="bg-gray-900 border-b border-gray-800 sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
@@ -53,7 +56,7 @@ export const AdminDashboard: React.FC = () => {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+      <main id="admin-main-content" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
         <StatsDashboard getStatsUseCase={container.getDocumentStatsUseCase} />
         
         <div className="md:flex md:items-center md:justify-between mb-2">
