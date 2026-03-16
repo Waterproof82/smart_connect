@@ -1,31 +1,22 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Document } from '../../domain/entities/Document';
-import { GetAllDocumentsUseCase } from '../../domain/usecases/GetAllDocumentsUseCase';
-import { DeleteDocumentUseCase } from '../../domain/usecases/DeleteDocumentUseCase';
-import { UpdateDocumentUseCase } from '../../domain/usecases/UpdateDocumentUseCase';
-import { CreateDocumentUseCase } from '../../domain/usecases/CreateDocumentUseCase';
-import { AdminUser } from '../../domain/entities/AdminUser';
 import { PaginatedResult } from '../../domain/repositories/IDocumentRepository';
 import { Search, Filter, Plus, Database, ChevronLeft, ChevronRight, Edit2, X } from 'lucide-react';
 import { SourceTag, DocumentCard, DocumentTable } from './document';
+import { useAdmin } from '../AdminContext';
+import { ConsoleLogger } from '@core/domain/usecases/Logger';
+
+const logger = new ConsoleLogger('[DocumentList]');
 
 interface DocumentListProps {
-  getAllDocumentsUseCase: GetAllDocumentsUseCase;
-  deleteDocumentUseCase: DeleteDocumentUseCase;
-  updateDocumentUseCase: UpdateDocumentUseCase;
-  createDocumentUseCase: CreateDocumentUseCase;
-  currentUser: AdminUser;
   onDocumentChange?: () => void;
 }
 
 export const DocumentList: React.FC<DocumentListProps> = ({
-  getAllDocumentsUseCase,
-  deleteDocumentUseCase,
-  updateDocumentUseCase,
-  createDocumentUseCase,
-  currentUser,
   onDocumentChange,
 }) => {
+  const { container, currentUser } = useAdmin();
+  const { getAllDocumentsUseCase, deleteDocumentUseCase, updateDocumentUseCase, createDocumentUseCase } = container;
   // --- States ---
   const [documents, setDocuments] = useState<PaginatedResult<Document> | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -44,6 +35,10 @@ export const DocumentList: React.FC<DocumentListProps> = ({
   const [editedSources, setEditedSources] = useState<string[]>([]); // State for editing tags
   const [newSourceInput, setNewSourceInput] = useState('');
   const [isSaving, setIsSaving] = useState(false);
+
+  // Confirmation dialog
+  const [confirmDelete, setConfirmDelete] = useState<{ id: string; title: string } | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
 
   // Creation
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -73,7 +68,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
       allDocs.data.forEach(doc => doc.source.split(',').forEach(s => s.trim() && allSources.add(s.trim())));
       setAvailableSources(Array.from(allSources).sort((a, b) => a.localeCompare(b)));
     } catch (err) {
-      console.error('Failed to load sources', err);
+      logger.error('Failed to load sources', err);
     }
   }, [getAllDocumentsUseCase]);
 
@@ -98,18 +93,25 @@ export const DocumentList: React.FC<DocumentListProps> = ({
     loadDocuments();
   };
 
-  const handleDelete = async (id: string, e?: React.MouseEvent) => {
+  const handleDeleteRequest = (id: string, e?: React.MouseEvent) => {
     e?.stopPropagation();
-    if (!confirm('Are you sure you want to delete this document?')) return;
-    
+    const doc = documents?.data.find(d => d.id === id);
+    setConfirmDelete({ id, title: doc?.content.slice(0, 50) || id });
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!confirmDelete) return;
     try {
-      await deleteDocumentUseCase.execute(id, currentUser);
+      await deleteDocumentUseCase.execute(confirmDelete.id, currentUser);
       await loadDocuments();
       await loadAvailableSources();
       onDocumentChange?.();
-      if (selectedDocument?.id === id) setSelectedDocument(null);
+      if (selectedDocument?.id === confirmDelete.id) setSelectedDocument(null);
+      setConfirmDelete(null);
     } catch (err) {
-      alert(err instanceof Error ? err.message : 'Failed');
+      setActionError(err instanceof Error ? err.message : 'Failed to delete');
+      setConfirmDelete(null);
+      setTimeout(() => setActionError(null), 4000);
     }
   };
 
@@ -135,7 +137,8 @@ export const DocumentList: React.FC<DocumentListProps> = ({
       setSelectedDocument(null);
       setIsEditing(false);
     } catch (err) {
-      alert(err instanceof Error ? err.message : 'Update failed');
+      setActionError(err instanceof Error ? err.message : 'Update failed');
+      setTimeout(() => setActionError(null), 4000);
     } finally {
       setIsSaving(false);
     }
@@ -143,7 +146,11 @@ export const DocumentList: React.FC<DocumentListProps> = ({
 
   const handleCreate = async () => {
     const finalSource = newDocument.source === '_custom_' ? customSource.trim() : newDocument.source;
-    if (!newDocument.content.trim() || !finalSource) return alert('Content and Source are required');
+    if (!newDocument.content.trim() || !finalSource) {
+      setActionError('Content and Source are required');
+      setTimeout(() => setActionError(null), 4000);
+      return;
+    }
 
     setIsCreating(true);
     try {
@@ -156,7 +163,8 @@ export const DocumentList: React.FC<DocumentListProps> = ({
       await loadAvailableSources();
       onDocumentChange?.();
     } catch (err) {
-      alert(err instanceof Error ? err.message : 'Create failed');
+      setActionError(err instanceof Error ? err.message : 'Create failed');
+      setTimeout(() => setActionError(null), 4000);
     } finally {
       setIsCreating(false);
     }
@@ -203,12 +211,39 @@ export const DocumentList: React.FC<DocumentListProps> = ({
 
   return (
     <div className="space-y-6">
-      
+
+      {/* Error Banner */}
+      {actionError && (
+        <div className="p-3 bg-red-900/20 border border-red-500/50 rounded-lg text-sm text-red-400 flex items-center justify-between">
+          <span>{actionError}</span>
+          <button onClick={() => setActionError(null)} className="text-red-400 hover:text-red-300 ml-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400 rounded" type="button">
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      )}
+
+      {/* Confirm Delete Dialog */}
+      {confirmDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={() => setConfirmDelete(null)} />
+          <div className="relative bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded-xl p-6 max-w-sm w-full shadow-2xl">
+            <h4 className="text-lg font-bold text-default mb-2">Delete Document?</h4>
+            <p className="text-sm text-muted mb-6">
+              This will permanently delete &quot;{confirmDelete.title}...&quot;. This action cannot be undone.
+            </p>
+            <div className="flex justify-end gap-3">
+              <button onClick={() => setConfirmDelete(null)} className="px-4 py-2 text-default hover:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 rounded-lg" type="button">Cancel</button>
+              <button onClick={handleDeleteConfirm} className="px-4 py-2 bg-red-600 hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400 text-white rounded-lg" type="button">Delete</button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Action Bar */}
-      <div className="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center bg-gray-900/50 p-4 rounded-xl border border-gray-800">
+      <div className="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center bg-[var(--color-bg-alt)]/50 p-4 rounded-xl border border-[var(--color-border)]">
         <form onSubmit={handleSearch} className="w-full md:w-auto flex flex-col md:flex-row gap-3 flex-1 max-w-3xl">
           <div className="relative w-full md:w-48">
-             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-500">
+             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted">
                <Filter className="w-4 h-4" />
              </div>
              <label htmlFor="sourceFilter" className="sr-only">Filter by Source</label>
@@ -216,7 +251,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
                id="sourceFilter"
                value={sourceFilter}
                onChange={(e) => setSourceFilter(e.target.value)}
-               className="w-full pl-9 pr-4 py-2.5 bg-gray-800 border border-gray-700 rounded-lg text-sm text-white focus:ring-2 focus:ring-blue-500 appearance-none"
+               className="w-full pl-9 pr-4 py-2.5 bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded-lg text-sm text-default focus:ring-2 focus:ring-blue-500 appearance-none"
              >
                <option value="">All Sources</option>
                {availableSources.map(s => <option key={s} value={s}>{s}</option>)}
@@ -225,7 +260,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
           
           <div className="flex gap-2 w-full md:flex-1">
             <div className="relative flex-1">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-500">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted">
                 <Search className="w-4 h-4" />
               </div>
               <label htmlFor="searchInput" className="sr-only">Search Content</label>
@@ -235,10 +270,10 @@ export const DocumentList: React.FC<DocumentListProps> = ({
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
                 placeholder="Search content..."
-                className="w-full pl-9 pr-4 py-2.5 bg-gray-800 border border-gray-700 rounded-lg text-sm text-white focus:ring-2 focus:ring-blue-500"
+                className="w-full pl-9 pr-4 py-2.5 bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded-lg text-sm text-default focus:ring-2 focus:ring-blue-500"
               />
             </div>
-            <button type="submit" className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors">
+            <button type="submit" className="px-4 py-2 bg-blue-600 hover:bg-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 text-white rounded-lg transition-colors">
               Go
             </button>
           </div>
@@ -257,7 +292,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
 
       {/* Content Display */}
       {isLoading && !documents ? (
-        <div className="text-center py-20 text-gray-500 animate-pulse">Loading knowledge base...</div>
+        <div className="text-center py-20 text-muted animate-pulse" role="status" aria-live="polite">Loading knowledge base...</div>
       ) : (
         <>
           {/* Mobile View: Cards */}
@@ -267,27 +302,27 @@ export const DocumentList: React.FC<DocumentListProps> = ({
                 key={doc.id}
                 doc={doc}
                 onView={() => handleViewDocument(doc)}
-                onDelete={currentUser.canPerform('edit') ? (e) => handleDelete(doc.id, e) : undefined}
+                onDelete={currentUser.canPerform('edit') ? (e) => handleDeleteRequest(doc.id, e) : undefined}
                 canEdit={currentUser.canPerform('edit')}
               />
             ))}
           </div>
 
           {/* Desktop View: Table */}
-          <div className="hidden md:block bg-gray-900 border border-gray-800 rounded-xl overflow-hidden shadow-sm">
+          <div className="hidden md:block bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded-xl overflow-hidden shadow-sm">
             {documents?.data && (
               <DocumentTable
                 documents={documents.data}
                 onView={handleViewDocument}
                 onEdit={handleEditDocument}
-                onDelete={handleDelete}
+                onDelete={handleDeleteRequest}
                 canEdit={currentUser.canPerform('edit')}
               />
             )}
           </div>
 
           {documents?.data.length === 0 && (
-             <div className="flex flex-col items-center justify-center py-16 text-gray-500 border border-dashed border-gray-800 rounded-xl bg-gray-900/30">
+             <div className="flex flex-col items-center justify-center py-16 text-muted border border-dashed border-[var(--color-border)] rounded-xl bg-[var(--color-bg-alt)]/30">
                <Database className="w-12 h-12 mb-4 opacity-50" />
                <p>No documents found matching your criteria.</p>
              </div>
@@ -297,24 +332,24 @@ export const DocumentList: React.FC<DocumentListProps> = ({
 
       {/* Pagination */}
       {documents && documents.totalPages > 1 && (
-        <div className="flex items-center justify-between pt-4 border-t border-gray-800/50">
-          <span className="text-sm text-gray-500 hidden sm:block">
+        <div className="flex items-center justify-between pt-4 border-t border-[var(--color-border)]">
+          <span className="text-sm text-muted hidden sm:block">
             Page {currentPage} of {documents.totalPages}
           </span>
           <div className="flex gap-2 w-full sm:w-auto justify-between sm:justify-end">
             <button
               onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
               disabled={currentPage === 1}
-              className="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1 text-sm"
+              className="px-4 py-2 bg-[var(--color-bg-alt)] text-default rounded-lg hover:bg-[var(--color-surface)] disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1 text-sm"
               type="button"
             >
               <ChevronLeft className="w-4 h-4" /> Prev
             </button>
-            <span className="sm:hidden text-sm text-gray-400 flex items-center">{currentPage} / {documents.totalPages}</span>
+            <span className="sm:hidden text-sm text-muted flex items-center">{currentPage} / {documents.totalPages}</span>
             <button
               onClick={() => setCurrentPage(p => Math.min(documents.totalPages, p + 1))}
               disabled={currentPage === documents.totalPages}
-              className="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1 text-sm"
+              className="px-4 py-2 bg-[var(--color-bg-alt)] text-default rounded-lg hover:bg-[var(--color-surface)] disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1 text-sm"
               type="button"
             >
               Next <ChevronRight className="w-4 h-4" />
@@ -337,16 +372,16 @@ export const DocumentList: React.FC<DocumentListProps> = ({
             }}
             style={{ cursor: 'pointer' }}
           />
-          <div className="relative bg-gray-900 w-full h-full sm:h-auto sm:max-h-[85vh] sm:rounded-xl sm:border border-gray-800 flex flex-col max-w-4xl shadow-2xl">
-            
+          <div className="relative bg-[var(--color-bg-alt)] w-full h-full sm:h-auto sm:max-h-[85vh] sm:rounded-xl sm:border border-[var(--color-border)] flex flex-col max-w-4xl shadow-2xl">
+
             {/* Modal Header */}
-            <div className="flex items-center justify-between p-4 border-b border-gray-800 bg-gray-900/95 sticky top-0 z-10">
-              <h3 className="text-lg font-bold text-white flex items-center gap-2">
+            <div className="flex items-center justify-between p-4 border-b border-[var(--color-border)] bg-[var(--color-bg-alt)]/95 sticky top-0 z-10">
+              <h3 className="text-lg font-bold text-default flex items-center gap-2">
                 {isEditing ? 'Edit Document' : 'Document Details'}
               </h3>
               <button 
                 onClick={() => setSelectedDocument(null)} 
-                className="p-2 hover:bg-gray-800 rounded-lg text-gray-400 hover:text-white" 
+                className="p-2 hover:bg-[var(--color-surface)] rounded-lg text-muted hover:text-[var(--color-text)]"
                 aria-label="Close modal"
                 type="button"
               >
@@ -358,8 +393,8 @@ export const DocumentList: React.FC<DocumentListProps> = ({
             <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
                {isEditing ? (
                  <div className="space-y-4">
-                   <div className="bg-gray-800/50 p-3 rounded-lg border border-gray-700">
-                     <label htmlFor="edit-tags-input" className="text-xs font-medium text-gray-400 uppercase mb-2 block">Sources</label>
+                   <div className="bg-[var(--color-surface)] p-3 rounded-lg border border-[var(--color-border)]">
+                     <label htmlFor="edit-tags-input" className="text-xs font-medium text-muted uppercase mb-2 block">Sources</label>
                      <div className="flex flex-wrap gap-2 mb-2">
                        {editedSources.map(s => (
                          <SourceTag 
@@ -375,7 +410,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
                          id="edit-tags-input"
                          type="text" 
                          list="available-sources-list"
-                         className="flex-1 bg-gray-900 border border-gray-600 rounded px-3 py-1.5 text-sm text-white focus:ring-1 focus:ring-blue-500"
+                         className="flex-1 bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded px-3 py-1.5 text-sm text-default focus:ring-1 focus:ring-blue-500"
                          placeholder="Select or type tag..."
                          value={newSourceInput}
                          onChange={(e) => setNewSourceInput(e.target.value)}
@@ -389,7 +424,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
                        
                        <button 
                          onClick={handleManualAddTag}
-                         className="px-3 py-1 bg-gray-700 text-white text-xs rounded hover:bg-gray-600"
+                         className="px-3 py-1 bg-[var(--color-surface)] text-default text-xs rounded hover:bg-[var(--color-border)]"
                          type="button"
                        >
                          Add
@@ -401,7 +436,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
                      id="edit-content-area"
                      value={editedContent}
                      onChange={(e) => setEditedContent(e.target.value)}
-                     className="w-full h-[50vh] sm:h-[400px] bg-gray-800 text-gray-100 p-4 rounded-lg font-mono text-sm leading-relaxed resize-none focus:ring-2 focus:ring-blue-500 outline-none"
+                     className="w-full h-[50vh] sm:h-[400px] bg-[var(--color-bg-alt)] text-default p-4 rounded-lg font-mono text-sm leading-relaxed resize-none focus:ring-2 focus:ring-blue-500 outline-none"
                    />
                  </div>
                ) : (
@@ -409,12 +444,12 @@ export const DocumentList: React.FC<DocumentListProps> = ({
                    <div className="flex flex-wrap gap-2">
                      {selectedDocument.source.split(',').map(s => <SourceTag key={s} source={s} />)}
                    </div>
-                   <div className="bg-gray-800/30 rounded-lg p-4 border border-gray-800">
-                     <pre className="text-sm text-gray-300 whitespace-pre-wrap font-mono leading-relaxed break-words">
+                   <div className="bg-[var(--color-surface)] rounded-lg p-4 border border-[var(--color-border)]">
+                     <pre className="text-sm text-default whitespace-pre-wrap font-mono leading-relaxed break-words">
                        {selectedDocument.content}
                      </pre>
                    </div>
-                   <div className="text-xs text-gray-500 pt-2 border-t border-gray-800">
+                   <div className="text-xs text-muted pt-2 border-t border-[var(--color-border)]">
                       ID: {selectedDocument.id} • Created: {selectedDocument.createdAt.toLocaleString()}
                    </div>
                  </>
@@ -422,12 +457,12 @@ export const DocumentList: React.FC<DocumentListProps> = ({
             </div>
 
             {/* Modal Footer */}
-            <div className="p-4 border-t border-gray-800 bg-gray-900/95 flex justify-end gap-3 sticky bottom-0">
+            <div className="p-4 border-t border-[var(--color-border)] bg-[var(--color-bg-alt)]/95 flex justify-end gap-3 sticky bottom-0">
                {isEditing ? (
                  <>
                    <button 
                       onClick={() => setIsEditing(false)} 
-                      className="px-4 py-2 text-gray-300 hover:text-white" 
+                      className="px-4 py-2 text-default hover:text-[var(--color-text)]"
                       disabled={isSaving}
                       type="button"
                    >
@@ -447,7 +482,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
                    {currentUser.canPerform('update') && (
                      <button 
                         onClick={() => handleEditOpen(selectedDocument)} 
-                        className="flex items-center gap-2 px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700"
+                        className="flex items-center gap-2 px-4 py-2 bg-[var(--color-bg-alt)] text-default rounded-lg hover:bg-[var(--color-surface)]"
                         type="button"
                      >
                        <Edit2 className="w-4 h-4" /> Edit
@@ -455,7 +490,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
                    )}
                    <button 
                       onClick={() => setSelectedDocument(null)} 
-                      className="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600"
+                      className="px-4 py-2 bg-[var(--color-surface)] text-default rounded-lg hover:bg-[var(--color-border)]"
                       type="button"
                    >
                       Close
@@ -470,21 +505,21 @@ export const DocumentList: React.FC<DocumentListProps> = ({
       {/* Create Modal */}
       {showCreateModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center sm:p-4">
-          <div className="absolute inset-0 bg-black/90 backdrop-blur-sm" />
-          <div className="relative bg-gray-900 w-full h-full sm:h-auto sm:max-h-[90vh] sm:rounded-xl border border-gray-800 flex flex-col max-w-4xl">
-             <div className="flex justify-between p-5 border-b border-gray-800">
-                <h3 className="text-xl font-bold text-white">New Document</h3>
-                <button onClick={() => setShowCreateModal(false)} className="text-gray-400 hover:text-white" aria-label="Close modal" type="button"><X className="w-6 h-6"/></button>
-             </div>
+          <div className="absolute inset-0 bg-black/90 backdrop-blur-sm cursor-pointer" onClick={() => setShowCreateModal(false)} />
+           <div className="relative bg-[var(--color-bg-alt)] w-full h-full sm:h-auto sm:max-h-[90vh] sm:rounded-xl border border-[var(--color-border)] flex flex-col max-w-4xl">
+              <div className="flex justify-between p-5 border-b border-[var(--color-border)]">
+                <h3 className="text-xl font-bold text-default">New Document</h3>
+                <button onClick={() => setShowCreateModal(false)} className="text-muted hover:text-[var(--color-text)] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 rounded-lg p-1" aria-label="Close modal" type="button"><X className="w-6 h-6"/></button>
+              </div>
              <div className="flex-1 overflow-y-auto p-5 space-y-5">
                 {/* Source Selection */}
                 <div>
-                   <label htmlFor="create-source-select" className="block text-sm font-medium text-gray-400 mb-2">Source</label>
-                   <select 
+                   <label htmlFor="create-source-select" className="block text-sm font-medium text-muted mb-2">Source</label>
+                   <select
                       id="create-source-select"
                       value={newDocument.source}
                       onChange={(e) => setNewDocument({...newDocument, source: e.target.value})}
-                      className="w-full bg-gray-800 border border-gray-700 rounded-lg p-2.5 text-white focus:ring-2 focus:ring-blue-500"
+                      className="w-full bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded-lg p-2.5 text-default focus:ring-2 focus:ring-blue-500"
                    >
                       <option value="">Select Source</option>
                       {availableSources.map(s => <option key={s} value={s}>{s}</option>)}
@@ -497,7 +532,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
                           id="custom-source-input"
                           type="text" 
                           placeholder="Enter source name..." 
-                          className="w-full bg-gray-800 border border-gray-700 rounded-lg p-2.5 text-white"
+                          className="w-full bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded-lg p-2.5 text-default"
                           value={customSource}
                           onChange={e => setCustomSource(e.target.value)}
                         />
@@ -506,22 +541,22 @@ export const DocumentList: React.FC<DocumentListProps> = ({
                 </div>
                 {/* Content Input */}
                 <div>
-                   <label htmlFor="create-content-area" className="block text-sm font-medium text-gray-400 mb-2">Content</label>
-                   <textarea 
+                   <label htmlFor="create-content-area" className="block text-sm font-medium text-muted mb-2">Content</label>
+                   <textarea
                       id="create-content-area"
-                      className="w-full h-64 bg-gray-800 border border-gray-700 rounded-lg p-4 text-white font-mono text-sm focus:ring-2 focus:ring-blue-500"
+                      className="w-full h-64 bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded-lg p-4 text-default font-mono text-sm focus:ring-2 focus:ring-blue-500"
                       placeholder="Paste content here..."
                       value={newDocument.content}
                       onChange={e => setNewDocument({...newDocument, content: e.target.value})}
                    />
                 </div>
              </div>
-             <div className="p-5 border-t border-gray-800 flex justify-end gap-3">
-                <button onClick={() => setShowCreateModal(false)} className="px-5 py-2.5 text-gray-300 hover:bg-gray-800 rounded-lg" type="button">Cancel</button>
+              <div className="p-5 border-t border-[var(--color-border)] flex justify-end gap-3">
+                <button onClick={() => setShowCreateModal(false)} className="px-5 py-2.5 text-default hover:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 rounded-lg" type="button">Cancel</button>
                 <button 
                   onClick={handleCreate} 
                   disabled={isCreating} 
-                  className="px-5 py-2.5 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium disabled:opacity-50"
+                  className="px-5 py-2.5 bg-green-600 hover:bg-green-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-400 text-white rounded-lg font-medium disabled:opacity-50"
                   type="button"
                 >
                   {isCreating ? 'Creating...' : 'Create Document'}

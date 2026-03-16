@@ -1,16 +1,19 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { X, Send, User, Bot, Sparkles, Loader2, MessageSquare } from 'lucide-react';
 import { createChatbotContainer } from './ChatbotContainer';
-import { MessageEntity, ChatSessionEntity } from '../domain/entities';
+import { MessageEntity, ChatSessionEntity, type Message } from '../domain/entities';
 import { sanitizeInput } from '@shared/utils/sanitizer';
 import { rateLimiter, RateLimitPresets } from '@shared/utils/rateLimiter';
 import { supabase } from '@shared/supabaseClient';
 import { getAppSettings } from '@shared/services/settingsService';
 
-// ====================================
-// SESSION IDENTIFIER (per-tab rate limiting)
-// ====================================
-function getSessionIdentifier(): string {
+let _container: ReturnType<typeof createChatbotContainer> | null = null;
+const getContainer = () => {
+  if (!_container) _container = createChatbotContainer(supabase);
+  return _container;
+};
+
+const getSessionIdentifier = (): string => {
   const key = 'sc_chat_session_id';
   let sessionId = sessionStorage.getItem(key);
   if (!sessionId) {
@@ -18,16 +21,8 @@ function getSessionIdentifier(): string {
     sessionStorage.setItem(key, sessionId);
   }
   return sessionId;
-}
+};
 
-// ====================================
-// DEPENDENCY INJECTION
-// ====================================
-const container = createChatbotContainer(supabase);
-
-// ====================================
-// COMPONENT
-// ====================================
 export const ExpertAssistant: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState('');
@@ -35,142 +30,115 @@ export const ExpertAssistant: React.FC = () => {
   const [whatsappPhone, setWhatsappPhone] = useState<string>('');
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Fetch WhatsApp number from settings (via shared service, not direct Supabase)
   useEffect(() => {
     const fetchWhatsApp = async () => {
       const settings = await getAppSettings();
       if (settings.whatsappPhone) {
-        const cleanPhone = settings.whatsappPhone.replaceAll(/[^\d+]/g, '');
-        setWhatsappPhone(cleanPhone);
+        setWhatsappPhone(settings.whatsappPhone.replaceAll(/[^\d+]/g, ''));
       }
     };
     fetchWhatsApp();
   }, []);
 
-  // Use domain entities for chat session management
-  const chatSessionRef = useRef(new ChatSessionEntity());
+  const [chatSession, setChatSession] = useState(() => new ChatSessionEntity());
 
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [chatSessionRef.current.messages, isLoading]);
+  }, [chatSession.messages, isLoading]);
 
-  const handleSendMessage = async (message: string) => {
+  const handleSendMessage = useCallback(async (message: string, currentMessages: Message[]) => {
     setIsLoading(true);
-    
     try {
-      const response = await container.generateResponseUseCase.execute({
+      const response = await getContainer().generateResponseUseCase.execute({
         userQuery: message,
-        conversationHistory: chatSessionRef.current.messages,
+        conversationHistory: currentMessages,
         useRAG: true,
-        ragOptions: {
-          topK: 5,
-          threshold: 0.4,
-          source: null,
-        },
+        ragOptions: { topK: 5, threshold: 0.4, source: null },
       });
-
-      const assistantEntity = new MessageEntity({
-        role: 'assistant',
-        content: response,
-      });
-      chatSessionRef.current = chatSessionRef.current.addMessage(assistantEntity);
+      const assistantEntity = new MessageEntity({ role: 'assistant', content: response });
+      setChatSession(prev => prev.addMessage(assistantEntity));
     } catch {
-      const errorEntity = new MessageEntity({
-        role: 'assistant',
-        content: 'Hubo un error al conectar con el asistente. Por favor, intenta de nuevo.',
-      });
-      chatSessionRef.current = chatSessionRef.current.addMessage(errorEntity);
+      const errorEntity = new MessageEntity({ role: 'assistant', content: 'Hubo un error al conectar con el asistente. Por favor, intenta de nuevo.' });
+      setChatSession(prev => prev.addMessage(errorEntity));
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
 
-    // ✅ Security: Rate limiting per session (OWASP A04:2021 - Insecure Design)
     const userIdentifier = getSessionIdentifier();
     const isAllowed = await rateLimiter.checkLimit(userIdentifier, RateLimitPresets.CHATBOT);
-
     if (!isAllowed) {
-      const errorEntity = new MessageEntity({
-        role: 'assistant',
-        content: 'Has enviado demasiados mensajes. Por favor, espera un minuto antes de continuar.',
-      });
-      chatSessionRef.current = chatSessionRef.current.addMessage(errorEntity);
+      const errorEntity = new MessageEntity({ role: 'assistant', content: 'Has enviado demasiados mensajes. Por favor, espera un minuto antes de continuar.' });
+      setChatSession(prev => prev.addMessage(errorEntity));
       return;
     }
 
-    // ✅ Security: Sanitize user input (OWASP A03:2021 - Injection)
     let sanitizedInput: string;
     try {
       sanitizedInput = sanitizeInput(input.trim(), 'chatbot_message', 4000);
     } catch {
-      // Input validation failed (too long or invalid)
-      const errorEntity = new MessageEntity({
-        role: 'assistant',
-        content: 'Tu mensaje es demasiado largo. Máximo 4000 caracteres.',
-      });
-      chatSessionRef.current = chatSessionRef.current.addMessage(errorEntity);
+      const errorEntity = new MessageEntity({ role: 'assistant', content: 'Tu mensaje es demasiado largo. Máximo 4000 caracteres.' });
+      setChatSession(prev => prev.addMessage(errorEntity));
       setInput('');
       return;
     }
 
     setInput('');
-    
-    // Add user message to session (using sanitized input)
-    const userEntity = new MessageEntity({
-      role: 'user',
-      content: sanitizedInput,
-    });
-    chatSessionRef.current = chatSessionRef.current.addMessage(userEntity);
-    
-    // Use the new handleSendMessage function
-    await handleSendMessage(sanitizedInput);
+    const userEntity = new MessageEntity({ role: 'user', content: sanitizedInput });
+    const updatedSession = chatSession.addMessage(userEntity);
+    setChatSession(updatedSession);
+    await handleSendMessage(sanitizedInput, updatedSession.messages);
   };
 
   return (
     <div className="fixed bottom-8 right-8 z-[100] flex flex-col items-end gap-4">
-      {/* Chat Window */}
       {isOpen && (
-        <div className="mb-4 w-[90vw] md:w-[400px] h-[550px] bg-[#0d0d1e] border border-white/10 rounded-3xl shadow-2xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-300">
-          <div className="p-5 bg-blue-600 flex items-center justify-between">
+        <div className="mb-4 w-[85vw] sm:w-[90vw] md:w-[400px] h-[60vh] sm:h-[550px] max-h-[80vh] sm:max-h-[80vh] bg-[var(--color-bg)] border border-[var(--color-border)] rounded-3xl shadow-2xl flex flex-col overflow-hidden">
+          <div className="p-4 bg-blue-600 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
-                <Bot className="text-white w-6 h-6" />
+              <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
+                <Bot className="text-white w-5 h-5" />
               </div>
               <div>
-                <h4 className="font-bold text-sm leading-none">Asistente Experto</h4>
+                <h4 className="font-bold text-sm">Asistente Experto</h4>
                 <p className="text-[10px] text-blue-100 opacity-70">Entrenado con IA</p>
               </div>
             </div>
-            <button onClick={() => setIsOpen(false)} className="text-white/70 hover:text-white">
+            <button onClick={() => setIsOpen(false)} className="text-white/70 hover:text-white focus:outline-none focus:ring-2 focus:ring-white/50 p-2 rounded-lg hover:bg-white/10 transition-colors" aria-label="Cerrar chat">
               <X className="w-5 h-5" />
             </button>
           </div>
 
-          <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 space-y-6 bg-gradient-to-b from-transparent to-[#050505]/50">
-            {chatSessionRef.current.isEmpty() && (
-              <div className="text-center py-10 px-6">
-                <div className="w-16 h-16 bg-blue-600/10 rounded-2xl flex items-center justify-center mx-auto mb-6 text-blue-500">
-                  <Sparkles className="w-8 h-8" />
+          <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4" role="log" aria-live="polite">
+            {chatSession.isEmpty() && (
+              <div className="text-center py-8">
+                <div className="w-14 h-14 bg-blue-600/10 rounded-xl flex items-center justify-center mx-auto mb-4 text-blue-500">
+                  <Sparkles className="w-7 h-7" />
                 </div>
                 <h5 className="font-bold mb-2">¿Cómo puedo ayudarte?</h5>
-                <p className="text-xs text-gray-500 leading-relaxed">
-                  Pregúntame sobre QRIBAR, automatización con n8n o cómo mejorar tus reseñas en Google.
-                </p>
+                <p className="text-xs text-muted mb-4">Pregúntame sobre QRIBAR, automatización con n8n o cómo mejorar tus reseñas en Google.</p>
+                  <div className="flex flex-wrap gap-2 justify-center">
+                  {['¿Qué es QRIBAR?', '¿Cómo funcionan las tarjetas NFC?', 'Quiero automatizar mi negocio'].map((prompt) => (
+                    <button key={prompt} onClick={() => setInput(prompt)} className="text-xs bg-blue-600/10 border border-blue-500/20 text-blue-400 px-3 py-2 sm:py-2 rounded-full hover:bg-blue-600/20 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] transition-colors min-h-[44px]">
+                      {prompt}
+                    </button>
+                  ))}
+                </div>
               </div>
             )}
             
-            {chatSessionRef.current.messages.map((m, _i) => (
+            {chatSession.messages.map((m) => (
               <div key={m.id} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                <div className={`max-w-[80%] flex gap-3 ${m.role === 'user' ? 'flex-row-reverse' : ''}`}>
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${m.role === 'user' ? 'bg-blue-600' : 'bg-white/5 border border-white/10'}`}>
+                <div className={`max-w-[80%] flex gap-2 ${m.role === 'user' ? 'flex-row-reverse' : ''}`}>
+                  <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${m.role === 'user' ? 'bg-blue-600' : 'bg-[var(--color-surface)] border border-[var(--color-border)]'}`}>
                     {m.role === 'user' ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4 text-blue-400" />}
                   </div>
-                  <div className={`p-4 rounded-2xl text-xs leading-relaxed ${m.role === 'user' ? 'bg-blue-600 text-white rounded-tr-none' : 'bg-white/5 border border-white/10 text-gray-300 rounded-tl-none'}`}>
+                  <div className={`p-3 rounded-2xl text-sm ${m.role === 'user' ? 'bg-blue-600 text-white rounded-tr-none' : 'bg-[var(--color-surface)] border border-[var(--color-border)] text-muted rounded-tl-none'}`}>
                     {m.content}
                   </div>
                 </div>
@@ -179,28 +147,17 @@ export const ExpertAssistant: React.FC = () => {
 
             {isLoading && (
               <div className="flex justify-start">
-                <div className="bg-white/5 border border-white/10 p-4 rounded-2xl rounded-tl-none">
+                <div className="bg-[var(--color-surface)] border border-[var(--color-border)] p-3 rounded-2xl rounded-tl-none">
                   <Loader2 className="w-4 h-4 animate-spin text-blue-400" />
                 </div>
               </div>
             )}
           </div>
 
-          <div className="p-4 bg-[#0a0a0a] border-t border-white/5">
-            <div className="relative">
-              <input 
-                type="text" 
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-                placeholder="Escribe tu mensaje..."
-                className="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-6 pr-14 text-xs outline-none focus:border-blue-500 transition-colors"
-              />
-              <button 
-                onClick={handleSend}
-                disabled={!input.trim() || isLoading}
-                className="absolute right-2 top-2 bottom-2 w-10 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg flex items-center justify-center transition-all"
-              >
+          <div className="p-3 bg-[var(--color-bg)] border-t border-[var(--color-border)]">
+            <div className="relative flex gap-2">
+              <input type="text" value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()} placeholder="Escribe tu mensaje..." aria-label="Escribe tu mensaje" autoComplete="off" className="flex-1 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl py-3 px-4 text-sm text-default outline-none focus:border-blue-500 transition-colors min-h-[44px]" />
+              <button onClick={handleSend} disabled={!input.trim() || isLoading} aria-label="Enviar mensaje" className="w-11 h-11 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] disabled:opacity-50 disabled:cursor-not-allowed rounded-xl flex items-center justify-center transition-colors shrink-0">
                 <Send className="w-4 h-4 text-white" />
               </button>
             </div>
@@ -208,46 +165,19 @@ export const ExpertAssistant: React.FC = () => {
         </div>
       )}
 
-      {/* Buttons Group */}
       <div className="flex items-center gap-3">
-        {/* WhatsApp Button */}
-        <a 
-          href={whatsappPhone ? `https://wa.me/${whatsappPhone}` : '#'}
-          target={whatsappPhone ? "_blank" : undefined}
-          rel={whatsappPhone ? "noopener noreferrer" : undefined}
-          className={`flex items-center gap-4 bg-[#25D366] hover:bg-[#1ebc57] text-white px-6 py-3 rounded-full shadow-2xl transition-all active:scale-95 border border-white/10 group overflow-hidden relative${whatsappPhone ? '' : ' opacity-50 cursor-not-allowed'}`}
-        >
-          <div className="relative z-10">
-            <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform">
-               <MessageSquare className="text-white fill-white w-5 h-5" />
-            </div>
-          </div>
-          <div className="text-left relative z-10 hidden sm:block">
-            <p className="text-[11px] font-bold leading-none mb-0.5">WhatsApp</p>
-            <p className="text-[9px] text-white/80 font-medium">Habla con nosotros</p>
-          </div>
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-        </a>
+        {whatsappPhone && (
+          <a href={`https://wa.me/${whatsappPhone}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 sm:gap-3 bg-whatsapp hover:bg-whatsapp-hover focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] text-white px-4 py-3 sm:px-5 rounded-full shadow-lg transition-colors min-h-[48px]">
+            <MessageSquare className="w-5 h-5" />
+            <span className="text-sm font-bold hidden sm:block">WhatsApp</span>
+          </a>
+        )}
 
-        {/* AI Assistant Trigger Button */}
-        <button 
-          onClick={() => setIsOpen(!isOpen)}
-          className={`flex items-center gap-4 px-6 py-3 rounded-full shadow-2xl transition-all active:scale-95 border border-white/10 group ${
-            isOpen ? 'bg-blue-600 text-white' : 'bg-white text-black hover:bg-gray-100'
-          }`}
-        >
-          <div className="relative">
-            <div className={`w-10 h-10 rounded-full flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform ${
-              isOpen ? 'bg-white/20' : 'bg-blue-600'
-            }`}>
-               <Bot className="text-white w-5 h-5" />
-            </div>
-            <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
+        <button onClick={() => setIsOpen(!isOpen)} className={`flex items-center gap-2 sm:gap-3 px-4 py-3 sm:px-5 rounded-full shadow-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 min-h-[48px] ${isOpen ? 'bg-blue-600 text-white' : 'bg-[var(--color-text)] text-[var(--color-bg)] hover:opacity-90'}`}>
+          <div className={`w-9 h-9 rounded-full flex items-center justify-center ${isOpen ? 'bg-white/20' : 'bg-blue-600'}`}>
+            <Bot className="text-white w-5 h-5" />
           </div>
-          <div className="text-left hidden sm:block">
-            <p className="text-[11px] font-bold leading-none mb-0.5">Asistente Experto</p>
-            <p className={`text-[9px] font-medium ${isOpen ? 'text-blue-100' : 'text-gray-500'}`}>¿Preguntas?</p>
-          </div>
+          <span className="text-sm font-bold hidden sm:block">Asistente Experto</span>
         </button>
       </div>
     </div>

@@ -10,6 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { LoginAdminUseCase } from '../../domain/usecases/LoginAdminUseCase';
 import { AuthSession } from '../../domain/repositories/IAuthRepository';
 import { loginSchema, LoginFormData } from '../schemas/loginSchema';
+import { rateLimiter, RateLimitPresets } from '@shared/utils/rateLimiter';
 
 interface LoginProps {
   loginUseCase: LoginAdminUseCase;
@@ -23,7 +24,7 @@ export const Login: React.FC<LoginProps> = ({ loginUseCase, onLoginSuccess }) =>
   const {
     register,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting, errors: formErrors },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     defaultValues: { email: '', password: '' },
@@ -31,6 +32,13 @@ export const Login: React.FC<LoginProps> = ({ loginUseCase, onLoginSuccess }) =>
 
   const onSubmit = async ({ email, password }: LoginFormData) => {
     setError(null);
+
+    const isAllowed = await rateLimiter.checkLimit(`login_${email}`, RateLimitPresets.LOGIN);
+    if (!isAllowed) {
+      setError('Demasiados intentos. Espera unos minutos.');
+      return;
+    }
+
     try {
       const session = await loginUseCase.execute({ email, password });
       onLoginSuccess(session);
@@ -40,12 +48,12 @@ export const Login: React.FC<LoginProps> = ({ loginUseCase, onLoginSuccess }) =>
   };
 
   return (
-    <div className="relative min-h-screen bg-[#020408] flex items-center justify-center px-4">
+    <div className="relative min-h-screen bg-base flex items-center justify-center px-4">
 
       {/* Back button */}
       <button
         onClick={() => navigate(-1)}
-        className="absolute top-4 left-4 sm:top-8 sm:left-8 flex items-center text-sm font-medium text-gray-400 hover:text-white transition-colors group z-10"
+        className="absolute top-4 left-4 sm:top-8 sm:left-8 flex items-center text-sm font-medium text-muted hover:text-[var(--color-text)] transition-colors group z-10"
       >
         <svg
           className="mr-2 h-5 w-5 transition-transform group-hover:-translate-x-1"
@@ -58,45 +66,51 @@ export const Login: React.FC<LoginProps> = ({ loginUseCase, onLoginSuccess }) =>
         Volver
       </button>
 
-      <div className="max-w-md w-full space-y-8 border border-gray-800 p-8 rounded-2xl bg-[#0B0E14]/50 shadow-2xl backdrop-blur-sm">
+      <div className="max-w-md w-full space-y-8 border border-[var(--color-border)] p-8 rounded-2xl bg-[var(--color-surface)] shadow-2xl">
         <div>
-          <h2 className="text-center text-3xl font-extrabold text-white tracking-tight">
+          <h2 className="text-center text-3xl font-extrabold text-default tracking-tight">
             Admin Panel
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-400">
+          <p className="mt-2 text-center text-sm text-muted">
             Inicia sesión para gestionar el sistema
           </p>
         </div>
 
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)} aria-busy={isSubmitting}>
           <div className="rounded-md shadow-sm space-y-4">
             <div>
-              <label htmlFor="email" className="block text-xs font-semibold text-gray-400 uppercase mb-1 ml-1">
+              <label htmlFor="email" className="block text-xs font-semibold text-muted uppercase mb-1 ml-1">
                 Email
               </label>
               <input
                 id="email"
                 type="email"
                 autoComplete="email"
-                className="appearance-none relative block w-full px-4 py-3 border border-gray-700 placeholder-gray-500 text-white bg-gray-900/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm transition-all"
+                className="appearance-none relative block w-full px-4 py-3 border border-[var(--color-border)] placeholder-[var(--color-text-muted)] text-default bg-[var(--color-bg-alt)]/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm transition-all"
                 placeholder="admin@ejemplo.com"
                 disabled={isSubmitting}
                 {...register('email')}
               />
+              {formErrors.email && (
+                <p className="text-xs text-red-400 mt-1 ml-1">{formErrors.email.message}</p>
+              )}
             </div>
             <div>
-              <label htmlFor="password" className="block text-xs font-semibold text-gray-400 uppercase mb-1 ml-1">
+              <label htmlFor="password" className="block text-xs font-semibold text-muted uppercase mb-1 ml-1">
                 Contraseña
               </label>
               <input
                 id="password"
                 type="password"
                 autoComplete="current-password"
-                className="appearance-none relative block w-full px-4 py-3 border border-gray-700 placeholder-gray-500 text-white bg-gray-900/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm transition-all"
+                className="appearance-none relative block w-full px-4 py-3 border border-[var(--color-border)] placeholder-[var(--color-text-muted)] text-default bg-[var(--color-bg-alt)]/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm transition-all"
                 placeholder="••••••••"
                 disabled={isSubmitting}
                 {...register('password')}
               />
+              {formErrors.password && (
+                <p className="text-xs text-red-400 mt-1 ml-1">{formErrors.password.message}</p>
+              )}
             </div>
           </div>
 
@@ -109,7 +123,7 @@ export const Login: React.FC<LoginProps> = ({ loginUseCase, onLoginSuccess }) =>
           <button
             type="submit"
             disabled={isSubmitting}
-            className="group relative w-full flex justify-center py-3.5 px-4 border border-transparent text-sm font-bold rounded-xl text-white bg-blue-600 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#020408] focus:ring-blue-500 disabled:opacity-50 transition-all shadow-lg shadow-blue-900/20"
+            className="group relative w-full flex justify-center py-3.5 px-4 border border-transparent text-sm font-bold rounded-xl text-white bg-blue-600 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] focus:ring-blue-500 disabled:opacity-50 transition-all shadow-lg shadow-blue-900/20"
           >
             {isSubmitting ? (
               <span className="flex items-center">
