@@ -45,7 +45,7 @@ export const AdminDashboard: React.FC = () => {
                 <User className="w-5 h-5" />
               </div>
               <div className="h-6 w-px bg-gray-700 mx-1"></div>
-              <button onClick={handleLogout} className="p-2 text-neutral-300 hover:text-red-400 hover:bg-gray-800 rounded-lg transition-colors" title="Logout">
+              <button onClick={handleLogout} className="p-2 text-neutral-300 hover:text-red-400 hover:bg-gray-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400 rounded-lg transition-colors" title="Logout" aria-label="Cerrar sesión">
                 <LogOut className="w-5 h-5" />
               </button>
             </div>

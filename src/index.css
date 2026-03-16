@@ -64,7 +64,10 @@
 
 @layer utilities {
   .gradient-text {
-    @apply bg-gradient-to-r from-primary-light via-primary to-primary-dark bg-clip-text text-transparent;
+    background: linear-gradient(to right, oklch(80% 0.12 250), oklch(65% 0.18 250), oklch(45% 0.15 250));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 
   .text-muted {

@@ -8,8 +8,28 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 // Simple in-memory rate limiter (for development)
 // Rate limiter: In-memory implementation (Upstash Redis migration deferred by business decision)
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
+const CLEANUP_INTERVAL = 60000; // Clean up every minute
+let lastCleanup = Date.now();
+
+function cleanupRateLimitMap(): void {
+  const now = Date.now();
+  if (now - lastCleanup < CLEANUP_INTERVAL) return;
+  
+  lastCleanup = now;
+  for (const [key, value] of rateLimitMap.entries()) {
+    if (now > value.resetAt) {
+      rateLimitMap.delete(key);
+    }
+  }
+  // Prevent unbounded growth
+  if (rateLimitMap.size > 1000) {
+    const keysToDelete = Array.from(rateLimitMap.keys()).slice(0, 500);
+    keysToDelete.forEach(k => rateLimitMap.delete(k));
+  }
+}
 
 function checkRateLimit(userId: string): { allowed: boolean; remaining: number } {
+  cleanupRateLimitMap();
   const now = Date.now();
   const windowMs = 60000; // 1 minute
   const maxRequests = 10;
