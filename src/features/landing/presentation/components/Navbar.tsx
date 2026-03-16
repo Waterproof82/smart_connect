@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Cpu, ChevronDown, Code2, Settings2, Smartphone, Utensils, Shield, X, Menu } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Cpu, ChevronDown, Code2, Settings2, Smartphone, Utensils, Shield, X, Menu, Sun, Moon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 interface NavbarProps {
@@ -9,6 +9,27 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+
+  // Initialize theme from localStorage after mount (no setState in effect)
+  useEffect(() => {
+    const saved = localStorage.getItem('theme');
+    if (saved === 'light') {
+      document.documentElement.classList.add('light');
+    }
+  }, []);
+
+  const toggleTheme = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const newTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
+    if (newTheme === 'light') {
+      document.documentElement.classList.add('light');
+    } else {
+      document.documentElement.classList.remove('light');
+    }
+  };
 
   const solutions = [
     {
@@ -154,6 +175,19 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
             <Shield className="w-4 h-4" />
             <span>Admin</span>
           </Link>
+          
+          {/* Theme Toggle */}
+          <button
+            onClick={toggleTheme}
+            className="flex items-center justify-center w-9 h-9 rounded-lg bg-white/5 hover:bg-white/10 transition-colors"
+            aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+          >
+            {theme === 'dark' ? (
+              <Sun className="w-4 h-4 text-yellow-400" />
+            ) : (
+              <Moon className="w-4 h-4 text-gray-600" />
+            )}
+          </button>
         </div>
 
         {/* Hamburger for mobile */}

@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Home, LogOut, User } from 'lucide-react';
@@ -8,7 +9,6 @@ import { useAdmin } from '../AdminContext';
 
 export const AdminDashboard: React.FC = () => {
   const { container, currentUser, onLogout } = useAdmin();
-  const [statsKey, setStatsKey] = React.useState(0);
 
   const handleLogout = async () => {
     try {
@@ -19,33 +19,21 @@ export const AdminDashboard: React.FC = () => {
     }
   };
 
-  const refreshStats = () => {
-    setStatsKey(prev => prev + 1);
-  };
-
   return (
     <div className="min-h-screen bg-sc-dark pb-10">
-      {/* Header */}
-      <header className="bg-gray-900 border-b border-gray-800 sticky top-0 z-30 shadow-md">
+      <header className="bg-gray-900 border-b border-gray-800 sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            
-            {/* Logo Area */}
             <div className="flex items-center gap-3">
-              <Link 
-                to="/"
-                className="p-2 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-colors"
-                title="Back to Home"
-              >
+              <Link to="/" className="p-2 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-colors" title="Back to Home">
                 <Home className="w-5 h-5" />
               </Link>
               <div className="flex flex-col">
-                <h1 className="text-lg md:text-xl font-bold text-white leading-tight">SmartConnect</h1>
+                <h1 className="text-lg md:text-xl font-bold text-white">SmartConnect</h1>
                 <span className="text-[10px] md:text-xs text-gray-400 font-medium tracking-wide">ADMIN PANEL</span>
               </div>
             </div>
 
-            {/* User Area */}
             <div className="flex items-center gap-3 md:gap-4">
               <div className="hidden md:flex flex-col items-end">
                 <span className="text-sm text-gray-200">{currentUser.email}</span>
@@ -53,19 +41,11 @@ export const AdminDashboard: React.FC = () => {
                   {currentUser.role}
                 </span>
               </div>
-              
-              {/* Mobile User Icon (replacing full email) */}
               <div className="md:hidden text-gray-400">
                 <User className="w-5 h-5" />
               </div>
-
               <div className="h-6 w-px bg-gray-700 mx-1"></div>
-
-              <button
-                onClick={handleLogout}
-                className="p-2 text-gray-300 hover:text-red-400 hover:bg-gray-800 rounded-lg transition-colors"
-                title="Logout"
-              >
+              <button onClick={handleLogout} className="p-2 text-gray-300 hover:text-red-400 hover:bg-gray-800 rounded-lg transition-colors" title="Logout">
                 <LogOut className="w-5 h-5" />
               </button>
             </div>
@@ -73,9 +53,8 @@ export const AdminDashboard: React.FC = () => {
         </div>
       </header>
 
-      {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
-        <StatsDashboard key={statsKey} getStatsUseCase={container.getDocumentStatsUseCase} />
+        <StatsDashboard getStatsUseCase={container.getDocumentStatsUseCase} />
         
         <div className="md:flex md:items-center md:justify-between mb-2">
           <div>
@@ -84,11 +63,8 @@ export const AdminDashboard: React.FC = () => {
           </div>
         </div>
 
-        <DocumentList
-          onDocumentChange={refreshStats}
-        />
+        <DocumentList />
 
-        {/* Settings Section */}
         <div className="md:flex md:items-center md:justify-between mb-2 mt-8">
           <div>
             <h2 className="text-2xl font-bold text-white">Configuración</h2>
