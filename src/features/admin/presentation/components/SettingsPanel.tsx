@@ -82,7 +82,7 @@ export const SettingsPanel: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
+      <div className="bg-gray-900 border border-gray-800 rounded-lg p-6" role="status" aria-live="polite">
         <div className="flex items-center justify-center h-32">
           <div className="text-gray-400">Cargando configuración...</div>
         </div>
@@ -90,8 +90,18 @@ export const SettingsPanel: React.FC = () => {
     );
   }
 
+  if (error) {
+    return (
+      <div className="bg-gray-900 border border-red-800 rounded-lg p-6" role="alert">
+        <div className="flex items-center justify-center h-32">
+          <div className="text-red-400">{error}</div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
+    <div className="bg-gray-900 border border-gray-800 rounded-lg p-6" role="form" aria-label="Configuración de la aplicación">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
@@ -111,14 +121,14 @@ export const SettingsPanel: React.FC = () => {
 
       {/* Success/Error Messages */}
       {success && (
-        <div className="mb-4 p-3 bg-green-900/30 border border-green-700/50 rounded-lg flex items-center gap-2">
+        <div className="mb-4 p-3 bg-green-900/30 border border-green-700/50 rounded-lg flex items-center gap-2" role="status" aria-live="polite">
           <CheckCircle2 className="w-5 h-5 text-green-400" />
           <span className="text-green-400 text-sm">{success}</span>
         </div>
       )}
 
       {error && (
-        <div className="mb-4 p-3 bg-red-900/30 border border-red-700/50 rounded-lg flex items-center gap-2">
+        <div className="mb-4 p-3 bg-red-900/30 border border-red-700/50 rounded-lg flex items-center gap-2" role="alert" aria-live="assertive">
           <AlertCircle className="w-5 h-5 text-red-400" />
           <span className="text-red-400 text-sm">{error}</span>
         </div>
