@@ -87,9 +87,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
 
   return (
     <nav 
-      // Estilo forzado: Eliminamos cualquier rastro de transparencia
-      style={{ backgroundColor: '#020408', opacity: 1 }}
-      className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 border-b border-white/5 shadow-2xl ${
+      className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 border-b border-white/5 shadow-2xl bg-sc-dark ${
         scrolled ? 'py-2 md:py-3' : 'py-3 md:py-6'
       }`}
     >
@@ -233,7 +231,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
                   <a
                     key={item.id}
                     href={item.href}
-                    className="flex items-center gap-3 p-3 text-neutral-300 min-h-[48px]"
+                    className="flex items-center gap-3 p-3 text-neutral-300 min-h-[48px] hover:bg-white/5 focus:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 rounded-xl transition-colors"
                     target={item.external ? "_blank" : undefined}
                     rel={item.external ? "noopener noreferrer" : undefined}
                     onClick={(e) => item.external ? setIsMobileMenuOpen(false) : handleMobileLinkClick(e)}
@@ -243,9 +241,9 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
                   </a>
                 ))}
                 <hr className="border-white/10 my-2" />
-                <a href="#exito" className="text-neutral-300 p-3 min-h-[48px] flex items-center" onClick={handleMobileLinkClick}>Éxito</a>
-                <a href="#contacto" className="text-neutral-300 p-3 min-h-[48px] flex items-center" onClick={handleMobileLinkClick}>Contacto</a>
-                <Link to="/admin" className="text-neutral-300 flex items-center gap-2 p-3 min-h-[48px]" onClick={() => setIsMobileMenuOpen(false)}>
+                <a href="#exito" className="text-neutral-300 p-3 min-h-[48px] flex items-center hover:bg-white/5 focus:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 rounded-xl transition-colors" onClick={handleMobileLinkClick}>Éxito</a>
+                <a href="#contacto" className="text-neutral-300 p-3 min-h-[48px] flex items-center hover:bg-white/5 focus:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 rounded-xl transition-colors" onClick={handleMobileLinkClick}>Contacto</a>
+                <Link to="/admin" className="text-neutral-300 flex items-center gap-2 p-3 min-h-[48px] hover:bg-white/5 focus:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 rounded-xl transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
                   <Shield className="w-4 h-4" />
                   <span>Admin</span>
                 </Link>

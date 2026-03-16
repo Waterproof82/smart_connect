@@ -37,9 +37,9 @@ Deno.serve(async (req) => {
     'http://localhost:3000',
   ];
   const origin = req.headers.get('origin') || '';
-  const allowedOrigin = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+  const isOriginAllowed = ALLOWED_ORIGINS.includes(origin);
   const corsHeaders = {
-    'Access-Control-Allow-Origin': allowedOrigin,
+    'Access-Control-Allow-Origin': isOriginAllowed ? origin : 'null',
     'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
     'X-Content-Type-Options': 'nosniff',

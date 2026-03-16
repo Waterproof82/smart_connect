@@ -21,6 +21,15 @@ export const Contact: React.FC = () => {
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
+  const successTimeoutRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (successTimeoutRef.current) {
+        clearTimeout(successTimeoutRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -96,12 +105,15 @@ export const Contact: React.FC = () => {
 
       if (result.success) {
         setSubmitStatus('success');
-        setTimeout(() => { reset(); setSubmitStatus('idle'); }, 3000);
+        successTimeoutRef.current = window.setTimeout(() => { reset(); setSubmitStatus('idle'); }, 3000);
       } else {
         setSubmitStatus('error');
-        setTimeout(() => setSubmitStatus('idle'), 3000);
+        successTimeoutRef.current = window.setTimeout(() => setSubmitStatus('idle'), 3000);
       }
-    } catch { setSubmitStatus('error'); setTimeout(() => setSubmitStatus('idle'), 3000); }
+    } catch { 
+      setSubmitStatus('error'); 
+      successTimeoutRef.current = window.setTimeout(() => setSubmitStatus('idle'), 3000); 
+    }
   };
 
   useEffect(() => {
@@ -188,7 +200,7 @@ export const Contact: React.FC = () => {
                 <div>
                   <label htmlFor="contact-service" className="text-xs font-bold text-neutral-400 uppercase tracking-widest ml-1 block mb-2">Servicio de Interés</label>
                   <div className="relative">
-                    <select id="contact-service" className={getFieldClassName('service') + ' appearance-none pr-10 [&>option]:bg-sc-dark [&>option]:text-neutral-200 [&>option]:py-2'} aria-describedby={errors.service ? 'contact-service-error' : undefined} {...register('service')}>
+                    <select id="contact-service" className={getFieldClassName('service') + ' appearance-none pr-10 [&>option]:bg-sc-dark [&>option]:text-neutral-200 [&>option]:py-2'} aria-invalid={touchedFields.service && !!errors.service} aria-describedby={errors.service ? 'contact-service-error' : undefined} {...register('service')}>
                       <option value="" className="text-neutral-400">Selecciona una opción</option>
                       <option value="QRIBAR - Menú Digital">QRIBAR - Menú Digital</option>
                       <option value="Automatización n8n">Automatización n8n</option>

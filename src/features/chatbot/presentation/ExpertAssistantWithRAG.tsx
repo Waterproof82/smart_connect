@@ -7,7 +7,9 @@ import { rateLimiter, RateLimitPresets } from '@shared/utils/rateLimiter';
 import { supabase } from '@shared/supabaseClient';
 import { getAppSettings } from '@shared/services/settingsService';
 
-function getSessionIdentifier(): string {
+const container = createChatbotContainer(supabase);
+
+const getSessionIdentifier = (): string => {
   const key = 'sc_chat_session_id';
   let sessionId = sessionStorage.getItem(key);
   if (!sessionId) {
@@ -15,9 +17,7 @@ function getSessionIdentifier(): string {
     sessionStorage.setItem(key, sessionId);
   }
   return sessionId;
-}
-
-const container = createChatbotContainer(supabase);
+};
 
 export const ExpertAssistant: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
