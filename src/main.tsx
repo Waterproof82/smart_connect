@@ -25,6 +25,10 @@ const LoadingFallback = () => (
   </div>
 );
 
+// Ensure dark mode only — remove any stale light theme class/storage
+document.documentElement.classList.remove('light');
+localStorage.removeItem('theme');
+
 const rootElement = document.getElementById('root');
 if (!rootElement) {
   throw new Error("Could not find root element to mount to");

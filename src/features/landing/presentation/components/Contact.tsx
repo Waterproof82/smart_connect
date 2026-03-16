@@ -61,8 +61,7 @@ export const Contact: React.FC = () => {
   } = useForm<ContactFormData>({
     resolver: zodResolver(contactSchema),
     defaultValues: { name: '', company: '', email: '', service: '', message: '' },
-    mode: 'onBlur',
-    reValidateMode: 'onChange',
+    mode: 'onChange',
   });
 
   const getFieldClassName = (field: keyof ContactFormData): string => {

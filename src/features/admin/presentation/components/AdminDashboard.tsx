@@ -1,7 +1,7 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Home, LogOut, User, Sun, Moon } from 'lucide-react';
+import { Home, LogOut, User } from 'lucide-react';
 import { StatsDashboard } from './StatsDashboard';
 import { DocumentList } from './DocumentList';
 import { SettingsPanel } from './SettingsPanel';
@@ -12,23 +12,10 @@ const logger = new ConsoleLogger('[AdminDashboard]');
 
 export const AdminDashboard: React.FC = () => {
   const { container, currentUser, onLogout } = useAdmin();
-  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
-    const saved = localStorage.getItem('theme');
-    return saved === 'light' ? 'light' : 'dark';
-  });
+  const [statsKey, setStatsKey] = useState(0);
 
-  useEffect(() => {
-    if (theme === 'light') {
-      document.documentElement.classList.add('light');
-    } else {
-      document.documentElement.classList.remove('light');
-    }
-    localStorage.setItem('theme', theme);
-  }, [theme]);
-
-  const toggleTheme = (e: React.MouseEvent) => {
-    e.preventDefault();
-    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+  const handleDocumentChange = () => {
+    setStatsKey(prev => prev + 1);
   };
 
   const handleLogout = async () => {
@@ -69,9 +56,6 @@ export const AdminDashboard: React.FC = () => {
                 <User className="w-5 h-5" />
               </div>
               <div className="h-6 w-px bg-[var(--color-border)] mx-1"></div>
-              <button onClick={toggleTheme} className="p-2 text-muted hover:text-default hover:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 rounded-lg transition-colors" title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'} aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}>
-                {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-              </button>
               <button onClick={handleLogout} className="p-2 text-muted hover:text-red-400 hover:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400 rounded-lg transition-colors" title="Logout" aria-label="Cerrar sesión">
                 <LogOut className="w-5 h-5" />
               </button>
@@ -81,7 +65,7 @@ export const AdminDashboard: React.FC = () => {
       </header>
 
       <main id="admin-main-content" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
-        <StatsDashboard getStatsUseCase={container.getDocumentStatsUseCase} />
+        <StatsDashboard key={statsKey} getStatsUseCase={container.getDocumentStatsUseCase} />
 
         <div className="md:flex md:items-center md:justify-between mb-2">
           <div>
@@ -90,7 +74,7 @@ export const AdminDashboard: React.FC = () => {
           </div>
         </div>
 
-        <DocumentList />
+        <DocumentList onDocumentChange={handleDocumentChange} />
 
         <div className="md:flex md:items-center md:justify-between mb-2 mt-8">
           <div>

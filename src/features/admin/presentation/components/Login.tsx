@@ -86,7 +86,7 @@ export const Login: React.FC<LoginProps> = ({ loginUseCase, onLoginSuccess }) =>
                 id="email"
                 type="email"
                 autoComplete="email"
-                className="appearance-none relative block w-full px-4 py-3 border border-[var(--color-border)] placeholder-[var(--color-text-muted)] text-default bg-[var(--color-bg-alt)]/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm transition-all"
+                className="appearance-none relative block w-full px-4 py-3 border border-[var(--color-border)] placeholder-[var(--color-text-muted)] text-white bg-[var(--color-bg-alt)] rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm transition-all"
                 placeholder="admin@ejemplo.com"
                 disabled={isSubmitting}
                 {...register('email')}
@@ -103,7 +103,7 @@ export const Login: React.FC<LoginProps> = ({ loginUseCase, onLoginSuccess }) =>
                 id="password"
                 type="password"
                 autoComplete="current-password"
-                className="appearance-none relative block w-full px-4 py-3 border border-[var(--color-border)] placeholder-[var(--color-text-muted)] text-default bg-[var(--color-bg-alt)]/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm transition-all"
+                className="appearance-none relative block w-full px-4 py-3 border border-[var(--color-border)] placeholder-[var(--color-text-muted)] text-white bg-[var(--color-bg-alt)] rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm transition-all"
                 placeholder="••••••••"
                 disabled={isSubmitting}
                 {...register('password')}
