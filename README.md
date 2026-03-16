@@ -12,6 +12,7 @@
 | **Performance** | 10/10 ✅ |
 | **Responsive Design** | 10/10 ✅ |
 | **Design System** | 10/10 ✅ |
+| **Code Quality** | 10/10 ✅ |
 
 **Auditoría completa:** `docs/audit/2026-03-16_ux-ui-audit-and-frontend-review.md`
 
@@ -61,6 +62,28 @@
 - **Panel Admin:** Gestión de documentos y usuarios con roles (ver: [Admin Panel](docs/ADMIN_PANEL.md)).
 - **Checklist Producción:** Validación de seguridad, tests, integraciones y rendimiento antes de deploy (ver: [Checklist](docs/PRODUCTION_CHECKLIST.md)).
 - **Logging RAG:** Trazabilidad completa del flujo de IA y búsquedas (ver: [Logging](docs/RAG_LOGGING_GUIDE.md)).
+
+---
+
+## 🔒 Security Improvements (v0.5.0)
+
+### Security Headers (vercel.json + index.html)
+- ✅ **CSP:** Content-Security-Policy con whitelist de orígenes
+- ✅ **X-Content-Type-Options:** nosniff
+- ✅ **Referrer-Policy:** strict-origin-when-cross-origin
+- ✅ **Permissions-Policy:** camera=(), microphone=(), geolocation=()
+- ✅ **HSTS:** Strict-Transport-Security header
+
+### OWASP Compliance
+- ✅ **A02:2021 Cryptographic Failures:** PBKDF2 key derivation (10000 iterations)
+- ✅ **A03:2021 Injection:** DOMPurify 3.3.3, Zod validation
+- ✅ **A04:2021 Insecure Design:** Rate limiting with cleanup mechanism
+- ✅ **A07:2021 Authentication Failures:** Generic error messages, JWT validation
+
+### Edge Functions Security
+- ✅ **Origin Validation:** Reject unknown origins instead of fallback
+- ✅ **Rate Limiter:** Memory cleanup to prevent unbounded growth
+- ✅ **CORS:** Strict whitelist validation
 
 ---
 

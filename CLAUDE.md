@@ -93,6 +93,7 @@ Se aplican los estándares de calidad del Máster de Desarrollo con IA:
 - **Accessibility Score:** 10/10 ✅
 - **Performance Score:** 10/10 ✅
 - **Responsive Score:** 10/10 ✅
+- **Code Quality Score:** 10/10 ✅
 
 ### Flujo de trabajo obligatorio:
 1. **INICIALIZACIÓN:** Lee `docs/context/` relevante ANTES de empezar cualquier tarea

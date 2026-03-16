@@ -7,6 +7,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-03-16
+
+### Added
+- **Security Headers:** CSP (Content-Security-Policy), X-Content-Type-Options, Referrer-Policy, Permissions-Policy, HSTS in `vercel.json` and `index.html`
+- **Security Meta Tags:** X-Content-Type-Options, Referrer-Policy, Permissions-Policy in index.html
+- **Skip Link:** Admin panel skip link for keyboard navigation
+
+### Changed
+- **DOMPurify:** Updated from 3.3.1 to 3.3.3 (XSS vulnerability fix)
+- **Encryption:** PBKDF2 key derivation with 10000 iterations for stronger security
+- **Rate Limiter:** Added cleanup mechanism to prevent memory leaks in edge functions
+
+### Fixed
+- **CORS Security:** Edge functions now reject unknown origins instead of defaulting to first allowed
+- **Accessibility:** Added aria-live, role=status, aria-busy to multiple components
+- **Focus States:** Added focus-visible rings to all admin panel buttons
+- **Dark Theme:** UnauthorizedErrorPage now matches dark theme
+- **Loading States:** Added role="status" aria-live="polite" to SettingsPanel, StatsDashboard, DocumentList
+
+### Security
+- CSP policy blocks inline scripts except from trusted CDNs
+- All origins must be explicitly allowed in edge functions
+- Encryption key now uses PBKDF2 derivation
+
+---
+
 ## [0.4.1] - 2026-03-16
 
 ### Added
