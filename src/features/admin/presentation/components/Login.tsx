@@ -76,7 +76,7 @@ export const Login: React.FC<LoginProps> = ({ loginUseCase, onLoginSuccess }) =>
           </p>
         </div>
 
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)} aria-busy={isSubmitting}>
           <div className="rounded-md shadow-sm space-y-4">
             <div>
               <label htmlFor="email" className="block text-xs font-semibold text-gray-400 uppercase mb-1 ml-1">
