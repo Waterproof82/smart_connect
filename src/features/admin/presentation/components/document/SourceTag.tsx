@@ -18,7 +18,7 @@ const getSourceColor = (source: string): string => {
   return `hsl(${hue}, ${sat}%, ${light}%)`;
 };
 
-export const SourceTag: React.FC<SourceTagProps> = ({ source, onRemove }) => {
+export const SourceTag: React.FC<SourceTagProps> = React.memo(({ source, onRemove }) => {
   const trimmed = source.trim();
   const color = getSourceColor(trimmed);
   return (
@@ -34,13 +34,14 @@ export const SourceTag: React.FC<SourceTagProps> = ({ source, onRemove }) => {
       {onRemove && (
         <button
           onClick={onRemove}
-          className="ml-1.5 hover:text-white focus:outline-none"
+          className="ml-1 p-1 min-w-[28px] min-h-[28px] flex items-center justify-center rounded-full hover:bg-black/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-current"
           type="button"
-          aria-label={`Remove tag ${trimmed}`}
+          aria-label={`Eliminar etiqueta ${trimmed}`}
         >
           <X className="w-3 h-3" />
         </button>
       )}
     </span>
   );
-};
+});
+SourceTag.displayName = 'SourceTag';

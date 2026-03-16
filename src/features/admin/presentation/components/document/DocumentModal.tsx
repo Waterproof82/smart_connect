@@ -47,9 +47,9 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({
     <div className="relative bg-[var(--color-bg-alt)] w-full h-full sm:h-auto sm:max-h-[85vh] sm:rounded-xl sm:border border-[var(--color-border)] flex flex-col max-w-4xl shadow-2xl">
       <div className="flex items-center justify-between p-4 border-b border-[var(--color-border)] bg-[var(--color-bg-alt)]/95 sticky top-0 z-10">
         <h3 className="text-lg font-bold text-default flex items-center gap-2">
-          {isEditing ? 'Edit Document' : 'Document Details'}
+          {isEditing ? 'Editar Documento' : 'Detalles del Documento'}
         </h3>
-        <button onClick={onClose} className="p-2 hover:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 rounded-lg text-muted hover:text-[var(--color-text)]" aria-label="Close modal" type="button">
+        <button onClick={onClose} className="p-2 hover:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-lg text-muted hover:text-[var(--color-text)]" aria-label="Cerrar modal" type="button">
           <X className="w-6 h-6" />
         </button>
       </div>
@@ -57,12 +57,12 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({
         {isEditing ? (
           <div className="space-y-4">
             <div className="bg-[var(--color-surface)] p-3 rounded-lg border border-[var(--color-border)]">
-              <label htmlFor="edit-tags-input" className="text-xs font-medium text-muted uppercase mb-2 block">Sources</label>
+              <label htmlFor="edit-tags-input" className="text-xs font-medium text-muted uppercase mb-2 block">Fuentes</label>
               <div className="flex flex-wrap gap-2 mb-2">
                 {editedSources.map(s => (
-                  <span key={s} className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium mr-1 mb-1 bg-blue-900 text-blue-300 border border-blue-700">
+                  <span key={s} className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium mr-1 mb-1 bg-[var(--color-accent-subtle)] text-[var(--color-primary)] border border-[var(--color-accent-border)]">
                     {s}
-                    <button onClick={() => onSourceChange(editedSources.filter(x => x !== s))} className="ml-1.5 hover:text-white focus:outline-none cursor-pointer" type="button" aria-label={`Remove tag ${s}`}>×</button>
+                    <button onClick={() => onSourceChange(editedSources.filter(x => x !== s))} className="ml-1.5 hover:text-white focus:outline-none cursor-pointer" type="button" aria-label={`Eliminar etiqueta ${s}`}>×</button>
                   </span>
                 ))}
               </div>
@@ -70,9 +70,9 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({
                 <input
                   id="edit-tags-input"
                   type="text"
-                  list="available-sources-list"
-                  className="flex-1 bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded px-3 py-1.5 text-sm text-default focus:ring-1 focus:ring-blue-500"
-                  placeholder="Select or type tag..."
+                  list="modal-sources-list"
+                  className="flex-1 bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded px-3 py-1.5 text-sm text-default focus:ring-1 focus:ring-[var(--focus-ring)]"
+                  placeholder="Seleccionar o escribir etiqueta..."
                   value={newSourceInput}
                   onChange={e => onSourceInputChange(e.target.value)}
                   onKeyDown={e => {
@@ -85,7 +85,7 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({
                     }
                   }}
                 />
-                <datalist id="available-sources-list">
+                <datalist id="modal-sources-list">
                   {availableSources.map(source => (
                     <option key={source} value={source} />
                   ))}
@@ -100,22 +100,22 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({
                   }}
                   className="px-3 py-1 bg-[var(--color-surface)] text-default text-xs rounded hover:bg-[var(--color-border)]"
                   type="button"
-                >Add</button>
+                >Agregar</button>
               </div>
             </div>
-            <label htmlFor="edit-content-area" className="sr-only">Document Content</label>
+            <label htmlFor="edit-content-area" className="sr-only">Contenido del documento</label>
             <textarea
               id="edit-content-area"
               value={editedContent}
               onChange={e => onEditChange(e.target.value)}
-              className="w-full h-[50vh] sm:h-[400px] bg-[var(--color-bg-alt)] text-default p-4 rounded-lg font-mono text-sm leading-relaxed resize-none focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full h-[50vh] sm:h-[400px] bg-[var(--color-bg-alt)] text-default p-4 rounded-lg font-mono text-sm leading-relaxed resize-none focus:ring-2 focus:ring-[var(--focus-ring)] outline-none"
             />
           </div>
         ) : (
           <>
             <div className="flex flex-wrap gap-2">
               {selectedDocument.source.split(',').map(s => (
-                <span key={s} className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium mr-1 mb-1 bg-blue-900 text-blue-300 border border-blue-700">{s}</span>
+                <span key={s} className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium mr-1 mb-1 bg-[var(--color-accent-subtle)] text-[var(--color-primary)] border border-[var(--color-accent-border)]">{s}</span>
               ))}
             </div>
             <div className="bg-[var(--color-surface)] rounded-lg p-4 border border-[var(--color-border)]">
@@ -130,11 +130,11 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({
       <div className="p-4 border-t border-[var(--color-border)] bg-[var(--color-bg-alt)]/95 flex justify-end gap-3 sticky bottom-0">
         {isEditing ? (
           <>
-            <button onClick={onClose} className="px-4 py-2 text-default hover:text-[var(--color-text)] focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 disabled:opacity-50" disabled={isSaving} type="button">Cancel</button>
-            <button onClick={onSave} disabled={isSaving} className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 disabled:opacity-50" type="button">{isSaving ? 'Saving...' : 'Save Changes'}</button>
+            <button onClick={onClose} className="px-4 py-2 text-default hover:text-[var(--color-text)] focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 disabled:opacity-50" disabled={isSaving} type="button">Cancelar</button>
+            <button onClick={onSave} disabled={isSaving} className="px-6 py-2 bg-[var(--color-accent)] text-white rounded-lg hover:bg-[var(--color-accent-hover)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] disabled:opacity-50" type="button">{isSaving ? 'Guardando...' : 'Guardar Cambios'}</button>
           </>
         ) : (
-          <button onClick={onClose} className="px-4 py-2 bg-[var(--color-surface)] text-default rounded-lg hover:bg-[var(--color-border)] focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400" type="button">Close</button>
+          <button onClick={onClose} className="px-4 py-2 bg-[var(--color-surface)] text-default rounded-lg hover:bg-[var(--color-border)] focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400" type="button">Cerrar</button>
         )}
       </div>
     </div>
