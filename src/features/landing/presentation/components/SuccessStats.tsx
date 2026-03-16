@@ -54,7 +54,7 @@ const StatCard: React.FC<StatProps> = ({ icon, label, value, suffix, color, isIn
 
   return (
     <div
-      className={`glass-card p-8 rounded-[2.5rem] border border-white/5 group hover:border-blue-500/20 hover:bg-white/[0.05] transition-all duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)] relative overflow-hidden ${
+      className={`glass-card p-8 rounded-[2.5rem] border border-white/5 group hover:border-blue-500/20 hover:bg-white/[0.05] transition-all duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)] relative overflow-hidden min-w-0 ${
         isInView 
           ? 'opacity-100 translate-y-0 blur-0 scale-100' 
           : 'opacity-0 translate-y-20 blur-md scale-90'
@@ -73,7 +73,7 @@ const StatCard: React.FC<StatProps> = ({ icon, label, value, suffix, color, isIn
           <span className="text-blue-500">{suffix}</span>
         </div>
         
-        <p className="text-gray-400 text-[10px] font-bold uppercase tracking-[0.2em]">{label}</p>
+        <p className="text-neutral-400 text-xs font-bold uppercase tracking-[0.2em] truncate max-w-full">{label}</p>
         
         <div className={`mt-6 h-[2px] bg-gradient-to-r from-transparent via-blue-500 to-transparent transition-all duration-1000 ease-out ${isInView ? 'w-full opacity-100' : 'w-0 opacity-0'}`}
              style={{ transitionDelay: `${delay + 500}ms` }}

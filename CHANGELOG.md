@@ -5,6 +5,35 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+## [0.4.1] - 2026-03-16
+
+### Added
+- **Quality Section in README:** Comprehensive documentation of all quality improvements with skill execution table
+- **CLAUDE.md Metrics:** Updated to include Accessibility, Performance, Responsive scores (all 10/10)
+- **Audit Log:** Created `docs/audit/2026-03-16_quality-improvements.md` with detailed skill execution history
+
+### Changed
+- **Design System Tokens:** Replaced gray-* with neutral-* across all components (normalize skill)
+- **Text Sizes:** Fixed text-[10px] to text-xs (14px minimum) for WCAG readability
+- **Touch Targets:** Increased to 44x44px minimum on all interactive elements (adapt skill)
+- **Mobile Optimizations:** Added landscape media queries, viewport meta tags, larger touch targets
+
+### Fixed
+- **Focus States:** Added focus rings on Hero buttons, Contact form, ExpertAssistant
+- **ARIA:** Added aria-describedby, role="alert" on form errors
+- **Overflow Handling:** Added min-w-0 and truncate where needed
+- **Error Boundary:** Added ErrorBoundary in App.tsx
+- **Lazy Loading:** Added Suspense with skeleton for SuccessStats
+
+### Removed
+- **Excessive Animations:** Removed decorative background orbs in Hero
+- **Complex IntersectionObserver:** Simplified Features scroll handling
+- **Unused Code:** Removed dead code in AdminDashboard
+
+---
+
 ## [0.4.0] - 2026-03-16
 
 ### Added

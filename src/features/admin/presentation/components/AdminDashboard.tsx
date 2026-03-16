@@ -25,12 +25,12 @@ export const AdminDashboard: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-3">
-              <Link to="/" className="p-2 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-colors" title="Back to Home">
+              <Link to="/" className="p-2 text-neutral-400 hover:text-white hover:bg-gray-800 rounded-lg transition-colors" title="Back to Home">
                 <Home className="w-5 h-5" />
               </Link>
               <div className="flex flex-col">
                 <h1 className="text-lg md:text-xl font-bold text-white">SmartConnect</h1>
-                <span className="text-[10px] md:text-xs text-gray-400 font-medium tracking-wide">ADMIN PANEL</span>
+                <span className="text-[10px] md:text-xs text-neutral-400 font-medium tracking-wide">ADMIN PANEL</span>
               </div>
             </div>
 
@@ -41,11 +41,11 @@ export const AdminDashboard: React.FC = () => {
                   {currentUser.role}
                 </span>
               </div>
-              <div className="md:hidden text-gray-400">
+              <div className="md:hidden text-neutral-400">
                 <User className="w-5 h-5" />
               </div>
               <div className="h-6 w-px bg-gray-700 mx-1"></div>
-              <button onClick={handleLogout} className="p-2 text-gray-300 hover:text-red-400 hover:bg-gray-800 rounded-lg transition-colors" title="Logout">
+              <button onClick={handleLogout} className="p-2 text-neutral-300 hover:text-red-400 hover:bg-gray-800 rounded-lg transition-colors" title="Logout">
                 <LogOut className="w-5 h-5" />
               </button>
             </div>
@@ -59,7 +59,7 @@ export const AdminDashboard: React.FC = () => {
         <div className="md:flex md:items-center md:justify-between mb-2">
           <div>
             <h2 className="text-2xl font-bold text-white">Knowledge Base</h2>
-            <p className="text-gray-400 text-sm mt-1">Chatbot RAG - Manage documents and embeddings</p>
+            <p className="text-neutral-400 text-sm mt-1">Chatbot RAG - Manage documents and embeddings</p>
           </div>
         </div>
 
@@ -68,7 +68,7 @@ export const AdminDashboard: React.FC = () => {
         <div className="md:flex md:items-center md:justify-between mb-2 mt-8">
           <div>
             <h2 className="text-2xl font-bold text-white">Configuración</h2>
-            <p className="text-gray-400 text-sm mt-1">Parámetros globales de la aplicación</p>
+            <p className="text-neutral-400 text-sm mt-1">Parámetros globales de la aplicación</p>
           </div>
         </div>
 

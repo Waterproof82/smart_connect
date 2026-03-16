@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 export const NotFound: React.FC = () => (
   <div className="min-h-screen bg-sc-dark flex flex-col items-center justify-center px-4 text-center">
     <h1 className="text-6xl font-black text-white mb-4">404</h1>
-    <p className="text-gray-400 text-lg mb-8">P&aacute;gina no encontrada</p>
+    <p className="text-neutral-400 text-lg mb-8">P&aacute;gina no encontrada</p>
     <Link to="/" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-bold transition-colors">
       Volver al inicio
     </Link>

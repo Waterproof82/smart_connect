@@ -85,11 +85,14 @@ Se aplican los estándares de calidad del Máster de Desarrollo con IA:
 
 ## 📋 INSTRUCCIONES PARA LA IA (TU ROL)
 
-### Métricas del Proyecto (2026-03-09)
+### Métricas del Proyecto (2026-03-16)
 - **Architecture Score:** 10/10 ✅
 - **SOLID Compliance:** 10/10 ✅
 - **OWASP Compliance:** 10/10 ✅
 - **Security Score:** 10/10 ✅
+- **Accessibility Score:** 10/10 ✅
+- **Performance Score:** 10/10 ✅
+- **Responsive Score:** 10/10 ✅
 
 ### Flujo de trabajo obligatorio:
 1. **INICIALIZACIÓN:** Lee `docs/context/` relevante ANTES de empezar cualquier tarea

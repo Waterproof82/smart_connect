@@ -105,7 +105,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
         </a>
 
         {/* Navigation - Desktop */}
-        <div className="hidden md:flex items-center gap-10 text-sm font-semibold text-gray-400">
+        <div className="hidden md:flex items-center gap-10 text-sm font-semibold text-neutral-400">
           <div
             className="relative group"
             onMouseEnter={() => setIsDropdownOpen(true)}
@@ -160,7 +160,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
                       </div>
                       <div>
                         <p className="text-white text-xs font-bold">{item.title}</p>
-                        <p className="text-[10px] text-gray-500 font-medium">{item.desc}</p>
+                        <p className="text-xs text-neutral-500 font-medium">{item.desc}</p>
                       </div>
                     </a>
                   ))}
@@ -171,7 +171,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
 
           <a href="#exito" className="hover:text-white transition-colors" onClick={handleDropdownLinkClick}>Éxito</a>
           <a href="#contacto" className="hover:text-white transition-colors" onClick={handleDropdownLinkClick}>Contacto</a>
-          <Link to="/admin" className="flex items-center gap-2 text-gray-300 hover:text-blue-400 transition-colors">
+          <Link to="/admin" className="flex items-center gap-2 text-neutral-300 hover:text-blue-400 transition-colors">
             <Shield className="w-4 h-4" />
             <span>Admin</span>
           </Link>
@@ -185,14 +185,14 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
             {theme === 'dark' ? (
               <Sun className="w-4 h-4 text-yellow-400" />
             ) : (
-              <Moon className="w-4 h-4 text-gray-600" />
+              <Moon className="w-4 h-4 text-neutral-600" />
             )}
           </button>
         </div>
 
         {/* Hamburger for mobile */}
         <button
-          className="md:hidden flex items-center justify-center w-10 h-10 rounded-xl bg-blue-600 text-white"
+          className="md:hidden flex items-center justify-center w-11 h-11 rounded-xl bg-blue-600 text-white"
           onClick={() => setIsMobileMenuOpen(true)}
         >
           <Menu className="w-6 h-6" />
@@ -228,12 +228,12 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
                   <X className="w-6 h-6" />
                 </button>
               </div>
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-1">
                 {solutions.map((item) => (
                   <a
                     key={item.id}
                     href={item.href}
-                    className="flex items-center gap-3 p-2 text-gray-300"
+                    className="flex items-center gap-3 p-3 text-neutral-300 min-h-[48px]"
                     target={item.external ? "_blank" : undefined}
                     rel={item.external ? "noopener noreferrer" : undefined}
                     onClick={(e) => item.external ? setIsMobileMenuOpen(false) : handleMobileLinkClick(e)}
@@ -243,9 +243,9 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
                   </a>
                 ))}
                 <hr className="border-white/10 my-2" />
-                <a href="#exito" className="text-gray-300" onClick={handleMobileLinkClick}>Éxito</a>
-                <a href="#contacto" className="text-gray-300" onClick={handleMobileLinkClick}>Contacto</a>
-                <Link to="/admin" className="text-gray-300 flex items-center gap-2" onClick={() => setIsMobileMenuOpen(false)}>
+                <a href="#exito" className="text-neutral-300 p-3 min-h-[48px] flex items-center" onClick={handleMobileLinkClick}>Éxito</a>
+                <a href="#contacto" className="text-neutral-300 p-3 min-h-[48px] flex items-center" onClick={handleMobileLinkClick}>Contacto</a>
+                <Link to="/admin" className="text-neutral-300 flex items-center gap-2 p-3 min-h-[48px]" onClick={() => setIsMobileMenuOpen(false)}>
                   <Shield className="w-4 h-4" />
                   <span>Admin</span>
                 </Link>

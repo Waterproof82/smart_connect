@@ -94,7 +94,7 @@ export const ExpertAssistant: React.FC = () => {
   return (
     <div className="fixed bottom-8 right-8 z-[100] flex flex-col items-end gap-4">
       {isOpen && (
-        <div className="mb-4 w-[90vw] md:w-[400px] h-[550px] max-h-[80vh] bg-sc-dark-alt border border-white/10 rounded-3xl shadow-2xl flex flex-col overflow-hidden">
+        <div className="mb-4 w-[85vw] sm:w-[90vw] md:w-[400px] h-[60vh] sm:h-[550px] max-h-[80vh] sm:max-h-[80vh] bg-sc-dark-alt border border-white/10 rounded-3xl shadow-2xl flex flex-col overflow-hidden">
           <div className="p-4 bg-blue-600 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
@@ -105,7 +105,7 @@ export const ExpertAssistant: React.FC = () => {
                 <p className="text-[10px] text-blue-100 opacity-70">Entrenado con IA</p>
               </div>
             </div>
-            <button onClick={() => setIsOpen(false)} className="text-white/70 hover:text-white p-2 rounded-lg hover:bg-white/10 transition-colors" aria-label="Cerrar chat">
+            <button onClick={() => setIsOpen(false)} className="text-white/70 hover:text-white focus:outline-none focus:ring-2 focus:ring-white/50 p-2 rounded-lg hover:bg-white/10 transition-colors" aria-label="Cerrar chat">
               <X className="w-5 h-5" />
             </button>
           </div>
@@ -117,10 +117,10 @@ export const ExpertAssistant: React.FC = () => {
                   <Sparkles className="w-7 h-7" />
                 </div>
                 <h5 className="font-bold mb-2">¿Cómo puedo ayudarte?</h5>
-                <p className="text-xs text-gray-500 mb-4">Pregúntame sobre QRIBAR, automatización con n8n o cómo mejorar tus reseñas en Google.</p>
-                <div className="flex flex-wrap gap-2 justify-center">
+                <p className="text-xs text-neutral-500 mb-4">Pregúntame sobre QRIBAR, automatización con n8n o cómo mejorar tus reseñas en Google.</p>
+                  <div className="flex flex-wrap gap-2 justify-center">
                   {['¿Qué es QRIBAR?', '¿Cómo funcionan las tarjetas NFC?', 'Quiero automatizar mi negocio'].map((prompt) => (
-                    <button key={prompt} onClick={() => setInput(prompt)} className="text-xs bg-blue-600/10 border border-blue-500/20 text-blue-400 px-3 py-1.5 rounded-full hover:bg-blue-600/20 transition-colors">
+                    <button key={prompt} onClick={() => setInput(prompt)} className="text-xs bg-blue-600/10 border border-blue-500/20 text-blue-400 px-3 py-2 sm:py-1.5 rounded-full hover:bg-blue-600/20 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-sc-dark transition-colors min-h-[36px]">
                       {prompt}
                     </button>
                   ))}
@@ -134,7 +134,7 @@ export const ExpertAssistant: React.FC = () => {
                   <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${m.role === 'user' ? 'bg-blue-600' : 'bg-white/5 border border-white/10'}`}>
                     {m.role === 'user' ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4 text-blue-400" />}
                   </div>
-                  <div className={`p-3 rounded-2xl text-sm ${m.role === 'user' ? 'bg-blue-600 text-white rounded-tr-none' : 'bg-white/5 border border-white/10 text-gray-300 rounded-tl-none'}`}>
+                  <div className={`p-3 rounded-2xl text-sm ${m.role === 'user' ? 'bg-blue-600 text-white rounded-tr-none' : 'bg-white/5 border border-white/10 text-neutral-300 rounded-tl-none'}`}>
                     {m.content}
                   </div>
                 </div>
@@ -152,8 +152,8 @@ export const ExpertAssistant: React.FC = () => {
 
           <div className="p-3 bg-sc-dark-input border-t border-white/5">
             <div className="relative flex gap-2">
-              <input type="text" value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()} placeholder="Escribe tu mensaje..." aria-label="Escribe tu mensaje" className="flex-1 bg-white/5 border border-white/10 rounded-xl py-3 px-4 text-xs outline-none focus:border-blue-500 transition-colors" />
-              <button onClick={handleSend} disabled={!input.trim() || isLoading} aria-label="Enviar mensaje" className="w-10 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg flex items-center justify-center transition-colors">
+              <input type="text" value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()} placeholder="Escribe tu mensaje..." aria-label="Escribe tu mensaje" className="flex-1 bg-white/5 border border-white/10 rounded-xl py-3 px-4 text-sm outline-none focus:border-blue-500 transition-colors min-h-[44px]" />
+              <button onClick={handleSend} disabled={!input.trim() || isLoading} aria-label="Enviar mensaje" className="w-11 h-11 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-sc-dark disabled:opacity-50 disabled:cursor-not-allowed rounded-xl flex items-center justify-center transition-colors shrink-0">
                 <Send className="w-4 h-4 text-white" />
               </button>
             </div>
@@ -163,13 +163,13 @@ export const ExpertAssistant: React.FC = () => {
 
       <div className="flex items-center gap-3">
         {whatsappPhone && (
-          <a href={`https://wa.me/${whatsappPhone}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 bg-[#25D366] hover:bg-[#1ebc57] text-white px-5 py-3 rounded-full shadow-lg transition-colors">
+          <a href={`https://wa.me/${whatsappPhone}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 sm:gap-3 bg-[#25D366] hover:bg-[#1ebc57] focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-sc-dark text-white px-4 py-3 sm:px-5 rounded-full shadow-lg transition-colors min-h-[48px]">
             <MessageSquare className="w-5 h-5" />
             <span className="text-sm font-bold hidden sm:block">WhatsApp</span>
           </a>
         )}
 
-        <button onClick={() => setIsOpen(!isOpen)} className={`flex items-center gap-3 px-5 py-3 rounded-full shadow-lg transition-colors ${isOpen ? 'bg-blue-600 text-white' : 'bg-white text-black hover:bg-gray-100'}`}>
+        <button onClick={() => setIsOpen(!isOpen)} className={`flex items-center gap-2 sm:gap-3 px-4 py-3 sm:px-5 rounded-full shadow-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-sc-dark min-h-[48px] ${isOpen ? 'bg-blue-600 text-white' : 'bg-white text-black hover:bg-gray-100'}`}>
           <div className={`w-9 h-9 rounded-full flex items-center justify-center ${isOpen ? 'bg-white/20' : 'bg-blue-600'}`}>
             <Bot className="text-white w-5 h-5" />
           </div>

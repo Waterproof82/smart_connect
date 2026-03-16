@@ -26,11 +26,11 @@ export const Hero: React.FC = () => {
           </p>
 
           <div className="reveal-3 flex flex-wrap gap-5">
-            <button onClick={() => document.querySelector('#contacto')?.scrollIntoView({ behavior: 'smooth' })} className="bg-blue-600 hover:bg-blue-700 text-white px-6 md:px-10 py-4 md:py-5 rounded-2xl font-bold flex items-center gap-3 transition-all shadow-2xl shadow-blue-600/30 active:scale-95 group">
+            <button onClick={() => document.querySelector('#contacto')?.scrollIntoView({ behavior: 'smooth' })} className="bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-sc-dark text-white px-6 md:px-10 py-4 md:py-5 rounded-2xl font-bold flex items-center gap-3 transition-all shadow-2xl shadow-blue-600/30 active:scale-95 group min-h-[48px] sm:min-h-[52px]">
               Empezar Ahora
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
-            <button onClick={() => document.querySelector('#soluciones')?.scrollIntoView({ behavior: 'smooth' })} className="bg-white/5 hover:bg-white/10 border border-white/10 px-6 md:px-10 py-4 md:py-5 rounded-2xl font-bold flex items-center gap-3 transition-all active:scale-95 group">
+            <button onClick={() => document.querySelector('#soluciones')?.scrollIntoView({ behavior: 'smooth' })} className="bg-white/5 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-sc-dark border border-white/10 px-6 md:px-10 py-4 md:py-5 rounded-2xl font-bold flex items-center gap-3 transition-all active:scale-95 group min-h-[48px] sm:min-h-[52px]">
               Ver Demo
               <div className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center group-hover:bg-white/20 transition-colors">
                 <Play className="w-3 h-3 fill-white ml-0.5" />
@@ -45,7 +45,7 @@ export const Hero: React.FC = () => {
               <div className="w-12 h-12 bg-blue-500/20 rounded-2xl flex items-center justify-center text-blue-400">
                 <Volume2 className="w-6 h-6" />
               </div>
-              <div className="flex items-center gap-2 bg-green-500/10 border border-green-500/20 px-4 py-1.5 rounded-full text-[10px] text-green-400 font-black tracking-widest uppercase">
+              <div className="flex items-center gap-2 bg-green-500/10 border border-green-500/20 px-4 py-1.5 rounded-full text-xs text-green-400 font-black tracking-widest uppercase">
                 <CheckCircle2 className="w-3.5 h-3.5" />
                 NFC Active
               </div>
@@ -68,7 +68,7 @@ export const Hero: React.FC = () => {
               <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
                 <div className="h-full w-2/3 bg-gradient-to-r from-blue-600 to-indigo-400 rounded-full animate-shimmer-bar"></div>
               </div>
-              <div className="flex justify-between text-[10px] text-gray-500 font-mono tracking-widest uppercase font-bold">
+              <div className="flex justify-between text-xs text-neutral-500 font-mono tracking-widest uppercase font-bold">
                 <span className="flex items-center gap-1.5">
                   <div className="w-1 h-1 bg-blue-500 rounded-full animate-ping"></div>
                   ID: 8493-XJ
@@ -82,7 +82,7 @@ export const Hero: React.FC = () => {
                  <Sparkles className="w-4 h-4 text-white" />
                </div>
                <div className="flex flex-col">
-                 <span className="text-[10px] font-black text-white/70 uppercase tracking-tighter">AI Core</span>
+                 <span className="text-xs font-black text-white/70 uppercase tracking-tighter">AI Core</span>
                  <span className="text-xs font-bold text-white">Procesando...</span>
                </div>
             </div>
@@ -91,7 +91,7 @@ export const Hero: React.FC = () => {
                <div className="flex gap-1">
                  {[1, 2, 3].map(i => <div key={i} className="w-6 h-1 bg-blue-500/40 rounded-full"></div>)}
                </div>
-               <span className="text-[9px] font-mono text-gray-500">Uplink Stable</span>
+               <span className="text-[8px] font-mono text-neutral-500">Uplink Stable</span>
             </div>
           </div>
         </div>
