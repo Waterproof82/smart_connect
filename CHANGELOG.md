@@ -5,6 +5,71 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2026-03-16
+
+### Added
+- **SEO Foundation:** Meta description, keywords, Open Graph tags, Twitter cards, canonical URL, JSON-LD Organization structured data in `index.html`
+- **SEO Static Files:** `robots.txt` (Allow all, disallow /admin) and `sitemap.xml` (landing page)
+- **react-helmet-async:** Dynamic `<Helmet>` with `noindex, nofollow` on admin routes
+- **TypeScript Strict Mode:** Enabled `strict: true`, `noUnusedLocals`, `noUnusedParameters` in `tsconfig.json`
+- **Tailwind Design Tokens:** Custom colors (`sc-dark`, `sc-dark-alt`, `sc-dark-surface`, `sc-dark-input`, `sc-dark-card`), animations (`float-fancy`, `drift`)
+- **CSS Utility Classes:** `glass-card`, `gradient-text`, `shimmer`, `glow-blue`, `reveal-1/2/3`, `animate-in` system with `fade-in`, `slide-in-from-*`, `zoom-in`
+- **Accessibility - Skip Link:** "Saltar al contenido" skip-to-content link (sr-only, visible on focus) — WCAG 2.4.1
+- **Accessibility - Reduced Motion:** Global `@media (prefers-reduced-motion: reduce)` disabling all animations + counter jump-to-final in SuccessStats
+- **Accessibility - ARIA:** `role="log"` + `aria-live="polite"` on chatbot messages, `aria-invalid` + `aria-describedby` + `role="alert"` on Contact form fields, focus trap + `role="dialog"` on mobile menu
+- **AdminContext:** React Context + `useAdmin()` hook eliminating prop drilling across AdminDashboard, DocumentList, SettingsPanel
+- **Login Rate Limiting:** `LOGIN` preset (5 attempts/5 min) with per-email tracking — OWASP A04:2021
+- **Sanitizer Tests:** 32 test cases for sanitizeInput, sanitizeHTML, isValidEmail, isValidPhone, sanitizeURL
+- **Rate Limiter Tests:** 15 test cases for checkLimit, getRemainingRequests, clearLimit, destroy, RateLimitPresets
+- **Chatbot Suggested Prompts:** 3 clickable suggestion chips in empty state ("Que es QRIBAR?", "Como funcionan las tarjetas NFC?", "Quiero automatizar mi negocio")
+- **Contact Form Chevron:** Custom ChevronDown icon on select dropdown (was invisible with `appearance-none`)
+- **Contact Info Clickable Cards:** Email → `mailto:`, WhatsApp → `wa.me`, Location → Google Maps links
+- **Contact Form-Level Warning:** Amber warning when `submitCount > 0 && !isValid`
+- **Login Field Errors:** Zod validation errors rendered below email and password inputs
+- **Stats Skeleton Loading:** Pulse skeleton cards replacing plain "Loading statistics..." text
+- **404 Page:** Custom NotFound component with "Volver al inicio" link, replacing silent redirect
+- **Expanded Footer:** 3-column layout with navigation links, legal placeholders, and copyright
+
+### Changed
+- **Hero Responsive Text:** `text-6xl md:text-8xl` → `text-3xl sm:text-4xl md:text-6xl lg:text-8xl` for mobile readability
+- **Hero Floating Decorators:** Hidden below `lg` breakpoint with `hidden lg:flex` to prevent mobile overflow
+- **Hero Buttons Wired:** "Empezar Ahora" scrolls to `#contacto`, "Ver Demo" scrolls to `#soluciones`
+- **Features Grid:** `md:grid-cols-3` → `sm:grid-cols-2 lg:grid-cols-4` (no more orphaned 4th card)
+- **Navbar Responsive Padding:** `py-3/py-6` → `py-2 md:py-3`/`py-3 md:py-6` for mobile
+- **Navbar Mobile Smooth Scroll:** Mobile links now use `scrollIntoView({ behavior: 'smooth' })` like desktop
+- **Navbar Mobile Animation:** Drawer slides in from right with `animate-in slide-in-from-right`
+- **Navbar ARIA:** Fixed `role="menu"` placement (moved to dropdown panel), removed incorrect `tabIndex` on wrapper div, fixed accent in `aria-label="Menu de navegacion"` → `"Menu de navegacion"`
+- **Chatbot Close Button:** Enlarged touch target from ~20px to 44px+ with `p-3` padding — WCAG 2.5.8
+- **Chatbot Message Text:** `text-xs` (12px) → `text-sm` (14px) for readability
+- **Chatbot Input Guard:** Added `!e.shiftKey` to Enter key handler
+- **Chatbot Max Height:** Added `max-h-[80vh]` to prevent viewport overflow on small screens
+- **Chatbot WhatsApp Button:** Hidden entirely when no phone number (was showing disabled link to `#`)
+- **Chatbot State:** Replaced `useRef` with `useState` for proper React re-renders
+- **Contact Labels:** `text-[10px]` → `text-xs` (12px) — WCAG minimum readable size
+- **Contact Error Icon:** Replaced `❌` emoji with Lucide `AlertCircle` icon for consistency
+- **Contact Email Validation:** Custom regex → Zod `.email()` built-in
+- **DocumentList Confirm Modal:** Replaced native `confirm()` with React confirmation dialog
+- **DocumentList Alert:** Replaced native `alert()` with inline error state + auto-dismiss
+- **DocumentList Create Modal:** Backdrop now closes modal on click (was non-interactive)
+- **DocumentTable Actions:** Added `focus-within:opacity-100` for keyboard accessibility
+- **StatsDashboard Grid:** `md:grid-cols-3` → `md:grid-cols-2` (matching actual 2 cards)
+- **Env Config:** Static `import.meta.env.VITE_X` access instead of dynamic key lookup (Vite compatibility fix)
+- **Supabase Client:** Imports from `env.config.ts` instead of local `getEnvVar` function
+- **Vite Chunks:** Replaced dead `@google/generativeai` manualChunk with `recharts` chunk isolation
+- **Hardcoded Colors:** Replaced `bg-[#020408]`, `bg-[#0d0d1e]` etc. with design tokens across all components
+
+### Removed
+- **`supabaseEnv.ts`:** Deleted unused env wrapper (consolidated into `env.config.ts`)
+- **`@google/genai`:** Removed unused dependency from `package.json`
+- **Dead code:** Removed `isKnowledgeBaseReady` state + useEffect from App.tsx
+
+### Security
+- **Login brute-force protection:** Rate limiting with sliding window (5 attempts per email per 5 minutes)
+- **Chatbot per-session rate limiting:** Session-scoped identifier via `sessionStorage`
+- **Input sanitization tests:** 32 test cases covering XSS patterns, HTML injection, email/phone/URL validation
+
+---
+
 ## [Unreleased] - 2026-03-09
 
 ### Added

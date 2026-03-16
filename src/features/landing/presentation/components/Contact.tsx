@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Mail, MapPin, Send, MessageSquare, Sparkles, CheckCircle2 } from 'lucide-react';
+import { Mail, MapPin, Send, MessageSquare, Sparkles, CheckCircle2, ChevronDown, AlertCircle } from 'lucide-react';
 import { getAppSettings, AppSettings } from '@shared/services/settingsService';
 import { getLandingContainer } from '../LandingContainer';
 import { LeadEntity } from '../../domain/entities';
@@ -49,7 +49,7 @@ export const Contact: React.FC = () => {
     watch,
     reset,
     setValue,
-    formState: { errors, isSubmitting, isValid, touchedFields },
+    formState: { errors, isSubmitting, isValid, touchedFields, submitCount },
   } = useForm<ContactFormData>({
     resolver: zodResolver(contactSchema),
     defaultValues: {
@@ -211,7 +211,8 @@ export const Contact: React.FC = () => {
                 value: settings?.contactEmail || "Cargando...",
                 desc: "Respondemos en menos de 2 horas",
                 color: "text-blue-500",
-                loading: isLoadingSettings
+                loading: isLoadingSettings,
+                href: settings?.contactEmail ? `mailto:${settings.contactEmail}` : undefined,
               },
               {
                 id: 'contact-whatsapp',
@@ -220,7 +221,9 @@ export const Contact: React.FC = () => {
                 value: settings?.whatsappPhone || "Disponible pronto",
                 desc: "Soporte técnico inmediato",
                 color: "text-emerald-500",
-                loading: isLoadingSettings
+                loading: isLoadingSettings,
+                href: settings?.whatsappPhone ? `https://wa.me/${settings.whatsappPhone.replaceAll(/[^\d+]/g, '')}` : undefined,
+                external: true,
               },
               {
                 id: 'contact-location',
@@ -229,20 +232,39 @@ export const Contact: React.FC = () => {
                 value: settings?.physicalAddress || "Madrid, España",
                 desc: "Hub Tecnológico de Innovación",
                 color: "text-purple-500",
-                loading: isLoadingSettings
+                loading: isLoadingSettings,
+                href: `https://maps.google.com/?q=${encodeURIComponent(settings?.physicalAddress || 'Madrid, España')}`,
+                external: true,
               }
-            ].map((item) => (
-              <div key={item.id} className="glass-card p-8 rounded-3xl border border-white/5 flex gap-6 group hover:border-white/10 transition-all">
-                <div className={`w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center ${item.color} group-hover:scale-110 transition-transform`}>
-                  {item.icon}
+            ].map((item) => {
+              const content = (
+                <>
+                  <div className={`w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center ${item.color} group-hover:scale-110 transition-transform`}>
+                    {item.icon}
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">{item.title}</p>
+                    <h4 className={`text-xl font-bold mb-1 ${item.loading ? 'animate-pulse' : ''}`}>{item.value}</h4>
+                    <p className="text-sm text-gray-500">{item.desc}</p>
+                  </div>
+                </>
+              );
+              return item.href && !item.loading ? (
+                <a
+                  key={item.id}
+                  href={item.href}
+                  target={item.external ? "_blank" : undefined}
+                  rel={item.external ? "noopener noreferrer" : undefined}
+                  className="glass-card p-8 rounded-3xl border border-white/5 flex gap-6 group hover:border-white/10 transition-all"
+                >
+                  {content}
+                </a>
+              ) : (
+                <div key={item.id} className="glass-card p-8 rounded-3xl border border-white/5 flex gap-6 group hover:border-white/10 transition-all">
+                  {content}
                 </div>
-                <div>
-                  <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">{item.title}</p>
-                  <h4 className={`text-xl font-bold mb-1 ${item.loading ? 'animate-pulse' : ''}`}>{item.value}</h4>
-                  <p className="text-sm text-gray-500">{item.desc}</p>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           {/* Contact Form */}
@@ -253,12 +275,14 @@ export const Contact: React.FC = () => {
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label htmlFor="contact-name" className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Nombre Completo</label>
+                    <label htmlFor="contact-name" className="text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">Nombre Completo</label>
                     <input
                       id="contact-name"
                       type="text"
                       placeholder="Ej. Juan Pérez"
                       className={getFieldClassName('name')}
+                      aria-invalid={touchedFields.name && !!errors.name}
+                      aria-describedby={errors.name ? 'name-error' : undefined}
                       ref={(e) => {
                         nameRegRef(e);
                         (nameInputRef as React.MutableRefObject<HTMLInputElement | null>).current = e;
@@ -266,8 +290,8 @@ export const Contact: React.FC = () => {
                       {...nameRegProps}
                     />
                     {touchedFields.name && errors.name && (
-                      <p className="text-xs text-red-400 ml-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                        ⚠️ {errors.name.message}
+                      <p id="name-error" role="alert" className="text-xs text-red-400 ml-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
+                        {errors.name.message}
                       </p>
                     )}
                     {touchedFields.name && !errors.name && (
@@ -277,17 +301,19 @@ export const Contact: React.FC = () => {
                     )}
                   </div>
                   <div className="space-y-2">
-                    <label htmlFor="contact-company" className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Empresa</label>
+                    <label htmlFor="contact-company" className="text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">Empresa</label>
                     <input
                       id="contact-company"
                       type="text"
                       placeholder="Ej. Restaurante L'Escale"
                       className={getFieldClassName('company')}
+                      aria-invalid={touchedFields.company && !!errors.company}
+                      aria-describedby={errors.company ? 'company-error' : undefined}
                       {...register('company')}
                     />
                     {touchedFields.company && errors.company && (
-                      <p className="text-xs text-red-400 ml-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                        ⚠️ {errors.company.message}
+                      <p id="company-error" role="alert" className="text-xs text-red-400 ml-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
+                        {errors.company.message}
                       </p>
                     )}
                     {touchedFields.company && !errors.company && (
@@ -299,17 +325,19 @@ export const Contact: React.FC = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="contact-email" className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Correo Electrónico</label>
+                  <label htmlFor="contact-email" className="text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">Correo Electrónico</label>
                   <input
                     id="contact-email"
                     type="email"
                     placeholder="juan@empresa.com"
                     className={getFieldClassName('email')}
+                    aria-invalid={touchedFields.email && !!errors.email}
+                    aria-describedby={errors.email ? 'email-error' : undefined}
                     {...register('email')}
                   />
                   {touchedFields.email && errors.email && (
-                    <p className="text-xs text-red-400 ml-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                      ⚠️ {errors.email.message}
+                    <p id="email-error" role="alert" className="text-xs text-red-400 ml-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
+                      {errors.email.message}
                     </p>
                   )}
                   {touchedFields.email && !errors.email && (
@@ -320,21 +348,26 @@ export const Contact: React.FC = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="contact-service" className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Servicio de Interés</label>
-                  <select
-                    id="contact-service"
-                    className={getFieldClassName('service', 'appearance-none')}
-                    {...register('service')}
-                  >
-                    <option className="bg-[#0d0d1e]" value="">Selecciona una opción</option>
-                    <option className="bg-[#0d0d1e]" value="QRIBAR - Menú Digital">QRIBAR - Menú Digital</option>
-                    <option className="bg-[#0d0d1e]" value="Automatización n8n">Automatización n8n</option>
-                    <option className="bg-[#0d0d1e]" value="Tarjetas NFC Reseñas">Tarjetas NFC Reseñas</option>
-                    <option className="bg-[#0d0d1e]" value="Consultoría IA">Consultoría IA</option>
-                  </select>
+                  <label htmlFor="contact-service" className="text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">Servicio de Interés</label>
+                  <div className="relative">
+                    <select
+                      id="contact-service"
+                      className={getFieldClassName('service', 'appearance-none pr-10')}
+                      aria-invalid={touchedFields.service && !!errors.service}
+                      aria-describedby={errors.service ? 'service-error' : undefined}
+                      {...register('service')}
+                    >
+                      <option className="bg-sc-dark-alt" value="">Selecciona una opción</option>
+                      <option className="bg-sc-dark-alt" value="QRIBAR - Menú Digital">QRIBAR - Menú Digital</option>
+                      <option className="bg-sc-dark-alt" value="Automatización n8n">Automatización n8n</option>
+                      <option className="bg-sc-dark-alt" value="Tarjetas NFC Reseñas">Tarjetas NFC Reseñas</option>
+                      <option className="bg-sc-dark-alt" value="Consultoría IA">Consultoría IA</option>
+                    </select>
+                    <ChevronDown className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                  </div>
                   {touchedFields.service && errors.service && (
-                    <p className="text-xs text-red-400 ml-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                      ⚠️ {errors.service.message}
+                    <p id="service-error" role="alert" className="text-xs text-red-400 ml-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
+                      {errors.service.message}
                     </p>
                   )}
                   {touchedFields.service && !errors.service && serviceValue && (
@@ -345,7 +378,7 @@ export const Contact: React.FC = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="contact-message" className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">
+                  <label htmlFor="contact-message" className="text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">
                     Mensaje {messageValue.length > 0 && (
                       <span className="text-gray-600">({messageValue.length}/1000)</span>
                     )}
@@ -355,11 +388,13 @@ export const Contact: React.FC = () => {
                     rows={4}
                     placeholder="Cuéntanos brevemente sobre tu proyecto..."
                     className={getFieldClassName('message', 'resize-none')}
+                    aria-invalid={touchedFields.message && !!errors.message}
+                    aria-describedby={errors.message ? 'message-error' : undefined}
                     {...register('message')}
                   ></textarea>
                   {touchedFields.message && errors.message && (
-                    <p className="text-xs text-red-400 ml-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                      ⚠️ {errors.message.message}
+                    <p id="message-error" role="alert" className="text-xs text-red-400 ml-1 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
+                      {errors.message.message}
                     </p>
                   )}
                   {touchedFields.message && !errors.message && (
@@ -381,10 +416,17 @@ export const Contact: React.FC = () => {
 
                 {submitStatus === 'error' && (
                   <div className="flex items-center gap-3 bg-red-500/10 border border-red-500/30 rounded-2xl py-4 px-6 animate-in fade-in slide-in-from-top-2 duration-500">
+                    <AlertCircle className="w-5 h-5 text-red-400 shrink-0" />
                     <p className="text-sm text-red-300 font-medium">
-                      ❌ Error al enviar. Por favor, intenta nuevamente.
+                      Error al enviar. Por favor, intenta nuevamente.
                     </p>
                   </div>
+                )}
+
+                {!isValid && submitCount > 0 && submitStatus === 'idle' && (
+                  <p className="text-sm text-amber-400 text-center animate-in fade-in slide-in-from-top-1">
+                    Por favor, revisa los campos marcados antes de enviar.
+                  </p>
                 )}
 
                 <button

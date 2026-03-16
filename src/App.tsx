@@ -22,40 +22,63 @@ const ChatbotLoading = () => (
 
 const App: React.FC = () => {
   const [scrolled, setScrolled] = React.useState(false);
-  const [isKnowledgeBaseReady, setIsKnowledgeBaseReady] = React.useState(false);
-
-  // Initialize knowledge base from Supabase on app startup
-  React.useEffect(() => {
-    // Knowledge base initialization removed (no longer needed)
-    setIsKnowledgeBaseReady(true);
-  }, []);
 
   React.useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#020408] text-white">
+    <div className="min-h-screen bg-sc-dark text-white">
+      <a href="#inicio" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:bg-blue-600 focus:text-white focus:px-4 focus:py-2 focus:rounded-lg focus:text-sm focus:font-bold">
+        Saltar al contenido
+      </a>
       <Navbar scrolled={scrolled} />
-      <section id="inicio"><Hero /></section>
-      <section id="soluciones"><Features /></section>
-      <section id="exito"><SuccessStats /></section>
-      <section id="contacto"><Contact /></section>
-      
+      <main>
+        <section id="inicio"><Hero /></section>
+        <section id="soluciones" className="py-20 md:py-32"><Features /></section>
+        <section id="exito" className="py-20 md:py-32"><SuccessStats /></section>
+        <section id="contacto"><Contact /></section>
+      </main>
+
       {/* AI Chatbot Assistant - Always visible */}
-      {isKnowledgeBaseReady && (
-        <Suspense fallback={<ChatbotLoading />}>
-          <ExpertAssistant />
-        </Suspense>
-      )}
-      
+      <Suspense fallback={<ChatbotLoading />}>
+        <ExpertAssistant />
+      </Suspense>
+
       {/* Footer */}
-      <footer className="bg-black/50 py-8 text-center text-gray-400">
-        <p>© 2026 SmartConnect AI. Todos los derechos reservados.</p>
+      <footer className="bg-black/50 border-t border-white/10 pt-16 pb-8">
+        <div className="container mx-auto px-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+            <div>
+              <span className="font-bold text-xl text-white">SmartConnect <span className="text-blue-500">AI</span></span>
+              <p className="text-gray-500 text-sm mt-3 leading-relaxed">Tecnolog&iacute;a de pr&oacute;xima generaci&oacute;n para negocios locales.</p>
+            </div>
+            <div>
+              <h4 className="text-sm font-bold text-gray-300 uppercase tracking-wider mb-4">Navegaci&oacute;n</h4>
+              <ul className="space-y-2 text-sm text-gray-500">
+                <li><a href="#inicio" className="hover:text-white transition-colors">Inicio</a></li>
+                <li><a href="#soluciones" className="hover:text-white transition-colors">Soluciones</a></li>
+                <li><a href="#exito" className="hover:text-white transition-colors">Casos de &Eacute;xito</a></li>
+                <li><a href="#contacto" className="hover:text-white transition-colors">Contacto</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-sm font-bold text-gray-300 uppercase tracking-wider mb-4">Legal</h4>
+              <ul className="space-y-2 text-sm text-gray-500">
+                <li><span className="cursor-default">Aviso Legal</span></li>
+                <li><span className="cursor-default">Pol&iacute;tica de Privacidad</span></li>
+                <li><span className="cursor-default">Cookies</span></li>
+              </ul>
+            </div>
+          </div>
+          <div className="border-t border-white/5 pt-8 text-center text-gray-500 text-sm">
+            <p>&copy; 2026 SmartConnect AI. Todos los derechos reservados.</p>
+          </div>
+        </div>
       </footer>
     </div>
   );

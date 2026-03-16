@@ -6,7 +6,6 @@
  * Security: OWASP A04:2021 (Rate Limiting & Bot Protection)
  */
 
-import React from 'react';
 import { render } from '@testing-library/react';
 import { HoneypotField } from '../../../src/shared/components/HoneypotField';
 

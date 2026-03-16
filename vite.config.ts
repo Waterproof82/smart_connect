@@ -24,8 +24,8 @@ export default defineConfig(() => {
                 if (id.includes('@supabase')) {
                   return 'vendor-supabase';
                 }
-                if (id.includes('@google/generativeai')) {
-                  return 'vendor-ai';
+                if (id.includes('recharts')) {
+                  return 'vendor-recharts';
                 }
                 if (id.includes('react') || id.includes('scheduler')) {
                   return 'vendor-react';

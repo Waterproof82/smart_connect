@@ -76,7 +76,7 @@ export const Features: React.FC = () => {
         </p>
       </div>
 
-      <div className="grid md:grid-cols-3 gap-8">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {solutions.map((item, idx) => (
           <div 
             key={item.id} 

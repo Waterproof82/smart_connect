@@ -17,7 +17,7 @@ export const Hero: React.FC = () => {
             Tecnología de Próxima Generación
           </div>
           
-          <h1 className="reveal-2 text-6xl md:text-8xl font-black leading-[1.05] mb-8 tracking-tight">
+          <h1 className="reveal-2 text-3xl sm:text-4xl md:text-6xl lg:text-8xl font-black leading-[1.05] mb-8 tracking-tight">
             No solo creamos software. <br />
             <span className="gradient-text">Escalamos con IA</span>
           </h1>
@@ -27,11 +27,11 @@ export const Hero: React.FC = () => {
           </p>
 
           <div className="reveal-3 flex flex-wrap gap-5">
-            <button className="bg-blue-600 hover:bg-blue-700 text-white px-10 py-5 rounded-2xl font-bold flex items-center gap-3 transition-all shadow-2xl shadow-blue-600/30 active:scale-95 group">
+            <button onClick={() => document.querySelector('#contacto')?.scrollIntoView({ behavior: 'smooth' })} className="bg-blue-600 hover:bg-blue-700 text-white px-10 py-5 rounded-2xl font-bold flex items-center gap-3 transition-all shadow-2xl shadow-blue-600/30 active:scale-95 group">
               Empezar Ahora
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
-            <button className="bg-white/5 hover:bg-white/10 border border-white/10 px-10 py-5 rounded-2xl font-bold flex items-center gap-3 transition-all active:scale-95 group">
+            <button onClick={() => document.querySelector('#soluciones')?.scrollIntoView({ behavior: 'smooth' })} className="bg-white/5 hover:bg-white/10 border border-white/10 px-10 py-5 rounded-2xl font-bold flex items-center gap-3 transition-all active:scale-95 group">
               Ver Demo
               <div className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center group-hover:bg-white/20 transition-colors">
                 <Play className="w-3 h-3 fill-white ml-0.5" />
@@ -80,7 +80,7 @@ export const Hero: React.FC = () => {
             </div>
 
             {/* Float Floating Element - Enhanced */}
-            <div className="absolute -left-16 top-1/3 bg-blue-600 border border-blue-400/50 backdrop-blur-xl px-6 py-4 rounded-2xl flex items-center gap-4 shadow-[0_20px_50px_rgba(37,99,235,0.4)] animate-float-fancy" style={{ animationDelay: '-2s' }}>
+            <div className="hidden lg:flex absolute -left-16 top-1/3 bg-blue-600 border border-blue-400/50 backdrop-blur-xl px-6 py-4 rounded-2xl flex items-center gap-4 shadow-[0_20px_50px_rgba(37,99,235,0.4)] animate-float-fancy" style={{ animationDelay: '-2s' }}>
                <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
                  <Sparkles className="w-4 h-4 text-white" />
                </div>
@@ -91,7 +91,7 @@ export const Hero: React.FC = () => {
             </div>
 
             {/* Secondary Decorator */}
-            <div className="absolute -right-12 bottom-1/4 bg-white/5 border border-white/10 backdrop-blur-md p-4 rounded-2xl flex flex-col gap-1 shadow-2xl animate-float-fancy" style={{ animationDelay: '-4s' }}>
+            <div className="hidden lg:flex absolute -right-12 bottom-1/4 bg-white/5 border border-white/10 backdrop-blur-md p-4 rounded-2xl flex flex-col gap-1 shadow-2xl animate-float-fancy" style={{ animationDelay: '-4s' }}>
                <div className="flex gap-1">
                  {[1, 2, 3].map(i => <div key={i} className="w-6 h-1 bg-blue-500/40 rounded-full"></div>)}
                </div>

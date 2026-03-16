@@ -1,19 +1,26 @@
 
 import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import './index.css';
 import App from './App';
 
 // Lazy loading para rutas - AdminPanel solo se carga cuando se necesita
-const AdminPanel = React.lazy(() => 
-  import('@features/admin/presentation').then(module => ({ 
-    default: module.AdminPanel 
+const AdminPanel = React.lazy(() =>
+  import('@features/admin/presentation').then(module => ({
+    default: module.AdminPanel
+  }))
+);
+
+const NotFound = React.lazy(() =>
+  import('@features/landing/presentation/components/NotFound').then(module => ({
+    default: module.NotFound
   }))
 );
 
 const LoadingFallback = () => (
-  <div className="min-h-screen bg-[#020408] flex items-center justify-center">
+  <div className="min-h-screen bg-sc-dark flex items-center justify-center">
     <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
   </div>
 );
@@ -26,14 +33,16 @@ if (!rootElement) {
 const root = ReactDOM.createRoot(rootElement);
 root.render(
   <React.StrictMode>
+    <HelmetProvider>
     <BrowserRouter>
       <Suspense fallback={<LoadingFallback />}>
         <Routes>
           <Route path="/" element={<App />} />
           <Route path="/admin" element={<AdminPanel />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
     </BrowserRouter>
+    </HelmetProvider>
   </React.StrictMode>
 );

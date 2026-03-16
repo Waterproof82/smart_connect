@@ -1,7 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { X, Send, User, Bot, Sparkles, Loader2, MessageSquare } from 'lucide-react';
 import { createChatbotContainer } from './ChatbotContainer';
-import { MessageEntity, ChatSessionEntity } from '../domain/entities';
+import { MessageEntity, ChatSessionEntity, type Message } from '../domain/entities';
 import { sanitizeInput } from '@shared/utils/sanitizer';
 import { rateLimiter, RateLimitPresets } from '@shared/utils/rateLimiter';
 import { supabase } from '@shared/supabaseClient';
@@ -48,21 +48,21 @@ export const ExpertAssistant: React.FC = () => {
   }, []);
 
   // Use domain entities for chat session management
-  const chatSessionRef = useRef(new ChatSessionEntity());
+  const [chatSession, setChatSession] = useState(() => new ChatSessionEntity());
 
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [chatSessionRef.current.messages, isLoading]);
+  }, [chatSession.messages, isLoading]);
 
-  const handleSendMessage = async (message: string) => {
+  const handleSendMessage = useCallback(async (message: string, currentMessages: Message[]) => {
     setIsLoading(true);
-    
+
     try {
       const response = await container.generateResponseUseCase.execute({
         userQuery: message,
-        conversationHistory: chatSessionRef.current.messages,
+        conversationHistory: currentMessages,
         useRAG: true,
         ragOptions: {
           topK: 5,
@@ -75,17 +75,17 @@ export const ExpertAssistant: React.FC = () => {
         role: 'assistant',
         content: response,
       });
-      chatSessionRef.current = chatSessionRef.current.addMessage(assistantEntity);
+      setChatSession(prev => prev.addMessage(assistantEntity));
     } catch {
       const errorEntity = new MessageEntity({
         role: 'assistant',
         content: 'Hubo un error al conectar con el asistente. Por favor, intenta de nuevo.',
       });
-      chatSessionRef.current = chatSessionRef.current.addMessage(errorEntity);
+      setChatSession(prev => prev.addMessage(errorEntity));
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [container.generateResponseUseCase]);
 
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
@@ -99,7 +99,7 @@ export const ExpertAssistant: React.FC = () => {
         role: 'assistant',
         content: 'Has enviado demasiados mensajes. Por favor, espera un minuto antes de continuar.',
       });
-      chatSessionRef.current = chatSessionRef.current.addMessage(errorEntity);
+      setChatSession(prev => prev.addMessage(errorEntity));
       return;
     }
 
@@ -113,7 +113,7 @@ export const ExpertAssistant: React.FC = () => {
         role: 'assistant',
         content: 'Tu mensaje es demasiado largo. Máximo 4000 caracteres.',
       });
-      chatSessionRef.current = chatSessionRef.current.addMessage(errorEntity);
+      setChatSession(prev => prev.addMessage(errorEntity));
       setInput('');
       return;
     }
@@ -125,17 +125,18 @@ export const ExpertAssistant: React.FC = () => {
       role: 'user',
       content: sanitizedInput,
     });
-    chatSessionRef.current = chatSessionRef.current.addMessage(userEntity);
-    
+    const updatedSession = chatSession.addMessage(userEntity);
+    setChatSession(updatedSession);
+
     // Use the new handleSendMessage function
-    await handleSendMessage(sanitizedInput);
+    await handleSendMessage(sanitizedInput, updatedSession.messages);
   };
 
   return (
     <div className="fixed bottom-8 right-8 z-[100] flex flex-col items-end gap-4">
       {/* Chat Window */}
       {isOpen && (
-        <div className="mb-4 w-[90vw] md:w-[400px] h-[550px] bg-[#0d0d1e] border border-white/10 rounded-3xl shadow-2xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-300">
+        <div className="mb-4 w-[90vw] md:w-[400px] h-[550px] max-h-[80vh] bg-sc-dark-alt border border-white/10 rounded-3xl shadow-2xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-300">
           <div className="p-5 bg-blue-600 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
@@ -146,13 +147,13 @@ export const ExpertAssistant: React.FC = () => {
                 <p className="text-[10px] text-blue-100 opacity-70">Entrenado con IA</p>
               </div>
             </div>
-            <button onClick={() => setIsOpen(false)} className="text-white/70 hover:text-white">
+            <button onClick={() => setIsOpen(false)} className="text-white/70 hover:text-white p-3 -mr-3 -mt-1 rounded-lg hover:bg-white/10 transition-colors" aria-label="Cerrar chat">
               <X className="w-5 h-5" />
             </button>
           </div>
 
-          <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 space-y-6 bg-gradient-to-b from-transparent to-[#050505]/50">
-            {chatSessionRef.current.isEmpty() && (
+          <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 space-y-6 bg-gradient-to-b from-transparent to-[#050505]/50" role="log" aria-live="polite" aria-label="Historial de mensajes">
+            {chatSession.isEmpty() && (
               <div className="text-center py-10 px-6">
                 <div className="w-16 h-16 bg-blue-600/10 rounded-2xl flex items-center justify-center mx-auto mb-6 text-blue-500">
                   <Sparkles className="w-8 h-8" />
@@ -161,16 +162,27 @@ export const ExpertAssistant: React.FC = () => {
                 <p className="text-xs text-gray-500 leading-relaxed">
                   Pregúntame sobre QRIBAR, automatización con n8n o cómo mejorar tus reseñas en Google.
                 </p>
+                <div className="flex flex-wrap gap-2 mt-6 justify-center">
+                  {['¿Qué es QRIBAR?', '¿Cómo funcionan las tarjetas NFC?', 'Quiero automatizar mi negocio'].map((prompt) => (
+                    <button
+                      key={prompt}
+                      onClick={() => setInput(prompt)}
+                      className="text-xs bg-blue-600/10 border border-blue-500/20 text-blue-400 px-3 py-1.5 rounded-full hover:bg-blue-600/20 transition-colors"
+                    >
+                      {prompt}
+                    </button>
+                  ))}
+                </div>
               </div>
             )}
             
-            {chatSessionRef.current.messages.map((m, _i) => (
+            {chatSession.messages.map((m, _i) => (
               <div key={m.id} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 <div className={`max-w-[80%] flex gap-3 ${m.role === 'user' ? 'flex-row-reverse' : ''}`}>
                   <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${m.role === 'user' ? 'bg-blue-600' : 'bg-white/5 border border-white/10'}`}>
                     {m.role === 'user' ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4 text-blue-400" />}
                   </div>
-                  <div className={`p-4 rounded-2xl text-xs leading-relaxed ${m.role === 'user' ? 'bg-blue-600 text-white rounded-tr-none' : 'bg-white/5 border border-white/10 text-gray-300 rounded-tl-none'}`}>
+                  <div className={`p-4 rounded-2xl text-sm leading-relaxed ${m.role === 'user' ? 'bg-blue-600 text-white rounded-tr-none' : 'bg-white/5 border border-white/10 text-gray-300 rounded-tl-none'}`}>
                     {m.content}
                   </div>
                 </div>
@@ -186,19 +198,21 @@ export const ExpertAssistant: React.FC = () => {
             )}
           </div>
 
-          <div className="p-4 bg-[#0a0a0a] border-t border-white/5">
+          <div className="p-4 bg-sc-dark-input border-t border-white/5">
             <div className="relative">
-              <input 
-                type="text" 
+              <input
+                type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+                onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
                 placeholder="Escribe tu mensaje..."
+                aria-label="Escribe tu mensaje"
                 className="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-6 pr-14 text-xs outline-none focus:border-blue-500 transition-colors"
               />
-              <button 
+              <button
                 onClick={handleSend}
                 disabled={!input.trim() || isLoading}
+                aria-label="Enviar mensaje"
                 className="absolute right-2 top-2 bottom-2 w-10 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg flex items-center justify-center transition-all"
               >
                 <Send className="w-4 h-4 text-white" />
@@ -211,23 +225,25 @@ export const ExpertAssistant: React.FC = () => {
       {/* Buttons Group */}
       <div className="flex items-center gap-3">
         {/* WhatsApp Button */}
-        <a 
-          href={whatsappPhone ? `https://wa.me/${whatsappPhone}` : '#'}
-          target={whatsappPhone ? "_blank" : undefined}
-          rel={whatsappPhone ? "noopener noreferrer" : undefined}
-          className={`flex items-center gap-4 bg-[#25D366] hover:bg-[#1ebc57] text-white px-6 py-3 rounded-full shadow-2xl transition-all active:scale-95 border border-white/10 group overflow-hidden relative${whatsappPhone ? '' : ' opacity-50 cursor-not-allowed'}`}
-        >
-          <div className="relative z-10">
-            <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform">
-               <MessageSquare className="text-white fill-white w-5 h-5" />
+        {whatsappPhone && (
+          <a
+            href={`https://wa.me/${whatsappPhone}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-4 bg-[#25D366] hover:bg-[#1ebc57] text-white px-6 py-3 rounded-full shadow-2xl transition-all active:scale-95 border border-white/10 group overflow-hidden relative"
+          >
+            <div className="relative z-10">
+              <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform">
+                 <MessageSquare className="text-white fill-white w-5 h-5" />
+              </div>
             </div>
-          </div>
-          <div className="text-left relative z-10 hidden sm:block">
-            <p className="text-[11px] font-bold leading-none mb-0.5">WhatsApp</p>
-            <p className="text-[9px] text-white/80 font-medium">Habla con nosotros</p>
-          </div>
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-        </a>
+            <div className="text-left relative z-10 hidden sm:block">
+              <p className="text-[11px] font-bold leading-none mb-0.5">WhatsApp</p>
+              <p className="text-[9px] text-white/80 font-medium">Habla con nosotros</p>
+            </div>
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+          </a>
+        )}
 
         {/* AI Assistant Trigger Button */}
         <button 

@@ -10,6 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { LoginAdminUseCase } from '../../domain/usecases/LoginAdminUseCase';
 import { AuthSession } from '../../domain/repositories/IAuthRepository';
 import { loginSchema, LoginFormData } from '../schemas/loginSchema';
+import { rateLimiter, RateLimitPresets } from '@shared/utils/rateLimiter';
 
 interface LoginProps {
   loginUseCase: LoginAdminUseCase;
@@ -23,7 +24,7 @@ export const Login: React.FC<LoginProps> = ({ loginUseCase, onLoginSuccess }) =>
   const {
     register,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting, errors: formErrors },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     defaultValues: { email: '', password: '' },
@@ -31,6 +32,13 @@ export const Login: React.FC<LoginProps> = ({ loginUseCase, onLoginSuccess }) =>
 
   const onSubmit = async ({ email, password }: LoginFormData) => {
     setError(null);
+
+    const isAllowed = await rateLimiter.checkLimit(`login_${email}`, RateLimitPresets.LOGIN);
+    if (!isAllowed) {
+      setError('Demasiados intentos. Espera unos minutos.');
+      return;
+    }
+
     try {
       const session = await loginUseCase.execute({ email, password });
       onLoginSuccess(session);
@@ -40,7 +48,7 @@ export const Login: React.FC<LoginProps> = ({ loginUseCase, onLoginSuccess }) =>
   };
 
   return (
-    <div className="relative min-h-screen bg-[#020408] flex items-center justify-center px-4">
+    <div className="relative min-h-screen bg-sc-dark flex items-center justify-center px-4">
 
       {/* Back button */}
       <button
@@ -58,7 +66,7 @@ export const Login: React.FC<LoginProps> = ({ loginUseCase, onLoginSuccess }) =>
         Volver
       </button>
 
-      <div className="max-w-md w-full space-y-8 border border-gray-800 p-8 rounded-2xl bg-[#0B0E14]/50 shadow-2xl backdrop-blur-sm">
+      <div className="max-w-md w-full space-y-8 border border-gray-800 p-8 rounded-2xl bg-sc-dark-card/50 shadow-2xl backdrop-blur-sm">
         <div>
           <h2 className="text-center text-3xl font-extrabold text-white tracking-tight">
             Admin Panel
@@ -83,6 +91,9 @@ export const Login: React.FC<LoginProps> = ({ loginUseCase, onLoginSuccess }) =>
                 disabled={isSubmitting}
                 {...register('email')}
               />
+              {formErrors.email && (
+                <p className="text-xs text-red-400 mt-1 ml-1">{formErrors.email.message}</p>
+              )}
             </div>
             <div>
               <label htmlFor="password" className="block text-xs font-semibold text-gray-400 uppercase mb-1 ml-1">
@@ -97,6 +108,9 @@ export const Login: React.FC<LoginProps> = ({ loginUseCase, onLoginSuccess }) =>
                 disabled={isSubmitting}
                 {...register('password')}
               />
+              {formErrors.password && (
+                <p className="text-xs text-red-400 mt-1 ml-1">{formErrors.password.message}</p>
+              )}
             </div>
           </div>
 

@@ -38,7 +38,7 @@ export const DocumentTable: React.FC<DocumentTableProps> = ({ documents, onView,
             {doc.createdAt.toLocaleDateString()}
           </td>
           <td className="px-6 py-4 text-center">
-            <div className="flex justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className="flex justify-center gap-2 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity">
               <button onClick={() => onEdit(doc)} className="p-1.5 text-blue-400 hover:bg-blue-900/30 rounded" aria-label="Edit document">
                 <Edit2 className="w-4 h-4" />
               </button>

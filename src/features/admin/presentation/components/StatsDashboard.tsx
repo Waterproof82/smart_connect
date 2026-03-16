@@ -35,8 +35,13 @@ export const StatsDashboard: React.FC<StatsDashboardProps> = ({ getStatsUseCase 
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-32">
-        <div className="text-gray-400">Loading statistics...</div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        {[1, 2].map((i) => (
+          <div key={i} className="bg-gray-800/50 border border-gray-700/50 rounded-lg p-6 animate-pulse">
+            <div className="h-4 w-24 bg-gray-700 rounded mb-3" />
+            <div className="h-8 w-16 bg-gray-700 rounded" />
+          </div>
+        ))}
       </div>
     );
   }
@@ -46,7 +51,7 @@ export const StatsDashboard: React.FC<StatsDashboardProps> = ({ getStatsUseCase 
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
       {/* Total Documents */}
       <div className="bg-gradient-to-br from-blue-900/30 to-blue-800/20 border border-blue-700/50 rounded-lg p-6">
         <div className="flex items-center justify-between">

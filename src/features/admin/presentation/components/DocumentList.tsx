@@ -1,31 +1,19 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Document } from '../../domain/entities/Document';
-import { GetAllDocumentsUseCase } from '../../domain/usecases/GetAllDocumentsUseCase';
-import { DeleteDocumentUseCase } from '../../domain/usecases/DeleteDocumentUseCase';
-import { UpdateDocumentUseCase } from '../../domain/usecases/UpdateDocumentUseCase';
-import { CreateDocumentUseCase } from '../../domain/usecases/CreateDocumentUseCase';
-import { AdminUser } from '../../domain/entities/AdminUser';
 import { PaginatedResult } from '../../domain/repositories/IDocumentRepository';
 import { Search, Filter, Plus, Database, ChevronLeft, ChevronRight, Edit2, X } from 'lucide-react';
 import { SourceTag, DocumentCard, DocumentTable } from './document';
+import { useAdmin } from '../AdminContext';
 
 interface DocumentListProps {
-  getAllDocumentsUseCase: GetAllDocumentsUseCase;
-  deleteDocumentUseCase: DeleteDocumentUseCase;
-  updateDocumentUseCase: UpdateDocumentUseCase;
-  createDocumentUseCase: CreateDocumentUseCase;
-  currentUser: AdminUser;
   onDocumentChange?: () => void;
 }
 
 export const DocumentList: React.FC<DocumentListProps> = ({
-  getAllDocumentsUseCase,
-  deleteDocumentUseCase,
-  updateDocumentUseCase,
-  createDocumentUseCase,
-  currentUser,
   onDocumentChange,
 }) => {
+  const { container, currentUser } = useAdmin();
+  const { getAllDocumentsUseCase, deleteDocumentUseCase, updateDocumentUseCase, createDocumentUseCase } = container;
   // --- States ---
   const [documents, setDocuments] = useState<PaginatedResult<Document> | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -44,6 +32,10 @@ export const DocumentList: React.FC<DocumentListProps> = ({
   const [editedSources, setEditedSources] = useState<string[]>([]); // State for editing tags
   const [newSourceInput, setNewSourceInput] = useState('');
   const [isSaving, setIsSaving] = useState(false);
+
+  // Confirmation dialog
+  const [confirmDelete, setConfirmDelete] = useState<{ id: string; title: string } | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
 
   // Creation
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -98,18 +90,25 @@ export const DocumentList: React.FC<DocumentListProps> = ({
     loadDocuments();
   };
 
-  const handleDelete = async (id: string, e?: React.MouseEvent) => {
+  const handleDeleteRequest = (id: string, e?: React.MouseEvent) => {
     e?.stopPropagation();
-    if (!confirm('Are you sure you want to delete this document?')) return;
-    
+    const doc = documents?.data.find(d => d.id === id);
+    setConfirmDelete({ id, title: doc?.content.slice(0, 50) || id });
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!confirmDelete) return;
     try {
-      await deleteDocumentUseCase.execute(id, currentUser);
+      await deleteDocumentUseCase.execute(confirmDelete.id, currentUser);
       await loadDocuments();
       await loadAvailableSources();
       onDocumentChange?.();
-      if (selectedDocument?.id === id) setSelectedDocument(null);
+      if (selectedDocument?.id === confirmDelete.id) setSelectedDocument(null);
+      setConfirmDelete(null);
     } catch (err) {
-      alert(err instanceof Error ? err.message : 'Failed');
+      setActionError(err instanceof Error ? err.message : 'Failed to delete');
+      setConfirmDelete(null);
+      setTimeout(() => setActionError(null), 4000);
     }
   };
 
@@ -135,7 +134,8 @@ export const DocumentList: React.FC<DocumentListProps> = ({
       setSelectedDocument(null);
       setIsEditing(false);
     } catch (err) {
-      alert(err instanceof Error ? err.message : 'Update failed');
+      setActionError(err instanceof Error ? err.message : 'Update failed');
+      setTimeout(() => setActionError(null), 4000);
     } finally {
       setIsSaving(false);
     }
@@ -143,7 +143,11 @@ export const DocumentList: React.FC<DocumentListProps> = ({
 
   const handleCreate = async () => {
     const finalSource = newDocument.source === '_custom_' ? customSource.trim() : newDocument.source;
-    if (!newDocument.content.trim() || !finalSource) return alert('Content and Source are required');
+    if (!newDocument.content.trim() || !finalSource) {
+      setActionError('Content and Source are required');
+      setTimeout(() => setActionError(null), 4000);
+      return;
+    }
 
     setIsCreating(true);
     try {
@@ -156,7 +160,8 @@ export const DocumentList: React.FC<DocumentListProps> = ({
       await loadAvailableSources();
       onDocumentChange?.();
     } catch (err) {
-      alert(err instanceof Error ? err.message : 'Create failed');
+      setActionError(err instanceof Error ? err.message : 'Create failed');
+      setTimeout(() => setActionError(null), 4000);
     } finally {
       setIsCreating(false);
     }
@@ -203,7 +208,34 @@ export const DocumentList: React.FC<DocumentListProps> = ({
 
   return (
     <div className="space-y-6">
-      
+
+      {/* Error Banner */}
+      {actionError && (
+        <div className="p-3 bg-red-900/20 border border-red-500/50 rounded-lg text-sm text-red-400 flex items-center justify-between">
+          <span>{actionError}</span>
+          <button onClick={() => setActionError(null)} className="text-red-400 hover:text-red-300 ml-4" type="button">
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      )}
+
+      {/* Confirm Delete Dialog */}
+      {confirmDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={() => setConfirmDelete(null)} />
+          <div className="relative bg-gray-900 border border-gray-700 rounded-xl p-6 max-w-sm w-full shadow-2xl">
+            <h4 className="text-lg font-bold text-white mb-2">Delete Document?</h4>
+            <p className="text-sm text-gray-400 mb-6">
+              This will permanently delete &quot;{confirmDelete.title}...&quot;. This action cannot be undone.
+            </p>
+            <div className="flex justify-end gap-3">
+              <button onClick={() => setConfirmDelete(null)} className="px-4 py-2 text-gray-300 hover:bg-gray-800 rounded-lg" type="button">Cancel</button>
+              <button onClick={handleDeleteConfirm} className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg" type="button">Delete</button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Action Bar */}
       <div className="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center bg-gray-900/50 p-4 rounded-xl border border-gray-800">
         <form onSubmit={handleSearch} className="w-full md:w-auto flex flex-col md:flex-row gap-3 flex-1 max-w-3xl">
@@ -267,7 +299,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
                 key={doc.id}
                 doc={doc}
                 onView={() => handleViewDocument(doc)}
-                onDelete={currentUser.canPerform('edit') ? (e) => handleDelete(doc.id, e) : undefined}
+                onDelete={currentUser.canPerform('edit') ? (e) => handleDeleteRequest(doc.id, e) : undefined}
                 canEdit={currentUser.canPerform('edit')}
               />
             ))}
@@ -280,7 +312,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
                 documents={documents.data}
                 onView={handleViewDocument}
                 onEdit={handleEditDocument}
-                onDelete={handleDelete}
+                onDelete={handleDeleteRequest}
                 canEdit={currentUser.canPerform('edit')}
               />
             )}
@@ -470,7 +502,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
       {/* Create Modal */}
       {showCreateModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center sm:p-4">
-          <div className="absolute inset-0 bg-black/90 backdrop-blur-sm" />
+          <div className="absolute inset-0 bg-black/90 backdrop-blur-sm cursor-pointer" onClick={() => setShowCreateModal(false)} />
           <div className="relative bg-gray-900 w-full h-full sm:h-auto sm:max-h-[90vh] sm:rounded-xl border border-gray-800 flex flex-col max-w-4xl">
              <div className="flex justify-between p-5 border-b border-gray-800">
                 <h3 className="text-xl font-bold text-white">New Document</h3>

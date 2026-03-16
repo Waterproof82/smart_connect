@@ -32,10 +32,7 @@ export const contactSchema = z.object({
     .string()
     .trim()
     .min(1, 'El email es requerido')
-    .regex(
-      /^[a-zA-Z0-9._%+\u002D]+@[a-zA-Z0-9.\u002D]+\.[a-zA-Z]{2,}$/,
-      'Formato de email inválido (ejemplo@dominio.com)',
-    ),
+    .email('Formato de email inválido (ejemplo@dominio.com)'),
   service: z
     .string()
     .min(1, 'Debes seleccionar un servicio')

@@ -42,6 +42,17 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
     }
   ];
 
+  const handleMobileLinkClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    setIsMobileMenuOpen(false);
+    if (e.currentTarget.hash) {
+      e.preventDefault();
+      const hash = e.currentTarget.hash;
+      setTimeout(() => {
+        document.querySelector(hash)?.scrollIntoView({ behavior: 'smooth' });
+      }, 300);
+    }
+  };
+
   const handleDropdownLinkClick = (e?: React.MouseEvent<HTMLAnchorElement>) => {
     setIsDropdownOpen(false);
     if (e?.currentTarget?.hash) {
@@ -58,7 +69,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
       // Estilo forzado: Eliminamos cualquier rastro de transparencia
       style={{ backgroundColor: '#020408', opacity: 1 }}
       className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 border-b border-white/5 shadow-2xl ${
-        scrolled ? 'py-3' : 'py-6'
+        scrolled ? 'py-2 md:py-3' : 'py-3 md:py-6'
       }`}
     >
       <div className="container mx-auto px-6 flex items-center justify-between">
@@ -76,8 +87,6 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
         <div className="hidden md:flex items-center gap-10 text-sm font-semibold text-gray-400">
           <div
             className="relative group"
-            role="menu"
-            tabIndex={0}
             onMouseEnter={() => setIsDropdownOpen(true)}
             onMouseLeave={() => setIsDropdownOpen(false)}
             onFocus={() => setIsDropdownOpen(true)}
@@ -98,7 +107,6 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
               className="flex items-center gap-1.5 hover:text-white transition-colors py-2 outline-none"
               aria-haspopup="true"
               aria-expanded={isDropdownOpen}
-              tabIndex={-1}
             >
               Soluciones
               <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`} />
@@ -107,7 +115,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
             <div className={`absolute top-full left-1/2 -translate-x-1/2 pt-4 transition-all duration-300 ${
               isDropdownOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-4 pointer-events-none'
             }`}>
-              <div className="w-[280px] bg-[#0a0c10] border border-white/10 rounded-[2rem] p-4 shadow-2xl">
+              <div className="w-[280px] bg-sc-dark-surface border border-white/10 rounded-[2rem] p-4 shadow-2xl" role="menu">
                 <div className="grid gap-2">
                   {solutions.map((item) => (
                     <a
@@ -158,11 +166,31 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
 
         {/* Mobile Menu Drawer */}
         {isMobileMenuOpen && (
-          <div className="fixed inset-0 z-[200] bg-black/80 backdrop-blur-sm flex justify-end">
-            <div className="w-[80vw] max-w-xs h-full bg-[#020408] border-l border-white/10 p-6 flex flex-col gap-6 shadow-2xl">
+          <div
+            className="fixed inset-0 z-[200] bg-black/80 backdrop-blur-sm flex justify-end"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Menú de navegación"
+            onKeyDown={(e) => {
+              if (e.key === 'Escape') setIsMobileMenuOpen(false);
+              if (e.key === 'Tab') {
+                const focusable = e.currentTarget.querySelectorAll<HTMLElement>('a, button');
+                const first = focusable[0];
+                const last = focusable[focusable.length - 1];
+                if (e.shiftKey && document.activeElement === first) {
+                  e.preventDefault();
+                  last.focus();
+                } else if (!e.shiftKey && document.activeElement === last) {
+                  e.preventDefault();
+                  first.focus();
+                }
+              }
+            }}
+          >
+            <div className="w-[80vw] max-w-xs h-full bg-sc-dark border-l border-white/10 p-6 flex flex-col gap-6 shadow-2xl animate-in slide-in-from-right">
               <div className="flex items-center justify-between">
                 <span className="font-bold text-xl text-white">SmartConnect <span className="text-blue-500">AI</span></span>
-                <button onClick={() => setIsMobileMenuOpen(false)} className="text-white">
+                <button onClick={() => setIsMobileMenuOpen(false)} className="text-white" aria-label="Cerrar menu" autoFocus>
                   <X className="w-6 h-6" />
                 </button>
               </div>
@@ -174,15 +202,15 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
                     className="flex items-center gap-3 p-2 text-gray-300"
                     target={item.external ? "_blank" : undefined}
                     rel={item.external ? "noopener noreferrer" : undefined}
-                    onClick={() => setIsMobileMenuOpen(false)}
+                    onClick={(e) => item.external ? setIsMobileMenuOpen(false) : handleMobileLinkClick(e)}
                   >
                     {item.icon}
                     <span>{item.title}</span>
                   </a>
                 ))}
                 <hr className="border-white/10 my-2" />
-                <a href="#exito" className="text-gray-300" onClick={() => setIsMobileMenuOpen(false)}>Éxito</a>
-                <a href="#contacto" className="text-gray-300" onClick={() => setIsMobileMenuOpen(false)}>Contacto</a>
+                <a href="#exito" className="text-gray-300" onClick={handleMobileLinkClick}>Éxito</a>
+                <a href="#contacto" className="text-gray-300" onClick={handleMobileLinkClick}>Contacto</a>
                 <Link to="/admin" className="text-gray-300 flex items-center gap-2" onClick={() => setIsMobileMenuOpen(false)}>
                   <Shield className="w-4 h-4" />
                   <span>Admin</span>

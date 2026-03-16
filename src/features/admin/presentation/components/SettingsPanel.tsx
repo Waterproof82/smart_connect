@@ -11,20 +11,13 @@ import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Settings } from '../../domain/entities/Settings';
-import { GetSettingsUseCase } from '../../domain/usecases/GetSettingsUseCase';
-import { UpdateSettingsUseCase } from '../../domain/usecases/UpdateSettingsUseCase';
 import { Mail, Link as LinkIcon, Save, RefreshCw, AlertCircle, CheckCircle2, Phone, MapPin } from 'lucide-react';
 import { settingsSchema, SettingsFormData } from '../schemas/settingsSchema';
+import { useAdmin } from '../AdminContext';
 
-interface SettingsPanelProps {
-  getSettingsUseCase: GetSettingsUseCase;
-  updateSettingsUseCase: UpdateSettingsUseCase;
-}
-
-export const SettingsPanel: React.FC<SettingsPanelProps> = ({
-  getSettingsUseCase,
-  updateSettingsUseCase,
-}) => {
+export const SettingsPanel: React.FC = () => {
+  const { container } = useAdmin();
+  const { getSettingsUseCase, updateSettingsUseCase } = container;
   const [settings, setSettings] = useState<Settings | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

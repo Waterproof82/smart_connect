@@ -4,46 +4,15 @@ import { Home, LogOut, User } from 'lucide-react';
 import { StatsDashboard } from './StatsDashboard';
 import { DocumentList } from './DocumentList';
 import { SettingsPanel } from './SettingsPanel';
-import { GetAllDocumentsUseCase } from '../../domain/usecases/GetAllDocumentsUseCase';
-import { GetDocumentStatsUseCase } from '../../domain/usecases/GetDocumentStatsUseCase';
-import { DeleteDocumentUseCase } from '../../domain/usecases/DeleteDocumentUseCase';
-import { UpdateDocumentUseCase } from '../../domain/usecases/UpdateDocumentUseCase';
-import { CreateDocumentUseCase } from '../../domain/usecases/CreateDocumentUseCase';
-import { GetSettingsUseCase } from '../../domain/usecases/GetSettingsUseCase';
-import { UpdateSettingsUseCase } from '../../domain/usecases/UpdateSettingsUseCase';
-import { AdminUser } from '../../domain/entities/AdminUser';
-import { IAuthRepository } from '../../domain/repositories/IAuthRepository';
+import { useAdmin } from '../AdminContext';
 
-interface AdminDashboardProps {
-  getAllDocumentsUseCase: GetAllDocumentsUseCase;
-  getStatsUseCase: GetDocumentStatsUseCase;
-  deleteDocumentUseCase: DeleteDocumentUseCase;
-  updateDocumentUseCase: UpdateDocumentUseCase;
-  createDocumentUseCase: CreateDocumentUseCase;
-  getSettingsUseCase: GetSettingsUseCase;
-  updateSettingsUseCase: UpdateSettingsUseCase;
-  authRepository: IAuthRepository;
-  currentUser: AdminUser;
-  onLogout: () => void;
-}
-
-export const AdminDashboard: React.FC<AdminDashboardProps> = ({
-  getAllDocumentsUseCase,
-  getStatsUseCase,
-  deleteDocumentUseCase,
-  updateDocumentUseCase,
-  createDocumentUseCase,
-  getSettingsUseCase,
-  updateSettingsUseCase,
-  authRepository,
-  currentUser,
-  onLogout,
-}) => {
+export const AdminDashboard: React.FC = () => {
+  const { container, currentUser, onLogout } = useAdmin();
   const [statsKey, setStatsKey] = React.useState(0);
 
   const handleLogout = async () => {
     try {
-      await authRepository.logout();
+      await container.authRepository.logout();
       onLogout();
     } catch (err) {
       console.error('Logout failed:', err);
@@ -55,7 +24,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-[#020408] pb-10">
+    <div className="min-h-screen bg-sc-dark pb-10">
       {/* Header */}
       <header className="bg-gray-900 border-b border-gray-800 sticky top-0 z-30 shadow-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -106,7 +75,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
-        <StatsDashboard key={statsKey} getStatsUseCase={getStatsUseCase} />
+        <StatsDashboard key={statsKey} getStatsUseCase={container.getDocumentStatsUseCase} />
         
         <div className="md:flex md:items-center md:justify-between mb-2">
           <div>
@@ -116,11 +85,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         </div>
 
         <DocumentList
-          getAllDocumentsUseCase={getAllDocumentsUseCase}
-          deleteDocumentUseCase={deleteDocumentUseCase}
-          updateDocumentUseCase={updateDocumentUseCase}
-          createDocumentUseCase={createDocumentUseCase}
-          currentUser={currentUser}
           onDocumentChange={refreshStats}
         />
 
@@ -132,10 +96,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           </div>
         </div>
 
-        <SettingsPanel
-          getSettingsUseCase={getSettingsUseCase}
-          updateSettingsUseCase={updateSettingsUseCase}
-        />
+        <SettingsPanel />
       </main>
     </div>
   );

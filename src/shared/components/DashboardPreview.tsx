@@ -48,7 +48,7 @@ export const DashboardPreview: React.FC = () => {
         <p className="text-gray-400">Monitorea tus KPIs y la reputación de tu negocio desde un solo lugar.</p>
       </div>
 
-      <div className={`max-w-6xl mx-auto bg-[#0a0a0a] border border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl transition-all duration-1000 ease-out ${
+      <div className={`max-w-6xl mx-auto bg-sc-dark-input border border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl transition-all duration-1000 ease-out ${
         isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-20 scale-[0.98]'
       }`}>
         {/* Dashboard Header */}

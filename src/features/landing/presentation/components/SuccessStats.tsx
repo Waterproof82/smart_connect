@@ -18,21 +18,27 @@ const StatCard: React.FC<StatProps> = ({ icon, label, value, suffix, color, isIn
   const hasAnimated = useRef(false);
 
   const animate = useCallback(() => {
+    // Respect reduced motion preference
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setCount(value);
+      return;
+    }
+
     const duration = 2000;
     const start = performance.now();
-    
+
     const step = (now: number) => {
       const progress = Math.min((now - start) / duration, 1);
       const easeOutExpo = (t: number) => t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
       const currentCount = Math.floor(easeOutExpo(progress) * value);
-      
+
       setCount(currentCount);
-      
+
       if (progress < 1) {
         animationRef.current = requestAnimationFrame(step);
       }
     };
-    
+
     animationRef.current = requestAnimationFrame(step);
   }, [value]);
 
@@ -62,7 +68,7 @@ const StatCard: React.FC<StatProps> = ({ icon, label, value, suffix, color, isIn
           {React.cloneElement(icon as React.ReactElement<{ className?: string }>, { className: 'w-8 h-8' })}
         </div>
         
-        <div className="text-5xl font-extrabold mb-3 tracking-tighter">
+        <div className="text-5xl font-extrabold mb-3 tracking-tighter" role="status" aria-live="polite" aria-label={`${label}: ${count}${suffix}`}>
           <span className="gradient-text">{count}</span>
           <span className="text-blue-500">{suffix}</span>
         </div>

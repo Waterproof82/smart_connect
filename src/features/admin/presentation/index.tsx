@@ -7,8 +7,10 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { Login } from './components/Login';
 import { AdminDashboard } from './components/AdminDashboard';
+import { AdminProvider } from './AdminContext';
 import UnauthorizedErrorPage from './components/errors/UnauthorizedErrorPage';
 import { getAdminContainer } from './AdminContainer';
 import { AdminUser } from '../domain/entities/AdminUser';
@@ -20,6 +22,13 @@ export const AdminPanel: React.FC = () => {
   const [generalError, setGeneralError] = useState<string | null>(null);
 
   const container = getAdminContainer();
+
+  const noIndexHelmet = (
+    <Helmet>
+      <meta name="robots" content="noindex, nofollow" />
+      <title>Admin Panel - SmartConnect AI</title>
+    </Helmet>
+  );
 
   // Check authentication on mount and listen for session changes
   useEffect(() => {
@@ -64,7 +73,8 @@ export const AdminPanel: React.FC = () => {
   // Loading state
   if (isCheckingAuth) {
     return (
-      <div className="min-h-screen bg-[#020408] flex items-center justify-center">
+      <div className="min-h-screen bg-sc-dark flex items-center justify-center">
+        {noIndexHelmet}
         <div className="flex flex-col items-center gap-4">
           <div className="relative">
             <div className="w-12 h-12 border-4 border-indigo-500/30 rounded-full"></div>
@@ -78,33 +88,25 @@ export const AdminPanel: React.FC = () => {
 
   // General error (e.g., 404)
   if (generalError) {
-    return <UnauthorizedErrorPage />;
+    return <>{noIndexHelmet}<UnauthorizedErrorPage /></>;
   }
 
   // Not authenticated - show login
   if (!currentUser) {
     return (
-      <Login
+      <>{noIndexHelmet}<Login
         loginUseCase={container.loginAdminUseCase}
         onLoginSuccess={handleLoginSuccess}
-      />
+      /></>
     );
   }
 
   // Authenticated - show dashboard
   return (
-    <AdminDashboard
-      getAllDocumentsUseCase={container.getAllDocumentsUseCase}
-      getStatsUseCase={container.getDocumentStatsUseCase}
-      deleteDocumentUseCase={container.deleteDocumentUseCase}
-      updateDocumentUseCase={container.updateDocumentUseCase}
-      createDocumentUseCase={container.createDocumentUseCase}
-      getSettingsUseCase={container.getSettingsUseCase}
-      updateSettingsUseCase={container.updateSettingsUseCase}
-      authRepository={container.authRepository}
-      currentUser={currentUser}
-      onLogout={handleLogout}
-    />
+    <AdminProvider container={container} currentUser={currentUser} onLogout={handleLogout}>
+      {noIndexHelmet}
+      <AdminDashboard />
+    </AdminProvider>
   );
 };
 
