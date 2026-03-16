@@ -28,7 +28,7 @@ export const QRIBARSection: React.FC = () => {
   if (error) {
     return (
       <div className="container mx-auto px-6 py-20 text-center" role="alert">
-        <p className="text-[var(--color-error-text)]">Error loading menu: {error}</p>
+        <p className="text-red-500">Error loading menu: {error}</p>
       </div>
     );
   }

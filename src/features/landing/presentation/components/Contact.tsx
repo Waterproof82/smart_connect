@@ -11,9 +11,9 @@ import { rateLimiter, RateLimitPresets } from '@shared/utils/rateLimiter';
 import { contactSchema, ContactFormData } from '../schemas/contactSchema';
 import { useIntersectionObserver } from '@shared/hooks';
 
-const fieldClasses = "w-full border rounded-2xl py-3 sm:py-4 px-4 sm:px-6 outline-none transition-colors text-sm text-default bg-[var(--color-surface)] border-[var(--color-border)] focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--focus-ring)] min-h-[48px] sm:min-h-[52px]";
-const errorClasses = "bg-[var(--color-error-bg)] border-[var(--color-error-border)] focus:border-[var(--color-error-text)]";
-const validClasses = "bg-[var(--color-accent-subtle)] border-[var(--color-accent-border)] focus:border-[var(--color-primary)]";
+const fieldClasses = "w-full border rounded-2xl py-3 sm:py-4 px-4 sm:px-6 outline-none transition-colors text-sm text-default bg-[var(--color-surface)] border-[var(--color-border)] focus:border-blue-500 min-h-[48px] sm:min-h-[52px]";
+const errorClasses = "bg-red-500/10 border-red-500/50 focus:border-red-500";
+const validClasses = "bg-blue-500/10 border-blue-500/50 focus:border-blue-500";
 
 export const Contact: React.FC = () => {
   const [settings, setSettings] = useState<AppSettings | null>(null);
@@ -61,7 +61,8 @@ export const Contact: React.FC = () => {
   } = useForm<ContactFormData>({
     resolver: zodResolver(contactSchema),
     defaultValues: { name: '', company: '', email: '', service: '', message: '' },
-    mode: 'onChange',
+    mode: 'onBlur',
+    reValidateMode: 'onChange',
   });
 
   const getFieldClassName = (field: keyof ContactFormData): string => {
@@ -121,20 +122,21 @@ export const Contact: React.FC = () => {
   }, [setValue]);
 
   const { ref: nameRegRef, ...nameRegProps } = register('name');
+  const nameInputRef = useRef<HTMLInputElement>(null);
 
   return (
     <div className="relative py-24 overflow-hidden" ref={sectionRef}>
-      <div className="absolute top-1/2 left-0 w-[200px] h-[200px] bg-[var(--color-accent)]/10 rounded-full -translate-y-1/2 -ml-16"></div>
+      <div className="absolute top-1/2 left-0 w-[200px] h-[200px] bg-blue-900/20 rounded-full -translate-y-1/2 -ml-16"></div>
 
       <div className="container mx-auto px-6 relative z-10">
         <div className={`text-center max-w-3xl mx-auto mb-20 transition-all duration-1000 ${
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}>
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--color-accent-subtle)] border border-[var(--color-accent-border)] text-[var(--color-primary)] text-xs font-bold mb-6 tracking-wider uppercase">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-600/10 border border-blue-500/20 text-blue-400 text-xs font-bold mb-6 tracking-wider uppercase">
             <Sparkles className="w-3.5 h-3.5" />
             ¿Hablamos?
           </div>
-          <h2 className="text-5xl font-black mb-6">Impulsa tu <span className="text-[var(--color-primary)]">Negocio Hoy</span></h2>
+          <h2 className="text-5xl font-black mb-6">Impulsa tu <span className="text-blue-400">Negocio Hoy</span></h2>
           <p className="text-muted text-lg leading-relaxed">
             Estamos listos para auditar tu proceso actual y mostrarte cómo la IA y la automatización pueden ahorrarte cientos de horas mensuales.
           </p>
@@ -145,9 +147,9 @@ export const Contact: React.FC = () => {
             isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'
           }`}>
             {[
-              { id: 'email', icon: <Mail className="w-6 h-6" />, title: "Email Directo", value: settings?.contactEmail || (settingsError ? "No disponible" : "Cargando..."), desc: settingsError ? "Intenta más tarde" : "Respondemos en menos de 2 horas", color: "text-[var(--color-icon-blue)]", href: settings?.contactEmail ? `mailto:${settings.contactEmail}` : undefined },
-              { id: 'whatsapp', icon: <MessageSquare className="w-6 h-6" />, title: "WhatsApp Business", value: settings?.whatsappPhone || "Disponible pronto", desc: "Soporte técnico inmediato", color: "text-[var(--color-icon-emerald)]", href: settings?.whatsappPhone ? `https://wa.me/${settings.whatsappPhone.replaceAll(/[^\d+]/g, '')}` : undefined, external: true },
-              { id: 'location', icon: <MapPin className="w-6 h-6" />, title: "Nuestras Oficinas", value: settings?.physicalAddress || "Madrid, España", desc: "Hub Tecnológico de Innovación", color: "text-[var(--color-icon-purple)]", href: `https://maps.google.com/?q=${encodeURIComponent(settings?.physicalAddress || 'Madrid, España')}`, external: true }
+              { id: 'email', icon: <Mail className="w-6 h-6" />, title: "Email Directo", value: settings?.contactEmail || (settingsError ? "No disponible" : "Cargando..."), desc: settingsError ? "Intenta más tarde" : "Respondemos en menos de 2 horas", color: "text-blue-500", href: settings?.contactEmail ? `mailto:${settings.contactEmail}` : undefined },
+              { id: 'whatsapp', icon: <MessageSquare className="w-6 h-6" />, title: "WhatsApp Business", value: settings?.whatsappPhone || "Disponible pronto", desc: "Soporte técnico inmediato", color: "text-emerald-500", href: settings?.whatsappPhone ? `https://wa.me/${settings.whatsappPhone.replaceAll(/[^\d+]/g, '')}` : undefined, external: true },
+              { id: 'location', icon: <MapPin className="w-6 h-6" />, title: "Nuestras Oficinas", value: settings?.physicalAddress || "Madrid, España", desc: "Hub Tecnológico de Innovación", color: "text-purple-500", href: `https://maps.google.com/?q=${encodeURIComponent(settings?.physicalAddress || 'Madrid, España')}`, external: true }
             ].map((item) => {
               const cardClasses = "glass-card p-6 rounded-2xl flex gap-4 group hover:border-[var(--color-border)] transition-colors block";
               const content = (
@@ -180,20 +182,20 @@ export const Contact: React.FC = () => {
                 <div className="grid md:grid-cols-2 gap-5">
                   <div>
                     <label htmlFor="contact-name" className="text-xs font-bold text-muted uppercase tracking-widest ml-1 block mb-2">Nombre Completo</label>
-                    <input id="contact-name" type="text" placeholder="Ej. Juan Pérez" className={getFieldClassName('name') + ' placeholder:text-[var(--color-text-muted)]'} aria-invalid={touchedFields.name && !!errors.name} aria-describedby={errors.name ? 'contact-name-error' : undefined} ref={nameRegRef} {...nameRegProps} />
-                    {touchedFields.name && errors.name && <p id="contact-name-error" role="alert" className="text-xs text-[var(--color-error-text)] mt-1">{errors.name.message}</p>}
+                    <input id="contact-name" type="text" placeholder="Ej. Juan Pérez" className={getFieldClassName('name') + ' placeholder:text-[var(--color-text-muted)]'} aria-invalid={touchedFields.name && !!errors.name} aria-describedby={errors.name ? 'contact-name-error' : undefined} ref={(e) => { nameRegRef(e); nameInputRef.current = e; }} {...nameRegProps} />
+                    {touchedFields.name && errors.name && <p id="contact-name-error" role="alert" className="text-xs text-red-400 mt-1">{errors.name.message}</p>}
                   </div>
                   <div>
                     <label htmlFor="contact-company" className="text-xs font-bold text-muted uppercase tracking-widest ml-1 block mb-2">Empresa</label>
                     <input id="contact-company" type="text" placeholder="Ej. Restaurante L'Escale" className={getFieldClassName('company') + ' placeholder:text-[var(--color-text-muted)]'} aria-describedby={errors.company ? 'contact-company-error' : undefined} {...register('company')} />
-                    {touchedFields.company && errors.company && <p id="contact-company-error" role="alert" className="text-xs text-[var(--color-error-text)] mt-1">{errors.company.message}</p>}
+                    {touchedFields.company && errors.company && <p id="contact-company-error" role="alert" className="text-xs text-red-400 mt-1">{errors.company.message}</p>}
                   </div>
                 </div>
 
                 <div>
                   <label htmlFor="contact-email" className="text-xs font-bold text-muted uppercase tracking-widest ml-1 block mb-2">Correo Electrónico</label>
                   <input id="contact-email" type="email" placeholder="juan@empresa.com" className={getFieldClassName('email') + ' placeholder:text-[var(--color-text-muted)]'} aria-describedby={errors.email ? 'contact-email-error' : undefined} {...register('email')} />
-                  {touchedFields.email && errors.email && <p id="contact-email-error" role="alert" className="text-xs text-[var(--color-error-text)] mt-1">{errors.email.message}</p>}
+                  {touchedFields.email && errors.email && <p id="contact-email-error" role="alert" className="text-xs text-red-400 mt-1">{errors.email.message}</p>}
                 </div>
 
                 <div>
@@ -208,30 +210,30 @@ export const Contact: React.FC = () => {
                     </select>
                     <ChevronDown className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
                   </div>
-                  {touchedFields.service && errors.service && <p id="contact-service-error" role="alert" className="text-xs text-[var(--color-error-text)] mt-1">{errors.service.message}</p>}
+                  {touchedFields.service && errors.service && <p id="contact-service-error" role="alert" className="text-xs text-red-400 mt-1">{errors.service.message}</p>}
                 </div>
 
                 <div>
                   <label htmlFor="contact-message" className="text-xs font-bold text-muted uppercase tracking-widest ml-1 block mb-2">Mensaje</label>
                   <textarea id="contact-message" rows={4} placeholder="Cuéntanos brevemente sobre tu proyecto..." className={getFieldClassName('message') + ' resize-none placeholder:text-[var(--color-text-muted)]'} aria-describedby={errors.message ? 'contact-message-error' : undefined} {...register('message')}></textarea>
-                  {touchedFields.message && errors.message && <p id="contact-message-error" role="alert" className="text-xs text-[var(--color-error-text)] mt-1">{errors.message.message}</p>}
+                  {touchedFields.message && errors.message && <p id="contact-message-error" role="alert" className="text-xs text-red-400 mt-1">{errors.message.message}</p>}
                 </div>
 
                 {submitStatus === 'success' && (
-                  <div role="alert" className="flex items-center gap-3 bg-[var(--color-success-bg)] border border-[var(--color-success-border)] rounded-2xl py-4 px-6">
-                    <CheckCircle2 className="w-5 h-5 text-[var(--color-success-text)]" />
-                    <p className="text-sm text-[var(--color-success-text)]">¡Mensaje enviado con éxito! Te responderemos pronto.</p>
+                  <div className="flex items-center gap-3 bg-emerald-500/10 border border-emerald-500/30 rounded-2xl py-4 px-6">
+                    <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                    <p className="text-sm text-emerald-300">¡Mensaje enviado con éxito! Te responderemos pronto.</p>
                   </div>
                 )}
 
                 {submitStatus === 'error' && (
-                  <div className="flex items-center gap-3 bg-[var(--color-error-bg)] border border-[var(--color-error-border)] rounded-2xl py-4 px-6" role="alert">
-                    <AlertCircle className="w-5 h-5 text-[var(--color-error-text)] shrink-0" />
-                    <p className="text-sm text-[var(--color-error-text)]">Error al enviar. Por favor, intenta nuevamente.</p>
+                  <div className="flex items-center gap-3 bg-red-500/10 border border-red-500/30 rounded-2xl py-4 px-6">
+                    <AlertCircle className="w-5 h-5 text-red-400 shrink-0" />
+                    <p className="text-sm text-red-300">Error al enviar. Por favor, intenta nuevamente.</p>
                   </div>
                 )}
 
-                <button type="submit" disabled={!isValid || isSubmitting || isLoadingSettings} className={`w-full py-5 rounded-2xl font-bold flex items-center justify-center gap-3 transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] ${isValid && !isSubmitting && !isLoadingSettings ? 'bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-white' : 'bg-neutral-600/30 text-muted cursor-not-allowed'}`}>
+                <button type="submit" disabled={!isValid || isSubmitting || isLoadingSettings} className={`w-full py-5 rounded-2xl font-bold flex items-center justify-center gap-3 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] ${isValid && !isSubmitting && !isLoadingSettings ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-neutral-600/30 text-muted cursor-not-allowed'}`}>
                   {isLoadingSettings ? <><Loader2 className="w-4 h-4 animate-spin" />Cargando...</> : isSubmitting ? <><Loader2 className="w-4 h-4 animate-spin" />Enviando...</> : <>Enviar Propuesta <Send className="w-4 h-4" /></>}
                 </button>
               </form>

@@ -4,7 +4,7 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
-  // Dark-mode only — no class toggle needed
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
@@ -51,13 +51,26 @@ export default {
           elevated: 'oklch(18% 0.015 250)',
           overlay: 'oklch(22% 0.015 250)',
         },
+        // Light mode surfaces
+        light: {
+          DEFAULT: 'oklch(98% 0.005 250)',
+          muted: 'oklch(95% 0.008 250)',
+          subtle: 'oklch(92% 0.010 250)',
+        },
+        // Legacy aliases for backward compatibility
+        'sc-dark': 'oklch(8% 0.012 250)',
+        'sc-dark-alt': 'oklch(12% 0.015 250)',
+        'sc-dark-surface': 'oklch(10% 0.014 250)',
+        'sc-dark-input': 'oklch(6% 0.010 250)',
+        'sc-dark-card': 'oklch(14% 0.015 250)',
         // Brand colors
         whatsapp: '#25D366',
         'whatsapp-hover': '#1ebc57',
       },
       fontFamily: {
-        sans: ['Instrument Sans', 'system-ui', 'sans-serif'],
+        sans: ['Instrument Sans', 'Plus Jakarta Sans', 'system-ui', 'sans-serif'],
         display: ['Space Grotesk', 'Instrument Sans', 'system-ui', 'sans-serif'],
+        body: ['DM Sans', 'Instrument Sans', 'system-ui', 'sans-serif'],
       },
       fontSize: {
         'fluid-sm': 'clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem)',

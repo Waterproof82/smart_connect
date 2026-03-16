@@ -11,15 +11,14 @@ interface DocumentCardProps {
   canEdit: boolean;
 }
 
-export const DocumentCard: React.FC<DocumentCardProps> = React.memo(({ doc, onView, onDelete, canEdit }) => (
+export const DocumentCard: React.FC<DocumentCardProps> = ({ doc, onView, onDelete, canEdit }) => (
   <div
-    className="relative bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded-xl p-4 active:scale-[0.99] transition-transform outline-none focus:ring-2 focus:ring-[var(--focus-ring)]"
+    className="relative bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded-xl p-4 active:scale-[0.99] transition-transform outline-none focus:ring-2 focus:ring-blue-500"
   >
     <button
       type="button"
       className="block w-full text-left focus:outline-none bg-transparent border-none p-0"
       onClick={onView}
-      aria-label={`Ver documento: ${doc.content.slice(0, 50)}`}
       onKeyDown={e => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
@@ -41,7 +40,7 @@ export const DocumentCard: React.FC<DocumentCardProps> = React.memo(({ doc, onVi
         {doc.content}
       </p>
       <div className="flex justify-between items-center border-t border-[var(--color-border)] pt-3 mt-2">
-        <span className="text-xs text-[var(--color-primary)] font-medium">Toca para ver detalles</span>
+        <span className="text-xs text-blue-400 font-medium">Tap to view details</span>
       </div>
     </button>
     {canEdit && (
@@ -50,8 +49,8 @@ export const DocumentCard: React.FC<DocumentCardProps> = React.memo(({ doc, onVi
           e.stopPropagation();
           if (onDelete) onDelete(e);
         }}
-        className="absolute bottom-4 right-4 p-2 text-[var(--color-error-text)] bg-[var(--color-error-bg)] rounded-lg hover:opacity-80 z-10 ml-2"
-        aria-label="Eliminar documento"
+        className="absolute bottom-4 right-4 p-2 text-red-400 bg-red-900/10 rounded-lg hover:bg-red-900/30 z-10 ml-2"
+        aria-label="Delete document"
         tabIndex={0}
         type="button"
       >
@@ -59,5 +58,4 @@ export const DocumentCard: React.FC<DocumentCardProps> = React.memo(({ doc, onVi
       </button>
     )}
   </div>
-));
-DocumentCard.displayName = 'DocumentCard';
+);
