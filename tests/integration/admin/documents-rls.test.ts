@@ -87,7 +87,7 @@ describeIfConfigured('Documents Table - RLS Policies', () => {
     });
 
     test('should deny anonymous UPDATE on documents', async () => {
-      const { data, error } = await anonClient
+      const { error } = await anonClient
         .from('documents')
         .update({ content: 'Unauthorized update' })
         .eq('id', testDocumentId);
@@ -98,7 +98,7 @@ describeIfConfigured('Documents Table - RLS Policies', () => {
     });
 
     test('should deny anonymous DELETE on documents', async () => {
-      const { data, error } = await anonClient
+      const { error } = await anonClient
         .from('documents')
         .delete()
         .eq('id', testDocumentId);
@@ -169,7 +169,6 @@ test('should allow non-admin SELECT on documents (everyone can read)', async () 
 
   describe('Admin User Access', () => {
     let adminClient: SupabaseClient;
-    let adminEmail: string;
 
     beforeAll(async () => {
       // Note: RLS policy checks for specific admin email (admin@smartconnect.ai)
@@ -178,7 +177,6 @@ test('should allow non-admin SELECT on documents (everyone can read)', async () 
       
       // Use service client for admin operations (bypasses RLS)
       adminClient = serviceClient;
-      adminEmail = 'admin@smartconnect.ai';
       
       // Skip if no service key
       if (!SUPABASE_SERVICE_KEY) {

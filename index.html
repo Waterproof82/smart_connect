@@ -1,17 +1,71 @@
 <!DOCTYPE html>
-<html lang="es" class="bg-[#020408] min-h-full">
+<html lang="es" class="bg-sc-dark min-h-full">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#030508" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#fafafa" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    
+    <!-- Security -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()" />
+    <title>SmartConnect AI - Potencia tu Negocio con IA y Automatizacion</title>
+    <meta name="description" content="SmartConnect AI potencia negocios locales con IA, automatizacion n8n, tarjetas NFC para Google Reviews y menus digitales QRIBAR. Digitaliza y escala tu negocio." />
+    <meta name="keywords" content="SmartConnect AI, automatizacion, n8n, NFC, QRIBAR, menu digital, inteligencia artificial, negocio local, Google Reviews, carta digital" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="SmartConnect AI - Potencia tu Negocio con IA" />
+    <meta property="og:description" content="Escalamos tu negocio con IA, automatizacion n8n, tarjetas NFC y menus digitales QRIBAR." />
+    <meta property="og:url" content="https://smart-connect-olive.vercel.app/" />
+    <meta property="og:image" content="https://smart-connect-olive.vercel.app/icon.png" />
+    <meta property="og:site_name" content="SmartConnect AI" />
+    <meta property="og:locale" content="es_ES" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="SmartConnect AI - Potencia tu Negocio con IA" />
+    <meta name="twitter:description" content="Escalamos tu negocio con IA, automatizacion n8n, tarjetas NFC y menus digitales QRIBAR." />
+    <meta name="twitter:image" content="https://smart-connect-olive.vercel.app/icon.png" />
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://smart-connect-olive.vercel.app/" />
+
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://tysjedvujvsmrzzrmesr.supabase.co" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Instrument+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Instrument+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'" />
+
+    <!-- Icons -->
     <link rel="icon" type="image/png" href="/icon.png" />
     <link rel="apple-touch-icon" href="/icon.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SmartConnect AI</title>
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "SmartConnect AI",
+      "url": "https://smart-connect-olive.vercel.app",
+      "logo": "https://smart-connect-olive.vercel.app/icon.png",
+      "description": "Potenciamos negocios locales con IA, automatizacion y herramientas digitales.",
+      "sameAs": []
+    }
+    </script>
+
     <style>
-      html { background-color: #020408; min-height: 100%; }
+      html { background-color: var(--color-bg, #030508); min-height: 100%; }
       body { min-height: 100%; margin: 0; }
     </style>
   </head>
-  <body class="bg-[#020408] min-h-full">
+  <body class="bg-sc-dark min-h-full">
     <div id="root" class="min-h-full"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

@@ -8,7 +8,8 @@
 
 import React, { useRef } from 'react';
 import { MenuPhone, MenuInfo } from './components';
-import { useQRIBAR, useIntersectionObserver } from './hooks';
+import { useQRIBAR } from './hooks';
+import { useIntersectionObserver } from '@shared/hooks';
 import { getQRIBARContainer } from './QRIBARContainer';
 
 export const QRIBARSection: React.FC = () => {
@@ -26,7 +27,7 @@ export const QRIBARSection: React.FC = () => {
 
   if (error) {
     return (
-      <div className="container mx-auto px-6 py-20 text-center">
+      <div className="container mx-auto px-6 py-20 text-center" role="alert">
         <p className="text-red-500">Error loading menu: {error}</p>
       </div>
     );
@@ -34,14 +35,14 @@ export const QRIBARSection: React.FC = () => {
 
   if (isLoading || !restaurant) {
     return (
-      <div className="container mx-auto px-6 py-20 text-center">
-        <p className="text-gray-400">Loading menu...</p>
+      <div className="container mx-auto px-6 py-20 text-center" role="status" aria-live="polite">
+        <p className="text-muted">Loading menu...</p>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto px-6 grid lg:grid-cols-2 gap-20 items-center" ref={sectionRef}>
+    <div className="container mx-auto px-6 grid lg:grid-cols-2 gap-20 items-center" ref={sectionRef} role="region" aria-label="QRIBAR - Menú digital">
       <div className="order-2 lg:order-1">
         <MenuPhone 
           restaurant={restaurant}

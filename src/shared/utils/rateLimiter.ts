@@ -211,4 +211,10 @@ export const RateLimitPresets = {
     maxRequests: 5,
     windowMs: 60000,
   },
+
+  // Login: 5 attempts per 5 minutes (brute force protection)
+  LOGIN: {
+    maxRequests: 5,
+    windowMs: 5 * 60 * 1000,
+  },
 };

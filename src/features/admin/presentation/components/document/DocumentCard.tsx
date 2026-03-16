@@ -13,7 +13,7 @@ interface DocumentCardProps {
 
 export const DocumentCard: React.FC<DocumentCardProps> = ({ doc, onView, onDelete, canEdit }) => (
   <div
-    className="relative bg-gray-900 border border-gray-800 rounded-xl p-4 active:scale-[0.99] transition-transform outline-none focus:ring-2 focus:ring-blue-500"
+    className="relative bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded-xl p-4 active:scale-[0.99] transition-transform outline-none focus:ring-2 focus:ring-blue-500"
   >
     <button
       type="button"
@@ -29,17 +29,17 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({ doc, onView, onDelet
       <div className="flex justify-between items-start mb-3">
         <div className="flex flex-wrap gap-1">
           {doc.source.split(',').slice(0, 2).map((s: string) => <SourceTag key={s} source={s} />)}
-          {doc.source.split(',').length > 2 && <span className="text-xs text-gray-500 self-center">+more</span>}
+          {doc.source.split(',').length > 2 && <span className="text-xs text-muted self-center">+more</span>}
         </div>
-        <span className="text-xs text-gray-500 flex items-center gap-1 shrink-0">
+        <span className="text-xs text-muted flex items-center gap-1 shrink-0">
           <Calendar className="w-3 h-3" />
           {doc.createdAt.toLocaleDateString()}
         </span>
       </div>
-      <p className="text-gray-300 text-sm line-clamp-3 mb-4 leading-relaxed">
+      <p className="text-default text-sm line-clamp-3 mb-4 leading-relaxed">
         {doc.content}
       </p>
-      <div className="flex justify-between items-center border-t border-gray-800 pt-3 mt-2">
+      <div className="flex justify-between items-center border-t border-[var(--color-border)] pt-3 mt-2">
         <span className="text-xs text-blue-400 font-medium">Tap to view details</span>
       </div>
     </button>

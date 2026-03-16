@@ -86,13 +86,6 @@ export class ChatSessionEntity implements ChatSession {
   }
 
   /**
-   * Generate a unique ID (browser-compatible fallback)
-   */
-  private generateId(): string {
-    return ChatSessionEntity.generateIdStatic();
-  }
-
-  /**
    * Gets conversation length
    */
   getMessageCount(): number {

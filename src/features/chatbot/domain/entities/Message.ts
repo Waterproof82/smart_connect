@@ -77,10 +77,4 @@ export class MessageEntity implements Message {
     });
   }
 
-  /**
-   * Generate a unique ID (browser-compatible fallback)
-   */
-  private generateId(): number {
-    return MessageEntity.generateIdStatic();
-  }
 }

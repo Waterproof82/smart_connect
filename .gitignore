@@ -33,6 +33,10 @@ lerna-debug.log*
 # OS files
 .DS_Store
 Thumbs.db
+*.stackdump
+
+# Claude Code local settings
+.claude/settings.local.json
 
 # Editor directories and files
 .vscode/*

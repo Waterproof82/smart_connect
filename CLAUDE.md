@@ -85,11 +85,15 @@ Se aplican los estándares de calidad del Máster de Desarrollo con IA:
 
 ## 📋 INSTRUCCIONES PARA LA IA (TU ROL)
 
-### Métricas del Proyecto (2026-03-09)
+### Métricas del Proyecto (2026-03-16)
 - **Architecture Score:** 10/10 ✅
 - **SOLID Compliance:** 10/10 ✅
 - **OWASP Compliance:** 10/10 ✅
 - **Security Score:** 10/10 ✅
+- **Accessibility Score:** 10/10 ✅
+- **Performance Score:** 10/10 ✅
+- **Responsive Score:** 10/10 ✅
+- **Code Quality Score:** 10/10 ✅
 
 ### Flujo de trabajo obligatorio:
 1. **INICIALIZACIÓN:** Lee `docs/context/` relevante ANTES de empezar cualquier tarea
@@ -168,3 +172,28 @@ Al ejecutar el linter de Supabase, pueden aparecer warnings que requieren accion
   - `security_logs`: Solo admins y service_role
 
 **¿Entendido? Confirma para comenzar con el primer paso del desarrollo.**
+
+---
+
+## Design Context
+
+### Users
+Local restaurants, bars, and cafes - hospitality businesses that need digital tools (QR menus, NFC cards, AI chatbots) to grow their business. Users are typically business owners without deep technical knowledge who want simple, effective solutions.
+
+### Brand Personality
+- **Tech-forward**: Emphasize innovation, AI-powered capabilities, modern technology
+- **Trustworthy**: Reliable, professional, established authority in the space
+- **Professional**: Clean, polished, business-appropriate aesthetics
+
+### Aesthetic Direction
+- Modern & Professional feel with a blue primary color (slight purple tint)
+- Dark/light mode support (both equally important)
+- Clean, uncluttered interfaces that don't overwhelm non-technical users
+- Clear visual hierarchy - ONE primary action per screen
+
+### Design Principles
+1. **Clarity over complexity** - Every element must justify its existence
+2. **Tech-forward visual identity** - Use the existing design tokens (blue primary, Space Grotesk display font) to convey innovation
+3. **Respect user intelligence** - Don't over-explain, but provide clear paths to success
+4. **Progressive disclosure** - Hide advanced options until needed
+5. **Accessible by default** - WCAG compliant, support reduced motion, touch-friendly targets

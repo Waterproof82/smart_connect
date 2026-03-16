@@ -8,6 +8,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { GetDocumentStatsUseCase, DocumentStats } from '../../domain/usecases/GetDocumentStatsUseCase';
+import { FileText } from 'lucide-react';
+import { ConsoleLogger } from '@core/domain/usecases/Logger';
+
+const logger = new ConsoleLogger('[StatsDashboard]');
 
 interface StatsDashboardProps {
   getStatsUseCase: GetDocumentStatsUseCase;
@@ -23,7 +27,7 @@ export const StatsDashboard: React.FC<StatsDashboardProps> = ({ getStatsUseCase 
         const result = await getStatsUseCase.execute();
         setStats(result);
       } catch (err) {
-        console.error('Failed to load stats:', err);
+        logger.error('Failed to load stats', err);
       } finally {
         setIsLoading(false);
       }
@@ -35,8 +39,13 @@ export const StatsDashboard: React.FC<StatsDashboardProps> = ({ getStatsUseCase 
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-32">
-        <div className="text-gray-400">Loading statistics...</div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8" role="status" aria-live="polite">
+        {[1, 2].map((i) => (
+          <div key={i} className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-6 animate-pulse">
+            <div className="h-4 w-24 bg-[var(--color-border)] rounded mb-3" />
+            <div className="h-8 w-16 bg-[var(--color-border)] rounded" />
+          </div>
+        ))}
       </div>
     );
   }
@@ -46,28 +55,30 @@ export const StatsDashboard: React.FC<StatsDashboardProps> = ({ getStatsUseCase 
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
       {/* Total Documents */}
-      <div className="bg-gradient-to-br from-blue-900/30 to-blue-800/20 border border-blue-700/50 rounded-lg p-6">
+      <div className="bg-blue-950/50 border border-blue-800/50 rounded-lg p-6">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm text-gray-400 mb-1">Total Documents</p>
-            <p className="text-3xl font-bold text-white">{stats.totalDocuments}</p>
+            <p className="text-sm text-muted mb-1">Total Documents</p>
+            <p className="text-3xl font-bold text-default">{stats.totalDocuments}</p>
           </div>
-          <div className="text-blue-400 text-4xl">📄</div>
+          <div className="text-blue-400" aria-hidden="true">
+            <FileText className="w-9 h-9" />
+          </div>
         </div>
       </div>
 
       {/* By Source */}
-      <div className="bg-gradient-to-br from-purple-900/30 to-purple-800/20 border border-purple-700/50 rounded-lg p-6">
-        <p className="text-sm text-gray-400 mb-3">Documents by Source</p>
+      <div className="bg-purple-950/50 border border-purple-800/50 rounded-lg p-6">
+        <p className="text-sm text-muted mb-3">Documents by Source</p>
         <div className="space-y-2">
           {Object.entries(stats.bySource)
             .sort((a, b) => b[1] - a[1])
             .map(([source, count]) => (
               <div key={source} className="flex items-center justify-between text-sm">
-                <span className="text-gray-300 capitalize">{source}</span>
-                <span className="text-white font-semibold">{count}</span>
+                <span className="text-default capitalize">{source}</span>
+                <span className="text-default font-semibold">{count}</span>
               </div>
             ))}
         </div>

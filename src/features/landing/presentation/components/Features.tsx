@@ -1,6 +1,7 @@
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useRef } from 'react';
 import { Code2, Settings2, Smartphone, Utensils, ArrowUpRight } from 'lucide-react';
+import { useIntersectionObserver } from '@shared/hooks';
 
 const solutions = [
   {
@@ -36,34 +37,8 @@ const solutions = [
 ];
 
 export const Features: React.FC = () => {
-  const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        // Marcamos como visible si el elemento está en el viewport
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
-      },
-      { 
-        threshold: 0.1, // Se activa más rápido (al 10% de visibilidad)
-        rootMargin: "0px 0px -50px 0px" // Margen inferior para disparar antes de que llegue al borde
-      }
-    );
-
-    const currentSection = sectionRef.current;
-    if (currentSection) {
-      observer.observe(currentSection);
-    }
-
-    return () => {
-      if (currentSection) {
-        observer.unobserve(currentSection);
-      }
-    };
-  }, []);
+  const isVisible = useIntersectionObserver(sectionRef, { rootMargin: "0px 0px -50px 0px" });
 
   return (
     <div className="container mx-auto px-6" ref={sectionRef}>
@@ -71,31 +46,36 @@ export const Features: React.FC = () => {
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
       }`}>
         <h2 className="text-4xl md:text-5xl font-bold mb-6">Nuestras Soluciones</h2>
-        <p className="text-gray-400 leading-relaxed">
+        <p className="text-muted leading-relaxed">
           Herramientas avanzadas diseñadas para la era digital, desde el hardware hasta el código.
         </p>
       </div>
 
-      <div className="grid md:grid-cols-3 gap-8">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-12 gap-6">
         {solutions.map((item, idx) => (
           <div 
             key={item.id} 
-            className={`glass-card p-10 rounded-3xl group hover:border-blue-500/30 transition-all duration-1000 cursor-default relative overflow-hidden ${
+            className={`glass-card p-8 lg:p-10 rounded-3xl group hover:border-blue-500/30 transition-all duration-1000 cursor-default relative overflow-hidden ${
+              idx === 0 
+                ? 'lg:col-span-5 lg:row-span-2' 
+                : idx === 3 
+                  ? 'lg:col-span-7' 
+                  : 'lg:col-span-4'
+            } ${
               isVisible 
                 ? 'opacity-100 translate-y-0 blur-0' 
                 : 'opacity-0 translate-y-20 blur-sm'
             }`}
             style={{ transitionDelay: `${idx * 150}ms` }}
           >
-            <div className="mb-8 w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
+            <div className={`mb-6 w-14 h-14 bg-[var(--color-surface)] rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform ${idx === 0 ? 'lg:w-16 lg:h-16' : ''}`}>
               {item.icon}
             </div>
-            <h3 className="text-2xl font-bold mb-4">{item.title}</h3>
-            <p className="text-gray-400 leading-relaxed mb-12 min-h-[100px]">
+            <h3 className={`font-bold mb-4 ${idx === 0 ? 'text-3xl lg:text-4xl' : 'text-xl lg:text-2xl'}`}>{item.title}</h3>
+            <p className={`text-muted leading-relaxed ${idx === 0 ? 'mb-12 text-lg' : 'mb-8'}`}>
               {item.description}
             </p>
             
-            {/* Botón con animación de "colocación" */}
             <div className={`transform transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
               isVisible 
                 ? 'opacity-100 translate-y-0 scale-100' 
@@ -115,7 +95,6 @@ export const Features: React.FC = () => {
                 <span>{item.external ? 'Visitar' : 'Saber más'}</span>
                 <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                 
-                {/* Línea decorativa que se expande */}
                 <div className={`absolute -bottom-1 left-0 h-[2px] bg-blue-500 transition-all duration-1000 ease-out ${
                   isVisible ? 'w-full opacity-100' : 'w-0 opacity-0'
                 }`} 
@@ -124,8 +103,7 @@ export const Features: React.FC = () => {
               </a>
             </div>
 
-            {/* Decoración de fondo de la tarjeta */}
-            <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-blue-500/5 blur-3xl rounded-full group-hover:bg-blue-500/10 transition-colors" />
+            <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-blue-500/5 rounded-full group-hover:bg-blue-500/10 transition-colors" />
           </div>
         ))}
       </div>
