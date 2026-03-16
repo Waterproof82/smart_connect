@@ -229,8 +229,8 @@ export const DocumentList: React.FC<DocumentListProps> = ({
               This will permanently delete &quot;{confirmDelete.title}...&quot;. This action cannot be undone.
             </p>
             <div className="flex justify-end gap-3">
-              <button onClick={() => setConfirmDelete(null)} className="px-4 py-2 text-gray-300 hover:bg-gray-800 rounded-lg" type="button">Cancel</button>
-              <button onClick={handleDeleteConfirm} className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg" type="button">Delete</button>
+              <button onClick={() => setConfirmDelete(null)} className="px-4 py-2 text-gray-300 hover:bg-gray-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 rounded-lg" type="button">Cancel</button>
+              <button onClick={handleDeleteConfirm} className="px-4 py-2 bg-red-600 hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400 text-white rounded-lg" type="button">Delete</button>
             </div>
           </div>
         </div>
@@ -270,7 +270,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
                 className="w-full pl-9 pr-4 py-2.5 bg-gray-800 border border-gray-700 rounded-lg text-sm text-white focus:ring-2 focus:ring-blue-500"
               />
             </div>
-            <button type="submit" className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors">
+            <button type="submit" className="px-4 py-2 bg-blue-600 hover:bg-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 text-white rounded-lg transition-colors">
               Go
             </button>
           </div>
