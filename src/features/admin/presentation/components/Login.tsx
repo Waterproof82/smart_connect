@@ -43,7 +43,7 @@ export const Login: React.FC<LoginProps> = ({ loginUseCase, onLoginSuccess }) =>
       const session = await loginUseCase.execute({ email, password });
       onLoginSuccess(session);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Authentication failed');
+      setError(err instanceof Error ? err.message : 'Error de autenticación');
     }
   };
 
@@ -69,7 +69,7 @@ export const Login: React.FC<LoginProps> = ({ loginUseCase, onLoginSuccess }) =>
       <div className="max-w-md w-full space-y-8 border border-[var(--color-border)] p-8 rounded-2xl bg-[var(--color-surface)] shadow-2xl">
         <div>
           <h2 className="text-center text-3xl font-extrabold text-default tracking-tight">
-            Admin Panel
+            Panel Admin
           </h2>
           <p className="mt-2 text-center text-sm text-muted">
             Inicia sesión para gestionar el sistema
@@ -86,13 +86,15 @@ export const Login: React.FC<LoginProps> = ({ loginUseCase, onLoginSuccess }) =>
                 id="email"
                 type="email"
                 autoComplete="email"
-                className="appearance-none relative block w-full px-4 py-3 border border-[var(--color-border)] placeholder-[var(--color-text-muted)] text-white bg-[var(--color-bg-alt)] rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm transition-all"
+                className="appearance-none relative block w-full px-4 py-3 border border-[var(--color-border)] placeholder-[var(--color-text-muted)] text-white bg-[var(--color-bg-alt)] rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:border-transparent sm:text-sm transition-all"
                 placeholder="admin@ejemplo.com"
                 disabled={isSubmitting}
+                aria-invalid={!!formErrors.email}
+                aria-describedby={formErrors.email ? 'login-email-error' : undefined}
                 {...register('email')}
               />
               {formErrors.email && (
-                <p className="text-xs text-red-400 mt-1 ml-1">{formErrors.email.message}</p>
+                <p id="login-email-error" role="alert" className="text-xs text-[var(--color-error-text)] mt-1 ml-1">{formErrors.email.message}</p>
               )}
             </div>
             <div>
@@ -103,27 +105,29 @@ export const Login: React.FC<LoginProps> = ({ loginUseCase, onLoginSuccess }) =>
                 id="password"
                 type="password"
                 autoComplete="current-password"
-                className="appearance-none relative block w-full px-4 py-3 border border-[var(--color-border)] placeholder-[var(--color-text-muted)] text-white bg-[var(--color-bg-alt)] rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm transition-all"
+                className="appearance-none relative block w-full px-4 py-3 border border-[var(--color-border)] placeholder-[var(--color-text-muted)] text-white bg-[var(--color-bg-alt)] rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:border-transparent sm:text-sm transition-all"
                 placeholder="••••••••"
                 disabled={isSubmitting}
+                aria-invalid={!!formErrors.password}
+                aria-describedby={formErrors.password ? 'login-password-error' : undefined}
                 {...register('password')}
               />
               {formErrors.password && (
-                <p className="text-xs text-red-400 mt-1 ml-1">{formErrors.password.message}</p>
+                <p id="login-password-error" role="alert" className="text-xs text-[var(--color-error-text)] mt-1 ml-1">{formErrors.password.message}</p>
               )}
             </div>
           </div>
 
           {error && (
-            <div className="rounded-lg bg-red-900/20 border border-red-500/50 p-3 animate-in fade-in zoom-in duration-300">
-              <p className="text-sm text-red-400 text-center font-medium">{error}</p>
+            <div role="alert" className="rounded-lg bg-[var(--color-error-bg)] border border-[var(--color-error-border)] p-3 animate-in fade-in zoom-in duration-300">
+              <p className="text-sm text-[var(--color-error-text)] text-center font-medium">{error}</p>
             </div>
           )}
 
           <button
             type="submit"
             disabled={isSubmitting}
-            className="group relative w-full flex justify-center py-3.5 px-4 border border-transparent text-sm font-bold rounded-xl text-white bg-blue-600 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] focus:ring-blue-500 disabled:opacity-50 transition-all shadow-lg shadow-blue-900/20"
+            className="group relative w-full flex justify-center py-3.5 px-4 border border-transparent text-sm font-bold rounded-xl text-white bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] focus:ring-[var(--focus-ring)] disabled:opacity-50 transition-all shadow-lg"
           >
             {isSubmitting ? (
               <span className="flex items-center">

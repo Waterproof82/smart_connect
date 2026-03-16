@@ -13,28 +13,28 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
   const solutions = [
     {
       id: 'software-ia',
-      icon: <Code2 className="w-5 h-5 text-blue-500" />,
+      icon: <Code2 className="w-5 h-5 text-[var(--color-icon-blue)]" />,
       title: 'Software & IA',
       desc: 'Soluciones a medida',
       href: '#soluciones'
     },
     {
       id: 'automatizacion-n8n',
-      icon: <Settings2 className="w-5 h-5 text-purple-500" />,
+      icon: <Settings2 className="w-5 h-5 text-[var(--color-icon-purple)]" />,
       title: 'Automatización n8n',
       desc: 'Flujos inteligentes',
       href: '#soluciones'
     },
     {
       id: 'tarjetas-nfc',
-      icon: <Smartphone className="w-5 h-5 text-emerald-500" />,
+      icon: <Smartphone className="w-5 h-5 text-[var(--color-icon-emerald)]" />,
       title: 'Tarjetas NFC',
       desc: 'Reseñas al instante',
       href: '#soluciones'
     },
     {
       id: 'qribar',
-      icon: <Utensils className="w-5 h-5 text-amber-500" />,
+      icon: <Utensils className="w-5 h-5 text-[var(--color-icon-amber)]" />,
       title: 'QR iBar',
       desc: 'Menús digitales HOSTELERÍA',
       href: 'https://qribar.es',
@@ -65,7 +65,8 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
   };
 
   return (
-    <nav 
+    <nav
+      aria-label="Navegación principal"
       className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 border-b border-[var(--color-border)] shadow-2xl bg-[var(--color-bg)] ${
         scrolled ? 'py-2 md:py-3' : 'py-3 md:py-6'
       }`}
@@ -73,11 +74,11 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
       <div className="container mx-auto px-6 flex items-center justify-between">
         {/* Logo */}
         <a href="#inicio" className="flex items-center gap-2 group">
-          <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-600/20 group-hover:scale-110 transition-transform">
+          <div className="w-10 h-10 bg-[var(--color-accent)] rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
             <Cpu className="text-white w-6 h-6" />
           </div>
           <span className="font-bold text-xl tracking-tighter text-default">
-            SmartConnect <span className="text-blue-500">AI</span>
+            SmartConnect <span className="text-[var(--color-primary)]">AI</span>
           </span>
         </a>
 
@@ -113,7 +114,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
             <div className={`absolute top-full left-1/2 -translate-x-1/2 pt-4 transition-all duration-300 ${
               isDropdownOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-4 pointer-events-none'
             }`}>
-              <div className="w-[280px] bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[2rem] p-4 shadow-2xl" role="menu">
+              <div className="w-[280px] bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[2rem] p-4 shadow-2xl">
                 <div className="grid gap-2">
                   {solutions.map((item) => (
                     <a
@@ -148,7 +149,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
 
           <a href="#exito" className="hover:text-[var(--color-text)] transition-colors" onClick={handleDropdownLinkClick}>Éxito</a>
           <a href="#contacto" className="hover:text-[var(--color-text)] transition-colors" onClick={handleDropdownLinkClick}>Contacto</a>
-          <Link to="/admin" className="flex items-center gap-2 text-muted hover:text-blue-400 transition-colors">
+          <Link to="/admin" className="flex items-center gap-2 text-muted hover:text-[var(--color-primary)] transition-colors">
             <Shield className="w-4 h-4" />
             <span>Admin</span>
           </Link>
@@ -156,7 +157,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
 
         {/* Hamburger for mobile */}
         <button
-          className="md:hidden flex items-center justify-center w-11 h-11 rounded-xl bg-blue-600 text-white"
+          className="md:hidden flex items-center justify-center w-12 h-12 rounded-xl bg-[var(--color-accent)] text-white"
           onClick={() => setIsMobileMenuOpen(true)}
           aria-label="Abrir menú de navegación"
         >
@@ -189,8 +190,8 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
           >
             <div className="w-[80vw] max-w-xs h-full bg-[var(--color-bg)] border-l border-[var(--color-border)] p-6 flex flex-col gap-6 shadow-2xl animate-in slide-in-from-right" onClick={(e) => e.stopPropagation()}>
               <div className="flex items-center justify-between">
-                <span className="font-bold text-xl text-default">SmartConnect <span className="text-blue-500">AI</span></span>
-                <button onClick={() => setIsMobileMenuOpen(false)} className="text-default" aria-label="Cerrar menu" autoFocus>
+                <span className="font-bold text-xl text-default">SmartConnect <span className="text-[var(--color-primary)]">AI</span></span>
+                <button onClick={() => setIsMobileMenuOpen(false)} className="text-default p-2 rounded-lg focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)]" aria-label="Cerrar menu" autoFocus>
                   <X className="w-6 h-6" />
                 </button>
               </div>
@@ -199,7 +200,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
                   <a
                     key={item.id}
                     href={item.href}
-                    className="flex items-center gap-3 p-3 text-muted min-h-[48px] hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 rounded-xl transition-colors"
+                    className="flex items-center gap-3 p-3 text-muted min-h-[48px] hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-xl transition-colors"
                     target={item.external ? "_blank" : undefined}
                     rel={item.external ? "noopener noreferrer" : undefined}
                     onClick={(e) => item.external ? setIsMobileMenuOpen(false) : handleMobileLinkClick(e)}
@@ -209,9 +210,9 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
                   </a>
                 ))}
                 <hr className="border-[var(--color-border)] my-2" />
-                <a href="#exito" className="text-muted p-3 min-h-[48px] flex items-center hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 rounded-xl transition-colors" onClick={handleMobileLinkClick}>Éxito</a>
-                <a href="#contacto" className="text-muted p-3 min-h-[48px] flex items-center hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 rounded-xl transition-colors" onClick={handleMobileLinkClick}>Contacto</a>
-                <Link to="/admin" className="text-muted flex items-center gap-2 p-3 min-h-[48px] hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 rounded-xl transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
+                <a href="#exito" className="text-muted p-3 min-h-[48px] flex items-center hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-xl transition-colors" onClick={handleMobileLinkClick}>Éxito</a>
+                <a href="#contacto" className="text-muted p-3 min-h-[48px] flex items-center hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-xl transition-colors" onClick={handleMobileLinkClick}>Contacto</a>
+                <Link to="/admin" className="text-muted flex items-center gap-2 p-3 min-h-[48px] hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-xl transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
                   <Shield className="w-4 h-4" />
                   <span>Admin</span>
                 </Link>

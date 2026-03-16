@@ -44,7 +44,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
             <p className="text-muted mb-4">Por favor, recarga la página.</p>
             <button 
               onClick={() => window.location.reload()} 
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-bold"
+              className="bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-white px-6 py-3 rounded-xl font-bold focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)]"
             >
               Recargar
             </button>
@@ -71,7 +71,7 @@ const ExpertAssistant = lazy(() =>
 );
 
 const ChatbotLoading = () => (
-  <div className="fixed bottom-4 right-4 w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center shadow-lg">
+  <div className="fixed bottom-4 right-4 w-16 h-16 bg-[var(--color-accent)] rounded-full flex items-center justify-center shadow-lg">
     <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-white"></div>
   </div>
 );
@@ -94,32 +94,36 @@ const SectionLoading = () => (
 
 const App: React.FC = () => {
   const [scrolled, setScrolled] = React.useState(false);
+  const sentinelRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-
-    return () => window.removeEventListener('scroll', handleScroll);
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setScrolled(!entry.isIntersecting),
+      { threshold: 1 }
+    );
+    observer.observe(sentinel);
+    return () => observer.disconnect();
   }, []);
 
   return (
     <ErrorBoundary>
       <div className="min-h-screen bg-base text-default">
-      <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:bg-blue-600 focus:text-white focus:px-4 focus:py-2 focus:rounded-lg focus:text-sm focus:font-bold">
+      <div ref={sentinelRef} className="absolute top-[50px] h-px w-px" aria-hidden="true" />
+      <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:bg-[var(--color-accent)] focus:text-white focus:px-4 focus:py-2 focus:rounded-lg focus:text-sm focus:font-bold">
         Saltar al contenido
       </a>
       <Navbar scrolled={scrolled} />
       <main id="main" aria-label="Contenido principal">
-        <section id="inicio"><Hero /></section>
-        <section id="soluciones" className="py-20 md:py-32"><Features /></section>
-        <section id="exito" className="py-20 md:py-32">
+        <section id="inicio" aria-label="Inicio"><Hero /></section>
+        <section id="soluciones" aria-label="Nuestras Soluciones" className="py-20 md:py-32"><Features /></section>
+        <section id="exito" aria-label="Casos de Éxito" className="py-20 md:py-32">
           <Suspense fallback={<SectionLoading />}>
             <SuccessStats />
           </Suspense>
         </section>
-        <section id="contacto"><Contact /></section>
+        <section id="contacto" aria-label="Contacto"><Contact /></section>
       </main>
 
       {/* AI Chatbot Assistant - Always visible */}
@@ -130,9 +134,9 @@ const App: React.FC = () => {
       {/* Footer */}
       <footer className="bg-[var(--color-bg-alt)] border-t border-[var(--color-border)] pt-16 pb-8">
         <div className="container mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-12 mb-12">
             <div>
-              <span className="font-bold text-xl text-default">SmartConnect <span className="text-blue-500">AI</span></span>
+              <span className="font-bold text-xl text-default">SmartConnect <span className="text-[var(--color-primary)]">AI</span></span>
               <p className="text-muted text-sm mt-3 leading-relaxed">Tecnología de próxima generación para negocios locales.</p>
             </div>
             <nav aria-label="Navegación del footer">
