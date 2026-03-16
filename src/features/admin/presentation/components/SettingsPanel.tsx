@@ -14,6 +14,11 @@ import { Settings } from '../../domain/entities/Settings';
 import { Mail, Link as LinkIcon, Save, RefreshCw, AlertCircle, CheckCircle2, Phone, MapPin } from 'lucide-react';
 import { settingsSchema, SettingsFormData } from '../schemas/settingsSchema';
 import { useAdmin } from '../AdminContext';
+import { ConsoleLogger } from '@core/domain/usecases/Logger';
+
+const logger = new ConsoleLogger('[SettingsPanel]');
+
+const inputClasses = "w-full px-4 py-2 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg text-default placeholder-[var(--color-text-muted)] focus:outline-none focus:ring-2 focus:border-transparent";
 
 export const SettingsPanel: React.FC = () => {
   const { container } = useAdmin();
@@ -51,7 +56,7 @@ export const SettingsPanel: React.FC = () => {
         physicalAddress: result.physicalAddress,
       });
     } catch (err) {
-      console.error('Failed to load settings:', err);
+      logger.error('Failed to load settings', err);
       setError('Error al cargar la configuración');
     } finally {
       setIsLoading(false);
@@ -75,16 +80,16 @@ export const SettingsPanel: React.FC = () => {
 
       setTimeout(() => setSuccess(null), 3000);
     } catch (err) {
-      console.error('Failed to save settings:', err);
+      logger.error('Failed to save settings', err);
       setError(err instanceof Error ? err.message : 'Error al guardar la configuración');
     }
   };
 
   if (isLoading) {
     return (
-      <div className="bg-gray-900 border border-gray-800 rounded-lg p-6" role="status" aria-live="polite">
+      <div className="bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded-lg p-6" role="status" aria-live="polite">
         <div className="flex items-center justify-center h-32">
-          <div className="text-gray-400">Cargando configuración...</div>
+          <div className="text-muted">Cargando configuración...</div>
         </div>
       </div>
     );
@@ -92,7 +97,7 @@ export const SettingsPanel: React.FC = () => {
 
   if (error) {
     return (
-      <div className="bg-gray-900 border border-red-800 rounded-lg p-6" role="alert">
+      <div className="bg-[var(--color-bg-alt)] border border-red-800 rounded-lg p-6" role="alert">
         <div className="flex items-center justify-center h-32">
           <div className="text-red-400">{error}</div>
         </div>
@@ -101,18 +106,18 @@ export const SettingsPanel: React.FC = () => {
   }
 
   return (
-    <div className="bg-gray-900 border border-gray-800 rounded-lg p-6" role="form" aria-label="Configuración de la aplicación">
+    <div className="bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded-lg p-6" role="form" aria-label="Configuración de la aplicación">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="text-xl font-bold text-white">Configuración</h2>
-          <p className="text-gray-400 text-sm mt-1">
+          <h2 className="text-xl font-bold text-default">Configuración</h2>
+          <p className="text-muted text-sm mt-1">
             Datos de contacto mostrados en la landing page
           </p>
         </div>
         <button
           onClick={loadSettings}
-          className="p-2 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-colors"
+          className="p-2 text-muted hover:text-default hover:bg-[var(--color-surface)] rounded-lg transition-colors"
           title="Refresh"
         >
           <RefreshCw className="w-5 h-5" />
@@ -138,65 +143,68 @@ export const SettingsPanel: React.FC = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="space-y-4">
           {/* Section: Contact Info */}
-          <div className="border-b border-gray-800 pb-4 mb-4">
-            <h3 className="text-lg font-semibold text-white mb-4">Información de Contacto</h3>
+          <div className="border-b border-[var(--color-border)] pb-4 mb-4">
+            <h3 className="text-lg font-semibold text-default mb-4">Información de Contacto</h3>
 
             {/* Contact Email */}
             <div className="mb-4">
-              <label className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2">
+              <label htmlFor="settings-contactEmail" className="flex items-center gap-2 text-sm font-medium text-default mb-2">
                 <Mail className="w-4 h-4" />
                 Email de Contacto
               </label>
               <input
+                id="settings-contactEmail"
                 type="email"
                 placeholder="contacto@tuempresa.com"
-                className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className={`${inputClasses} focus:ring-blue-500`}
                 {...register('contactEmail')}
               />
               {errors.contactEmail && (
                 <p className="text-xs text-red-400 mt-1">{errors.contactEmail.message}</p>
               )}
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-muted mt-1">
                 Email mostrado en la landing page
               </p>
             </div>
 
             {/* WhatsApp Phone */}
             <div className="mb-4">
-              <label className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2">
+              <label htmlFor="settings-whatsappPhone" className="flex items-center gap-2 text-sm font-medium text-default mb-2">
                 <Phone className="w-4 h-4" />
                 WhatsApp
               </label>
               <input
+                id="settings-whatsappPhone"
                 type="tel"
                 placeholder="+5491112345678"
-                className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className={`${inputClasses} focus:ring-green-500`}
                 {...register('whatsappPhone')}
               />
               {errors.whatsappPhone && (
                 <p className="text-xs text-red-400 mt-1">{errors.whatsappPhone.message}</p>
               )}
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-muted mt-1">
                 Número de WhatsApp mostrado en la landing
               </p>
             </div>
 
             {/* Physical Address */}
             <div className="mb-4">
-              <label className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2">
+              <label htmlFor="settings-physicalAddress" className="flex items-center gap-2 text-sm font-medium text-default mb-2">
                 <MapPin className="w-4 h-4" />
                 Dirección
               </label>
               <input
+                id="settings-physicalAddress"
                 type="text"
                 placeholder="Av. Example 123, Ciudad"
-                className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className={`${inputClasses} focus:ring-purple-500`}
                 {...register('physicalAddress')}
               />
               {errors.physicalAddress && (
                 <p className="text-xs text-red-400 mt-1">{errors.physicalAddress.message}</p>
               )}
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-muted mt-1">
                 Dirección mostrada en la landing page
               </p>
             </div>
@@ -204,24 +212,25 @@ export const SettingsPanel: React.FC = () => {
 
           {/* Section: n8n Webhook */}
           <div>
-            <h3 className="text-lg font-semibold text-white mb-4">Integración n8n</h3>
+            <h3 className="text-lg font-semibold text-default mb-4">Integración n8n</h3>
 
             {/* n8n Webhook URL */}
             <div className="mb-4">
-              <label className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2">
+              <label htmlFor="settings-n8nWebhookUrl" className="flex items-center gap-2 text-sm font-medium text-default mb-2">
                 <LinkIcon className="w-4 h-4" />
                 Webhook URL
               </label>
               <input
+                id="settings-n8nWebhookUrl"
                 type="url"
                 placeholder="https://tu-n8n.com/webhook/..."
-                className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className={`${inputClasses} focus:ring-blue-500`}
                 {...register('n8nWebhookUrl')}
               />
               {errors.n8nWebhookUrl && (
                 <p className="text-xs text-red-400 mt-1">{errors.n8nWebhookUrl.message}</p>
               )}
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-muted mt-1">
                 URL del webhook de n8n para recibir leads
               </p>
             </div>
@@ -252,7 +261,7 @@ export const SettingsPanel: React.FC = () => {
 
       {/* Last Updated */}
       {settings && (
-        <div className="mt-4 pt-4 border-t border-gray-800 text-xs text-gray-500">
+        <div className="mt-4 pt-4 border-t border-[var(--color-border)] text-xs text-muted">
           Última actualización: {settings.updatedAt.toLocaleString('es-AR')}
         </div>
       )}

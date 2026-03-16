@@ -34,7 +34,7 @@ export const MenuInfo: React.FC<MenuInfoProps> = ({ isVisible }) => {
         Digitaliza la experiencia con <span className="text-amber-500">QRIBAR</span>
       </h2>
 
-      <p className="text-lg text-gray-400 mb-10 leading-relaxed">
+      <p className="text-lg text-muted mb-10 leading-relaxed">
         Soluciones específicas para restaurantes de alta gama. Menús digitales elegantes, rápidos y sin contacto que elevan la percepción de tu marca mientras optimizan el servicio.
       </p>
 
@@ -52,7 +52,7 @@ export const MenuInfo: React.FC<MenuInfoProps> = ({ isVisible }) => {
             <div className="w-6 h-6 bg-amber-500/10 rounded-full flex items-center justify-center">
               <CheckCircle2 className="w-4 h-4 text-amber-500" />
             </div>
-            <span className="text-gray-300 font-medium">{text}</span>
+            <span className="text-default font-medium">{text}</span>
           </div>
         ))}
       </div>

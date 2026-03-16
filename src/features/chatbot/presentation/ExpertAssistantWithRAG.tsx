@@ -7,7 +7,11 @@ import { rateLimiter, RateLimitPresets } from '@shared/utils/rateLimiter';
 import { supabase } from '@shared/supabaseClient';
 import { getAppSettings } from '@shared/services/settingsService';
 
-const container = createChatbotContainer(supabase);
+let _container: ReturnType<typeof createChatbotContainer> | null = null;
+const getContainer = () => {
+  if (!_container) _container = createChatbotContainer(supabase);
+  return _container;
+};
 
 const getSessionIdentifier = (): string => {
   const key = 'sc_chat_session_id';
@@ -47,7 +51,7 @@ export const ExpertAssistant: React.FC = () => {
   const handleSendMessage = useCallback(async (message: string, currentMessages: Message[]) => {
     setIsLoading(true);
     try {
-      const response = await container.generateResponseUseCase.execute({
+      const response = await getContainer().generateResponseUseCase.execute({
         userQuery: message,
         conversationHistory: currentMessages,
         useRAG: true,
@@ -94,7 +98,7 @@ export const ExpertAssistant: React.FC = () => {
   return (
     <div className="fixed bottom-8 right-8 z-[100] flex flex-col items-end gap-4">
       {isOpen && (
-        <div className="mb-4 w-[85vw] sm:w-[90vw] md:w-[400px] h-[60vh] sm:h-[550px] max-h-[80vh] sm:max-h-[80vh] bg-sc-dark-alt border border-white/10 rounded-3xl shadow-2xl flex flex-col overflow-hidden">
+        <div className="mb-4 w-[85vw] sm:w-[90vw] md:w-[400px] h-[60vh] sm:h-[550px] max-h-[80vh] sm:max-h-[80vh] bg-[var(--color-bg)] border border-[var(--color-border)] rounded-3xl shadow-2xl flex flex-col overflow-hidden">
           <div className="p-4 bg-blue-600 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
@@ -117,10 +121,10 @@ export const ExpertAssistant: React.FC = () => {
                   <Sparkles className="w-7 h-7" />
                 </div>
                 <h5 className="font-bold mb-2">¿Cómo puedo ayudarte?</h5>
-                <p className="text-xs text-neutral-500 mb-4">Pregúntame sobre QRIBAR, automatización con n8n o cómo mejorar tus reseñas en Google.</p>
+                <p className="text-xs text-muted mb-4">Pregúntame sobre QRIBAR, automatización con n8n o cómo mejorar tus reseñas en Google.</p>
                   <div className="flex flex-wrap gap-2 justify-center">
                   {['¿Qué es QRIBAR?', '¿Cómo funcionan las tarjetas NFC?', 'Quiero automatizar mi negocio'].map((prompt) => (
-                    <button key={prompt} onClick={() => setInput(prompt)} className="text-xs bg-blue-600/10 border border-blue-500/20 text-blue-400 px-3 py-2 sm:py-1.5 rounded-full hover:bg-blue-600/20 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-sc-dark transition-colors min-h-[36px]">
+                    <button key={prompt} onClick={() => setInput(prompt)} className="text-xs bg-blue-600/10 border border-blue-500/20 text-blue-400 px-3 py-2 sm:py-2 rounded-full hover:bg-blue-600/20 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] transition-colors min-h-[44px]">
                       {prompt}
                     </button>
                   ))}
@@ -131,10 +135,10 @@ export const ExpertAssistant: React.FC = () => {
             {chatSession.messages.map((m) => (
               <div key={m.id} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 <div className={`max-w-[80%] flex gap-2 ${m.role === 'user' ? 'flex-row-reverse' : ''}`}>
-                  <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${m.role === 'user' ? 'bg-blue-600' : 'bg-white/5 border border-white/10'}`}>
+                  <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${m.role === 'user' ? 'bg-blue-600' : 'bg-[var(--color-surface)] border border-[var(--color-border)]'}`}>
                     {m.role === 'user' ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4 text-blue-400" />}
                   </div>
-                  <div className={`p-3 rounded-2xl text-sm ${m.role === 'user' ? 'bg-blue-600 text-white rounded-tr-none' : 'bg-white/5 border border-white/10 text-neutral-300 rounded-tl-none'}`}>
+                  <div className={`p-3 rounded-2xl text-sm ${m.role === 'user' ? 'bg-blue-600 text-white rounded-tr-none' : 'bg-[var(--color-surface)] border border-[var(--color-border)] text-muted rounded-tl-none'}`}>
                     {m.content}
                   </div>
                 </div>
@@ -143,17 +147,17 @@ export const ExpertAssistant: React.FC = () => {
 
             {isLoading && (
               <div className="flex justify-start">
-                <div className="bg-white/5 border border-white/10 p-3 rounded-2xl rounded-tl-none">
+                <div className="bg-[var(--color-surface)] border border-[var(--color-border)] p-3 rounded-2xl rounded-tl-none">
                   <Loader2 className="w-4 h-4 animate-spin text-blue-400" />
                 </div>
               </div>
             )}
           </div>
 
-          <div className="p-3 bg-sc-dark-input border-t border-white/5">
+          <div className="p-3 bg-[var(--color-bg)] border-t border-[var(--color-border)]">
             <div className="relative flex gap-2">
-              <input type="text" value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()} placeholder="Escribe tu mensaje..." aria-label="Escribe tu mensaje" className="flex-1 bg-white/5 border border-white/10 rounded-xl py-3 px-4 text-sm outline-none focus:border-blue-500 transition-colors min-h-[44px]" />
-              <button onClick={handleSend} disabled={!input.trim() || isLoading} aria-label="Enviar mensaje" className="w-11 h-11 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-sc-dark disabled:opacity-50 disabled:cursor-not-allowed rounded-xl flex items-center justify-center transition-colors shrink-0">
+              <input type="text" value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()} placeholder="Escribe tu mensaje..." aria-label="Escribe tu mensaje" autoComplete="off" className="flex-1 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl py-3 px-4 text-sm text-default outline-none focus:border-blue-500 transition-colors min-h-[44px]" />
+              <button onClick={handleSend} disabled={!input.trim() || isLoading} aria-label="Enviar mensaje" className="w-11 h-11 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] disabled:opacity-50 disabled:cursor-not-allowed rounded-xl flex items-center justify-center transition-colors shrink-0">
                 <Send className="w-4 h-4 text-white" />
               </button>
             </div>
@@ -163,13 +167,13 @@ export const ExpertAssistant: React.FC = () => {
 
       <div className="flex items-center gap-3">
         {whatsappPhone && (
-          <a href={`https://wa.me/${whatsappPhone}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 sm:gap-3 bg-[#25D366] hover:bg-[#1ebc57] focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-sc-dark text-white px-4 py-3 sm:px-5 rounded-full shadow-lg transition-colors min-h-[48px]">
+          <a href={`https://wa.me/${whatsappPhone}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 sm:gap-3 bg-whatsapp hover:bg-whatsapp-hover focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] text-white px-4 py-3 sm:px-5 rounded-full shadow-lg transition-colors min-h-[48px]">
             <MessageSquare className="w-5 h-5" />
             <span className="text-sm font-bold hidden sm:block">WhatsApp</span>
           </a>
         )}
 
-        <button onClick={() => setIsOpen(!isOpen)} className={`flex items-center gap-2 sm:gap-3 px-4 py-3 sm:px-5 rounded-full shadow-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-sc-dark min-h-[48px] ${isOpen ? 'bg-blue-600 text-white' : 'bg-white text-black hover:bg-gray-100'}`}>
+        <button onClick={() => setIsOpen(!isOpen)} className={`flex items-center gap-2 sm:gap-3 px-4 py-3 sm:px-5 rounded-full shadow-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 min-h-[48px] ${isOpen ? 'bg-blue-600 text-white' : 'bg-[var(--color-text)] text-[var(--color-bg)] hover:opacity-90'}`}>
           <div className={`w-9 h-9 rounded-full flex items-center justify-center ${isOpen ? 'bg-white/20' : 'bg-blue-600'}`}>
             <Bot className="text-white w-5 h-5" />
           </div>

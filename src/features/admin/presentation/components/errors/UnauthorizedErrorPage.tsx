@@ -12,20 +12,20 @@ const UnauthorizedErrorPage: React.FC = () => {
   }, [navigate]);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-sc-dark">
-      <div className="bg-sc-dark-card border border-white/10 shadow-2xl rounded-2xl p-10 flex flex-col items-center max-w-md">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-base">
+      <div className="bg-[var(--color-surface)] border border-[var(--color-border)] shadow-2xl rounded-2xl p-10 flex flex-col items-center max-w-md">
         <svg className="w-20 h-20 text-red-400 mb-6" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
-        <h1 className="text-3xl font-bold text-white mb-2">Acceso Denegado</h1>
-        <p className="text-neutral-400 mb-4 text-center">Debes iniciar sesión para acceder al panel de administración.</p>
+        <h1 className="text-3xl font-bold text-default mb-2">Acceso Denegado</h1>
+        <p className="text-muted mb-4 text-center">Debes iniciar sesión para acceder al panel de administración.</p>
         <button
           onClick={() => navigate('/')}
-          className="mt-2 px-6 py-2 bg-blue-600 text-white rounded-xl shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-sc-dark transition"
+          className="mt-2 px-6 py-2 bg-blue-600 text-white rounded-xl shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] transition"
         >
           Ir al Inicio
         </button>
-        <p className="text-xs text-neutral-500 mt-4">Redireccionando en 3 segundos...</p>
+        <p className="text-xs text-muted mt-4">Redireccionando en 3 segundos...</p>
       </div>
     </div>
   );

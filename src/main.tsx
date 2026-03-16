@@ -20,7 +20,7 @@ const NotFound = React.lazy(() =>
 );
 
 const LoadingFallback = () => (
-  <div className="min-h-screen bg-sc-dark flex items-center justify-center">
+  <div className="min-h-screen bg-base flex items-center justify-center">
     <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
   </div>
 );

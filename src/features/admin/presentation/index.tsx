@@ -73,7 +73,7 @@ export const AdminPanel: React.FC = () => {
   // Loading state
   if (isCheckingAuth) {
     return (
-      <div className="min-h-screen bg-sc-dark flex items-center justify-center">
+      <div className="min-h-screen bg-base flex items-center justify-center">
         {noIndexHelmet}
         <div className="flex flex-col items-center gap-4">
           <div className="relative">

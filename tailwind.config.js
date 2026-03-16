@@ -63,6 +63,9 @@ export default {
         'sc-dark-surface': 'oklch(10% 0.014 250)',
         'sc-dark-input': 'oklch(6% 0.010 250)',
         'sc-dark-card': 'oklch(14% 0.015 250)',
+        // Brand colors
+        whatsapp: '#25D366',
+        'whatsapp-hover': '#1ebc57',
       },
       fontFamily: {
         sans: ['Instrument Sans', 'Plus Jakarta Sans', 'system-ui', 'sans-serif'],
@@ -83,27 +86,6 @@ export default {
         'fluid': 'clamp(0.75rem, 0.5rem + 1vw, 1.5rem)',
         'fluid-lg': 'clamp(1rem, 0.75rem + 1vw, 2rem)',
         'fluid-xl': 'clamp(1.5rem, 1rem + 2vw, 3rem)',
-      },
-      animation: {
-        'float-fancy': 'float-fancy 6s ease-in-out infinite',
-        'drift': 'drift 20s ease-in-out infinite',
-        'drift-slow': 'drift 30s ease-in-out infinite reverse',
-        'shimmer-bar': 'shimmer-bar 3s ease-in-out infinite',
-      },
-      keyframes: {
-        'float-fancy': {
-          '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
-          '50%': { transform: 'translateY(-20px) rotate(2deg)' },
-        },
-        'drift': {
-          '0%, 100%': { transform: 'translate(0, 0)' },
-          '50%': { transform: 'translate(30px, -30px)' },
-        },
-        'shimmer-bar': {
-          '0%': { transform: 'translateX(-100%)' },
-          '50%': { transform: 'translateX(100%)' },
-          '100%': { transform: 'translateX(-100%)' },
-        },
       },
     },
   },

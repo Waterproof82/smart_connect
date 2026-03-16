@@ -14,6 +14,9 @@
     --color-border: oklch(20% 0.018 250);
     --color-primary: oklch(65% 0.18 250);
     --focus-ring: oklch(70% 0.15 250);
+    --chart-bar: #1e293b;
+    --chart-tick: #9ca3af;
+    --chart-tooltip: #111111;
   }
 
   .light {
@@ -25,6 +28,9 @@
     --color-border: oklch(80% 0.012 250);
     --color-primary: oklch(55% 0.18 250);
     --focus-ring: oklch(60% 0.15 250);
+    --chart-bar: #3b82f6;
+    --chart-tick: #4b5563;
+    --chart-tooltip: #ffffff;
   }
 
   body {
@@ -37,19 +43,16 @@
     color: var(--color-text);
   }
 
-  /* Light mode styles */
   .light body {
     background-color: var(--color-bg);
     color: var(--color-text);
   }
 
-  /* Focus visible for accessibility */
   :focus-visible {
     outline: 2px solid var(--color-primary);
     outline-offset: 2px;
   }
 
-  /* Skip link focus */
   .skip-link:focus {
     outline: 2px solid var(--color-primary);
     outline-offset: 2px;
@@ -63,11 +66,8 @@
 }
 
 @layer utilities {
-  .gradient-text {
-    background: linear-gradient(to right, oklch(80% 0.12 250), oklch(65% 0.18 250), oklch(45% 0.15 250));
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+  .text-default {
+    color: var(--color-text);
   }
 
   .text-muted {
@@ -139,7 +139,6 @@
   }
 }
 
-/* Light mode specific glass card override */
 .light .glass-card {
   background-color: oklch(100% 0 0 / 0.5);
   border-color: oklch(90% 0.008 250);
@@ -150,7 +149,35 @@
  100% { transform: translateX(100%); }
 }
 
-/* Reveal animations for scroll-triggered content */
+@keyframes drift {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(20px, -20px); }
+}
+
+@keyframes drift-slow {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-15px, 15px); }
+}
+
+@keyframes float-fancy {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-8px) rotate(1deg); }
+  50% { transform: translateY(0) rotate(0deg); }
+  75% { transform: translateY(8px) rotate(-1deg); }
+}
+
+.animate-drift {
+  animation: drift 15s ease-in-out infinite;
+}
+
+.animate-drift-slow {
+  animation: drift-slow 20s ease-in-out infinite;
+}
+
+.animate-float-fancy {
+  animation: float-fancy 6s ease-in-out infinite;
+}
+
 .reveal-1 {
   animation: revealUp 0.8s ease-out forwards;
   opacity: 0;
@@ -175,7 +202,6 @@
   }
 }
 
-/* Exit animations */
 .reveal-exit {
   animation: revealExit 0.4s ease-in forwards;
 }
@@ -191,7 +217,6 @@
   }
 }
 
-/* animate-in utility system */
 .animate-in {
   animation: animateIn 0.3s ease-out forwards;
 }
@@ -226,7 +251,6 @@
   }
 }
 
-/* Accessibility: Respect user motion preferences */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
@@ -236,7 +260,6 @@
   }
 }
 
-/* Touch target minimum for mobile accessibility */
 @media (pointer: coarse) {
   button, 
   a, 
@@ -249,7 +272,6 @@
   }
 }
 
-/* Landscape mobile optimization */
 @media (max-height: 500px) and (orientation: landscape) {
   .min-h-\[90vh\] {
     min-height: auto;
@@ -263,7 +285,6 @@
   }
 }
 
-/* Very small screens (small phones) */
 @media (max-width: 374px) {
   .container {
     padding-left: 1rem;

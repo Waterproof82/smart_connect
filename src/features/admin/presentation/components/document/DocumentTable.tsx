@@ -12,19 +12,19 @@ interface DocumentTableProps {
 }
 
 export const DocumentTable: React.FC<DocumentTableProps> = ({ documents, onView, onEdit, onDelete, canEdit }) => (
-  <table className="min-w-full divide-y divide-gray-800">
-    <thead className="bg-gray-800/50">
+  <table className="min-w-full divide-y divide-[var(--color-border)]">
+    <thead className="bg-[var(--color-surface)]">
       <tr>
-        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Content Preview</th>
-        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Source</th>
-        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Created</th>
-        <th className="px-6 py-4 text-center text-xs font-semibold text-gray-400 uppercase tracking-wider">Actions</th>
+        <th className="px-6 py-4 text-left text-xs font-semibold text-muted uppercase tracking-wider">Content Preview</th>
+        <th className="px-6 py-4 text-left text-xs font-semibold text-muted uppercase tracking-wider">Source</th>
+        <th className="px-6 py-4 text-left text-xs font-semibold text-muted uppercase tracking-wider">Created</th>
+        <th className="px-6 py-4 text-center text-xs font-semibold text-muted uppercase tracking-wider">Actions</th>
       </tr>
     </thead>
-    <tbody className="divide-y divide-gray-800">
+    <tbody className="divide-y divide-[var(--color-border)]">
       {documents.map(doc => (
-        <tr key={doc.id} className="hover:bg-gray-800/40 transition-colors group focus-within:bg-gray-800/30">
-          <td className="px-6 py-4 text-sm text-gray-300 max-w-md">
+        <tr key={doc.id} className="hover:bg-[var(--color-surface)]/40 transition-colors group focus-within:bg-[var(--color-surface)]/30">
+          <td className="px-6 py-4 text-sm text-default max-w-md">
             <button onClick={() => onView(doc)} className="text-left hover:text-blue-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 rounded transition-colors line-clamp-2 w-full">
               {doc.getContentPreview ? doc.getContentPreview(120) : doc.content}
             </button>
@@ -34,7 +34,7 @@ export const DocumentTable: React.FC<DocumentTableProps> = ({ documents, onView,
               {doc.source.split(',').map((s: string) => <SourceTag key={s} source={s} />)}
             </div>
           </td>
-          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+          <td className="px-6 py-4 whitespace-nowrap text-sm text-muted">
             {doc.createdAt.toLocaleDateString()}
           </td>
           <td className="px-6 py-4 text-center">

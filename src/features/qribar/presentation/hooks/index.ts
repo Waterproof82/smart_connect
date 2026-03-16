@@ -4,4 +4,3 @@
  */
 
 export { useQRIBAR } from './useQRIBAR';
-export { useIntersectionObserver } from './useIntersectionObserver';
