@@ -7,6 +7,7 @@
  * 
  * Features:
  * - AES-256 encryption for sensitive data
+ * - PBKDF2 key derivation for stronger security
  * - Automatic encryption/decryption
  * - Type-safe API
  * - Fallback for unsupported browsers
@@ -19,6 +20,31 @@ import CryptoJS from 'crypto-js';
  * In production, this should be an environment variable
  */
 const ENCRYPTION_KEY = import.meta.env.VITE_STORAGE_ENCRYPTION_KEY;
+const SALT = 'smartconnect-ai-salt-v1'; // Fixed salt for PBKDF2
+
+/**
+ * Derives a stronger key using PBKDF2
+ */
+function deriveKey(password: string): string {
+  // Use PBKDF2 with 10000 iterations for key derivation
+  const key = CryptoJS.PBKDF2(password, SALT, {
+    keySize: 256 / 32,
+    iterations: 10000
+  });
+  return key.toString();
+}
+
+/**
+ * Get the derived encryption key (or raw if derivation fails)
+ */
+function getEncryptionKey(): string {
+  if (!ENCRYPTION_KEY) return '';
+  try {
+    return deriveKey(ENCRYPTION_KEY);
+  } catch {
+    return ENCRYPTION_KEY;
+  }
+}
 
 if (!ENCRYPTION_KEY && typeof window !== 'undefined') {
   console.warn('SecureStorage: VITE_STORAGE_ENCRYPTION_KEY not configured. Data will not be encrypted.');
@@ -37,12 +63,13 @@ function getStorage(type: StorageType): Storage {
 }
 
 /**
- * Encrypts data using AES-256
+ * Encrypts data using AES-256 with derived key
  */
 function encrypt(data: string): string {
-  if (!ENCRYPTION_KEY) return data;
+  const key = getEncryptionKey();
+  if (!key) return data;
   try {
-    return CryptoJS.AES.encrypt(data, ENCRYPTION_KEY).toString();
+    return CryptoJS.AES.encrypt(data, key).toString();
   } catch (error) {
     console.warn('Encryption failed, storing plain text', error);
     return data;
@@ -50,12 +77,13 @@ function encrypt(data: string): string {
 }
 
 /**
- * Decrypts AES-256 encrypted data
+ * Decrypts AES-256 encrypted data with derived key
  */
 function decrypt(encryptedData: string): string {
-  if (!ENCRYPTION_KEY) return encryptedData;
+  const key = getEncryptionKey();
+  if (!key) return encryptedData;
   try {
-    const bytes = CryptoJS.AES.decrypt(encryptedData, ENCRYPTION_KEY);
+    const bytes = CryptoJS.AES.decrypt(encryptedData, key);
     const decrypted = bytes.toString(CryptoJS.enc.Utf8);
     return decrypted || encryptedData; // Fallback if decryption fails
   } catch (error) {
