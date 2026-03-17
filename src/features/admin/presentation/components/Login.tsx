@@ -28,6 +28,7 @@ export const Login: React.FC<LoginProps> = ({ loginUseCase, onLoginSuccess }) =>
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     defaultValues: { email: '', password: '' },
+    mode: 'onBlur',
   });
 
   const onSubmit = async ({ email, password }: LoginFormData) => {

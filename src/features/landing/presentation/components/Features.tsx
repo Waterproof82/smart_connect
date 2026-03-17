@@ -60,7 +60,9 @@ export const Features: React.FC = () => {
                 ? 'lg:col-span-5 lg:row-span-2 bg-[var(--color-surface)] border-2 border-[var(--color-primary)]/30' 
                 : idx === 3 
                   ? 'lg:col-span-7 bg-transparent border border-[var(--color-border)]' 
-                  : 'lg:col-span-4 glass-card'
+                  : idx === 1
+                    ? 'lg:col-span-4 bg-[var(--color-bg-alt)] border border-[var(--color-border)]'
+                    : 'lg:col-span-4 border-2 border-dashed border-[var(--color-border)]'
             } ${
               isVisible 
                 ? 'opacity-100 translate-y-0 blur-0' 

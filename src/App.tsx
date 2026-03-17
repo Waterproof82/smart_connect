@@ -44,7 +44,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
             <p className="text-muted mb-4">Por favor, recarga la página.</p>
             <button 
               onClick={() => window.location.reload()} 
-              className="bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-[var(--color-on-accent)] px-6 py-3 rounded-xl font-bold focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)]"
+              className="bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-[var(--color-on-accent)] px-6 py-3 rounded-xl font-bold focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] min-h-[44px]"
             >
               Recargar
             </button>
@@ -79,14 +79,25 @@ const ChatbotLoading = () => (
 const SectionLoading = () => (
   <div className="py-20 md:py-32">
     <div className="container mx-auto px-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-        {[1, 2, 3, 4].map(i => (
-          <div key={i} className="glass-card p-8 rounded-[2.5rem] border border-[var(--color-border)] animate-pulse">
-            <div className="w-16 h-16 bg-[var(--color-border)] rounded-2xl mb-6 mx-auto"></div>
-            <div className="h-12 bg-[var(--color-border)] rounded mb-3"></div>
-            <div className="h-4 bg-[var(--color-border)] rounded w-2/3 mx-auto"></div>
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+        {/* Main large card */}
+        <div className="md:col-span-7 bg-[var(--color-surface)] border border-[var(--color-border)] p-8 rounded-[2.5rem] animate-pulse">
+          <div className="w-16 h-16 bg-[var(--color-border)] rounded-2xl mb-6"></div>
+          <div className="h-12 bg-[var(--color-border)] rounded mb-4 w-2/3"></div>
+          <div className="h-4 bg-[var(--color-border)] rounded w-full"></div>
+          <div className="h-4 bg-[var(--color-border)] rounded w-4/5 mt-2"></div>
+        </div>
+        {/* Two smaller cards */}
+        <div className="md:col-span-5 grid gap-6">
+          <div className="bg-[var(--color-surface)] border border-[var(--color-border)] p-6 rounded-2xl animate-pulse">
+            <div className="w-12 h-12 bg-[var(--color-border)] rounded-xl mb-4"></div>
+            <div className="h-8 bg-[var(--color-border)] rounded w-1/2"></div>
           </div>
-        ))}
+          <div className="bg-[var(--color-surface)] border border-[var(--color-border)] p-6 rounded-2xl animate-pulse">
+            <div className="w-12 h-12 bg-[var(--color-border)] rounded-xl mb-4"></div>
+            <div className="h-8 bg-[var(--color-border)] rounded w-1/2"></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -153,7 +164,7 @@ const App: React.FC = () => {
               <ul className="space-y-2 text-sm text-muted">
                 <li><a href="mailto:legal@smartconnect.ai" className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors">Aviso Legal</a></li>
                 <li><a href="mailto:legal@smartconnect.ai" className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors">Política de Privacidad</a></li>
-                <li><a href="mailto:legal@smartconnect.ai" className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors">Cookies</a></li>
+                <li><a href="mailto:legal@smartconnect.ai" className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors">Contacto</a></li>
               </ul>
             </div>
           </div>

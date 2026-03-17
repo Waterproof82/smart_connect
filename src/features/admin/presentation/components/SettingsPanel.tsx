@@ -7,7 +7,7 @@
  * Solo incluye campos que son usados directamente por la app.
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Settings } from '../../domain/entities/Settings';
@@ -27,6 +27,7 @@ export const SettingsPanel: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const successRef = useRef<HTMLDivElement>(null);
 
   const {
     register,
@@ -41,6 +42,7 @@ export const SettingsPanel: React.FC = () => {
       whatsappPhone: '',
       physicalAddress: '',
     },
+    mode: 'onBlur',
   });
 
   const loadSettings = useCallback(async () => {
@@ -76,8 +78,14 @@ export const SettingsPanel: React.FC = () => {
 
       setSuccess('Configuración guardada correctamente');
       await loadSettings();
+      
+      setTimeout(() => {
+        successRef.current?.focus();
+      }, 100);
 
-      setTimeout(() => setSuccess(null), 3000);
+      setTimeout(() => {
+        setSuccess(null);
+      }, 3000);
     } catch (err) {
       logger.error('Failed to save settings', err);
       setError(err instanceof Error ? err.message : 'Error al guardar la configuración');
@@ -125,7 +133,7 @@ export const SettingsPanel: React.FC = () => {
 
       {/* Success/Error Messages */}
       {success && (
-        <div className="mb-4 p-3 bg-[var(--color-success-bg)] border border-[var(--color-success-border)] rounded-lg flex items-center gap-2" role="status" aria-live="polite">
+        <div ref={successRef} tabIndex={-1} className="mb-4 p-3 bg-[var(--color-success-bg)] border border-[var(--color-success-border)] rounded-lg flex items-center gap-2" role="status" aria-live="polite">
           <CheckCircle2 className="w-5 h-5 text-[var(--color-success-text)]" />
           <span className="text-[var(--color-success-text)] text-sm">{success}</span>
         </div>
@@ -241,7 +249,7 @@ export const SettingsPanel: React.FC = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="flex items-center gap-2 px-4 py-2 bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] disabled:opacity-60 text-[var(--color-on-accent)] rounded-lg transition-colors font-medium"
+            className="flex items-center gap-2 px-4 py-2 bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] disabled:opacity-60 text-[var(--color-on-accent)] rounded-lg transition-colors font-medium min-h-[44px]"
           >
             {isSubmitting ? (
               <>

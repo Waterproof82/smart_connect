@@ -57,12 +57,16 @@ export const DashboardPreview: React.FC = () => {
           {/* Left Column - Stats */}
           <div className="lg:col-span-3 space-y-6">
             {[
-              { label: 'Total Scans', value: '12,450', sub: '↗ +12% vs mes pasado', icon: <TrendingUp className="w-2.5 h-2.5" />, color: 'text-[var(--color-primary)]', delay: 500 },
-              { label: 'Reseñas Google', value: '4.9', sub: 'rating', icon: <Star className="w-3.5 h-3.5 text-[var(--color-icon-amber)] fill-[var(--color-icon-amber)]" />, type: 'rating', delay: 650 }
+              { label: 'Total Scans', value: '12,450', sub: '↗ +12% vs mes pasado', icon: <TrendingUp className="w-2.5 h-2.5" />, color: 'text-[var(--color-primary)]', delay: 500, style: 'solid' },
+              { label: 'Reseñas Google', value: '4.9', sub: 'rating', icon: <Star className="w-3.5 h-3.5 text-[var(--color-icon-amber)] fill-[var(--color-icon-amber)]" />, type: 'rating', delay: 650, style: 'bordered' }
             ].map((card) => (
               <div 
                 key={card.label} 
-                className={`glass-card p-6 rounded-2xl border border-[var(--color-border)] transition-all duration-700`}
+                className={`p-6 rounded-2xl transition-all duration-700 ${
+                  card.style === 'solid' 
+                    ? 'bg-[var(--color-bg-alt)] border border-[var(--color-border)]' 
+                    : 'bg-[var(--color-surface)] border-2 border-[var(--color-primary)]/20'
+                }`}
                 style={{ 
                   transitionDelay: `${isVisible ? card.delay : 0}ms`,
                   opacity: isVisible ? 1 : 0,
@@ -98,7 +102,7 @@ export const DashboardPreview: React.FC = () => {
           </div>
 
           {/* Center Column - Chart */}
-          <div className={`lg:col-span-6 glass-card p-8 rounded-3xl border border-[var(--color-border)] transition-all duration-1000 delay-[600ms] ${
+          <div className={`lg:col-span-6 bg-[var(--color-surface)] p-8 rounded-3xl border border-[var(--color-border)] transition-all duration-1000 delay-[600ms] ${
             isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
           }`}>
             <div className="flex items-center justify-between mb-8">
@@ -127,7 +131,7 @@ export const DashboardPreview: React.FC = () => {
           </div>
 
           {/* Right Column - Recent Activity */}
-          <div className={`lg:col-span-3 glass-card p-8 rounded-3xl border border-[var(--color-border)] transition-all duration-700 delay-[900ms] ${
+          <div className={`lg:col-span-3 bg-[var(--color-bg-alt)] p-8 rounded-3xl border border-[var(--color-border)] transition-all duration-700 delay-[900ms] ${
             isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-20'
           }`}>
             <h4 className="font-bold text-sm mb-8">Actividad Reciente</h4>

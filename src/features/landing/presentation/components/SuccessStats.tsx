@@ -56,11 +56,15 @@ const StatCard: React.FC<StatProps> = ({ icon, label, value, suffix, color, isIn
 
   return (
     <div
-      className={`glass-card p-8 rounded-[2.5rem] border border-[var(--color-border)] group hover:border-[var(--color-accent-border)] hover:bg-[var(--color-overlay-subtle)] transition-all duration-1000 ease-out relative overflow-hidden min-w-0 ${
+      className={`p-8 rounded-[2.5rem] group hover:border-[var(--color-accent-border)] transition-all duration-1000 ease-out relative overflow-hidden min-w-0 ${
         isInView 
           ? 'opacity-100 translate-y-0 blur-0 scale-100' 
           : 'opacity-0 translate-y-20 blur-md scale-90'
-      } ${prominent ? 'lg:p-12' : ''}`}
+      } ${
+        prominent 
+          ? 'bg-[var(--color-surface)] border-2 border-[var(--color-primary)]/30 lg:p-12' 
+          : 'bg-[var(--color-bg-alt)] border border-[var(--color-border)]'
+      }`}
       style={{ transitionDelay: `${delay}ms` }}
     >
       <div className={`absolute -right-8 -top-8 w-32 h-32 ${color} opacity-[0.03] group-hover:opacity-[0.06] transition-opacity duration-700`}></div>

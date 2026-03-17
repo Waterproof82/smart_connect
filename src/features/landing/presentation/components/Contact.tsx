@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Mail, MapPin, Send, MessageSquare, Sparkles, CheckCircle2, AlertCircle, ChevronDown, Loader2 } from 'lucide-react';
+import { Mail, MapPin, Send, MessageSquare, CheckCircle2, AlertCircle, ChevronDown, Loader2 } from 'lucide-react';
 import { getAppSettings, AppSettings } from '@shared/services/settingsService';
 import { getLandingContainer } from '../LandingContainer';
 import { LeadEntity } from '../../domain/entities';
@@ -60,6 +60,7 @@ export const Contact: React.FC = () => {
     reset,
     setValue,
     watch,
+    trigger,
     formState: { errors, isSubmitting, touchedFields },
   } = useForm<ContactFormData>({
     resolver: zodResolver(contactSchema),
@@ -78,6 +79,9 @@ export const Contact: React.FC = () => {
   };
 
   const onSubmit = async (data: ContactFormData) => {
+    const isValid = await trigger();
+    if (!isValid) return;
+
     const userIdentifier = data.email || 'anonymous';
     const isAllowed = await rateLimiter.checkLimit(userIdentifier, RateLimitPresets.CONTACT_FORM);
     if (!isAllowed) { setSubmitStatus('error'); return; }
@@ -138,10 +142,9 @@ export const Contact: React.FC = () => {
           prefersReducedMotion() || isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}>
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--color-accent-subtle)] border border-[var(--color-accent-border)] text-[var(--color-primary)] text-xs font-bold mb-6 tracking-wider uppercase">
-            <Sparkles className="w-3.5 h-3.5" />
             ¿Hablamos?
           </div>
-          <h2 className="text-5xl font-black mb-6">Impulsa tu <span className="text-[var(--color-primary)]">Negocio Hoy</span></h2>
+          <h2 className="text-5xl font-extrabold mb-6">Impulsa tu <span className="text-[var(--color-primary)]">Negocio Hoy</span></h2>
           <p className="text-muted text-lg leading-relaxed">
             Estamos listos para auditar tu proceso actual y mostrarte cómo la IA y la automatización pueden ahorrarte cientos de horas mensuales.
           </p>
@@ -155,8 +158,12 @@ export const Contact: React.FC = () => {
               { id: 'email', icon: <Mail className="w-6 h-6" />, title: "Email Directo", value: settings?.contactEmail || (settingsError ? "No disponible" : "Cargando..."), desc: settingsError ? "Intenta más tarde" : "Respondemos en menos de 2 horas", color: "text-[var(--color-icon-blue)]", href: settings?.contactEmail ? `mailto:${settings.contactEmail}` : undefined },
               { id: 'whatsapp', icon: <MessageSquare className="w-6 h-6" />, title: "WhatsApp Business", value: settings?.whatsappPhone || "Disponible pronto", desc: "Soporte técnico inmediato", color: "text-[var(--color-icon-emerald)]", href: settings?.whatsappPhone ? `https://wa.me/${settings.whatsappPhone.replaceAll(/[^\d+]/g, '')}` : undefined, external: true },
               { id: 'location', icon: <MapPin className="w-6 h-6" />, title: "Nuestras Oficinas", value: settings?.physicalAddress || "Madrid, España", desc: "Hub Tecnológico de Innovación", color: "text-[var(--color-icon-purple)]", href: `https://maps.google.com/?q=${encodeURIComponent(settings?.physicalAddress || 'Madrid, España')}`, external: true }
-            ].map((item) => {
-              const cardClasses = "glass-card p-6 rounded-2xl flex gap-4 group hover:border-[var(--color-border)] transition-colors block";
+            ].map((item, idx) => {
+              const cardClasses = `p-6 rounded-2xl flex gap-4 group hover:border-[var(--color-border)] transition-colors block ${
+                idx === 0 ? 'bg-[var(--color-surface)] border border-[var(--color-border)]' :
+                idx === 1 ? 'bg-[var(--color-bg-alt)] border-2 border-dashed border-[var(--color-border)]' :
+                'bg-[var(--color-surface)] border border-[var(--color-border)]'
+              }`;
               const content = (
                 <>
                   <div className={`w-12 h-12 bg-[var(--color-surface)] rounded-xl flex items-center justify-center ${item.color}`}>{item.icon}</div>
@@ -182,7 +189,7 @@ export const Contact: React.FC = () => {
           <div className={`lg:col-span-7 transition-all duration-1000 delay-500 ${
             prefersReducedMotion() || isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'
           }`}>
-            <div className="glass-card p-8 md:p-10 rounded-3xl border border-[var(--color-border)] shadow-xl">
+            <div className="bg-[var(--color-bg-alt)] p-8 md:p-10 rounded-3xl border border-[var(--color-border)] shadow-xl">
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
                 <div className="grid md:grid-cols-2 gap-5">
                   <div>
@@ -225,14 +232,14 @@ export const Contact: React.FC = () => {
                 </div>
 
                 {submitStatus === 'success' && (
-                  <div role="alert" className="flex items-center gap-3 bg-[var(--color-success-bg)] border border-[var(--color-success-border)] rounded-2xl py-4 px-6">
+                  <div id="contact-success-message" role="status" className="flex items-center gap-3 bg-[var(--color-success-bg)] border border-[var(--color-success-border)] rounded-2xl py-4 px-6">
                     <CheckCircle2 className="w-5 h-5 text-[var(--color-success-text)]" />
                     <p className="text-sm text-[var(--color-success-text)]">¡Mensaje enviado con éxito! Te responderemos pronto.</p>
                   </div>
                 )}
 
                 {submitStatus === 'error' && (
-                  <div className="flex items-center gap-3 bg-[var(--color-error-bg)] border border-[var(--color-error-border)] rounded-2xl py-4 px-6" role="alert">
+                  <div id="contact-error-message" role="alert" className="flex items-center gap-3 bg-[var(--color-error-bg)] border border-[var(--color-error-border)] rounded-2xl py-4 px-6">
                     <AlertCircle className="w-5 h-5 text-[var(--color-error-text)] shrink-0" />
                     <p className="text-sm text-[var(--color-error-text)]">Error al enviar. Por favor, intenta nuevamente.</p>
                   </div>

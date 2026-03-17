@@ -14,7 +14,7 @@ export const Hero: React.FC = () => {
             Tecnología de Próxima Generación
           </div>
           
-          <h1 className="reveal-2 text-3xl sm:text-4xl md:text-6xl lg:text-8xl font-black leading-[1.05] mb-8 tracking-tight">
+          <h1 className="reveal-2 text-3xl sm:text-4xl md:text-6xl lg:text-8xl font-extrabold leading-[1.05] mb-8 tracking-tight">
             No solo creamos software. <br />
             <span className="text-[var(--color-primary)]">Escalamos con IA</span>
           </h1>
@@ -38,12 +38,12 @@ export const Hero: React.FC = () => {
         </div>
 
         <div className="relative hidden lg:flex justify-center lg:justify-end reveal-1" aria-hidden="true">
-          <div className="relative w-full max-w-md aspect-[3/4] glass-card rounded-[3rem] p-10 border border-[var(--color-border)] shadow-xl glow-blue shimmer animate-float-fancy">
+          <div className="relative w-full max-w-md aspect-[3/4] bg-[var(--color-surface)] rounded-[3rem] p-10 border border-[var(--color-border)] shadow-2xl animate-float-fancy">
             <div className="flex justify-between items-start mb-16">
               <div className="w-12 h-12 bg-[var(--color-accent-subtle)] rounded-2xl flex items-center justify-center text-[var(--color-primary)]">
                 <Volume2 className="w-6 h-6" />
               </div>
-              <div className="flex items-center gap-2 bg-[var(--color-success-bg)] border border-[var(--color-success-border)] px-4 py-1.5 rounded-full text-xs text-[var(--color-success-text)] font-black tracking-widest uppercase">
+              <div className="flex items-center gap-2 bg-[var(--color-success-bg)] border border-[var(--color-success-border)] px-4 py-1.5 rounded-full text-xs text-[var(--color-success-text)] font-extrabold tracking-widest uppercase">
                 <CheckCircle2 className="w-3.5 h-3.5" />
                 NFC Active
               </div>
@@ -56,7 +56,7 @@ export const Hero: React.FC = () => {
                 </div>
               </div>
               <div>
-                <h3 className="text-3xl font-black mb-1">SmartConnect</h3>
+                <h3 className="text-3xl font-extrabold mb-1">SmartConnect</h3>
                 <p className="text-muted text-xs font-bold tracking-[0.2em] uppercase">Enterprise AI Node</p>
               </div>
             </div>
