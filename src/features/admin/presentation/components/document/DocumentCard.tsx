@@ -52,7 +52,6 @@ export const DocumentCard: React.FC<DocumentCardProps> = React.memo(({ doc, onVi
         }}
         className="absolute bottom-4 right-4 p-2 text-[var(--color-error-text)] bg-[var(--color-error-bg)] rounded-lg hover:opacity-80 z-10 ml-2"
         aria-label="Eliminar documento"
-        tabIndex={0}
         type="button"
       >
         <Trash2 className="w-4 h-4" />

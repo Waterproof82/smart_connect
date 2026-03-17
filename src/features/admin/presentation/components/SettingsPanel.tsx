@@ -176,7 +176,7 @@ export const SettingsPanel: React.FC = () => {
                 id="settings-whatsappPhone"
                 type="tel"
                 placeholder="+5491112345678"
-                className={`${inputClasses} focus:ring-green-500`}
+                className={`${inputClasses} focus:ring-[var(--focus-ring)]`}
                 {...register('whatsappPhone')}
               />
               {errors.whatsappPhone && (
@@ -197,7 +197,7 @@ export const SettingsPanel: React.FC = () => {
                 id="settings-physicalAddress"
                 type="text"
                 placeholder="Av. Example 123, Ciudad"
-                className={`${inputClasses} focus:ring-purple-500`}
+                className={`${inputClasses} focus:ring-[var(--focus-ring)]`}
                 {...register('physicalAddress')}
               />
               {errors.physicalAddress && (

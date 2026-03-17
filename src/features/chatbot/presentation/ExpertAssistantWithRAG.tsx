@@ -172,7 +172,7 @@ export const ExpertAssistant: React.FC = () => {
 
           <div className="p-3 bg-[var(--color-bg)] border-t border-[var(--color-border)]">
             <div className="relative flex gap-2">
-              <input type="text" value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()} placeholder="Escribe tu mensaje..." aria-label="Escribe tu mensaje" autoComplete="off" className="flex-1 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl py-3 px-4 text-sm text-default outline-none focus:border-[var(--color-primary)] transition-colors min-h-[44px]" />
+              <input type="text" value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()} placeholder="Escribe tu mensaje..." aria-label="Escribe tu mensaje" className="flex-1 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl py-3 px-4 text-sm text-default outline-none focus:border-[var(--color-primary)] transition-colors min-h-[44px]" />
               <button onClick={handleSend} disabled={!input.trim() || isLoading} aria-label="Enviar mensaje" className="w-11 h-11 bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] disabled:opacity-50 disabled:cursor-not-allowed rounded-xl flex items-center justify-center transition-colors shrink-0">
                 <Send className="w-4 h-4 text-[var(--color-on-accent)]" />
               </button>

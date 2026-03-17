@@ -155,7 +155,7 @@ export const Contact: React.FC = () => {
                   <div className={`w-12 h-12 bg-[var(--color-surface)] rounded-xl flex items-center justify-center ${item.color}`}>{item.icon}</div>
                   <div>
                     <p className="text-xs font-bold text-muted uppercase tracking-widest mb-1">{item.title}</p>
-                    <h4 className="text-lg font-bold mb-1">{item.value}</h4>
+                    <h3 className="text-lg font-bold mb-1">{item.value}</h3>
                     <p className="text-sm text-muted">{item.desc}</p>
                   </div>
                 </>

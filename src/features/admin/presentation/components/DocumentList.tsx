@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Document } from '../../domain/entities/Document';
 import { PaginatedResult } from '../../domain/repositories/IDocumentRepository';
 import { Search, Filter, Plus, Database, ChevronLeft, ChevronRight, Edit2, X } from 'lucide-react';
@@ -384,11 +384,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
             type="button"
             className="absolute inset-0 bg-black/80 backdrop-blur-sm"
             aria-label="Cerrar modal"
-            tabIndex={0}
             onClick={() => setSelectedDocument(null)}
-            onKeyDown={e => {
-              if (e.key === 'Enter' || e.key === ' ') setSelectedDocument(null);
-            }}
             style={{ cursor: 'pointer' }}
           />
           <div className="relative bg-[var(--color-bg-alt)] w-full h-full sm:h-auto sm:max-h-[85vh] sm:rounded-xl sm:border border-[var(--color-border)] flex flex-col max-w-4xl shadow-2xl">

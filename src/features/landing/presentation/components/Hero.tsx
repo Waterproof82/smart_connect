@@ -5,7 +5,7 @@ import { ArrowRight, Play, CheckCircle2, Sparkles, Volume2 } from 'lucide-react'
 export const Hero: React.FC = () => {
   return (
     <div className="relative pt-32 pb-20 overflow-hidden min-h-[90vh] flex items-center">
-      <div className="absolute top-1/4 right-0 w-[500px] h-[500px] bg-[var(--color-accent)]/10 blur-[150px] rounded-full -mr-48 animate-drift" aria-hidden="true"></div>
+      <div className="absolute top-1/4 right-0 w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-[var(--color-accent)]/10 blur-[150px] rounded-full -mr-48 animate-drift" aria-hidden="true"></div>
 
       <div className="container mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center relative z-10">
         <div className="max-w-2xl">
@@ -24,11 +24,11 @@ export const Hero: React.FC = () => {
           </p>
 
           <div className="reveal-3 flex flex-wrap gap-5">
-            <button onClick={() => document.querySelector('#contacto')?.scrollIntoView({ behavior: 'smooth' })} className="bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] text-[var(--color-on-accent)] px-6 md:px-10 py-4 md:py-5 rounded-2xl font-bold flex items-center gap-3 transition-all shadow-xl active:scale-95 group min-h-[48px] sm:min-h-[52px]">
+            <button onClick={() => document.querySelector('#contacto')?.scrollIntoView({ behavior: 'smooth' })} className="bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] text-[var(--color-on-accent)] px-6 md:px-10 py-4 md:py-5 rounded-2xl font-bold flex items-center gap-3 transition-all shadow-xl motion-safe:active:scale-95 group min-h-[48px] sm:min-h-[52px]">
               Empezar Ahora
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
-            <button onClick={() => document.querySelector('#soluciones')?.scrollIntoView({ behavior: 'smooth' })} className="bg-[var(--color-overlay-subtle)] hover:bg-[var(--color-overlay-medium)] focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] border border-[var(--color-border)] px-6 md:px-10 py-4 md:py-5 rounded-2xl font-bold flex items-center gap-3 transition-all active:scale-95 group min-h-[48px] sm:min-h-[52px]">
+            <button onClick={() => document.querySelector('#soluciones')?.scrollIntoView({ behavior: 'smooth' })} className="bg-[var(--color-overlay-subtle)] hover:bg-[var(--color-overlay-medium)] focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] border border-[var(--color-border)] px-6 md:px-10 py-4 md:py-5 rounded-2xl font-bold flex items-center gap-3 transition-all motion-safe:active:scale-95 group min-h-[48px] sm:min-h-[52px]">
               Ver Demo
               <div className="w-8 h-8 bg-[var(--color-overlay-medium)] rounded-full flex items-center justify-center group-hover:bg-[var(--color-overlay-strong)] transition-colors">
                 <Play className="w-3 h-3 fill-[var(--color-text)] ml-0.5" />

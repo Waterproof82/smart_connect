@@ -36,7 +36,7 @@ export const MenuPhone: React.FC<MenuPhoneProps> = ({
                 alt={restaurant.name}
                 loading="lazy"
                 decoding="async"
-                className="w-full h-full object-cover opacity-80 group-hover:scale-110 transition-transform duration-1000"
+                className="w-full h-full object-cover opacity-80 motion-safe:group-hover:scale-110 transition-transform duration-1000"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-bg)] via-transparent"></div>
             </>
