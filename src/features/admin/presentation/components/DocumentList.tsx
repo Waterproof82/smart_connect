@@ -408,35 +408,36 @@ export const DocumentList: React.FC<DocumentListProps> = ({
                          />
                        ))}
                      </div>
-                     <div className="flex gap-2">
-                       {/* Dropdown for Sources using Datalist */}
-                       <input 
-                         id="edit-tags-input"
-                         type="text" 
-                         list="available-sources-list"
-                         className="flex-1 bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded px-3 py-1.5 text-sm text-default focus:ring-1 focus:ring-[var(--color-primary)]"
-                          placeholder="Selecciona o escribe una etiqueta..."
-                         value={newSourceInput}
-                         onChange={(e) => setNewSourceInput(e.target.value)}
-                         onKeyDown={handleAddTagInputKeyDown}
-                       />
+                    <label htmlFor="edit-tags-input" className="block text-xs font-medium text-muted uppercase mb-2">Fuentes</label>
+                    <div className="flex gap-2">
+                      {/* Dropdown for Sources using Datalist */}
+                      <input 
+                        id="edit-tags-input"
+                        type="text" 
+                        list="available-sources-list"
+                        className="flex-1 bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded px-3 py-1.5 text-sm text-default focus:ring-1 focus:ring-[var(--color-primary)]"
+                         placeholder="Selecciona o escribe una etiqueta..."
+                        value={newSourceInput}
+                        onChange={(e) => setNewSourceInput(e.target.value)}
+                        onKeyDown={handleAddTagInputKeyDown}
+                      />
                        <datalist id="available-sources-list">
                          {availableSources.map(source => (
                            <option key={source} value={source} />
                          ))}
                        </datalist>
                        
-                       <button 
-                         onClick={handleManualAddTag}
-                         className="px-3 py-1 bg-[var(--color-surface)] text-default text-xs rounded hover:bg-[var(--color-border)]"
-                         type="button"
-                       >
-                         Add
-                       </button>
+                        <button 
+                          onClick={handleManualAddTag}
+                          className="px-3 py-1 bg-[var(--color-surface)] text-default text-xs rounded hover:bg-[var(--color-border)]"
+                          type="button"
+                        >
+                          Añadir
+                        </button>
                      </div>
-                   </div>
-                   <label htmlFor="edit-content-area" className="sr-only">Contenido del documento</label>
-                   <textarea
+                    </div>
+                    <label htmlFor="edit-content-area" className="block text-xs font-medium text-muted uppercase mb-2">Contenido</label>
+                    <textarea
                      id="edit-content-area"
                      value={editedContent}
                      onChange={(e) => setEditedContent(e.target.value)}
@@ -512,7 +513,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
           <div className="absolute inset-0 bg-black/90 backdrop-blur-sm cursor-pointer" onClick={() => setShowCreateModal(false)} />
            <div className="relative bg-[var(--color-bg-alt)] w-full h-full sm:h-auto sm:max-h-[90vh] sm:rounded-xl border border-[var(--color-border)] flex flex-col max-w-4xl">
               <div className="flex justify-between p-5 border-b border-[var(--color-border)]">
-                <h3 className="text-xl font-bold text-default">New Document</h3>
+                <h3 className="text-xl font-bold text-default">Nuevo Documento</h3>
                 <button onClick={() => setShowCreateModal(false)} className="text-muted hover:text-[var(--color-text)] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 rounded-lg p-1" aria-label="Close modal" type="button"><X className="w-6 h-6"/></button>
               </div>
              <div className="flex-1 overflow-y-auto p-5 space-y-5">

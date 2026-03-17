@@ -65,7 +65,7 @@ export const Hero: React.FC = () => {
               <div className="h-1.5 w-full bg-[var(--color-overlay-subtle)] rounded-full overflow-hidden">
                 <div className="h-full w-2/3 bg-[var(--color-accent)] rounded-full"></div>
               </div>
-              <div className="flex justify-between text-xs text-muted font-mono tracking-widest uppercase font-bold">
+              <div className="flex justify-between text-xs text-muted tracking-widest uppercase font-medium">
                 <span className="flex items-center gap-1.5">
                   <div className="w-1 h-1 bg-[var(--color-primary)] rounded-full"></div>
                   ID: 8493-XJ
@@ -88,7 +88,7 @@ export const Hero: React.FC = () => {
                <div className="flex gap-1">
                  {[1, 2, 3].map(i => <div key={i} className="w-6 h-1 bg-[var(--color-primary)]/40 rounded-full"></div>)}
                </div>
-               <span className="text-[9px] font-mono text-muted">Uplink Stable</span>
+               <span className="text-[9px] text-muted font-medium">Uplink Stable</span>
             </div>
           </div>
         </div>

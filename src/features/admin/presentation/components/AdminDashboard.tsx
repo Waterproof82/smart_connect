@@ -64,7 +64,7 @@ export const AdminDashboard: React.FC = () => {
 
         <div className="md:flex md:items-center md:justify-between mb-2">
           <div>
-            <h2 className="text-2xl font-bold text-default">Knowledge Base</h2>
+            <h2 className="text-2xl font-bold text-default">Base de Conocimiento</h2>
             <p className="text-muted text-sm mt-1">Chatbot RAG - Gestiona documentos y embeddings</p>
           </div>
         </div>
