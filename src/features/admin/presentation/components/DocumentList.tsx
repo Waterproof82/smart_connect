@@ -233,7 +233,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
           <div className="relative bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded-xl p-6 max-w-sm w-full shadow-lg">
             <h4 className="text-lg font-bold text-default mb-2">¿Eliminar documento?</h4>
             <p className="text-sm text-muted mb-6">
-              Se eliminará permanentemente "{confirmDelete.title}...". Esta acción no se puede deshacer.
+              Se eliminará permanentemente &quot;{confirmDelete.title}...&quot;. Esta acción no se puede deshacer.
             </p>
             <div className="flex justify-end gap-3">
               <button onClick={() => setConfirmDelete(null)} className="px-4 py-2 text-default hover:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 rounded-lg" type="button">Cancelar</button>

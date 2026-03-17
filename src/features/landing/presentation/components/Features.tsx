@@ -67,7 +67,7 @@ const SoftwareIAAbstract = () => (
               key={i} 
               className="w-1 bg-current rounded-full animate-pulse"
               style={{ 
-                height: `${Math.random() * 24 + 8}px`,
+                height: `${BAR_HEIGHTS[i]}px`,
                 animationDelay: `${i * 0.15}s`
               }}
             />
@@ -78,6 +78,8 @@ const SoftwareIAAbstract = () => (
     </div>
   </div>
 );
+
+const BAR_HEIGHTS = [16, 28, 12, 24, 20];
 
 export const Features: React.FC = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
