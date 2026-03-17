@@ -107,7 +107,7 @@ export const DashboardPreview: React.FC = () => {
               </div>
             </div>
             <div className="h-[250px] w-full" role="img" aria-label="Gráfico de temperatura de leads durante los últimos 7 días">
-              <Suspense fallback={<div className="h-full flex items-center justify-center text-muted">Cargando gráfico...</div>}>
+              <Suspense fallback={<div className="h-full flex items-center justify-center text-muted">Preparando gráfico...</div>}>
                 <LazyBarChart data={data} />
               </Suspense>
             </div>

@@ -234,19 +234,19 @@ export const Contact: React.FC = () => {
                 {submitStatus === 'success' && (
                   <div id="contact-success-message" role="status" className="flex items-center gap-3 bg-[var(--color-success-bg)] border border-[var(--color-success-border)] rounded-2xl py-4 px-6">
                     <CheckCircle2 className="w-5 h-5 text-[var(--color-success-text)]" />
-                    <p className="text-sm text-[var(--color-success-text)]">¡Mensaje enviado con éxito! Te responderemos pronto.</p>
+                    <p className="text-sm text-[var(--color-success-text)]">¡Mensaje enviado! Te contactaremos en menos de 2 horas.</p>
                   </div>
                 )}
 
                 {submitStatus === 'error' && (
                   <div id="contact-error-message" role="alert" className="flex items-center gap-3 bg-[var(--color-error-bg)] border border-[var(--color-error-border)] rounded-2xl py-4 px-6">
                     <AlertCircle className="w-5 h-5 text-[var(--color-error-text)] shrink-0" />
-                    <p className="text-sm text-[var(--color-error-text)]">Error al enviar. Por favor, intenta nuevamente.</p>
+                    <p className="text-sm text-[var(--color-error-text)]">No se pudo enviar. Intenta de nuevo o contáctanos por otro medio.</p>
                   </div>
                 )}
 
                 <button type="submit" disabled={!canSubmit} className={`w-full py-4 sm:py-5 px-6 rounded-2xl font-bold flex items-center justify-center gap-3 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] min-h-[44px] ${canSubmit ? 'bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-[var(--color-on-accent)] shadow-lg shadow-[var(--color-accent)]/25 hover:shadow-xl hover:shadow-[var(--color-accent)]/30 hover:-translate-y-0.5 active:translate-y-0 active:shadow-md' : 'bg-[var(--color-overlay-medium)] text-muted cursor-not-allowed'}`}>
-                  {isLoadingSettings ? <><Loader2 className="w-5 h-5 animate-spin" />Cargando...</> : isSubmitting ? <><Loader2 className="w-5 h-5 animate-spin" />Enviando...</> : <><span className="text-base">Enviar Propuesta</span> <Send className="w-5 h-5" aria-hidden="true" /></>}
+                  {isLoadingSettings ? <><Loader2 className="w-5 h-5 animate-spin" />Cargando configuración...</> : isSubmitting ? <><Loader2 className="w-5 h-5 animate-spin" />Enviando mensaje...</> : <><span className="text-base">Enviar Mensaje</span> <Send className="w-5 h-5" aria-hidden="true" /></>}
                 </button>
               </form>
             </div>

@@ -31,7 +31,7 @@ export const AdminDashboard: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-3">
-              <Link to="/" className="p-2 text-muted hover:text-default hover:bg-[var(--color-surface)] rounded-lg transition-colors" title="Back to Home">
+              <Link to="/" className="p-2 text-muted hover:text-default hover:bg-[var(--color-surface)] rounded-lg transition-colors" title="Volver al inicio">
                 <Home className="w-5 h-5" />
               </Link>
               <div className="flex flex-col">
@@ -51,7 +51,7 @@ export const AdminDashboard: React.FC = () => {
                 <User className="w-5 h-5" />
               </div>
               <div className="h-6 w-px bg-[var(--color-border)] mx-1"></div>
-              <button onClick={handleLogout} className="p-2 text-muted hover:text-red-400 hover:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400 rounded-lg transition-colors" title="Logout" aria-label="Cerrar sesión">
+              <button onClick={handleLogout} className="p-2 text-muted hover:text-red-400 hover:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400 rounded-lg transition-colors" title="Cerrar sesión" aria-label="Cerrar sesión">
                 <LogOut className="w-5 h-5" />
               </button>
             </div>
@@ -65,7 +65,7 @@ export const AdminDashboard: React.FC = () => {
         <div className="md:flex md:items-center md:justify-between mb-2">
           <div>
             <h2 className="text-2xl font-bold text-default">Knowledge Base</h2>
-            <p className="text-muted text-sm mt-1">Chatbot RAG - Manage documents and embeddings</p>
+            <p className="text-muted text-sm mt-1">Chatbot RAG - Gestiona documentos y embeddings</p>
           </div>
         </div>
 

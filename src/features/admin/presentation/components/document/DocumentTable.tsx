@@ -15,10 +15,10 @@ export const DocumentTable: React.FC<DocumentTableProps> = ({ documents, onView,
   <table className="min-w-full divide-y divide-[var(--color-border)]">
     <thead className="bg-[var(--color-surface)]">
       <tr>
-        <th className="px-6 py-4 text-left text-xs font-semibold text-muted uppercase tracking-wider">Content Preview</th>
-        <th className="px-6 py-4 text-left text-xs font-semibold text-muted uppercase tracking-wider">Source</th>
-        <th className="px-6 py-4 text-left text-xs font-semibold text-muted uppercase tracking-wider">Created</th>
-        <th className="px-6 py-4 text-center text-xs font-semibold text-muted uppercase tracking-wider">Actions</th>
+        <th className="px-6 py-4 text-left text-xs font-semibold text-muted uppercase tracking-wider">Vista previa</th>
+        <th className="px-6 py-4 text-left text-xs font-semibold text-muted uppercase tracking-wider">Fuente</th>
+        <th className="px-6 py-4 text-left text-xs font-semibold text-muted uppercase tracking-wider">Creado</th>
+        <th className="px-6 py-4 text-center text-xs font-semibold text-muted uppercase tracking-wider">Acciones</th>
       </tr>
     </thead>
     <tbody className="divide-y divide-[var(--color-border)]">
@@ -39,11 +39,11 @@ export const DocumentTable: React.FC<DocumentTableProps> = ({ documents, onView,
           </td>
           <td className="px-6 py-4 text-center">
             <div className="flex justify-center gap-2 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity">
-              <button onClick={() => onEdit(doc)} className="p-1.5 text-[var(--color-primary)] hover:bg-[var(--color-primary)]/10 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)]" aria-label="Edit document">
+              <button onClick={() => onEdit(doc)} className="p-1.5 text-[var(--color-primary)] hover:bg-[var(--color-primary)]/10 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)]" aria-label="Editar documento">
                 <Edit2 className="w-4 h-4" />
               </button>
               {canEdit && (
-                <button onClick={() => onDelete(doc.id)} className="p-1.5 text-red-400 hover:bg-red-900/30 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400" aria-label="Delete document">
+                <button onClick={() => onDelete(doc.id)} className="p-1.5 text-red-400 hover:bg-red-900/30 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400" aria-label="Eliminar documento">
                   <Trash2 className="w-4 h-4" />
                 </button>
               )}

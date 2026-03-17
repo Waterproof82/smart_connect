@@ -55,7 +55,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
       const result = await getAllDocumentsUseCase.execute(filters, { page: currentPage, pageSize: 20 });
       setDocuments(result);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load documents');
+        setError(err instanceof Error ? err.message : 'No se pudieron cargar los documentos');
     } finally {
       setIsLoading(false);
     }
@@ -109,7 +109,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
       if (selectedDocument?.id === confirmDelete.id) setSelectedDocument(null);
       setConfirmDelete(null);
     } catch (err) {
-      setActionError(err instanceof Error ? err.message : 'Failed to delete');
+      setActionError(err instanceof Error ? err.message : 'Error al eliminar el documento');
       setConfirmDelete(null);
       setTimeout(() => setActionError(null), 4000);
     }
@@ -137,7 +137,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
       setSelectedDocument(null);
       setIsEditing(false);
     } catch (err) {
-      setActionError(err instanceof Error ? err.message : 'Update failed');
+      setActionError(err instanceof Error ? err.message : 'Error al guardar los cambios');
       setTimeout(() => setActionError(null), 4000);
     } finally {
       setIsSaving(false);
@@ -147,7 +147,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
   const handleCreate = async () => {
     const finalSource = newDocument.source === '_custom_' ? customSource.trim() : newDocument.source;
     if (!newDocument.content.trim() || !finalSource) {
-      setActionError('Content and Source are required');
+      setActionError('El contenido y la fuente son obligatorios');
       setTimeout(() => setActionError(null), 4000);
       return;
     }
@@ -163,7 +163,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
       await loadAvailableSources();
       onDocumentChange?.();
     } catch (err) {
-      setActionError(err instanceof Error ? err.message : 'Create failed');
+      setActionError(err instanceof Error ? err.message : 'Error al crear el documento');
       setTimeout(() => setActionError(null), 4000);
     } finally {
       setIsCreating(false);
@@ -207,16 +207,20 @@ export const DocumentList: React.FC<DocumentListProps> = ({
 
   // --- Render ---
 
-  if (error) return <div className="p-4 bg-red-900/20 border border-red-500 rounded text-red-400">{error}</div>;
+  if (error) return (
+    <div className="p-4 bg-[var(--color-error-bg)] border border-[var(--color-error-border)] rounded-lg text-[var(--color-error-text)]">
+      <p>No se pudieron cargar los documentos. Intenta de nuevo.</p>
+    </div>
+  );
 
   return (
     <div className="space-y-6">
 
       {/* Error Banner */}
       {actionError && (
-        <div className="p-3 bg-red-900/20 border border-red-500/50 rounded-lg text-sm text-red-400 flex items-center justify-between">
+        <div className="p-3 bg-[var(--color-error-bg)] border border-[var(--color-error-border)] rounded-lg text-sm text-[var(--color-error-text)] flex items-center justify-between">
           <span>{actionError}</span>
-          <button onClick={() => setActionError(null)} className="text-red-400 hover:text-red-300 ml-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400 rounded" type="button">
+          <button onClick={() => setActionError(null)} className="text-[var(--color-error-text)] hover:opacity-70 ml-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-error-text)] rounded" type="button">
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -227,13 +231,13 @@ export const DocumentList: React.FC<DocumentListProps> = ({
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={() => setConfirmDelete(null)} />
           <div className="relative bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded-xl p-6 max-w-sm w-full shadow-lg">
-            <h4 className="text-lg font-bold text-default mb-2">Delete Document?</h4>
+            <h4 className="text-lg font-bold text-default mb-2">¿Eliminar documento?</h4>
             <p className="text-sm text-muted mb-6">
-              This will permanently delete &quot;{confirmDelete.title}...&quot;. This action cannot be undone.
+              Se eliminará permanentemente "{confirmDelete.title}...". Esta acción no se puede deshacer.
             </p>
             <div className="flex justify-end gap-3">
-              <button onClick={() => setConfirmDelete(null)} className="px-4 py-2 text-default hover:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 rounded-lg" type="button">Cancel</button>
-              <button onClick={handleDeleteConfirm} className="px-4 py-2 bg-red-600 hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400 text-white rounded-lg" type="button">Delete</button>
+              <button onClick={() => setConfirmDelete(null)} className="px-4 py-2 text-default hover:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 rounded-lg" type="button">Cancelar</button>
+              <button onClick={handleDeleteConfirm} className="px-4 py-2 bg-red-600 hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400 text-white rounded-lg" type="button">Eliminar</button>
             </div>
           </div>
         </div>
@@ -246,14 +250,14 @@ export const DocumentList: React.FC<DocumentListProps> = ({
              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted">
                <Filter className="w-4 h-4" />
              </div>
-             <label htmlFor="sourceFilter" className="sr-only">Filter by Source</label>
+              <label htmlFor="sourceFilter" className="sr-only">Filtrar por fuente</label>
              <select
                id="sourceFilter"
                value={sourceFilter}
                onChange={(e) => setSourceFilter(e.target.value)}
                className="w-full pl-9 pr-4 py-2.5 bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded-lg text-sm text-default focus:ring-2 focus:ring-[var(--color-primary)] appearance-none"
              >
-               <option value="">All Sources</option>
+                <option value="">Todas las fuentes</option>
                {availableSources.map(s => <option key={s} value={s}>{s}</option>)}
              </select>
           </div>
@@ -263,18 +267,18 @@ export const DocumentList: React.FC<DocumentListProps> = ({
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted">
                 <Search className="w-4 h-4" />
               </div>
-              <label htmlFor="searchInput" className="sr-only">Search Content</label>
+               <label htmlFor="searchInput" className="sr-only">Buscar en el contenido</label>
               <input
                 id="searchInput"
                 type="text"
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
-                placeholder="Search content..."
+                 placeholder="Buscar contenido..."
                 className="w-full pl-9 pr-4 py-2.5 bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded-lg text-sm text-default focus:ring-2 focus:ring-[var(--color-primary)]"
               />
             </div>
             <button type="submit" className="px-4 py-2 bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] text-[var(--color-on-accent)] rounded-lg transition-colors">
-              Go
+              Buscar
             </button>
           </div>
         </form>
@@ -285,14 +289,14 @@ export const DocumentList: React.FC<DocumentListProps> = ({
             className="w-full md:w-auto px-4 py-2.5 bg-green-600 hover:bg-green-700 text-white rounded-lg flex items-center justify-center gap-2 transition-colors font-medium shadow-lg shadow-green-900/20"
           >
             <Plus className="w-4 h-4" />
-            <span>New Document</span>
+            <span>Nuevo documento</span>
           </button>
         )}
       </div>
 
       {/* Content Display */}
       {isLoading && !documents ? (
-        <div className="text-center py-20 text-muted animate-pulse" role="status" aria-live="polite">Loading knowledge base...</div>
+        <div className="text-center py-20 text-muted animate-pulse" role="status" aria-live="polite">Cargando base de conocimiento...</div>
       ) : (
         <>
           {/* Mobile View: Cards */}
@@ -324,7 +328,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
           {documents?.data.length === 0 && (
              <div className="flex flex-col items-center justify-center py-16 text-muted border border-dashed border-[var(--color-border)] rounded-xl bg-[var(--color-bg-alt)]/30">
                <Database className="w-12 h-12 mb-4 opacity-50" />
-               <p>No documents found matching your criteria.</p>
+                <p>No se encontraron documentos con esos criterios.</p>
              </div>
           )}
         </>
@@ -334,7 +338,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
       {documents && documents.totalPages > 1 && (
         <div className="flex items-center justify-between pt-4 border-t border-[var(--color-border)]">
           <span className="text-sm text-muted hidden sm:block">
-            Page {currentPage} of {documents.totalPages}
+            Página {currentPage} de {documents.totalPages}
           </span>
           <div className="flex gap-2 w-full sm:w-auto justify-between sm:justify-end">
             <button
@@ -343,7 +347,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
               className="px-4 py-2 bg-[var(--color-bg-alt)] text-default rounded-lg hover:bg-[var(--color-surface)] disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1 text-sm"
               type="button"
             >
-              <ChevronLeft className="w-4 h-4" /> Prev
+               <ChevronLeft className="w-4 h-4" /> Anterior
             </button>
             <span className="sm:hidden text-sm text-muted flex items-center">{currentPage} / {documents.totalPages}</span>
             <button
@@ -352,7 +356,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
               className="px-4 py-2 bg-[var(--color-bg-alt)] text-default rounded-lg hover:bg-[var(--color-surface)] disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1 text-sm"
               type="button"
             >
-              Next <ChevronRight className="w-4 h-4" />
+               Siguiente <ChevronRight className="w-4 h-4" />
             </button>
           </div>
         </div>
@@ -377,7 +381,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
             {/* Modal Header */}
             <div className="flex items-center justify-between p-4 border-b border-[var(--color-border)] bg-[var(--color-bg-alt)]/95 sticky top-0 z-10">
               <h3 className="text-lg font-bold text-default flex items-center gap-2">
-                {isEditing ? 'Edit Document' : 'Document Details'}
+                {isEditing ? 'Editar documento' : 'Detalles del documento'}
               </h3>
               <button 
                 onClick={() => setSelectedDocument(null)} 
@@ -394,7 +398,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
                {isEditing ? (
                  <div className="space-y-4">
                    <div className="bg-[var(--color-surface)] p-3 rounded-lg border border-[var(--color-border)]">
-                     <label htmlFor="edit-tags-input" className="text-xs font-medium text-muted uppercase mb-2 block">Sources</label>
+                     <label htmlFor="edit-tags-input" className="text-xs font-medium text-muted uppercase mb-2 block">Fuentes</label>
                      <div className="flex flex-wrap gap-2 mb-2">
                        {editedSources.map(s => (
                          <SourceTag 
@@ -411,7 +415,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
                          type="text" 
                          list="available-sources-list"
                          className="flex-1 bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded px-3 py-1.5 text-sm text-default focus:ring-1 focus:ring-[var(--color-primary)]"
-                         placeholder="Select or type tag..."
+                          placeholder="Selecciona o escribe una etiqueta..."
                          value={newSourceInput}
                          onChange={(e) => setNewSourceInput(e.target.value)}
                          onKeyDown={handleAddTagInputKeyDown}
@@ -431,7 +435,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
                        </button>
                      </div>
                    </div>
-                   <label htmlFor="edit-content-area" className="sr-only">Document Content</label>
+                   <label htmlFor="edit-content-area" className="sr-only">Contenido del documento</label>
                    <textarea
                      id="edit-content-area"
                      value={editedContent}
@@ -514,24 +518,24 @@ export const DocumentList: React.FC<DocumentListProps> = ({
              <div className="flex-1 overflow-y-auto p-5 space-y-5">
                 {/* Source Selection */}
                 <div>
-                   <label htmlFor="create-source-select" className="block text-sm font-medium text-muted mb-2">Source</label>
+                   <label htmlFor="create-source-select" className="block text-sm font-medium text-muted mb-2">Fuente</label>
                    <select
                       id="create-source-select"
                       value={newDocument.source}
                       onChange={(e) => setNewDocument({...newDocument, source: e.target.value})}
                       className="w-full bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded-lg p-2.5 text-default focus:ring-2 focus:ring-[var(--color-primary)]"
                    >
-                      <option value="">Select Source</option>
+                       <option value="">Selecciona fuente</option>
                       {availableSources.map(s => <option key={s} value={s}>{s}</option>)}
-                      <option value="_custom_">+ Custom Source</option>
+                       <option value="_custom_">+ Nueva fuente</option>
                    </select>
                    {newDocument.source === '_custom_' && (
                       <div className="mt-2">
-                        <label htmlFor="custom-source-input" className="sr-only">Custom Source Name</label>
+                         <label htmlFor="custom-source-input" className="sr-only">Nombre de la nueva fuente</label>
                         <input 
                           id="custom-source-input"
                           type="text" 
-                          placeholder="Enter source name..." 
+                           placeholder="Escribe el nombre de la fuente..."
                           className="w-full bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded-lg p-2.5 text-default"
                           value={customSource}
                           onChange={e => setCustomSource(e.target.value)}
@@ -541,25 +545,25 @@ export const DocumentList: React.FC<DocumentListProps> = ({
                 </div>
                 {/* Content Input */}
                 <div>
-                   <label htmlFor="create-content-area" className="block text-sm font-medium text-muted mb-2">Content</label>
+                   <label htmlFor="create-content-area" className="block text-sm font-medium text-muted mb-2">Contenido</label>
                    <textarea
                       id="create-content-area"
                       className="w-full h-64 bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded-lg p-4 text-default font-mono text-sm focus:ring-2 focus:ring-[var(--color-primary)]"
-                      placeholder="Paste content here..."
+                       placeholder="Pega el contenido aquí..."
                       value={newDocument.content}
                       onChange={e => setNewDocument({...newDocument, content: e.target.value})}
                    />
                 </div>
              </div>
               <div className="p-5 border-t border-[var(--color-border)] flex justify-end gap-3">
-                <button onClick={() => setShowCreateModal(false)} className="px-5 py-2.5 text-default hover:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 rounded-lg" type="button">Cancel</button>
+                <button onClick={() => setShowCreateModal(false)} className="px-5 py-2.5 text-default hover:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 rounded-lg" type="button">Cancelar</button>
                 <button 
                   onClick={handleCreate} 
                   disabled={isCreating} 
                   className="px-5 py-2.5 bg-green-600 hover:bg-green-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-400 text-white rounded-lg font-medium disabled:opacity-50"
                   type="button"
                 >
-                  {isCreating ? 'Creating...' : 'Create Document'}
+                  {isCreating ? 'Creando...' : 'Crear documento'}
                 </button>
              </div>
           </div>

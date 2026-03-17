@@ -72,7 +72,7 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({
                   type="text"
                   list="available-sources-list"
                   className="flex-1 bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded px-3 py-1.5 text-sm text-default focus:ring-1 focus:ring-[var(--color-primary)]"
-                  placeholder="Select or type tag..."
+                  placeholder="Selecciona o escribe una etiqueta..."
                   value={newSourceInput}
                   onChange={e => onSourceInputChange(e.target.value)}
                   onKeyDown={e => {
