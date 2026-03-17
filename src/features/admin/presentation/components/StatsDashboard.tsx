@@ -17,7 +17,7 @@ interface StatsDashboardProps {
   getStatsUseCase: GetDocumentStatsUseCase;
 }
 
-export const StatsDashboard: React.FC<StatsDashboardProps> = ({ getStatsUseCase }) => {
+export const StatsDashboard: React.FC<StatsDashboardProps> = React.memo(({ getStatsUseCase }) => {
   const [stats, setStats] = useState<DocumentStats | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -34,8 +34,7 @@ export const StatsDashboard: React.FC<StatsDashboardProps> = ({ getStatsUseCase 
     };
 
     loadStats();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [getStatsUseCase]);
 
   if (isLoading) {
     return (
@@ -55,23 +54,25 @@ export const StatsDashboard: React.FC<StatsDashboardProps> = ({ getStatsUseCase 
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+    <div>
+      <h2 className="text-xl font-semibold text-default mb-6">Estadísticas del Sistema</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
       {/* Total Documents */}
-      <div className="bg-blue-950/50 border border-blue-800/50 rounded-lg p-6">
+      <div className="bg-[var(--color-accent-subtle)] border border-[var(--color-accent-border)] rounded-lg p-6">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm text-muted mb-1">Total Documents</p>
+            <p className="text-sm text-muted mb-1">Total Documentos</p>
             <p className="text-3xl font-bold text-default">{stats.totalDocuments}</p>
           </div>
-          <div className="text-blue-400" aria-hidden="true">
+          <div className="text-[var(--color-icon-blue)]" aria-hidden="true">
             <FileText className="w-9 h-9" />
           </div>
         </div>
       </div>
 
       {/* By Source */}
-      <div className="bg-purple-950/50 border border-purple-800/50 rounded-lg p-6">
-        <p className="text-sm text-muted mb-3">Documents by Source</p>
+      <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-6">
+        <p className="text-sm text-muted mb-3">Documentos por Fuente</p>
         <div className="space-y-2">
           {Object.entries(stats.bySource)
             .sort((a, b) => b[1] - a[1])
@@ -83,6 +84,8 @@ export const StatsDashboard: React.FC<StatsDashboardProps> = ({ getStatsUseCase 
             ))}
         </div>
       </div>
+      </div>
     </div>
   );
-};
+});
+StatsDashboard.displayName = 'StatsDashboard';

@@ -251,7 +251,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
                id="sourceFilter"
                value={sourceFilter}
                onChange={(e) => setSourceFilter(e.target.value)}
-               className="w-full pl-9 pr-4 py-2.5 bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded-lg text-sm text-default focus:ring-2 focus:ring-blue-500 appearance-none"
+               className="w-full pl-9 pr-4 py-2.5 bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded-lg text-sm text-default focus:ring-2 focus:ring-[var(--color-primary)] appearance-none"
              >
                <option value="">All Sources</option>
                {availableSources.map(s => <option key={s} value={s}>{s}</option>)}
@@ -270,10 +270,10 @@ export const DocumentList: React.FC<DocumentListProps> = ({
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
                 placeholder="Search content..."
-                className="w-full pl-9 pr-4 py-2.5 bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded-lg text-sm text-default focus:ring-2 focus:ring-blue-500"
+                className="w-full pl-9 pr-4 py-2.5 bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded-lg text-sm text-default focus:ring-2 focus:ring-[var(--color-primary)]"
               />
             </div>
-            <button type="submit" className="px-4 py-2 bg-blue-600 hover:bg-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 text-white rounded-lg transition-colors">
+            <button type="submit" className="px-4 py-2 bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] text-[var(--color-on-accent)] rounded-lg transition-colors">
               Go
             </button>
           </div>
@@ -410,7 +410,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
                          id="edit-tags-input"
                          type="text" 
                          list="available-sources-list"
-                         className="flex-1 bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded px-3 py-1.5 text-sm text-default focus:ring-1 focus:ring-blue-500"
+                         className="flex-1 bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded px-3 py-1.5 text-sm text-default focus:ring-1 focus:ring-[var(--color-primary)]"
                          placeholder="Select or type tag..."
                          value={newSourceInput}
                          onChange={(e) => setNewSourceInput(e.target.value)}
@@ -436,7 +436,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
                      id="edit-content-area"
                      value={editedContent}
                      onChange={(e) => setEditedContent(e.target.value)}
-                     className="w-full h-[50vh] sm:h-[400px] bg-[var(--color-bg-alt)] text-default p-4 rounded-lg font-mono text-sm leading-relaxed resize-none focus:ring-2 focus:ring-blue-500 outline-none"
+                     className="w-full h-[50vh] sm:h-[400px] bg-[var(--color-bg-alt)] text-default p-4 rounded-lg font-mono text-sm leading-relaxed resize-none focus:ring-2 focus:ring-[var(--color-primary)] outline-none"
                    />
                  </div>
                ) : (
@@ -468,12 +468,12 @@ export const DocumentList: React.FC<DocumentListProps> = ({
                    >
                       Cancel
                    </button>
-                   <button 
-                      onClick={handleSave} 
-                      disabled={isSaving} 
-                      className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 disabled:opacity-50"
-                      type="button"
-                   >
+                    <button 
+                       onClick={handleSave} 
+                       disabled={isSaving} 
+                       className="px-6 py-2 bg-[var(--color-accent)] text-[var(--color-on-accent)] rounded-lg hover:bg-[var(--color-accent-hover)] disabled:opacity-50"
+                       type="button"
+                    >
                      {isSaving ? 'Saving...' : 'Save Changes'}
                    </button>
                  </>
@@ -519,7 +519,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
                       id="create-source-select"
                       value={newDocument.source}
                       onChange={(e) => setNewDocument({...newDocument, source: e.target.value})}
-                      className="w-full bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded-lg p-2.5 text-default focus:ring-2 focus:ring-blue-500"
+                      className="w-full bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded-lg p-2.5 text-default focus:ring-2 focus:ring-[var(--color-primary)]"
                    >
                       <option value="">Select Source</option>
                       {availableSources.map(s => <option key={s} value={s}>{s}</option>)}
@@ -544,7 +544,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
                    <label htmlFor="create-content-area" className="block text-sm font-medium text-muted mb-2">Content</label>
                    <textarea
                       id="create-content-area"
-                      className="w-full h-64 bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded-lg p-4 text-default font-mono text-sm focus:ring-2 focus:ring-blue-500"
+                      className="w-full h-64 bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded-lg p-4 text-default font-mono text-sm focus:ring-2 focus:ring-[var(--color-primary)]"
                       placeholder="Paste content here..."
                       value={newDocument.content}
                       onChange={e => setNewDocument({...newDocument, content: e.target.value})}

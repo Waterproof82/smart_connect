@@ -42,7 +42,7 @@ export const AdminDashboard: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-base pb-10">
-      <a href="#admin-main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:bg-blue-600 focus:text-white focus:px-4 focus:py-2 focus:rounded-lg focus:text-sm focus:font-bold">
+      <a href="#admin-main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:bg-[var(--color-accent)] focus:text-[var(--color-on-accent)] focus:px-4 focus:py-2 focus:rounded-lg focus:text-sm focus:font-bold">
         Saltar al contenido principal
       </a>
       <header className="bg-[var(--color-bg-alt)] border-b border-[var(--color-border)] sticky top-0 z-30">
@@ -61,7 +61,7 @@ export const AdminDashboard: React.FC = () => {
             <div className="flex items-center gap-3 md:gap-4">
               <div className="hidden md:flex flex-col items-end">
                 <span className="text-sm text-default">{currentUser.email}</span>
-                <span className="px-1.5 py-0.5 bg-blue-900/30 text-blue-400 rounded text-[10px] border border-blue-800">
+                <span className="px-1.5 py-0.5 bg-[var(--color-primary)]/20 text-[var(--color-primary)] rounded text-[10px] border border-[var(--color-primary)]/30">
                   {currentUser.role}
                 </span>
               </div>

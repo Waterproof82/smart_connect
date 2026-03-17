@@ -28,6 +28,7 @@ export const Login: React.FC<LoginProps> = ({ loginUseCase, onLoginSuccess }) =>
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     defaultValues: { email: '', password: '' },
+    mode: 'onBlur',
   });
 
   const onSubmit = async ({ email, password }: LoginFormData) => {
@@ -43,7 +44,7 @@ export const Login: React.FC<LoginProps> = ({ loginUseCase, onLoginSuccess }) =>
       const session = await loginUseCase.execute({ email, password });
       onLoginSuccess(session);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Authentication failed');
+      setError(err instanceof Error ? err.message : 'Error de autenticación');
     }
   };
 
@@ -69,7 +70,7 @@ export const Login: React.FC<LoginProps> = ({ loginUseCase, onLoginSuccess }) =>
       <div className="max-w-md w-full space-y-8 border border-[var(--color-border)] p-8 rounded-2xl bg-[var(--color-surface)] shadow-2xl">
         <div>
           <h2 className="text-center text-3xl font-extrabold text-default tracking-tight">
-            Admin Panel
+            Panel Admin
           </h2>
           <p className="mt-2 text-center text-sm text-muted">
             Inicia sesión para gestionar el sistema
@@ -80,54 +81,60 @@ export const Login: React.FC<LoginProps> = ({ loginUseCase, onLoginSuccess }) =>
           <div className="rounded-md shadow-sm space-y-4">
             <div>
               <label htmlFor="email" className="block text-xs font-semibold text-muted uppercase mb-1 ml-1">
-                Email
+                Email <span className="text-[var(--color-error-text)]" aria-hidden="true">*</span>
               </label>
               <input
                 id="email"
                 type="email"
                 autoComplete="email"
-                className="appearance-none relative block w-full px-4 py-3 border border-[var(--color-border)] placeholder-[var(--color-text-muted)] text-default bg-[var(--color-bg-alt)]/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm transition-all"
+                className="appearance-none relative block w-full px-4 py-3 border border-[var(--color-border)] placeholder-[var(--color-text-muted)] text-default bg-[var(--color-bg-alt)] rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:border-transparent sm:text-sm transition-all"
                 placeholder="admin@ejemplo.com"
                 disabled={isSubmitting}
+                aria-required="true"
+                aria-invalid={!!formErrors.email}
+                aria-describedby={formErrors.email ? 'login-email-error' : undefined}
                 {...register('email')}
               />
               {formErrors.email && (
-                <p className="text-xs text-red-400 mt-1 ml-1">{formErrors.email.message}</p>
+                <p id="login-email-error" role="alert" className="text-xs text-[var(--color-error-text)] mt-1 ml-1">{formErrors.email.message}</p>
               )}
             </div>
             <div>
               <label htmlFor="password" className="block text-xs font-semibold text-muted uppercase mb-1 ml-1">
-                Contraseña
+                Contraseña <span className="text-[var(--color-error-text)]" aria-hidden="true">*</span>
               </label>
               <input
                 id="password"
                 type="password"
                 autoComplete="current-password"
-                className="appearance-none relative block w-full px-4 py-3 border border-[var(--color-border)] placeholder-[var(--color-text-muted)] text-default bg-[var(--color-bg-alt)]/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm transition-all"
+                className="appearance-none relative block w-full px-4 py-3 border border-[var(--color-border)] placeholder-[var(--color-text-muted)] text-default bg-[var(--color-bg-alt)] rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:border-transparent sm:text-sm transition-all"
                 placeholder="••••••••"
                 disabled={isSubmitting}
+                aria-required="true"
+                aria-invalid={!!formErrors.password}
+                aria-describedby={formErrors.password ? 'login-password-error' : undefined}
                 {...register('password')}
               />
               {formErrors.password && (
-                <p className="text-xs text-red-400 mt-1 ml-1">{formErrors.password.message}</p>
+                <p id="login-password-error" role="alert" className="text-xs text-[var(--color-error-text)] mt-1 ml-1">{formErrors.password.message}</p>
               )}
             </div>
           </div>
 
           {error && (
-            <div className="rounded-lg bg-red-900/20 border border-red-500/50 p-3 animate-in fade-in zoom-in duration-300">
-              <p className="text-sm text-red-400 text-center font-medium">{error}</p>
+            <div role="alert" className="rounded-lg bg-[var(--color-error-bg)] border border-[var(--color-error-border)] p-3 animate-in fade-in zoom-in duration-300">
+              <p className="text-sm text-[var(--color-error-text)] text-center font-medium">{error}</p>
             </div>
           )}
 
           <button
             type="submit"
             disabled={isSubmitting}
-            className="group relative w-full flex justify-center py-3.5 px-4 border border-transparent text-sm font-bold rounded-xl text-white bg-blue-600 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] focus:ring-blue-500 disabled:opacity-50 transition-all shadow-lg shadow-blue-900/20"
+            className="group relative w-full flex justify-center py-3.5 px-4 border border-transparent text-sm font-bold rounded-xl text-[var(--color-on-accent)] bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] focus:ring-[var(--focus-ring)] disabled:opacity-50 transition-all shadow-lg"
           >
             {isSubmitting ? (
               <span className="flex items-center">
-                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-[var(--color-on-accent)]" fill="none" viewBox="0 0 24 24">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>

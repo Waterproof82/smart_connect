@@ -23,7 +23,7 @@ export const MenuPhone: React.FC<MenuPhoneProps> = ({
   isVisible 
 }) => {
   return (
-    <div className={`flex justify-center transition-all duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)] ${
+    <div className={`flex justify-center transition-all duration-1000 ease-out ${
       isVisible ? 'opacity-100 translate-x-0 blur-0 rotate-0' : 'opacity-0 -translate-x-20 blur-md -rotate-6'
     }`}>
       <div className="relative w-full max-w-[360px] aspect-[9/19] bg-[var(--color-bg)] rounded-[3rem] border-8 border-[var(--color-surface)] shadow-2xl overflow-hidden group">
@@ -31,16 +31,18 @@ export const MenuPhone: React.FC<MenuPhoneProps> = ({
         <div className="absolute top-0 w-full h-40 overflow-hidden">
           {restaurant.hasImage() && (
             <>
-              <img 
-                src={restaurant.imageUrl} 
-                alt={restaurant.name} 
-                className="w-full h-full object-cover opacity-80 group-hover:scale-110 transition-transform duration-1000"
+              <img
+                src={restaurant.imageUrl}
+                alt={`Foto del restaurante ${restaurant.name}`}
+                loading="lazy"
+                decoding="async"
+                className="w-full h-full object-cover opacity-80 motion-safe:group-hover:scale-110 transition-transform duration-1000"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-bg)] via-transparent"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-bg)] via-transparent" aria-hidden="true"></div>
             </>
           )}
           <div className="absolute bottom-4 left-6">
-            <h4 className="text-xl font-bold">{restaurant.name}</h4>
+            <h3 className="text-xl font-bold">{restaurant.name}</h3>
             {restaurant.description && (
               <p className="text-[10px] text-muted">{restaurant.description}</p>
             )}
@@ -60,12 +62,12 @@ export const MenuPhone: React.FC<MenuPhoneProps> = ({
               }}
             >
               <div>
-                <h5 className="text-sm font-semibold">{item.name}</h5>
+                <h4 className="text-sm font-semibold">{item.name}</h4>
                 {item.description && (
                   <p className="text-[10px] text-muted">{item.description}</p>
                 )}
               </div>
-              <span className="text-amber-500 font-bold text-sm">{item.formattedPrice}</span>
+              <span className="text-[var(--color-icon-amber)] font-bold text-sm">{item.formattedPrice}</span>
             </div>
           ))}
         </div>
@@ -74,7 +76,7 @@ export const MenuPhone: React.FC<MenuPhoneProps> = ({
         <div className={`absolute bottom-8 left-6 right-6 transition-all duration-700 delay-1000 ${
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}>
-          <button className="w-full bg-white text-black py-4 rounded-xl font-bold flex items-center justify-center gap-2 text-sm hover:bg-neutral-200 transition-colors">
+          <button className="w-full bg-[var(--color-text)] text-[var(--color-bg)] py-4 rounded-xl font-bold flex items-center justify-center gap-2 text-sm hover:opacity-90 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)]">
             <ShoppingCart className="w-4 h-4" />
             Ver Carrito ({menuItems.length})
           </button>

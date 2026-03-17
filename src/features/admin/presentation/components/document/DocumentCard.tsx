@@ -13,7 +13,7 @@ interface DocumentCardProps {
 
 export const DocumentCard: React.FC<DocumentCardProps> = ({ doc, onView, onDelete, canEdit }) => (
   <div
-    className="relative bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded-xl p-4 active:scale-[0.99] transition-transform outline-none focus:ring-2 focus:ring-blue-500"
+    className="relative bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded-xl p-4 active:scale-[0.99] transition-transform outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
   >
     <button
       type="button"
@@ -40,7 +40,7 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({ doc, onView, onDelet
         {doc.content}
       </p>
       <div className="flex justify-between items-center border-t border-[var(--color-border)] pt-3 mt-2">
-        <span className="text-xs text-blue-400 font-medium">Tap to view details</span>
+        <span className="text-xs text-[var(--color-primary)] font-medium">Tap to view details</span>
       </div>
     </button>
     {canEdit && (

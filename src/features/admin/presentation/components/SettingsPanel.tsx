@@ -7,7 +7,7 @@
  * Solo incluye campos que son usados directamente por la app.
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Settings } from '../../domain/entities/Settings';
@@ -27,6 +27,7 @@ export const SettingsPanel: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const successRef = useRef<HTMLDivElement>(null);
 
   const {
     register,
@@ -41,9 +42,10 @@ export const SettingsPanel: React.FC = () => {
       whatsappPhone: '',
       physicalAddress: '',
     },
+    mode: 'onBlur',
   });
 
-  const loadSettings = async () => {
+  const loadSettings = useCallback(async () => {
     try {
       setIsLoading(true);
       setError(null);
@@ -61,12 +63,11 @@ export const SettingsPanel: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [getSettingsUseCase, reset]);
 
   useEffect(() => {
     loadSettings();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [loadSettings]);
 
   const onSubmit = async (data: SettingsFormData) => {
     try {
@@ -77,8 +78,14 @@ export const SettingsPanel: React.FC = () => {
 
       setSuccess('Configuración guardada correctamente');
       await loadSettings();
+      
+      setTimeout(() => {
+        successRef.current?.focus();
+      }, 100);
 
-      setTimeout(() => setSuccess(null), 3000);
+      setTimeout(() => {
+        setSuccess(null);
+      }, 3000);
     } catch (err) {
       logger.error('Failed to save settings', err);
       setError(err instanceof Error ? err.message : 'Error al guardar la configuración');
@@ -97,9 +104,9 @@ export const SettingsPanel: React.FC = () => {
 
   if (error) {
     return (
-      <div className="bg-[var(--color-bg-alt)] border border-red-800 rounded-lg p-6" role="alert">
+      <div className="bg-[var(--color-bg-alt)] border border-[var(--color-error-border)] rounded-lg p-6" role="alert">
         <div className="flex items-center justify-center h-32">
-          <div className="text-red-400">{error}</div>
+          <div className="text-[var(--color-error-text)]">{error}</div>
         </div>
       </div>
     );
@@ -117,8 +124,8 @@ export const SettingsPanel: React.FC = () => {
         </div>
         <button
           onClick={loadSettings}
-          className="p-2 text-muted hover:text-default hover:bg-[var(--color-surface)] rounded-lg transition-colors"
-          title="Refresh"
+          className="p-3 min-w-[44px] min-h-[44px] flex items-center justify-center text-muted hover:text-default hover:bg-[var(--color-surface)] rounded-lg transition-colors"
+          aria-label="Recargar configuración"
         >
           <RefreshCw className="w-5 h-5" />
         </button>
@@ -126,16 +133,16 @@ export const SettingsPanel: React.FC = () => {
 
       {/* Success/Error Messages */}
       {success && (
-        <div className="mb-4 p-3 bg-green-900/30 border border-green-700/50 rounded-lg flex items-center gap-2" role="status" aria-live="polite">
-          <CheckCircle2 className="w-5 h-5 text-green-400" />
-          <span className="text-green-400 text-sm">{success}</span>
+        <div ref={successRef} tabIndex={-1} className="mb-4 p-3 bg-[var(--color-success-bg)] border border-[var(--color-success-border)] rounded-lg flex items-center gap-2" role="status" aria-live="polite">
+          <CheckCircle2 className="w-5 h-5 text-[var(--color-success-text)]" />
+          <span className="text-[var(--color-success-text)] text-sm">{success}</span>
         </div>
       )}
 
       {error && (
-        <div className="mb-4 p-3 bg-red-900/30 border border-red-700/50 rounded-lg flex items-center gap-2" role="alert" aria-live="assertive">
-          <AlertCircle className="w-5 h-5 text-red-400" />
-          <span className="text-red-400 text-sm">{error}</span>
+        <div className="mb-4 p-3 bg-[var(--color-error-bg)] border border-[var(--color-error-border)] rounded-lg flex items-center gap-2" role="alert" aria-live="assertive">
+          <AlertCircle className="w-5 h-5 text-[var(--color-error-text)]" />
+          <span className="text-[var(--color-error-text)] text-sm">{error}</span>
         </div>
       )}
 
@@ -156,11 +163,11 @@ export const SettingsPanel: React.FC = () => {
                 id="settings-contactEmail"
                 type="email"
                 placeholder="contacto@tuempresa.com"
-                className={`${inputClasses} focus:ring-blue-500`}
+                className={`${inputClasses} focus:ring-[var(--focus-ring)]`}
                 {...register('contactEmail')}
               />
               {errors.contactEmail && (
-                <p className="text-xs text-red-400 mt-1">{errors.contactEmail.message}</p>
+                <p className="text-xs text-[var(--color-error-text)] mt-1">{errors.contactEmail.message}</p>
               )}
               <p className="text-xs text-muted mt-1">
                 Email mostrado en la landing page
@@ -177,11 +184,11 @@ export const SettingsPanel: React.FC = () => {
                 id="settings-whatsappPhone"
                 type="tel"
                 placeholder="+5491112345678"
-                className={`${inputClasses} focus:ring-green-500`}
+                className={`${inputClasses} focus:ring-[var(--focus-ring)]`}
                 {...register('whatsappPhone')}
               />
               {errors.whatsappPhone && (
-                <p className="text-xs text-red-400 mt-1">{errors.whatsappPhone.message}</p>
+                <p className="text-xs text-[var(--color-error-text)] mt-1">{errors.whatsappPhone.message}</p>
               )}
               <p className="text-xs text-muted mt-1">
                 Número de WhatsApp mostrado en la landing
@@ -198,11 +205,11 @@ export const SettingsPanel: React.FC = () => {
                 id="settings-physicalAddress"
                 type="text"
                 placeholder="Av. Example 123, Ciudad"
-                className={`${inputClasses} focus:ring-purple-500`}
+                className={`${inputClasses} focus:ring-[var(--focus-ring)]`}
                 {...register('physicalAddress')}
               />
               {errors.physicalAddress && (
-                <p className="text-xs text-red-400 mt-1">{errors.physicalAddress.message}</p>
+                <p className="text-xs text-[var(--color-error-text)] mt-1">{errors.physicalAddress.message}</p>
               )}
               <p className="text-xs text-muted mt-1">
                 Dirección mostrada en la landing page
@@ -224,11 +231,11 @@ export const SettingsPanel: React.FC = () => {
                 id="settings-n8nWebhookUrl"
                 type="url"
                 placeholder="https://tu-n8n.com/webhook/..."
-                className={`${inputClasses} focus:ring-blue-500`}
+                className={`${inputClasses} focus:ring-[var(--focus-ring)]`}
                 {...register('n8nWebhookUrl')}
               />
               {errors.n8nWebhookUrl && (
-                <p className="text-xs text-red-400 mt-1">{errors.n8nWebhookUrl.message}</p>
+                <p className="text-xs text-[var(--color-error-text)] mt-1">{errors.n8nWebhookUrl.message}</p>
               )}
               <p className="text-xs text-muted mt-1">
                 URL del webhook de n8n para recibir leads
@@ -242,7 +249,7 @@ export const SettingsPanel: React.FC = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800 text-white rounded-lg transition-colors font-medium"
+            className="flex items-center gap-2 px-4 py-2 bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] disabled:opacity-60 text-[var(--color-on-accent)] rounded-lg transition-colors font-medium min-h-[44px]"
           >
             {isSubmitting ? (
               <>

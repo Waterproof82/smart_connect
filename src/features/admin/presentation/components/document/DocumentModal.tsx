@@ -60,7 +60,7 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({
               <label htmlFor="edit-tags-input" className="text-xs font-medium text-muted uppercase mb-2 block">Sources</label>
               <div className="flex flex-wrap gap-2 mb-2">
                 {editedSources.map(s => (
-                  <span key={s} className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium mr-1 mb-1 bg-blue-900 text-blue-300 border border-blue-700">
+                  <span key={s} className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium mr-1 mb-1 bg-[var(--color-primary)]/20 text-[var(--color-primary)] border border-[var(--color-primary)]/30">
                     {s}
                     <button onClick={() => onSourceChange(editedSources.filter(x => x !== s))} className="ml-1.5 hover:text-white focus:outline-none cursor-pointer" type="button" aria-label={`Remove tag ${s}`}>×</button>
                   </span>
@@ -71,7 +71,7 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({
                   id="edit-tags-input"
                   type="text"
                   list="available-sources-list"
-                  className="flex-1 bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded px-3 py-1.5 text-sm text-default focus:ring-1 focus:ring-blue-500"
+                  className="flex-1 bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded px-3 py-1.5 text-sm text-default focus:ring-1 focus:ring-[var(--color-primary)]"
                   placeholder="Select or type tag..."
                   value={newSourceInput}
                   onChange={e => onSourceInputChange(e.target.value)}
@@ -108,14 +108,14 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({
               id="edit-content-area"
               value={editedContent}
               onChange={e => onEditChange(e.target.value)}
-              className="w-full h-[50vh] sm:h-[400px] bg-[var(--color-bg-alt)] text-default p-4 rounded-lg font-mono text-sm leading-relaxed resize-none focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full h-[50vh] sm:h-[400px] bg-[var(--color-bg-alt)] text-default p-4 rounded-lg font-mono text-sm leading-relaxed resize-none focus:ring-2 focus:ring-[var(--color-primary)] outline-none"
             />
           </div>
         ) : (
           <>
             <div className="flex flex-wrap gap-2">
               {selectedDocument.source.split(',').map(s => (
-                <span key={s} className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium mr-1 mb-1 bg-blue-900 text-blue-300 border border-blue-700">{s}</span>
+                <span key={s} className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium mr-1 mb-1 bg-[var(--color-primary)]/20 text-[var(--color-primary)] border border-[var(--color-primary)]/30">{s}</span>
               ))}
             </div>
             <div className="bg-[var(--color-surface)] rounded-lg p-4 border border-[var(--color-border)]">
@@ -131,7 +131,7 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({
         {isEditing ? (
           <>
             <button onClick={onClose} className="px-4 py-2 text-default hover:text-[var(--color-text)] focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 disabled:opacity-50" disabled={isSaving} type="button">Cancel</button>
-            <button onClick={onSave} disabled={isSaving} className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 disabled:opacity-50" type="button">{isSaving ? 'Saving...' : 'Save Changes'}</button>
+            <button onClick={onSave} disabled={isSaving} className="px-6 py-2 bg-[var(--color-accent)] text-[var(--color-on-accent)] rounded-lg hover:bg-[var(--color-accent-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] disabled:opacity-50" type="button">{isSaving ? 'Saving...' : 'Save Changes'}</button>
           </>
         ) : (
           <button onClick={onClose} className="px-4 py-2 bg-[var(--color-surface)] text-default rounded-lg hover:bg-[var(--color-border)] focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400" type="button">Close</button>
