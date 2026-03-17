@@ -1,7 +1,7 @@
 /**
  * useIntersectionObserver Hook
  * @module shared/hooks
- *
+ * 
  * Reusable hook for scroll animations
  * Follows SRP: Single responsibility - handle intersection observation
  */
@@ -12,13 +12,9 @@ export const useIntersectionObserver = (
   ref: RefObject<HTMLElement | null>,
   options?: IntersectionObserverInit
 ): boolean => {
-  const prefersReducedMotion = typeof window !== 'undefined'
-    && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const [isVisible, setIsVisible] = useState(prefersReducedMotion);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    if (prefersReducedMotion) return;
-
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -36,10 +32,9 @@ export const useIntersectionObserver = (
     return () => {
       if (currentRef) {
         observer.unobserve(currentRef);
-        observer.disconnect();
       }
     };
-  }, [ref, options, prefersReducedMotion]);
+  }, [ref, options]);
 
   return isVisible;
 };

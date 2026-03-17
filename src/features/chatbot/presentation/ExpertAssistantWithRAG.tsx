@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { X, Send, User, Bot, Sparkles, Loader2, MessageSquare } from 'lucide-react';
+import { X, Send, User, Bot, Sparkles, Loader2, MessageCircle } from 'lucide-react';
 import { createChatbotContainer } from './ChatbotContainer';
 import { MessageEntity, ChatSessionEntity, type Message } from '../domain/entities';
 import { sanitizeInput } from '@shared/utils/sanitizer';
@@ -122,7 +122,7 @@ export const ExpertAssistant: React.FC = () => {
               else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
             }
           }}
-          className="mb-4 w-[85vw] sm:w-[90vw] md:w-[400px] h-[60vh] sm:h-[550px] max-h-[calc(100dvh-120px)] sm:max-h-[80vh] bg-[var(--color-bg)] border border-[var(--color-border)] rounded-3xl shadow-2xl flex flex-col overflow-hidden"
+          className="mb-4 w-[85vw] sm:w-[90vw] md:w-[400px] h-[60vh] sm:h-[550px] max-h-[calc(100dvh-120px)] sm:max-h-[80vh] bg-[var(--color-bg)] border border-[var(--color-border)] rounded-3xl shadow-lg flex flex-col overflow-hidden"
         >
           <div className="p-4 bg-[var(--color-accent)] flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -190,7 +190,7 @@ export const ExpertAssistant: React.FC = () => {
                 onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()} 
                 placeholder="Escribe tu mensaje..." 
                 aria-label="Escribe tu mensaje" 
-                className="flex-1 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl py-3 px-4 text-sm text-default outline-none focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--focus-ring)] transition-colors min-h-[48px]" 
+                className="flex-1 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl py-3 px-4 text-sm text-default outline-none focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--focus-ring)] transition-colors min-h-[44px]" 
               />
               <button onClick={handleSend} disabled={!input.trim() || isLoading} aria-label="Enviar mensaje" className="w-11 h-11 bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] disabled:opacity-50 disabled:cursor-not-allowed rounded-xl flex items-center justify-center transition-colors shrink-0">
                 <Send className="w-4 h-4 text-[var(--color-on-accent)]" />
@@ -202,13 +202,12 @@ export const ExpertAssistant: React.FC = () => {
 
       <div className="flex items-center gap-3">
         {whatsappPhone && (
-          <a href={`https://wa.me/${whatsappPhone}`} target="_blank" rel="noopener noreferrer" aria-label="Contactar por WhatsApp" className="flex items-center gap-2 sm:gap-3 bg-[var(--color-whatsapp)] hover:bg-[var(--color-whatsapp-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] text-[var(--color-on-accent)] px-4 py-3 sm:px-5 rounded-full shadow-lg transition-colors min-h-[48px]">
-            <MessageSquare className="w-5 h-5" />
-            <span className="text-sm font-bold hidden sm:block">WhatsApp</span>
+          <a href={`https://wa.me/${whatsappPhone}`} target="_blank" rel="noopener noreferrer" aria-label="Contactar por WhatsApp" className="flex items-center gap-2 sm:gap-3 bg-[var(--color-whatsapp)] hover:bg-[var(--color-whatsapp-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] text-[var(--color-on-accent)] px-4 py-3 sm:px-5 rounded-full shadow-lg transition-colors min-h-[44px]">
+            Contactar
+            <MessageCircle className="w-4 h-4" />
           </a>
         )}
-
-        <button ref={toggleBtnRef} onClick={() => setIsOpen(!isOpen)} className={`flex items-center gap-2 sm:gap-3 px-4 py-3 sm:px-5 rounded-full shadow-lg transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2 min-h-[48px] ${isOpen ? 'bg-[var(--color-accent)] text-[var(--color-on-accent)]' : 'bg-[var(--color-text)] text-[var(--color-bg)] hover:opacity-90'}`}>
+        <button ref={toggleBtnRef} onClick={() => setIsOpen(!isOpen)} className={`flex items-center gap-2 sm:gap-3 px-4 py-3 sm:px-5 rounded-full shadow-lg transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2 min-h-[44px] ${isOpen ? 'bg-[var(--color-accent)] text-[var(--color-on-accent)]' : 'bg-[var(--color-text)] text-[var(--color-bg)] hover:opacity-90'}`}>
           <div className={`w-9 h-9 rounded-full flex items-center justify-center ${isOpen ? 'bg-[var(--color-overlay-strong)]' : 'bg-[var(--color-accent)]'}`}>
             <Bot className="text-[var(--color-on-accent)] w-5 h-5" />
           </div>

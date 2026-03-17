@@ -11,92 +11,87 @@
     --color-text-muted: oklch(60% 0.015 250);
     --color-border: oklch(20% 0.018 250);
     --color-primary: oklch(65% 0.18 250);
-    --focus-ring: oklch(70% 0.15 250);
-    --chart-bar: oklch(22% 0.02 250);
-    --chart-tick: oklch(60% 0.01 250);
-    --chart-tooltip: oklch(10% 0.01 250);
-    --color-accent: oklch(60% 0.18 250);
+    --color-accent: oklch(65% 0.18 250);
     --color-accent-hover: oklch(55% 0.18 250);
-    --color-accent-subtle: oklch(60% 0.18 250 / 0.1);
-    --color-accent-border: oklch(60% 0.18 250 / 0.2);
-    --color-error-bg: oklch(25% 0.08 25 / 0.3);
-    --color-error-border: oklch(45% 0.12 25 / 0.5);
-    --color-error-text: oklch(65% 0.15 25);
-    --color-success-bg: oklch(25% 0.08 150 / 0.3);
-    --color-success-border: oklch(45% 0.12 150 / 0.5);
-    --color-success-text: oklch(65% 0.15 150);
-    --color-warning: oklch(75% 0.15 70);
-    --color-icon-blue: oklch(65% 0.18 250);
-    --color-icon-purple: oklch(60% 0.18 300);
-    --color-icon-emerald: oklch(65% 0.15 160);
-    --color-icon-amber: oklch(75% 0.15 70);
-    --color-icon-amber-subtle: oklch(75% 0.15 70 / 0.1);
-    --color-icon-amber-border: oklch(75% 0.15 70 / 0.2);
-    --color-icon-rose: oklch(65% 0.18 15);
-    --color-whatsapp: oklch(72% 0.17 150);
-    --color-whatsapp-hover: oklch(65% 0.18 150);
-    --color-overlay-subtle: rgba(255, 255, 255, 0.05);
-    --color-overlay-medium: rgba(255, 255, 255, 0.10);
-    --color-overlay-strong: rgba(255, 255, 255, 0.20);
-    --color-shimmer: rgba(255, 255, 255, 0.03);
-    --color-on-accent: oklch(100% 0 0);
-    --color-on-accent-muted: oklch(100% 0 0 / 0.7);
-    --color-highlight: var(--color-icon-amber);
-    --color-highlight-subtle: var(--color-icon-amber-subtle);
-    --color-highlight-border: var(--color-icon-amber-border);
+    --color-on-accent: oklch(98% 0.005 250);
+    --color-accent-subtle: oklch(25% 0.015 250);
+    --color-accent-border: oklch(30% 0.018 250);
+    --color-success-bg: oklch(25% 0.015 150);
+    --color-success-border: oklch(35% 0.018 150);
+    --color-success-text: oklch(70% 0.15 150);
+    --color-error-bg: oklch(25% 0.015 25);
+    --color-error-border: oklch(35% 0.018 25);
+    --color-error-text: oklch(65% 0.18 25);
+    --color-highlight: oklch(70% 0.15 150);
+    --color-highlight-subtle: oklch(25% 0.015 150);
+    --color-highlight-border: oklch(35% 0.018 150);
+    --color-overlay-medium: oklch(25% 0.015 250);
+    --color-overlay-subtle: oklch(15% 0.012 250);
+    --color-overlay-strong: oklch(35% 0.020 250);
+    --color-on-accent-muted: oklch(75% 0.008 250);
+    --color-icon-blue: oklch(65% 0.18 230);
+    --color-icon-purple: oklch(65% 0.18 280);
+    --color-icon-emerald: oklch(65% 0.18 160);
+    --color-icon-amber: oklch(70% 0.18 60);
+    --color-icon-rose: oklch(65% 0.18 350);
+    --color-whatsapp: oklch(65% 0.18 150);
+    --color-whatsapp-hover: oklch(55% 0.18 150);
+    --focus-ring: oklch(70% 0.15 250);
+    --chart-bar: oklch(60% 0.18 230);
+    --chart-tick: oklch(45% 0.020 250);
+    --chart-tooltip: oklch(20% 0.015 250);
   }
 
-  @media (prefers-color-scheme: light) {
-    :root {
-      --color-bg: oklch(98% 0.005 250);
-      --color-bg-alt: oklch(95% 0.008 250);
-      --color-surface: oklch(100% 0 0);
-      --color-text: oklch(15% 0.01 250);
-      --color-text-muted: oklch(45% 0.02 250);
-      --color-border: oklch(85% 0.01 250);
-      --color-primary: oklch(50% 0.2 250);
-      --focus-ring: oklch(55% 0.18 250);
-      --chart-bar: oklch(88% 0.01 250);
-      --chart-tick: oklch(45% 0.01 250);
-      --chart-tooltip: oklch(98% 0.005 250);
-      --color-accent: oklch(50% 0.2 250);
-      --color-accent-hover: oklch(45% 0.2 250);
-      --color-accent-subtle: oklch(50% 0.2 250 / 0.08);
-      --color-accent-border: oklch(50% 0.2 250 / 0.2);
-      --color-error-bg: oklch(95% 0.03 25 / 0.5);
-      --color-error-border: oklch(65% 0.12 25 / 0.5);
-      --color-error-text: oklch(45% 0.18 25);
-      --color-success-bg: oklch(95% 0.03 150 / 0.5);
-      --color-success-border: oklch(65% 0.12 150 / 0.5);
-      --color-success-text: oklch(38% 0.15 150);
-      --color-warning: oklch(55% 0.18 70);
-      --color-icon-blue: oklch(50% 0.2 250);
-      --color-icon-purple: oklch(48% 0.2 300);
-      --color-icon-emerald: oklch(48% 0.18 160);
-      --color-icon-amber: oklch(55% 0.18 70);
-      --color-icon-amber-subtle: oklch(55% 0.18 70 / 0.1);
-      --color-icon-amber-border: oklch(55% 0.18 70 / 0.2);
-      --color-icon-rose: oklch(50% 0.2 15);
-      --color-whatsapp: oklch(72% 0.17 150);
-      --color-whatsapp-hover: oklch(65% 0.18 150);
-      --color-overlay-subtle: rgba(0, 0, 0, 0.04);
-      --color-overlay-medium: rgba(0, 0, 0, 0.08);
-      --color-overlay-strong: rgba(0, 0, 0, 0.15);
-      --color-shimmer: rgba(0, 0, 0, 0.03);
-      --color-on-accent: oklch(100% 0 0);
-      --color-on-accent-muted: oklch(100% 0 0 / 0.7);
-      --color-highlight: var(--color-icon-amber);
-      --color-highlight-subtle: var(--color-icon-amber-subtle);
-      --color-highlight-border: var(--color-icon-amber-border);
-    }
+  .light {
+    --color-bg: oklch(98% 0.005 250);
+    --color-bg-alt: oklch(95% 0.008 250);
+    --color-surface: oklch(92% 0.010 250);
+    --color-text: oklch(15% 0.015 250);
+    --color-text-muted: oklch(45% 0.020 250);
+    --color-border: oklch(80% 0.012 250);
+    --color-primary: oklch(55% 0.18 250);
+    --color-accent: oklch(55% 0.18 250);
+    --color-accent-hover: oklch(45% 0.18 250);
+    --color-on-accent: oklch(98% 0.005 250);
+    --color-accent-subtle: oklch(90% 0.008 250);
+    --color-accent-border: oklch(75% 0.010 250);
+    --color-success-bg: oklch(90% 0.008 150);
+    --color-success-border: oklch(75% 0.010 150);
+    --color-success-text: oklch(50% 0.15 150);
+    --color-error-bg: oklch(90% 0.008 25);
+    --color-error-border: oklch(75% 0.010 25);
+    --color-error-text: oklch(50% 0.18 25);
+    --color-highlight: oklch(55% 0.18 150);
+    --color-highlight-subtle: oklch(90% 0.008 150);
+    --color-highlight-border: oklch(75% 0.010 150);
+    --color-overlay-medium: oklch(85% 0.008 250);
+    --color-overlay-subtle: oklch(92% 0.006 250);
+    --color-overlay-strong: oklch(75% 0.010 250);
+    --color-on-accent-muted: oklch(35% 0.010 250);
+    --color-icon-blue: oklch(55% 0.18 230);
+    --color-icon-purple: oklch(55% 0.18 280);
+    --color-icon-emerald: oklch(55% 0.18 160);
+    --color-icon-amber: oklch(60% 0.18 60);
+    --color-icon-rose: oklch(55% 0.18 350);
+    --color-whatsapp: oklch(65% 0.18 150);
+    --color-whatsapp-hover: oklch(55% 0.18 150);
+    --focus-ring: oklch(60% 0.15 250);
+    --chart-bar: oklch(55% 0.18 230);
+    --chart-tick: oklch(45% 0.025 250);
+    --chart-tooltip: oklch(98% 0.005 250);
   }
 
   body {
     margin: 0;
     padding: 0;
-    font-family: 'Instrument Sans', system-ui, sans-serif;
+    font-family: 'Instrument Sans', 'DM Sans', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+  }
+
+  .light body {
     background-color: var(--color-bg);
     color: var(--color-text);
   }
@@ -113,9 +108,6 @@
 }
 
 @layer components {
-  .glass-card {
-    @apply bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl;
-  }
 }
 
 @layer utilities {
@@ -156,14 +148,14 @@
   }
 
   .text-body {
-    font-family: 'Instrument Sans', system-ui, sans-serif;
+    font-family: 'DM Sans', 'Instrument Sans', system-ui, sans-serif;
     font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
     font-weight: 400;
     line-height: 1.6;
   }
 
   .text-caption {
-    font-family: 'Instrument Sans', system-ui, sans-serif;
+    font-family: 'DM Sans', 'Instrument Sans', system-ui, sans-serif;
     font-size: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
     font-weight: 500;
     letter-spacing: 0.02em;
@@ -181,16 +173,20 @@
     background: linear-gradient(
       90deg,
       transparent 0%,
-      var(--color-shimmer) 50%,
+      rgba(255, 255, 255, 0.03) 50%,
       transparent 100%
     );
     animation: shimmer-move 3s ease-in-out infinite;
-    will-change: transform;
   }
 
   .glow-blue {
-    box-shadow: 0 0 60px var(--color-accent-subtle);
+    box-shadow: 0 0 60px rgba(59, 130, 246, 0.15);
   }
+}
+
+.light .glass-card {
+  background-color: oklch(100% 0 0 / 0.5);
+  border-color: oklch(90% 0.008 250);
 }
 
 @keyframes shimmer-move {
@@ -215,19 +211,18 @@
   75% { transform: translateY(8px) rotate(-1deg); }
 }
 
-.animate-drift, .animate-drift-slow, .animate-float-fancy {
-  will-change: transform;
-}
-
 .animate-drift {
+  will-change: transform;
   animation: drift 15s ease-in-out infinite;
 }
 
 .animate-drift-slow {
+  will-change: transform;
   animation: drift-slow 20s ease-in-out infinite;
 }
 
 .animate-float-fancy {
+  will-change: transform;
   animation: float-fancy 6s ease-in-out infinite;
 }
 

@@ -106,7 +106,7 @@ export const SettingsPanel: React.FC = () => {
     return (
       <div className="bg-[var(--color-bg-alt)] border border-[var(--color-error-border)] rounded-lg p-6" role="alert">
         <div className="flex items-center justify-center h-32">
-          <div className="text-[var(--color-error-text)]">{error}</div>
+          <div className="text-[var(--color-error-text)]">Error al cargar la configuración. Intenta de nuevo.</div>
         </div>
       </div>
     );
@@ -135,14 +135,14 @@ export const SettingsPanel: React.FC = () => {
       {success && (
         <div ref={successRef} tabIndex={-1} className="mb-4 p-3 bg-[var(--color-success-bg)] border border-[var(--color-success-border)] rounded-lg flex items-center gap-2" role="status" aria-live="polite">
           <CheckCircle2 className="w-5 h-5 text-[var(--color-success-text)]" />
-          <span className="text-[var(--color-success-text)] text-sm">{success}</span>
+          <span className="text-[var(--color-success-text)] text-sm">Cambios guardados correctamente</span>
         </div>
       )}
 
       {error && (
         <div className="mb-4 p-3 bg-[var(--color-error-bg)] border border-[var(--color-error-border)] rounded-lg flex items-center gap-2" role="alert" aria-live="assertive">
           <AlertCircle className="w-5 h-5 text-[var(--color-error-text)]" />
-          <span className="text-[var(--color-error-text)] text-sm">{error}</span>
+          <span className="text-[var(--color-error-text)] text-sm">Error al guardar. Intenta de nuevo.</span>
         </div>
       )}
 

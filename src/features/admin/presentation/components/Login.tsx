@@ -67,7 +67,7 @@ export const Login: React.FC<LoginProps> = ({ loginUseCase, onLoginSuccess }) =>
         Volver
       </button>
 
-      <div className="max-w-md w-full space-y-8 border border-[var(--color-border)] p-8 rounded-2xl bg-[var(--color-surface)] shadow-2xl">
+      <div className="max-w-md w-full space-y-8 border border-[var(--color-border)] p-8 rounded-2xl bg-[var(--color-surface)] shadow-lg">
         <div>
           <h2 className="text-center text-3xl font-extrabold text-default tracking-tight">
             Panel Admin
@@ -123,7 +123,13 @@ export const Login: React.FC<LoginProps> = ({ loginUseCase, onLoginSuccess }) =>
 
           {error && (
             <div role="alert" className="rounded-lg bg-[var(--color-error-bg)] border border-[var(--color-error-border)] p-3 animate-in fade-in zoom-in duration-300">
-              <p className="text-sm text-[var(--color-error-text)] text-center font-medium">{error}</p>
+              <p className="text-sm text-[var(--color-error-text)] text-center font-medium">
+                {error === 'Demasiados intentos. Espera unos minutos.' 
+                  ? 'Demasiados intentos. Espera unos minutos e intenta de nuevo.'
+                  : error === 'Invalid login credentials'
+                    ? 'Correo o contraseña incorrectos. Intenta de nuevo.'
+                    : 'No se pudo iniciar sesión. Intenta de nuevo más tarde.'}
+              </p>
             </div>
           )}
 

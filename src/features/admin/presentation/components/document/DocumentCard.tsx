@@ -11,15 +11,14 @@ interface DocumentCardProps {
   canEdit: boolean;
 }
 
-export const DocumentCard: React.FC<DocumentCardProps> = React.memo(({ doc, onView, onDelete, canEdit }) => (
+export const DocumentCard: React.FC<DocumentCardProps> = ({ doc, onView, onDelete, canEdit }) => (
   <div
-    className="relative bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded-xl p-4 motion-safe:active:scale-[0.99] transition-transform outline-none focus:ring-2 focus:ring-[var(--focus-ring)]"
+    className="relative bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded-xl p-4 active:scale-[0.99] transition-transform outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
   >
     <button
       type="button"
       className="block w-full text-left focus:outline-none bg-transparent border-none p-0"
       onClick={onView}
-      aria-label={`Ver documento: ${doc.content.slice(0, 50)}`}
       onKeyDown={e => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
@@ -37,7 +36,7 @@ export const DocumentCard: React.FC<DocumentCardProps> = React.memo(({ doc, onVi
           {doc.createdAt.toLocaleDateString()}
         </span>
       </div>
-      <p className="text-default text-sm line-clamp-3 mb-4 leading-relaxed" title={doc.content.slice(0, 200)}>
+      <p className="text-default text-sm line-clamp-3 mb-4 leading-relaxed">
         {doc.content}
       </p>
       <div className="flex justify-between items-center border-t border-[var(--color-border)] pt-3 mt-2">
@@ -50,13 +49,13 @@ export const DocumentCard: React.FC<DocumentCardProps> = React.memo(({ doc, onVi
           e.stopPropagation();
           if (onDelete) onDelete(e);
         }}
-        className="absolute bottom-4 right-4 p-2 text-[var(--color-error-text)] bg-[var(--color-error-bg)] rounded-lg hover:opacity-80 z-10 ml-2"
+        className="absolute bottom-4 right-4 p-2 text-red-400 bg-red-900/10 rounded-lg hover:bg-red-900/30 z-10 ml-2"
         aria-label="Eliminar documento"
+        tabIndex={0}
         type="button"
       >
         <Trash2 className="w-4 h-4" />
       </button>
     )}
   </div>
-));
-DocumentCard.displayName = 'DocumentCard';
+);
