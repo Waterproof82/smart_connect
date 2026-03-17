@@ -65,7 +65,7 @@ const StatCard: React.FC<StatProps> = ({ icon, label, value, suffix, color, isIn
       <div className={`absolute -right-8 -top-8 w-32 h-32 ${color} opacity-[0.03] group-hover:opacity-[0.06] transition-opacity duration-700`}></div>
       
       <div className="flex flex-col items-center text-center relative z-10">
-        <div className={`mb-6 w-16 h-16 bg-[var(--color-surface)] rounded-2xl flex items-center justify-center group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500`}>
+        <div className={`mb-6 w-16 h-16 bg-[var(--color-surface)] rounded-2xl flex items-center justify-center motion-safe:group-hover:scale-110 motion-safe:group-hover:rotate-6 transition-transform duration-500`}>
           {React.cloneElement(icon as React.ReactElement<{ className?: string }>, { className: 'w-8 h-8' })}
         </div>
         

@@ -42,7 +42,7 @@ export const MenuPhone: React.FC<MenuPhoneProps> = ({
             </>
           )}
           <div className="absolute bottom-4 left-6">
-            <h4 className="text-xl font-bold">{restaurant.name}</h4>
+            <h3 className="text-xl font-bold">{restaurant.name}</h3>
             {restaurant.description && (
               <p className="text-[10px] text-muted">{restaurant.description}</p>
             )}
@@ -62,7 +62,7 @@ export const MenuPhone: React.FC<MenuPhoneProps> = ({
               }}
             >
               <div>
-                <h5 className="text-sm font-semibold">{item.name}</h5>
+                <h4 className="text-sm font-semibold">{item.name}</h4>
                 {item.description && (
                   <p className="text-[10px] text-muted">{item.description}</p>
                 )}

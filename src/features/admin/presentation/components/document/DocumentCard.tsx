@@ -13,7 +13,7 @@ interface DocumentCardProps {
 
 export const DocumentCard: React.FC<DocumentCardProps> = React.memo(({ doc, onView, onDelete, canEdit }) => (
   <div
-    className="relative bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded-xl p-4 active:scale-[0.99] transition-transform outline-none focus:ring-2 focus:ring-[var(--focus-ring)]"
+    className="relative bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded-xl p-4 motion-safe:active:scale-[0.99] transition-transform outline-none focus:ring-2 focus:ring-[var(--focus-ring)]"
   >
     <button
       type="button"

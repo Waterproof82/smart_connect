@@ -74,7 +74,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
       <div className="container mx-auto px-6 flex items-center justify-between">
         {/* Logo */}
         <a href="#inicio" className="flex items-center gap-2 group">
-          <div className="w-10 h-10 bg-[var(--color-accent)] rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+          <div className="w-10 h-10 bg-[var(--color-accent)] rounded-xl flex items-center justify-center shadow-lg motion-safe:group-hover:scale-110 transition-transform">
             <Cpu className="text-[var(--color-on-accent)] w-6 h-6" />
           </div>
           <span className="font-bold text-xl tracking-tighter text-default">

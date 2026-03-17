@@ -61,7 +61,7 @@ export const MenuInfo: React.FC<MenuInfoProps> = ({ isVisible }) => {
         href="https://www.qribar.es" 
         target="_blank" 
         rel="noopener noreferrer"
-        className={`inline-block bg-[var(--color-icon-amber)] hover:opacity-90 text-[var(--color-bg)] px-10 py-4 rounded-xl font-bold transition-all shadow-xl shadow-[var(--color-icon-amber)]/20 active:scale-95 delay-1000 ${
+        className={`inline-block bg-[var(--color-icon-amber)] hover:opacity-90 text-[var(--color-bg)] px-10 py-4 rounded-xl font-bold transition-all shadow-xl shadow-[var(--color-icon-amber)]/20 motion-safe:active:scale-95 delay-1000 ${
           isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'
         }`}
       >

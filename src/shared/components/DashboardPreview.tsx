@@ -45,10 +45,10 @@ export const DashboardPreview: React.FC = () => {
             <div className="flex items-center gap-2 bg-[var(--color-success-bg)] border border-[var(--color-success-border)] px-3 py-1 rounded-full text-[10px] text-[var(--color-success-text)] font-bold">
               Sistema Operativo
             </div>
-            <button className="text-muted hover:text-[var(--color-text)] transition-colors relative p-1" tabIndex={-1} aria-label="Notificaciones">
+            <div className="text-muted relative p-1">
               <Bell className="w-5 h-5" />
-              <div className="absolute top-0 right-0 w-2 h-2 bg-[var(--color-error-text)] rounded-full border-2 border-[var(--color-bg)]" aria-hidden="true"></div>
-            </button>
+              <div className="absolute top-0 right-0 w-2 h-2 bg-[var(--color-error-text)] rounded-full border-2 border-[var(--color-bg)]"></div>
+            </div>
           </div>
         </div>
 
@@ -87,13 +87,13 @@ export const DashboardPreview: React.FC = () => {
             ))}
 
             <div className={`bg-[var(--color-accent)] p-6 rounded-2xl shadow-lg transition-all duration-700 delay-[800ms] ${
-              isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'
+              isVisible ? 'opacity-100 motion-safe:scale-100' : 'opacity-0 motion-safe:scale-90'
             }`}>
               <h4 className="font-bold mb-2">Plan Pro</h4>
               <p className="text-[10px] text-[var(--color-on-accent-muted)] mb-6">Tu suscripción está activa hasta Dic 2024.</p>
-              <button tabIndex={-1} className="w-full bg-[var(--color-text)] text-[var(--color-accent)] py-2.5 rounded-lg text-[10px] font-bold shadow-xl active:scale-95 transition-all">
+              <div className="w-full bg-[var(--color-text)] text-[var(--color-accent)] py-2.5 rounded-lg text-[10px] font-bold shadow-xl text-center">
                 Gestionar
-              </button>
+              </div>
             </div>
           </div>
 
@@ -103,9 +103,9 @@ export const DashboardPreview: React.FC = () => {
           }`}>
             <div className="flex items-center justify-between mb-8">
               <h4 className="font-bold text-sm">Lead Temperature</h4>
-              <select className="bg-transparent text-[10px] font-bold text-muted border border-[var(--color-border)] rounded-md px-2 py-1 outline-none" tabIndex={-1} aria-label="Periodo de tiempo">
-                <option>Últimos 7 días</option>
-              </select>
+              <div className="bg-transparent text-[10px] font-bold text-muted border border-[var(--color-border)] rounded-md px-2 py-1">
+                Últimos 7 días
+              </div>
             </div>
             <div className="h-[250px] w-full" role="img" aria-label="Gráfico de temperatura de leads durante los últimos 7 días">
               <ResponsiveContainer width="100%" height="100%">

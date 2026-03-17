@@ -68,7 +68,7 @@ export const Features: React.FC = () => {
             }`}
             style={{ transitionDelay: `${idx * 150}ms` }}
           >
-            <div className={`mb-6 w-14 h-14 bg-[var(--color-surface)] rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform ${idx === 0 ? 'lg:w-16 lg:h-16' : ''}`}>
+            <div className={`mb-6 w-14 h-14 bg-[var(--color-surface)] rounded-2xl flex items-center justify-center motion-safe:group-hover:scale-110 transition-transform ${idx === 0 ? 'lg:w-16 lg:h-16' : ''}`}>
               {item.icon}
             </div>
             <h3 className={`font-bold mb-4 ${idx === 0 ? 'text-3xl lg:text-4xl' : 'text-xl lg:text-2xl'}`}>{item.title}</h3>
