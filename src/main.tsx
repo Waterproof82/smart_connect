@@ -6,6 +6,25 @@ import { HelmetProvider } from 'react-helmet-async';
 import './index.css';
 import App from './App';
 
+const getInitialTheme = (): 'light' | 'dark' => {
+  if (typeof window === 'undefined') return 'dark';
+  return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+};
+
+const applyTheme = (theme: 'light' | 'dark') => {
+  if (theme === 'light') {
+    document.documentElement.classList.add('light');
+  } else {
+    document.documentElement.classList.remove('light');
+  }
+};
+
+applyTheme(getInitialTheme());
+
+window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', (e) => {
+  applyTheme(e.matches ? 'light' : 'dark');
+});
+
 // Lazy loading para rutas - AdminPanel solo se carga cuando se necesita
 const AdminPanel = React.lazy(() =>
   import('@features/admin/presentation').then(module => ({

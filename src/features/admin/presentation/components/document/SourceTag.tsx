@@ -23,18 +23,19 @@ export const SourceTag: React.FC<SourceTagProps> = ({ source, onRemove }) => {
   const color = getSourceColor(trimmed);
   return (
     <span
-      className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium mr-1 mb-1"
+      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium mr-1 mb-1 border"
       style={{
         backgroundColor: `${color}15`,
         color: color,
-        border: `1px solid ${color}40`
+        borderColor: `${color}50`
       }}
     >
+      <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: color }} />
       {trimmed}
       {onRemove && (
         <button
           onClick={onRemove}
-          className="ml-1.5 hover:text-white focus:outline-none"
+          className="ml-0.5 hover:text-white focus:outline-none"
           type="button"
           aria-label={`Remove tag ${trimmed}`}
         >

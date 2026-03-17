@@ -38,7 +38,7 @@ export const Hero: React.FC = () => {
         </div>
 
         <div className="relative hidden lg:flex justify-center lg:justify-end reveal-1" aria-hidden="true">
-          <div className="relative w-full max-w-md aspect-[3/4] bg-[var(--color-surface)] rounded-[3rem] p-10 border border-[var(--color-border)] shadow-2xl animate-float-fancy">
+          <div className="relative w-full max-w-md aspect-[3/4] bg-[var(--color-surface)] rounded-[3rem] p-10 border border-[var(--color-border)] shadow-2xl glow-blue shimmer animate-float-fancy">
             <div className="flex justify-between items-start mb-16">
               <div className="w-12 h-12 bg-[var(--color-accent-subtle)] rounded-2xl flex items-center justify-center text-[var(--color-primary)]">
                 <Volume2 className="w-6 h-6" />
@@ -72,6 +72,23 @@ export const Hero: React.FC = () => {
                 </span>
                 <span className="text-[var(--color-primary)]">Protocol v2.5</span>
               </div>
+            </div>
+
+            <div className="absolute -left-16 top-1/3 bg-[var(--color-accent)] border border-[var(--color-accent)]/50 backdrop-blur-xl px-6 py-4 rounded-2xl flex items-center gap-4 shadow-[0_20px_50px_rgba(37,99,235,0.4)] animate-float-fancy" style={{ animationDelay: '-2s' }}>
+               <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
+                 <Sparkles className="w-4 h-4 text-[var(--color-on-accent)]" />
+               </div>
+               <div className="flex flex-col">
+                 <span className="text-[10px] font-black text-white/70 uppercase tracking-tighter">AI Core</span>
+                 <span className="text-xs font-bold text-white">Procesando...</span>
+               </div>
+            </div>
+
+            <div className="absolute -right-12 bottom-1/4 bg-[var(--color-surface)] border border-[var(--color-border)] backdrop-blur-md p-4 rounded-2xl flex flex-col gap-1 shadow-2xl animate-float-fancy" style={{ animationDelay: '-4s' }}>
+               <div className="flex gap-1">
+                 {[1, 2, 3].map(i => <div key={i} className="w-6 h-1 bg-[var(--color-primary)]/40 rounded-full"></div>)}
+               </div>
+               <span className="text-[9px] font-mono text-muted">Uplink Stable</span>
             </div>
           </div>
         </div>

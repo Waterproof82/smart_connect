@@ -245,8 +245,8 @@ export const Contact: React.FC = () => {
                   </div>
                 )}
 
-                <button type="submit" disabled={!canSubmit} className={`w-full py-5 rounded-2xl font-bold flex items-center justify-center gap-3 transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] ${canSubmit ? 'bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-[var(--color-on-accent)]' : 'bg-[var(--color-overlay-medium)] text-muted cursor-not-allowed'}`}>
-                  {isLoadingSettings ? <><Loader2 className="w-4 h-4 animate-spin" />Cargando...</> : isSubmitting ? <><Loader2 className="w-4 h-4 animate-spin" />Enviando...</> : <>Enviar Propuesta <Send className="w-4 h-4" aria-hidden="true" /></>}
+                <button type="submit" disabled={!canSubmit} className={`w-full py-4 sm:py-5 px-6 rounded-2xl font-bold flex items-center justify-center gap-3 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] ${canSubmit ? 'bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-[var(--color-on-accent)] shadow-lg shadow-[var(--color-accent)]/25 hover:shadow-xl hover:shadow-[var(--color-accent)]/30 hover:-translate-y-0.5 active:translate-y-0 active:shadow-md' : 'bg-[var(--color-overlay-medium)] text-muted cursor-not-allowed'}`}>
+                  {isLoadingSettings ? <><Loader2 className="w-5 h-5 animate-spin" />Cargando...</> : isSubmitting ? <><Loader2 className="w-5 h-5 animate-spin" />Enviando...</> : <><span className="text-base">Enviar Propuesta</span> <Send className="w-5 h-5" aria-hidden="true" /></>}
                 </button>
               </form>
             </div>
