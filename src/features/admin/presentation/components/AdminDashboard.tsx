@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Home, LogOut, User } from 'lucide-react';
 import { StatsDashboard } from './StatsDashboard';
@@ -12,6 +12,11 @@ const logger = new ConsoleLogger('[AdminDashboard]');
 
 export const AdminDashboard: React.FC = () => {
   const { container, currentUser, onLogout } = useAdmin();
+  const [statsKey, setStatsKey] = useState(0);
+
+  const handleDocumentChange = useCallback(() => {
+    setStatsKey(prev => prev + 1);
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -60,7 +65,7 @@ export const AdminDashboard: React.FC = () => {
       </header>
 
       <main id="admin-main-content" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
-        <StatsDashboard getStatsUseCase={container.getDocumentStatsUseCase} />
+        <StatsDashboard key={statsKey} getStatsUseCase={container.getDocumentStatsUseCase} />
 
         <div className="md:flex md:items-center md:justify-between mb-2">
           <div>
@@ -69,7 +74,7 @@ export const AdminDashboard: React.FC = () => {
           </div>
         </div>
 
-        <DocumentList />
+        <DocumentList onDocumentChange={handleDocumentChange} />
 
         <div className="md:flex md:items-center md:justify-between mb-2 mt-8">
           <div>
