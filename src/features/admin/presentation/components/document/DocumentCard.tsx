@@ -37,7 +37,7 @@ export const DocumentCard: React.FC<DocumentCardProps> = React.memo(({ doc, onVi
           {doc.createdAt.toLocaleDateString()}
         </span>
       </div>
-      <p className="text-default text-sm line-clamp-3 mb-4 leading-relaxed">
+      <p className="text-default text-sm line-clamp-3 mb-4 leading-relaxed" title={doc.content.slice(0, 200)}>
         {doc.content}
       </p>
       <div className="flex justify-between items-center border-t border-[var(--color-border)] pt-3 mt-2">

@@ -103,7 +103,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
             }}
           >
             <button
-              className="flex items-center gap-1.5 hover:text-[var(--color-text)] transition-colors py-2 outline-none"
+              className="flex items-center gap-1.5 hover:text-[var(--color-text)] transition-colors py-2 outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-lg"
               aria-haspopup="true"
               aria-expanded={isDropdownOpen}
             >

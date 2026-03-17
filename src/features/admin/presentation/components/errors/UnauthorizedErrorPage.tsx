@@ -21,7 +21,7 @@ const UnauthorizedErrorPage: React.FC = () => {
         <p className="text-muted mb-4 text-center">Debes iniciar sesión para acceder al panel de administración.</p>
         <button
           onClick={() => navigate('/')}
-          className="mt-2 px-6 py-3 min-h-[44px] bg-[var(--color-accent)] text-white rounded-xl shadow hover:bg-[var(--color-accent-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] transition" aria-label="Ir al inicio"
+          className="mt-2 px-6 py-3 min-h-[44px] bg-[var(--color-accent)] text-[var(--color-on-accent)] rounded-xl shadow hover:bg-[var(--color-accent-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] transition" aria-label="Ir al inicio"
         >
           Ir al Inicio
         </button>

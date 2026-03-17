@@ -37,7 +37,7 @@ export const SourceTag: React.FC<SourceTagProps> = React.memo(({ source, onRemov
       {onRemove && (
         <button
           onClick={onRemove}
-          className="ml-1 p-1 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full hover:bg-black/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-current"
+          className="ml-1 p-1 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full hover:bg-[var(--color-overlay-medium)] focus:outline-none focus-visible:ring-2 focus-visible:ring-current"
           type="button"
           aria-label={`Eliminar etiqueta ${trimmed}`}
         >

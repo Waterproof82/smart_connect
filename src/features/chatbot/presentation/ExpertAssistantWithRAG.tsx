@@ -122,7 +122,7 @@ export const ExpertAssistant: React.FC = () => {
               </div>
               <div>
                 <h4 className="font-bold text-sm text-[var(--color-on-accent)]">Asistente Experto</h4>
-                <p className="text-[10px] text-[var(--color-on-accent-muted)]">Entrenado con IA</p>
+                <p className="text-xs text-[var(--color-on-accent-muted)]">Entrenado con IA</p>
               </div>
             </div>
             <button onClick={() => { setIsOpen(false); toggleBtnRef.current?.focus(); }} className="text-[var(--color-on-accent-muted)] hover:text-[var(--color-on-accent)] focus:outline-none focus:ring-2 focus:ring-[var(--color-on-accent-muted)] p-2 rounded-lg hover:bg-[var(--color-overlay-medium)] transition-colors" aria-label="Cerrar chat">
@@ -152,9 +152,9 @@ export const ExpertAssistant: React.FC = () => {
               <div key={m.id} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 <div className={`max-w-[80%] flex gap-2 ${m.role === 'user' ? 'flex-row-reverse' : ''}`}>
                   <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${m.role === 'user' ? 'bg-[var(--color-accent)]' : 'bg-[var(--color-surface)] border border-[var(--color-border)]'}`}>
-                    {m.role === 'user' ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4 text-[var(--color-primary)]" />}
+                    {m.role === 'user' ? <User className="w-4 h-4 text-[var(--color-on-accent)]" /> : <Bot className="w-4 h-4 text-[var(--color-primary)]" />}
                   </div>
-                  <div className={`p-3 rounded-2xl text-sm ${m.role === 'user' ? 'bg-[var(--color-accent)] text-white rounded-tr-none' : 'bg-[var(--color-surface)] border border-[var(--color-border)] text-default rounded-tl-none'}`}>
+                  <div className={`p-3 rounded-2xl text-sm ${m.role === 'user' ? 'bg-[var(--color-accent)] text-[var(--color-on-accent)] rounded-tr-none' : 'bg-[var(--color-surface)] border border-[var(--color-border)] text-default rounded-tl-none'}`}>
                     {m.content}
                   </div>
                 </div>

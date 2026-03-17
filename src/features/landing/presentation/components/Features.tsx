@@ -76,7 +76,7 @@ export const Features: React.FC = () => {
               {item.description}
             </p>
             
-            <div className={`transform transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] ${
+            <div className={`transform transition-all duration-700 ease-out ${
               isVisible 
                 ? 'opacity-100 translate-y-0 scale-100' 
                 : 'opacity-0 translate-y-10 scale-90'

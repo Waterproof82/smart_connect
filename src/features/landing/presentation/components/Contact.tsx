@@ -179,27 +179,27 @@ export const Contact: React.FC = () => {
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
                 <div className="grid md:grid-cols-2 gap-5">
                   <div>
-                    <label htmlFor="contact-name" className="text-xs font-bold text-muted uppercase tracking-widest ml-1 block mb-2">Nombre Completo</label>
-                    <input id="contact-name" type="text" placeholder="Ej. Juan Pérez" className={getFieldClassName('name') + ' placeholder:text-[var(--color-text-muted)]'} aria-invalid={touchedFields.name && !!errors.name} aria-describedby={errors.name ? 'contact-name-error' : undefined} ref={nameRegRef} {...nameRegProps} />
+                    <label htmlFor="contact-name" className="text-xs font-bold text-muted uppercase tracking-widest ml-1 block mb-2">Nombre Completo <span className="text-[var(--color-error-text)]" aria-hidden="true">*</span></label>
+                    <input id="contact-name" type="text" placeholder="Ej. Juan Pérez" className={getFieldClassName('name') + ' placeholder:text-[var(--color-text-muted)]'} aria-required="true" aria-invalid={touchedFields.name && !!errors.name} aria-describedby={errors.name ? 'contact-name-error' : undefined} ref={nameRegRef} {...nameRegProps} />
                     {touchedFields.name && errors.name && <p id="contact-name-error" role="alert" className="text-xs text-[var(--color-error-text)] mt-1">{errors.name.message}</p>}
                   </div>
                   <div>
-                    <label htmlFor="contact-company" className="text-xs font-bold text-muted uppercase tracking-widest ml-1 block mb-2">Empresa</label>
-                    <input id="contact-company" type="text" placeholder="Ej. Restaurante L'Escale" className={getFieldClassName('company') + ' placeholder:text-[var(--color-text-muted)]'} aria-describedby={errors.company ? 'contact-company-error' : undefined} {...register('company')} />
+                    <label htmlFor="contact-company" className="text-xs font-bold text-muted uppercase tracking-widest ml-1 block mb-2">Empresa <span className="text-[var(--color-error-text)]" aria-hidden="true">*</span></label>
+                    <input id="contact-company" type="text" placeholder="Ej. Restaurante L'Escale" className={getFieldClassName('company') + ' placeholder:text-[var(--color-text-muted)]'} aria-required="true" aria-describedby={errors.company ? 'contact-company-error' : undefined} {...register('company')} />
                     {touchedFields.company && errors.company && <p id="contact-company-error" role="alert" className="text-xs text-[var(--color-error-text)] mt-1">{errors.company.message}</p>}
                   </div>
                 </div>
 
                 <div>
-                  <label htmlFor="contact-email" className="text-xs font-bold text-muted uppercase tracking-widest ml-1 block mb-2">Correo Electrónico</label>
-                  <input id="contact-email" type="email" placeholder="juan@empresa.com" className={getFieldClassName('email') + ' placeholder:text-[var(--color-text-muted)]'} aria-describedby={errors.email ? 'contact-email-error' : undefined} {...register('email')} />
+                  <label htmlFor="contact-email" className="text-xs font-bold text-muted uppercase tracking-widest ml-1 block mb-2">Correo Electrónico <span className="text-[var(--color-error-text)]" aria-hidden="true">*</span></label>
+                  <input id="contact-email" type="email" placeholder="juan@empresa.com" className={getFieldClassName('email') + ' placeholder:text-[var(--color-text-muted)]'} aria-required="true" aria-describedby={errors.email ? 'contact-email-error' : undefined} {...register('email')} />
                   {touchedFields.email && errors.email && <p id="contact-email-error" role="alert" className="text-xs text-[var(--color-error-text)] mt-1">{errors.email.message}</p>}
                 </div>
 
                 <div>
-                  <label htmlFor="contact-service" className="text-xs font-bold text-muted uppercase tracking-widest ml-1 block mb-2">Servicio de Interés</label>
+                  <label htmlFor="contact-service" className="text-xs font-bold text-muted uppercase tracking-widest ml-1 block mb-2">Servicio de Interés <span className="text-[var(--color-error-text)]" aria-hidden="true">*</span></label>
                   <div className="relative">
-                    <select id="contact-service" className={getFieldClassName('service') + ' appearance-none pr-10'} aria-invalid={touchedFields.service && !!errors.service} aria-describedby={errors.service ? 'contact-service-error' : undefined} {...register('service')}>
+                    <select id="contact-service" className={getFieldClassName('service') + ' appearance-none pr-10'} aria-required="true" aria-invalid={touchedFields.service && !!errors.service} aria-describedby={errors.service ? 'contact-service-error' : undefined} {...register('service')}>
                       <option value="" className="text-muted">Selecciona una opción</option>
                       <option value="QRIBAR - Menú Digital">QRIBAR - Menú Digital</option>
                       <option value="Automatización n8n">Automatización n8n</option>
@@ -212,8 +212,8 @@ export const Contact: React.FC = () => {
                 </div>
 
                 <div>
-                  <label htmlFor="contact-message" className="text-xs font-bold text-muted uppercase tracking-widest ml-1 block mb-2">Mensaje</label>
-                  <textarea id="contact-message" rows={4} placeholder="Cuéntanos brevemente sobre tu proyecto..." className={getFieldClassName('message') + ' resize-none placeholder:text-[var(--color-text-muted)]'} aria-describedby={errors.message ? 'contact-message-error' : undefined} {...register('message')}></textarea>
+                  <label htmlFor="contact-message" className="text-xs font-bold text-muted uppercase tracking-widest ml-1 block mb-2">Mensaje <span className="text-[var(--color-error-text)]" aria-hidden="true">*</span></label>
+                  <textarea id="contact-message" rows={4} placeholder="Cuéntanos brevemente sobre tu proyecto..." className={getFieldClassName('message') + ' resize-none placeholder:text-[var(--color-text-muted)]'} aria-required="true" aria-describedby={errors.message ? 'contact-message-error' : undefined} {...register('message')}></textarea>
                   {touchedFields.message && errors.message && <p id="contact-message-error" role="alert" className="text-xs text-[var(--color-error-text)] mt-1">{errors.message.message}</p>}
                 </div>
 

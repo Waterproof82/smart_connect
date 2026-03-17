@@ -12,10 +12,14 @@ export const useIntersectionObserver = (
   ref: RefObject<HTMLElement | null>,
   options?: IntersectionObserverInit
 ): boolean => {
-  const [isVisible, setIsVisible] = useState(false);
+  const prefersReducedMotion = typeof window !== 'undefined'
+    && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const [isVisible, setIsVisible] = useState(prefersReducedMotion);
   const optionsRef = useRef(options);
 
   useEffect(() => {
+    if (prefersReducedMotion) return;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {

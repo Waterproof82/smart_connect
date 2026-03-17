@@ -44,7 +44,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
             <p className="text-muted mb-4">Por favor, recarga la página.</p>
             <button 
               onClick={() => window.location.reload()} 
-              className="bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-white px-6 py-3 rounded-xl font-bold focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)]"
+              className="bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-[var(--color-on-accent)] px-6 py-3 rounded-xl font-bold focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)]"
             >
               Recargar
             </button>
@@ -111,7 +111,7 @@ const App: React.FC = () => {
     <ErrorBoundary>
       <div className="min-h-screen bg-base text-default">
       <div ref={sentinelRef} className="absolute top-[50px] h-px w-px" aria-hidden="true" />
-      <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:bg-[var(--color-accent)] focus:text-white focus:px-4 focus:py-2 focus:rounded-lg focus:text-sm focus:font-bold">
+      <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:bg-[var(--color-accent)] focus:text-[var(--color-on-accent)] focus:px-4 focus:py-2 focus:rounded-lg focus:text-sm focus:font-bold">
         Saltar al contenido
       </a>
       <Navbar scrolled={scrolled} />

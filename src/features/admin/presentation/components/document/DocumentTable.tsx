@@ -26,7 +26,7 @@ export const DocumentTable: React.FC<DocumentTableProps> = React.memo(({ documen
       {documents.map(doc => (
         <tr key={doc.id} className="hover:bg-[var(--color-surface)]/40 transition-colors group focus-within:bg-[var(--color-surface)]/30">
           <td className="px-6 py-4 text-sm text-default max-w-md">
-            <button onClick={() => onView(doc)} className="text-left hover:text-[var(--color-primary)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded transition-colors line-clamp-2 w-full">
+            <button onClick={() => onView(doc)} title={doc.content.slice(0, 200)} className="text-left hover:text-[var(--color-primary)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded transition-colors line-clamp-2 w-full">
               {doc.getContentPreview ? doc.getContentPreview(120) : doc.content}
             </button>
           </td>

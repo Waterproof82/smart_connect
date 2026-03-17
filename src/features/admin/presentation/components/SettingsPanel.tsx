@@ -7,7 +7,7 @@
  * Solo incluye campos que son usados directamente por la app.
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Settings } from '../../domain/entities/Settings';
@@ -43,7 +43,7 @@ export const SettingsPanel: React.FC = () => {
     },
   });
 
-  const loadSettings = async () => {
+  const loadSettings = useCallback(async () => {
     try {
       setIsLoading(true);
       setError(null);
@@ -61,12 +61,11 @@ export const SettingsPanel: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [getSettingsUseCase, reset]);
 
   useEffect(() => {
     loadSettings();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [loadSettings]);
 
   const onSubmit = async (data: SettingsFormData) => {
     try {
@@ -242,7 +241,7 @@ export const SettingsPanel: React.FC = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="flex items-center gap-2 px-4 py-2 bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] disabled:opacity-60 text-white rounded-lg transition-colors font-medium"
+            className="flex items-center gap-2 px-4 py-2 bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] disabled:opacity-60 text-[var(--color-on-accent)] rounded-lg transition-colors font-medium"
           >
             {isSubmitting ? (
               <>

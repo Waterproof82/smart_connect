@@ -35,7 +35,7 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { hasError: boole
           <div className="text-center max-w-md">
             <h1 className="text-2xl font-bold text-default mb-4">Error al cargar la página</h1>
             <p className="text-muted mb-6">Hubo un problema cargando esta sección. Puede ser un error de red.</p>
-            <button onClick={() => window.location.reload()} className="px-6 py-3 bg-[var(--color-accent)] text-white rounded-xl font-medium hover:bg-[var(--color-accent-hover)] transition-colors">
+            <button onClick={() => window.location.reload()} className="px-6 py-3 bg-[var(--color-accent)] text-[var(--color-on-accent)] rounded-xl font-medium hover:bg-[var(--color-accent-hover)] transition-colors">
               Reintentar
             </button>
           </div>
