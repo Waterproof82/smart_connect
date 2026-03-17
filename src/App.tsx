@@ -72,7 +72,7 @@ const ExpertAssistant = lazy(() =>
 
 const ChatbotLoading = () => (
   <div className="fixed bottom-4 right-4 w-16 h-16 bg-[var(--color-accent)] rounded-full flex items-center justify-center shadow-lg">
-    <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-white"></div>
+    <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[var(--color-on-accent)]"></div>
   </div>
 );
 
@@ -140,7 +140,7 @@ const App: React.FC = () => {
               <p className="text-muted text-sm mt-3 leading-relaxed">Tecnología de próxima generación para negocios locales.</p>
             </div>
             <nav aria-label="Navegación del footer">
-              <h4 className="text-sm font-bold text-muted uppercase tracking-wider mb-4">Navegación</h4>
+              <h3 className="text-sm font-bold text-muted uppercase tracking-wider mb-4">Navegación</h3>
               <ul className="space-y-2 text-sm text-muted">
                 <li><a href="#inicio" className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors">Inicio</a></li>
                 <li><a href="#soluciones" className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors">Soluciones</a></li>
@@ -149,11 +149,11 @@ const App: React.FC = () => {
               </ul>
             </nav>
             <div>
-              <h4 className="text-sm font-bold text-muted uppercase tracking-wider mb-4">Legal</h4>
+              <h3 className="text-sm font-bold text-muted uppercase tracking-wider mb-4">Legal</h3>
               <ul className="space-y-2 text-sm text-muted">
-                <li><span className="cursor-default">Aviso Legal <span className="text-xs opacity-60">(Próximamente)</span></span></li>
-                <li><span className="cursor-default">Política de Privacidad <span className="text-xs opacity-60">(Próximamente)</span></span></li>
-                <li><span className="cursor-default">Cookies <span className="text-xs opacity-60">(Próximamente)</span></span></li>
+                <li><a href="mailto:legal@smartconnect.ai" className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors">Aviso Legal</a></li>
+                <li><a href="mailto:legal@smartconnect.ai" className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors">Política de Privacidad</a></li>
+                <li><a href="mailto:legal@smartconnect.ai" className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors">Cookies</a></li>
               </ul>
             </div>
           </div>

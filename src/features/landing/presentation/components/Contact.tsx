@@ -231,8 +231,8 @@ export const Contact: React.FC = () => {
                   </div>
                 )}
 
-                <button type="submit" disabled={!isValid || isSubmitting || isLoadingSettings} className={`w-full py-5 rounded-2xl font-bold flex items-center justify-center gap-3 transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] ${isValid && !isSubmitting && !isLoadingSettings ? 'bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-white' : 'bg-neutral-600/30 text-muted cursor-not-allowed'}`}>
-                  {isLoadingSettings ? <><Loader2 className="w-4 h-4 animate-spin" />Cargando...</> : isSubmitting ? <><Loader2 className="w-4 h-4 animate-spin" />Enviando...</> : <>Enviar Propuesta <Send className="w-4 h-4" /></>}
+                <button type="submit" disabled={!isValid || isSubmitting || isLoadingSettings} className={`w-full py-5 rounded-2xl font-bold flex items-center justify-center gap-3 transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] ${isValid && !isSubmitting && !isLoadingSettings ? 'bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-[var(--color-on-accent)]' : 'bg-[var(--color-overlay-medium)] text-muted cursor-not-allowed'}`}>
+                  {isLoadingSettings ? <><Loader2 className="w-4 h-4 animate-spin" />Cargando...</> : isSubmitting ? <><Loader2 className="w-4 h-4 animate-spin" />Enviando...</> : <>Enviar Propuesta <Send className="w-4 h-4" aria-hidden="true" /></>}
                 </button>
               </form>
             </div>

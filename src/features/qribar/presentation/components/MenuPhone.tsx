@@ -31,9 +31,11 @@ export const MenuPhone: React.FC<MenuPhoneProps> = ({
         <div className="absolute top-0 w-full h-40 overflow-hidden">
           {restaurant.hasImage() && (
             <>
-              <img 
-                src={restaurant.imageUrl} 
-                alt={restaurant.name} 
+              <img
+                src={restaurant.imageUrl}
+                alt={restaurant.name}
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full object-cover opacity-80 group-hover:scale-110 transition-transform duration-1000"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-bg)] via-transparent"></div>
@@ -65,7 +67,7 @@ export const MenuPhone: React.FC<MenuPhoneProps> = ({
                   <p className="text-[10px] text-muted">{item.description}</p>
                 )}
               </div>
-              <span className="text-amber-500 font-bold text-sm">{item.formattedPrice}</span>
+              <span className="text-[var(--color-icon-amber)] font-bold text-sm">{item.formattedPrice}</span>
             </div>
           ))}
         </div>
@@ -74,7 +76,7 @@ export const MenuPhone: React.FC<MenuPhoneProps> = ({
         <div className={`absolute bottom-8 left-6 right-6 transition-all duration-700 delay-1000 ${
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}>
-          <button className="w-full bg-white text-black py-4 rounded-xl font-bold flex items-center justify-center gap-2 text-sm hover:bg-neutral-200 transition-colors">
+          <button className="w-full bg-[var(--color-text)] text-[var(--color-bg)] py-4 rounded-xl font-bold flex items-center justify-center gap-2 text-sm hover:opacity-90 transition-colors">
             <ShoppingCart className="w-4 h-4" />
             Ver Carrito ({menuItems.length})
           </button>

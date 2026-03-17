@@ -45,7 +45,7 @@ export const DashboardPreview: React.FC = () => {
             <div className="flex items-center gap-2 bg-[var(--color-success-bg)] border border-[var(--color-success-border)] px-3 py-1 rounded-full text-[10px] text-[var(--color-success-text)] font-bold">
               Sistema Operativo
             </div>
-            <button className="text-muted hover:text-white transition-colors relative p-1" aria-label="Notificaciones">
+            <button className="text-muted hover:text-[var(--color-text)] transition-colors relative p-1" tabIndex={-1} aria-label="Notificaciones">
               <Bell className="w-5 h-5" />
               <div className="absolute top-0 right-0 w-2 h-2 bg-[var(--color-error-text)] rounded-full border-2 border-[var(--color-bg)]" aria-hidden="true"></div>
             </button>
@@ -90,8 +90,8 @@ export const DashboardPreview: React.FC = () => {
               isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'
             }`}>
               <h4 className="font-bold mb-2">Plan Pro</h4>
-              <p className="text-[10px] text-white/70 mb-6">Tu suscripción está activa hasta Dic 2024.</p>
-              <button tabIndex={-1} className="w-full bg-white text-[var(--color-accent)] py-2.5 rounded-lg text-[10px] font-bold shadow-xl active:scale-95 transition-all">
+              <p className="text-[10px] text-[var(--color-on-accent-muted)] mb-6">Tu suscripción está activa hasta Dic 2024.</p>
+              <button tabIndex={-1} className="w-full bg-[var(--color-text)] text-[var(--color-accent)] py-2.5 rounded-lg text-[10px] font-bold shadow-xl active:scale-95 transition-all">
                 Gestionar
               </button>
             </div>
@@ -103,7 +103,7 @@ export const DashboardPreview: React.FC = () => {
           }`}>
             <div className="flex items-center justify-between mb-8">
               <h4 className="font-bold text-sm">Lead Temperature</h4>
-              <select className="bg-transparent text-[10px] font-bold text-muted border border-[var(--color-border)] rounded-md px-2 py-1 outline-none" aria-label="Periodo de tiempo">
+              <select className="bg-transparent text-[10px] font-bold text-muted border border-[var(--color-border)] rounded-md px-2 py-1 outline-none" tabIndex={-1} aria-label="Periodo de tiempo">
                 <option>Últimos 7 días</option>
               </select>
             </div>
@@ -117,7 +117,7 @@ export const DashboardPreview: React.FC = () => {
                     tick={{ fill: 'var(--chart-tick)', fontSize: 10 }} 
                   />
                   <Tooltip 
-                    cursor={{ fill: 'rgba(255,255,255,0.05)' }}
+                    cursor={{ fill: 'var(--color-overlay-subtle)' }}
                     contentStyle={{ background: 'var(--chart-tooltip)', border: 'none', borderRadius: '8px', fontSize: '12px' }}
                   />
                   <Bar dataKey="value" radius={[4, 4, 0, 0]} fill="var(--chart-bar)" />
@@ -146,7 +146,7 @@ export const DashboardPreview: React.FC = () => {
                     <div className={`${activity.color} w-1.5 h-1.5 rounded-full`}></div>
                   </div>
                   <div>
-                    <h5 className="text-[10px] font-bold leading-tight">{activity.label}</h5>
+                    <p className="text-[10px] font-bold leading-tight">{activity.label}</p>
                     <p className="text-[9px] text-muted">{activity.sub}</p>
                   </div>
                 </div>

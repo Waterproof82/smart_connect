@@ -34,8 +34,7 @@ export const StatsDashboard: React.FC<StatsDashboardProps> = React.memo(({ getSt
     };
 
     loadStats();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [getStatsUseCase]);
 
   if (isLoading) {
     return (

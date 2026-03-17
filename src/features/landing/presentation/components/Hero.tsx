@@ -24,21 +24,21 @@ export const Hero: React.FC = () => {
           </p>
 
           <div className="reveal-3 flex flex-wrap gap-5">
-            <button onClick={() => document.querySelector('#contacto')?.scrollIntoView({ behavior: 'smooth' })} className="bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] text-white px-6 md:px-10 py-4 md:py-5 rounded-2xl font-bold flex items-center gap-3 transition-all shadow-xl active:scale-95 group min-h-[48px] sm:min-h-[52px]">
+            <button onClick={() => document.querySelector('#contacto')?.scrollIntoView({ behavior: 'smooth' })} className="bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] text-[var(--color-on-accent)] px-6 md:px-10 py-4 md:py-5 rounded-2xl font-bold flex items-center gap-3 transition-all shadow-xl active:scale-95 group min-h-[48px] sm:min-h-[52px]">
               Empezar Ahora
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
-            <button onClick={() => document.querySelector('#soluciones')?.scrollIntoView({ behavior: 'smooth' })} className="bg-white/5 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] border border-white/10 px-6 md:px-10 py-4 md:py-5 rounded-2xl font-bold flex items-center gap-3 transition-all active:scale-95 group min-h-[48px] sm:min-h-[52px]">
+            <button onClick={() => document.querySelector('#soluciones')?.scrollIntoView({ behavior: 'smooth' })} className="bg-[var(--color-overlay-subtle)] hover:bg-[var(--color-overlay-medium)] focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] border border-[var(--color-border)] px-6 md:px-10 py-4 md:py-5 rounded-2xl font-bold flex items-center gap-3 transition-all active:scale-95 group min-h-[48px] sm:min-h-[52px]">
               Ver Demo
-              <div className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center group-hover:bg-white/20 transition-colors">
-                <Play className="w-3 h-3 fill-white ml-0.5" />
+              <div className="w-8 h-8 bg-[var(--color-overlay-medium)] rounded-full flex items-center justify-center group-hover:bg-[var(--color-overlay-strong)] transition-colors">
+                <Play className="w-3 h-3 fill-[var(--color-text)] ml-0.5" />
               </div>
             </button>
           </div>
         </div>
 
-        <div className="relative flex justify-center lg:justify-end reveal-1" aria-hidden="true">
-          <div className="relative w-full max-w-md aspect-[3/4] glass-card rounded-[3rem] p-10 border border-white/10 shadow-xl glow-blue shimmer animate-float-fancy">
+        <div className="relative hidden lg:flex justify-center lg:justify-end reveal-1" aria-hidden="true">
+          <div className="relative w-full max-w-md aspect-[3/4] glass-card rounded-[3rem] p-10 border border-[var(--color-border)] shadow-xl glow-blue shimmer animate-float-fancy">
             <div className="flex justify-between items-start mb-16">
               <div className="w-12 h-12 bg-[var(--color-accent-subtle)] rounded-2xl flex items-center justify-center text-[var(--color-primary)]">
                 <Volume2 className="w-6 h-6" />
@@ -52,7 +52,7 @@ export const Hero: React.FC = () => {
             <div className="flex flex-col items-center text-center space-y-8">
               <div className="relative">
                 <div className="relative w-20 h-20 bg-[var(--color-accent)] rounded-[1.5rem] flex items-center justify-center shadow-lg transform -rotate-6">
-                  <Sparkles className="text-white w-10 h-10" />
+                  <Sparkles className="text-[var(--color-on-accent)] w-10 h-10" />
                 </div>
               </div>
               <div>
@@ -62,7 +62,7 @@ export const Hero: React.FC = () => {
             </div>
 
             <div className="mt-20 space-y-5">
-              <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+              <div className="h-1.5 w-full bg-[var(--color-overlay-subtle)] rounded-full overflow-hidden">
                 <div className="h-full w-2/3 bg-[var(--color-accent)] rounded-full"></div>
               </div>
               <div className="flex justify-between text-xs text-muted font-mono tracking-widest uppercase font-bold">

@@ -117,15 +117,15 @@ export const ExpertAssistant: React.FC = () => {
         >
           <div className="p-4 bg-[var(--color-accent)] flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
-                <Bot className="text-white w-5 h-5" />
+              <div className="w-8 h-8 bg-[var(--color-overlay-strong)] rounded-lg flex items-center justify-center">
+                <Bot className="text-[var(--color-on-accent)] w-5 h-5" />
               </div>
               <div>
-                <h4 className="font-bold text-sm">Asistente Experto</h4>
-                <p className="text-[10px] text-white/70">Entrenado con IA</p>
+                <h4 className="font-bold text-sm text-[var(--color-on-accent)]">Asistente Experto</h4>
+                <p className="text-[10px] text-[var(--color-on-accent-muted)]">Entrenado con IA</p>
               </div>
             </div>
-            <button onClick={() => { setIsOpen(false); toggleBtnRef.current?.focus(); }} className="text-white/70 hover:text-white focus:outline-none focus:ring-2 focus:ring-white/50 p-2 rounded-lg hover:bg-white/10 transition-colors" aria-label="Cerrar chat">
+            <button onClick={() => { setIsOpen(false); toggleBtnRef.current?.focus(); }} className="text-[var(--color-on-accent-muted)] hover:text-[var(--color-on-accent)] focus:outline-none focus:ring-2 focus:ring-[var(--color-on-accent-muted)] p-2 rounded-lg hover:bg-[var(--color-overlay-medium)] transition-colors" aria-label="Cerrar chat">
               <X className="w-5 h-5" />
             </button>
           </div>
@@ -174,7 +174,7 @@ export const ExpertAssistant: React.FC = () => {
             <div className="relative flex gap-2">
               <input type="text" value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()} placeholder="Escribe tu mensaje..." aria-label="Escribe tu mensaje" autoComplete="off" className="flex-1 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl py-3 px-4 text-sm text-default outline-none focus:border-[var(--color-primary)] transition-colors min-h-[44px]" />
               <button onClick={handleSend} disabled={!input.trim() || isLoading} aria-label="Enviar mensaje" className="w-11 h-11 bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] disabled:opacity-50 disabled:cursor-not-allowed rounded-xl flex items-center justify-center transition-colors shrink-0">
-                <Send className="w-4 h-4 text-white" />
+                <Send className="w-4 h-4 text-[var(--color-on-accent)]" />
               </button>
             </div>
           </div>
@@ -183,15 +183,15 @@ export const ExpertAssistant: React.FC = () => {
 
       <div className="flex items-center gap-3">
         {whatsappPhone && (
-          <a href={`https://wa.me/${whatsappPhone}`} target="_blank" rel="noopener noreferrer" aria-label="Contactar por WhatsApp" className="flex items-center gap-2 sm:gap-3 bg-whatsapp hover:bg-whatsapp-hover focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] text-white px-4 py-3 sm:px-5 rounded-full shadow-lg transition-colors min-h-[48px]">
+          <a href={`https://wa.me/${whatsappPhone}`} target="_blank" rel="noopener noreferrer" aria-label="Contactar por WhatsApp" className="flex items-center gap-2 sm:gap-3 bg-whatsapp hover:bg-whatsapp-hover focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] text-[var(--color-on-accent)] px-4 py-3 sm:px-5 rounded-full shadow-lg transition-colors min-h-[48px]">
             <MessageSquare className="w-5 h-5" />
             <span className="text-sm font-bold hidden sm:block">WhatsApp</span>
           </a>
         )}
 
-        <button ref={toggleBtnRef} onClick={() => setIsOpen(!isOpen)} className={`flex items-center gap-2 sm:gap-3 px-4 py-3 sm:px-5 rounded-full shadow-lg transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2 min-h-[48px] ${isOpen ? 'bg-[var(--color-accent)] text-white' : 'bg-[var(--color-text)] text-[var(--color-bg)] hover:opacity-90'}`}>
-          <div className={`w-9 h-9 rounded-full flex items-center justify-center ${isOpen ? 'bg-white/20' : 'bg-[var(--color-accent)]'}`}>
-            <Bot className="text-white w-5 h-5" />
+        <button ref={toggleBtnRef} onClick={() => setIsOpen(!isOpen)} className={`flex items-center gap-2 sm:gap-3 px-4 py-3 sm:px-5 rounded-full shadow-lg transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2 min-h-[48px] ${isOpen ? 'bg-[var(--color-accent)] text-[var(--color-on-accent)]' : 'bg-[var(--color-text)] text-[var(--color-bg)] hover:opacity-90'}`}>
+          <div className={`w-9 h-9 rounded-full flex items-center justify-center ${isOpen ? 'bg-[var(--color-overlay-strong)]' : 'bg-[var(--color-accent)]'}`}>
+            <Bot className="text-[var(--color-on-accent)] w-5 h-5" />
           </div>
           <span className="text-sm font-bold hidden sm:block">Asistente Experto</span>
         </button>

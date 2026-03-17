@@ -75,7 +75,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
         {/* Logo */}
         <a href="#inicio" className="flex items-center gap-2 group">
           <div className="w-10 h-10 bg-[var(--color-accent)] rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-            <Cpu className="text-white w-6 h-6" />
+            <Cpu className="text-[var(--color-on-accent)] w-6 h-6" />
           </div>
           <span className="font-bold text-xl tracking-tighter text-default">
             SmartConnect <span className="text-[var(--color-primary)]">AI</span>
@@ -147,8 +147,8 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
             </div>
           </div>
 
-          <a href="#exito" className="hover:text-[var(--color-text)] transition-colors" onClick={handleDropdownLinkClick}>Éxito</a>
-          <a href="#contacto" className="hover:text-[var(--color-text)] transition-colors" onClick={handleDropdownLinkClick}>Contacto</a>
+          <a href="#exito" className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline focus-visible:outline-none transition-colors" onClick={handleDropdownLinkClick}>Éxito</a>
+          <a href="#contacto" className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline focus-visible:outline-none transition-colors" onClick={handleDropdownLinkClick}>Contacto</a>
           <Link to="/admin" className="flex items-center gap-2 text-muted hover:text-[var(--color-primary)] transition-colors">
             <Shield className="w-4 h-4" />
             <span>Admin</span>
@@ -157,7 +157,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
 
         {/* Hamburger for mobile */}
         <button
-          className="md:hidden flex items-center justify-center w-12 h-12 rounded-xl bg-[var(--color-accent)] text-white"
+          className="md:hidden flex items-center justify-center w-12 h-12 rounded-xl bg-[var(--color-accent)] text-[var(--color-on-accent)]"
           onClick={() => setIsMobileMenuOpen(true)}
           aria-label="Abrir menú de navegación"
         >

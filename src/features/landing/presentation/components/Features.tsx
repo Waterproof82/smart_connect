@@ -92,7 +92,7 @@ export const Features: React.FC = () => {
                 rel={item.external ? "noopener noreferrer" : undefined}
                 className="inline-flex items-center gap-2 text-sm font-bold text-[var(--color-primary)] group-hover:text-[var(--color-primary)] transition-colors relative"
               >
-                <span>{item.external ? 'Visitar' : 'Saber más'}</span>
+                <span>{item.external ? 'Visitar' : `Saber más sobre ${item.title}`}</span>
                 <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                 
                 <div className={`absolute -bottom-1 left-0 h-[2px] bg-[var(--color-accent)] transition-all duration-1000 ease-out ${
