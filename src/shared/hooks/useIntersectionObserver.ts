@@ -6,23 +6,26 @@
  * Follows SRP: Single responsibility - handle intersection observation
  */
 
-import { useEffect, useState, useRef, RefObject } from 'react';
+import { useEffect, useState, RefObject } from 'react';
 
 export const useIntersectionObserver = (
   ref: RefObject<HTMLElement | null>,
   options?: IntersectionObserverInit
 ): boolean => {
-  const [isVisible, setIsVisible] = useState(false);
-  const optionsRef = useRef(options);
+  const prefersReducedMotion = typeof window !== 'undefined'
+    && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const [isVisible, setIsVisible] = useState(prefersReducedMotion);
 
   useEffect(() => {
+    if (prefersReducedMotion) return;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true);
         }
       },
-      { threshold: 0.1, ...optionsRef.current }
+      { threshold: 0.1, ...options }
     );
 
     const currentRef = ref.current;
@@ -33,9 +36,10 @@ export const useIntersectionObserver = (
     return () => {
       if (currentRef) {
         observer.unobserve(currentRef);
+        observer.disconnect();
       }
     };
-  }, [ref]);
+  }, [ref, options, prefersReducedMotion]);
 
   return isVisible;
 };

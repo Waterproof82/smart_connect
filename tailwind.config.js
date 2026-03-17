@@ -51,9 +51,6 @@ export default {
           elevated: 'oklch(18% 0.015 250)',
           overlay: 'oklch(22% 0.015 250)',
         },
-        // Brand colors
-        whatsapp: '#25D366',
-        'whatsapp-hover': '#1ebc57',
       },
       fontFamily: {
         sans: ['Instrument Sans', 'system-ui', 'sans-serif'],

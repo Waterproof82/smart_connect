@@ -11,6 +11,7 @@ import { MenuPhone, MenuInfo } from './components';
 import { useQRIBAR } from './hooks';
 import { useIntersectionObserver } from '@shared/hooks';
 import { getQRIBARContainer } from './QRIBARContainer';
+import { AlertCircle } from 'lucide-react';
 
 export const QRIBARSection: React.FC = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -28,7 +29,10 @@ export const QRIBARSection: React.FC = () => {
   if (error) {
     return (
       <div className="container mx-auto px-6 py-20 text-center" role="alert">
-        <p className="text-[var(--color-error-text)]">Error loading menu: {error}</p>
+        <div className="flex items-center justify-center gap-3">
+          <AlertCircle className="w-6 h-6 text-[var(--color-error-text)]" />
+          <p className="text-[var(--color-error-text)]">Error al cargar el menú: {error}</p>
+        </div>
       </div>
     );
   }
@@ -36,7 +40,7 @@ export const QRIBARSection: React.FC = () => {
   if (isLoading || !restaurant) {
     return (
       <div className="container mx-auto px-6 py-20 text-center" role="status" aria-live="polite">
-        <p className="text-muted">Loading menu...</p>
+        <p className="text-muted">Cargando menú...</p>
       </div>
     );
   }

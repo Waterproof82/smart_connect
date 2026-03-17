@@ -37,11 +37,7 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({
       type="button"
       className="absolute inset-0 bg-black/80 backdrop-blur-sm"
       aria-label="Cerrar modal"
-      tabIndex={0}
       onClick={onClose}
-      onKeyDown={e => {
-        if (e.key === 'Enter' || e.key === ' ') onClose();
-      }}
       style={{ cursor: 'pointer' }}
     />
     <div className="relative bg-[var(--color-bg-alt)] w-full h-full sm:h-auto sm:max-h-[85vh] sm:rounded-xl sm:border border-[var(--color-border)] flex flex-col max-w-4xl shadow-2xl">
@@ -49,7 +45,7 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({
         <h3 className="text-lg font-bold text-default flex items-center gap-2">
           {isEditing ? 'Editar Documento' : 'Detalles del Documento'}
         </h3>
-        <button onClick={onClose} className="p-2 hover:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-lg text-muted hover:text-[var(--color-text)]" aria-label="Cerrar modal" type="button">
+        <button onClick={onClose} className="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center hover:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-lg text-muted hover:text-[var(--color-text)]" aria-label="Cerrar modal" type="button">
           <X className="w-6 h-6" />
         </button>
       </div>
@@ -62,7 +58,7 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({
                 {editedSources.map(s => (
                   <span key={s} className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium mr-1 mb-1 bg-[var(--color-accent-subtle)] text-[var(--color-primary)] border border-[var(--color-accent-border)]">
                     {s}
-                    <button onClick={() => onSourceChange(editedSources.filter(x => x !== s))} className="ml-1.5 hover:text-white focus:outline-none cursor-pointer" type="button" aria-label={`Eliminar etiqueta ${s}`}>×</button>
+                    <button onClick={() => onSourceChange(editedSources.filter(x => x !== s))} className="ml-1.5 hover:text-[var(--color-text)] focus:outline-none cursor-pointer" type="button" aria-label={`Eliminar etiqueta ${s}`}>×</button>
                   </span>
                 ))}
               </div>
@@ -98,7 +94,7 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({
                       onSourceInputChange('');
                     }
                   }}
-                  className="px-3 py-1 bg-[var(--color-surface)] text-default text-xs rounded hover:bg-[var(--color-border)]"
+                  className="px-3 py-1 bg-[var(--color-surface)] text-default text-xs rounded hover:bg-[var(--color-border)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)]"
                   type="button"
                 >Agregar</button>
               </div>
@@ -130,11 +126,11 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({
       <div className="p-4 border-t border-[var(--color-border)] bg-[var(--color-bg-alt)]/95 flex justify-end gap-3 sticky bottom-0">
         {isEditing ? (
           <>
-            <button onClick={onClose} className="px-4 py-2 text-default hover:text-[var(--color-text)] focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 disabled:opacity-50" disabled={isSaving} type="button">Cancelar</button>
-            <button onClick={onSave} disabled={isSaving} className="px-6 py-2 bg-[var(--color-accent)] text-white rounded-lg hover:bg-[var(--color-accent-hover)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] disabled:opacity-50" type="button">{isSaving ? 'Guardando...' : 'Guardar Cambios'}</button>
+            <button onClick={onClose} className="px-4 py-2 text-default hover:text-[var(--color-text)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] disabled:opacity-50" disabled={isSaving} type="button">Cancelar</button>
+            <button onClick={onSave} disabled={isSaving} className="px-6 py-2 bg-[var(--color-accent)] text-[var(--color-on-accent)] rounded-lg hover:bg-[var(--color-accent-hover)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] disabled:opacity-50" type="button">{isSaving ? 'Guardando...' : 'Guardar Cambios'}</button>
           </>
         ) : (
-          <button onClick={onClose} className="px-4 py-2 bg-[var(--color-surface)] text-default rounded-lg hover:bg-[var(--color-border)] focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400" type="button">Cerrar</button>
+          <button onClick={onClose} className="px-4 py-2 bg-[var(--color-surface)] text-default rounded-lg hover:bg-[var(--color-border)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)]" type="button">Cerrar</button>
         )}
       </div>
     </div>

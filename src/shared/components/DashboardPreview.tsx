@@ -45,10 +45,10 @@ export const DashboardPreview: React.FC = () => {
             <div className="flex items-center gap-2 bg-[var(--color-success-bg)] border border-[var(--color-success-border)] px-3 py-1 rounded-full text-[10px] text-[var(--color-success-text)] font-bold">
               Sistema Operativo
             </div>
-            <button className="text-muted hover:text-white transition-colors relative p-1" aria-label="Notificaciones">
+            <div className="text-muted relative p-1">
               <Bell className="w-5 h-5" />
-              <div className="absolute top-0 right-0 w-2 h-2 bg-[var(--color-error-text)] rounded-full border-2 border-[var(--color-bg)]" aria-hidden="true"></div>
-            </button>
+              <div className="absolute top-0 right-0 w-2 h-2 bg-[var(--color-error-text)] rounded-full border-2 border-[var(--color-bg)]"></div>
+            </div>
           </div>
         </div>
 
@@ -57,12 +57,16 @@ export const DashboardPreview: React.FC = () => {
           {/* Left Column - Stats */}
           <div className="lg:col-span-3 space-y-6">
             {[
-              { label: 'Total Scans', value: '12,450', sub: '↗ +12% vs mes pasado', icon: <TrendingUp className="w-2.5 h-2.5" />, color: 'text-[var(--color-primary)]', delay: 500 },
-              { label: 'Reseñas Google', value: '4.9', sub: 'rating', icon: <Star className="w-3.5 h-3.5 text-[var(--color-icon-amber)] fill-[var(--color-icon-amber)]" />, type: 'rating', delay: 650 }
+              { label: 'Total Scans', value: '12,450', sub: '↗ +12% vs mes pasado', icon: <TrendingUp className="w-2.5 h-2.5" />, color: 'text-[var(--color-primary)]', delay: 500, style: 'solid' },
+              { label: 'Reseñas Google', value: '4.9', sub: 'rating', icon: <Star className="w-3.5 h-3.5 text-[var(--color-icon-amber)] fill-[var(--color-icon-amber)]" />, type: 'rating', delay: 650, style: 'bordered' }
             ].map((card) => (
               <div 
                 key={card.label} 
-                className={`glass-card p-6 rounded-2xl border border-[var(--color-border)] transition-all duration-700`}
+                className={`p-6 rounded-2xl transition-all duration-700 ${
+                  card.style === 'solid' 
+                    ? 'bg-[var(--color-bg-alt)] border border-[var(--color-border)]' 
+                    : 'bg-[var(--color-surface)] border-2 border-[var(--color-primary)]/20'
+                }`}
                 style={{ 
                   transitionDelay: `${isVisible ? card.delay : 0}ms`,
                   opacity: isVisible ? 1 : 0,
@@ -87,25 +91,25 @@ export const DashboardPreview: React.FC = () => {
             ))}
 
             <div className={`bg-[var(--color-accent)] p-6 rounded-2xl shadow-lg transition-all duration-700 delay-[800ms] ${
-              isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'
+              isVisible ? 'opacity-100 motion-safe:scale-100' : 'opacity-0 motion-safe:scale-90'
             }`}>
               <h4 className="font-bold mb-2">Plan Pro</h4>
-              <p className="text-[10px] text-white/70 mb-6">Tu suscripción está activa hasta Dic 2024.</p>
-              <button tabIndex={-1} className="w-full bg-white text-[var(--color-accent)] py-2.5 rounded-lg text-[10px] font-bold shadow-xl active:scale-95 transition-all">
+              <p className="text-[10px] text-[var(--color-on-accent-muted)] mb-6">Tu suscripción está activa hasta Dic 2024.</p>
+              <div className="w-full bg-[var(--color-text)] text-[var(--color-accent)] py-2.5 rounded-lg text-[10px] font-bold shadow-xl text-center">
                 Gestionar
-              </button>
+              </div>
             </div>
           </div>
 
           {/* Center Column - Chart */}
-          <div className={`lg:col-span-6 glass-card p-8 rounded-3xl border border-[var(--color-border)] transition-all duration-1000 delay-[600ms] ${
+          <div className={`lg:col-span-6 bg-[var(--color-surface)] p-8 rounded-3xl border border-[var(--color-border)] transition-all duration-1000 delay-[600ms] ${
             isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
           }`}>
             <div className="flex items-center justify-between mb-8">
               <h4 className="font-bold text-sm">Lead Temperature</h4>
-              <select className="bg-transparent text-[10px] font-bold text-muted border border-[var(--color-border)] rounded-md px-2 py-1 outline-none" aria-label="Periodo de tiempo">
-                <option>Últimos 7 días</option>
-              </select>
+              <div className="bg-transparent text-[10px] font-bold text-muted border border-[var(--color-border)] rounded-md px-2 py-1">
+                Últimos 7 días
+              </div>
             </div>
             <div className="h-[250px] w-full" role="img" aria-label="Gráfico de temperatura de leads durante los últimos 7 días">
               <ResponsiveContainer width="100%" height="100%">
@@ -117,7 +121,7 @@ export const DashboardPreview: React.FC = () => {
                     tick={{ fill: 'var(--chart-tick)', fontSize: 10 }} 
                   />
                   <Tooltip 
-                    cursor={{ fill: 'rgba(255,255,255,0.05)' }}
+                    cursor={{ fill: 'var(--color-overlay-subtle)' }}
                     contentStyle={{ background: 'var(--chart-tooltip)', border: 'none', borderRadius: '8px', fontSize: '12px' }}
                   />
                   <Bar dataKey="value" radius={[4, 4, 0, 0]} fill="var(--chart-bar)" />
@@ -127,7 +131,7 @@ export const DashboardPreview: React.FC = () => {
           </div>
 
           {/* Right Column - Recent Activity */}
-          <div className={`lg:col-span-3 glass-card p-8 rounded-3xl border border-[var(--color-border)] transition-all duration-700 delay-[900ms] ${
+          <div className={`lg:col-span-3 bg-[var(--color-bg-alt)] p-8 rounded-3xl border border-[var(--color-border)] transition-all duration-700 delay-[900ms] ${
             isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-20'
           }`}>
             <h4 className="font-bold text-sm mb-8">Actividad Reciente</h4>
@@ -146,7 +150,7 @@ export const DashboardPreview: React.FC = () => {
                     <div className={`${activity.color} w-1.5 h-1.5 rounded-full`}></div>
                   </div>
                   <div>
-                    <h5 className="text-[10px] font-bold leading-tight">{activity.label}</h5>
+                    <p className="text-[10px] font-bold leading-tight">{activity.label}</p>
                     <p className="text-[9px] text-muted">{activity.sub}</p>
                   </div>
                 </div>

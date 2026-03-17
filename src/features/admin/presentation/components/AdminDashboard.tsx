@@ -29,7 +29,7 @@ export const AdminDashboard: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-base pb-10">
-      <a href="#admin-main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:bg-[var(--color-accent)] focus:text-white focus:px-4 focus:py-2 focus:rounded-lg focus:text-sm focus:font-bold">
+      <a href="#admin-main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:bg-[var(--color-accent)] focus:text-[var(--color-on-accent)] focus:px-4 focus:py-2 focus:rounded-lg focus:text-sm focus:font-bold">
         Saltar al contenido principal
       </a>
       <header className="bg-[var(--color-bg-alt)] border-b border-[var(--color-border)] sticky top-0 z-30">
@@ -41,14 +41,14 @@ export const AdminDashboard: React.FC = () => {
               </Link>
               <div className="flex flex-col">
                 <h1 className="text-lg md:text-xl font-bold text-default">SmartConnect</h1>
-                <span className="text-[10px] md:text-xs text-muted font-medium tracking-wide">PANEL ADMIN</span>
+                <span className="text-xs text-muted font-medium tracking-wide">PANEL ADMIN</span>
               </div>
             </div>
 
             <div className="flex items-center gap-3 md:gap-4">
               <div className="hidden md:flex flex-col items-end">
                 <span className="text-sm text-default">{currentUser.email}</span>
-                <span className="px-1.5 py-0.5 bg-[var(--color-accent-subtle)] text-[var(--color-primary)] rounded text-[10px] border border-[var(--color-accent-border)]">
+                <span className="px-1.5 py-0.5 bg-[var(--color-accent-subtle)] text-[var(--color-primary)] rounded text-xs border border-[var(--color-accent-border)]">
                   {currentUser.role}
                 </span>
               </div>

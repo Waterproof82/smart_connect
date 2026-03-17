@@ -28,6 +28,7 @@ export const Login: React.FC<LoginProps> = ({ loginUseCase, onLoginSuccess }) =>
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     defaultValues: { email: '', password: '' },
+    mode: 'onBlur',
   });
 
   const onSubmit = async ({ email, password }: LoginFormData) => {
@@ -80,15 +81,16 @@ export const Login: React.FC<LoginProps> = ({ loginUseCase, onLoginSuccess }) =>
           <div className="rounded-md shadow-sm space-y-4">
             <div>
               <label htmlFor="email" className="block text-xs font-semibold text-muted uppercase mb-1 ml-1">
-                Email
+                Email <span className="text-[var(--color-error-text)]" aria-hidden="true">*</span>
               </label>
               <input
                 id="email"
                 type="email"
                 autoComplete="email"
-                className="appearance-none relative block w-full px-4 py-3 border border-[var(--color-border)] placeholder-[var(--color-text-muted)] text-white bg-[var(--color-bg-alt)] rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:border-transparent sm:text-sm transition-all"
+                className="appearance-none relative block w-full px-4 py-3 border border-[var(--color-border)] placeholder-[var(--color-text-muted)] text-default bg-[var(--color-bg-alt)] rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:border-transparent sm:text-sm transition-all"
                 placeholder="admin@ejemplo.com"
                 disabled={isSubmitting}
+                aria-required="true"
                 aria-invalid={!!formErrors.email}
                 aria-describedby={formErrors.email ? 'login-email-error' : undefined}
                 {...register('email')}
@@ -99,15 +101,16 @@ export const Login: React.FC<LoginProps> = ({ loginUseCase, onLoginSuccess }) =>
             </div>
             <div>
               <label htmlFor="password" className="block text-xs font-semibold text-muted uppercase mb-1 ml-1">
-                Contraseña
+                Contraseña <span className="text-[var(--color-error-text)]" aria-hidden="true">*</span>
               </label>
               <input
                 id="password"
                 type="password"
                 autoComplete="current-password"
-                className="appearance-none relative block w-full px-4 py-3 border border-[var(--color-border)] placeholder-[var(--color-text-muted)] text-white bg-[var(--color-bg-alt)] rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:border-transparent sm:text-sm transition-all"
+                className="appearance-none relative block w-full px-4 py-3 border border-[var(--color-border)] placeholder-[var(--color-text-muted)] text-default bg-[var(--color-bg-alt)] rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:border-transparent sm:text-sm transition-all"
                 placeholder="••••••••"
                 disabled={isSubmitting}
+                aria-required="true"
                 aria-invalid={!!formErrors.password}
                 aria-describedby={formErrors.password ? 'login-password-error' : undefined}
                 {...register('password')}
@@ -127,11 +130,11 @@ export const Login: React.FC<LoginProps> = ({ loginUseCase, onLoginSuccess }) =>
           <button
             type="submit"
             disabled={isSubmitting}
-            className="group relative w-full flex justify-center py-3.5 px-4 border border-transparent text-sm font-bold rounded-xl text-white bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] focus:ring-[var(--focus-ring)] disabled:opacity-50 transition-all shadow-lg"
+            className="group relative w-full flex justify-center py-3.5 px-4 border border-transparent text-sm font-bold rounded-xl text-[var(--color-on-accent)] bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] focus:ring-[var(--focus-ring)] disabled:opacity-50 transition-all shadow-lg"
           >
             {isSubmitting ? (
               <span className="flex items-center">
-                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-[var(--color-on-accent)]" fill="none" viewBox="0 0 24 24">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>

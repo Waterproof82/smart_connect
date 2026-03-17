@@ -55,12 +55,14 @@ export const Features: React.FC = () => {
         {solutions.map((item, idx) => (
           <article
             key={item.id}
-            className={`glass-card p-8 lg:p-10 rounded-3xl group hover:border-[var(--color-accent-border)] transition-all duration-1000 cursor-default relative overflow-hidden ${
+            className={`p-8 lg:p-10 rounded-3xl group transition-all duration-1000 cursor-default relative overflow-hidden ${
               idx === 0 
-                ? 'lg:col-span-5 lg:row-span-2' 
+                ? 'lg:col-span-5 lg:row-span-2 bg-[var(--color-surface)] border-2 border-[var(--color-primary)]/30' 
                 : idx === 3 
-                  ? 'lg:col-span-7' 
-                  : 'lg:col-span-4'
+                  ? 'lg:col-span-7 bg-transparent border border-[var(--color-border)]' 
+                  : idx === 1
+                    ? 'lg:col-span-4 bg-[var(--color-bg-alt)] border border-[var(--color-border)]'
+                    : 'lg:col-span-4 border-2 border-dashed border-[var(--color-border)]'
             } ${
               isVisible 
                 ? 'opacity-100 translate-y-0 blur-0' 
@@ -68,7 +70,7 @@ export const Features: React.FC = () => {
             }`}
             style={{ transitionDelay: `${idx * 150}ms` }}
           >
-            <div className={`mb-6 w-14 h-14 bg-[var(--color-surface)] rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform ${idx === 0 ? 'lg:w-16 lg:h-16' : ''}`}>
+            <div className={`mb-6 w-14 h-14 bg-[var(--color-surface)] rounded-2xl flex items-center justify-center motion-safe:group-hover:scale-110 transition-transform ${idx === 0 ? 'lg:w-16 lg:h-16' : ''}`}>
               {item.icon}
             </div>
             <h3 className={`font-bold mb-4 ${idx === 0 ? 'text-3xl lg:text-4xl' : 'text-xl lg:text-2xl'}`}>{item.title}</h3>
@@ -76,7 +78,7 @@ export const Features: React.FC = () => {
               {item.description}
             </p>
             
-            <div className={`transform transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] ${
+            <div className={`transform transition-all duration-700 ease-out ${
               isVisible 
                 ? 'opacity-100 translate-y-0 scale-100' 
                 : 'opacity-0 translate-y-10 scale-90'
@@ -92,7 +94,7 @@ export const Features: React.FC = () => {
                 rel={item.external ? "noopener noreferrer" : undefined}
                 className="inline-flex items-center gap-2 text-sm font-bold text-[var(--color-primary)] group-hover:text-[var(--color-primary)] transition-colors relative"
               >
-                <span>{item.external ? 'Visitar' : 'Saber más'}</span>
+                <span>{item.external ? 'Visitar' : `Saber más sobre ${item.title}`}</span>
                 <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                 
                 <div className={`absolute -bottom-1 left-0 h-[2px] bg-[var(--color-accent)] transition-all duration-1000 ease-out ${
@@ -103,7 +105,6 @@ export const Features: React.FC = () => {
               </a>
             </div>
 
-            <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-[var(--color-accent-subtle)] rounded-full group-hover:bg-[var(--color-accent-border)] transition-colors" aria-hidden="true" />
           </article>
         ))}
       </div>

@@ -6,16 +6,24 @@ interface SourceTagProps {
   onRemove?: () => void;
 }
 
-const getSourceColor = (source: string): string => {
+const TAG_PALETTE = [
+  { text: 'text-[var(--color-icon-blue)]', bg: 'bg-[var(--color-icon-blue)]/10', border: 'border-[var(--color-icon-blue)]/30' },
+  { text: 'text-[var(--color-icon-purple)]', bg: 'bg-[var(--color-icon-purple)]/10', border: 'border-[var(--color-icon-purple)]/30' },
+  { text: 'text-[var(--color-icon-emerald)]', bg: 'bg-[var(--color-icon-emerald)]/10', border: 'border-[var(--color-icon-emerald)]/30' },
+  { text: 'text-[var(--color-icon-amber)]', bg: 'bg-[var(--color-icon-amber)]/10', border: 'border-[var(--color-icon-amber)]/30' },
+  { text: 'text-[var(--color-icon-rose)]', bg: 'bg-[var(--color-icon-rose)]/10', border: 'border-[var(--color-icon-rose)]/30' },
+  { text: 'text-[var(--color-primary)]', bg: 'bg-[var(--color-primary)]/10', border: 'border-[var(--color-primary)]/30' },
+  { text: 'text-[var(--color-success-text)]', bg: 'bg-[var(--color-success-text)]/10', border: 'border-[var(--color-success-text)]/30' },
+  { text: 'text-[var(--color-warning)]', bg: 'bg-[var(--color-warning)]/10', border: 'border-[var(--color-warning)]/30' },
+] as const;
+
+const getSourceColor = (source: string) => {
   let hash = 5381;
   for (let i = 0; i < source.length; i++) {
     const code = source.codePointAt(i) ?? 0;
     hash = ((hash << 5) + hash) + code;
   }
-  const hue = (hash % 360 + 360) % 360;
-  const sat = 65 + ((hash >> 8) % 15);
-  const light = 50 + ((hash >> 16) % 10);
-  return `hsl(${hue}, ${sat}%, ${light}%)`;
+  return TAG_PALETTE[((hash % TAG_PALETTE.length) + TAG_PALETTE.length) % TAG_PALETTE.length];
 };
 
 export const SourceTag: React.FC<SourceTagProps> = React.memo(({ source, onRemove }) => {
@@ -23,18 +31,13 @@ export const SourceTag: React.FC<SourceTagProps> = React.memo(({ source, onRemov
   const color = getSourceColor(trimmed);
   return (
     <span
-      className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium mr-1 mb-1"
-      style={{
-        backgroundColor: `${color}15`,
-        color: color,
-        border: `1px solid ${color}40`
-      }}
+      className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium mr-1 mb-1 border ${color.text} ${color.bg} ${color.border}`}
     >
       {trimmed}
       {onRemove && (
         <button
           onClick={onRemove}
-          className="ml-1 p-1 min-w-[28px] min-h-[28px] flex items-center justify-center rounded-full hover:bg-black/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-current"
+          className="ml-1 p-1 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full hover:bg-[var(--color-overlay-medium)] focus:outline-none focus-visible:ring-2 focus-visible:ring-current"
           type="button"
           aria-label={`Eliminar etiqueta ${trimmed}`}
         >

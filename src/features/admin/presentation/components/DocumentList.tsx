@@ -17,6 +17,9 @@ export const DocumentList: React.FC<DocumentListProps> = ({
 }) => {
   const { container, currentUser } = useAdmin();
   const { getAllDocumentsUseCase, deleteDocumentUseCase, updateDocumentUseCase, createDocumentUseCase } = container;
+  
+  const modalRef = useRef<HTMLDivElement>(null);
+  const previousActiveElement = useRef<HTMLElement | null>(null);
   // --- States ---
   const [documents, setDocuments] = useState<PaginatedResult<Document> | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -80,11 +83,36 @@ export const DocumentList: React.FC<DocumentListProps> = ({
     const hasModal = selectedDocument || showCreateModal;
     if (hasModal) {
       document.body.style.overflow = 'hidden';
+      previousActiveElement.current = document.activeElement as HTMLElement;
+      modalRef.current?.focus();
     } else {
       document.body.style.overflow = '';
+      previousActiveElement.current?.focus();
     }
     return () => { document.body.style.overflow = ''; };
   }, [selectedDocument, showCreateModal]);
+
+  // Focus trap handler
+  const handleModalKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key !== 'Tab') return;
+    
+    const focusableElements = modalRef.current?.querySelectorAll<HTMLElement>(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    
+    if (!focusableElements || focusableElements.length === 0) return;
+    
+    const firstElement = focusableElements[0];
+    const lastElement = focusableElements[focusableElements.length - 1];
+    
+    if (e.shiftKey && document.activeElement === firstElement) {
+      e.preventDefault();
+      lastElement.focus();
+    } else if (!e.shiftKey && document.activeElement === lastElement) {
+      e.preventDefault();
+      firstElement.focus();
+    }
+  };
 
   // --- Logic Handlers ---
 
@@ -217,7 +245,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
       {actionError && (
         <div className="p-3 bg-[var(--color-error-bg)] border border-[var(--color-error-border)] rounded-lg text-sm text-[var(--color-error-text)] flex items-center justify-between">
           <span>{actionError}</span>
-          <button onClick={() => setActionError(null)} className="text-[var(--color-error-text)] hover:text-white ml-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-error-text)] rounded" type="button">
+          <button onClick={() => setActionError(null)} className="text-[var(--color-error-text)] hover:opacity-70 ml-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-error-text)] rounded" type="button">
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -251,8 +279,8 @@ export const DocumentList: React.FC<DocumentListProps> = ({
               Se eliminará permanentemente &quot;{confirmDelete.title}...&quot;. Esta acción no se puede deshacer.
             </p>
             <div className="flex justify-end gap-3">
-              <button onClick={() => setConfirmDelete(null)} className="px-4 py-2 text-default hover:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 rounded-lg" type="button">Cancelar</button>
-              <button onClick={handleDeleteConfirm} className="px-4 py-2 bg-[var(--color-error-text)] hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-error-text)] text-white rounded-lg" type="button">Eliminar</button>
+              <button onClick={() => setConfirmDelete(null)} className="px-4 py-2 text-default hover:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-lg" type="button">Cancelar</button>
+              <button onClick={handleDeleteConfirm} className="px-4 py-2 bg-[var(--color-error-text)] hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-error-text)] text-[var(--color-on-accent)] rounded-lg" type="button">Eliminar</button>
             </div>
           </div>
         </div>
@@ -292,7 +320,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
                 className="w-full pl-9 pr-4 py-2.5 bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded-lg text-sm text-default focus:ring-2 focus:ring-[var(--focus-ring)]"
               />
             </div>
-            <button type="submit" className="px-4 py-2 bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] text-white rounded-lg transition-colors">
+            <button type="submit" className="px-4 py-2 bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] text-[var(--color-on-accent)] rounded-lg transition-colors">
               Buscar
             </button>
           </div>
@@ -301,7 +329,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
         {currentUser.canPerform('create') && (
           <button
             onClick={() => setShowCreateModal(true)}
-            className="w-full md:w-auto px-4 py-2.5 bg-[var(--color-success-text)] hover:opacity-90 text-white rounded-lg flex items-center justify-center gap-2 transition-colors font-medium shadow-lg"
+            className="w-full md:w-auto px-4 py-2.5 bg-[var(--color-success-text)] hover:opacity-90 text-[var(--color-on-accent)] rounded-lg flex items-center justify-center gap-2 transition-colors font-medium shadow-lg"
           >
             <Plus className="w-4 h-4" />
             <span>Nuevo Documento</span>
@@ -384,18 +412,22 @@ export const DocumentList: React.FC<DocumentListProps> = ({
             type="button"
             className="absolute inset-0 bg-black/80 backdrop-blur-sm"
             aria-label="Cerrar modal"
-            tabIndex={0}
             onClick={() => setSelectedDocument(null)}
-            onKeyDown={e => {
-              if (e.key === 'Enter' || e.key === ' ') setSelectedDocument(null);
-            }}
             style={{ cursor: 'pointer' }}
           />
-          <div className="relative bg-[var(--color-bg-alt)] w-full h-full sm:h-auto sm:max-h-[85vh] sm:rounded-xl sm:border border-[var(--color-border)] flex flex-col max-w-4xl shadow-2xl">
+          <div 
+            ref={modalRef}
+            className="relative bg-[var(--color-bg-alt)] w-full h-full sm:h-auto sm:max-h-[85vh] sm:rounded-xl sm:border border-[var(--color-border)] flex flex-col max-w-4xl shadow-2xl"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-title"
+            onKeyDown={handleModalKeyDown}
+            tabIndex={-1}
+          >
 
             {/* Modal Header */}
             <div className="flex items-center justify-between p-4 border-b border-[var(--color-border)] bg-[var(--color-bg-alt)]/95 sticky top-0 z-10">
-              <h3 className="text-lg font-bold text-default flex items-center gap-2">
+              <h3 id="modal-title" className="text-lg font-bold text-default flex items-center gap-2">
                 {isEditing ? 'Editar Documento' : 'Detalles del Documento'}
               </h3>
               <button 
@@ -441,9 +473,9 @@ export const DocumentList: React.FC<DocumentListProps> = ({
                          ))}
                        </datalist>
                        
-                       <button 
+                       <button
                          onClick={handleManualAddTag}
-                         className="px-3 py-1 bg-[var(--color-surface)] text-default text-xs rounded hover:bg-[var(--color-border)]"
+                         className="px-3 py-1 bg-[var(--color-surface)] text-default text-xs rounded hover:bg-[var(--color-border)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)]"
                          type="button"
                        >
                          Agregar
@@ -490,7 +522,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
                    <button
                       onClick={handleSave}
                       disabled={isSaving}
-                      className="px-6 py-2 bg-[var(--color-accent)] text-white rounded-lg hover:bg-[var(--color-accent-hover)] disabled:opacity-50"
+                      className="px-6 py-2 bg-[var(--color-accent)] text-[var(--color-on-accent)] rounded-lg hover:bg-[var(--color-accent-hover)] disabled:opacity-50"
                       type="button"
                    >
                      {isSaving ? 'Guardando...' : 'Guardar Cambios'}
@@ -569,7 +601,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
                           id="custom-source-input"
                           type="text" 
                           placeholder="Nombre de la fuente..." 
-                          className="w-full bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded-lg p-2.5 text-default"
+                          className="w-full bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded-lg p-2.5 text-default focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)]"
                           value={customSource}
                           onChange={e => setCustomSource(e.target.value)}
                         />
@@ -589,11 +621,11 @@ export const DocumentList: React.FC<DocumentListProps> = ({
                 </div>
              </div>
               <div className="p-5 border-t border-[var(--color-border)] flex justify-end gap-3">
-                <button onClick={() => setShowCreateModal(false)} className="px-5 py-2.5 text-default hover:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 rounded-lg" type="button">Cancelar</button>
-                <button 
+                <button onClick={() => setShowCreateModal(false)} className="px-5 py-2.5 text-default hover:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-lg" type="button">Cancelar</button>
+                <button
                   onClick={handleCreate} 
                   disabled={isCreating} 
-                  className="px-5 py-2.5 bg-[var(--color-success-text)] hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-success-text)] text-white rounded-lg font-medium disabled:opacity-50"
+                  className="px-5 py-2.5 bg-[var(--color-success-text)] hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-success-text)] text-[var(--color-on-accent)] rounded-lg font-medium disabled:opacity-50"
                   type="button"
                 >
                   {isCreating ? 'Creando...' : 'Crear Documento'}

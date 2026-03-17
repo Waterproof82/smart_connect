@@ -34,8 +34,7 @@ export const StatsDashboard: React.FC<StatsDashboardProps> = React.memo(({ getSt
     };
 
     loadStats();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [getStatsUseCase]);
 
   if (isLoading) {
     return (
@@ -55,7 +54,9 @@ export const StatsDashboard: React.FC<StatsDashboardProps> = React.memo(({ getSt
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+    <div>
+      <h2 className="text-xl font-semibold text-default mb-6">Estadísticas del Sistema</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
       {/* Total Documents */}
       <div className="bg-[var(--color-accent-subtle)] border border-[var(--color-accent-border)] rounded-lg p-6">
         <div className="flex items-center justify-between">
@@ -82,6 +83,7 @@ export const StatsDashboard: React.FC<StatsDashboardProps> = React.memo(({ getSt
               </div>
             ))}
         </div>
+      </div>
       </div>
     </div>
   );
