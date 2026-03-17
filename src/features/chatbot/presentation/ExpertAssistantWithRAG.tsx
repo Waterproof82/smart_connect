@@ -30,6 +30,7 @@ export const ExpertAssistant: React.FC = () => {
   const [whatsappPhone, setWhatsappPhone] = useState<string>('');
   const scrollRef = useRef<HTMLDivElement>(null);
   const toggleBtnRef = useRef<HTMLButtonElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchWhatsApp = async () => {
@@ -48,6 +49,13 @@ export const ExpertAssistant: React.FC = () => {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [chatSession.messages, isLoading]);
+
+  useEffect(() => {
+    if (isOpen && modalRef.current) {
+      const firstFocusable = modalRef.current.querySelector<HTMLElement>('button, input, [tabindex]:not([tabindex="-1"])');
+      setTimeout(() => firstFocusable?.focus(), 50);
+    }
+  }, [isOpen]);
 
   const handleSendMessage = useCallback(async (message: string, currentMessages: Message[]) => {
     setIsLoading(true);
@@ -100,6 +108,7 @@ export const ExpertAssistant: React.FC = () => {
     <div className="fixed bottom-4 right-4 sm:bottom-8 sm:right-8 z-[100] flex flex-col items-end gap-4">
       {isOpen && (
         <div
+          ref={modalRef}
           role="dialog"
           aria-modal="true"
           aria-label="Chat con asistente experto"
@@ -107,8 +116,8 @@ export const ExpertAssistant: React.FC = () => {
             if (e.key === 'Escape') { setIsOpen(false); toggleBtnRef.current?.focus(); }
             if (e.key === 'Tab') {
               const focusable = e.currentTarget.querySelectorAll<HTMLElement>('button, input, [tabindex]:not([tabindex="-1"])');
-              const first = focusable[0];
-              const last = focusable[focusable.length - 1];
+              const first = focusable[0] as HTMLElement;
+              const last = focusable[focusable.length - 1] as HTMLElement;
               if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
               else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
             }
@@ -121,11 +130,11 @@ export const ExpertAssistant: React.FC = () => {
                 <Bot className="text-[var(--color-on-accent)] w-5 h-5" />
               </div>
               <div>
-                <h4 className="font-bold text-sm text-[var(--color-on-accent)]">Asistente Experto</h4>
+                <h3 className="font-bold text-sm text-[var(--color-on-accent)]">Asistente Experto</h3>
                 <p className="text-xs text-[var(--color-on-accent-muted)]">Entrenado con IA</p>
               </div>
             </div>
-            <button onClick={() => { setIsOpen(false); toggleBtnRef.current?.focus(); }} className="text-[var(--color-on-accent-muted)] hover:text-[var(--color-on-accent)] focus:outline-none focus:ring-2 focus:ring-[var(--color-on-accent-muted)] p-2 rounded-lg hover:bg-[var(--color-overlay-medium)] transition-colors" aria-label="Cerrar chat">
+            <button onClick={() => { setIsOpen(false); toggleBtnRef.current?.focus(); }} className="text-[var(--color-on-accent-muted)] hover:text-[var(--color-on-accent)] focus:outline-none focus:ring-2 focus:ring-[var(--color-on-accent-muted)] p-2 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-[var(--color-overlay-medium)] transition-colors" aria-label="Cerrar chat">
               <X className="w-5 h-5" />
             </button>
           </div>
@@ -136,7 +145,7 @@ export const ExpertAssistant: React.FC = () => {
                 <div className="w-14 h-14 bg-[var(--color-accent-subtle)] rounded-xl flex items-center justify-center mx-auto mb-4 text-[var(--color-primary)]">
                   <Sparkles className="w-7 h-7" />
                 </div>
-                <h5 className="font-bold mb-2">¿Cómo puedo ayudarte?</h5>
+                <h4 className="font-bold mb-2">¿Cómo puedo ayudarte?</h4>
                 <p className="text-xs text-muted mb-4">Pregúntame sobre QRIBAR, automatización con n8n o cómo mejorar tus reseñas en Google.</p>
                   <div className="flex flex-wrap gap-2 justify-center">
                   {['¿Qué es QRIBAR?', '¿Cómo funcionan las tarjetas NFC?', 'Quiero automatizar mi negocio'].map((prompt) => (
@@ -172,7 +181,17 @@ export const ExpertAssistant: React.FC = () => {
 
           <div className="p-3 bg-[var(--color-bg)] border-t border-[var(--color-border)]">
             <div className="relative flex gap-2">
-              <input type="text" value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()} placeholder="Escribe tu mensaje..." aria-label="Escribe tu mensaje" className="flex-1 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl py-3 px-4 text-sm text-default outline-none focus:border-[var(--color-primary)] transition-colors min-h-[44px]" />
+              <label htmlFor="chatbot-input" className="sr-only">Escribe tu mensaje</label>
+              <input 
+                id="chatbot-input"
+                type="text" 
+                value={input} 
+                onChange={(e) => setInput(e.target.value)} 
+                onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()} 
+                placeholder="Escribe tu mensaje..." 
+                aria-label="Escribe tu mensaje" 
+                className="flex-1 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl py-3 px-4 text-sm text-default outline-none focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--focus-ring)] transition-colors min-h-[48px]" 
+              />
               <button onClick={handleSend} disabled={!input.trim() || isLoading} aria-label="Enviar mensaje" className="w-11 h-11 bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] disabled:opacity-50 disabled:cursor-not-allowed rounded-xl flex items-center justify-center transition-colors shrink-0">
                 <Send className="w-4 h-4 text-[var(--color-on-accent)]" />
               </button>
@@ -183,7 +202,7 @@ export const ExpertAssistant: React.FC = () => {
 
       <div className="flex items-center gap-3">
         {whatsappPhone && (
-          <a href={`https://wa.me/${whatsappPhone}`} target="_blank" rel="noopener noreferrer" aria-label="Contactar por WhatsApp" className="flex items-center gap-2 sm:gap-3 bg-whatsapp hover:bg-whatsapp-hover focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] text-[var(--color-on-accent)] px-4 py-3 sm:px-5 rounded-full shadow-lg transition-colors min-h-[48px]">
+          <a href={`https://wa.me/${whatsappPhone}`} target="_blank" rel="noopener noreferrer" aria-label="Contactar por WhatsApp" className="flex items-center gap-2 sm:gap-3 bg-[var(--color-whatsapp)] hover:bg-[var(--color-whatsapp-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] text-[var(--color-on-accent)] px-4 py-3 sm:px-5 rounded-full shadow-lg transition-colors min-h-[48px]">
             <MessageSquare className="w-5 h-5" />
             <span className="text-sm font-bold hidden sm:block">WhatsApp</span>
           </a>

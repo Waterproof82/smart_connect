@@ -29,14 +29,21 @@
     --color-icon-blue: oklch(65% 0.18 250);
     --color-icon-purple: oklch(60% 0.18 300);
     --color-icon-emerald: oklch(65% 0.15 160);
-    --color-icon-amber: oklch(75% 0.15 70);
-    --color-icon-rose: oklch(65% 0.18 15);
+      --color-icon-amber: oklch(75% 0.15 70);
+      --color-icon-amber-subtle: oklch(75% 0.15 70 / 0.1);
+      --color-icon-amber-border: oklch(75% 0.15 70 / 0.2);
+      --color-icon-rose: oklch(65% 0.18 15);
+      --color-whatsapp: oklch(72% 0.17 150);
+    --color-whatsapp-hover: oklch(65% 0.18 150);
     --color-overlay-subtle: rgba(255, 255, 255, 0.05);
     --color-overlay-medium: rgba(255, 255, 255, 0.10);
     --color-overlay-strong: rgba(255, 255, 255, 0.20);
     --color-shimmer: rgba(255, 255, 255, 0.03);
     --color-on-accent: oklch(100% 0 0);
     --color-on-accent-muted: oklch(100% 0 0 / 0.7);
+    --color-highlight: var(--color-icon-amber);
+    --color-highlight-subtle: var(--color-icon-amber-subtle);
+    --color-highlight-border: var(--color-icon-amber-border);
   }
 
   @media (prefers-color-scheme: light) {
@@ -67,13 +74,20 @@
       --color-icon-purple: oklch(48% 0.2 300);
       --color-icon-emerald: oklch(48% 0.18 160);
       --color-icon-amber: oklch(55% 0.18 70);
+      --color-icon-amber-subtle: oklch(55% 0.18 70 / 0.1);
+      --color-icon-amber-border: oklch(55% 0.18 70 / 0.2);
       --color-icon-rose: oklch(50% 0.2 15);
+      --color-whatsapp: oklch(72% 0.17 150);
+      --color-whatsapp-hover: oklch(65% 0.18 150);
       --color-overlay-subtle: rgba(0, 0, 0, 0.04);
       --color-overlay-medium: rgba(0, 0, 0, 0.08);
       --color-overlay-strong: rgba(0, 0, 0, 0.15);
       --color-shimmer: rgba(0, 0, 0, 0.03);
       --color-on-accent: oklch(100% 0 0);
       --color-on-accent-muted: oklch(100% 0 0 / 0.7);
+      --color-highlight: var(--color-icon-amber);
+      --color-highlight-subtle: var(--color-icon-amber-subtle);
+      --color-highlight-border: var(--color-icon-amber-border);
     }
   }
 

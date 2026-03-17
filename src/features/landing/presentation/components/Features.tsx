@@ -55,12 +55,12 @@ export const Features: React.FC = () => {
         {solutions.map((item, idx) => (
           <article
             key={item.id}
-            className={`glass-card p-8 lg:p-10 rounded-3xl group hover:border-[var(--color-accent-border)] transition-all duration-1000 cursor-default relative overflow-hidden ${
+            className={`p-8 lg:p-10 rounded-3xl group transition-all duration-1000 cursor-default relative overflow-hidden ${
               idx === 0 
-                ? 'lg:col-span-5 lg:row-span-2' 
+                ? 'lg:col-span-5 lg:row-span-2 bg-[var(--color-surface)] border-2 border-[var(--color-primary)]/30' 
                 : idx === 3 
-                  ? 'lg:col-span-7' 
-                  : 'lg:col-span-4'
+                  ? 'lg:col-span-7 bg-transparent border border-[var(--color-border)]' 
+                  : 'lg:col-span-4 glass-card'
             } ${
               isVisible 
                 ? 'opacity-100 translate-y-0 blur-0' 
@@ -103,7 +103,6 @@ export const Features: React.FC = () => {
               </a>
             </div>
 
-            <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-[var(--color-accent-subtle)] rounded-full group-hover:bg-[var(--color-accent-border)] transition-colors" aria-hidden="true" />
           </article>
         ))}
       </div>

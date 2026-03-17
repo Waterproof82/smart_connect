@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Document } from '../../domain/entities/Document';
 import { PaginatedResult } from '../../domain/repositories/IDocumentRepository';
 import { Search, Filter, Plus, Database, ChevronLeft, ChevronRight, Edit2, X } from 'lucide-react';
@@ -17,6 +17,9 @@ export const DocumentList: React.FC<DocumentListProps> = ({
 }) => {
   const { container, currentUser } = useAdmin();
   const { getAllDocumentsUseCase, deleteDocumentUseCase, updateDocumentUseCase, createDocumentUseCase } = container;
+  
+  const modalRef = useRef<HTMLDivElement>(null);
+  const previousActiveElement = useRef<HTMLElement | null>(null);
   // --- States ---
   const [documents, setDocuments] = useState<PaginatedResult<Document> | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -80,11 +83,36 @@ export const DocumentList: React.FC<DocumentListProps> = ({
     const hasModal = selectedDocument || showCreateModal;
     if (hasModal) {
       document.body.style.overflow = 'hidden';
+      previousActiveElement.current = document.activeElement as HTMLElement;
+      modalRef.current?.focus();
     } else {
       document.body.style.overflow = '';
+      previousActiveElement.current?.focus();
     }
     return () => { document.body.style.overflow = ''; };
   }, [selectedDocument, showCreateModal]);
+
+  // Focus trap handler
+  const handleModalKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key !== 'Tab') return;
+    
+    const focusableElements = modalRef.current?.querySelectorAll<HTMLElement>(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    
+    if (!focusableElements || focusableElements.length === 0) return;
+    
+    const firstElement = focusableElements[0];
+    const lastElement = focusableElements[focusableElements.length - 1];
+    
+    if (e.shiftKey && document.activeElement === firstElement) {
+      e.preventDefault();
+      lastElement.focus();
+    } else if (!e.shiftKey && document.activeElement === lastElement) {
+      e.preventDefault();
+      firstElement.focus();
+    }
+  };
 
   // --- Logic Handlers ---
 
@@ -387,11 +415,19 @@ export const DocumentList: React.FC<DocumentListProps> = ({
             onClick={() => setSelectedDocument(null)}
             style={{ cursor: 'pointer' }}
           />
-          <div className="relative bg-[var(--color-bg-alt)] w-full h-full sm:h-auto sm:max-h-[85vh] sm:rounded-xl sm:border border-[var(--color-border)] flex flex-col max-w-4xl shadow-2xl">
+          <div 
+            ref={modalRef}
+            className="relative bg-[var(--color-bg-alt)] w-full h-full sm:h-auto sm:max-h-[85vh] sm:rounded-xl sm:border border-[var(--color-border)] flex flex-col max-w-4xl shadow-2xl"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-title"
+            onKeyDown={handleModalKeyDown}
+            tabIndex={-1}
+          >
 
             {/* Modal Header */}
             <div className="flex items-center justify-between p-4 border-b border-[var(--color-border)] bg-[var(--color-bg-alt)]/95 sticky top-0 z-10">
-              <h3 className="text-lg font-bold text-default flex items-center gap-2">
+              <h3 id="modal-title" className="text-lg font-bold text-default flex items-center gap-2">
                 {isEditing ? 'Editar Documento' : 'Detalles del Documento'}
               </h3>
               <button 
@@ -437,9 +473,9 @@ export const DocumentList: React.FC<DocumentListProps> = ({
                          ))}
                        </datalist>
                        
-                       <button 
+                       <button
                          onClick={handleManualAddTag}
-                         className="px-3 py-1 bg-[var(--color-surface)] text-default text-xs rounded hover:bg-[var(--color-border)]"
+                         className="px-3 py-1 bg-[var(--color-surface)] text-default text-xs rounded hover:bg-[var(--color-border)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)]"
                          type="button"
                        >
                          Agregar
@@ -565,7 +601,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
                           id="custom-source-input"
                           type="text" 
                           placeholder="Nombre de la fuente..." 
-                          className="w-full bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded-lg p-2.5 text-default"
+                          className="w-full bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded-lg p-2.5 text-default focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)]"
                           value={customSource}
                           onChange={e => setCustomSource(e.target.value)}
                         />

@@ -33,12 +33,12 @@ export const MenuPhone: React.FC<MenuPhoneProps> = ({
             <>
               <img
                 src={restaurant.imageUrl}
-                alt={restaurant.name}
+                alt={`Foto del restaurante ${restaurant.name}`}
                 loading="lazy"
                 decoding="async"
                 className="w-full h-full object-cover opacity-80 motion-safe:group-hover:scale-110 transition-transform duration-1000"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-bg)] via-transparent"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-bg)] via-transparent" aria-hidden="true"></div>
             </>
           )}
           <div className="absolute bottom-4 left-6">

@@ -11,9 +11,10 @@ interface StatProps {
   color: string;
   isInView: boolean;
   delay: number;
+  prominent?: boolean;
 }
 
-const StatCard: React.FC<StatProps> = ({ icon, label, value, suffix, color, isInView, delay }) => {
+const StatCard: React.FC<StatProps> = ({ icon, label, value, suffix, color, isInView, delay, prominent }) => {
   const [count, setCount] = useState(0);
   const animationRef = useRef<number | null>(null);
   const hasAnimated = useRef(false);
@@ -59,17 +60,17 @@ const StatCard: React.FC<StatProps> = ({ icon, label, value, suffix, color, isIn
         isInView 
           ? 'opacity-100 translate-y-0 blur-0 scale-100' 
           : 'opacity-0 translate-y-20 blur-md scale-90'
-      }`}
+      } ${prominent ? 'lg:p-12' : ''}`}
       style={{ transitionDelay: `${delay}ms` }}
     >
       <div className={`absolute -right-8 -top-8 w-32 h-32 ${color} opacity-[0.03] group-hover:opacity-[0.06] transition-opacity duration-700`}></div>
       
       <div className="flex flex-col items-center text-center relative z-10">
-        <div className={`mb-6 w-16 h-16 bg-[var(--color-surface)] rounded-2xl flex items-center justify-center motion-safe:group-hover:scale-110 motion-safe:group-hover:rotate-6 transition-transform duration-500`}>
-          {React.cloneElement(icon as React.ReactElement<{ className?: string }>, { className: 'w-8 h-8' })}
+        <div className={`mb-6 bg-[var(--color-surface)] rounded-2xl flex items-center justify-center motion-safe:group-hover:scale-110 motion-safe:group-hover:rotate-6 transition-transform duration-500 ${prominent ? 'w-20 h-20 lg:w-24 lg:h-24' : 'w-16 h-16'}`}>
+          {React.cloneElement(icon as React.ReactElement<{ className?: string }>, { className: prominent ? 'w-10 h-10 lg:w-12 lg:h-12' : 'w-8 h-8' })}
         </div>
         
-        <div className="text-5xl font-extrabold mb-3 tracking-tighter" aria-label={`${label}: ${value}${suffix}`}>
+        <div className={`font-extrabold mb-3 tracking-tighter ${prominent ? 'text-6xl lg:text-7xl' : 'text-5xl'}`} aria-label={`${label}: ${value}${suffix}`}>
           <span className="text-[var(--color-primary)]">{count}</span>
           <span className="text-[var(--color-icon-blue)]">{suffix}</span>
         </div>
@@ -126,19 +127,51 @@ export const SuccessStats: React.FC = () => {
   return (
     <div className="container mx-auto px-6" ref={sectionRef}>
       <h2 className="sr-only">Casos de Éxito en Números</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-        {stats.map((stat) => (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6">
+        <div className="md:col-span-2 lg:col-span-4">
           <StatCard 
-            key={stat.label}
-            icon={stat.icon}
-            label={stat.label}
-            value={stat.value}
-            suffix={stat.suffix}
-            color={stat.color}
+            icon={stats[0].icon}
+            label={stats[0].label}
+            value={stats[0].value}
+            suffix={stats[0].suffix}
+            color={stats[0].color}
             isInView={isVisible}
-            delay={stat.delay}
+            delay={stats[0].delay}
+            prominent
           />
-        ))}
+        </div>
+        <div className="md:col-span-1 lg:col-span-4 grid gap-6">
+          <StatCard 
+            icon={stats[1].icon}
+            label={stats[1].label}
+            value={stats[1].value}
+            suffix={stats[1].suffix}
+            color={stats[1].color}
+            isInView={isVisible}
+            delay={stats[1].delay}
+          />
+          <StatCard 
+            icon={stats[2].icon}
+            label={stats[2].label}
+            value={stats[2].value}
+            suffix={stats[2].suffix}
+            color={stats[2].color}
+            isInView={isVisible}
+            delay={stats[2].delay}
+          />
+        </div>
+        <div className="md:col-span-1 lg:col-span-4">
+          <StatCard 
+            icon={stats[3].icon}
+            label={stats[3].label}
+            value={stats[3].value}
+            suffix={stats[3].suffix}
+            color={stats[3].color}
+            isInView={isVisible}
+            delay={stats[3].delay}
+            prominent
+          />
+        </div>
       </div>
     </div>
   );

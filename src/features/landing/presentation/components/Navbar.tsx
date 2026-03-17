@@ -9,6 +9,7 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [focusedDropdownIndex, setFocusedDropdownIndex] = useState<number>(-1);
 
   const solutions = [
     {
@@ -87,11 +88,12 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
           <div
             className="relative group"
             onMouseEnter={() => setIsDropdownOpen(true)}
-            onMouseLeave={() => setIsDropdownOpen(false)}
+            onMouseLeave={() => { setIsDropdownOpen(false); setFocusedDropdownIndex(-1); }}
             onFocus={() => setIsDropdownOpen(true)}
             onBlur={(e) => {
               if (!e.currentTarget.contains(e.relatedTarget as Node)) {
                 setIsDropdownOpen(false);
+                setFocusedDropdownIndex(-1);
               }
             }}
             onKeyDown={(e) => {
@@ -100,6 +102,16 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
                 setIsDropdownOpen(!isDropdownOpen);
               }
               if (e.key === 'Escape') setIsDropdownOpen(false);
+              if (isDropdownOpen) {
+                if (e.key === 'ArrowDown') {
+                  e.preventDefault();
+                  setFocusedDropdownIndex(0);
+                }
+                if (e.key === 'ArrowUp') {
+                  e.preventDefault();
+                  setFocusedDropdownIndex(solutions.length - 1);
+                }
+              }
             }}
           >
             <button
@@ -116,20 +128,39 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
             }`}>
               <div className="w-[280px] bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[2rem] p-4 shadow-2xl">
                 <div className="grid gap-2">
-                  {solutions.map((item) => (
+                  {solutions.map((item, idx) => (
                     <a
                       key={item.id}
                       href={item.href}
                       target={item.external ? "_blank" : undefined}
                       rel={item.external ? "noopener noreferrer" : undefined}
-                      className="flex items-center gap-4 p-3 rounded-2xl hover:bg-[var(--color-bg-alt)] transition-colors group/item"
+                      tabIndex={isDropdownOpen ? 0 : -1}
+                      className={`flex items-center gap-4 p-3 rounded-2xl hover:bg-[var(--color-bg-alt)] transition-colors group/item ${focusedDropdownIndex === idx ? 'bg-[var(--color-bg-alt)]' : ''}`}
                       onClick={(e) => {
                         if (item.external) {
-                          // No cerrar el dropdown si es externo
                           setIsDropdownOpen(false);
                         } else {
                           handleDropdownLinkClick(e);
                           setIsDropdownOpen(false);
+                        }
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'ArrowDown') {
+                          e.preventDefault();
+                          setFocusedDropdownIndex((idx + 1) % solutions.length);
+                        }
+                        if (e.key === 'ArrowUp') {
+                          e.preventDefault();
+                          setFocusedDropdownIndex((idx - 1 + solutions.length) % solutions.length);
+                        }
+                        if (e.key === 'Escape') {
+                          setIsDropdownOpen(false);
+                          setFocusedDropdownIndex(-1);
+                        }
+                      }}
+                      ref={(el) => {
+                        if (focusedDropdownIndex === idx && el) {
+                          el.focus();
                         }
                       }}
                     >

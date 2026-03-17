@@ -45,7 +45,7 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({
         <h3 className="text-lg font-bold text-default flex items-center gap-2">
           {isEditing ? 'Editar Documento' : 'Detalles del Documento'}
         </h3>
-        <button onClick={onClose} className="p-2 hover:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-lg text-muted hover:text-[var(--color-text)]" aria-label="Cerrar modal" type="button">
+        <button onClick={onClose} className="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center hover:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-lg text-muted hover:text-[var(--color-text)]" aria-label="Cerrar modal" type="button">
           <X className="w-6 h-6" />
         </button>
       </div>
@@ -94,7 +94,7 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({
                       onSourceInputChange('');
                     }
                   }}
-                  className="px-3 py-1 bg-[var(--color-surface)] text-default text-xs rounded hover:bg-[var(--color-border)]"
+                  className="px-3 py-1 bg-[var(--color-surface)] text-default text-xs rounded hover:bg-[var(--color-border)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)]"
                   type="button"
                 >Agregar</button>
               </div>

@@ -12,6 +12,8 @@ import { contactSchema, ContactFormData } from '../schemas/contactSchema';
 import { useIntersectionObserver } from '@shared/hooks';
 
 const fieldClasses = "w-full border rounded-2xl py-3 sm:py-4 px-4 sm:px-6 outline-none transition-colors text-sm text-default bg-[var(--color-surface)] border-[var(--color-border)] focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--focus-ring)] min-h-[48px] sm:min-h-[52px]";
+
+const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const errorClasses = "bg-[var(--color-error-bg)] border-[var(--color-error-border)] focus:border-[var(--color-error-text)]";
 const validClasses = "bg-[var(--color-accent-subtle)] border-[var(--color-accent-border)] focus:border-[var(--color-primary)]";
 
@@ -57,12 +59,17 @@ export const Contact: React.FC = () => {
     handleSubmit,
     reset,
     setValue,
-    formState: { errors, isSubmitting, isValid, touchedFields },
+    watch,
+    formState: { errors, isSubmitting, touchedFields },
   } = useForm<ContactFormData>({
     resolver: zodResolver(contactSchema),
     defaultValues: { name: '', company: '', email: '', service: '', message: '' },
-    mode: 'onChange',
+    mode: 'onBlur',
   });
+
+  const formValues = watch();
+  const hasAllRequiredFields = formValues.name && formValues.company && formValues.email && formValues.service && formValues.message;
+  const canSubmit = hasAllRequiredFields && !isSubmitting && !isLoadingSettings;
 
   const getFieldClassName = (field: keyof ContactFormData): string => {
     if (touchedFields[field] && errors[field]) return `${fieldClasses} ${errorClasses}`;
@@ -128,7 +135,7 @@ export const Contact: React.FC = () => {
 
       <div className="container mx-auto px-6 relative z-10">
         <div className={`text-center max-w-3xl mx-auto mb-20 transition-all duration-1000 ${
-          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+          prefersReducedMotion() || isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}>
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--color-accent-subtle)] border border-[var(--color-accent-border)] text-[var(--color-primary)] text-xs font-bold mb-6 tracking-wider uppercase">
             <Sparkles className="w-3.5 h-3.5" />
@@ -142,7 +149,7 @@ export const Contact: React.FC = () => {
 
         <div className="grid lg:grid-cols-12 gap-12 items-start">
           <div className={`lg:col-span-5 space-y-6 transition-all duration-1000 delay-300 ${
-            isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'
+            prefersReducedMotion() || isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'
           }`}>
             {[
               { id: 'email', icon: <Mail className="w-6 h-6" />, title: "Email Directo", value: settings?.contactEmail || (settingsError ? "No disponible" : "Cargando..."), desc: settingsError ? "Intenta más tarde" : "Respondemos en menos de 2 horas", color: "text-[var(--color-icon-blue)]", href: settings?.contactEmail ? `mailto:${settings.contactEmail}` : undefined },
@@ -173,7 +180,7 @@ export const Contact: React.FC = () => {
           </div>
 
           <div className={`lg:col-span-7 transition-all duration-1000 delay-500 ${
-            isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'
+            prefersReducedMotion() || isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'
           }`}>
             <div className="glass-card p-8 md:p-10 rounded-3xl border border-[var(--color-border)] shadow-xl">
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
@@ -185,7 +192,7 @@ export const Contact: React.FC = () => {
                   </div>
                   <div>
                     <label htmlFor="contact-company" className="text-xs font-bold text-muted uppercase tracking-widest ml-1 block mb-2">Empresa <span className="text-[var(--color-error-text)]" aria-hidden="true">*</span></label>
-                    <input id="contact-company" type="text" placeholder="Ej. Restaurante L'Escale" className={getFieldClassName('company') + ' placeholder:text-[var(--color-text-muted)]'} aria-required="true" aria-describedby={errors.company ? 'contact-company-error' : undefined} {...register('company')} />
+                    <input id="contact-company" type="text" placeholder="Ej. Restaurante L'Escale" className={getFieldClassName('company') + ' placeholder:text-[var(--color-text-muted)]'} aria-required="true" aria-invalid={touchedFields.company && !!errors.company} aria-describedby={errors.company ? 'contact-company-error' : undefined} {...register('company')} />
                     {touchedFields.company && errors.company && <p id="contact-company-error" role="alert" className="text-xs text-[var(--color-error-text)] mt-1">{errors.company.message}</p>}
                   </div>
                 </div>
@@ -206,7 +213,7 @@ export const Contact: React.FC = () => {
                       <option value="Tarjetas NFC Reseñas">Tarjetas NFC Reseñas</option>
                       <option value="Consultoría IA">Consultoría IA</option>
                     </select>
-                    <ChevronDown className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
+                    <ChevronDown aria-hidden="true" className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
                   </div>
                   {touchedFields.service && errors.service && <p id="contact-service-error" role="alert" className="text-xs text-[var(--color-error-text)] mt-1">{errors.service.message}</p>}
                 </div>
@@ -231,7 +238,7 @@ export const Contact: React.FC = () => {
                   </div>
                 )}
 
-                <button type="submit" disabled={!isValid || isSubmitting || isLoadingSettings} className={`w-full py-5 rounded-2xl font-bold flex items-center justify-center gap-3 transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] ${isValid && !isSubmitting && !isLoadingSettings ? 'bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-[var(--color-on-accent)]' : 'bg-[var(--color-overlay-medium)] text-muted cursor-not-allowed'}`}>
+                <button type="submit" disabled={!canSubmit} className={`w-full py-5 rounded-2xl font-bold flex items-center justify-center gap-3 transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] ${canSubmit ? 'bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-[var(--color-on-accent)]' : 'bg-[var(--color-overlay-medium)] text-muted cursor-not-allowed'}`}>
                   {isLoadingSettings ? <><Loader2 className="w-4 h-4 animate-spin" />Cargando...</> : isSubmitting ? <><Loader2 className="w-4 h-4 animate-spin" />Enviando...</> : <>Enviar Propuesta <Send className="w-4 h-4" aria-hidden="true" /></>}
                 </button>
               </form>
