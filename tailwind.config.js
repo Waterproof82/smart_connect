@@ -64,8 +64,8 @@ export default {
         'sc-dark-input': 'oklch(6% 0.010 250)',
         'sc-dark-card': 'oklch(14% 0.015 250)',
         // Brand colors
-        whatsapp: '#25D366',
-        'whatsapp-hover': '#1ebc57',
+        whatsapp: 'var(--color-whatsapp, oklch(65% 0.18 150))',
+        'whatsapp-hover': 'var(--color-whatsapp-hover, oklch(55% 0.18 150))',
       },
       fontFamily: {
         sans: ['Instrument Sans', 'Plus Jakarta Sans', 'system-ui', 'sans-serif'],

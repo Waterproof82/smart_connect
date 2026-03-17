@@ -67,7 +67,7 @@ export const Login: React.FC<LoginProps> = ({ loginUseCase, onLoginSuccess }) =>
         Volver
       </button>
 
-      <div className="max-w-md w-full space-y-8 border border-[var(--color-border)] p-8 rounded-2xl bg-[var(--color-surface)] shadow-2xl">
+      <div className="max-w-md w-full space-y-8 border border-[var(--color-border)] p-8 rounded-2xl bg-[var(--color-surface)] shadow-lg">
         <div>
           <h2 className="text-center text-3xl font-extrabold text-default tracking-tight">
             Panel Admin

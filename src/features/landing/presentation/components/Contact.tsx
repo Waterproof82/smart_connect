@@ -11,7 +11,7 @@ import { rateLimiter, RateLimitPresets } from '@shared/utils/rateLimiter';
 import { contactSchema, ContactFormData } from '../schemas/contactSchema';
 import { useIntersectionObserver } from '@shared/hooks';
 
-const fieldClasses = "w-full border rounded-2xl py-3 sm:py-4 px-4 sm:px-6 outline-none transition-colors text-sm text-default bg-[var(--color-surface)] border-[var(--color-border)] focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--focus-ring)] min-h-[48px] sm:min-h-[52px]";
+const fieldClasses = "w-full border rounded-2xl py-3 sm:py-4 px-4 sm:px-6 outline-none transition-colors text-sm text-default bg-[var(--color-surface)] border-[var(--color-border)] focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--focus-ring)] min-h-[44px]";
 
 const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const errorClasses = "bg-[var(--color-error-bg)] border-[var(--color-error-border)] focus:border-[var(--color-error-text)]";
@@ -245,7 +245,7 @@ export const Contact: React.FC = () => {
                   </div>
                 )}
 
-                <button type="submit" disabled={!canSubmit} className={`w-full py-4 sm:py-5 px-6 rounded-2xl font-bold flex items-center justify-center gap-3 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] ${canSubmit ? 'bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-[var(--color-on-accent)] shadow-lg shadow-[var(--color-accent)]/25 hover:shadow-xl hover:shadow-[var(--color-accent)]/30 hover:-translate-y-0.5 active:translate-y-0 active:shadow-md' : 'bg-[var(--color-overlay-medium)] text-muted cursor-not-allowed'}`}>
+                <button type="submit" disabled={!canSubmit} className={`w-full py-4 sm:py-5 px-6 rounded-2xl font-bold flex items-center justify-center gap-3 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] min-h-[44px] ${canSubmit ? 'bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-[var(--color-on-accent)] shadow-lg shadow-[var(--color-accent)]/25 hover:shadow-xl hover:shadow-[var(--color-accent)]/30 hover:-translate-y-0.5 active:translate-y-0 active:shadow-md' : 'bg-[var(--color-overlay-medium)] text-muted cursor-not-allowed'}`}>
                   {isLoadingSettings ? <><Loader2 className="w-5 h-5 animate-spin" />Cargando...</> : isSubmitting ? <><Loader2 className="w-5 h-5 animate-spin" />Enviando...</> : <><span className="text-base">Enviar Propuesta</span> <Send className="w-5 h-5" aria-hidden="true" /></>}
                 </button>
               </form>

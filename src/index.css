@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Instrument+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -28,10 +26,20 @@
     --color-highlight-subtle: oklch(25% 0.015 150);
     --color-highlight-border: oklch(35% 0.018 150);
     --color-overlay-medium: oklch(25% 0.015 250);
+    --color-overlay-subtle: oklch(15% 0.012 250);
+    --color-overlay-strong: oklch(35% 0.020 250);
+    --color-on-accent-muted: oklch(75% 0.008 250);
+    --color-icon-blue: oklch(65% 0.18 230);
+    --color-icon-purple: oklch(65% 0.18 280);
+    --color-icon-emerald: oklch(65% 0.18 160);
+    --color-icon-amber: oklch(70% 0.18 60);
+    --color-icon-rose: oklch(65% 0.18 350);
+    --color-whatsapp: oklch(65% 0.18 150);
+    --color-whatsapp-hover: oklch(55% 0.18 150);
     --focus-ring: oklch(70% 0.15 250);
-    --chart-bar: #1e293b;
-    --chart-tick: #9ca3af;
-    --chart-tooltip: #111111;
+    --chart-bar: oklch(60% 0.18 230);
+    --chart-tick: oklch(45% 0.020 250);
+    --chart-tooltip: oklch(20% 0.015 250);
   }
 
   .light {
@@ -57,10 +65,20 @@
     --color-highlight-subtle: oklch(90% 0.008 150);
     --color-highlight-border: oklch(75% 0.010 150);
     --color-overlay-medium: oklch(85% 0.008 250);
+    --color-overlay-subtle: oklch(92% 0.006 250);
+    --color-overlay-strong: oklch(75% 0.010 250);
+    --color-on-accent-muted: oklch(35% 0.010 250);
+    --color-icon-blue: oklch(55% 0.18 230);
+    --color-icon-purple: oklch(55% 0.18 280);
+    --color-icon-emerald: oklch(55% 0.18 160);
+    --color-icon-amber: oklch(60% 0.18 60);
+    --color-icon-rose: oklch(55% 0.18 350);
+    --color-whatsapp: oklch(65% 0.18 150);
+    --color-whatsapp-hover: oklch(55% 0.18 150);
     --focus-ring: oklch(60% 0.15 250);
-    --chart-bar: #3b82f6;
-    --chart-tick: #4b5563;
-    --chart-tooltip: #ffffff;
+    --chart-bar: oklch(55% 0.18 230);
+    --chart-tick: oklch(45% 0.025 250);
+    --chart-tooltip: oklch(98% 0.005 250);
   }
 
   body {
@@ -90,9 +108,6 @@
 }
 
 @layer components {
-  .glass-card {
-    @apply bg-[var(--color-surface)] backdrop-blur-md border border-[var(--color-border)] rounded-2xl;
-  }
 }
 
 @layer utilities {
@@ -197,14 +212,17 @@
 }
 
 .animate-drift {
+  will-change: transform;
   animation: drift 15s ease-in-out infinite;
 }
 
 .animate-drift-slow {
+  will-change: transform;
   animation: drift-slow 20s ease-in-out infinite;
 }
 
 .animate-float-fancy {
+  will-change: transform;
   animation: float-fancy 6s ease-in-out infinite;
 }
 

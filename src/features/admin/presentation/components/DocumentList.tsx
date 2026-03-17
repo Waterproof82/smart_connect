@@ -226,7 +226,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
       {confirmDelete && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={() => setConfirmDelete(null)} />
-          <div className="relative bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded-xl p-6 max-w-sm w-full shadow-2xl">
+          <div className="relative bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded-xl p-6 max-w-sm w-full shadow-lg">
             <h4 className="text-lg font-bold text-default mb-2">Delete Document?</h4>
             <p className="text-sm text-muted mb-6">
               This will permanently delete &quot;{confirmDelete.title}...&quot;. This action cannot be undone.
@@ -372,7 +372,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
             }}
             style={{ cursor: 'pointer' }}
           />
-          <div className="relative bg-[var(--color-bg-alt)] w-full h-full sm:h-auto sm:max-h-[85vh] sm:rounded-xl sm:border border-[var(--color-border)] flex flex-col max-w-4xl shadow-2xl">
+          <div className="relative bg-[var(--color-bg-alt)] w-full h-full sm:h-auto sm:max-h-[85vh] sm:rounded-xl sm:border border-[var(--color-border)] flex flex-col max-w-4xl shadow-lg">
 
             {/* Modal Header */}
             <div className="flex items-center justify-between p-4 border-b border-[var(--color-border)] bg-[var(--color-bg-alt)]/95 sticky top-0 z-10">

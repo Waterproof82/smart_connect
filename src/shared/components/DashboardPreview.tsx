@@ -1,8 +1,9 @@
 
-import React, { useRef } from 'react';
-import { BarChart, Bar, XAxis, ResponsiveContainer, Tooltip } from 'recharts';
+import React, { useRef, lazy, Suspense } from 'react';
 import { LayoutDashboard, Bell, TrendingUp, Star, Webhook } from 'lucide-react';
 import { useIntersectionObserver } from '@shared/hooks';
+
+const LazyBarChart = lazy(() => import('./LazyBarChart').then(m => ({ default: m.LazyBarChart })));
 
 const data = [
   { name: 'Lun', value: 300 },
@@ -27,7 +28,7 @@ export const DashboardPreview: React.FC = () => {
         <p className="text-muted">Monitorea tus KPIs y la reputación de tu negocio desde un solo lugar.</p>
       </div>
 
-      <div aria-hidden="true" className={`max-w-6xl mx-auto bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[2.5rem] overflow-hidden shadow-2xl transition-all duration-1000 ease-out ${
+      <div aria-hidden="true" className={`max-w-6xl mx-auto bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[2.5rem] overflow-hidden shadow-lg transition-all duration-1000 ease-out ${
         isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-20 scale-[0.98]'
       }`}>
         {/* Dashboard Header */}
@@ -37,7 +38,7 @@ export const DashboardPreview: React.FC = () => {
               <LayoutDashboard className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="font-bold">Panel de Control</h3>
+              <h3 className="font-bold text-default">Panel de Control</h3>
               <p className="text-[10px] text-muted">Última actualización: hace 2 min</p>
             </div>
           </div>
@@ -58,7 +59,7 @@ export const DashboardPreview: React.FC = () => {
           <div className="lg:col-span-3 space-y-6">
             {[
               { label: 'Total Scans', value: '12,450', sub: '↗ +12% vs mes pasado', icon: <TrendingUp className="w-2.5 h-2.5" />, color: 'text-[var(--color-primary)]', delay: 500, style: 'solid' },
-              { label: 'Reseñas Google', value: '4.9', sub: 'rating', icon: <Star className="w-3.5 h-3.5 text-[var(--color-icon-amber)] fill-[var(--color-icon-amber)]" />, type: 'rating', delay: 650, style: 'bordered' }
+              { label: 'Reseñas Google', value: '4.9', sub: 'Excelente', icon: <Star className="w-3.5 h-3.5 text-[var(--color-icon-amber)] fill-[var(--color-icon-amber)]" />, type: 'rating', delay: 650, style: 'bordered' }
             ].map((card) => (
               <div 
                 key={card.label} 
@@ -79,23 +80,17 @@ export const DashboardPreview: React.FC = () => {
                     {card.icon}
                   </div>
                 </div>
-                <div className="text-3xl font-bold mb-2">{card.value}</div>
-                {card.type === 'rating' ? (
-                  <div className="w-full h-1.5 bg-[var(--color-surface)] rounded-full overflow-hidden">
-                    <div className="h-full w-[95%] bg-[var(--color-icon-amber)] rounded-full"></div>
-                  </div>
-                ) : (
-                  <div className="text-[10px] text-[var(--color-success-text)] font-medium">{card.sub}</div>
-                )}
+                <div className="text-3xl font-bold text-default mb-2">{card.value}</div>
+                <div className="text-[10px] text-[var(--color-success-text)] font-medium">{card.sub}</div>
               </div>
             ))}
 
             <div className={`bg-[var(--color-accent)] p-6 rounded-2xl shadow-lg transition-all duration-700 delay-[800ms] ${
               isVisible ? 'opacity-100 motion-safe:scale-100' : 'opacity-0 motion-safe:scale-90'
             }`}>
-              <h4 className="font-bold mb-2">Plan Pro</h4>
+              <h4 className="font-bold text-default mb-2">Plan Pro</h4>
               <p className="text-[10px] text-[var(--color-on-accent-muted)] mb-6">Tu suscripción está activa hasta Dic 2024.</p>
-              <div className="w-full bg-[var(--color-text)] text-[var(--color-accent)] py-2.5 rounded-lg text-[10px] font-bold shadow-xl text-center">
+              <div className="w-full bg-[var(--color-text)] text-[var(--color-accent)] py-2.5 rounded-lg text-[10px] font-bold shadow-xl text-center text-default">
                 Gestionar
               </div>
             </div>
@@ -106,27 +101,15 @@ export const DashboardPreview: React.FC = () => {
             isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
           }`}>
             <div className="flex items-center justify-between mb-8">
-              <h4 className="font-bold text-sm">Lead Temperature</h4>
+              <h4 className="font-bold text-sm text-default">Lead Temperature</h4>
               <div className="bg-transparent text-[10px] font-bold text-muted border border-[var(--color-border)] rounded-md px-2 py-1">
                 Últimos 7 días
               </div>
             </div>
             <div className="h-[250px] w-full" role="img" aria-label="Gráfico de temperatura de leads durante los últimos 7 días">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={data} margin={{ top: 10, right: 0, left: -20, bottom: 0 }}>
-                  <XAxis 
-                    dataKey="name" 
-                    axisLine={false} 
-                    tickLine={false} 
-                    tick={{ fill: 'var(--chart-tick)', fontSize: 10 }} 
-                  />
-                  <Tooltip 
-                    cursor={{ fill: 'var(--color-overlay-subtle)' }}
-                    contentStyle={{ background: 'var(--chart-tooltip)', border: 'none', borderRadius: '8px', fontSize: '12px' }}
-                  />
-                  <Bar dataKey="value" radius={[4, 4, 0, 0]} fill="var(--chart-bar)" />
-                </BarChart>
-              </ResponsiveContainer>
+              <Suspense fallback={<div className="h-full flex items-center justify-center text-muted">Cargando gráfico...</div>}>
+                <LazyBarChart data={data} />
+              </Suspense>
             </div>
           </div>
 
@@ -134,7 +117,7 @@ export const DashboardPreview: React.FC = () => {
           <div className={`lg:col-span-3 bg-[var(--color-bg-alt)] p-8 rounded-3xl border border-[var(--color-border)] transition-all duration-700 delay-[900ms] ${
             isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-20'
           }`}>
-            <h4 className="font-bold text-sm mb-8">Actividad Reciente</h4>
+            <h4 className="font-bold text-sm text-default mb-8">Actividad Reciente</h4>
             <div className="space-y-6">
               {[
                 { icon: <Bell className="w-3 h-3" />, label: 'Usuario Escaneo NFC', sub: 'Hace 2 min', color: 'bg-[var(--color-icon-blue)]', delay: 1200 },
@@ -150,7 +133,7 @@ export const DashboardPreview: React.FC = () => {
                     <div className={`${activity.color} w-1.5 h-1.5 rounded-full`}></div>
                   </div>
                   <div>
-                    <p className="text-[10px] font-bold leading-tight">{activity.label}</p>
+                    <p className="text-[10px] font-bold leading-tight text-default">{activity.label}</p>
                     <p className="text-[9px] text-muted">{activity.sub}</p>
                   </div>
                 </div>

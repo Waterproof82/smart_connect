@@ -51,60 +51,41 @@ export const Features: React.FC = () => {
         </p>
       </div>
 
-      <div className="grid sm:grid-cols-2 lg:grid-cols-12 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
         {solutions.map((item, idx) => (
           <article
             key={item.id}
-            className={`p-8 lg:p-10 rounded-3xl group transition-all duration-1000 cursor-default relative overflow-hidden ${
-              idx === 0 
-                ? 'lg:col-span-5 lg:row-span-2 bg-[var(--color-surface)] border-2 border-[var(--color-primary)]/30' 
-                : idx === 3 
-                  ? 'lg:col-span-7 bg-transparent border border-[var(--color-border)]' 
-                  : idx === 1
-                    ? 'lg:col-span-4 bg-[var(--color-bg-alt)] border border-[var(--color-border)]'
-                    : 'lg:col-span-4 border-2 border-dashed border-[var(--color-border)]'
-            } ${
+            className={`relative p-8 lg:p-10 rounded-3xl transition-all duration-700 cursor-pointer group ${
               isVisible 
-                ? 'opacity-100 translate-y-0 blur-0' 
-                : 'opacity-0 translate-y-20 blur-sm'
+                ? 'opacity-100 translate-y-0' 
+                : 'opacity-0 translate-y-10'
+            } ${
+              idx === 0 
+                ? 'bg-[var(--color-surface)] lg:col-span-2 lg:row-span-2' 
+                : 'bg-[var(--color-bg-alt)]'
             }`}
-            style={{ transitionDelay: `${idx * 150}ms` }}
+            style={{ transitionDelay: `${idx * 100}ms` }}
           >
             <div className={`mb-6 w-14 h-14 bg-[var(--color-surface)] rounded-2xl flex items-center justify-center motion-safe:group-hover:scale-110 transition-transform ${idx === 0 ? 'lg:w-16 lg:h-16' : ''}`}>
               {item.icon}
             </div>
-            <h3 className={`font-bold mb-4 ${idx === 0 ? 'text-3xl lg:text-4xl' : 'text-xl lg:text-2xl'}`}>{item.title}</h3>
-            <p className={`text-muted leading-relaxed ${idx === 0 ? 'mb-12 text-lg' : 'mb-8'}`}>
+            <h3 className={`font-bold mb-4 text-default ${idx === 0 ? 'text-3xl lg:text-4xl' : 'text-xl lg:text-2xl'}`}>{item.title}</h3>
+            <p className={`text-muted leading-relaxed mb-6 ${idx === 0 ? 'text-lg' : ''}`}>
               {item.description}
             </p>
             
-            <div className={`transform transition-all duration-700 ease-out ${
-              isVisible 
-                ? 'opacity-100 translate-y-0 scale-100' 
-                : 'opacity-0 translate-y-10 scale-90'
-            }`}
-            style={{ transitionDelay: `${(idx * 150) + 400}ms` }}
+            <a 
+              href={item.external && item.href 
+                ? item.href 
+                : `#contacto?servicio=${encodeURIComponent(item.serviceValue)}`
+              }
+              target={item.external ? "_blank" : undefined}
+              rel={item.external ? "noopener noreferrer" : undefined}
+              className="inline-flex items-center gap-2 text-sm font-bold text-[var(--color-primary)] group-hover:text-[var(--color-primary)] transition-colors"
             >
-              <a 
-                href={item.external && item.href 
-                  ? item.href 
-                  : `#contacto?servicio=${encodeURIComponent(item.serviceValue)}`
-                }
-                target={item.external ? "_blank" : undefined}
-                rel={item.external ? "noopener noreferrer" : undefined}
-                className="inline-flex items-center gap-2 text-sm font-bold text-[var(--color-primary)] group-hover:text-[var(--color-primary)] transition-colors relative"
-              >
-                <span>{item.external ? 'Visitar' : `Saber más sobre ${item.title}`}</span>
-                <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                
-                <div className={`absolute -bottom-1 left-0 h-[2px] bg-[var(--color-accent)] transition-all duration-1000 ease-out ${
-                  isVisible ? 'w-full opacity-100' : 'w-0 opacity-0'
-                }`} 
-                style={{ transitionDelay: `${(idx * 150) + 800}ms` }}
-                />
-              </a>
-            </div>
-
+              <span>{item.external ? 'Visitar' : 'Contactar'}</span>
+              <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+            </a>
           </article>
         ))}
       </div>

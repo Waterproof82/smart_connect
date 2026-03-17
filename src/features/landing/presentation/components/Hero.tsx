@@ -24,11 +24,11 @@ export const Hero: React.FC = () => {
           </p>
 
           <div className="reveal-3 flex flex-wrap gap-5">
-            <button onClick={() => document.querySelector('#contacto')?.scrollIntoView({ behavior: 'smooth' })} className="bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg)] text-[var(--color-on-accent)] px-6 md:px-10 py-4 md:py-5 rounded-2xl font-bold flex items-center gap-3 transition-all shadow-xl motion-safe:active:scale-95 group min-h-[48px] sm:min-h-[52px]">
+            <button onClick={() => document.querySelector('#contacto')?.scrollIntoView({ behavior: 'smooth' })} className="bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg)] text-[var(--color-on-accent)] px-6 md:px-10 py-4 md:py-5 rounded-2xl font-bold flex items-center gap-3 transition-all shadow-xl motion-safe:active:scale-95 group min-h-[44px]">
               Empezar Ahora
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
-            <button onClick={() => document.querySelector('#soluciones')?.scrollIntoView({ behavior: 'smooth' })} className="bg-[var(--color-overlay-subtle)] hover:bg-[var(--color-overlay-medium)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg)] border border-[var(--color-border)] px-6 md:px-10 py-4 md:py-5 rounded-2xl font-bold flex items-center gap-3 transition-all motion-safe:active:scale-95 group min-h-[48px] sm:min-h-[52px]">
+            <button onClick={() => document.querySelector('#soluciones')?.scrollIntoView({ behavior: 'smooth' })} className="bg-[var(--color-overlay-subtle)] hover:bg-[var(--color-overlay-medium)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg)] border border-[var(--color-border)] px-6 md:px-10 py-4 md:py-5 rounded-2xl font-bold flex items-center gap-3 transition-all motion-safe:active:scale-95 group min-h-[44px]">
               Ver Demo
               <div className="w-8 h-8 bg-[var(--color-overlay-medium)] rounded-full flex items-center justify-center group-hover:bg-[var(--color-overlay-strong)] transition-colors">
                 <Play className="w-3 h-3 fill-[var(--color-text)] ml-0.5" />
@@ -38,7 +38,7 @@ export const Hero: React.FC = () => {
         </div>
 
         <div className="relative hidden lg:flex justify-center lg:justify-end reveal-1" aria-hidden="true">
-          <div className="relative w-full max-w-md aspect-[3/4] bg-[var(--color-surface)] rounded-[3rem] p-10 border border-[var(--color-border)] shadow-2xl glow-blue shimmer animate-float-fancy">
+          <div className="relative w-full max-w-md aspect-[3/4] bg-[var(--color-surface)] rounded-[3rem] p-10 border border-[var(--color-border)] glow-blue shimmer animate-float-fancy">
             <div className="flex justify-between items-start mb-16">
               <div className="w-12 h-12 bg-[var(--color-accent-subtle)] rounded-2xl flex items-center justify-center text-[var(--color-primary)]">
                 <Volume2 className="w-6 h-6" />
@@ -84,7 +84,7 @@ export const Hero: React.FC = () => {
                </div>
             </div>
 
-            <div className="absolute -right-12 bottom-1/4 bg-[var(--color-surface)] border border-[var(--color-border)] backdrop-blur-md p-4 rounded-2xl flex flex-col gap-1 shadow-2xl animate-float-fancy" style={{ animationDelay: '-4s' }}>
+            <div className="absolute -right-12 bottom-1/4 bg-[var(--color-surface)] border border-[var(--color-border)] backdrop-blur-md p-4 rounded-2xl flex flex-col gap-1 shadow-lg animate-float-fancy" style={{ animationDelay: '-4s' }}>
                <div className="flex gap-1">
                  {[1, 2, 3].map(i => <div key={i} className="w-6 h-1 bg-[var(--color-primary)]/40 rounded-full"></div>)}
                </div>

@@ -68,7 +68,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
   return (
     <nav
       aria-label="Navegación principal"
-      className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 border-b border-[var(--color-border)] shadow-2xl bg-[var(--color-bg)] ${
+      className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 border-b border-[var(--color-border)] bg-[var(--color-bg)] ${
         scrolled ? 'py-2 md:py-3' : 'py-3 md:py-6'
       }`}
     >
@@ -126,7 +126,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
             <div className={`absolute top-full left-1/2 -translate-x-1/2 pt-4 transition-all duration-300 ${
               isDropdownOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-4 pointer-events-none'
             }`}>
-              <div className="w-[280px] bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[2rem] p-4 shadow-2xl">
+              <div className="w-[280px] bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[2rem] p-4 shadow-lg">
                 <div className="grid gap-2">
                   {solutions.map((item, idx) => (
                     <a
@@ -205,33 +205,29 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
             onClick={() => setIsMobileMenuOpen(false)}
             onKeyDown={(e) => {
               if (e.key === 'Escape') setIsMobileMenuOpen(false);
-              if (e.key === 'Tab') {
-                const focusable = e.currentTarget.querySelectorAll<HTMLElement>('a, button');
-                const first = focusable[0];
-                const last = focusable[focusable.length - 1];
-                if (e.shiftKey && document.activeElement === first) {
-                  e.preventDefault();
-                  last.focus();
-                } else if (!e.shiftKey && document.activeElement === last) {
-                  e.preventDefault();
-                  first.focus();
-                }
-              }
             }}
           >
-            <div className="w-[80vw] max-w-xs h-full bg-[var(--color-bg)] border-l border-[var(--color-border)] p-6 flex flex-col gap-6 shadow-2xl animate-in slide-in-from-right" onClick={(e) => e.stopPropagation()}>
+            <div 
+              className="w-[80vw] max-w-xs h-full bg-[var(--color-bg)] border-l border-[var(--color-border)] p-6 flex flex-col gap-6 shadow-lg animate-in slide-in-from-right" 
+              onClick={(e) => e.stopPropagation()}
+              onKeyDown={(e) => e.stopPropagation()}
+              role="dialog"
+              aria-modal="true"
+              aria-label="Menú de navegación"
+              tabIndex={-1}
+            >
               <div className="flex items-center justify-between">
                 <span className="font-bold text-xl text-default">SmartConnect <span className="text-[var(--color-primary)]">AI</span></span>
                 <button onClick={() => setIsMobileMenuOpen(false)} className="text-default p-2 rounded-lg focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)]" aria-label="Cerrar menu" autoFocus>
                   <X className="w-6 h-6" />
                 </button>
               </div>
-              <div className="flex flex-col gap-1">
+              <div className="flex flex-col gap-1" role="navigation" aria-label="Enlaces de navegación">
                 {solutions.map((item) => (
                   <a
                     key={item.id}
                     href={item.href}
-                    className="flex items-center gap-3 p-3 text-muted min-h-[48px] hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-xl transition-colors"
+                    className="flex items-center gap-3 p-3 text-muted min-h-[44px] hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-xl transition-colors"
                     target={item.external ? "_blank" : undefined}
                     rel={item.external ? "noopener noreferrer" : undefined}
                     onClick={(e) => item.external ? setIsMobileMenuOpen(false) : handleMobileLinkClick(e)}
@@ -241,9 +237,9 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
                   </a>
                 ))}
                 <hr className="border-[var(--color-border)] my-2" />
-                <a href="#exito" className="text-muted p-3 min-h-[48px] flex items-center hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-xl transition-colors" onClick={handleMobileLinkClick}>Éxito</a>
-                <a href="#contacto" className="text-muted p-3 min-h-[48px] flex items-center hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-xl transition-colors" onClick={handleMobileLinkClick}>Contacto</a>
-                <Link to="/admin" className="text-muted flex items-center gap-2 p-3 min-h-[48px] hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-xl transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
+                <a href="#exito" className="text-muted p-3 min-h-[44px] flex items-center hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-xl transition-colors" onClick={handleMobileLinkClick}>Éxito</a>
+                <a href="#contacto" className="text-muted p-3 min-h-[44px] flex items-center hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-xl transition-colors" onClick={handleMobileLinkClick}>Contacto</a>
+                <Link to="/admin" className="text-muted flex items-center gap-2 p-3 min-h-[44px] hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-xl transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
                   <Shield className="w-4 h-4" />
                   <span>Admin</span>
                 </Link>

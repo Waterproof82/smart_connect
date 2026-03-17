@@ -44,7 +44,7 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({
       }}
       style={{ cursor: 'pointer' }}
     />
-    <div className="relative bg-[var(--color-bg-alt)] w-full h-full sm:h-auto sm:max-h-[85vh] sm:rounded-xl sm:border border-[var(--color-border)] flex flex-col max-w-4xl shadow-2xl">
+    <div className="relative bg-[var(--color-bg-alt)] w-full h-full sm:h-auto sm:max-h-[85vh] sm:rounded-xl sm:border border-[var(--color-border)] flex flex-col max-w-4xl shadow-lg">
       <div className="flex items-center justify-between p-4 border-b border-[var(--color-border)] bg-[var(--color-bg-alt)]/95 sticky top-0 z-10">
         <h3 className="text-lg font-bold text-default flex items-center gap-2">
           {isEditing ? 'Edit Document' : 'Document Details'}

@@ -26,7 +26,7 @@ export const MenuPhone: React.FC<MenuPhoneProps> = ({
     <div className={`flex justify-center transition-all duration-1000 ease-out ${
       isVisible ? 'opacity-100 translate-x-0 blur-0 rotate-0' : 'opacity-0 -translate-x-20 blur-md -rotate-6'
     }`}>
-      <div className="relative w-full max-w-[360px] aspect-[9/19] bg-[var(--color-bg)] rounded-[3rem] border-8 border-[var(--color-surface)] shadow-2xl overflow-hidden group">
+      <div className="relative w-full max-w-[360px] aspect-[9/19] bg-[var(--color-bg)] rounded-[3rem] border-8 border-[var(--color-surface)] shadow-lg overflow-hidden group">
         {/* Header with restaurant info */}
         <div className="absolute top-0 w-full h-40 overflow-hidden">
           {restaurant.hasImage() && (
