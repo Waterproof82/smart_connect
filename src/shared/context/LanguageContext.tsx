@@ -250,6 +250,86 @@ interface Translation {
   cartaCTASupport: string;
   cartaCTANoComm: string;
 
+  // Tap Review (NFC)
+  tapReviewMetaTitle: string;
+  tapReviewMetaDesc: string;
+  tapReviewBack: string;
+  tapReviewEyebrow: string;
+  tapReviewHeroTitle: string;
+  tapReviewHeroAccent: string;
+  tapReviewHeroSubtitle: string;
+  tapReviewHeroBtnContact: string;
+  tapReviewHeroBtnProduct: string;
+  tapReviewHeroFeature1: string;
+  tapReviewHeroFeature2: string;
+  tapReviewHeroFeature3: string;
+  
+  tapReviewProductExhibitorWhite: string;
+  tapReviewProductExhibitorWhiteAlt: string;
+  tapReviewProductExhibitorBlack: string;
+  tapReviewProductExhibitorBlackAlt: string;
+  tapReviewProductStand: string;
+  tapReviewProductStandAlt: string;
+  
+  tapReviewStatsBusinesses: string;
+  tapReviewStatsReviews: string;
+  tapReviewStatsDaily: string;
+  
+  tapReviewHowTitle: string;
+  tapReviewHowSubtitle: string;
+  tapReviewHowStep1Title: string;
+  tapReviewHowStep1Desc: string;
+  tapReviewHowStep2Title: string;
+  tapReviewHowStep2Desc: string;
+  tapReviewHowStep3Title: string;
+  tapReviewHowStep3Desc: string;
+  
+  tapReviewFeatTitle: string;
+  tapReviewFeatSubtitle: string;
+  tapReviewFeatNFC: string;
+  tapReviewFeatNFCDesc: string;
+  tapReviewFeatSpeed: string;
+  tapReviewFeatSpeedDesc: string;
+  tapReviewFeatGoogle: string;
+  tapReviewFeatGoogleDesc: string;
+  tapReviewFeatNoSub: string;
+  tapReviewFeatNoSubDesc: string;
+  
+  tapReviewSocialTitle: string;
+  tapReviewSocialSubtitle: string;
+  tapReviewTestimonial1Quote: string;
+  tapReviewTestimonial1Author: string;
+  tapReviewTestimonial1Business: string;
+  tapReviewTestimonial2Quote: string;
+  tapReviewTestimonial2Author: string;
+  tapReviewTestimonial2Business: string;
+  tapReviewTestimonial3Quote: string;
+  tapReviewTestimonial3Author: string;
+  tapReviewTestimonial3Business: string;
+  
+  tapReviewFAQTitle: string;
+  tapReviewFAQ1Question: string;
+  tapReviewFAQ1Answer: string;
+  tapReviewFAQ2Question: string;
+  tapReviewFAQ2Answer: string;
+  tapReviewFAQ3Question: string;
+  tapReviewFAQ3Answer: string;
+  tapReviewFAQ4Question: string;
+  tapReviewFAQ4Answer: string;
+  
+  tapReviewCTATitle: string;
+  tapReviewCTASubtitle: string;
+  tapReviewCTABtnPrimary: string;
+  tapReviewCTABtnSecondary: string;
+  tapReviewCTAFeature1: string;
+  tapReviewCTAFeature2: string;
+  tapReviewCTAFeature3: string;
+  
+  tapReviewTrust30Days: string;
+  tapReviewTrust24h: string;
+  tapReviewTrustSupport: string;
+  tapReviewTrustNoSub: string;
+
   // QRIBAR
   qribarSector: string;
   qribarTitle: string;
@@ -395,6 +475,86 @@ const translations: Record<Language, Translation> = {
     // Skip Link
     skipLink: 'Saltar al contenido',
     
+    // Tap Review (NFC) translations for Spanish
+    tapReviewMetaTitle: 'Tap-to-Review NFC - Multiplica tus reseñas en Google',
+    tapReviewMetaDesc: 'Dispositivos NFC para conseguir reseñas en Google de forma automática. Solo un toque y tus clientes te valoran con 5 estrellas.',
+    tapReviewBack: 'Volver al inicio',
+    tapReviewEyebrow: 'TARJETAS NFC',
+    tapReviewHeroTitle: 'Multiplica las reseñas',
+    tapReviewHeroAccent: 'en Google de tu negocio',
+    tapReviewHeroSubtitle: 'Consigue más reseñas con los dispositivos Tap-to-Review y atrae más clientes. Chip NFC de alto rendimiento para reseñas en 5 segundos.',
+    tapReviewHeroBtnContact: 'Contactar ahora',
+    tapReviewHeroBtnProduct: 'Ver producto',
+    tapReviewHeroFeature1: 'Pago único - Sin suscripciones',
+    tapReviewHeroFeature2: 'Consigue reseñas en 5 segundos',
+    tapReviewHeroFeature3: 'Aparece el primero en Google Maps',
+    
+    tapReviewProductExhibitorWhite: 'Expositor Blanco',
+    tapReviewProductExhibitorWhiteAlt: 'Expositor de reseñas blanco',
+    tapReviewProductExhibitorBlack: 'Expositor Negro',
+    tapReviewProductExhibitorBlackAlt: 'Expositor de reseñas negro',
+    tapReviewProductStand: 'Stand Exhibidor',
+    tapReviewProductStandAlt: 'Stand exhibidor Tap-to-Review',
+    
+    tapReviewStatsBusinesses: 'Funcionando en +20,000 negocios',
+    tapReviewStatsReviews: 'reseñas conseguidas',
+    tapReviewStatsDaily: 'reseñas diarias',
+    
+    tapReviewHowTitle: '¿Cómo funciona?',
+    tapReviewHowSubtitle: 'Gracias a su Chip NFC de alto rendimiento, tus clientes acercan el móvil y se les abre la página de reseñas de tu negocio en Google.',
+    tapReviewHowStep1Title: 'Coloca el dispositivo',
+    tapReviewHowStep1Desc: 'Pon el expositor Tapstar en tu local, visible para tus clientes.',
+    tapReviewHowStep2Title: 'Cliente acerca el móvil',
+    tapReviewHowStep2Desc: 'El cliente acerca su teléfono al chip NFC. No necesita abrir apps ni escanear nada.',
+    tapReviewHowStep3Title: 'Reseña en 5 segundos',
+    tapReviewHowStep3Desc: 'Se abre directamente la página de reseñas de tu negocio en Google. El cliente solo tiene que tocar 5 estrellas.',
+    
+    tapReviewFeatTitle: 'Ventajas Tap-to-Review',
+    tapReviewFeatSubtitle: 'Todo lo que necesitas para conseguir reseñas de forma automática',
+    tapReviewFeatNFC: 'NFC de Alto Rendimiento',
+    tapReviewFeatNFCDesc: 'Tecnología NFC de última generación que funciona con cualquier smartphone moderno.',
+    tapReviewFeatSpeed: 'Reseñas en 5 segundos',
+    tapReviewFeatSpeedDesc: 'El proceso es tan rápido que los clientes no tienen tiempo de decir "no".',
+    tapReviewFeatGoogle: 'Aparece primero en Google',
+    tapReviewFeatGoogleDesc: 'Más reseñas = mejor posicionamiento en Google Maps y búsquedas locales.',
+    tapReviewFeatNoSub: 'Sin suscripciones',
+    tapReviewFeatNoSubDesc: 'Pago único. Sin cuotas mensuales, sin permanencia, sin sorpresas.',
+    
+    tapReviewSocialTitle: 'Miles de negocios confían en nosotros',
+    tapReviewSocialSubtitle: 'Negocios de hostelería en toda España ya están multiplicando sus reseñas',
+    tapReviewTestimonial1Quote: 'Pasamos de 50 a 500 reseñas en 3 meses. El impacto en nuevos clientes ha sido brutal.',
+    tapReviewTestimonial1Author: 'Carlos Martínez',
+    tapReviewTestimonial1Business: 'Restaurante El Bodegón',
+    tapReviewTestimonial2Quote: 'Mis clientes lo usan constantemente. Es facilísimo, solo tienen que acercar el teléfono.',
+    tapReviewTestimonial2Author: 'María López',
+    tapReviewTestimonial2Business: 'Café Central Madrid',
+    tapReviewTestimonial3Quote: 'La mejor inversión que hemos hecho. Las reseñas han mejorado nuestro posicionamiento en Google.',
+    tapReviewTestimonial3Author: 'Pedro Sánchez',
+    tapReviewTestimonial3Business: 'Bar La Tapa',
+    
+    tapReviewFAQTitle: 'Preguntas frecuentes',
+    tapReviewFAQ1Question: '¿Realmente funciona el NFC con cualquier móvil?',
+    tapReviewFAQ1Answer: 'Sí, el NFC funciona en la mayoría de smartphones modernos (iPhone 8 en adelante, y todos los Android con NFC). Los iPhone también permiten NFC sin abrir apps.',
+    tapReviewFAQ2Question: '¿Cómo configuro el dispositivo para mi negocio?',
+    tapReviewFAQ2Answer: 'Nosotros nos encargamos de todo. Solo necesitas darnos el nombre de tu negocio y nosotros configuramos el chip NFC para que apunte a tu ficha de Google Business.',
+    tapReviewFAQ3Question: '¿Qué pasa si el cliente no tiene NFC?',
+    tapReviewFAQ3Answer: 'El dispositivo también incluye un código QR que el cliente puede escanear con la cámara de su móvil. Así nadie se queda sin poder dejarte su reseña.',
+    tapReviewFAQ4Question: '¿Hay garantía o devolución?',
+    tapReviewFAQ4Answer: 'Sí, ofrecemos garantía de 30 días. Si no estás satisfecho, te devolvemos el 100% de tu dinero.',
+    
+    tapReviewCTATitle: 'Empieza a conseguir reseñas hoy',
+    tapReviewCTASubtitle: 'Únete a los +20,000 negocios que ya están multiplicando sus reseñas en Google',
+    tapReviewCTABtnPrimary: 'Contactar ahora',
+    tapReviewCTABtnSecondary: 'Volver al inicio',
+    tapReviewCTAFeature1: 'Garantía 30 días',
+    tapReviewCTAFeature2: 'Envío gratis 24h',
+    tapReviewCTAFeature3: 'Sin suscripciones',
+    
+    tapReviewTrust30Days: 'Garantía 30 días',
+    tapReviewTrust24h: 'Envío gratis 24h',
+    tapReviewTrustSupport: 'Soporte 24/7',
+    tapReviewTrustNoSub: 'Sin suscripciones',
+     
     // QRIBAR
     qribarSector: 'SECTOR HOSTELERÍA',
     qribarTitle: 'Digitaliza la experiencia con',
@@ -783,6 +943,86 @@ const translations: Record<Language, Translation> = {
     cartaCTASignup48h: '✓ Setup in 48h',
     cartaCTASupport: '✓ Support',
     cartaCTANoComm: '✓ 0% commissions',
+    
+    // Tap Review (NFC) translations for English
+    tapReviewMetaTitle: 'Tap-to-Review NFC - Multiply your Google reviews',
+    tapReviewMetaDesc: 'NFC devices to get reviews on Google automatically. One tap and your customers rate you with 5 stars.',
+    tapReviewBack: 'Back to home',
+    tapReviewEyebrow: 'NFC CARDS',
+    tapReviewHeroTitle: 'Multiply the reviews',
+    tapReviewHeroAccent: 'on Google for your business',
+    tapReviewHeroSubtitle: 'Get more reviews with Tap-to-Review devices and attract more customers. High-performance NFC chip for reviews in 5 seconds.',
+    tapReviewHeroBtnContact: 'Contact now',
+    tapReviewHeroBtnProduct: 'View product',
+    tapReviewHeroFeature1: 'One-time payment - No subscriptions',
+    tapReviewHeroFeature2: 'Get reviews in 5 seconds',
+    tapReviewHeroFeature3: 'Appear first on Google Maps',
+    
+    tapReviewProductExhibitorWhite: 'White Exhibitor',
+    tapReviewProductExhibitorWhiteAlt: 'White reviews exhibitor',
+    tapReviewProductExhibitorBlack: 'Black Exhibitor',
+    tapReviewProductExhibitorBlackAlt: 'Black reviews exhibitor',
+    tapReviewProductStand: 'Display Stand',
+    tapReviewProductStandAlt: 'Tap-to-Review display stand',
+    
+    tapReviewStatsBusinesses: 'Working in +20,000 businesses',
+    tapReviewStatsReviews: 'reviews obtained',
+    tapReviewStatsDaily: 'daily reviews',
+    
+    tapReviewHowTitle: 'How does it work?',
+    tapReviewHowSubtitle: 'Thanks to its high-performance NFC chip, your customers bring their phone closer and the Google reviews page for your business opens.',
+    tapReviewHowStep1Title: 'Place the device',
+    tapReviewHowStep1Desc: 'Put the Tapstar exhibitor in your establishment, visible for your customers.',
+    tapReviewHowStep2Title: 'Customer brings phone closer',
+    tapReviewHowStep2Desc: 'The customer brings their phone to the NFC chip. No need to open apps or scan anything.',
+    tapReviewHowStep3Title: 'Review in 5 seconds',
+    tapReviewHowStep3Desc: 'Your business Google reviews page opens directly. The customer just has to tap 5 stars.',
+    
+    tapReviewFeatTitle: 'Tap-to-Review Advantages',
+    tapReviewFeatSubtitle: 'Everything you need to get reviews automatically',
+    tapReviewFeatNFC: 'High-Performance NFC',
+    tapReviewFeatNFCDesc: 'Latest generation NFC technology that works with any modern smartphone.',
+    tapReviewFeatSpeed: 'Reviews in 5 seconds',
+    tapReviewFeatSpeedDesc: 'The process is so fast that customers don\'t have time to say "no".',
+    tapReviewFeatGoogle: 'Appear first on Google',
+    tapReviewFeatGoogleDesc: 'More reviews = better positioning on Google Maps and local searches.',
+    tapReviewFeatNoSub: 'No subscriptions',
+    tapReviewFeatNoSubDesc: 'One-time payment. No monthly fees, no commitment, no surprises.',
+    
+    tapReviewSocialTitle: 'Thousands of businesses trust us',
+    tapReviewSocialSubtitle: 'Hospitality businesses across Spain are already multiplying their reviews',
+    tapReviewTestimonial1Quote: 'We went from 50 to 500 reviews in 3 months. The impact on new customers has been brutal.',
+    tapReviewTestimonial1Author: 'Carlos Martínez',
+    tapReviewTestimonial1Business: 'Restaurante El Bodegón',
+    tapReviewTestimonial2Quote: 'My customers use it constantly. It\'s super easy, they just have to bring their phone closer.',
+    tapReviewTestimonial2Author: 'María López',
+    tapReviewTestimonial2Business: 'Café Central Madrid',
+    tapReviewTestimonial3Quote: 'The best investment we\'ve made. The reviews have improved our positioning on Google.',
+    tapReviewTestimonial3Author: 'Pedro Sánchez',
+    tapReviewTestimonial3Business: 'Bar La Tapa',
+    
+    tapReviewFAQTitle: 'Frequently Asked Questions',
+    tapReviewFAQ1Question: 'Does NFC really work with any phone?',
+    tapReviewFAQ1Answer: 'Yes, NFC works on most modern smartphones (iPhone 8 and newer, and all Android phones with NFC). iPhones also allow NFC without opening apps.',
+    tapReviewFAQ2Question: 'How do I configure the device for my business?',
+    tapReviewFAQ2Answer: 'We take care of everything. You just need to give us your business name and we configure the NFC chip to point to your Google Business profile.',
+    tapReviewFAQ3Question: 'What if the customer doesn\'t have NFC?',
+    tapReviewFAQ3Answer: 'The device also includes a QR code that the customer can scan with their phone camera. This way no one is left without being able to leave you their review.',
+    tapReviewFAQ4Question: 'Is there a guarantee or return policy?',
+    tapReviewFAQ4Answer: 'Yes, we offer a 30-day guarantee. If you\'re not satisfied, we\'ll refund 100% of your money.',
+    
+    tapReviewCTATitle: 'Start getting reviews today',
+    tapReviewCTASubtitle: 'Join the +20,000 businesses that are already multiplying their Google reviews',
+    tapReviewCTABtnPrimary: 'Contact now',
+    tapReviewCTABtnSecondary: 'Back to home',
+    tapReviewCTAFeature1: '30-day guarantee',
+    tapReviewCTAFeature2: 'Free 24h shipping',
+    tapReviewCTAFeature3: 'No subscriptions',
+    
+    tapReviewTrust30Days: '30-day guarantee',
+    tapReviewTrust24h: 'Free 24h shipping',
+    tapReviewTrustSupport: '24/7 Support',
+    tapReviewTrustNoSub: 'No subscriptions',
   }
 };
 

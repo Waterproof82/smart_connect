@@ -7,6 +7,7 @@ import { LanguageProvider } from '@shared/context/LanguageContext';
 import './index.css';
 import App from './App';
 import CartaDigitalPremium from './features/landing/presentation/components/CartaDigitalPremium';
+import { TapReviewPage } from './features/tap-review/presentation';
 
 const getInitialTheme = (): 'light' | 'dark' => {
   if (typeof window === 'undefined') return 'dark';
@@ -62,6 +63,7 @@ root.render(
             <Route path="/" element={<App />} />
             <Route path="/admin" element={<AdminPanel />} />
             <Route path="/carta-digital" element={<CartaDigitalPremium />} />
+            <Route path="/tap-review" element={<TapReviewPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>

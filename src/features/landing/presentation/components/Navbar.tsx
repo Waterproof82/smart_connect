@@ -34,7 +34,8 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
       icon: <Smartphone className="w-5 h-5 text-[var(--color-icon-emerald)]" />,
       title: t.navbarNFC,
       desc: t.navbarNFCDesc,
-      href: '#soluciones'
+      href: '/tap-review',
+      internal: true
     },
     {
       id: 'qribar',
