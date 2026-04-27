@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { TrendingUp, Heart, Star, Users, Quote } from 'lucide-react';
 import { useIntersectionObserver } from '@shared/hooks';
+import { useLanguage } from '@shared/context/LanguageContext';
 
 interface StatProps {
   icon: React.ReactElement;
@@ -99,37 +100,38 @@ const StatCard: React.FC<StatProps> = ({ icon, label, quote, author, color, isIn
 export const SuccessStats: React.FC = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const isVisible = useIntersectionObserver(sectionRef);
+  const { t } = useLanguage();
 
   const stats = [
     { 
       icon: <TrendingUp className="text-[var(--color-icon-emerald)]" />,
-      label: "Aumento Promedio",
-      quote: "Desde que implementamos QRIBAR, nuestros ingresos por mesa aumentaron un 45%",
-      author: "Restaurante L'Escale",
+      label: t.successStat1Label,
+      quote: t.successStat1Quote,
+      author: t.successStat1Author,
       color: "bg-[var(--color-icon-emerald)]",
       delay: 0
     },
     { 
       icon: <Heart className="text-[var(--color-icon-rose)]" />,
-      label: "Satisfacción",
-      quote: "Mis clientes adoran la experiencia. Las reseñas positivas se dispararon",
-      author: "Café Central Madrid",
+      label: t.successStat2Label,
+      quote: t.successStat2Quote,
+      author: t.successStat2Author,
       color: "bg-[var(--color-icon-rose)]",
       delay: 150
     },
     { 
       icon: <Star className="text-[var(--color-icon-amber)]" />,
-      label: "Reseñas Ganadas",
-      quote: "Pasamos de 200 a 1200 reseñas en Google. Es increíble el impacto",
-      author: "Bar Bodega Toledo",
+      label: t.successStat3Label,
+      quote: t.successStat3Quote,
+      author: t.successStat3Author,
       color: "bg-[var(--color-icon-amber)]",
       delay: 300
     },
     { 
       icon: <Users className="text-[var(--color-icon-blue)]" />,
-      label: "Clientes Activos",
-      quote: "Más de 850 negocios confían en SmartConnect para su transformación digital",
-      author: "Comunidad Hostelera",
+      label: t.successStat4Label,
+      quote: t.successStat4Quote,
+      author: t.successStat4Author,
       color: "bg-[var(--color-icon-blue)]",
       delay: 450
     }
@@ -137,7 +139,7 @@ export const SuccessStats: React.FC = () => {
 
   return (
     <div className="container mx-auto px-6" ref={sectionRef}>
-      <h2 className="sr-only">Casos de Éxito en Números</h2>
+      <h2 className="sr-only">{t.successTitle}</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6">
         <div className="md:col-span-2 lg:col-span-4">
           <StatCard 

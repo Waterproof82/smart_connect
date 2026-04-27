@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { Cpu, ChevronDown, Code2, Settings2, Smartphone, Utensils, Shield, X, Menu } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import LanguageSelector from '@shared/components/LanguageSelector';
+import { useLanguage } from '@shared/context/LanguageContext';
 
 interface NavbarProps {
   scrolled: boolean;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
+  const { t } = useLanguage();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [focusedDropdownIndex, setFocusedDropdownIndex] = useState<number>(-1);
@@ -15,37 +18,37 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
     {
       id: 'software-ia',
       icon: <Code2 className="w-5 h-5 text-[var(--color-icon-blue)]" />,
-      title: 'Software & IA',
-      desc: 'Soluciones a medida',
+      title: t.navbarSoftwareIA,
+      desc: t.navbarSoftwareIADesc,
       href: '#soluciones'
     },
     {
       id: 'automatizacion-n8n',
       icon: <Settings2 className="w-5 h-5 text-[var(--color-icon-purple)]" />,
-      title: 'Automatización n8n',
-      desc: 'Flujos inteligentes',
+      title: t.navbarAutomation,
+      desc: t.navbarAutomationDesc,
       href: '#soluciones'
     },
     {
       id: 'tarjetas-nfc',
       icon: <Smartphone className="w-5 h-5 text-[var(--color-icon-emerald)]" />,
-      title: 'Tarjetas NFC',
-      desc: 'Reseñas al instante',
+      title: t.navbarNFC,
+      desc: t.navbarNFCDesc,
       href: '#soluciones'
     },
     {
       id: 'qribar',
       icon: <Utensils className="w-5 h-5 text-[var(--color-icon-amber)]" />,
-      title: 'QRIBAR',
-      desc: 'Pedido en tiempo real a barra y cocina',
+      title: t.navbarQribar,
+      desc: t.navbarQribarDesc,
       href: 'https://qribar.es',
       external: true
     },
     {
       id: 'carta-digital',
       icon: <Utensils className="w-5 h-5 text-[var(--color-icon-emerald)]" />,
-      title: 'Carta Digital Premium',
-      desc: '0% comisiones, 5 idiomas',
+      title: t.navbarCartaDigital,
+      desc: t.navbarCartaDigitalDesc,
       href: '/carta-digital',
       internal: true
     }
@@ -127,7 +130,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
               aria-haspopup="true"
               aria-expanded={isDropdownOpen}
             >
-              Soluciones
+              {t.navSolutions}
               <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`} />
             </button>
 
@@ -186,11 +189,12 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
             </div>
           </div>
 
-          <a href="#exito" className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline focus-visible:outline-none transition-colors" onClick={handleDropdownLinkClick}>Éxito</a>
-          <a href="#contacto" className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline focus-visible:outline-none transition-colors" onClick={handleDropdownLinkClick}>Contacto</a>
+          <a href="#exito" className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline focus-visible:outline-none transition-colors" onClick={handleDropdownLinkClick}>{t.navSuccess}</a>
+          <a href="#contacto" className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline focus-visible:outline-none transition-colors" onClick={handleDropdownLinkClick}>{t.navContact}</a>
+          <LanguageSelector />
           <Link to="/admin" className="flex items-center gap-2 text-muted hover:text-[var(--color-primary)] transition-colors">
             <Shield className="w-4 h-4" />
-            <span>Admin</span>
+            <span>{t.navAdmin}</span>
           </Link>
         </div>
 
@@ -226,9 +230,12 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
             >
               <div className="flex items-center justify-between">
                 <span className="font-bold text-xl text-default">SmartConnect <span className="text-[var(--color-primary)]">AI</span></span>
-                <button onClick={() => setIsMobileMenuOpen(false)} className="text-default p-2 rounded-lg focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)]" aria-label="Cerrar menu" autoFocus>
-                  <X className="w-6 h-6" />
-                </button>
+                <div className="flex items-center gap-4">
+                  <LanguageSelector />
+                  <button onClick={() => setIsMobileMenuOpen(false)} className="text-default p-2 rounded-lg focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)]" aria-label="Cerrar menu" autoFocus>
+                    <X className="w-6 h-6" />
+                  </button>
+                </div>
               </div>
               <div className="flex flex-col gap-1" role="navigation" aria-label="Enlaces de navegación">
                 {solutions.map((item) => (
@@ -245,8 +252,8 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
                   </a>
                 ))}
                 <hr className="border-[var(--color-border)] my-2" />
-                <a href="#exito" className="text-muted p-3 min-h-[44px] flex items-center hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-xl transition-colors" onClick={handleMobileLinkClick}>Éxito</a>
-                <a href="#contacto" className="text-muted p-3 min-h-[44px] flex items-center hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-xl transition-colors" onClick={handleMobileLinkClick}>Contacto</a>
+                <a href="#exito" className="text-muted p-3 min-h-[44px] flex items-center hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-xl transition-colors" onClick={handleMobileLinkClick}>{t.navSuccess}</a>
+                <a href="#contacto" className="text-muted p-3 min-h-[44px] flex items-center hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-xl transition-colors" onClick={handleMobileLinkClick}>{t.navContact}</a>
                 <Link to="/admin" className="text-muted flex items-center gap-2 p-3 min-h-[44px] hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-xl transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
                   <Shield className="w-4 h-4" />
                   <span>Admin</span>
