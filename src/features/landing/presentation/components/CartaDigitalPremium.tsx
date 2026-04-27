@@ -3,8 +3,10 @@ import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import { Cpu, ChevronDown, Code2, Settings2, Smartphone, Utensils, X, Menu, ArrowLeft } from 'lucide-react';
 import { useState } from 'react';
+import { useLanguage } from '@shared/context/LanguageContext';
 
 const Navbar: React.FC<{ scrolled?: boolean }> = ({ scrolled = false }) => {
+  const { t } = useLanguage();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [focusedDropdownIndex, setFocusedDropdownIndex] = useState<number>(-1);
@@ -13,38 +15,31 @@ const Navbar: React.FC<{ scrolled?: boolean }> = ({ scrolled = false }) => {
     {
       id: 'software-ia',
       icon: <Code2 className="w-5 h-5 text-[var(--color-icon-blue)]" />,
-      title: 'Software & IA',
-      desc: 'Soluciones a medida',
+      title: t.navbarSoftwareIA,
+      desc: t.navbarSoftwareIADesc,
       href: '/#soluciones'
     },
     {
       id: 'automatizacion-n8n',
       icon: <Settings2 className="w-5 h-5 text-[var(--color-icon-purple)]" />,
-      title: 'Automatización n8n',
-      desc: 'Flujos inteligentes',
+      title: t.navbarAutomation,
+      desc: t.navbarAutomationDesc,
       href: '/#soluciones'
     },
     {
       id: 'tarjetas-nfc',
       icon: <Smartphone className="w-5 h-5 text-[var(--color-icon-emerald)]" />,
-      title: 'Tarjetas NFC',
-      desc: 'Reseñas al instante',
+      title: t.navbarNFC,
+      desc: t.navbarNFCDesc,
       href: '/#soluciones'
     },
     {
       id: 'qribar',
       icon: <Utensils className="w-5 h-5 text-[var(--color-icon-amber)]" />,
-      title: 'QRIBAR',
-      desc: 'Pedido en tiempo real a barra y cocina',
+      title: t.navbarQribar,
+      desc: t.navbarQribarDesc,
       href: 'https://qribar.es',
       external: true
-    },
-    {
-      id: 'carta-digital',
-      icon: <Utensils className="w-5 h-5 text-[#2ECC71]" />,
-      title: 'Carta Digital Premium',
-      desc: '0% comisiones, 5 idiomas',
-      href: '/carta-digital'
     }
   ];
 
@@ -81,7 +76,7 @@ const Navbar: React.FC<{ scrolled?: boolean }> = ({ scrolled = false }) => {
         <div className="hidden md:flex items-center gap-8 lg:gap-10 text-sm font-semibold text-muted">
           <Link to="/" className="flex items-center gap-1.5 hover:text-[var(--color-text)] transition-colors">
             <ArrowLeft className="w-4 h-4" />
-            Volver
+            {t.navBack}
           </Link>
           <div
             className="relative group"
@@ -93,7 +88,7 @@ const Navbar: React.FC<{ scrolled?: boolean }> = ({ scrolled = false }) => {
               aria-haspopup="true"
               aria-expanded={isDropdownOpen}
             >
-              Soluciones
+              {t.navSolutions}
               <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`} />
             </button>
 
@@ -134,8 +129,8 @@ const Navbar: React.FC<{ scrolled?: boolean }> = ({ scrolled = false }) => {
             </div>
           </div>
 
-          <Link to="/#exito" className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline focus-visible:outline-none transition-colors">Éxito</Link>
-          <Link to="/#contacto" className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline focus-visible:outline-none transition-colors">Contacto</Link>
+          <Link to="/#exito" className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline focus-visible:outline-none transition-colors">{t.navSuccess}</Link>
+          <Link to="/#contacto" className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline focus-visible:outline-none transition-colors">{t.navContact}</Link>
         </div>
 
         {/* Hamburger for mobile */}
@@ -168,12 +163,12 @@ const Navbar: React.FC<{ scrolled?: boolean }> = ({ scrolled = false }) => {
               <div className="flex flex-col gap-1">
                 <Link to="/" className="flex items-center gap-3 p-3 text-muted hover:bg-[var(--color-surface)] rounded-xl transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
                   <ArrowLeft className="w-5 h-5" />
-                  Volver aInicio
+                  {t.navBack}
                 </Link>
                 <hr className="border-[var(--color-border)] my-1" />
-                <a href="/#soluciones" className="flex items-center gap-3 p-3 text-muted hover:bg-[var(--color-surface)] rounded-xl transition-colors" onClick={() => setIsMobileMenuOpen(false)}>Soluciones</a>
-                <a href="/#exito" className="flex items-center gap-3 p-3 text-muted hover:bg-[var(--color-surface)] rounded-xl transition-colors" onClick={() => setIsMobileMenuOpen(false)}>Éxito</a>
-                <a href="/#contacto" className="flex items-center gap-3 p-3 text-muted hover:bg-[var(--color-surface)] rounded-xl transition-colors" onClick={() => setIsMobileMenuOpen(false)}>Contacto</a>
+                <a href="/#soluciones" className="flex items-center gap-3 p-3 text-muted hover:bg-[var(--color-surface)] rounded-xl transition-colors" onClick={() => setIsMobileMenuOpen(false)}>{t.navSolutions}</a>
+                <a href="/#exito" className="flex items-center gap-3 p-3 text-muted hover:bg-[var(--color-surface)] rounded-xl transition-colors" onClick={() => setIsMobileMenuOpen(false)}>{t.navSuccess}</a>
+                <a href="/#contacto" className="flex items-center gap-3 p-3 text-muted hover:bg-[var(--color-surface)] rounded-xl transition-colors" onClick={() => setIsMobileMenuOpen(false)}>{t.navContact}</a>
               </div>
             </div>
           </div>
@@ -183,40 +178,44 @@ const Navbar: React.FC<{ scrolled?: boolean }> = ({ scrolled = false }) => {
   );
 };
 
-const Footer: React.FC = () => (
+const Footer: React.FC = () => {
+  const { t } = useLanguage();
+  return (
   <footer className="bg-[var(--color-bg-alt)] border-t border-[var(--color-border)] pt-12 md:pt-16 pb-8">
     <div className="container mx-auto px-4 md:px-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 mb-12">
         <div>
           <span className="font-bold text-xl text-default">SmartConnect <span className="text-[var(--color-primary)]">AI</span></span>
-          <p className="text-muted text-sm mt-3 leading-relaxed">Tecnología de próxima generación para negocios locales.</p>
+          <p className="text-muted text-sm mt-3 leading-relaxed">{t.footerTagline}</p>
         </div>
         <nav aria-label="Navegación del footer">
-          <h3 className="text-sm font-bold text-muted uppercase tracking-wider mb-4">Navegación</h3>
+          <h3 className="text-sm font-bold text-muted uppercase tracking-wider mb-4">{t.footerNavTitle}</h3>
           <ul className="space-y-2 text-sm text-muted">
-            <li><Link to="/" className="hover:text-[var(--color-text)] transition-colors">Inicio</Link></li>
-            <li><Link to="/#soluciones" className="hover:text-[var(--color-text)] transition-colors">Soluciones</Link></li>
-            <li><Link to="/#exito" className="hover:text-[var(--color-text)] transition-colors">Casos de Éxito</Link></li>
-            <li><Link to="/#contacto" className="hover:text-[var(--color-text)] transition-colors">Contacto</Link></li>
+            <li><Link to="/" className="hover:text-[var(--color-text)] transition-colors">{t.footerNavInicio}</Link></li>
+            <li><Link to="/#soluciones" className="hover:text-[var(--color-text)] transition-colors">{t.footerNavSoluciones}</Link></li>
+            <li><Link to="/#exito" className="hover:text-[var(--color-text)] transition-colors">{t.footerNavExito}</Link></li>
+            <li><Link to="/#contacto" className="hover:text-[var(--color-text)] transition-colors">{t.footerNavContacto}</Link></li>
           </ul>
         </nav>
         <div>
-          <h3 className="text-sm font-bold text-muted uppercase tracking-wider mb-4">Legal</h3>
+          <h3 className="text-sm font-bold text-muted uppercase tracking-wider mb-4">{t.footerLegalTitle}</h3>
           <ul className="space-y-2 text-sm text-muted">
-            <li><a href="mailto:legal@smartconnect.ai" className="hover:text-[var(--color-text)] transition-colors">Aviso Legal</a></li>
-            <li><a href="mailto:legal@smartconnect.ai" className="hover:text-[var(--color-text)] transition-colors">Política de Privacidad</a></li>
-            <li><a href="mailto:legal@smartconnect.ai" className="hover:text-[var(--color-text)] transition-colors">Política de Cookies</a></li>
+            <li><a href="mailto:legal@smartconnect.ai" className="hover:text-[var(--color-text)] transition-colors">{t.footerLegalAviso}</a></li>
+            <li><a href="mailto:legal@smartconnect.ai" className="hover:text-[var(--color-text)] transition-colors">{t.footerLegalPrivacidad}</a></li>
+            <li><a href="mailto:legal@smartconnect.ai" className="hover:text-[var(--color-text)] transition-colors">{t.footerLegalCookies}</a></li>
           </ul>
         </div>
       </div>
       <div className="border-t border-[var(--color-border)] pt-6 md:pt-8 text-center text-muted text-sm">
-        <p>&copy; 2026 SmartConnect AI. Todos los derechos reservados.</p>
+        <p>&copy; {t.footerCopyright}</p>
       </div>
     </div>
   </footer>
-);
+  );
+};
 
 const CartaDigitalPremium: React.FC = () => {
+  const { t } = useLanguage();
   const scrollToSection = (id: string) => {
     const el = document.getElementById(id);
     el?.scrollIntoView({ behavior: 'smooth' });
@@ -227,8 +226,8 @@ const CartaDigitalPremium: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>Carta Digital Premium — Presentación | SmartConnect AI</title>
-        <meta name="description" content="La carta digital que elimina intermediarios. 0% comisiones, 5 idiomas, pedidos por WhatsApp y tu propia base de datos de clientes." />
+        <title>{t.navbarCartaDigital} — Presentación | SmartConnect AI</title>
+        <meta name="description" content={t.featuresCartaDigitalDesc} />
       </Helmet>
 
       <div className="min-h-screen bg-[var(--color-bg)] text-default">
@@ -243,34 +242,34 @@ const CartaDigitalPremium: React.FC = () => {
           <div className="container mx-auto relative z-10">
             <div className="text-center max-w-4xl mx-auto">
               <div className="inline-block text-xs font-semibold tracking-[0.25em] text-[var(--color-primary)] uppercase border border-[rgba(201,168,76,0.3)] px-4 py-2 rounded-full mb-6 md:mb-8">
-                La revolución digital para restaurantes
+                {t.cartaHeroEyebrow}
               </div>
               
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black leading-[1.1] mb-4 md:mb-6 font-['Playfair_Display','serif']">
-                Tu carta,<br />
-                <span className="text-[var(--color-primary)] italic">tu negocio,</span><br />
-                tus clientes.
+                {t.cartaHeroTitle1}<br />
+                <span className="text-[var(--color-primary)] italic">{t.cartaHeroTitleAccent}</span><br />
+                {t.cartaHeroTitle2}
               </h1>
               
               <p className="text-base md:text-lg lg:text-xl text-muted max-w-xl mx-auto mb-8 md:mb-12 leading-relaxed">
-                Una carta digital autogestionable que transforma la experiencia de tus comensales, elimina intermediarios y convierte cada visita en un cliente fiel.
+                {t.cartaHeroSubtitle}
               </p>
               
               <div className="flex flex-wrap gap-3 md:gap-4 justify-center mb-10 md:mb-16">
                 <button onClick={() => scrollToSection('demo')} className="px-6 md:px-8 py-3 md:py-4 rounded-xl bg-[var(--color-primary)] text-[var(--color-bg)] font-semibold text-sm tracking-wider uppercase hover:opacity-90 transition-all cursor-pointer border-none min-h-[44px]">
-                  Ver cómo funciona
+                  {t.cartaHeroButtonDemo}
                 </button>
                 <button onClick={() => scrollToSection('dinero')} className="px-6 md:px-8 py-3 md:py-4 rounded-xl bg-transparent text-default font-medium text-sm cursor-pointer border border-[var(--color-border)] hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] transition-all min-h-[44px]">
-                  Calcular ahorro
+                  {t.cartaHeroButtonCalc}
                 </button>
               </div>
               
               <div className="flex flex-wrap gap-6 md:gap-10 lg:gap-12 justify-center">
                 {[
-                  { num: '5', label: 'Idiomas' },
-                  { num: '0%', label: 'Comisiones' },
-                  { num: '24/7', label: 'Pedidos online' },
-                  { num: '∞', label: 'Clientes' },
+                  { num: '5', label: t.cartaHeroStat1Label },
+                  { num: '0%', label: t.cartaHeroStat2Label },
+                  { num: '24/7', label: t.cartaHeroStat3Label },
+                  { num: '∞', label: t.cartaHeroStat4Label },
                 ].map((stat, idx) => (
                   <div key={idx} className="text-center">
                     <div className="text-2xl md:text-3xl lg:text-4xl font-bold text-[var(--color-primary)] font-['Playfair_Display','serif']">{stat.num}</div>
@@ -288,7 +287,7 @@ const CartaDigitalPremium: React.FC = () => {
                     className="w-full h-auto rounded-2xl shadow-2xl shadow-[var(--color-primary)]/20"
                   />
                   <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 px-4 py-2 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-full">
-                    <span className="text-xs font-semibold text-[var(--color-primary)]">Tap-to-Review NFC</span>
+                    <span className="text-xs font-semibold text-[var(--color-primary)]">{t.cartaHeroCardLabel}</span>
                   </div>
                 </div>
               </div>
@@ -296,24 +295,24 @@ const CartaDigitalPremium: React.FC = () => {
           </div>
         </section>
 
-        {/* PROBLEMA - Full Width */}
+{/* PROBLEMA - Full Width */}
         <section id="problema" className="py-16 md:py-24 bg-[var(--color-bg-alt)]">
           <div className="container mx-auto px-4 md:px-6">
             <div className="max-w-6xl mx-auto">
-              <div className="text-xs font-semibold tracking-[0.3em] text-[var(--color-primary)] uppercase mb-3 md:mb-4">El problema actual</div>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-[1.15] mb-4 md:mb-6 font-['Playfair_Display','serif']">¿Cuánto dinero<br />estás perdiendo hoy?</h2>
+              <div className="text-xs font-semibold tracking-[0.3em] text-[var(--color-primary)] uppercase mb-3 md:mb-4">{t.cartaProblemaTitle}</div>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-[1.15] mb-4 md:mb-6 font-['Playfair_Display','serif']">{t.cartaProblemaSubtitle}</h2>
               <p className="text-base text-muted leading-relaxed max-w-lg md:max-w-xl mb-10 md:mb-14">
-                La mayoría de restaurantes dependen de sistemas anticuados, intermediarios costosos y herramientas que no les pertenecen. El resultado: margen reducido, clientes anónimos y oportunidades perdidas.
+                {t.cartaProblemaDesc}
               </p>
               
               <div className="grid grid-cols-1 sm:2 lg:3 gap-4">
                 {[
-                  { icon: '💸', title: 'Comisiones que sangran', desc: 'Glovo, Uber Eats y similares se quedan entre el 25% y el 35% de cada pedido. Túizas, ellos se llevan el margen.' },
-                  { icon: '📜', title: 'Carta en papel obsoleta', desc: 'Sin fotos, sin descripciones claras, sin idiomas. El cliente no sabe qué va a pedir y llama al camarero tres veces.' },
-                  { icon: '🌍', title: 'Turistas sin atender', desc: 'El cliente extranjero no entiende la carta y pide lo más sencillo. Ticket medio más bajo garantizado.' },
-                  { icon: '📵', title: 'Llamadas perdidas', desc: 'Gestionar pedidos por teléfono mientras sirves mesas es imposible.' },
-                  { icon: '👻', title: 'Clientes anónimos', desc: 'Cada cliente que pide por Glovo es de Glovo, no tuyo. No tienes su contacto.' },
-                  { icon: '📉', title: 'Invisible en internet', desc: 'Sin web propia optimizada en buscadores, dependes de plataformas de terceros.' },
+                  { icon: '💸', title: t.cartaProblemaItem1Title, desc: t.cartaProblemaItem1Desc },
+                  { icon: '📜', title: t.cartaProblemaItem2Title, desc: t.cartaProblemaItem2Desc },
+                  { icon: '🌍', title: t.cartaProblemaItem3Title, desc: t.cartaProblemaItem3Desc },
+                  { icon: '📵', title: t.cartaProblemaItem4Title, desc: t.cartaProblemaItem4Desc },
+                  { icon: '👻', title: t.cartaProblemaItem5Title, desc: t.cartaProblemaItem5Desc },
+                  { icon: '📉', title: t.cartaProblemaItem6Title, desc: t.cartaProblemaItem6Desc },
                 ].map((item, idx) => (
                   <div key={idx} className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-5 md:p-6 hover:border-[rgba(231,76,60,0.4)] hover:-translate-y-1 transition-all cursor-pointer relative overflow-hidden">
                     <div className="absolute top-0 left-0 right-0 h-px bg-[#E74C3C]"></div>
@@ -331,21 +330,21 @@ const CartaDigitalPremium: React.FC = () => {
         <section id="solucion" className="py-16 md:py-24" style={{ background: 'linear-gradient(135deg, var(--color-bg) 0%, #0D1A12 100%)' }}>
           <div className="container mx-auto px-4 md:px-6">
             <div className="max-w-5xl mx-auto text-center">
-              <div className="text-xs font-semibold tracking-[0.3em] text-[var(--color-primary)] uppercase mb-3 md:mb-4">La solución</div>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-[1.15] mb-6 md:mb-10 font-['Playfair_Display','serif']">Una sola herramienta.<br />Todos los problemas, resueltos.</h2>
+              <div className="text-xs font-semibold tracking-[0.3em] text-[var(--color-primary)] uppercase mb-3 md:mb-4">{t.cartaSolucionTitle}</div>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-[1.15] mb-6 md:mb-10 font-['Playfair_Display','serif']">{t.cartaSolucionSubtitle}</h2>
               
               <div className="bg-[rgba(46,204,113,0.08)] border border-[rgba(46,204,113,0.25)] rounded-2xl md:rounded-3xl p-6 md:p-10 lg:p-14 mt-8 md:mt-12 relative overflow-hidden">
                 <p className="text-lg md:text-xl lg:text-2xl font-bold leading-relaxed font-['Playfair_Display','serif']">
-                  Una <span className="text-[#2ECC71]">carta digital multimedia</span> que trabaja para ti las 24 horas: dentro del local, en Google y en redes sociales.
+                  Una <span className="text-[#2ECC71]">{t.cartaSolucionHighlight}</span> que trabaja para ti las 24 horas: dentro del local, en Google y en redes sociales.
                 </p>
                 <p className="text-base text-muted leading-relaxed mt-4 md:mt-6 max-w-2xl mx-auto">
-                  Tus clientes ven los platos con fotos, vídeos y descripciones en 5 idiomas escaneando el QR de la mesa. Los nuevos clientes encuentran tu carta en Google y hacen pedidos take away directamente. Tú recibes el pedido por WhatsApp, acumulas su contacto en tu base de datos y les fidelizas con promociones. Sin intermediarios. Sin comisiones. Sin depender de nadie.
+                  {t.cartaSolucionDesc}
                 </p>
                 <div className="flex flex-wrap gap-2 md:gap-3 justify-center mt-6 md:mt-10">
                   {['📱 QR en mesa', '🌍 5 idiomas', '🎬 Fotos y vídeos', '🛒 Take Away', '💬 WhatsApp', '📧 Email marketing', '📊 Estadísticas', '🔍 SEO', '📱 Redes', '⭐ Google'].map((pill, idx) => (
-                    <div key={idx} className="px-3 md:px-4 py-1.5 md:py-2 rounded-full bg-[rgba(46,204,113,0.12)] border border-[rgba(46,204,113,0.25)] text-xs md:text-sm text-[#2ECC71] font-medium">
-                      {pill}
-                    </div>
+                      <div key={idx} className="px-3 md:px-4 py-1.5 md:py-2 rounded-full bg-[rgba(46,204,113,0.12)] border border-[rgba(46,204,113,0.25)] text-xs md:text-sm text-[#2ECC71] font-medium">
+                        {pill}
+                      </div>
                   ))}
                 </div>
               </div>
@@ -353,28 +352,28 @@ const CartaDigitalPremium: React.FC = () => {
           </div>
         </section>
 
-        {/* BENEFICIOS - Full Width */}
+{/* BENEFICIOS - Full Width */}
         <section id="beneficios" className="py-16 md:py-24 bg-[var(--color-bg-alt)]">
           <div className="container mx-auto px-4 md:px-6">
             <div className="max-w-6xl mx-auto">
               <div className="text-center mb-12 md:mb-20">
-                <div className="text-xs font-semibold tracking-[0.3em] text-[var(--color-primary)] uppercase mb-3 md:mb-4">Por qué funciona</div>
-                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-[1.15] font-['Playfair_Display','serif']">7 beneficios que<br />cambian tu negocio</h2>
+                <div className="text-xs font-semibold tracking-[0.3em] text-[var(--color-primary)] uppercase mb-3 md:mb-4">{t.cartaBeneficiosTitle}</div>
+                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-[1.15] font-['Playfair_Display','serif']">{t.cartaBeneficiosSubtitle}</h2>
               </div>
               
               <div className="grid grid-cols-1 md:2 gap-px bg-[var(--color-border)]">
                 {[
-                  { num: '01', icon: '🍽️', title: 'Experiencia premium en mesa', desc: 'Cada plato se presenta con fotos profesionales, vídeos y descripciones detalladas. El cliente sabe exactamente qué va a pedir.', tag: '↑ Ticket medio' },
-                  { num: '02', icon: '🌍', title: 'Sin barreras de idioma', desc: 'La carta se adapta automáticamente a 5 idiomas. Turistas entienden la oferta completa.', tag: '↑ Satisfacción' },
-                  { num: '03', icon: '💰', title: 'Cero comisiones', desc: 'Los pedidos para recogido llegan directamente. Te ahorras entre el 25% y el 35%.', tag: 'Ahorro real' },
-                  { num: '04', icon: '👤', title: 'Tus clientes, tu base', desc: 'Cada pedido online pasa a ser tuyo. Envías promociones cuando quieras.', tag: 'Fidelización' },
-                  { num: '05', icon: '💬', title: 'Pedidos por WhatsApp', desc: 'Los pedidos llegan en tiempo real por WhatsApp, bien estructurados.', tag: '↓ Errores' },
-                  { num: '06', icon: '🌐', title: 'Presencia digital', desc: 'Web SEO, Google Business, redes sociales. Apareces cuando te buscan.', tag: '↑ Visibilidad' },
-                  { num: '07', icon: '⚙️', title: 'Gestión total', desc: 'Añade, edita u oculta platos en segundos. Todo desde un panel intuitivo.', tag: 'Autogestionable', fullWidth: true },
+                  { num: '01', icon: '🍽️', title: t.cartaBeneficio1Title, desc: t.cartaBeneficio1Desc, tag: t.cartaBeneficio1Tag },
+                  { num: '02', icon: '🌍', title: t.cartaBeneficio2Title, desc: t.cartaBeneficio2Desc, tag: t.cartaBeneficio2Tag },
+                  { num: '03', icon: '💰', title: t.cartaBeneficio3Title, desc: t.cartaBeneficio3Desc, tag: t.cartaBeneficio3Tag },
+                  { num: '04', icon: '👤', title: t.cartaBeneficio4Title, desc: t.cartaBeneficio4Desc, tag: t.cartaBeneficio4Tag },
+                  { num: '05', icon: '💬', title: t.cartaBeneficio5Title, desc: t.cartaBeneficio5Desc, tag: t.cartaBeneficio5Tag },
+                  { num: '06', icon: '🌐', title: t.cartaBeneficio6Title, desc: t.cartaBeneficio6Desc, tag: t.cartaBeneficio6Tag },
+                  { num: '07', icon: '⚙️', title: t.cartaBeneficio7Title, desc: t.cartaBeneficio7Desc, tag: t.cartaBeneficio7Tag, fullWidth: true },
                 ].map((item, idx) => (
                   <div key={idx} className={`p-6 md:p-8 lg:p-10 bg-[var(--color-surface)] flex gap-4 md:gap-6 ${item.fullWidth ? 'md:col-span-2 border-l-2 border-[var(--color-primary)]' : ''}`}>
                     <div className="text-3xl md:text-4xl lg:text-5xl font-black text-[rgba(201,168,76,0.2)] font-['Playfair_Display','serif'] leading-none hidden sm:block">{item.num}</div>
-                    <div className="flex-1">
+                    <div className="flex-1 min-w-0">
                       <div className="flex items-start gap-3 md:gap-4">
                         <div className="text-xl md:text-2xl lg:text-3xl flex-shrink-0">{item.icon}</div>
                         <div className="flex-1 min-w-0">
@@ -396,17 +395,17 @@ const CartaDigitalPremium: React.FC = () => {
           <div className="container mx-auto px-4 md:px-6">
             <div className="max-w-5xl mx-auto">
               <div className="text-center mb-12 md:mb-16">
-                <div className="text-xs font-semibold tracking-[0.3em] text-[var(--color-primary)] uppercase mb-3 md:mb-4">El flujo</div>
-                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-[1.15] font-['Playfair_Display','serif']">¿Cómo funciona<br />en la práctica?</h2>
+                <div className="text-xs font-semibold tracking-[0.3em] text-[var(--color-primary)] uppercase mb-3 md:mb-4">{t.cartaFlujoTitle}</div>
+                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-[1.15] font-['Playfair_Display','serif']">{t.cartaFlujoSubtitle}</h2>
               </div>
               
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 relative">
                 <div className="absolute top-14 left-[12%] right-[12%] h-px bg-gradient-to-r from-[var(--color-primary)] to-transparent hidden md:block" style={{ opacity: 0.3 }}></div>
                 {[
-                  { icon: '📱', title: 'Escanea el QR', desc: 'El cliente apunta la cámara al QR de la mesa.' },
-                  { icon: '🎬', title: 'Explora', desc: 'Ve cada plato con imágenes y precio.' },
-                  { icon: '🔔', title: 'Fidelización', desc: 'Recibe oferta a cambio de su email.' },
-                  { icon: '✅', title: 'Pide', desc: 'Sin dudas, sin malentendidos.' },
+                  { icon: '📱', title: t.cartaFlujoStep1Title, desc: t.cartaFlujoStep1Desc },
+                  { icon: '🎬', title: t.cartaFlujoStep2Title, desc: t.cartaFlujoStep2Desc },
+                  { icon: '🔔', title: t.cartaFlujoStep3Title, desc: t.cartaFlujoStep3Desc },
+                  { icon: '✅', title: t.cartaFlujoStep4Title, desc: t.cartaFlujoStep4Desc },
                 ].map((step, idx) => (
                   <div key={idx} className="text-center relative z-10">
                     <div className="w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 rounded-full bg-[var(--color-surface)] border-2 border-[var(--color-primary)] flex items-center justify-center text-xl md:text-2xl lg:text-3xl mx-auto mb-3 md:mb-4">
@@ -425,29 +424,29 @@ const CartaDigitalPremium: React.FC = () => {
         <section id="dinero" className="py-16 md:py-24 bg-[var(--color-bg-alt)]">
           <div className="container mx-auto px-4 md:px-6">
             <div className="max-w-4xl mx-auto text-center">
-              <div className="text-xs font-semibold tracking-[0.3em] text-[var(--color-primary)] uppercase mb-3 md:mb-4">La matemática</div>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-[1.15] mb-4 md:mb-6 font-['Playfair_Display','serif']">Lo que te cobrado<br />vs. lo que pagarías con nosotros</h2>
+              <div className="text-xs font-semibold tracking-[0.3em] text-[var(--color-primary)] uppercase mb-3 md:mb-4">{t.cartaDineroTitle}</div>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-[1.15] mb-4 md:mb-6 font-['Playfair_Display','serif']">{t.cartaDineroSubtitle}</h2>
               <p className="text-base text-muted leading-relaxed mb-10 md:mb-14 max-w-lg mx-auto">
-                Basado en un restaurante con 3.000€/mes en pedidos take away. Los números hablan solos.
+                {t.cartaDineroCalcDesc}
               </p>
               
               <div className="grid grid-cols-1 md:3 gap-4 md:gap-6 items-stretch mb-8 md:mb-12">
                 <div className="bg-[var(--color-surface)] rounded-2xl p-5 md:p-6 border border-[rgba(231,76,60,0.3)]">
-                  <div className="text-xs font-bold tracking-widest uppercase text-[#E74C3C] mb-4">❌ Con intermediarios</div>
+                  <div className="text-xs font-bold tracking-widest uppercase text-[#E74C3C] mb-4">{t.cartaDineroIntermediarios}</div>
                   <div className="flex justify-between py-2 border-b border-[var(--color-border)] text-sm">
-                    <span>Uber Eats (~30%)</span>
+                    <span>{t.cartaDineroUber}</span>
                     <span className="font-bold text-[#E74C3C]">−900€</span>
                   </div>
                   <div className="flex justify-between py-2 border-b border-[var(--color-border)] text-sm">
-                    <span>Glovo (~28%)</span>
+                    <span>{t.cartaDineroGlovo}</span>
                     <span className="font-bold text-[#E74C3C]">−840€</span>
                   </div>
                   <div className="flex justify-between py-2 border-b border-[var(--color-border)] text-sm">
-                    <span>Just Eat (~25%)</span>
+                    <span>{t.cartaDineroJustEat}</span>
                     <span className="font-bold text-[#E74C3C]">−750€</span>
                   </div>
                   <div className="flex justify-between pt-3 mt-3 border-t border-[var(--color-border)]">
-                    <span className="text-sm text-muted">Total mensual</span>
+                    <span className="text-sm text-muted">{t.cartaDineroTotal}</span>
                     <span className="text-xl font-bold text-[#E74C3C] font-['Playfair_Display','serif']">−870€</span>
                   </div>
                 </div>
@@ -457,21 +456,21 @@ const CartaDigitalPremium: React.FC = () => {
                 </div>
                 
                 <div className="bg-[var(--color-surface)] rounded-2xl p-5 md:p-6 border border-[rgba(46,204,113,0.3)]">
-                  <div className="text-xs font-bold tracking-widest uppercase text-[#2ECC71] mb-4">✅ Con tu carta</div>
+                  <div className="text-xs font-bold tracking-widest uppercase text-[#2ECC71] mb-4">{t.cartaDineroTuCarta}</div>
                   <div className="flex justify-between py-2 border-b border-[var(--color-border)] text-sm">
-                    <span>Comisión</span>
+                    <span>{t.cartaDineroComision}</span>
                     <span className="font-bold text-[#2ECC71]">0€</span>
                   </div>
                   <div className="flex justify-between py-2 border-b border-[var(--color-border)] text-sm">
-                    <span>Suscripción</span>
+                    <span>{t.cartaDineroSuscripcion}</span>
                     <span className="font-bold text-[#2ECC71]">Fija</span>
                   </div>
                   <div className="flex justify-between py-2 border-b border-[var(--color-border)] text-sm">
-                    <span>Clientes</span>
+                    <span>{t.cartaDineroClientes}</span>
                     <span className="font-bold text-[#2ECC71]">Tuyos</span>
                   </div>
                   <div className="flex justify-between pt-3 mt-3 border-t border-[var(--color-border)]">
-                    <span className="text-sm text-muted">Ahorro mensual</span>
+                    <span className="text-sm text-muted">{t.cartaDineroAhorro}</span>
                     <span className="text-xl font-bold text-[#2ECC71] font-['Playfair_Display','serif']">+700€</span>
                   </div>
                 </div>
@@ -479,8 +478,7 @@ const CartaDigitalPremium: React.FC = () => {
               
               <div className="inline-block px-6 md:px-10 py-4 md:py-5 rounded-xl bg-[rgba(46,204,113,0.12)] border border-[rgba(46,204,113,0.25)]">
                 <span className="text-base md:text-lg font-semibold text-[#2ECC71]">Ahorra más de </span>
-                <span className="text-2xl md:text-3xl font-black text-[#2ECC71] font-['Playfair_Display','serif']"> 8.000€</span>
-                <span className="text-base md:text-lg font-semibold text-[#2ECC71]"> al año.</span>
+                <span className="text-2xl md:text-3xl font-black text-[#2ECC71] font-['Playfair_Display','serif']"> {t.cartaDineroAhorroAnual}</span>
               </div>
             </div>
           </div>
@@ -490,10 +488,10 @@ const CartaDigitalPremium: React.FC = () => {
         <section id="bbdd" className="py-16 md:py-24" style={{ background: 'linear-gradient(135deg, var(--color-bg) 0%, #0A0D15 100%)' }}>
           <div className="container mx-auto px-4 md:px-6">
             <div className="max-w-3xl mx-auto text-center mb-12 md:mb-16">
-              <div className="text-xs font-semibold tracking-[0.3em] text-[var(--color-primary)] uppercase mb-3 md:mb-4">Tu activo más valioso</div>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-[1.15] mb-4 md:mb-6 font-['Playfair_Display','serif']">La base de datos<br />que trabaja sola</h2>
+              <div className="text-xs font-semibold tracking-[0.3em] text-[var(--color-primary)] uppercase mb-3 md:mb-4">{t.cartaBBDDTitle}</div>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-[1.15] mb-4 md:mb-6 font-['Playfair_Display','serif']">{t.cartaBBDDSubtitle}</h2>
               <p className="text-base text-muted leading-relaxed">
-                Cada cliente que entra en tu local o hace un pedido online es una oportunidad. Con esta herramienta, no se escapa ninguna.
+                {t.cartaBBDDDesc}
               </p>
             </div>
             
@@ -501,32 +499,32 @@ const CartaDigitalPremium: React.FC = () => {
               <div className="flex flex-wrap gap-2 md:gap-3 justify-center mb-6 md:mb-8">
                 <div className="px-3 md:px-4 py-2 rounded-lg bg-[var(--color-surface)] border border-[rgba(201,168,76,0.2)] text-xs md:text-sm font-medium flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full bg-[var(--color-primary)]"></div>
-                  QR en mesa
+                  {t.cartaBBDDLabel1}
                 </div>
                 <div className="px-3 md:px-4 py-2 rounded-lg bg-[var(--color-surface)] border border-[rgba(201,168,76,0.2)] text-xs md:text-sm font-medium flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full bg-[var(--color-primary)]"></div>
-                  Take Away
+                  {t.cartaBBDDLabel2}
                 </div>
               </div>
               
               <div className="text-2xl text-[var(--color-primary)] mb-4">↓</div>
               
               <div className="bg-[var(--color-surface)] border border-[rgba(201,168,76,0.3)] rounded-2xl p-6 md:p-8 w-full relative">
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[var(--color-primary)] text-[var(--color-bg)] text-xs font-bold tracking-widest px-4 py-1 rounded-full">TU BBDD</div>
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[var(--color-primary)] text-[var(--color-bg)] text-xs font-bold tracking-widest px-4 py-1 rounded-full">{t.cartaBBDDLabelTuBBDD}</div>
                 <div className="flex flex-wrap gap-2 md:gap-3 justify-center">
-                  <div className="px-3 md:px-4 py-1.5 md:py-2 rounded bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] text-xs md:text-sm text-muted">Nombre</div>
-                  <div className="px-3 md:px-4 py-1.5 md:py-2 rounded bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] text-xs md:text-sm text-muted">Email</div>
-                  <div className="px-3 md:px-4 py-1.5 md:py-2 rounded bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] text-xs md:text-sm text-muted">Teléfono</div>
-                  <div className="px-3 md:px-4 py-1.5 md:py-2 rounded bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] text-xs md:text-sm text-muted">Historial</div>
+                  <div className="px-3 md:px-4 py-1.5 md:py-2 rounded bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] text-xs md:text-sm text-muted">{t.cartaBBDDData1}</div>
+                  <div className="px-3 md:px-4 py-1.5 md:py-2 rounded bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] text-xs md:text-sm text-muted">{t.cartaBBDDData2}</div>
+                  <div className="px-3 md:px-4 py-1.5 md:py-2 rounded bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] text-xs md:text-sm text-muted">{t.cartaBBDDData3}</div>
+                  <div className="px-3 md:px-4 py-1.5 md:py-2 rounded bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] text-xs md:text-sm text-muted">{t.cartaBBDDData4}</div>
                 </div>
               </div>
               
               <div className="text-2xl text-[var(--color-primary)] my-4">↓</div>
               
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 md:gap-3 w-full">
-                <div className="px-3 md:px-4 py-3 md:py-4 rounded-xl text-center bg-[rgba(201,168,76,0.12)] border border-[rgba(201,168,76,0.25)] text-xs md:text-sm font-semibold text-[var(--color-primary)]">📧 Email</div>
-                <div className="px-3 md:px-4 py-3 md:py-4 rounded-xl text-center bg-[rgba(201,168,76,0.12)] border border-[rgba(201,168,76,0.25)] text-xs md:text-sm font-semibold text-[var(--color-primary)]">🎁 Promo</div>
-                <div className="px-3 md:px-4 py-3 md:py-4 rounded-xl text-center bg-[rgba(201,168,76,0.12)] border border-[rgba(201,168,76,0.25)] text-xs md:text-sm font-semibold text-[var(--color-primary)]">🔄 Recuperar</div>
+                <div className="px-3 md:px-4 py-3 md:py-4 rounded-xl text-center bg-[rgba(201,168,76,0.12)] border border-[rgba(201,168,76,0.25)] text-xs md:text-sm font-semibold text-[var(--color-primary)]">{t.cartaBBDDAction1}</div>
+                <div className="px-3 md:px-4 py-3 md:py-4 rounded-xl text-center bg-[rgba(201,168,76,0.12)] border border-[rgba(201,168,76,0.25)] text-xs md:text-sm font-semibold text-[var(--color-primary)]">{t.cartaBBDDAction2}</div>
+                <div className="px-3 md:px-4 py-3 md:py-4 rounded-xl text-center bg-[rgba(201,168,76,0.12)] border border-[rgba(201,168,76,0.25)] text-xs md:text-sm font-semibold text-[var(--color-primary)]">{t.cartaBBDDAction3}</div>
               </div>
             </div>
           </div>
@@ -536,8 +534,8 @@ const CartaDigitalPremium: React.FC = () => {
         <section id="demo" className="py-16 md:py-24 bg-[var(--color-bg-alt)]">
           <div className="container mx-auto px-4 md:px-6">
             <div className="text-center mb-12 md:mb-16">
-              <div className="text-xs font-semibold tracking-[0.3em] text-[var(--color-primary)] uppercase mb-3 md:mb-4">El producto real</div>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-[1.15] font-['Playfair_Display','serif']">Tres pantallas que<br />lo cambian todo</h2>
+              <div className="text-xs font-semibold tracking-[0.3em] text-[var(--color-primary)] uppercase mb-3 md:mb-4">{t.cartaDemoTitle}</div>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-[1.15] font-['Playfair_Display','serif']">{t.cartaFlujoSubtitle}</h2>
             </div>
             
             {/* Video Showcase - Plato en formato TV */}
@@ -560,7 +558,7 @@ const CartaDigitalPremium: React.FC = () => {
                 {/* Label */}
                 <div className="absolute bottom-4 left-4 z-20">
                   <div className="px-4 py-2 bg-black/70 backdrop-blur-sm rounded-xl">
-                    <span className="text-sm text-white font-medium">▶ Así se ven tus platos en la carta digital</span>
+                    <span className="text-sm text-white font-medium">{t.cartaDemoVideoLabel}</span>
                   </div>
                 </div>
               </div>
@@ -573,7 +571,7 @@ const CartaDigitalPremium: React.FC = () => {
                   <div className="w-2.5 h-2.5 rounded-full bg-[#FF5F56]"></div>
                   <div className="w-2.5 h-2.5 rounded-full bg-[#FFBD2E]"></div>
                   <div className="w-2.5 h-2.5 rounded-full bg-[#27C93F]"></div>
-                  <span className="text-xs text-muted ml-2">Vista del cliente</span>
+                  <span className="text-xs text-muted ml-2">{t.cartaDemoScreen1Label}</span>
                 </div>
                 <div className="relative w-full overflow-hidden" style={{ aspectRatio: '16/9' }}>
                   <img 
@@ -584,7 +582,7 @@ const CartaDigitalPremium: React.FC = () => {
                   />
                 </div>
                 <div className="px-4 py-3 font-bold text-sm border-t border-[var(--color-border)] text-[var(--color-primary)] flex items-center gap-2">
-                  📱 Carta digital — QR en mesa
+                  {t.cartaDemoScreen1Title}
                 </div>
               </div>
 
@@ -594,7 +592,7 @@ const CartaDigitalPremium: React.FC = () => {
                   <div className="w-2.5 h-2.5 rounded-full bg-[#FF5F56]"></div>
                   <div className="w-2.5 h-2.5 rounded-full bg-[#FFBD2E]"></div>
                   <div className="w-2.5 h-2.5 rounded-full bg-[#27C93F]"></div>
-                  <span className="text-xs text-muted ml-2">Panel de administración</span>
+                  <span className="text-xs text-muted ml-2">{t.cartaDemoScreen2Label}</span>
                 </div>
                 <div className="relative w-full overflow-hidden" style={{ aspectRatio: '16/9' }}>
                   <img 
@@ -605,7 +603,7 @@ const CartaDigitalPremium: React.FC = () => {
                   />
                 </div>
                 <div className="px-4 py-3 font-bold text-sm border-t border-[var(--color-border)] text-[var(--color-primary)] flex items-center gap-2">
-                  ⚙️ Panel de gestión y estadísticas
+                  {t.cartaDemoScreen2Title}
                 </div>
               </div>
 
@@ -615,7 +613,7 @@ const CartaDigitalPremium: React.FC = () => {
                   <div className="w-2.5 h-2.5 rounded-full bg-[#FF5F56]"></div>
                   <div className="w-2.5 h-2.5 rounded-full bg-[#FFBD2E]"></div>
                   <div className="w-2.5 h-2.5 rounded-full bg-[#27C93F]"></div>
-                  <span className="text-xs text-muted ml-2">Gestión de pedidos</span>
+                  <span className="text-xs text-muted ml-2">{t.cartaDemoScreen3Label}</span>
                 </div>
                 <div className="relative w-full overflow-hidden" style={{ aspectRatio: '16/9' }}>
                   <img 
@@ -626,7 +624,7 @@ const CartaDigitalPremium: React.FC = () => {
                   />
                 </div>
                 <div className="px-4 py-3 font-bold text-sm border-t border-[var(--color-border)] text-[var(--color-primary)] flex items-center gap-2">
-                  📧 Pedidos en tiempo real
+                  {t.cartaDemoScreen3Title}
                 </div>
               </div>
             </div>
@@ -639,31 +637,30 @@ const CartaDigitalPremium: React.FC = () => {
         }}>
           <div className="container mx-auto px-4 md:px-6">
             <div className="text-center max-w-2xl mx-auto">
-              <div className="text-xs font-semibold tracking-[0.25em] text-[var(--color-primary)] uppercase mb-4">El siguiente paso</div>
+              <div className="text-xs font-semibold tracking-[0.25em] text-[var(--color-primary)] uppercase mb-4">{t.cartaCTATitle}</div>
               <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-[1.1] mb-6 font-['Playfair_Display','serif']">
-                Empieza a trabajar<br />
-                para <span className="text-[var(--color-primary)] italic">ti.</span>
+                {t.cartaCTASubtitle}
               </h2>
               <p className="text-base md:text-lg text-muted max-w-md mx-auto mb-8 md:mb-12 leading-relaxed">
-                Sin comisiones. Sin intermediarios. Con tus clientes, tu imagen y tus datos. La carta que tu restaurante merece.
+                {t.featuresCartaDigitalDesc}
               </p>
               
               <div className="flex flex-wrap gap-3 md:gap-4 justify-center mb-12 md:mb-16">
                 <Link to="#contacto?servicio=Carta%20Digital%20Premium" className="px-6 md:px-10 py-3 md:py-4 rounded-xl bg-[var(--color-primary)] text-[var(--color-bg)] font-bold text-sm tracking-wider uppercase hover:opacity-90 transition-all cursor-pointer border-none min-h-[48px] inline-flex items-center justify-center">
-                  Demo gratuita
+                  {t.cartaCTABtnDemo}
                 </Link>
                 <Link to="#contacto?servicio=Carta%20Digital%20Premium" className="px-6 md:px-10 py-3 md:py-4 rounded-xl bg-transparent text-default font-medium text-sm cursor-pointer border border-[var(--color-border)] hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] transition-all min-h-[48px] flex items-center gap-2">
-                  Hablar con asesor
+                  {t.cartaCTABtnContact}
                 </Link>
               </div>
               
               <div className="w-px h-10 bg-[var(--color-primary)] mx-auto mb-6"></div>
               
               <div className="flex flex-wrap gap-4 md:gap-8 justify-center text-sm text-muted">
-                <span className="flex items-center gap-2">✓ Sin permanencia</span>
-                <span className="flex items-center gap-2">✓ Alta 48h</span>
-                <span className="flex items-center gap-2">✓ Soporte</span>
-                <span className="flex items-center gap-2">✓ 0% comisiones</span>
+                <span className="flex items-center gap-2">{t.cartaCTANoContract}</span>
+                <span className="flex items-center gap-2">{t.cartaCTASignup48h}</span>
+                <span className="flex items-center gap-2">{t.cartaCTASupport}</span>
+                <span className="flex items-center gap-2">{t.cartaCTANoComm}</span>
               </div>
             </div>
           </div>

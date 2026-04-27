@@ -10,6 +10,7 @@ import { sanitizeInput, isValidEmail } from '@shared/utils/sanitizer';
 import { rateLimiter, RateLimitPresets } from '@shared/utils/rateLimiter';
 import { contactSchema, ContactFormData } from '../schemas/contactSchema';
 import { useIntersectionObserver } from '@shared/hooks';
+import { useLanguage } from '@shared/context/LanguageContext';
 
 const fieldClasses = "w-full border rounded-2xl py-3 sm:py-4 px-4 sm:px-6 outline-none transition-colors text-sm text-default bg-[var(--color-surface)] border-[var(--color-border)] focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--focus-ring)] min-h-[44px]";
 
@@ -18,6 +19,7 @@ const errorClasses = "bg-[var(--color-error-bg)] border-[var(--color-error-borde
 const validClasses = "bg-[var(--color-accent-subtle)] border-[var(--color-accent-border)] focus:border-[var(--color-primary)]";
 
 export const Contact: React.FC = () => {
+  const { t } = useLanguage();
   const [settings, setSettings] = useState<AppSettings | null>(null);
   const [settingsError, setSettingsError] = useState(false);
   const [isLoadingSettings, setIsLoadingSettings] = useState(true);
@@ -142,11 +144,11 @@ export const Contact: React.FC = () => {
           prefersReducedMotion() || isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}>
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--color-accent-subtle)] border border-[var(--color-accent-border)] text-[var(--color-primary)] text-xs font-bold mb-6 tracking-wider uppercase">
-            ¿Hablamos?
+            {t.heroEyebrow}
           </div>
-          <h2 className="text-5xl font-extrabold mb-6">Impulsa tu <span className="text-[var(--color-primary)]">Negocio Hoy</span></h2>
+          <h2 className="text-5xl font-extrabold mb-6">{t.contactTitle}</h2>
           <p className="text-muted text-lg leading-relaxed">
-            Estamos listos para auditar tu proceso actual y mostrarte cómo la IA y la automatización pueden ahorrarte cientos de horas mensuales.
+            {t.contactSubtitle}
           </p>
         </div>
 
@@ -155,9 +157,9 @@ export const Contact: React.FC = () => {
             prefersReducedMotion() || isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'
           }`}>
             {[
-              { id: 'email', icon: <Mail className="w-6 h-6" />, title: "Email Directo", value: settings?.contactEmail || (settingsError ? "No disponible" : "Cargando..."), desc: settingsError ? "Intenta más tarde" : "Respondemos en menos de 2 horas", color: "text-[var(--color-icon-blue)]", href: settings?.contactEmail ? `mailto:${settings.contactEmail}` : undefined },
-              { id: 'whatsapp', icon: <MessageSquare className="w-6 h-6" />, title: "WhatsApp Business", value: settings?.whatsappPhone || "Disponible pronto", desc: "Soporte técnico inmediato", color: "text-[var(--color-icon-emerald)]", href: settings?.whatsappPhone ? `https://wa.me/${settings.whatsappPhone.replaceAll(/[^\d+]/g, '')}` : undefined, external: true },
-              { id: 'location', icon: <MapPin className="w-6 h-6" />, title: "Nuestras Oficinas", value: settings?.physicalAddress || "Madrid, España", desc: "Hub Tecnológico de Innovación", color: "text-[var(--color-icon-purple)]", href: `https://maps.google.com/?q=${encodeURIComponent(settings?.physicalAddress || 'Madrid, España')}`, external: true }
+              { id: 'email', icon: <Mail className="w-6 h-6" />, title: t.contactEmailTitle, value: settings?.contactEmail || (settingsError ? t.contactEmailError : t.contactEmailLoading), desc: t.contactEmailDesc, color: "text-[var(--color-icon-blue)]", href: settings?.contactEmail ? `mailto:${settings.contactEmail}` : undefined },
+              { id: 'whatsapp', icon: <MessageSquare className="w-6 h-6" />, title: t.contactWhatsappTitle, value: settings?.whatsappPhone || t.contactEmailLoading, desc: t.contactWhatsappDesc, color: "text-[var(--color-icon-emerald)]", href: settings?.whatsappPhone ? `https://wa.me/${settings.whatsappPhone.replaceAll(/[^\d+]/g, '')}` : undefined, external: true },
+              { id: 'location', icon: <MapPin className="w-6 h-6" />, title: t.contactLocationTitle, value: settings?.physicalAddress || "Madrid, España", desc: "Hub Tecnológico de Innovación", color: "text-[var(--color-icon-purple)]", href: `https://maps.google.com/?q=${encodeURIComponent(settings?.physicalAddress || 'Madrid, España')}`, external: true }
             ].map((item, idx) => {
               const cardClasses = `p-6 rounded-2xl flex gap-4 group hover:border-[var(--color-border)] transition-colors block ${
                 idx === 0 ? 'bg-[var(--color-surface)] border border-[var(--color-border)]' :
@@ -193,33 +195,33 @@ export const Contact: React.FC = () => {
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
                 <div className="grid md:grid-cols-2 gap-5">
                   <div>
-                    <label htmlFor="contact-name" className="text-xs font-bold text-muted uppercase tracking-widest ml-1 block mb-2">Nombre Completo <span className="text-[var(--color-error-text)]" aria-hidden="true">*</span></label>
-                    <input id="contact-name" type="text" placeholder="Ej. Juan Pérez" className={getFieldClassName('name') + ' placeholder:text-[var(--color-text-muted)]'} aria-required="true" aria-invalid={touchedFields.name && !!errors.name} aria-describedby={errors.name ? 'contact-name-error' : undefined} ref={nameRegRef} {...nameRegProps} />
+                    <label htmlFor="contact-name" className="text-xs font-bold text-muted uppercase tracking-widest ml-1 block mb-2">{t.contactFormName} <span className="text-[var(--color-error-text)]" aria-hidden="true">*</span></label>
+                    <input id="contact-name" type="text" placeholder={t.contactPlaceholderName} className={getFieldClassName('name') + ' placeholder:text-[var(--color-text-muted)]'} aria-required="true" aria-invalid={touchedFields.name && !!errors.name} aria-describedby={errors.name ? 'contact-name-error' : undefined} ref={nameRegRef} {...nameRegProps} />
                     {touchedFields.name && errors.name && <p id="contact-name-error" role="alert" className="text-xs text-[var(--color-error-text)] mt-1">{errors.name.message}</p>}
                   </div>
                   <div>
-                    <label htmlFor="contact-company" className="text-xs font-bold text-muted uppercase tracking-widest ml-1 block mb-2">Empresa <span className="text-[var(--color-error-text)]" aria-hidden="true">*</span></label>
-                    <input id="contact-company" type="text" placeholder="Ej. Restaurante L'Escale" className={getFieldClassName('company') + ' placeholder:text-[var(--color-text-muted)]'} aria-required="true" aria-invalid={touchedFields.company && !!errors.company} aria-describedby={errors.company ? 'contact-company-error' : undefined} {...register('company')} />
+                    <label htmlFor="contact-company" className="text-xs font-bold text-muted uppercase tracking-widest ml-1 block mb-2">{t.contactFormCompany} <span className="text-[var(--color-error-text)]" aria-hidden="true">*</span></label>
+                    <input id="contact-company" type="text" placeholder={t.contactPlaceholderCompany} className={getFieldClassName('company') + ' placeholder:text-[var(--color-text-muted)]'} aria-required="true" aria-invalid={touchedFields.company && !!errors.company} aria-describedby={errors.company ? 'contact-company-error' : undefined} {...register('company')} />
                     {touchedFields.company && errors.company && <p id="contact-company-error" role="alert" className="text-xs text-[var(--color-error-text)] mt-1">{errors.company.message}</p>}
                   </div>
                 </div>
 
                 <div>
-                  <label htmlFor="contact-email" className="text-xs font-bold text-muted uppercase tracking-widest ml-1 block mb-2">Correo Electrónico <span className="text-[var(--color-error-text)]" aria-hidden="true">*</span></label>
-                  <input id="contact-email" type="email" placeholder="juan@empresa.com" className={getFieldClassName('email') + ' placeholder:text-[var(--color-text-muted)]'} aria-required="true" aria-describedby={errors.email ? 'contact-email-error' : undefined} {...register('email')} />
+                  <label htmlFor="contact-email" className="text-xs font-bold text-muted uppercase tracking-widest ml-1 block mb-2">{t.contactFormEmail} <span className="text-[var(--color-error-text)]" aria-hidden="true">*</span></label>
+                  <input id="contact-email" type="email" placeholder={t.contactPlaceholderEmail} className={getFieldClassName('email') + ' placeholder:text-[var(--color-text-muted)]'} aria-required="true" aria-describedby={errors.email ? 'contact-email-error' : undefined} {...register('email')} />
                   {touchedFields.email && errors.email && <p id="contact-email-error" role="alert" className="text-xs text-[var(--color-error-text)] mt-1">{errors.email.message}</p>}
                 </div>
 
                 <div>
-                  <label htmlFor="contact-service" className="text-xs font-bold text-muted uppercase tracking-widest ml-1 block mb-2">Servicio de Interés <span className="text-[var(--color-error-text)]" aria-hidden="true">*</span></label>
+                  <label htmlFor="contact-service" className="text-xs font-bold text-muted uppercase tracking-widest ml-1 block mb-2">{t.contactFormService} <span className="text-[var(--color-error-text)]" aria-hidden="true">*</span></label>
                   <div className="relative">
                     <select id="contact-service" className={getFieldClassName('service') + ' appearance-none pr-10'} aria-required="true" aria-invalid={touchedFields.service && !!errors.service} aria-describedby={errors.service ? 'contact-service-error' : undefined} {...register('service')}>
-                      <option value="" className="text-muted">Selecciona una opción</option>
-                      <option value="Carta Digital Premium">Carta Digital Premium</option>
-                      <option value="QRIBAR - Menú Digital">QRIBAR - Pedido实时 a barra y cocina</option>
-                      <option value="Automatización n8n">Automatización n8n</option>
-                      <option value="Tarjetas NFC Reseñas">Tarjetas NFC Reseñas</option>
-                      <option value="Consultoría IA">Consultoría IA</option>
+                      <option value="" className="text-muted">{t.contactSelectOption}</option>
+                      <option value="Carta Digital Premium">{t.serviceCartaDigital}</option>
+                      <option value="QRIBAR - Menú Digital">{t.serviceQribar}</option>
+                      <option value="Automatización n8n">{t.serviceAutomation}</option>
+                      <option value="Tarjetas NFC Reseñas">{t.serviceNFC}</option>
+                      <option value="Consultoría IA">{t.serviceConsultoria}</option>
                     </select>
                     <ChevronDown aria-hidden="true" className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
                   </div>
@@ -227,27 +229,27 @@ export const Contact: React.FC = () => {
                 </div>
 
                 <div>
-                  <label htmlFor="contact-message" className="text-xs font-bold text-muted uppercase tracking-widest ml-1 block mb-2">Mensaje <span className="text-[var(--color-error-text)]" aria-hidden="true">*</span></label>
-                  <textarea id="contact-message" rows={4} placeholder="Cuéntanos brevemente sobre tu proyecto..." className={getFieldClassName('message') + ' resize-none placeholder:text-[var(--color-text-muted)]'} aria-required="true" aria-describedby={errors.message ? 'contact-message-error' : undefined} {...register('message')}></textarea>
+                  <label htmlFor="contact-message" className="text-xs font-bold text-muted uppercase tracking-widest ml-1 block mb-2">{t.contactFormMessage} <span className="text-[var(--color-error-text)]" aria-hidden="true">*</span></label>
+                  <textarea id="contact-message" rows={4} placeholder={t.contactPlaceholderMessage} className={getFieldClassName('message') + ' resize-none placeholder:text-[var(--color-text-muted)]'} aria-required="true" aria-describedby={errors.message ? 'contact-message-error' : undefined} {...register('message')}></textarea>
                   {touchedFields.message && errors.message && <p id="contact-message-error" role="alert" className="text-xs text-[var(--color-error-text)] mt-1">{errors.message.message}</p>}
                 </div>
 
                 {submitStatus === 'success' && (
                   <div id="contact-success-message" role="status" className="flex items-center gap-3 bg-[var(--color-success-bg)] border border-[var(--color-success-border)] rounded-2xl py-4 px-6">
                     <CheckCircle2 className="w-5 h-5 text-[var(--color-success-text)]" />
-                    <p className="text-sm text-[var(--color-success-text)]">¡Mensaje enviado! Te contactaremos en menos de 2 horas.</p>
+                    <p className="text-sm text-[var(--color-success-text)]">{t.contactSuccess}</p>
                   </div>
                 )}
 
                 {submitStatus === 'error' && (
                   <div id="contact-error-message" role="alert" className="flex items-center gap-3 bg-[var(--color-error-bg)] border border-[var(--color-error-border)] rounded-2xl py-4 px-6">
                     <AlertCircle className="w-5 h-5 text-[var(--color-error-text)] shrink-0" />
-                    <p className="text-sm text-[var(--color-error-text)]">No se pudo enviar. Intenta de nuevo o contáctanos por otro medio.</p>
+                    <p className="text-sm text-[var(--color-error-text)]">{t.contactError}</p>
                   </div>
                 )}
 
                 <button type="submit" disabled={!canSubmit} className={`w-full py-4 sm:py-5 px-6 rounded-2xl font-bold flex items-center justify-center gap-3 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] min-h-[44px] ${canSubmit ? 'bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-[var(--color-on-accent)] shadow-lg shadow-[var(--color-accent)]/25 hover:shadow-xl hover:shadow-[var(--color-accent)]/30 hover:-translate-y-0.5 active:translate-y-0 active:shadow-md' : 'bg-[var(--color-overlay-medium)] text-muted cursor-not-allowed'}`}>
-                  {isLoadingSettings ? <><Loader2 className="w-5 h-5 animate-spin" />Cargando configuración...</> : isSubmitting ? <><Loader2 className="w-5 h-5 animate-spin" />Enviando mensaje...</> : <><span className="text-base">Enviar Mensaje</span> <Send className="w-5 h-5" aria-hidden="true" /></>}
+                  {isLoadingSettings ? <><Loader2 className="w-5 h-5 animate-spin" />{t.contactFormLoading}</> : isSubmitting ? <><Loader2 className="w-5 h-5 animate-spin" />{t.contactFormSending}</> : <><span className="text-base">{t.contactFormSubmit}</span> <Send className="w-5 h-5" aria-hidden="true" /></>}
                 </button>
               </form>
             </div>

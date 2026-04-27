@@ -5,6 +5,7 @@ import { Hero } from '@features/landing/presentation/components/Hero';
 import { Features } from '@features/landing/presentation/components/Features';
 import { Contact } from '@features/landing/presentation/components/Contact';
 import { ConsoleLogger } from '@core/domain/usecases/Logger';
+import { useLanguage } from '@shared/context/LanguageContext';
 
 const logger = new ConsoleLogger('[ErrorBoundary]');
 
@@ -37,24 +38,29 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
   render() {
     if (this.state.hasError) {
-      return this.props.fallback || (
-        <div className="min-h-screen bg-base text-default flex items-center justify-center">
-          <div className="text-center p-8">
-            <h1 className="text-2xl font-bold mb-4">Algo salió mal</h1>
-            <p className="text-muted mb-4">Por favor, recarga la página.</p>
-            <button 
-              onClick={() => window.location.reload()} 
-              className="bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-[var(--color-on-accent)] px-6 py-3 rounded-xl font-bold focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] min-h-[44px]"
-            >
-              Recargar
-            </button>
-          </div>
-        </div>
-      );
+      return this.props.fallback || <ErrorBoundaryFallback />;
     }
     return this.props.children;
   }
 }
+
+const ErrorBoundaryFallback: React.FC = () => {
+  const { t } = useLanguage();
+  return (
+    <div className="min-h-screen bg-base text-default flex items-center justify-center">
+      <div className="text-center p-8">
+        <h1 className="text-2xl font-bold mb-4">{t.errorBoundaryTitle}</h1>
+        <p className="text-muted mb-4">{t.errorBoundaryMessage}</p>
+        <button 
+          onClick={() => window.location.reload()} 
+          className="bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-[var(--color-on-accent)] px-6 py-3 rounded-xl font-bold focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] min-h-[44px]"
+        >
+          {t.errorBoundaryButton}
+        </button>
+      </div>
+    </div>
+  );
+};
 
 // Lazy loading para componentes below-the-fold - reduce initial bundle
 const SuccessStats = lazy(() => 
@@ -106,6 +112,7 @@ const SectionLoading = () => (
 const App: React.FC = () => {
   const [scrolled, setScrolled] = React.useState(false);
   const sentinelRef = React.useRef<HTMLDivElement>(null);
+  const { t } = useLanguage();
 
   React.useEffect(() => {
     const sentinel = sentinelRef.current;
@@ -123,7 +130,7 @@ const App: React.FC = () => {
       <div className="min-h-screen bg-base text-default">
       <div ref={sentinelRef} className="absolute top-[50px] h-px w-px" aria-hidden="true" />
       <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:bg-[var(--color-accent)] focus:text-[var(--color-on-accent)] focus:px-4 focus:py-2 focus:rounded-lg focus:text-sm focus:font-bold">
-        Saltar al contenido
+        {t.skipLink}
       </a>
       <Navbar scrolled={scrolled} />
       <main id="main" aria-label="Contenido principal">
@@ -148,28 +155,28 @@ const App: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-12 mb-12">
             <div>
               <span className="font-bold text-xl text-default">SmartConnect <span className="text-[var(--color-primary)]">AI</span></span>
-              <p className="text-muted text-sm mt-3 leading-relaxed">Tecnología de próxima generación para negocios locales.</p>
+              <p className="text-muted text-sm mt-3 leading-relaxed">{t.footerTagline}</p>
             </div>
             <nav aria-label="Navegación del footer">
-              <h3 className="text-sm font-bold text-muted uppercase tracking-wider mb-4">Navegación</h3>
+              <h3 className="text-sm font-bold text-muted uppercase tracking-wider mb-4">{t.footerNavTitle}</h3>
               <ul className="space-y-2 text-sm text-muted">
-                <li><a href="#inicio" className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors">Inicio</a></li>
-                <li><a href="#soluciones" className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors">Soluciones</a></li>
-                <li><a href="#exito" className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors">Casos de Éxito</a></li>
-                <li><a href="#contacto" className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors">Contacto</a></li>
+                <li><a href="#inicio" className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors">{t.footerNavInicio}</a></li>
+                <li><a href="#soluciones" className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors">{t.footerNavSoluciones}</a></li>
+                <li><a href="#exito" className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors">{t.footerNavExito}</a></li>
+                <li><a href="#contacto" className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors">{t.footerNavContacto}</a></li>
               </ul>
             </nav>
             <div>
-              <h3 className="text-sm font-bold text-muted uppercase tracking-wider mb-4">Legal</h3>
+              <h3 className="text-sm font-bold text-muted uppercase tracking-wider mb-4">{t.footerLegalTitle}</h3>
               <ul className="space-y-2 text-sm text-muted">
-                <li><a href="mailto:legal@smartconnect.ai" className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors">Aviso Legal</a></li>
-                <li><a href="mailto:legal@smartconnect.ai" className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors">Política de Privacidad</a></li>
-                <li><a href="mailto:legal@smartconnect.ai" className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors">Política de Cookies</a></li>
+                <li><a href="mailto:legal@smartconnect.ai" className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors">{t.footerLegalAviso}</a></li>
+                <li><a href="mailto:legal@smartconnect.ai" className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors">{t.footerLegalPrivacidad}</a></li>
+                <li><a href="mailto:legal@smartconnect.ai" className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors">{t.footerLegalCookies}</a></li>
               </ul>
             </div>
           </div>
           <div className="border-t border-[var(--color-border)] pt-8 text-center text-muted text-sm">
-            <p>&copy; 2026 SmartConnect AI. Todos los derechos reservados.</p>
+            <p>&copy; {t.footerCopyright}</p>
           </div>
         </div>
       </footer>

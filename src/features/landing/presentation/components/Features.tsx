@@ -1,38 +1,37 @@
-
 import React, { useRef } from 'react';
 import { Code2, Settings2, Smartphone, Utensils, ArrowUpRight, Sparkles } from 'lucide-react';
 import { useIntersectionObserver } from '@shared/hooks';
+import { useLanguage } from '@shared/context/LanguageContext';
 
 const solutions = [
   {
     id: 'software-ia',
     icon: <Code2 className="w-6 h-6 text-[var(--color-icon-blue)]" />,
-    title: 'Software & IA',
-    description: 'Desarrollo de herramientas personalizadas que se integran perfectamente con tus sistemas actuales. Soluciones a medida impulsadas por algoritmos inteligentes.',
+    titleKey: 'featuresSoftwareIA',
+    descriptionKey: 'featuresSoftwareIADesc',
     serviceValue: 'Consultoría IA',
     hasImage: true
   },
   {
     id: 'automatizacion-n8n',
     icon: <Settings2 className="w-6 h-6 text-[var(--color-icon-purple)]" />,
-    title: 'Automatización (n8n)',
-    description: 'Orquesta flujos de trabajo complejos sin esfuerzo. Conectamos tus apps favoritas y automatizamos tareas repetitivas para que tu equipo se enfoque en innovar.',
+    titleKey: 'featuresAutomation',
+    descriptionKey: 'featuresAutomationDesc',
     serviceValue: 'Automatización n8n'
   },
   {
     id: 'tarjetas-nfc',
     icon: <Smartphone className="w-6 h-6 text-[var(--color-icon-emerald)]" />,
-    title: 'Tarjetas Tap-to-Review',
-    description: 'Hardware físico con alma digital. Tarjetas NFC elegantes que permiten a tus clientes dejar reseñas positivas al instante con un solo toque.',
+    titleKey: 'featuresNFC',
+    descriptionKey: 'featuresNFCDesc',
     serviceValue: 'Tarjetas NFC Reseñas',
-    hasImage: true,
-    imagePosition: 'right'
+    hasImage: true
   },
   {
     id: 'qribar',
     icon: <Utensils className="w-6 h-6 text-[var(--color-icon-amber)]" />,
-    title: 'QRIBAR',
-    description: 'El cliente pide desde su móvil en la mesa y el pedido llega en tiempo real a barra y cocina. Elimina esperas del camarero y aumenta la rotación de mesas.',
+    titleKey: 'featuresQribar',
+    descriptionKey: 'featuresQribarDesc',
     serviceValue: 'QRIBAR',
     external: true,
     href: 'https://qribar.es'
@@ -40,8 +39,8 @@ const solutions = [
   {
     id: 'carta-digital',
     icon: <Utensils className="w-6 h-6 text-[var(--color-icon-emerald)]" />,
-    title: 'Carta Digital Premium',
-    description: 'La carta digital que elimina intermediarios. 0% comisiones, 5 idiomas, pedidos por WhatsApp y tu propia base de datos de clientes.',
+    titleKey: 'featuresCartaDigital',
+    descriptionKey: 'featuresCartaDigitalDesc',
     serviceValue: 'Carta Digital Premium',
     internal: true,
     route: '/carta-digital',
@@ -94,6 +93,7 @@ const SoftwareIAAbstract = () => (
 const BAR_HEIGHTS = [16, 28, 12, 24, 20];
 
 export const Features: React.FC = () => {
+  const { t } = useLanguage();
   const sectionRef = useRef<HTMLDivElement>(null);
   const isVisible = useIntersectionObserver(sectionRef, { rootMargin: "0px 0px -50px 0px" });
 
@@ -102,9 +102,9 @@ export const Features: React.FC = () => {
       <div className={`text-center max-w-3xl mx-auto mb-20 transition-all duration-1000 ${
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
       }`}>
-        <h2 className="text-4xl md:text-5xl font-bold mb-6">Nuestras Soluciones</h2>
+        <h2 className="text-4xl md:text-5xl font-bold mb-6">{t.featuresTitle}</h2>
         <p className="text-muted leading-relaxed">
-          Herramientas avanzadas diseñadas para la era digital, desde el hardware hasta el código.
+          {t.featuresSubtitle}
         </p>
       </div>
 
@@ -129,9 +129,9 @@ export const Features: React.FC = () => {
             <div className={`relative z-10 mb-6 w-14 h-14 bg-[var(--color-surface)] rounded-2xl flex items-center justify-center motion-safe:group-hover:scale-110 transition-transform ${idx === 0 ? 'lg:w-16 lg:h-16' : ''}`}>
               {item.icon}
             </div>
-            <h3 className={`font-bold mb-4 text-default ${idx === 0 ? 'text-3xl lg:text-4xl' : 'text-xl lg:text-2xl'}`}>{item.title}</h3>
+            <h3 className={`font-bold mb-4 text-default ${idx === 0 ? 'text-3xl lg:text-4xl' : 'text-xl lg:text-2xl'}`}>{t[item.titleKey as keyof typeof t]}</h3>
             <p className={`text-muted leading-relaxed mb-6 ${idx === 0 ? 'text-lg' : ''}`}>
-              {item.description}
+              {t[item.descriptionKey as keyof typeof t]}
             </p>
             
             {item.hasImage && idx === 2 && (
@@ -147,7 +147,6 @@ export const Features: React.FC = () => {
             {item.hasVideo && idx === 4 && (
               <div className="relative z-10 mt-4 rounded-2xl overflow-hidden border border-[var(--color-border)] shadow-lg group/video">
                 <div className="relative bg-black rounded-2xl overflow-hidden">
-                  {/* TV Frame Effect */}
                   <div className="absolute inset-0 pointer-events-none z-10 border-[8px] md:border-[12px] border-[#1a1a1a] rounded-2xl"></div>
                   <div className="absolute top-0 left-0 right-0 h-6 md:h-8 bg-gradient-to-b from-black/50 to-transparent z-10"></div>
                   <div className="absolute bottom-0 left-0 right-0 h-6 md:h-8 bg-gradient-to-t from-black/50 to-transparent z-10"></div>
@@ -159,7 +158,6 @@ export const Features: React.FC = () => {
                     playsInline
                     className="w-full aspect-video object-cover"
                   />
-                  {/* Play indicator */}
                   <div className="absolute bottom-4 right-4 z-20 flex items-center gap-2">
                     <div className="px-2 py-1 bg-black/60 backdrop-blur rounded text-xs text-white/80">
                       ▶ Ejemplo de plato
@@ -180,7 +178,7 @@ export const Features: React.FC = () => {
               rel={item.external ? "noopener noreferrer" : undefined}
               className="inline-flex items-center gap-2 text-sm font-bold text-[var(--color-primary)] group-hover:text-[var(--color-primary)] transition-colors"
             >
-              <span>{item.external ? 'Visitar' : item.internal ? 'Ver details' : 'Contactar'}</span>
+              <span>{item.external ? t.featuresVisit : item.internal ? t.featuresDetails : t.featuresContact}</span>
               <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
             </a>
           </article>
