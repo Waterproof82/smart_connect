@@ -215,7 +215,8 @@ export const Contact: React.FC = () => {
                   <div className="relative">
                     <select id="contact-service" className={getFieldClassName('service') + ' appearance-none pr-10'} aria-required="true" aria-invalid={touchedFields.service && !!errors.service} aria-describedby={errors.service ? 'contact-service-error' : undefined} {...register('service')}>
                       <option value="" className="text-muted">Selecciona una opción</option>
-                      <option value="QRIBAR - Menú Digital">QRIBAR - Menú Digital</option>
+                      <option value="Carta Digital Premium">Carta Digital Premium</option>
+                      <option value="QRIBAR - Menú Digital">QRIBAR - Pedido实时 a barra y cocina</option>
                       <option value="Automatización n8n">Automatización n8n</option>
                       <option value="Tarjetas NFC Reseñas">Tarjetas NFC Reseñas</option>
                       <option value="Consultoría IA">Consultoría IA</option>

@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import './index.css';
 import App from './App';
+import CartaDigitalPremium from './features/landing/presentation/components/CartaDigitalPremium';
 
 const getInitialTheme = (): 'light' | 'dark' => {
   if (typeof window === 'undefined') return 'dark';
@@ -58,6 +59,7 @@ root.render(
         <Routes>
           <Route path="/" element={<App />} />
           <Route path="/admin" element={<AdminPanel />} />
+          <Route path="/carta-digital" element={<CartaDigitalPremium />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>

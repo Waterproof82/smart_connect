@@ -24,16 +24,28 @@ const solutions = [
     icon: <Smartphone className="w-6 h-6 text-[var(--color-icon-emerald)]" />,
     title: 'Tarjetas Tap-to-Review',
     description: 'Hardware físico con alma digital. Tarjetas NFC elegantes que permiten a tus clientes dejar reseñas positivas al instante con un solo toque.',
-    serviceValue: 'Tarjetas NFC Reseñas'
+    serviceValue: 'Tarjetas NFC Reseñas',
+    hasImage: true,
+    imagePosition: 'right'
   },
   {
     id: 'qribar',
     icon: <Utensils className="w-6 h-6 text-[var(--color-icon-amber)]" />,
     title: 'QRIBAR',
-    description: 'Menú digital interactivo para restaurantes y hostelería. Tus clientes escanean un QR y acceden a tu carta desde el móvil, sin descargar nada.',
+    description: 'El cliente pide desde su móvil en la mesa y el pedido llega en tiempo real a barra y cocina. Elimina esperas del camarero y aumenta la rotación de mesas.',
     serviceValue: 'QRIBAR',
     external: true,
     href: 'https://qribar.es'
+  },
+  {
+    id: 'carta-digital',
+    icon: <Utensils className="w-6 h-6 text-[var(--color-icon-emerald)]" />,
+    title: 'Carta Digital Premium',
+    description: 'La carta digital que elimina intermediarios. 0% comisiones, 5 idiomas, pedidos por WhatsApp y tu propia base de datos de clientes.',
+    serviceValue: 'Carta Digital Premium',
+    internal: true,
+    route: '/carta-digital',
+    hasVideo: true
   }
 ];
 
@@ -122,16 +134,53 @@ export const Features: React.FC = () => {
               {item.description}
             </p>
             
+            {item.hasImage && idx === 2 && (
+              <div className="relative z-10 mt-4 rounded-2xl overflow-hidden border border-[var(--color-border)] shadow-lg">
+                <img 
+                  src="/assets/Tarjeta_NFC_negra_MontesTAP.webp" 
+                  alt="Tarjeta NFC Tap-to-Review" 
+                  className="w-full h-auto object-cover"
+                />
+              </div>
+            )}
+            
+            {item.hasVideo && idx === 4 && (
+              <div className="relative z-10 mt-4 rounded-2xl overflow-hidden border border-[var(--color-border)] shadow-lg group/video">
+                <div className="relative bg-black rounded-2xl overflow-hidden">
+                  {/* TV Frame Effect */}
+                  <div className="absolute inset-0 pointer-events-none z-10 border-[8px] md:border-[12px] border-[#1a1a1a] rounded-2xl"></div>
+                  <div className="absolute top-0 left-0 right-0 h-6 md:h-8 bg-gradient-to-b from-black/50 to-transparent z-10"></div>
+                  <div className="absolute bottom-0 left-0 right-0 h-6 md:h-8 bg-gradient-to-t from-black/50 to-transparent z-10"></div>
+                  <video 
+                    src="/assets/video.mp4" 
+                    autoPlay 
+                    loop 
+                    muted 
+                    playsInline
+                    className="w-full aspect-video object-cover"
+                  />
+                  {/* Play indicator */}
+                  <div className="absolute bottom-4 right-4 z-20 flex items-center gap-2">
+                    <div className="px-2 py-1 bg-black/60 backdrop-blur rounded text-xs text-white/80">
+                      ▶ Ejemplo de plato
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+            
             <a 
-              href={item.external && item.href 
-                ? item.href 
-                : `#contacto?servicio=${encodeURIComponent(item.serviceValue)}`
+              href={item.internal && item.route 
+                ? item.route
+                : item.external && item.href 
+                  ? item.href 
+                  : `#contacto?servicio=${encodeURIComponent(item.serviceValue)}`
               }
               target={item.external ? "_blank" : undefined}
               rel={item.external ? "noopener noreferrer" : undefined}
               className="inline-flex items-center gap-2 text-sm font-bold text-[var(--color-primary)] group-hover:text-[var(--color-primary)] transition-colors"
             >
-              <span>{item.external ? 'Visitar' : 'Contactar'}</span>
+              <span>{item.external ? 'Visitar' : item.internal ? 'Ver details' : 'Contactar'}</span>
               <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
             </a>
           </article>

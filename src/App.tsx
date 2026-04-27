@@ -164,7 +164,7 @@ const App: React.FC = () => {
               <ul className="space-y-2 text-sm text-muted">
                 <li><a href="mailto:legal@smartconnect.ai" className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors">Aviso Legal</a></li>
                 <li><a href="mailto:legal@smartconnect.ai" className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors">Política de Privacidad</a></li>
-                <li><a href="mailto:legal@smartconnect.ai" className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors">Contacto</a></li>
+                <li><a href="mailto:legal@smartconnect.ai" className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors">Política de Cookies</a></li>
               </ul>
             </div>
           </div>
