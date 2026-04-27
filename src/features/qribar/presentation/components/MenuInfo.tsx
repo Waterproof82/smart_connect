@@ -8,17 +8,20 @@
 
 import React from 'react';
 import { Utensils, CheckCircle2 } from 'lucide-react';
+import { useLanguage } from '@shared/context/LanguageContext';
 
 interface MenuInfoProps {
   isVisible: boolean;
 }
 
 export const MenuInfo: React.FC<MenuInfoProps> = ({ isVisible }) => {
+  const { t } = useLanguage();
+  
   const benefits = [
-    'Actualización de precios en tiempo real',
-    'Diseño adaptable a tu identidad visual',
-    'Aumenta la rotación de mesas',
-    'Integración con sistemas de pedidos y pagos'
+    t.qribarBenefit1,
+    t.qribarBenefit2,
+    t.qribarBenefit3,
+    t.qribarBenefit4
   ];
 
   return (
@@ -27,15 +30,15 @@ export const MenuInfo: React.FC<MenuInfoProps> = ({ isVisible }) => {
     }`}>
       <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--color-highlight-subtle)] border border-[var(--color-highlight-border)] text-[var(--color-highlight)] text-xs font-semibold mb-6">
         <Utensils className="w-3.5 h-3.5" />
-        SECTOR HOSTELERÍA
+        {t.qribarSector}
       </div>
       
       <h2 className="text-5xl font-extrabold mb-8 leading-tight">
-        Digitaliza la experiencia con <span className="text-[var(--color-highlight)]">QRIBAR</span>
+        {t.qribarTitle} <span className="text-[var(--color-highlight)]">QRIBAR</span>
       </h2>
 
       <p className="text-lg text-muted mb-10 leading-relaxed">
-        Soluciones específicas para restaurantes de alta gama. Menús digitales elegantes, rápidos y sin contacto que elevan la percepción de tu marca mientras optimizan el servicio.
+        {t.qribarSubtitle}
       </p>
 
       <div className="space-y-6 mb-12">
@@ -65,7 +68,7 @@ export const MenuInfo: React.FC<MenuInfoProps> = ({ isVisible }) => {
           isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'
         }`}
       >
-        Más información
+        {t.qribarButton}
       </a>
     </div>
   );

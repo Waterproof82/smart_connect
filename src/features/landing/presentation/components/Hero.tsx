@@ -1,8 +1,10 @@
-
 import React from 'react';
 import { ArrowRight, Play, CheckCircle2, Sparkles, Volume2 } from 'lucide-react';
+import { useLanguage } from '@shared/context/LanguageContext';
 
 export const Hero: React.FC = () => {
+  const { t } = useLanguage();
+  
   return (
     <div className="relative pt-32 pb-20 overflow-hidden min-h-[90vh] flex items-center">
       <div className="absolute top-1/4 right-0 w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-[var(--color-accent)]/10 blur-[150px] rounded-full -mr-48 animate-drift" aria-hidden="true"></div>
@@ -11,25 +13,25 @@ export const Hero: React.FC = () => {
         <div className="max-w-2xl">
           <div className="reveal-1 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--color-accent-subtle)] border border-[var(--color-accent-border)] text-[var(--color-primary)] text-xs font-bold mb-8 tracking-wider uppercase">
             <div className="w-2 h-2 rounded-full bg-[var(--color-primary)] animate-pulse"></div>
-            Tecnología de Próxima Generación
+            {t.heroEyebrow}
           </div>
           
           <h1 className="reveal-2 text-3xl sm:text-4xl md:text-6xl lg:text-8xl font-extrabold leading-[1.05] mb-8 tracking-tight">
-            No solo creamos software. <br />
-            <span className="text-[var(--color-primary)]">Escalamos con IA</span>
+            {t.heroTitle} <br />
+            <span className="text-[var(--color-primary)]">{t.heroTitleAccent}</span>
           </h1>
 
           <p className="reveal-3 text-xl text-muted mb-12 leading-relaxed max-w-xl">
-            Fusionamos hardware NFC inteligente con flujos de trabajo autónomos. Convierte la complejidad operativa en un motor de crecimiento automatizado.
+            {t.heroSubtitle}
           </p>
 
           <div className="reveal-3 flex flex-wrap gap-5">
             <button onClick={() => document.querySelector('#contacto')?.scrollIntoView({ behavior: 'smooth' })} className="bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg)] text-[var(--color-on-accent)] px-6 md:px-10 py-4 md:py-5 rounded-2xl font-bold flex items-center gap-3 transition-all shadow-xl motion-safe:active:scale-95 group min-h-[44px]">
-              Empezar Ahora
+              {t.heroButtonContact}
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
             <button onClick={() => document.querySelector('#soluciones')?.scrollIntoView({ behavior: 'smooth' })} className="bg-[var(--color-overlay-subtle)] hover:bg-[var(--color-overlay-medium)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg)] border border-[var(--color-border)] px-6 md:px-10 py-4 md:py-5 rounded-2xl font-bold flex items-center gap-3 transition-all motion-safe:active:scale-95 group min-h-[44px]">
-              Ver Demo
+              {t.heroButtonDemo}
               <div className="w-8 h-8 bg-[var(--color-overlay-medium)] rounded-full flex items-center justify-center group-hover:bg-[var(--color-overlay-strong)] transition-colors">
                 <Play className="w-3 h-3 fill-[var(--color-text)] ml-0.5" />
               </div>
