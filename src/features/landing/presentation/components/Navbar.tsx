@@ -36,10 +36,18 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
     {
       id: 'qribar',
       icon: <Utensils className="w-5 h-5 text-[var(--color-icon-amber)]" />,
-      title: 'QR iBar',
-      desc: 'Menús digitales HOSTELERÍA',
+      title: 'QRIBAR',
+      desc: 'Pedido en tiempo real a barra y cocina',
       href: 'https://qribar.es',
       external: true
+    },
+    {
+      id: 'carta-digital',
+      icon: <Utensils className="w-5 h-5 text-[var(--color-icon-emerald)]" />,
+      title: 'Carta Digital Premium',
+      desc: '0% comisiones, 5 idiomas',
+      href: '/carta-digital',
+      internal: true
     }
   ];
 
