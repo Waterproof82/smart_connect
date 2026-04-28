@@ -135,6 +135,7 @@ interface Translation {
 
   // Carta Digital Page
   cartaHeroEyebrow: string;
+   cartaHeroTenerife: string;
   cartaHeroTitle1: string;
   cartaHeroTitleAccent: string;
   cartaHeroTitle2: string;
@@ -166,9 +167,10 @@ interface Translation {
   cartaSolucionTitle: string;
   cartaSolucionSubtitle: string;
   cartaSolucionHighlight: string;
-  cartaSolucionDesc: string;
-  
-  cartaBeneficiosTitle: string;
+cartaSolucionDesc: string;
+   cartaSolucionTenerife: string;
+   
+   cartaBeneficiosTitle: string;
   cartaBeneficiosSubtitle: string;
   cartaBeneficio1Title: string;
   cartaBeneficio1Desc: string;
@@ -191,34 +193,41 @@ interface Translation {
   cartaBeneficio7Title: string;
   cartaBeneficio7Desc: string;
   cartaBeneficio7Tag: string;
-  
-  cartaFlujoTitle: string;
-  cartaFlujoSubtitle: string;
-  cartaFlujoStep1Title: string;
-  cartaFlujoStep1Desc: string;
-  cartaFlujoStep2Title: string;
-  cartaFlujoStep2Desc: string;
-  cartaFlujoStep3Title: string;
-  cartaFlujoStep3Desc: string;
-  cartaFlujoStep4Title: string;
-  cartaFlujoStep4Desc: string;
-  
+    
+    cartaFlujoTitle: string;
+    cartaFlujoSubtitle: string;
+    cartaFlujoStep5Title: string;
+    cartaFlujoStep5Desc: string;
+    cartaFlujoStep1Title: string;
+    cartaFlujoStep1Desc: string;
+    cartaFlujoStep2Title: string;
+    cartaFlujoStep2Desc: string;
+    cartaFlujoStep3Title: string;
+    cartaFlujoStep3Desc: string;
+    cartaFlujoStep4Title: string;
+    cartaFlujoStep4Desc: string;
+    
+  // --- COMPARATIVA DINERO ---
   cartaDineroTitle: string;
   cartaDineroSubtitle: string;
   cartaDineroCalcDesc: string;
-  cartaDineroIntermediarios: string;
-  cartaDineroGlovo: string;
-  cartaDineroJustEat: string;
-  cartaDineroUber: string;
-  cartaDineroTotal: string;
-  cartaDineroTuCarta: string;
-  cartaDineroComision: string;
-  cartaDineroSuscripcion: string;
-  cartaDineroClientes: string;
-  cartaDineroAhorro: string;
-  cartaDineroAhorroAnual: string;
   
-  cartaBBDDTitle: string;
+  // Card 1: Pérdidas
+  cartaDineroCard1Title: string;
+  cartaDineroCard1Item1: string;
+  cartaDineroCard1Item2: string;
+  cartaDineroCard1Item3: string;
+  cartaDineroCard1Total: string;
+
+  // Card 2: Ganancias
+  cartaDineroCard2Title: string;
+  cartaDineroCard2Item1: string;
+  cartaDineroCard2Item2: string;
+  cartaDineroCard2Item3: string;
+  cartaDineroCard2Item4: string;
+  cartaDineroCard2Total: string;
+   
+   cartaBBDDTitle: string;
   cartaBBDDSubtitle: string;
   cartaBBDDDesc: string;
   cartaBBDDLabel1: string;
@@ -344,7 +353,7 @@ interface Translation {
 }
 
 const translations: Record<Language, Translation> = {
-  es: {
+   es: {
     // Navigation
     navSolutions: 'Soluciones',
     navSuccess: 'Éxito',
@@ -568,7 +577,8 @@ const translations: Record<Language, Translation> = {
     qribarLoading: 'Cargando menú...',
     
     // Carta Digital Page
-    cartaHeroEyebrow: 'La revolución digital para restaurantes',
+    cartaHeroEyebrow: 'La revolución digital para restaurantes en Tenerife',
+     cartaHeroTenerife: 'Especial para bares, restaurantes y empresas. Atención en persona con explicación de demos in situ.',
     cartaHeroTitle1: 'Tu carta,',
     cartaHeroTitleAccent: 'tu negocio,',
     cartaHeroTitle2: 'tus clientes.',
@@ -585,7 +595,7 @@ const translations: Record<Language, Translation> = {
     cartaProblemaSubtitle: 'estás perdiendo hoy?',
     cartaProblemaDesc: 'La mayoría de restaurantes dependen de sistemas anticuados, intermediarios costosos y herramientas que no les pertenecen. El resultado: margen reducido, clientes anónimos y oportunidades perdidas.',
     cartaProblemaItem1Title: 'Comisiones que sangran',
-    cartaProblemaItem1Desc: 'Glovo, Uber Eats y similares se quedan entre el 25% y el 35% de cada pedido. Túizas, ellos se llevan el margen.',
+    cartaProblemaItem1Desc: 'Glovo, Uber Eats y similares se quedan entre el 25% y el 35% de cada pedido. Tú trabajas, ellos se llevan el margen.',
     cartaProblemaItem2Title: 'Carta en papel obsoleta',
     cartaProblemaItem2Desc: 'Sin fotos, sin descripciones claras, sin idiomas. El cliente no sabe qué va a pedir y llama al camarero tres veces.',
     cartaProblemaItem3Title: 'Turistas sin atender',
@@ -593,7 +603,7 @@ const translations: Record<Language, Translation> = {
     cartaProblemaItem4Title: 'Llamadas perdidas',
     cartaProblemaItem4Desc: 'Gestionar pedidos por teléfono mientras sirves mesas es imposible.',
     cartaProblemaItem5Title: 'Clientes anónimos',
-    cartaProblemaItem5Desc: 'Cada cliente que pide por Glovo es de Glovo, no tuyo. No tienes su contacto.',
+    cartaProblemaItem5Desc: 'Cada cliente que pide por Glovo, Uber Eats o similares es de ellos, no tuyo. No tienes su contacto y no podés fidelizarlo.',
     cartaProblemaItem6Title: 'Invisible en internet',
     cartaProblemaItem6Desc: 'Sin web propia optimizada en buscadores, dependes de plataformas de terceros.',
     
@@ -601,9 +611,23 @@ const translations: Record<Language, Translation> = {
     cartaSolucionSubtitle: 'Una sola herramienta. Todos los problemas, resueltos.',
     cartaSolucionHighlight: 'carta digital multimedia',
     cartaSolucionDesc: 'Tus clientes ven los platos con fotos, vídeos y descripciones en 5 idiomas escaneando el QR de la mesa. Los nuevos clientes encuentran tu carta en Google y hacen pedidos take away directamente. Tú recibes el pedido por WhatsApp, acumulas su contacto en tu base de datos y les fidelizas con promociones. Sin intermediarios. Sin comisiones. Sin depender de nadie.',
-    
-    cartaBeneficiosTitle: '7 beneficios que',
+     cartaSolucionTenerife: 'Especial para clientes en Tenerife: bares, restaurantes y empresas. Atención en persona con explicación de demos in situ.',
+     
+     cartaBeneficiosTitle: '7 beneficios que',
     cartaBeneficiosSubtitle: 'cambian tu negocio',
+    // Carta Flujo
+    cartaFlujoTitle: 'El flujo',
+    cartaFlujoSubtitle: '¿Cómo funciona en la práctica?',
+    cartaFlujoStep1Title: 'Escanea el QR',
+    cartaFlujoStep1Desc: 'El cliente apunta la cámara al QR de la mesa.',
+    cartaFlujoStep2Title: 'Explora',
+    cartaFlujoStep2Desc: 'Ve cada plato con imágenes y precio.',
+    cartaFlujoStep3Title: 'Fidelización',
+    cartaFlujoStep3Desc: 'Recibe oferta a cambio de su email.',
+    cartaFlujoStep4Title: 'Pide',
+    cartaFlujoStep4Desc: 'Sin dudas, sin malentendidos.',
+    cartaFlujoStep5Title: '',
+    cartaFlujoStep5Desc: '',
     cartaBeneficio1Title: 'Experiencia premium en mesa',
     cartaBeneficio1Desc: 'Cada plato se presenta con fotos profesionales, vídeos y descripciones detalladas. El cliente sabe exactamente qué va a pedir.',
     cartaBeneficio1Tag: '↑ Ticket medio',
@@ -626,32 +650,26 @@ const translations: Record<Language, Translation> = {
     cartaBeneficio7Desc: 'Añade, edita u oculta platos en segundos. Todo desde un panel intuitivo.',
     cartaBeneficio7Tag: 'Autogestionable',
     
-    cartaFlujoTitle: 'El flujo',
-    cartaFlujoSubtitle: '¿Cómo funciona en la práctica?',
-    cartaFlujoStep1Title: 'Escanea el QR',
-    cartaFlujoStep1Desc: 'El cliente apunta la cámara al QR de la mesa.',
-    cartaFlujoStep2Title: 'Explora',
-    cartaFlujoStep2Desc: 'Ve cada plato con imágenes y precio.',
-    cartaFlujoStep3Title: 'Fidelización',
-    cartaFlujoStep3Desc: 'Recibe oferta a cambio de su email.',
-    cartaFlujoStep4Title: 'Pide',
-    cartaFlujoStep4Desc: 'Sin dudas, sin malentendidos.',
+    // --- COMPARATIVA DINERO ---
+    cartaDineroTitle: 'El valor real',
+    cartaDineroSubtitle: 'Comisiones perdidas vs. Inversión en tu negocio',
+    cartaDineroCalcDesc: 'Deja de pagar comisiones a terceros y haz mailings con promociones para los días con menos gente. Tus clientes, tu contacto, tu dinero.',
     
-    cartaDineroTitle: 'La matemática',
-    cartaDineroSubtitle: 'Lo que te cobrabas vs. lo que pagarías con nosotros',
-    cartaDineroCalcDesc: 'Basado en un restaurante con 3.000€/mes en pedidos take away. Los números hablan solos.',
-    cartaDineroIntermediarios: '❌ Con intermediarios',
-    cartaDineroGlovo: 'Glovo (~28%)',
-    cartaDineroJustEat: 'Just Eat (~25%)',
-    cartaDineroUber: 'Uber Eats (~30%)',
-    cartaDineroTotal: 'Total mensual',
-    cartaDineroTuCarta: '✅ Con tu carta',
-    cartaDineroComision: 'Comisión',
-    cartaDineroSuscripcion: 'Suscripción',
-    cartaDineroClientes: 'Clientes',
-    cartaDineroAhorro: 'Ahorro mensual',
-    cartaDineroAhorroAnual: '8.000€ al año.',
-    
+    // Card 1: Pérdidas
+    cartaDineroCard1Title: 'Costes Ocultos y Comisiones',
+    cartaDineroCard1Item1: 'Comisiones a Terceros (Glovo, etc.)',
+    cartaDineroCard1Item2: 'Pérdida por Baja Visibilidad',
+    cartaDineroCard1Item3: 'Falta de Clientes Recurrentes',
+    cartaDineroCard1Total: 'Pérdida Neta Estimada',
+
+    // Card 2: Ganancias
+    cartaDineroCard2Title: 'Inversión y Crecimiento',
+    cartaDineroCard2Item1: 'Ahorro en Comisiones',
+    cartaDineroCard2Item2: 'Nuevos Clientes (SEO/Google)',
+    cartaDineroCard2Item3: 'Fidelización (Mailings)',
+    cartaDineroCard2Item4: 'Aumento Ticket Medio',
+    cartaDineroCard2Total: 'Incremento Neto Estimado',
+     
     cartaBBDDTitle: 'Tu activo más valioso',
     cartaBBDDSubtitle: 'La base de datos que trabaja sola',
     cartaBBDDDesc: 'Cada cliente que entra en tu local o hace un pedido online es una oportunidad. Con esta herramienta, no se escapa ninguna.',
@@ -828,7 +846,8 @@ const translations: Record<Language, Translation> = {
     qribarLoading: 'Loading menu...',
     
     // Carta Digital Page
-    cartaHeroEyebrow: 'Digital revolution for restaurants',
+    cartaHeroEyebrow: 'Digital revolution for restaurants in Tenerife',
+     cartaHeroTenerife: 'Special for bars, restaurants and companies. On-site demos and personalized attention.',
     cartaHeroTitle1: 'Your menu,',
     cartaHeroTitleAccent: 'your business,',
     cartaHeroTitle2: 'your customers.',
@@ -853,16 +872,17 @@ const translations: Record<Language, Translation> = {
     cartaProblemaItem4Title: 'Lost calls',
     cartaProblemaItem4Desc: 'Managing orders by phone while serving tables is impossible.',
     cartaProblemaItem5Title: 'Anonymous customers',
-    cartaProblemaItem5Desc: 'Every customer who orders through Glovo belongs to Glovo, not yours. You don\'t have their contact.',
+    cartaProblemaItem5Desc: 'Every customer who orders through Glovo, Uber Eats or similar platforms belongs to them, not yours. You don\'t have their contact and can\'t build loyalty.',
     cartaProblemaItem6Title: 'Invisible online',
     cartaProblemaItem6Desc: 'No own website optimized for search engines, you depend on third-party platforms.',
     
     cartaSolucionTitle: 'The solution',
     cartaSolucionSubtitle: 'One tool. All problems, solved.',
     cartaSolucionHighlight: 'multimedia digital menu',
-    cartaSolucionDesc: 'Your customers see dishes with photos, videos and descriptions in 5 languages by scanning the table QR. New customers find your menu on Google and order take away directly. You receive orders via WhatsApp, accumulate their contact in your database and fidelize them with promotions. No intermediaries. No commissions. Depending on no one.',
-    
-    cartaBeneficiosTitle: '7 benefits that',
+cartaSolucionDesc: 'Your customers see dishes with photos, videos and descriptions in 5 languages by scanning the table QR. New customers find your menu on Google and order take away directly. You receive orders via WhatsApp, accumulate their contact in your database and fidelize them with promotions. No intermediaries. No commissions. Depending on no one.',
+     cartaSolucionTenerife: 'Special for clients in Tenerife: bars, restaurants and companies. On-site demos and personalized attention.',
+     
+     cartaBeneficiosTitle: '7 benefits that',
     cartaBeneficiosSubtitle: 'change your business',
     cartaBeneficio1Title: 'Premium table experience',
     cartaBeneficio1Desc: 'Each dish is presented with professional photos, videos and detailed descriptions. The customer knows exactly what to order.',
@@ -886,31 +906,38 @@ const translations: Record<Language, Translation> = {
     cartaBeneficio7Desc: 'Add, edit or hide dishes in seconds. Everything from an intuitive panel.',
     cartaBeneficio7Tag: 'Self-manageable',
     
-    cartaFlujoTitle: 'The flow',
-    cartaFlujoSubtitle: 'How it works in practice?',
-    cartaFlujoStep1Title: 'Scan the QR',
-    cartaFlujoStep1Desc: 'The customer points the camera at the table QR.',
-    cartaFlujoStep2Title: 'Explore',
-    cartaFlujoStep2Desc: 'See each dish with images and price.',
-    cartaFlujoStep3Title: 'Fidelization',
-    cartaFlujoStep3Desc: 'Receives an offer in exchange for their email.',
-    cartaFlujoStep4Title: 'Order',
-    cartaFlujoStep4Desc: 'No doubts, no misunderstandings.',
+cartaFlujoTitle: 'The flow',
+     cartaFlujoSubtitle: 'How does it work in practice?',
+     cartaFlujoStep1Title: 'Instant Scan',
+     cartaFlujoStep1Desc: 'Customer points camera at the table QR or finds your menu on Google.',
+     cartaFlujoStep2Title: 'Multimedia Explore',
+     cartaFlujoStep2Desc: 'See dishes with photos, videos, and descriptions in 5 languages. Easy and fast.',
+     cartaFlujoStep3Title: 'In-Store Loyalty',
+     cartaFlujoStep3Desc: 'Email popup for promos and instant 5★ reviews. No orders at the table.',
+     cartaFlujoStep4Title: 'Take Away Online',
+     cartaFlujoStep4Desc: 'Activates "Cart Mode" from Google or Social Media. Orders for pickup.',
+     cartaFlujoStep5Title: 'Digital Presence',
+     cartaFlujoStep5Desc: 'Your menu visible on Google Business Profile. Attract new customers with stunning photos.',
     
-    cartaDineroTitle: 'The math',
-    cartaDineroSubtitle: 'What you were charging vs. what you\'d pay with us',
-    cartaDineroCalcDesc: 'Based on a restaurant with €3,000/month in take away orders. The numbers speak for themselves.',
-    cartaDineroIntermediarios: '❌ With intermediaries',
-    cartaDineroGlovo: 'Glovo (~28%)',
-    cartaDineroJustEat: 'Just Eat (~25%)',
-    cartaDineroUber: 'Uber Eats (~30%)',
-    cartaDineroTotal: 'Monthly total',
-    cartaDineroTuCarta: '✅ With your menu',
-    cartaDineroComision: 'Commission',
-    cartaDineroSuscripcion: 'Subscription',
-    cartaDineroClientes: 'Clients',
-    cartaDineroAhorro: 'Monthly savings',
-    cartaDineroAhorroAnual: '€8,000 per year.',
+    // --- COMPARATIVE MONEY ---
+    cartaDineroTitle: 'The real value',
+    cartaDineroSubtitle: 'Lost commissions vs. Investment in your business',
+    cartaDineroCalcDesc: 'Stop paying third-party commissions and send mailings with promos on slow days. Your clients, your contact, your money.',
+    
+    // Card 1: Losses
+    cartaDineroCard1Title: 'Hidden Costs and Commissions',
+    cartaDineroCard1Item1: 'Third-party Commissions (Glovo, etc.)',
+    cartaDineroCard1Item2: 'Loss due to Low Visibility',
+    cartaDineroCard1Item3: 'Lack of Recurring Customers',
+    cartaDineroCard1Total: 'Estimated Net Loss',
+    
+    // Card 2: Gains
+    cartaDineroCard2Title: 'Investment and Growth',
+    cartaDineroCard2Item1: 'Savings on Commissions',
+    cartaDineroCard2Item2: 'New Customers (SEO/Google)',
+    cartaDineroCard2Item3: 'Loyalty (Mailings)',
+    cartaDineroCard2Item4: 'Increased Average Ticket',
+    cartaDineroCard2Total: 'Estimated Net Increase',
     
     cartaBBDDTitle: 'Your most valuable asset',
     cartaBBDDSubtitle: 'The database that works for you',

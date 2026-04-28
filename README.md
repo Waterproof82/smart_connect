@@ -33,26 +33,6 @@
 - [Cumplimiento Arquitectura](docs/ARCHITECTURE_COMPLIANCE.md)
 - [Setup Entorno Vercel](docs/VERCEL_ENV_SETUP.md)
 
-## Admin Access Credentials
-
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                    ADMIN PANEL ACCESS                                       │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                                                             │
-│  URL:  /admin                                                              │
-│                                                                             │
-│  ┌─────────────────────────────────────────────────────────────────────┐   │
-│  │  Email:    admin@smartconnect.ai                                     │   │
-│  │  Password: bigSchool                                                 │   │
-│  └─────────────────────────────────────────────────────────────────────┘   │
-│                                                                             │
-│  ⚠️  IMPORTANTE: Estas credenciales son de producción.                     │
-│      No compartir.                                                          │
-│                                                                             │
-└─────────────────────────────────────────────────────────────────────────────┘
-```
-
 
 ## 🏗️ Arquitectura y Flujos Principales
 
