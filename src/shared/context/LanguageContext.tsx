@@ -43,6 +43,7 @@ interface Translation {
   // Success Stats
   successTitle: string;
   successSubtitle: string;
+  successDesc: string;
   successStat1Value: string;
   successStat1Label: string;
   successStat1Quote: string;
@@ -167,7 +168,9 @@ interface Translation {
   cartaSolucionTitle: string;
   cartaSolucionSubtitle: string;
   cartaSolucionHighlight: string;
-cartaSolucionDesc: string;
+  cartaSolucionPrefix: string;
+  cartaSolucionSuffix: string;
+  cartaSolucionDesc: string;
    cartaSolucionTenerife: string;
    
    cartaBeneficiosTitle: string;
@@ -394,6 +397,7 @@ const translations: Record<Language, Translation> = {
     // Success Stats
     successTitle: 'Casos de Éxito',
     successSubtitle: 'Resultados reales que transforman negocios',
+    successDesc: 'Empresas que ya confían en nosotros y han transformado su operación.',
     successStat1Value: '50+',
     successStat1Label: 'Aumento Promedio',
     successStat1Quote: 'Desde que implementamos QRIBAR, nuestros ingresos por mesa aumentaron un 45%',
@@ -609,7 +613,9 @@ const translations: Record<Language, Translation> = {
     
     cartaSolucionTitle: 'La solución',
     cartaSolucionSubtitle: 'Una sola herramienta. Todos los problemas, resueltos.',
+    cartaSolucionPrefix: 'Una ',
     cartaSolucionHighlight: 'carta digital multimedia',
+    cartaSolucionSuffix: ' que trabaja para ti las 24 horas: dentro del local, en Google y en redes sociales.',
     cartaSolucionDesc: 'Tus clientes ven los platos con fotos, vídeos y descripciones en 5 idiomas escaneando el QR de la mesa. Los nuevos clientes encuentran tu carta en Google y hacen pedidos take away directamente. Tú recibes el pedido por WhatsApp, acumulas su contacto en tu base de datos y les fidelizas con promociones. Sin intermediarios. Sin comisiones. Sin depender de nadie.',
      cartaSolucionTenerife: 'Especial para clientes en Tenerife: bares, restaurantes y empresas. Atención en persona con explicación de demos in situ.',
      
@@ -617,7 +623,7 @@ const translations: Record<Language, Translation> = {
     cartaBeneficiosSubtitle: 'cambian tu negocio',
     // Carta Flujo
     cartaFlujoTitle: 'El flujo',
-    cartaFlujoSubtitle: '¿Cómo funciona en la práctica?',
+    cartaFlujoSubtitle: '¿Cómo se ve?',
     cartaFlujoStep1Title: 'Escanea el QR',
     cartaFlujoStep1Desc: 'El cliente apunta la cámara al QR de la mesa.',
     cartaFlujoStep2Title: 'Explora',
@@ -626,8 +632,8 @@ const translations: Record<Language, Translation> = {
     cartaFlujoStep3Desc: 'Recibe oferta a cambio de su email.',
     cartaFlujoStep4Title: 'Pide',
     cartaFlujoStep4Desc: 'Sin dudas, sin malentendidos.',
-    cartaFlujoStep5Title: '',
-    cartaFlujoStep5Desc: '',
+    cartaFlujoStep5Title: 'Presencia Digital',
+    cartaFlujoStep5Desc: 'Tu carta visible en Google Business Profile. Atrae nuevos clientes con fotos impactantes.',
     cartaBeneficio1Title: 'Experiencia premium en mesa',
     cartaBeneficio1Desc: 'Cada plato se presenta con fotos profesionales, vídeos y descripciones detalladas. El cliente sabe exactamente qué va a pedir.',
     cartaBeneficio1Tag: '↑ Ticket medio',
@@ -684,7 +690,7 @@ const translations: Record<Language, Translation> = {
     cartaBBDDAction2: 'Promo',
     cartaBBDDAction3: 'Recuperar',
     
-    cartaDemoTitle: 'El producto real',
+    cartaDemoTitle: 'Demo del producto',
     cartaDemoVideoLabel: '▶ Así se ven tus platos en la carta digital',
     cartaDemoScreen1Title: '📱 Carta digital — QR en mesa',
     cartaDemoScreen1Label: 'Vista del cliente',
@@ -703,6 +709,11 @@ const translations: Record<Language, Translation> = {
     cartaCTANoComm: '✓ 0% comisiones',
   },
   en: {
+    // --- SUCCESS / TESTIMONIALS ---
+    successTitle: 'Success Stories',
+    successSubtitle: 'Real results that transform businesses',
+    successDesc: 'Companies that already trust us and have transformed their operation.',
+    
     // Navigation
     navSolutions: 'Solutions',
     navSuccess: 'Success',
@@ -741,8 +752,6 @@ const translations: Record<Language, Translation> = {
     featuresDetails: 'View details',
     
     // Success Stats
-    successTitle: 'Success Stories',
-    successSubtitle: 'Real results that transform businesses',
     successStat1Value: '50+',
     successStat1Label: 'Average Increase',
     successStat1Quote: 'Since we implemented QRIBAR, our revenue per table increased by 45%',
@@ -878,8 +887,10 @@ const translations: Record<Language, Translation> = {
     
     cartaSolucionTitle: 'The solution',
     cartaSolucionSubtitle: 'One tool. All problems, solved.',
-    cartaSolucionHighlight: 'multimedia digital menu',
-cartaSolucionDesc: 'Your customers see dishes with photos, videos and descriptions in 5 languages by scanning the table QR. New customers find your menu on Google and order take away directly. You receive orders via WhatsApp, accumulate their contact in your database and fidelize them with promotions. No intermediaries. No commissions. Depending on no one.',
+    cartaSolucionPrefix: 'A ',
+    cartaSolucionHighlight: 'digital menu with rich multimedia content',
+    cartaSolucionSuffix: ' that runs for your business 24/7: in your venue, on Google, and across your social channels.',
+    cartaSolucionDesc: 'Your customers see dishes with photos, videos and descriptions in 5 languages by scanning the table QR. New customers find your menu on Google and order take away directly. You receive orders via WhatsApp, accumulate their contact in your database and fidelize them with promotions. No intermediaries. No commissions. Depending on no one.',
      cartaSolucionTenerife: 'Special for clients in Tenerife: bars, restaurants and companies. On-site demos and personalized attention.',
      
      cartaBeneficiosTitle: '7 benefits that',
@@ -907,7 +918,7 @@ cartaSolucionDesc: 'Your customers see dishes with photos, videos and descriptio
     cartaBeneficio7Tag: 'Self-manageable',
     
 cartaFlujoTitle: 'The flow',
-     cartaFlujoSubtitle: 'How does it work in practice?',
+     cartaFlujoSubtitle: 'How does it work?',
      cartaFlujoStep1Title: 'Instant Scan',
      cartaFlujoStep1Desc: 'Customer points camera at the table QR or finds your menu on Google.',
      cartaFlujoStep2Title: 'Multimedia Explore',
@@ -953,7 +964,7 @@ cartaFlujoTitle: 'The flow',
     cartaBBDDAction2: 'Promo',
     cartaBBDDAction3: 'Recover',
     
-    cartaDemoTitle: 'The real product',
+    cartaDemoTitle: 'Product Demo',
     cartaDemoVideoLabel: '▶ This is how your dishes look on the digital menu',
     cartaDemoScreen1Title: '📱 Digital menu — QR at table',
     cartaDemoScreen1Label: 'Client view',

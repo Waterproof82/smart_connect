@@ -684,8 +684,8 @@ const CartaDigitalPremium: React.FC = () => {
               </div>
             </div>
           </div>
-        </section>
-
+         </section>
+        
         {/* CTA FINAL - Full Width */}
         <section id="cta-final" className="py-16 md:py-24" style={{ 
           background: 'radial-gradient(ellipse at 50% 50%, rgba(201,168,76,0.12) 0%, transparent 70%), var(--color-bg)'

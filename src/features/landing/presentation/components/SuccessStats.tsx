@@ -137,9 +137,15 @@ export const SuccessStats: React.FC = () => {
     }
   ];
 
-  return (
+    return (
     <div className="container mx-auto px-6" ref={sectionRef}>
-      <h2 className="sr-only">{t.successTitle}</h2>
+      <div className="text-center mb-12 md:mb-16">
+        <div className="text-xs font-bold tracking-[0.3em] text-[var(--color-primary)] uppercase mb-3 md:mb-4">{t.successTitle}</div>
+        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-[1.15] mb-4 md:mb-6 font-['Playfair_Display','serif']">{t.successSubtitle}</h2>
+        <p className="text-base text-muted leading-relaxed max-w-2xl mx-auto">
+          {t.successDesc}
+        </p>
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6">
         <div className="md:col-span-2 lg:col-span-4">
           <StatCard 
