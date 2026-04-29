@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { Code2, Settings2, Smartphone, Utensils, ArrowUpRight, Sparkles } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useIntersectionObserver } from '@shared/hooks';
 import { useLanguage } from '@shared/context/LanguageContext';
 
@@ -25,7 +26,9 @@ const solutions = [
     titleKey: 'featuresNFC',
     descriptionKey: 'featuresNFCDesc',
     serviceValue: 'Tarjetas NFC Reseñas',
-    hasImage: true
+    hasImage: true,
+    internal: true,
+    route: '/tap-review'
   },
   {
     id: 'qribar',
@@ -91,6 +94,29 @@ const SoftwareIAAbstract = () => (
 );
 
 const BAR_HEIGHTS = [16, 28, 12, 24, 20];
+
+const LinkWrapper: React.FC<{
+  href: string;
+  external?: boolean;
+  internal?: boolean;
+  route?: string;
+  children: React.ReactNode;
+  className?: string;
+}> = ({ href, external, internal, route, children, className }) => {
+  if (internal && route) {
+    return <Link to={route} className={className}>{children}</Link>;
+  }
+  return (
+    <a 
+      href={href}
+      target={external ? "_blank" : undefined}
+      rel={external ? "noopener noreferrer" : undefined}
+      className={className}
+    >
+      {children}
+    </a>
+  );
+};
 
 export const Features: React.FC = () => {
   const { t } = useLanguage();
@@ -165,22 +191,23 @@ export const Features: React.FC = () => {
                   </div>
                 </div>
               </div>
-            )}
-            
-            <a 
+)}
+             
+            <LinkWrapper
               href={item.internal && item.route 
                 ? item.route
                 : item.external && item.href 
                   ? item.href 
                   : `#contacto?servicio=${encodeURIComponent(item.serviceValue)}`
               }
-              target={item.external ? "_blank" : undefined}
-              rel={item.external ? "noopener noreferrer" : undefined}
+              external={item.external}
+              internal={item.internal}
+              route={item.route}
               className="inline-flex items-center gap-2 text-sm font-bold text-[var(--color-primary)] group-hover:text-[var(--color-primary)] transition-colors"
             >
               <span>{item.external ? t.featuresVisit : item.internal ? t.featuresDetails : t.featuresContact}</span>
               <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-            </a>
+            </LinkWrapper>
           </article>
         ))}
       </div>

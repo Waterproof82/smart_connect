@@ -125,6 +125,21 @@ const App: React.FC = () => {
     return () => observer.disconnect();
   }, []);
 
+  React.useEffect(() => {
+    const scrollToHash = () => {
+      const hash = window.location.hash;
+      if (hash) {
+        setTimeout(() => {
+          document.querySelector(hash)?.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    };
+
+    scrollToHash();
+    window.addEventListener('hashchange', scrollToHash);
+    return () => window.removeEventListener('hashchange', scrollToHash);
+  }, []);
+
   return (
     <ErrorBoundary>
       <div className="min-h-screen bg-base text-default">

@@ -43,6 +43,7 @@ interface Translation {
   // Success Stats
   successTitle: string;
   successSubtitle: string;
+  successDesc: string;
   successStat1Value: string;
   successStat1Label: string;
   successStat1Quote: string;
@@ -135,6 +136,7 @@ interface Translation {
 
   // Carta Digital Page
   cartaHeroEyebrow: string;
+   cartaHeroTenerife: string;
   cartaHeroTitle1: string;
   cartaHeroTitleAccent: string;
   cartaHeroTitle2: string;
@@ -166,9 +168,12 @@ interface Translation {
   cartaSolucionTitle: string;
   cartaSolucionSubtitle: string;
   cartaSolucionHighlight: string;
+  cartaSolucionPrefix: string;
+  cartaSolucionSuffix: string;
   cartaSolucionDesc: string;
-  
-  cartaBeneficiosTitle: string;
+   cartaSolucionTenerife: string;
+   
+   cartaBeneficiosTitle: string;
   cartaBeneficiosSubtitle: string;
   cartaBeneficio1Title: string;
   cartaBeneficio1Desc: string;
@@ -191,34 +196,41 @@ interface Translation {
   cartaBeneficio7Title: string;
   cartaBeneficio7Desc: string;
   cartaBeneficio7Tag: string;
-  
-  cartaFlujoTitle: string;
-  cartaFlujoSubtitle: string;
-  cartaFlujoStep1Title: string;
-  cartaFlujoStep1Desc: string;
-  cartaFlujoStep2Title: string;
-  cartaFlujoStep2Desc: string;
-  cartaFlujoStep3Title: string;
-  cartaFlujoStep3Desc: string;
-  cartaFlujoStep4Title: string;
-  cartaFlujoStep4Desc: string;
-  
+    
+    cartaFlujoTitle: string;
+    cartaFlujoSubtitle: string;
+    cartaFlujoStep5Title: string;
+    cartaFlujoStep5Desc: string;
+    cartaFlujoStep1Title: string;
+    cartaFlujoStep1Desc: string;
+    cartaFlujoStep2Title: string;
+    cartaFlujoStep2Desc: string;
+    cartaFlujoStep3Title: string;
+    cartaFlujoStep3Desc: string;
+    cartaFlujoStep4Title: string;
+    cartaFlujoStep4Desc: string;
+    
+  // --- COMPARATIVA DINERO ---
   cartaDineroTitle: string;
   cartaDineroSubtitle: string;
   cartaDineroCalcDesc: string;
-  cartaDineroIntermediarios: string;
-  cartaDineroGlovo: string;
-  cartaDineroJustEat: string;
-  cartaDineroUber: string;
-  cartaDineroTotal: string;
-  cartaDineroTuCarta: string;
-  cartaDineroComision: string;
-  cartaDineroSuscripcion: string;
-  cartaDineroClientes: string;
-  cartaDineroAhorro: string;
-  cartaDineroAhorroAnual: string;
   
-  cartaBBDDTitle: string;
+  // Card 1: Pérdidas
+  cartaDineroCard1Title: string;
+  cartaDineroCard1Item1: string;
+  cartaDineroCard1Item2: string;
+  cartaDineroCard1Item3: string;
+  cartaDineroCard1Total: string;
+
+  // Card 2: Ganancias
+  cartaDineroCard2Title: string;
+  cartaDineroCard2Item1: string;
+  cartaDineroCard2Item2: string;
+  cartaDineroCard2Item3: string;
+  cartaDineroCard2Item4: string;
+  cartaDineroCard2Total: string;
+   
+   cartaBBDDTitle: string;
   cartaBBDDSubtitle: string;
   cartaBBDDDesc: string;
   cartaBBDDLabel1: string;
@@ -250,6 +262,86 @@ interface Translation {
   cartaCTASupport: string;
   cartaCTANoComm: string;
 
+  // Tap Review (NFC)
+  tapReviewMetaTitle: string;
+  tapReviewMetaDesc: string;
+  tapReviewBack: string;
+  tapReviewEyebrow: string;
+  tapReviewHeroTitle: string;
+  tapReviewHeroAccent: string;
+  tapReviewHeroSubtitle: string;
+  tapReviewHeroBtnContact: string;
+  tapReviewHeroBtnProduct: string;
+  tapReviewHeroFeature1: string;
+  tapReviewHeroFeature2: string;
+  tapReviewHeroFeature3: string;
+  
+  tapReviewProductExhibitorWhite: string;
+  tapReviewProductExhibitorWhiteAlt: string;
+  tapReviewProductExhibitorBlack: string;
+  tapReviewProductExhibitorBlackAlt: string;
+  tapReviewProductStand: string;
+  tapReviewProductStandAlt: string;
+  
+  tapReviewStatsBusinesses: string;
+  tapReviewStatsReviews: string;
+  tapReviewStatsDaily: string;
+  
+  tapReviewHowTitle: string;
+  tapReviewHowSubtitle: string;
+  tapReviewHowStep1Title: string;
+  tapReviewHowStep1Desc: string;
+  tapReviewHowStep2Title: string;
+  tapReviewHowStep2Desc: string;
+  tapReviewHowStep3Title: string;
+  tapReviewHowStep3Desc: string;
+  
+  tapReviewFeatTitle: string;
+  tapReviewFeatSubtitle: string;
+  tapReviewFeatNFC: string;
+  tapReviewFeatNFCDesc: string;
+  tapReviewFeatSpeed: string;
+  tapReviewFeatSpeedDesc: string;
+  tapReviewFeatGoogle: string;
+  tapReviewFeatGoogleDesc: string;
+  tapReviewFeatNoSub: string;
+  tapReviewFeatNoSubDesc: string;
+  
+  tapReviewSocialTitle: string;
+  tapReviewSocialSubtitle: string;
+  tapReviewTestimonial1Quote: string;
+  tapReviewTestimonial1Author: string;
+  tapReviewTestimonial1Business: string;
+  tapReviewTestimonial2Quote: string;
+  tapReviewTestimonial2Author: string;
+  tapReviewTestimonial2Business: string;
+  tapReviewTestimonial3Quote: string;
+  tapReviewTestimonial3Author: string;
+  tapReviewTestimonial3Business: string;
+  
+  tapReviewFAQTitle: string;
+  tapReviewFAQ1Question: string;
+  tapReviewFAQ1Answer: string;
+  tapReviewFAQ2Question: string;
+  tapReviewFAQ2Answer: string;
+  tapReviewFAQ3Question: string;
+  tapReviewFAQ3Answer: string;
+  tapReviewFAQ4Question: string;
+  tapReviewFAQ4Answer: string;
+  
+  tapReviewCTATitle: string;
+  tapReviewCTASubtitle: string;
+  tapReviewCTABtnPrimary: string;
+  tapReviewCTABtnSecondary: string;
+  tapReviewCTAFeature1: string;
+  tapReviewCTAFeature2: string;
+  tapReviewCTAFeature3: string;
+  
+  tapReviewTrust30Days: string;
+  tapReviewTrust24h: string;
+  tapReviewTrustSupport: string;
+  tapReviewTrustNoSub: string;
+
   // QRIBAR
   qribarSector: string;
   qribarTitle: string;
@@ -264,7 +356,7 @@ interface Translation {
 }
 
 const translations: Record<Language, Translation> = {
-  es: {
+   es: {
     // Navigation
     navSolutions: 'Soluciones',
     navSuccess: 'Éxito',
@@ -305,6 +397,7 @@ const translations: Record<Language, Translation> = {
     // Success Stats
     successTitle: 'Casos de Éxito',
     successSubtitle: 'Resultados reales que transforman negocios',
+    successDesc: 'Empresas que ya confían en nosotros y han transformado su operación.',
     successStat1Value: '50+',
     successStat1Label: 'Aumento Promedio',
     successStat1Quote: 'Desde que implementamos QRIBAR, nuestros ingresos por mesa aumentaron un 45%',
@@ -395,6 +488,86 @@ const translations: Record<Language, Translation> = {
     // Skip Link
     skipLink: 'Saltar al contenido',
     
+    // Tap Review (NFC) translations for Spanish
+    tapReviewMetaTitle: 'Tap-to-Review NFC - Multiplica tus reseñas en Google',
+    tapReviewMetaDesc: 'Dispositivos NFC para conseguir reseñas en Google de forma automática. Solo un toque y tus clientes te valoran con 5 estrellas.',
+    tapReviewBack: 'Volver al inicio',
+    tapReviewEyebrow: 'TARJETAS NFC',
+    tapReviewHeroTitle: 'Multiplica las reseñas',
+    tapReviewHeroAccent: 'en Google de tu negocio',
+    tapReviewHeroSubtitle: 'Consigue más reseñas con los dispositivos Tap-to-Review y atrae más clientes. Chip NFC de alto rendimiento para reseñas en 5 segundos.',
+    tapReviewHeroBtnContact: 'Contactar ahora',
+    tapReviewHeroBtnProduct: 'Ver producto',
+    tapReviewHeroFeature1: 'Pago único - Sin suscripciones',
+    tapReviewHeroFeature2: 'Consigue reseñas en 5 segundos',
+    tapReviewHeroFeature3: 'Aparece el primero en Google Maps',
+    
+    tapReviewProductExhibitorWhite: 'Expositor Blanco',
+    tapReviewProductExhibitorWhiteAlt: 'Expositor de reseñas blanco',
+    tapReviewProductExhibitorBlack: 'Expositor Negro',
+    tapReviewProductExhibitorBlackAlt: 'Expositor de reseñas negro',
+    tapReviewProductStand: 'Stand Exhibidor',
+    tapReviewProductStandAlt: 'Stand exhibidor Tap-to-Review',
+    
+    tapReviewStatsBusinesses: 'Funcionando en +20,000 negocios',
+    tapReviewStatsReviews: 'reseñas conseguidas',
+    tapReviewStatsDaily: 'reseñas diarias',
+    
+    tapReviewHowTitle: '¿Cómo funciona?',
+    tapReviewHowSubtitle: 'Gracias a su Chip NFC de alto rendimiento, tus clientes acercan el móvil y se les abre la página de reseñas de tu negocio en Google.',
+    tapReviewHowStep1Title: 'Coloca el dispositivo',
+    tapReviewHowStep1Desc: 'Pon el expositor Tapstar en tu local, visible para tus clientes.',
+    tapReviewHowStep2Title: 'Cliente acerca el móvil',
+    tapReviewHowStep2Desc: 'El cliente acerca su teléfono al chip NFC. No necesita abrir apps ni escanear nada.',
+    tapReviewHowStep3Title: 'Reseña en 5 segundos',
+    tapReviewHowStep3Desc: 'Se abre directamente la página de reseñas de tu negocio en Google. El cliente solo tiene que tocar 5 estrellas.',
+    
+    tapReviewFeatTitle: 'Ventajas Tap-to-Review',
+    tapReviewFeatSubtitle: 'Todo lo que necesitas para conseguir reseñas de forma automática',
+    tapReviewFeatNFC: 'NFC de Alto Rendimiento',
+    tapReviewFeatNFCDesc: 'Tecnología NFC de última generación que funciona con cualquier smartphone moderno.',
+    tapReviewFeatSpeed: 'Reseñas en 5 segundos',
+    tapReviewFeatSpeedDesc: 'El proceso es tan rápido que los clientes no tienen tiempo de decir "no".',
+    tapReviewFeatGoogle: 'Aparece primero en Google',
+    tapReviewFeatGoogleDesc: 'Más reseñas = mejor posicionamiento en Google Maps y búsquedas locales.',
+    tapReviewFeatNoSub: 'Sin suscripciones',
+    tapReviewFeatNoSubDesc: 'Pago único. Sin cuotas mensuales, sin permanencia, sin sorpresas.',
+    
+    tapReviewSocialTitle: 'Miles de negocios confían en nosotros',
+    tapReviewSocialSubtitle: 'Negocios de hostelería en toda España ya están multiplicando sus reseñas',
+    tapReviewTestimonial1Quote: 'Pasamos de 50 a 500 reseñas en 3 meses. El impacto en nuevos clientes ha sido brutal.',
+    tapReviewTestimonial1Author: 'Carlos Martínez',
+    tapReviewTestimonial1Business: 'Restaurante El Bodegón',
+    tapReviewTestimonial2Quote: 'Mis clientes lo usan constantemente. Es facilísimo, solo tienen que acercar el teléfono.',
+    tapReviewTestimonial2Author: 'María López',
+    tapReviewTestimonial2Business: 'Café Central Madrid',
+    tapReviewTestimonial3Quote: 'La mejor inversión que hemos hecho. Las reseñas han mejorado nuestro posicionamiento en Google.',
+    tapReviewTestimonial3Author: 'Pedro Sánchez',
+    tapReviewTestimonial3Business: 'Bar La Tapa',
+    
+    tapReviewFAQTitle: 'Preguntas frecuentes',
+    tapReviewFAQ1Question: '¿Realmente funciona el NFC con cualquier móvil?',
+    tapReviewFAQ1Answer: 'Sí, el NFC funciona en la mayoría de smartphones modernos (iPhone 8 en adelante, y todos los Android con NFC). Los iPhone también permiten NFC sin abrir apps.',
+    tapReviewFAQ2Question: '¿Cómo configuro el dispositivo para mi negocio?',
+    tapReviewFAQ2Answer: 'Nosotros nos encargamos de todo. Solo necesitas darnos el nombre de tu negocio y nosotros configuramos el chip NFC para que apunte a tu ficha de Google Business.',
+    tapReviewFAQ3Question: '¿Qué pasa si el cliente no tiene NFC?',
+    tapReviewFAQ3Answer: 'El dispositivo también incluye un código QR que el cliente puede escanear con la cámara de su móvil. Así nadie se queda sin poder dejarte su reseña.',
+    tapReviewFAQ4Question: '¿Hay garantía o devolución?',
+    tapReviewFAQ4Answer: 'Sí, ofrecemos garantía de 30 días. Si no estás satisfecho, te devolvemos el 100% de tu dinero.',
+    
+    tapReviewCTATitle: 'Empieza a conseguir reseñas hoy',
+    tapReviewCTASubtitle: 'Únete a los +20,000 negocios que ya están multiplicando sus reseñas en Google',
+    tapReviewCTABtnPrimary: 'Contactar ahora',
+    tapReviewCTABtnSecondary: 'Volver al inicio',
+    tapReviewCTAFeature1: 'Garantía 30 días',
+    tapReviewCTAFeature2: 'Envío gratis 24h',
+    tapReviewCTAFeature3: 'Sin suscripciones',
+    
+    tapReviewTrust30Days: 'Garantía 30 días',
+    tapReviewTrust24h: 'Envío gratis 24h',
+    tapReviewTrustSupport: 'Soporte 24/7',
+    tapReviewTrustNoSub: 'Sin suscripciones',
+     
     // QRIBAR
     qribarSector: 'SECTOR HOSTELERÍA',
     qribarTitle: 'Digitaliza la experiencia con',
@@ -408,7 +581,8 @@ const translations: Record<Language, Translation> = {
     qribarLoading: 'Cargando menú...',
     
     // Carta Digital Page
-    cartaHeroEyebrow: 'La revolución digital para restaurantes',
+    cartaHeroEyebrow: 'La revolución digital para restaurantes en Tenerife',
+     cartaHeroTenerife: 'Especial para bares, restaurantes y empresas. Atención en persona con explicación de demos in situ.',
     cartaHeroTitle1: 'Tu carta,',
     cartaHeroTitleAccent: 'tu negocio,',
     cartaHeroTitle2: 'tus clientes.',
@@ -425,7 +599,7 @@ const translations: Record<Language, Translation> = {
     cartaProblemaSubtitle: 'estás perdiendo hoy?',
     cartaProblemaDesc: 'La mayoría de restaurantes dependen de sistemas anticuados, intermediarios costosos y herramientas que no les pertenecen. El resultado: margen reducido, clientes anónimos y oportunidades perdidas.',
     cartaProblemaItem1Title: 'Comisiones que sangran',
-    cartaProblemaItem1Desc: 'Glovo, Uber Eats y similares se quedan entre el 25% y el 35% de cada pedido. Túizas, ellos se llevan el margen.',
+    cartaProblemaItem1Desc: 'Glovo, Uber Eats y similares se quedan entre el 25% y el 35% de cada pedido. Tú trabajas, ellos se llevan el margen.',
     cartaProblemaItem2Title: 'Carta en papel obsoleta',
     cartaProblemaItem2Desc: 'Sin fotos, sin descripciones claras, sin idiomas. El cliente no sabe qué va a pedir y llama al camarero tres veces.',
     cartaProblemaItem3Title: 'Turistas sin atender',
@@ -433,17 +607,33 @@ const translations: Record<Language, Translation> = {
     cartaProblemaItem4Title: 'Llamadas perdidas',
     cartaProblemaItem4Desc: 'Gestionar pedidos por teléfono mientras sirves mesas es imposible.',
     cartaProblemaItem5Title: 'Clientes anónimos',
-    cartaProblemaItem5Desc: 'Cada cliente que pide por Glovo es de Glovo, no tuyo. No tienes su contacto.',
+    cartaProblemaItem5Desc: 'Cada cliente que pide por Glovo, Uber Eats o similares es de ellos, no tuyo. No tienes su contacto y no podés fidelizarlo.',
     cartaProblemaItem6Title: 'Invisible en internet',
     cartaProblemaItem6Desc: 'Sin web propia optimizada en buscadores, dependes de plataformas de terceros.',
     
     cartaSolucionTitle: 'La solución',
     cartaSolucionSubtitle: 'Una sola herramienta. Todos los problemas, resueltos.',
+    cartaSolucionPrefix: 'Una ',
     cartaSolucionHighlight: 'carta digital multimedia',
+    cartaSolucionSuffix: ' que trabaja para ti las 24 horas: dentro del local, en Google y en redes sociales.',
     cartaSolucionDesc: 'Tus clientes ven los platos con fotos, vídeos y descripciones en 5 idiomas escaneando el QR de la mesa. Los nuevos clientes encuentran tu carta en Google y hacen pedidos take away directamente. Tú recibes el pedido por WhatsApp, acumulas su contacto en tu base de datos y les fidelizas con promociones. Sin intermediarios. Sin comisiones. Sin depender de nadie.',
-    
-    cartaBeneficiosTitle: '7 beneficios que',
+     cartaSolucionTenerife: 'Especial para clientes en Tenerife: bares, restaurantes y empresas. Atención en persona con explicación de demos in situ.',
+     
+     cartaBeneficiosTitle: '7 beneficios que',
     cartaBeneficiosSubtitle: 'cambian tu negocio',
+    // Carta Flujo
+    cartaFlujoTitle: 'El flujo',
+    cartaFlujoSubtitle: '¿Cómo se ve?',
+    cartaFlujoStep1Title: 'Escanea el QR',
+    cartaFlujoStep1Desc: 'El cliente apunta la cámara al QR de la mesa.',
+    cartaFlujoStep2Title: 'Explora',
+    cartaFlujoStep2Desc: 'Ve cada plato con imágenes y precio.',
+    cartaFlujoStep3Title: 'Fidelización',
+    cartaFlujoStep3Desc: 'Recibe oferta a cambio de su email.',
+    cartaFlujoStep4Title: 'Pide',
+    cartaFlujoStep4Desc: 'Sin dudas, sin malentendidos.',
+    cartaFlujoStep5Title: 'Presencia Digital',
+    cartaFlujoStep5Desc: 'Tu carta visible en Google Business Profile. Atrae nuevos clientes con fotos impactantes.',
     cartaBeneficio1Title: 'Experiencia premium en mesa',
     cartaBeneficio1Desc: 'Cada plato se presenta con fotos profesionales, vídeos y descripciones detalladas. El cliente sabe exactamente qué va a pedir.',
     cartaBeneficio1Tag: '↑ Ticket medio',
@@ -466,32 +656,26 @@ const translations: Record<Language, Translation> = {
     cartaBeneficio7Desc: 'Añade, edita u oculta platos en segundos. Todo desde un panel intuitivo.',
     cartaBeneficio7Tag: 'Autogestionable',
     
-    cartaFlujoTitle: 'El flujo',
-    cartaFlujoSubtitle: '¿Cómo funciona en la práctica?',
-    cartaFlujoStep1Title: 'Escanea el QR',
-    cartaFlujoStep1Desc: 'El cliente apunta la cámara al QR de la mesa.',
-    cartaFlujoStep2Title: 'Explora',
-    cartaFlujoStep2Desc: 'Ve cada plato con imágenes y precio.',
-    cartaFlujoStep3Title: 'Fidelización',
-    cartaFlujoStep3Desc: 'Recibe oferta a cambio de su email.',
-    cartaFlujoStep4Title: 'Pide',
-    cartaFlujoStep4Desc: 'Sin dudas, sin malentendidos.',
+    // --- COMPARATIVA DINERO ---
+    cartaDineroTitle: 'El valor real',
+    cartaDineroSubtitle: 'Comisiones perdidas vs. Inversión en tu negocio',
+    cartaDineroCalcDesc: 'Deja de pagar comisiones a terceros y haz mailings con promociones para los días con menos gente. Tus clientes, tu contacto, tu dinero.',
     
-    cartaDineroTitle: 'La matemática',
-    cartaDineroSubtitle: 'Lo que te cobrabas vs. lo que pagarías con nosotros',
-    cartaDineroCalcDesc: 'Basado en un restaurante con 3.000€/mes en pedidos take away. Los números hablan solos.',
-    cartaDineroIntermediarios: '❌ Con intermediarios',
-    cartaDineroGlovo: 'Glovo (~28%)',
-    cartaDineroJustEat: 'Just Eat (~25%)',
-    cartaDineroUber: 'Uber Eats (~30%)',
-    cartaDineroTotal: 'Total mensual',
-    cartaDineroTuCarta: '✅ Con tu carta',
-    cartaDineroComision: 'Comisión',
-    cartaDineroSuscripcion: 'Suscripción',
-    cartaDineroClientes: 'Clientes',
-    cartaDineroAhorro: 'Ahorro mensual',
-    cartaDineroAhorroAnual: '8.000€ al año.',
-    
+    // Card 1: Pérdidas
+    cartaDineroCard1Title: 'Costes Ocultos y Comisiones',
+    cartaDineroCard1Item1: 'Comisiones a Terceros (Glovo, etc.)',
+    cartaDineroCard1Item2: 'Pérdida por Baja Visibilidad',
+    cartaDineroCard1Item3: 'Falta de Clientes Recurrentes',
+    cartaDineroCard1Total: 'Pérdida Neta Estimada',
+
+    // Card 2: Ganancias
+    cartaDineroCard2Title: 'Inversión y Crecimiento',
+    cartaDineroCard2Item1: 'Ahorro en Comisiones',
+    cartaDineroCard2Item2: 'Nuevos Clientes (SEO/Google)',
+    cartaDineroCard2Item3: 'Fidelización (Mailings)',
+    cartaDineroCard2Item4: 'Aumento Ticket Medio',
+    cartaDineroCard2Total: 'Incremento Neto Estimado',
+     
     cartaBBDDTitle: 'Tu activo más valioso',
     cartaBBDDSubtitle: 'La base de datos que trabaja sola',
     cartaBBDDDesc: 'Cada cliente que entra en tu local o hace un pedido online es una oportunidad. Con esta herramienta, no se escapa ninguna.',
@@ -506,7 +690,7 @@ const translations: Record<Language, Translation> = {
     cartaBBDDAction2: 'Promo',
     cartaBBDDAction3: 'Recuperar',
     
-    cartaDemoTitle: 'El producto real',
+    cartaDemoTitle: 'Demo del producto',
     cartaDemoVideoLabel: '▶ Así se ven tus platos en la carta digital',
     cartaDemoScreen1Title: '📱 Carta digital — QR en mesa',
     cartaDemoScreen1Label: 'Vista del cliente',
@@ -525,6 +709,11 @@ const translations: Record<Language, Translation> = {
     cartaCTANoComm: '✓ 0% comisiones',
   },
   en: {
+    // --- SUCCESS / TESTIMONIALS ---
+    successTitle: 'Success Stories',
+    successSubtitle: 'Real results that transform businesses',
+    successDesc: 'Companies that already trust us and have transformed their operation.',
+    
     // Navigation
     navSolutions: 'Solutions',
     navSuccess: 'Success',
@@ -563,8 +752,6 @@ const translations: Record<Language, Translation> = {
     featuresDetails: 'View details',
     
     // Success Stats
-    successTitle: 'Success Stories',
-    successSubtitle: 'Real results that transform businesses',
     successStat1Value: '50+',
     successStat1Label: 'Average Increase',
     successStat1Quote: 'Since we implemented QRIBAR, our revenue per table increased by 45%',
@@ -668,7 +855,8 @@ const translations: Record<Language, Translation> = {
     qribarLoading: 'Loading menu...',
     
     // Carta Digital Page
-    cartaHeroEyebrow: 'Digital revolution for restaurants',
+    cartaHeroEyebrow: 'Digital revolution for restaurants in Tenerife',
+     cartaHeroTenerife: 'Special for bars, restaurants and companies. On-site demos and personalized attention.',
     cartaHeroTitle1: 'Your menu,',
     cartaHeroTitleAccent: 'your business,',
     cartaHeroTitle2: 'your customers.',
@@ -693,16 +881,19 @@ const translations: Record<Language, Translation> = {
     cartaProblemaItem4Title: 'Lost calls',
     cartaProblemaItem4Desc: 'Managing orders by phone while serving tables is impossible.',
     cartaProblemaItem5Title: 'Anonymous customers',
-    cartaProblemaItem5Desc: 'Every customer who orders through Glovo belongs to Glovo, not yours. You don\'t have their contact.',
+    cartaProblemaItem5Desc: 'Every customer who orders through Glovo, Uber Eats or similar platforms belongs to them, not yours. You don\'t have their contact and can\'t build loyalty.',
     cartaProblemaItem6Title: 'Invisible online',
     cartaProblemaItem6Desc: 'No own website optimized for search engines, you depend on third-party platforms.',
     
     cartaSolucionTitle: 'The solution',
     cartaSolucionSubtitle: 'One tool. All problems, solved.',
-    cartaSolucionHighlight: 'multimedia digital menu',
+    cartaSolucionPrefix: 'A ',
+    cartaSolucionHighlight: 'digital menu with rich multimedia content',
+    cartaSolucionSuffix: ' that runs for your business 24/7: in your venue, on Google, and across your social channels.',
     cartaSolucionDesc: 'Your customers see dishes with photos, videos and descriptions in 5 languages by scanning the table QR. New customers find your menu on Google and order take away directly. You receive orders via WhatsApp, accumulate their contact in your database and fidelize them with promotions. No intermediaries. No commissions. Depending on no one.',
-    
-    cartaBeneficiosTitle: '7 benefits that',
+     cartaSolucionTenerife: 'Special for clients in Tenerife: bars, restaurants and companies. On-site demos and personalized attention.',
+     
+     cartaBeneficiosTitle: '7 benefits that',
     cartaBeneficiosSubtitle: 'change your business',
     cartaBeneficio1Title: 'Premium table experience',
     cartaBeneficio1Desc: 'Each dish is presented with professional photos, videos and detailed descriptions. The customer knows exactly what to order.',
@@ -726,31 +917,38 @@ const translations: Record<Language, Translation> = {
     cartaBeneficio7Desc: 'Add, edit or hide dishes in seconds. Everything from an intuitive panel.',
     cartaBeneficio7Tag: 'Self-manageable',
     
-    cartaFlujoTitle: 'The flow',
-    cartaFlujoSubtitle: 'How it works in practice?',
-    cartaFlujoStep1Title: 'Scan the QR',
-    cartaFlujoStep1Desc: 'The customer points the camera at the table QR.',
-    cartaFlujoStep2Title: 'Explore',
-    cartaFlujoStep2Desc: 'See each dish with images and price.',
-    cartaFlujoStep3Title: 'Fidelization',
-    cartaFlujoStep3Desc: 'Receives an offer in exchange for their email.',
-    cartaFlujoStep4Title: 'Order',
-    cartaFlujoStep4Desc: 'No doubts, no misunderstandings.',
+cartaFlujoTitle: 'The flow',
+     cartaFlujoSubtitle: 'How does it work?',
+     cartaFlujoStep1Title: 'Instant Scan',
+     cartaFlujoStep1Desc: 'Customer points camera at the table QR or finds your menu on Google.',
+     cartaFlujoStep2Title: 'Multimedia Explore',
+     cartaFlujoStep2Desc: 'See dishes with photos, videos, and descriptions in 5 languages. Easy and fast.',
+     cartaFlujoStep3Title: 'In-Store Loyalty',
+     cartaFlujoStep3Desc: 'Email popup for promos and instant 5★ reviews. No orders at the table.',
+     cartaFlujoStep4Title: 'Take Away Online',
+     cartaFlujoStep4Desc: 'Activates "Cart Mode" from Google or Social Media. Orders for pickup.',
+     cartaFlujoStep5Title: 'Digital Presence',
+     cartaFlujoStep5Desc: 'Your menu visible on Google Business Profile. Attract new customers with stunning photos.',
     
-    cartaDineroTitle: 'The math',
-    cartaDineroSubtitle: 'What you were charging vs. what you\'d pay with us',
-    cartaDineroCalcDesc: 'Based on a restaurant with €3,000/month in take away orders. The numbers speak for themselves.',
-    cartaDineroIntermediarios: '❌ With intermediaries',
-    cartaDineroGlovo: 'Glovo (~28%)',
-    cartaDineroJustEat: 'Just Eat (~25%)',
-    cartaDineroUber: 'Uber Eats (~30%)',
-    cartaDineroTotal: 'Monthly total',
-    cartaDineroTuCarta: '✅ With your menu',
-    cartaDineroComision: 'Commission',
-    cartaDineroSuscripcion: 'Subscription',
-    cartaDineroClientes: 'Clients',
-    cartaDineroAhorro: 'Monthly savings',
-    cartaDineroAhorroAnual: '€8,000 per year.',
+    // --- COMPARATIVE MONEY ---
+    cartaDineroTitle: 'The real value',
+    cartaDineroSubtitle: 'Lost commissions vs. Investment in your business',
+    cartaDineroCalcDesc: 'Stop paying third-party commissions and send mailings with promos on slow days. Your clients, your contact, your money.',
+    
+    // Card 1: Losses
+    cartaDineroCard1Title: 'Hidden Costs and Commissions',
+    cartaDineroCard1Item1: 'Third-party Commissions (Glovo, etc.)',
+    cartaDineroCard1Item2: 'Loss due to Low Visibility',
+    cartaDineroCard1Item3: 'Lack of Recurring Customers',
+    cartaDineroCard1Total: 'Estimated Net Loss',
+    
+    // Card 2: Gains
+    cartaDineroCard2Title: 'Investment and Growth',
+    cartaDineroCard2Item1: 'Savings on Commissions',
+    cartaDineroCard2Item2: 'New Customers (SEO/Google)',
+    cartaDineroCard2Item3: 'Loyalty (Mailings)',
+    cartaDineroCard2Item4: 'Increased Average Ticket',
+    cartaDineroCard2Total: 'Estimated Net Increase',
     
     cartaBBDDTitle: 'Your most valuable asset',
     cartaBBDDSubtitle: 'The database that works for you',
@@ -766,7 +964,7 @@ const translations: Record<Language, Translation> = {
     cartaBBDDAction2: 'Promo',
     cartaBBDDAction3: 'Recover',
     
-    cartaDemoTitle: 'The real product',
+    cartaDemoTitle: 'Product Demo',
     cartaDemoVideoLabel: '▶ This is how your dishes look on the digital menu',
     cartaDemoScreen1Title: '📱 Digital menu — QR at table',
     cartaDemoScreen1Label: 'Client view',
@@ -783,6 +981,86 @@ const translations: Record<Language, Translation> = {
     cartaCTASignup48h: '✓ Setup in 48h',
     cartaCTASupport: '✓ Support',
     cartaCTANoComm: '✓ 0% commissions',
+    
+    // Tap Review (NFC) translations for English
+    tapReviewMetaTitle: 'Tap-to-Review NFC - Multiply your Google reviews',
+    tapReviewMetaDesc: 'NFC devices to get reviews on Google automatically. One tap and your customers rate you with 5 stars.',
+    tapReviewBack: 'Back to home',
+    tapReviewEyebrow: 'NFC CARDS',
+    tapReviewHeroTitle: 'Multiply the reviews',
+    tapReviewHeroAccent: 'on Google for your business',
+    tapReviewHeroSubtitle: 'Get more reviews with Tap-to-Review devices and attract more customers. High-performance NFC chip for reviews in 5 seconds.',
+    tapReviewHeroBtnContact: 'Contact now',
+    tapReviewHeroBtnProduct: 'View product',
+    tapReviewHeroFeature1: 'One-time payment - No subscriptions',
+    tapReviewHeroFeature2: 'Get reviews in 5 seconds',
+    tapReviewHeroFeature3: 'Appear first on Google Maps',
+    
+    tapReviewProductExhibitorWhite: 'White Exhibitor',
+    tapReviewProductExhibitorWhiteAlt: 'White reviews exhibitor',
+    tapReviewProductExhibitorBlack: 'Black Exhibitor',
+    tapReviewProductExhibitorBlackAlt: 'Black reviews exhibitor',
+    tapReviewProductStand: 'Display Stand',
+    tapReviewProductStandAlt: 'Tap-to-Review display stand',
+    
+    tapReviewStatsBusinesses: 'Working in +20,000 businesses',
+    tapReviewStatsReviews: 'reviews obtained',
+    tapReviewStatsDaily: 'daily reviews',
+    
+    tapReviewHowTitle: 'How does it work?',
+    tapReviewHowSubtitle: 'Thanks to its high-performance NFC chip, your customers bring their phone closer and the Google reviews page for your business opens.',
+    tapReviewHowStep1Title: 'Place the device',
+    tapReviewHowStep1Desc: 'Put the Tapstar exhibitor in your establishment, visible for your customers.',
+    tapReviewHowStep2Title: 'Customer brings phone closer',
+    tapReviewHowStep2Desc: 'The customer brings their phone to the NFC chip. No need to open apps or scan anything.',
+    tapReviewHowStep3Title: 'Review in 5 seconds',
+    tapReviewHowStep3Desc: 'Your business Google reviews page opens directly. The customer just has to tap 5 stars.',
+    
+    tapReviewFeatTitle: 'Tap-to-Review Advantages',
+    tapReviewFeatSubtitle: 'Everything you need to get reviews automatically',
+    tapReviewFeatNFC: 'High-Performance NFC',
+    tapReviewFeatNFCDesc: 'Latest generation NFC technology that works with any modern smartphone.',
+    tapReviewFeatSpeed: 'Reviews in 5 seconds',
+    tapReviewFeatSpeedDesc: 'The process is so fast that customers don\'t have time to say "no".',
+    tapReviewFeatGoogle: 'Appear first on Google',
+    tapReviewFeatGoogleDesc: 'More reviews = better positioning on Google Maps and local searches.',
+    tapReviewFeatNoSub: 'No subscriptions',
+    tapReviewFeatNoSubDesc: 'One-time payment. No monthly fees, no commitment, no surprises.',
+    
+    tapReviewSocialTitle: 'Thousands of businesses trust us',
+    tapReviewSocialSubtitle: 'Hospitality businesses across Spain are already multiplying their reviews',
+    tapReviewTestimonial1Quote: 'We went from 50 to 500 reviews in 3 months. The impact on new customers has been brutal.',
+    tapReviewTestimonial1Author: 'Carlos Martínez',
+    tapReviewTestimonial1Business: 'Restaurante El Bodegón',
+    tapReviewTestimonial2Quote: 'My customers use it constantly. It\'s super easy, they just have to bring their phone closer.',
+    tapReviewTestimonial2Author: 'María López',
+    tapReviewTestimonial2Business: 'Café Central Madrid',
+    tapReviewTestimonial3Quote: 'The best investment we\'ve made. The reviews have improved our positioning on Google.',
+    tapReviewTestimonial3Author: 'Pedro Sánchez',
+    tapReviewTestimonial3Business: 'Bar La Tapa',
+    
+    tapReviewFAQTitle: 'Frequently Asked Questions',
+    tapReviewFAQ1Question: 'Does NFC really work with any phone?',
+    tapReviewFAQ1Answer: 'Yes, NFC works on most modern smartphones (iPhone 8 and newer, and all Android phones with NFC). iPhones also allow NFC without opening apps.',
+    tapReviewFAQ2Question: 'How do I configure the device for my business?',
+    tapReviewFAQ2Answer: 'We take care of everything. You just need to give us your business name and we configure the NFC chip to point to your Google Business profile.',
+    tapReviewFAQ3Question: 'What if the customer doesn\'t have NFC?',
+    tapReviewFAQ3Answer: 'The device also includes a QR code that the customer can scan with their phone camera. This way no one is left without being able to leave you their review.',
+    tapReviewFAQ4Question: 'Is there a guarantee or return policy?',
+    tapReviewFAQ4Answer: 'Yes, we offer a 30-day guarantee. If you\'re not satisfied, we\'ll refund 100% of your money.',
+    
+    tapReviewCTATitle: 'Start getting reviews today',
+    tapReviewCTASubtitle: 'Join the +20,000 businesses that are already multiplying their Google reviews',
+    tapReviewCTABtnPrimary: 'Contact now',
+    tapReviewCTABtnSecondary: 'Back to home',
+    tapReviewCTAFeature1: '30-day guarantee',
+    tapReviewCTAFeature2: 'Free 24h shipping',
+    tapReviewCTAFeature3: 'No subscriptions',
+    
+    tapReviewTrust30Days: '30-day guarantee',
+    tapReviewTrust24h: 'Free 24h shipping',
+    tapReviewTrustSupport: '24/7 Support',
+    tapReviewTrustNoSub: 'No subscriptions',
   }
 };
 
