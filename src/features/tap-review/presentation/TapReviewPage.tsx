@@ -301,7 +301,7 @@ const SocialProof: React.FC = () => {
                   <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
                 ))}
               </div>
-              <p className="text-default mb-6 italic">"{testimonial.quote}"</p>
+              <p className="text-default mb-6 italic">&ldquo;{testimonial.quote}&rdquo;</p>
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 bg-gradient-to-br from-[var(--color-accent)] to-[var(--color-primary)] rounded-full flex items-center justify-center text-white font-bold">
                   {testimonial.author.charAt(0)}
