@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Cpu, ChevronDown, Code2, Settings2, Smartphone, Utensils, Shield, X, Menu } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import LanguageSelector from '@shared/components/LanguageSelector';
 import { useLanguage } from '@shared/context/LanguageContext';
 
@@ -8,13 +8,61 @@ interface NavbarProps {
   scrolled: boolean;
 }
 
+interface SolutionItem {
+  id: string;
+  icon: React.ReactNode;
+  title: string;
+  desc: string;
+  href: string;
+  internal?: boolean;
+  external?: boolean;
+}
+
 export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
   const { t } = useLanguage();
+  const location = useLocation();
+  const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [focusedDropdownIndex, setFocusedDropdownIndex] = useState<number>(-1);
 
-  const solutions = [
+  const isActive = (href: string, internal?: boolean) => {
+    if (internal) return location.pathname === href;
+    if (href.startsWith('#')) return location.pathname === '/' && location.hash === href;
+    return false;
+  };
+
+  const handleNavClick = (
+    e: React.MouseEvent<HTMLAnchorElement> | undefined,
+    href: string,
+    internal?: boolean,
+    external?: boolean
+  ) => {
+    if (external) {
+      setIsDropdownOpen(false);
+      setIsMobileMenuOpen(false);
+      return;
+    }
+    
+    if (e) e.preventDefault();
+    
+    if (internal) {
+      if (href.startsWith('/')) {
+        navigate(href);
+      }
+    } else if (href.startsWith('#')) {
+      if (location.pathname !== '/') {
+        navigate(`/${href}`);
+      } else {
+        document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+    
+    setIsDropdownOpen(false);
+    setIsMobileMenuOpen(false);
+  };
+
+  const solutions: SolutionItem[] = [
     {
       id: 'software-ia',
       icon: <Code2 className="w-5 h-5 text-[var(--color-icon-blue)]" />,
@@ -34,7 +82,8 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
       icon: <Smartphone className="w-5 h-5 text-[var(--color-icon-emerald)]" />,
       title: t.navbarNFC,
       desc: t.navbarNFCDesc,
-      href: '#soluciones'
+      href: '/tap-review',
+      internal: true
     },
     {
       id: 'qribar',
@@ -54,28 +103,6 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
     }
   ];
 
-  const handleMobileLinkClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    setIsMobileMenuOpen(false);
-    if (e.currentTarget.hash) {
-      e.preventDefault();
-      const hash = e.currentTarget.hash;
-      setTimeout(() => {
-        document.querySelector(hash)?.scrollIntoView({ behavior: 'smooth' });
-      }, 300);
-    }
-  };
-
-  const handleDropdownLinkClick = (e?: React.MouseEvent<HTMLAnchorElement>) => {
-    setIsDropdownOpen(false);
-    if (e?.currentTarget?.hash) {
-      const target = document.querySelector(e.currentTarget.hash);
-      if (target) {
-        e.preventDefault();
-        target.scrollIntoView({ behavior: 'smooth' });
-      }
-    }
-  };
-
   return (
     <nav
       aria-label="Navegación principal"
@@ -85,7 +112,11 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
     >
       <div className="container mx-auto px-6 flex items-center justify-between">
         {/* Logo */}
-        <a href="#inicio" className="flex items-center gap-2 group">
+        <a 
+          href="#inicio" 
+          className="flex items-center gap-2 group" 
+          onClick={(e) => handleNavClick(e, '#inicio')}
+        >
           <div className="w-10 h-10 bg-[var(--color-accent)] rounded-xl flex items-center justify-center shadow-lg motion-safe:group-hover:scale-110 transition-transform">
             <Cpu className="text-[var(--color-on-accent)] w-6 h-6" />
           </div>
@@ -99,7 +130,10 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
           <div
             className="relative group"
             onMouseEnter={() => setIsDropdownOpen(true)}
-            onMouseLeave={() => { setIsDropdownOpen(false); setFocusedDropdownIndex(-1); }}
+            onMouseLeave={() => { 
+              setIsDropdownOpen(false); 
+              setFocusedDropdownIndex(-1); 
+            }}
             onFocus={() => setIsDropdownOpen(true)}
             onBlur={(e) => {
               if (!e.currentTarget.contains(e.relatedTarget as Node)) {
@@ -139,60 +173,111 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
             }`}>
               <div className="w-[280px] bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[2rem] p-4 shadow-lg">
                 <div className="grid gap-2">
-                  {solutions.map((item, idx) => (
-                    <a
-                      key={item.id}
-                      href={item.href}
-                      target={item.external ? "_blank" : undefined}
-                      rel={item.external ? "noopener noreferrer" : undefined}
-                      tabIndex={isDropdownOpen ? 0 : -1}
-                      className={`flex items-center gap-4 p-3 rounded-2xl hover:bg-[var(--color-bg-alt)] transition-colors group/item ${focusedDropdownIndex === idx ? 'bg-[var(--color-bg-alt)]' : ''}`}
-                      onClick={(e) => {
-                        if (item.external) {
-                          setIsDropdownOpen(false);
-                        } else {
-                          handleDropdownLinkClick(e);
-                          setIsDropdownOpen(false);
-                        }
-                      }}
-                      onKeyDown={(e) => {
-                        if (e.key === 'ArrowDown') {
-                          e.preventDefault();
-                          setFocusedDropdownIndex((idx + 1) % solutions.length);
-                        }
-                        if (e.key === 'ArrowUp') {
-                          e.preventDefault();
-                          setFocusedDropdownIndex((idx - 1 + solutions.length) % solutions.length);
-                        }
-                        if (e.key === 'Escape') {
-                          setIsDropdownOpen(false);
-                          setFocusedDropdownIndex(-1);
-                        }
-                      }}
-                      ref={(el) => {
-                        if (focusedDropdownIndex === idx && el) {
-                          el.focus();
-                        }
-                      }}
-                    >
-                      <div className="w-10 h-10 bg-[var(--color-surface)] rounded-xl flex items-center justify-center group-hover/item:scale-110 transition-transform">
-                        {item.icon}
-                      </div>
-                      <div>
-                        <p className="text-default text-xs font-bold">{item.title}</p>
-                        <p className="text-xs text-muted font-medium">{item.desc}</p>
-                      </div>
-                    </a>
-                  ))}
+                  {solutions.map((item, idx) => {
+                    const active = isActive(item.href, item.internal);
+                    return (
+                      <React.Fragment key={item.id}>
+                        {item.internal ? (
+                          <Link
+                            to={item.href}
+                            tabIndex={isDropdownOpen ? 0 : -1}
+                            className={`flex items-center gap-4 p-3 rounded-2xl transition-colors group/item ${active ? 'bg-[var(--color-accent-subtle)]' : 'hover:bg-[var(--color-bg-alt)]'} ${focusedDropdownIndex === idx ? 'bg-[var(--color-bg-alt)]' : ''}`}
+                            onClick={() => {
+                              setIsDropdownOpen(false);
+                              setIsMobileMenuOpen(false);
+                            }}
+                            onKeyDown={(e) => {
+                              if (e.key === 'ArrowDown') {
+                                e.preventDefault();
+                                setFocusedDropdownIndex((idx + 1) % solutions.length);
+                              }
+                              if (e.key === 'ArrowUp') {
+                                e.preventDefault();
+                                setFocusedDropdownIndex((idx - 1 + solutions.length) % solutions.length);
+                              }
+                              if (e.key === 'Escape') {
+                                setIsDropdownOpen(false);
+                                setFocusedDropdownIndex(-1);
+                              }
+                            }}
+                            ref={(el) => {
+                              if (focusedDropdownIndex === idx && el) {
+                                el.focus();
+                              }
+                            }}
+                          >
+                            <div className="w-10 h-10 bg-[var(--color-surface)] rounded-xl flex items-center justify-center group-hover/item:scale-110 transition-transform">
+                              {item.icon}
+                            </div>
+                            <div>
+                              <p className={`text-xs font-bold ${active ? 'text-[var(--color-primary)]' : 'text-default'}`}>{item.title}</p>
+                              <p className="text-xs text-muted font-medium">{item.desc}</p>
+                            </div>
+                          </Link>
+                        ) : (
+                          <a
+                            href={item.href}
+                            target={item.external ? "_blank" : undefined}
+                            rel={item.external ? "noopener noreferrer" : undefined}
+                            tabIndex={isDropdownOpen ? 0 : -1}
+                            className={`flex items-center gap-4 p-3 rounded-2xl transition-colors group/item ${active ? 'bg-[var(--color-accent-subtle)]' : 'hover:bg-[var(--color-bg-alt)]'} ${focusedDropdownIndex === idx ? 'bg-[var(--color-bg-alt)]' : ''}`}
+                            onClick={(e) => handleNavClick(e, item.href, item.internal, item.external)}
+                            onKeyDown={(e) => {
+                              if (e.key === 'ArrowDown') {
+                                e.preventDefault();
+                                setFocusedDropdownIndex((idx + 1) % solutions.length);
+                              }
+                              if (e.key === 'ArrowUp') {
+                                e.preventDefault();
+                                setFocusedDropdownIndex((idx - 1 + solutions.length) % solutions.length);
+                              }
+                              if (e.key === 'Escape') {
+                                setIsDropdownOpen(false);
+                                setFocusedDropdownIndex(-1);
+                              }
+                            }}
+                            ref={(el) => {
+                              if (focusedDropdownIndex === idx && el) {
+                                el.focus();
+                              }
+                            }}
+                          >
+                            <div className="w-10 h-10 bg-[var(--color-surface)] rounded-xl flex items-center justify-center group-hover/item:scale-110 transition-transform">
+                              {item.icon}
+                            </div>
+                            <div>
+                              <p className={`text-xs font-bold ${active ? 'text-[var(--color-primary)]' : 'text-default'}`}>{item.title}</p>
+                              <p className="text-xs text-muted font-medium">{item.desc}</p>
+                            </div>
+                          </a>
+                        )}
+                      </React.Fragment>
+                    );
+                  })}
                 </div>
               </div>
             </div>
           </div>
 
-          <a href="#exito" className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline focus-visible:outline-none transition-colors" onClick={handleDropdownLinkClick}>{t.navSuccess}</a>
-          <a href="#contacto" className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline focus-visible:outline-none transition-colors" onClick={handleDropdownLinkClick}>{t.navContact}</a>
+          <a 
+            href="#exito" 
+            className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline focus-visible:outline-none transition-colors" 
+            onClick={(e) => handleNavClick(e, '#exito')}
+          >
+            {t.navSuccess}
+          </a>
+          <a 
+            href="#contacto" 
+            className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline focus-visible:outline-none transition-colors" 
+            onClick={(e) => handleNavClick(e, '#contacto')}
+          >
+            {t.navContact}
+          </a>
           <LanguageSelector />
-          <Link to="/admin" className="flex items-center gap-2 text-muted hover:text-[var(--color-primary)] transition-colors">
+          <Link 
+            to="/admin" 
+            className="flex items-center gap-2 text-muted hover:text-[var(--color-primary)] transition-colors"
+          >
             <Shield className="w-4 h-4" />
             <span>{t.navAdmin}</span>
           </Link>
@@ -232,29 +317,65 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
                 <span className="font-bold text-xl text-default">SmartConnect <span className="text-[var(--color-primary)]">AI</span></span>
                 <div className="flex items-center gap-4">
                   <LanguageSelector />
-                  <button onClick={() => setIsMobileMenuOpen(false)} className="text-default p-2 rounded-lg focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)]" aria-label="Cerrar menu" autoFocus>
+                  <button 
+                    onClick={() => setIsMobileMenuOpen(false)} 
+                    className="text-default p-2 rounded-lg focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)]" 
+                    aria-label="Cerrar menu"
+                    autoFocus
+                  >
                     <X className="w-6 h-6" />
                   </button>
                 </div>
               </div>
               <div className="flex flex-col gap-1" role="navigation" aria-label="Enlaces de navegación">
-                {solutions.map((item) => (
-                  <a
-                    key={item.id}
-                    href={item.href}
-                    className="flex items-center gap-3 p-3 text-muted min-h-[44px] hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-xl transition-colors"
-                    target={item.external ? "_blank" : undefined}
-                    rel={item.external ? "noopener noreferrer" : undefined}
-                    onClick={(e) => item.external ? setIsMobileMenuOpen(false) : handleMobileLinkClick(e)}
-                  >
-                    {item.icon}
-                    <span>{item.title}</span>
-                  </a>
-                ))}
+                {solutions.map((item) => {
+                  const active = isActive(item.href, item.internal);
+                  return (
+                    <React.Fragment key={item.id}>
+                      {item.internal ? (
+                        <Link
+                          to={item.href}
+                          className={`flex items-center gap-3 p-3 min-h-[44px] hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-xl transition-colors ${active ? 'bg-[var(--color-accent-subtle)] text-[var(--color-primary)]' : 'text-muted'}`}
+                          onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                          {item.icon}
+                          <span className="font-semibold">{item.title}</span>
+                        </Link>
+                      ) : (
+                        <a
+                          href={item.href}
+                          className={`flex items-center gap-3 p-3 min-h-[44px] hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-xl transition-colors ${active ? 'bg-[var(--color-accent-subtle)] text-[var(--color-primary)]' : 'text-muted'}`}
+                          target={item.external ? "_blank" : undefined}
+                          rel={item.external ? "noopener noreferrer" : undefined}
+                          onClick={(e) => handleNavClick(e, item.href, item.internal, item.external)}
+                        >
+                          {item.icon}
+                          <span className="font-semibold">{item.title}</span>
+                        </a>
+                      )}
+                    </React.Fragment>
+                  );
+                })}
                 <hr className="border-[var(--color-border)] my-2" />
-                <a href="#exito" className="text-muted p-3 min-h-[44px] flex items-center hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-xl transition-colors" onClick={handleMobileLinkClick}>{t.navSuccess}</a>
-                <a href="#contacto" className="text-muted p-3 min-h-[44px] flex items-center hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-xl transition-colors" onClick={handleMobileLinkClick}>{t.navContact}</a>
-                <Link to="/admin" className="text-muted flex items-center gap-2 p-3 min-h-[44px] hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-xl transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
+                <a 
+                  href="#exito" 
+                  className="text-muted p-3 min-h-[44px] flex items-center hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-xl transition-colors" 
+                  onClick={(e) => handleNavClick(e, '#exito')}
+                >
+                  {t.navSuccess}
+                </a>
+                <a 
+                  href="#contacto" 
+                  className="text-muted p-3 min-h-[44px] flex items-center hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-xl transition-colors" 
+                  onClick={(e) => handleNavClick(e, '#contacto')}
+                >
+                  {t.navContact}
+                </a>
+                <Link 
+                  to="/admin" 
+                  className="text-muted flex items-center gap-2 p-3 min-h-[44px] hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-xl transition-colors" 
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
                   <Shield className="w-4 h-4" />
                   <span>Admin</span>
                 </Link>
