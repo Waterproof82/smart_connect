@@ -888,8 +888,8 @@ const translations: Record<Language, Translation> = {
     cartaSolucionTitle: 'The solution',
     cartaSolucionSubtitle: 'One tool. All problems, solved.',
     cartaSolucionPrefix: 'A ',
-    cartaSolucionHighlight: 'digital menu with rich multimedia content',
-    cartaSolucionSuffix: ' that runs for your business 24/7: in your venue, on Google, and across your social channels.',
+    cartaSolucionHighlight: 'rich-media digital menu',
+    cartaSolucionSuffix: ' that works for you 24/7: in your venue, on Google, and on social media.',
     cartaSolucionDesc: 'Your customers see dishes with photos, videos and descriptions in 5 languages by scanning the table QR. New customers find your menu on Google and order take away directly. You receive orders via WhatsApp, accumulate their contact in your database and fidelize them with promotions. No intermediaries. No commissions. Depending on no one.',
      cartaSolucionTenerife: 'Special for clients in Tenerife: bars, restaurants and companies. On-site demos and personalized attention.',
      
