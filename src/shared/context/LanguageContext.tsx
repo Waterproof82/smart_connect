@@ -265,7 +265,6 @@ interface Translation {
   // Tap Review (NFC)
   tapReviewMetaTitle: string;
   tapReviewMetaDesc: string;
-  tapReviewBack: string;
   tapReviewEyebrow: string;
   tapReviewHeroTitle: string;
   tapReviewHeroAccent: string;
@@ -326,13 +325,10 @@ interface Translation {
   tapReviewFAQ2Answer: string;
   tapReviewFAQ3Question: string;
   tapReviewFAQ3Answer: string;
-  tapReviewFAQ4Question: string;
-  tapReviewFAQ4Answer: string;
   
   tapReviewCTATitle: string;
   tapReviewCTASubtitle: string;
   tapReviewCTABtnPrimary: string;
-  tapReviewCTABtnSecondary: string;
   tapReviewCTAFeature1: string;
   tapReviewCTAFeature2: string;
   tapReviewCTAFeature3: string;
@@ -491,7 +487,6 @@ const translations: Record<Language, Translation> = {
     // Tap Review (NFC) translations for Spanish
     tapReviewMetaTitle: 'Tap-to-Review NFC - Multiplica tus reseñas en Google',
     tapReviewMetaDesc: 'Dispositivos NFC para conseguir reseñas en Google de forma automática. Solo un toque y tus clientes te valoran con 5 estrellas.',
-    tapReviewBack: 'Volver al inicio',
     tapReviewEyebrow: 'TARJETAS NFC',
     tapReviewHeroTitle: 'Multiplica las reseñas',
     tapReviewHeroAccent: 'en Google de tu negocio',
@@ -552,13 +547,10 @@ const translations: Record<Language, Translation> = {
     tapReviewFAQ2Answer: 'Nosotros nos encargamos de todo. Solo necesitas darnos el nombre de tu negocio y nosotros configuramos el chip NFC para que apunte a tu ficha de Google Business.',
     tapReviewFAQ3Question: '¿Qué pasa si el cliente no tiene NFC?',
     tapReviewFAQ3Answer: 'El dispositivo también incluye un código QR que el cliente puede escanear con la cámara de su móvil. Así nadie se queda sin poder dejarte su reseña.',
-    tapReviewFAQ4Question: '¿Hay garantía o devolución?',
-    tapReviewFAQ4Answer: 'Sí, ofrecemos garantía de 30 días. Si no estás satisfecho, te devolvemos el 100% de tu dinero.',
     
     tapReviewCTATitle: 'Empieza a conseguir reseñas hoy',
     tapReviewCTASubtitle: 'Únete a los +20,000 negocios que ya están multiplicando sus reseñas en Google',
     tapReviewCTABtnPrimary: 'Contactar ahora',
-    tapReviewCTABtnSecondary: 'Volver al inicio',
     tapReviewCTAFeature1: 'Garantía 30 días',
     tapReviewCTAFeature2: 'Envío gratis 24h',
     tapReviewCTAFeature3: 'Sin suscripciones',
@@ -888,8 +880,8 @@ const translations: Record<Language, Translation> = {
     cartaSolucionTitle: 'The solution',
     cartaSolucionSubtitle: 'One tool. All problems, solved.',
     cartaSolucionPrefix: 'A ',
-    cartaSolucionHighlight: 'digital menu with rich multimedia content',
-    cartaSolucionSuffix: ' that runs for your business 24/7: in your venue, on Google, and across your social channels.',
+    cartaSolucionHighlight: 'rich-media digital menu',
+    cartaSolucionSuffix: ' that works for you 24/7: in your venue, on Google, and on social media.',
     cartaSolucionDesc: 'Your customers see dishes with photos, videos and descriptions in 5 languages by scanning the table QR. New customers find your menu on Google and order take away directly. You receive orders via WhatsApp, accumulate their contact in your database and fidelize them with promotions. No intermediaries. No commissions. Depending on no one.',
      cartaSolucionTenerife: 'Special for clients in Tenerife: bars, restaurants and companies. On-site demos and personalized attention.',
      
@@ -985,7 +977,6 @@ cartaFlujoTitle: 'The flow',
     // Tap Review (NFC) translations for English
     tapReviewMetaTitle: 'Tap-to-Review NFC - Multiply your Google reviews',
     tapReviewMetaDesc: 'NFC devices to get reviews on Google automatically. One tap and your customers rate you with 5 stars.',
-    tapReviewBack: 'Back to home',
     tapReviewEyebrow: 'NFC CARDS',
     tapReviewHeroTitle: 'Multiply the reviews',
     tapReviewHeroAccent: 'on Google for your business',
@@ -1045,14 +1036,11 @@ cartaFlujoTitle: 'The flow',
     tapReviewFAQ2Question: 'How do I configure the device for my business?',
     tapReviewFAQ2Answer: 'We take care of everything. You just need to give us your business name and we configure the NFC chip to point to your Google Business profile.',
     tapReviewFAQ3Question: 'What if the customer doesn\'t have NFC?',
-    tapReviewFAQ3Answer: 'The device also includes a QR code that the customer can scan with their phone camera. This way no one is left without being able to leave you their review.',
-    tapReviewFAQ4Question: 'Is there a guarantee or return policy?',
-    tapReviewFAQ4Answer: 'Yes, we offer a 30-day guarantee. If you\'re not satisfied, we\'ll refund 100% of your money.',
+    tapReviewFAQ3Answer: 'The device also includes a QR code that the customer can scan with their phone camera. So no one misses out on leaving you a review.',
     
     tapReviewCTATitle: 'Start getting reviews today',
     tapReviewCTASubtitle: 'Join the +20,000 businesses that are already multiplying their Google reviews',
     tapReviewCTABtnPrimary: 'Contact now',
-    tapReviewCTABtnSecondary: 'Back to home',
     tapReviewCTAFeature1: '30-day guarantee',
     tapReviewCTAFeature2: 'Free 24h shipping',
     tapReviewCTAFeature3: 'No subscriptions',

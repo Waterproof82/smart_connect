@@ -358,7 +358,7 @@ const CartaDigitalPremium: React.FC = () => {
                   </div>
 
                   <p className="text-lg md:text-xl lg:text-2xl font-bold leading-relaxed font-['Playfair_Display','serif'] relative z-10">
-                    Una <span className="text-[var(--color-success-text)]">{t.cartaSolucionHighlight}</span> que trabaja para ti las 24 horas: dentro del local, en Google y en redes sociales.
+                    {t.cartaSolucionPrefix}<span className="text-[var(--color-success-text)]">{t.cartaSolucionHighlight}</span>{t.cartaSolucionSuffix}
                   </p>
                   <p className="text-base text-muted leading-relaxed mt-4 md:mt-6 max-w-2xl relative z-10">
                     {t.cartaSolucionDesc}
