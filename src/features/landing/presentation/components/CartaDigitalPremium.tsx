@@ -32,7 +32,7 @@ const Navbar: React.FC<{ scrolled?: boolean }> = ({ scrolled = false }) => {
       icon: <Smartphone className="w-5 h-5 text-[var(--color-icon-emerald)]" />,
       title: t.navbarNFC,
       desc: t.navbarNFCDesc,
-      href: '/#soluciones'
+      href: '/tap-review'
     },
     {
       id: 'qribar',
@@ -43,17 +43,6 @@ const Navbar: React.FC<{ scrolled?: boolean }> = ({ scrolled = false }) => {
       external: true
     }
   ];
-
-  const handleDropdownLinkClick = (e?: React.MouseEvent<HTMLAnchorElement>) => {
-    setIsDropdownOpen(false);
-    if (e?.currentTarget?.href?.includes('#')) {
-      const target = document.querySelector(new URL(e.currentTarget.href).hash);
-      if (target) {
-        e.preventDefault();
-        target.scrollIntoView({ behavior: 'smooth' });
-      }
-    }
-  };
 
   return (
     <nav
@@ -99,31 +88,65 @@ const Navbar: React.FC<{ scrolled?: boolean }> = ({ scrolled = false }) => {
               <div className="w-[280px] bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[2rem] p-4 shadow-lg">
                 <div className="grid gap-2">
                   {solutions.map((item, idx) => (
-                    <a
-                      key={item.id}
-                      href={item.href}
-                      tabIndex={isDropdownOpen ? 0 : -1}
-                      className={`flex items-center gap-4 p-3 rounded-2xl hover:bg-[var(--color-bg-alt)] transition-colors group/item ${focusedDropdownIndex === idx ? 'bg-[var(--color-bg-alt)]' : ''}`}
-                      onClick={handleDropdownLinkClick}
-                      onKeyDown={(e) => {
-                        if (e.key === 'ArrowDown') {
-                          e.preventDefault();
-                          setFocusedDropdownIndex((idx + 1) % solutions.length);
-                        }
-                        if (e.key === 'ArrowUp') {
-                          e.preventDefault();
-                          setFocusedDropdownIndex((idx - 1 + solutions.length) % solutions.length);
-                        }
-                      }}
-                    >
-                      <div className="w-10 h-10 bg-[var(--color-surface)] rounded-xl flex items-center justify-center group-hover/item:scale-110 transition-transform">
-                        {item.icon}
-                      </div>
-                      <div>
-                        <p className="text-default text-xs font-bold">{item.title}</p>
-                        <p className="text-xs text-muted font-medium">{item.desc}</p>
-                      </div>
-                    </a>
+                    <React.Fragment key={item.id}>
+                      {item.external ? (
+                        <a
+                          href={item.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          tabIndex={isDropdownOpen ? 0 : -1}
+                          className={`flex items-center gap-4 p-3 rounded-2xl hover:bg-[var(--color-bg-alt)] transition-colors group/item ${focusedDropdownIndex === idx ? 'bg-[var(--color-bg-alt)]' : ''}`}
+                          onClick={() => setIsDropdownOpen(false)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'ArrowDown') {
+                              e.preventDefault();
+                              setFocusedDropdownIndex((idx + 1) % solutions.length);
+                            }
+                            if (e.key === 'ArrowUp') {
+                              e.preventDefault();
+                              setFocusedDropdownIndex((idx - 1 + solutions.length) % solutions.length);
+                            }
+                          }}
+                        >
+                          <div className="w-10 h-10 bg-[var(--color-surface)] rounded-xl flex items-center justify-center group-hover/item:scale-110 transition-transform">
+                            {item.icon}
+                          </div>
+                          <div>
+                            <p className="text-default text-xs font-bold">{item.title}</p>
+                            <p className="text-xs text-muted font-medium">{item.desc}</p>
+                          </div>
+                        </a>
+                      ) : (
+                        <a
+                          href={item.href}
+                          tabIndex={isDropdownOpen ? 0 : -1}
+                          className={`flex items-center gap-4 p-3 rounded-2xl hover:bg-[var(--color-bg-alt)] transition-colors group/item ${focusedDropdownIndex === idx ? 'bg-[var(--color-bg-alt)]' : ''}`}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setIsDropdownOpen(false);
+                            window.location.href = item.href;
+                          }}
+                          onKeyDown={(e) => {
+                            if (e.key === 'ArrowDown') {
+                              e.preventDefault();
+                              setFocusedDropdownIndex((idx + 1) % solutions.length);
+                            }
+                            if (e.key === 'ArrowUp') {
+                              e.preventDefault();
+                              setFocusedDropdownIndex((idx - 1 + solutions.length) % solutions.length);
+                            }
+                          }}
+                        >
+                          <div className="w-10 h-10 bg-[var(--color-surface)] rounded-xl flex items-center justify-center group-hover/item:scale-110 transition-transform">
+                            {item.icon}
+                          </div>
+                          <div>
+                            <p className="text-default text-xs font-bold">{item.title}</p>
+                            <p className="text-xs text-muted font-medium">{item.desc}</p>
+                          </div>
+                        </a>
+                      )}
+                    </React.Fragment>
                   ))}
                 </div>
               </div>
