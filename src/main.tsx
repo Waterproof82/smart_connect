@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { LanguageProvider } from '@shared/context/LanguageContext';
+import { ScrollToTop } from '@shared/components/ScrollToTop';
 import './index.css';
 import App from './App';
 import CartaDigitalPremium from './features/landing/presentation/components/CartaDigitalPremium';
@@ -57,6 +58,7 @@ root.render(
   <React.StrictMode>
     <HelmetProvider>
     <BrowserRouter>
+      <ScrollToTop />
       <LanguageProvider>
         <Suspense fallback={<LoadingFallback />}>
           <Routes>
