@@ -112,7 +112,7 @@ const StatsBanner: React.FC = () => {
   const { t } = useLanguage();
 
   return (
-    <div className="container mx-auto px-6 mb-12">
+    <div className="container mx-auto px-6 my-12">
       <div className="bg-gradient-to-r from-[var(--color-bg-alt)] to-[var(--color-surface)] border border-[var(--color-border)] rounded-3xl p-8">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-4">
@@ -468,7 +468,7 @@ const TrustBadges: React.FC = () => {
   const { t } = useLanguage();
 
   return (
-    <div className="border-t border-b border-[var(--color-border)] py-8 bg-[var(--color-surface)]">
+    <div className="border-t border-b border-[var(--color-border)] py-8 bg-[var(--color-surface)] mt-12">
       <div className="container mx-auto px-6">
         <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16">
           <div className="flex items-center gap-2 text-muted">
