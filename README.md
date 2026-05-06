@@ -32,6 +32,7 @@
 - [Política de Dependencias](docs/DEPENDENCY_POLICY.md)
 - [Cumplimiento Arquitectura](docs/ARCHITECTURE_COMPLIANCE.md)
 - [Setup Entorno Vercel](docs/VERCEL_ENV_SETUP.md)
+- [SEO Implementation](docs/SEO_IMPLEMENTATION.md)
 
 
 ## 🏗️ Arquitectura y Flujos Principales
