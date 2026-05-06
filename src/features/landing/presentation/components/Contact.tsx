@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Mail, MapPin, Send, MessageSquare, CheckCircle2, AlertCircle, ChevronDown, Loader2 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { getAppSettings, AppSettings } from '@shared/services/settingsService';
 import { getLandingContainer } from '../LandingContainer';
 import { LeadEntity } from '../../domain/entities';
@@ -146,10 +147,10 @@ export const Contact: React.FC = () => {
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--color-accent-subtle)] border border-[var(--color-accent-border)] text-[var(--color-primary)] text-xs font-bold mb-6 tracking-wider uppercase">
             {t.heroEyebrow}
           </div>
-          <h2 className="text-5xl font-extrabold mb-6">{t.contactTitle}</h2>
-          <p className="text-muted text-lg leading-relaxed">
-            {t.contactSubtitle}
-          </p>
+            <h2 className="text-5xl font-extrabold mb-6">Contact Us for QRIBAR & NFC Cards</h2>
+            <p className="text-muted text-lg leading-relaxed">
+              Get a demo of our digital menu and NFC solutions for restaurants. Learn more about <Link to="/tap-review" className="text-[var(--color-primary)] hover:underline">NFC cards for Google Reviews</Link> or explore our <Link to="/chatbot" className="text-[var(--color-primary)] hover:underline">AI-powered chatbot</Link>.
+            </p>
         </div>
 
         <div className="grid lg:grid-cols-12 gap-12 items-start">
