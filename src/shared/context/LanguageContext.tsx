@@ -61,6 +61,11 @@ interface Translation {
   successStat4Quote: string;
   successStat4Author: string;
   
+  // SEO
+  seoTitle: string;
+  seoDescription: string;
+  seoProductDescription: string;
+ 
   // Contact
   contactTitle: string;
   contactSubtitle: string;
@@ -136,7 +141,7 @@ interface Translation {
 
   // Carta Digital Page
   cartaHeroEyebrow: string;
-   cartaHeroTenerife: string;
+  cartaHeroTenerife: string;
   cartaHeroTitle1: string;
   cartaHeroTitleAccent: string;
   cartaHeroTitle2: string;
@@ -171,9 +176,9 @@ interface Translation {
   cartaSolucionPrefix: string;
   cartaSolucionSuffix: string;
   cartaSolucionDesc: string;
-   cartaSolucionTenerife: string;
+  cartaSolucionTenerife: string;
    
-   cartaBeneficiosTitle: string;
+  cartaBeneficiosTitle: string;
   cartaBeneficiosSubtitle: string;
   cartaBeneficio1Title: string;
   cartaBeneficio1Desc: string;
@@ -197,18 +202,18 @@ interface Translation {
   cartaBeneficio7Desc: string;
   cartaBeneficio7Tag: string;
     
-    cartaFlujoTitle: string;
-    cartaFlujoSubtitle: string;
-    cartaFlujoStep5Title: string;
-    cartaFlujoStep5Desc: string;
-    cartaFlujoStep1Title: string;
-    cartaFlujoStep1Desc: string;
-    cartaFlujoStep2Title: string;
-    cartaFlujoStep2Desc: string;
-    cartaFlujoStep3Title: string;
-    cartaFlujoStep3Desc: string;
-    cartaFlujoStep4Title: string;
-    cartaFlujoStep4Desc: string;
+  cartaFlujoTitle: string;
+  cartaFlujoSubtitle: string;
+  cartaFlujoStep5Title: string;
+  cartaFlujoStep5Desc: string;
+  cartaFlujoStep1Title: string;
+  cartaFlujoStep1Desc: string;
+  cartaFlujoStep2Title: string;
+  cartaFlujoStep2Desc: string;
+  cartaFlujoStep3Title: string;
+  cartaFlujoStep3Desc: string;
+  cartaFlujoStep4Title: string;
+  cartaFlujoStep4Desc: string;
     
   // --- COMPARATIVA DINERO ---
   cartaDineroTitle: string;
@@ -230,7 +235,7 @@ interface Translation {
   cartaDineroCard2Item4: string;
   cartaDineroCard2Total: string;
    
-   cartaBBDDTitle: string;
+  cartaBBDDTitle: string;
   cartaBBDDSubtitle: string;
   cartaBBDDDesc: string;
   cartaBBDDLabel1: string;
@@ -352,7 +357,7 @@ interface Translation {
 }
 
 const translations: Record<Language, Translation> = {
-   es: {
+  es: {
     // Navigation
     navSolutions: 'Soluciones',
     navSuccess: 'Éxito',
@@ -411,6 +416,11 @@ const translations: Record<Language, Translation> = {
     successStat4Quote: 'Más de 850 negocios confían en SmartConnect para su transformación digital',
     successStat4Author: 'Comunidad Hostelera',
     
+    // SEO
+    seoTitle: 'Atrae Más Clientes a Tu Restaurante | Menú QR, NFC y Sistema de Pedidos - SmartConnect QRIBAR',
+    seoDescription: 'Aumenta las ventas de tu restaurante y atrae más clientes con QRIBAR. Menú digital con pedidos por código QR, tarjetas NFC y sistema de pedidos automatizado para aumentar la rotación de mesas y los ingresos.',
+    seoProductDescription: 'Plataforma de crecimiento para restaurantes con menú digital, pedidos por QR y tecnología NFC diseñada para aumentar pedidos, reducir tiempos de espera y maximizar ingresos por mesa.',
+
     // Contact
     contactTitle: 'Impulsa tu Negocio Hoy',
     contactSubtitle: '¿Hablamos? Estamos listos para auditar tu proceso actual y mostrarte cómo la IA y la automatización pueden ahorrarte cientos de horas mensuales.',
@@ -475,16 +485,144 @@ const translations: Record<Language, Translation> = {
     serviceAutomation: 'Automatización n8n',
     serviceNFC: 'Tarjetas NFC Reseñas',
     serviceConsultoria: 'Consultoría IA',
-    
+
     // Error Boundary
     errorBoundaryTitle: 'Algo salió mal',
     errorBoundaryMessage: 'Por favor, recarga la página.',
     errorBoundaryButton: 'Recargar',
-    
+
     // Skip Link
     skipLink: 'Saltar al contenido',
+
+    // Carta Digital Page
+    cartaHeroEyebrow: 'La revolución digital para restaurantes en Tenerife',
+    cartaHeroTenerife: 'Especial para bares, restaurantes y empresas. Atención en persona con explicación de demos in situ.',
+    cartaHeroTitle1: 'Tu carta,',
+    cartaHeroTitleAccent: 'tu negocio,',
+    cartaHeroTitle2: 'tus clientes.',
+    cartaHeroSubtitle: 'Una carta digital autogestionable que transforma la experiencia de tus comensales, elimina intermediarios y convierte cada visita en un cliente fiel.',
+    cartaHeroButtonDemo: 'Ver cómo funciona',
+    cartaHeroButtonCalc: 'Calcular ahorro',
+    cartaHeroStat1Label: 'Idiomas',
+    cartaHeroStat2Label: 'Comisiones',
+    cartaHeroStat3Label: 'Pedidos online',
+    cartaHeroStat4Label: 'Clientes',
+    cartaHeroCardLabel: 'Tap-to-Review NFC',
     
-    // Tap Review (NFC) translations for Spanish
+    cartaProblemaTitle: '¿Cuánto dinero',
+    cartaProblemaSubtitle: 'estás perdiendo hoy?',
+    cartaProblemaDesc: 'La mayoría de restaurantes dependen de sistemas anticuados, intermediarios costosos y herramientas que no les pertenecen. El resultado: margen reducido, clientes anónimos y oportunidades perdidas.',
+    cartaProblemaItem1Title: 'Comisiones que sangran',
+    cartaProblemaItem1Desc: 'Glovo, Uber Eats y similares se quedan entre el 25% y el 35% de cada pedido. Tú trabajas, ellos se llevan el margen.',
+    cartaProblemaItem2Title: 'Carta en papel obsoleta',
+    cartaProblemaItem2Desc: 'Sin fotos, sin descripciones claras, sin idiomas. El cliente no sabe qué va a pedir y llama al camarero tres veces.',
+    cartaProblemaItem3Title: 'Turistas sin atender',
+    cartaProblemaItem3Desc: 'El cliente extranjero no entiende la carta y pide lo más sencillo. Ticket medio más bajo garantizado.',
+    cartaProblemaItem4Title: 'Llamadas perdidas',
+    cartaProblemaItem4Desc: 'Gestionar pedidos por teléfono mientras sirves mesas es imposible.',
+    cartaProblemaItem5Title: 'Clientes anónimos',
+    cartaProblemaItem5Desc: 'Cada cliente que pide por Glovo, Uber Eats o similares es de ellos, no tuyo. No tienes su contacto y no puedes fidelizarlo.',
+    cartaProblemaItem6Title: 'Invisible en internet',
+    cartaProblemaItem6Desc: 'Sin web propia optimizada en buscadores, dependes de plataformas de terceros.',
+    
+    cartaSolucionTitle: 'La solución',
+    cartaSolucionSubtitle: 'Una sola herramienta. Todos los problemas, resueltos.',
+    cartaSolucionHighlight: 'carta digital multimedia',
+    cartaSolucionPrefix: 'Una ',
+    cartaSolucionSuffix: ' que trabaja para ti las 24 horas: dentro del local, en Google y en redes sociales.',
+    cartaSolucionDesc: 'Tus clientes ven los platos con fotos, vídeos y descripciones en 5 idiomas escaneando el QR de la mesa. Los nuevos clientes encuentran tu carta en Google y hacen pedidos take away directamente. Tú recibes el pedido por WhatsApp, acumulas su contacto en tu base de datos y les fidelizas con promociones. Sin intermediarios. Sin comisiones. Sin depender de nadie.',
+    cartaSolucionTenerife: 'Especial para clientes en Tenerife: bares, restaurantes y empresas. Atención en persona con explicación de demos in situ.',
+      
+    cartaBeneficiosTitle: '7 beneficios que',
+    cartaBeneficiosSubtitle: 'cambian tu negocio',
+    cartaBeneficio1Title: 'Experiencia premium en mesa',
+    cartaBeneficio1Desc: 'Cada plato se presenta con fotos profesionales, vídeos y descripciones detalladas. El cliente sabe exactamente qué va a pedir.',
+    cartaBeneficio1Tag: '↑ Ticket medio',
+    cartaBeneficio2Title: 'Sin barreras de idioma',
+    cartaBeneficio2Desc: 'La carta se adapta automáticamente a 5 idiomas. Turistas entienden la oferta completa.',
+    cartaBeneficio2Tag: '↑ Satisfacción',
+    cartaBeneficio3Title: 'Cero comisiones',
+    cartaBeneficio3Desc: 'Los pedidos para recogido llegan directamente. Te ahorras entre el 25% y el 35%.',
+    cartaBeneficio3Tag: 'Ahorro real',
+    cartaBeneficio4Title: 'Tus clientes, tu base',
+    cartaBeneficio4Desc: 'Cada pedido online pasa a ser tuyo. Envías promociones cuando quieras.',
+    cartaBeneficio4Tag: 'Fidelización',
+    cartaBeneficio5Title: 'Pedidos por WhatsApp',
+    cartaBeneficio5Desc: 'Los pedidos llegan en tiempo real por WhatsApp, bien estructurados.',
+    cartaBeneficio5Tag: '↓ Errores',
+    cartaBeneficio6Title: 'Presencia digital',
+    cartaBeneficio6Desc: 'Web SEO, Google Business, redes sociales. Apareces cuando te buscan.',
+    cartaBeneficio6Tag: '↑ Visibilidad',
+    cartaBeneficio7Title: 'Gestión total',
+    cartaBeneficio7Desc: 'Añade, edita u oculta platos en segundos. Todo desde un panel intuitivo.',
+    cartaBeneficio7Tag: 'Autogestionable',
+    
+    cartaFlujoTitle: 'El flujo',
+    cartaFlujoSubtitle: '¿Cómo se ve?',
+    cartaFlujoStep5Title: 'Presencia Digital',
+    cartaFlujoStep5Desc: 'Tu carta visible en Google Business Profile. Atrae nuevos clientes con fotos impactantes.',
+    cartaFlujoStep1Title: 'Escanea el QR',
+    cartaFlujoStep1Desc: 'El cliente apunta la cámara al QR de la mesa.',
+    cartaFlujoStep2Title: 'Explora',
+    cartaFlujoStep2Desc: 'Ve cada plato con imágenes y precio.',
+    cartaFlujoStep3Title: 'Fidelización',
+    cartaFlujoStep3Desc: 'Recibe oferta a cambio de su email.',
+    cartaFlujoStep4Title: 'Pide',
+    cartaFlujoStep4Desc: 'Sin dudas, sin malentendidos.',
+    
+    // --- COMPARATIVA DINERO ---
+    cartaDineroTitle: 'El valor real',
+    cartaDineroSubtitle: 'Comisiones perdidas vs. Inversión en tu negocio',
+    cartaDineroCalcDesc: 'Deja de pagar comisiones a terceros y haz mailings con promociones para los días con menos gente. Tus clientes, tu contacto, tu dinero.',
+    
+    // Card 1: Pérdidas
+    cartaDineroCard1Title: 'Costes Ocultos y Comisiones',
+    cartaDineroCard1Item1: 'Comisiones a Terceros (Glovo, etc.)',
+    cartaDineroCard1Item2: 'Pérdida por Baja Visibilidad',
+    cartaDineroCard1Item3: 'Falta de Clientes Recurrentes',
+    cartaDineroCard1Total: 'Pérdida Neta Estimada',
+
+    // Card 2: Ganancias
+    cartaDineroCard2Title: 'Inversión y Crecimiento',
+    cartaDineroCard2Item1: 'Ahorro en Comisiones',
+    cartaDineroCard2Item2: 'Nuevos Clientes (SEO/Google)',
+    cartaDineroCard2Item3: 'Fidelización (Mailings)',
+    cartaDineroCard2Item4: 'Aumento Ticket Medio',
+    cartaDineroCard2Total: 'Incremento Neto Estimado',
+   
+    cartaBBDDTitle: 'Tu activo más valioso',
+    cartaBBDDSubtitle: 'La base de datos que trabaja sola',
+    cartaBBDDDesc: 'Cada cliente que entra en tu local o hace un pedido online es una oportunidad. Con esta herramienta, no se escapa ninguna.',
+    cartaBBDDLabel1: 'QR en mesa',
+    cartaBBDDLabel2: 'Take Away',
+    cartaBBDDLabelTuBBDD: 'TU BBDD',
+    cartaBBDDData1: 'Nombre',
+    cartaBBDDData2: 'Email',
+    cartaBBDDData3: 'Teléfono',
+    cartaBBDDData4: 'Historial',
+    cartaBBDDAction1: 'Email',
+    cartaBBDDAction2: 'Promo',
+    cartaBBDDAction3: 'Recuperar',
+    
+    cartaDemoTitle: 'Demo del producto',
+    cartaDemoVideoLabel: '▶ Así se ven tus platos en la carta digital',
+    cartaDemoScreen1Title: '📱 Carta digital — QR en mesa',
+    cartaDemoScreen1Label: 'Vista del cliente',
+    cartaDemoScreen2Title: '⚙️ Panel de gestión y estadísticas',
+    cartaDemoScreen2Label: 'Panel de administración',
+    cartaDemoScreen3Title: '📧 Pedidos en tiempo real',
+    cartaDemoScreen3Label: 'Gestión de pedidos',
+    
+    cartaCTATitle: 'El siguiente paso',
+    cartaCTASubtitle: 'Empieza a trabajar para ti.',
+    cartaCTABtnDemo: 'Demo gratuita',
+    cartaCTABtnContact: 'Habar con asesor',
+    cartaCTANoContract: '✓ Sin permanencia',
+    cartaCTASignup48h: '✓ Alta 48h',
+    cartaCTASupport: '✓ Soporte',
+    cartaCTANoComm: '✓ 0% comisiones',
+
+    // Tap Review (NFC)
     tapReviewMetaTitle: 'Tap-to-Review NFC - Multiplica tus reseñas en Google',
     tapReviewMetaDesc: 'Dispositivos NFC para conseguir reseñas en Google de forma automática. Solo un toque y tus clientes te valoran con 5 estrellas.',
     tapReviewEyebrow: 'TARJETAS NFC',
@@ -503,7 +641,7 @@ const translations: Record<Language, Translation> = {
     tapReviewProductExhibitorBlackAlt: 'Expositor de reseñas negro',
     tapReviewProductStand: 'Stand Exhibidor',
     tapReviewProductStandAlt: 'Stand exhibidor Tap-to-Review',
-    
+  
     tapReviewStatsBusinesses: 'Funcionando en +20,000 negocios',
     tapReviewStatsReviews: 'reseñas conseguidas',
     tapReviewStatsDaily: 'reseñas diarias',
@@ -554,12 +692,12 @@ const translations: Record<Language, Translation> = {
     tapReviewCTAFeature1: 'Garantía 30 días',
     tapReviewCTAFeature2: 'Envío gratis 24h',
     tapReviewCTAFeature3: 'Sin suscripciones',
-    
+  
     tapReviewTrust30Days: 'Garantía 30 días',
     tapReviewTrust24h: 'Envío gratis 24h',
     tapReviewTrustSupport: 'Soporte 24/7',
     tapReviewTrustNoSub: 'Sin suscripciones',
-     
+
     // QRIBAR
     qribarSector: 'SECTOR HOSTELERÍA',
     qribarTitle: 'Digitaliza la experiencia con',
@@ -571,141 +709,8 @@ const translations: Record<Language, Translation> = {
     qribarButton: 'Más información',
     qribarError: 'Error al cargar el menú',
     qribarLoading: 'Cargando menú...',
-    
-    // Carta Digital Page
-    cartaHeroEyebrow: 'La revolución digital para restaurantes en Tenerife',
-     cartaHeroTenerife: 'Especial para bares, restaurantes y empresas. Atención en persona con explicación de demos in situ.',
-    cartaHeroTitle1: 'Tu carta,',
-    cartaHeroTitleAccent: 'tu negocio,',
-    cartaHeroTitle2: 'tus clientes.',
-    cartaHeroSubtitle: 'Una carta digital autogestionable que transforma la experiencia de tus comensales, elimina intermediarios y convierte cada visita en un cliente fiel.',
-    cartaHeroButtonDemo: 'Ver cómo funciona',
-    cartaHeroButtonCalc: 'Calcular ahorro',
-    cartaHeroStat1Label: 'Idiomas',
-    cartaHeroStat2Label: 'Comisiones',
-    cartaHeroStat3Label: 'Pedidos online',
-    cartaHeroStat4Label: 'Clientes',
-    cartaHeroCardLabel: 'Tap-to-Review NFC',
-    
-    cartaProblemaTitle: '¿Cuánto dinero',
-    cartaProblemaSubtitle: 'estás perdiendo hoy?',
-    cartaProblemaDesc: 'La mayoría de restaurantes dependen de sistemas anticuados, intermediarios costosos y herramientas que no les pertenecen. El resultado: margen reducido, clientes anónimos y oportunidades perdidas.',
-    cartaProblemaItem1Title: 'Comisiones que sangran',
-    cartaProblemaItem1Desc: 'Glovo, Uber Eats y similares se quedan entre el 25% y el 35% de cada pedido. Tú trabajas, ellos se llevan el margen.',
-    cartaProblemaItem2Title: 'Carta en papel obsoleta',
-    cartaProblemaItem2Desc: 'Sin fotos, sin descripciones claras, sin idiomas. El cliente no sabe qué va a pedir y llama al camarero tres veces.',
-    cartaProblemaItem3Title: 'Turistas sin atender',
-    cartaProblemaItem3Desc: 'El cliente extranjero no entiende la carta y pide lo más sencillo. Ticket medio más bajo garantizado.',
-    cartaProblemaItem4Title: 'Llamadas perdidas',
-    cartaProblemaItem4Desc: 'Gestionar pedidos por teléfono mientras sirves mesas es imposible.',
-    cartaProblemaItem5Title: 'Clientes anónimos',
-    cartaProblemaItem5Desc: 'Cada cliente que pide por Glovo, Uber Eats o similares es de ellos, no tuyo. No tienes su contacto y no podés fidelizarlo.',
-    cartaProblemaItem6Title: 'Invisible en internet',
-    cartaProblemaItem6Desc: 'Sin web propia optimizada en buscadores, dependes de plataformas de terceros.',
-    
-    cartaSolucionTitle: 'La solución',
-    cartaSolucionSubtitle: 'Una sola herramienta. Todos los problemas, resueltos.',
-    cartaSolucionPrefix: 'Una ',
-    cartaSolucionHighlight: 'carta digital multimedia',
-    cartaSolucionSuffix: ' que trabaja para ti las 24 horas: dentro del local, en Google y en redes sociales.',
-    cartaSolucionDesc: 'Tus clientes ven los platos con fotos, vídeos y descripciones en 5 idiomas escaneando el QR de la mesa. Los nuevos clientes encuentran tu carta en Google y hacen pedidos take away directamente. Tú recibes el pedido por WhatsApp, acumulas su contacto en tu base de datos y les fidelizas con promociones. Sin intermediarios. Sin comisiones. Sin depender de nadie.',
-     cartaSolucionTenerife: 'Especial para clientes en Tenerife: bares, restaurantes y empresas. Atención en persona con explicación de demos in situ.',
-     
-     cartaBeneficiosTitle: '7 beneficios que',
-    cartaBeneficiosSubtitle: 'cambian tu negocio',
-    // Carta Flujo
-    cartaFlujoTitle: 'El flujo',
-    cartaFlujoSubtitle: '¿Cómo se ve?',
-    cartaFlujoStep1Title: 'Escanea el QR',
-    cartaFlujoStep1Desc: 'El cliente apunta la cámara al QR de la mesa.',
-    cartaFlujoStep2Title: 'Explora',
-    cartaFlujoStep2Desc: 'Ve cada plato con imágenes y precio.',
-    cartaFlujoStep3Title: 'Fidelización',
-    cartaFlujoStep3Desc: 'Recibe oferta a cambio de su email.',
-    cartaFlujoStep4Title: 'Pide',
-    cartaFlujoStep4Desc: 'Sin dudas, sin malentendidos.',
-    cartaFlujoStep5Title: 'Presencia Digital',
-    cartaFlujoStep5Desc: 'Tu carta visible en Google Business Profile. Atrae nuevos clientes con fotos impactantes.',
-    cartaBeneficio1Title: 'Experiencia premium en mesa',
-    cartaBeneficio1Desc: 'Cada plato se presenta con fotos profesionales, vídeos y descripciones detalladas. El cliente sabe exactamente qué va a pedir.',
-    cartaBeneficio1Tag: '↑ Ticket medio',
-    cartaBeneficio2Title: 'Sin barreras de idioma',
-    cartaBeneficio2Desc: 'La carta se adapta automáticamente a 5 idiomas. Turistas entienden la oferta completa.',
-    cartaBeneficio2Tag: '↑ Satisfacción',
-    cartaBeneficio3Title: 'Cero comisiones',
-    cartaBeneficio3Desc: 'Los pedidos para recogido llegan directamente. Te ahorras entre el 25% y el 35%.',
-    cartaBeneficio3Tag: 'Ahorro real',
-    cartaBeneficio4Title: 'Tus clientes, tu base',
-    cartaBeneficio4Desc: 'Cada pedido online pasa a ser tuyo. Envías promociones cuando quieras.',
-    cartaBeneficio4Tag: 'Fidelización',
-    cartaBeneficio5Title: 'Pedidos por WhatsApp',
-    cartaBeneficio5Desc: 'Los pedidos llegan en tiempo real por WhatsApp, bien estructurados.',
-    cartaBeneficio5Tag: '↓ Errores',
-    cartaBeneficio6Title: 'Presencia digital',
-    cartaBeneficio6Desc: 'Web SEO, Google Business, redes sociales. Apareces cuando te buscan.',
-    cartaBeneficio6Tag: '↑ Visibilidad',
-    cartaBeneficio7Title: 'Gestión total',
-    cartaBeneficio7Desc: 'Añade, edita u oculta platos en segundos. Todo desde un panel intuitivo.',
-    cartaBeneficio7Tag: 'Autogestionable',
-    
-    // --- COMPARATIVA DINERO ---
-    cartaDineroTitle: 'El valor real',
-    cartaDineroSubtitle: 'Comisiones perdidas vs. Inversión en tu negocio',
-    cartaDineroCalcDesc: 'Deja de pagar comisiones a terceros y haz mailings con promociones para los días con menos gente. Tus clientes, tu contacto, tu dinero.',
-    
-    // Card 1: Pérdidas
-    cartaDineroCard1Title: 'Costes Ocultos y Comisiones',
-    cartaDineroCard1Item1: 'Comisiones a Terceros (Glovo, etc.)',
-    cartaDineroCard1Item2: 'Pérdida por Baja Visibilidad',
-    cartaDineroCard1Item3: 'Falta de Clientes Recurrentes',
-    cartaDineroCard1Total: 'Pérdida Neta Estimada',
-
-    // Card 2: Ganancias
-    cartaDineroCard2Title: 'Inversión y Crecimiento',
-    cartaDineroCard2Item1: 'Ahorro en Comisiones',
-    cartaDineroCard2Item2: 'Nuevos Clientes (SEO/Google)',
-    cartaDineroCard2Item3: 'Fidelización (Mailings)',
-    cartaDineroCard2Item4: 'Aumento Ticket Medio',
-    cartaDineroCard2Total: 'Incremento Neto Estimado',
-     
-    cartaBBDDTitle: 'Tu activo más valioso',
-    cartaBBDDSubtitle: 'La base de datos que trabaja sola',
-    cartaBBDDDesc: 'Cada cliente que entra en tu local o hace un pedido online es una oportunidad. Con esta herramienta, no se escapa ninguna.',
-    cartaBBDDLabel1: 'QR en mesa',
-    cartaBBDDLabel2: 'Take Away',
-    cartaBBDDLabelTuBBDD: 'TU BBDD',
-    cartaBBDDData1: 'Nombre',
-    cartaBBDDData2: 'Email',
-    cartaBBDDData3: 'Teléfono',
-    cartaBBDDData4: 'Historial',
-    cartaBBDDAction1: 'Email',
-    cartaBBDDAction2: 'Promo',
-    cartaBBDDAction3: 'Recuperar',
-    
-    cartaDemoTitle: 'Demo del producto',
-    cartaDemoVideoLabel: '▶ Así se ven tus platos en la carta digital',
-    cartaDemoScreen1Title: '📱 Carta digital — QR en mesa',
-    cartaDemoScreen1Label: 'Vista del cliente',
-    cartaDemoScreen2Title: '⚙️ Panel de gestión y estadísticas',
-    cartaDemoScreen2Label: 'Panel de administración',
-    cartaDemoScreen3Title: '📧 Pedidos en tiempo real',
-    cartaDemoScreen3Label: 'Gestión de pedidos',
-    
-    cartaCTATitle: 'El siguiente paso',
-    cartaCTASubtitle: 'Empieza a trabajar para ti.',
-    cartaCTABtnDemo: 'Demo gratuita',
-    cartaCTABtnContact: 'Habar con asesor',
-    cartaCTANoContract: '✓ Sin permanencia',
-    cartaCTASignup48h: '✓ Alta 48h',
-    cartaCTASupport: '✓ Soporte',
-    cartaCTANoComm: '✓ 0% comisiones',
   },
   en: {
-    // --- SUCCESS / TESTIMONIALS ---
-    successTitle: 'Success Stories',
-    successSubtitle: 'Real results that transform businesses',
-    successDesc: 'Companies that already trust us and have transformed their operation.',
-    
     // Navigation
     navSolutions: 'Solutions',
     navSuccess: 'Success',
@@ -744,6 +749,9 @@ const translations: Record<Language, Translation> = {
     featuresDetails: 'View details',
     
     // Success Stats
+    successTitle: 'Success Stories',
+    successSubtitle: 'Real results that transform businesses',
+    successDesc: 'Companies that already trust us and have transformed their operation.',
     successStat1Value: '50+',
     successStat1Label: 'Average Increase',
     successStat1Quote: 'Since we implemented QRIBAR, our revenue per table increased by 45%',
@@ -761,6 +769,11 @@ const translations: Record<Language, Translation> = {
     successStat4Quote: 'More than 850 businesses trust SmartConnect for their digital transformation',
     successStat4Author: 'Hospitality Community',
     
+    // SEO
+    seoTitle: 'Get More Customers for Your Restaurant | QR Menu, NFC & Ordering System - SmartConnect QRIBAR',
+    seoDescription: 'Increase restaurant sales and attract more customers with QRIBAR. Digital menu with QR code ordering, NFC cards, and automated ordering system to boost table turnover and revenue.',
+    seoProductDescription: 'Restaurant growth platform with digital menu, QR ordering, and NFC technology designed to increase orders, reduce wait times, and maximize revenue per table.',
+
     // Contact
     contactTitle: 'Boost Your Business Today',
     contactSubtitle: "Let's talk? We're ready to audit your current process and show you how AI and automation can save you hundreds of hours monthly.",
@@ -825,30 +838,18 @@ const translations: Record<Language, Translation> = {
     serviceAutomation: 'Automation n8n',
     serviceNFC: 'NFC Review Cards',
     serviceConsultoria: 'AI Consulting',
-    
+
     // Error Boundary
     errorBoundaryTitle: 'Something went wrong',
     errorBoundaryMessage: 'Please, reload the page.',
     errorBoundaryButton: 'Reload',
-    
+
     // Skip Link
     skipLink: 'Skip to main content',
-    
-    // QRIBAR
-    qribarSector: 'HOSPITALITY SECTOR',
-    qribarTitle: 'Digitalize the experience with',
-    qribarSubtitle: 'Specific solutions for high-end restaurants. Elegant, fast, contactless digital menus that elevate your brand perception while optimizing service.',
-    qribarBenefit1: 'Real-time price updates',
-    qribarBenefit2: 'Design adapted to your visual identity',
-    qribarBenefit3: 'Increases table turnover',
-    qribarBenefit4: 'Integration with order and payment systems',
-    qribarButton: 'More information',
-    qribarError: 'Error loading menu',
-    qribarLoading: 'Loading menu...',
-    
+
     // Carta Digital Page
     cartaHeroEyebrow: 'Digital revolution for restaurants in Tenerife',
-     cartaHeroTenerife: 'Special for bars, restaurants and companies. On-site demos and personalized attention.',
+    cartaHeroTenerife: 'Special for bars, restaurants and companies. On-site demos and personalized attention.',
     cartaHeroTitle1: 'Your menu,',
     cartaHeroTitleAccent: 'your business,',
     cartaHeroTitle2: 'your customers.',
@@ -879,13 +880,13 @@ const translations: Record<Language, Translation> = {
     
     cartaSolucionTitle: 'The solution',
     cartaSolucionSubtitle: 'One tool. All problems, solved.',
-    cartaSolucionPrefix: 'A ',
     cartaSolucionHighlight: 'rich-media digital menu',
+    cartaSolucionPrefix: 'A ',
     cartaSolucionSuffix: ' that works for you 24/7: in your venue, on Google, and on social media.',
     cartaSolucionDesc: 'Your customers see dishes with photos, videos and descriptions in 5 languages by scanning the table QR. New customers find your menu on Google and order take away directly. You receive orders via WhatsApp, accumulate their contact in your database and fidelize them with promotions. No intermediaries. No commissions. Depending on no one.',
-     cartaSolucionTenerife: 'Special for clients in Tenerife: bars, restaurants and companies. On-site demos and personalized attention.',
-     
-     cartaBeneficiosTitle: '7 benefits that',
+    cartaSolucionTenerife: 'Special for clients in Tenerife: bars, restaurants and companies. On-site demos and personalized attention.',
+      
+    cartaBeneficiosTitle: '7 benefits that',
     cartaBeneficiosSubtitle: 'change your business',
     cartaBeneficio1Title: 'Premium table experience',
     cartaBeneficio1Desc: 'Each dish is presented with professional photos, videos and detailed descriptions. The customer knows exactly what to order.',
@@ -909,18 +910,18 @@ const translations: Record<Language, Translation> = {
     cartaBeneficio7Desc: 'Add, edit or hide dishes in seconds. Everything from an intuitive panel.',
     cartaBeneficio7Tag: 'Self-manageable',
     
-cartaFlujoTitle: 'The flow',
-     cartaFlujoSubtitle: 'How does it work?',
-     cartaFlujoStep1Title: 'Instant Scan',
-     cartaFlujoStep1Desc: 'Customer points camera at the table QR or finds your menu on Google.',
-     cartaFlujoStep2Title: 'Multimedia Explore',
-     cartaFlujoStep2Desc: 'See dishes with photos, videos, and descriptions in 5 languages. Easy and fast.',
-     cartaFlujoStep3Title: 'In-Store Loyalty',
-     cartaFlujoStep3Desc: 'Email popup for promos and instant 5★ reviews. No orders at the table.',
-     cartaFlujoStep4Title: 'Take Away Online',
-     cartaFlujoStep4Desc: 'Activates "Cart Mode" from Google or Social Media. Orders for pickup.',
-     cartaFlujoStep5Title: 'Digital Presence',
-     cartaFlujoStep5Desc: 'Your menu visible on Google Business Profile. Attract new customers with stunning photos.',
+    cartaFlujoTitle: 'The flow',
+    cartaFlujoSubtitle: 'How does it work?',
+    cartaFlujoStep5Title: 'Digital Presence',
+    cartaFlujoStep5Desc: 'Your menu visible on Google Business Profile. Attract new customers with stunning photos.',
+    cartaFlujoStep1Title: 'Instant Scan',
+    cartaFlujoStep1Desc: 'Customer points camera at the table QR or finds your menu on Google.',
+    cartaFlujoStep2Title: 'Multimedia Explore',
+    cartaFlujoStep2Desc: 'See dishes with photos, videos, and descriptions in 5 languages. Easy and fast.',
+    cartaFlujoStep3Title: 'In-Store Loyalty',
+    cartaFlujoStep3Desc: 'Email popup for promos and instant 5★ reviews. No orders at the table.',
+    cartaFlujoStep4Title: 'Take Away Online',
+    cartaFlujoStep4Desc: 'Activates "Cart Mode" from Google or Social Media. Orders for pickup.',
     
     // --- COMPARATIVE MONEY ---
     cartaDineroTitle: 'The real value',
@@ -933,7 +934,7 @@ cartaFlujoTitle: 'The flow',
     cartaDineroCard1Item2: 'Loss due to Low Visibility',
     cartaDineroCard1Item3: 'Lack of Recurring Customers',
     cartaDineroCard1Total: 'Estimated Net Loss',
-    
+
     // Card 2: Gains
     cartaDineroCard2Title: 'Investment and Growth',
     cartaDineroCard2Item1: 'Savings on Commissions',
@@ -941,7 +942,7 @@ cartaFlujoTitle: 'The flow',
     cartaDineroCard2Item3: 'Loyalty (Mailings)',
     cartaDineroCard2Item4: 'Increased Average Ticket',
     cartaDineroCard2Total: 'Estimated Net Increase',
-    
+   
     cartaBBDDTitle: 'Your most valuable asset',
     cartaBBDDSubtitle: 'The database that works for you',
     cartaBBDDDesc: 'Every customer who enters your establishment or places an online order is an opportunity. With this tool, none escape.',
@@ -973,8 +974,8 @@ cartaFlujoTitle: 'The flow',
     cartaCTASignup48h: '✓ Setup in 48h',
     cartaCTASupport: '✓ Support',
     cartaCTANoComm: '✓ 0% commissions',
-    
-    // Tap Review (NFC) translations for English
+
+    // Tap Review (NFC)
     tapReviewMetaTitle: 'Tap-to-Review NFC - Multiply your Google reviews',
     tapReviewMetaDesc: 'NFC devices to get reviews on Google automatically. One tap and your customers rate you with 5 stars.',
     tapReviewEyebrow: 'NFC CARDS',
@@ -993,7 +994,7 @@ cartaFlujoTitle: 'The flow',
     tapReviewProductExhibitorBlackAlt: 'Black reviews exhibitor',
     tapReviewProductStand: 'Display Stand',
     tapReviewProductStandAlt: 'Tap-to-Review display stand',
-    
+  
     tapReviewStatsBusinesses: 'Working in +20,000 businesses',
     tapReviewStatsReviews: 'reviews obtained',
     tapReviewStatsDaily: 'daily reviews',
@@ -1044,11 +1045,23 @@ cartaFlujoTitle: 'The flow',
     tapReviewCTAFeature1: '30-day guarantee',
     tapReviewCTAFeature2: 'Free 24h shipping',
     tapReviewCTAFeature3: 'No subscriptions',
-    
+  
     tapReviewTrust30Days: '30-day guarantee',
     tapReviewTrust24h: 'Free 24h shipping',
     tapReviewTrustSupport: '24/7 Support',
     tapReviewTrustNoSub: 'No subscriptions',
+
+    // QRIBAR
+    qribarSector: 'HOSPITALITY SECTOR',
+    qribarTitle: 'Digitalize the experience with',
+    qribarSubtitle: 'Specific solutions for high-end restaurants. Elegant, fast, contactless digital menus that elevate your brand perception while optimizing service.',
+    qribarBenefit1: 'Real-time price updates',
+    qribarBenefit2: 'Design adapted to your visual identity',
+    qribarBenefit3: 'Increases table turnover',
+    qribarBenefit4: 'Integration with order and payment systems',
+    qribarButton: 'More information',
+    qribarError: 'Error loading menu',
+    qribarLoading: 'Loading menu...',
   }
 };
 

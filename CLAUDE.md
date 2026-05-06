@@ -175,6 +175,64 @@ Al ejecutar el linter de Supabase, pueden aparecer warnings que requieren accion
 
 ---
 
+* SDD model config (FREE profile): See `.opencode/sdd-profile-free.json`
+
+## SDD ORCHESTRATOR - Perfil FREE
+
+Cuando el usuario describa una tarea de desarrollo, ejecutá las fases SDD en orden:
+
+1. sdd-init → Ingerir contexto del repositorio
+2. sdd-explore → Mapear dependencias afectadas
+3. sdd-propose → Proponer arquitectura
+4. sdd-spec → Escribir especificación técnica
+5. sdd-design → Diseñar componentes UI (si aplica)
+6. sdd-tasks → Dividir en tickets atómicos
+7. sdd-apply → Escribir el código
+8. sdd-verify → Auditar con criterio Senior Reviewer
+9. sdd-archive → Guardar contexto en Engram
+
+### Reglas
+- NO saltear fases
+- Reportar al usuario al terminar cada fase antes de continuar
+- Si una fase falla, intentar el fallback definido en .opencode/sdd-profile-free.json
+- NO usar modelos bloqueados: claude-sonnet-4-6, gpt-5.4-thinking, gpt-5.3-instant, gemini-3.1-pro
+- Esperar confirmación del usuario antes de ejecutar sdd-apply
+
+---
+
+## ✅ SDD ORCHESTRATOR - COMPLETED (2026-05-06)
+
+### SEO Implementation for Landing Page (i18n)
+
+**Fases ejecutadas exitosamente:**
+
+| Phase | Model Used | Status |
+|-------|-------------|--------|
+| sdd-init | mistral/mistral-large-latest | ✅ |
+| sdd-explore | mistral/open-mixtral-8x22b | ✅ |
+| sdd-propose | mistral/mistral-large-latest | ✅ |
+| sdd-apply | mistral/codestral-latest | ✅ |
+| sdd-verify | mistral/codestral-latest | ✅ |
+| sdd-archive | opencode/big-pickle | ✅ |
+
+**Archivos modificados:**
+- `src/shared/context/LanguageContext.tsx` - SEO keys (seoTitle, seoDescription, seoProductDescription) agregadas en `es` y `en`
+- `src/features/landing/presentation/LandingContainer.tsx` - Meta tags usando `t.seoTitle`, `t.seoDescription`, structured data con `t.seoProductDescription`
+- `src/features/landing/presentation/components/Contact.tsx` - Headings usando `t.contactTitle`, `t.contactSubtitle`
+- `tsconfig.json` - Agregado `esModuleInterop: true` para fix de react-router types
+
+**Validaciones pasadas:**
+- ✅ Linting: `npm run lint` passed
+- ✅ Type checking: `npm run type-check` passed
+- ✅ Zero hardcoded strings - full i18n compliance
+- ✅ Structured data: JSON-LD format correct
+- ✅ Security: No API keys leaked
+
+**Documentación creada:**
+- `docs/SEO_IMPLEMENTATION.md` - Guía completa de implementación SEO
+
+**Engram Memory:** SEO implementation saved (ID: 1, Topic: `seo/landing-page-i18n`)
+
 ## Design Context
 
 ### Users
