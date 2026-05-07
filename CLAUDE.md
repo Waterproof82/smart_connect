@@ -175,32 +175,30 @@ Al ejecutar el linter de Supabase, pueden aparecer warnings que requieren accion
 
 ---
 
-* SDD model config (FREE profile): See `.opencode/sdd-profile-free.json`
+## SDD - Perfil FREE
 
-## SDD ORCHESTRATOR - Perfil FREE
+### Modelo activo
+Leer `.opencode/active-profile.json` → usar `profiles/free.json`
 
-Cuando el usuario describa una tarea de desarrollo, ejecutá las fases SDD en orden:
-
-1. sdd-init → Ingerir contexto del repositorio
-2. sdd-explore → Mapear dependencias afectadas
-3. sdd-propose → Proponer arquitectura
-4. sdd-spec → Escribir especificación técnica
-5. sdd-design → Diseñar componentes UI (si aplica)
-6. sdd-tasks → Dividir en tickets atómicos
-7. sdd-apply → Escribir el código
-8. sdd-verify → Auditar con criterio Senior Reviewer
-9. sdd-archive → Guardar contexto en Engram
+### Fases y modelos
+| Fase | Modelo primario |
+|---|---|
+| sdd-init | qwen3.6-plusfree |
+| sdd-explore | mistral/mixtral-8x22b |
+| sdd-propose | mistral-large-3 |
+| sdd-spec | mistral/devstral-medium |
+| sdd-design | pixtral-large-latest |
+| sdd-tasks | mistral/mistral-nemo |
+| sdd-apply | mistral/codestral-latest |
+| sdd-verify | mistral/codestral-latest |
+| sdd-archive | mimo-v2-omni-free |
 
 ### Reglas
 - NO saltear fases
-- Reportar al usuario al terminar cada fase antes de continuar
-- Si una fase falla, intentar el fallback definido en .opencode/sdd-profile-free.json
-- NO usar modelos bloqueados: claude-sonnet-4-6, gpt-5.4-thinking, gpt-5.3-instant, gemini-3.1-pro
-- Esperar confirmación del usuario antes de ejecutar sdd-apply
-
----
-
-## ✅ SDD ORCHESTRATOR - COMPLETED (2026-05-06)
+- Reportar al terminar cada fase antes de continuar
+- Fallbacks en `.opencode/profiles/free.json`
+- sdd-apply requiere confirmación explícita del usuario
+- Si health.json tiene alertas CRITICAL → detener y notificar
 
 ### SEO Implementation for Landing Page (i18n)
 
