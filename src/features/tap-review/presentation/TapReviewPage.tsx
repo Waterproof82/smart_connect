@@ -8,9 +8,10 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
-import { Check, Star, Smartphone, QrCode, Shield, Zap, Award, Users, MessageSquare, ChevronDown, Cpu, Menu, X, Code2, Settings2, Utensils } from 'lucide-react';
+import { Check, Star, Smartphone, QrCode, Shield, Zap, Award, Users, MessageSquare, ChevronDown, Cpu, Menu, X, ArrowLeft, Code2, Settings2, Utensils } from 'lucide-react';
 import { useIntersectionObserver } from '@shared/hooks';
 import { useLanguage } from '@shared/context/LanguageContext';
+import LanguageSelector from '@shared/components/LanguageSelector';
 import { getAppSettings } from '@shared/services/settingsService';
 
 const StarRating: React.FC<{ rating: number }> = ({ rating }) => (
@@ -560,19 +561,23 @@ const Navbar: React.FC<{ scrolled?: boolean }> = ({ scrolled = false }) => {
         </Link>
 
         <div className="hidden md:flex items-center gap-8 lg:gap-10 text-sm font-semibold text-muted">
+           <Link to="/" className="flex items-center gap-1.5 hover:text-[var(--color-text)] transition-colors">
+             <ArrowLeft className="w-4 h-4" />
+             {t.navBack}
+           </Link>
            <div
              className="relative group"
              onMouseEnter={() => setIsDropdownOpen(true)}
              onMouseLeave={() => { setIsDropdownOpen(false); setFocusedDropdownIndex(-1); }}
            >
-            <button
-              className="flex items-center gap-1.5 hover:text-[var(--color-text)] transition-colors py-2 outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-lg"
-              aria-haspopup="true"
-              aria-expanded={isDropdownOpen}
-            >
-              {t.navSolutions}
-              <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`} />
-            </button>
+             <button
+               className="flex items-center gap-1.5 hover:text-[var(--color-text)] transition-colors py-2 outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-lg"
+               aria-haspopup="true"
+               aria-expanded={isDropdownOpen}
+             >
+               {t.navSolutions}
+               <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`} />
+             </button>
 
             <div className={`absolute top-full left-1/2 -translate-x-1/2 pt-4 transition-all duration-300 ${
               isDropdownOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-4 pointer-events-none'
@@ -611,9 +616,10 @@ const Navbar: React.FC<{ scrolled?: boolean }> = ({ scrolled = false }) => {
             </div>
           </div>
 
-          <Link to="/#exito" className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline focus-visible:outline-none transition-colors">{t.navSuccess}</Link>
-          <Link to="/#contacto" className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline focus-visible:outline-none transition-colors">{t.navContact}</Link>
-        </div>
+           <Link to="/#exito" className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline focus-visible:outline-none transition-colors">{t.navSuccess}</Link>
+           <Link to="/#contacto" className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline focus-visible:outline-none transition-colors">{t.navContact}</Link>
+           <LanguageSelector />
+         </div>
 
         <button
           className="md:hidden flex items-center justify-center w-10 h-10 rounded-lg bg-[var(--color-accent)] text-[var(--color-on-accent)]"
@@ -640,13 +646,18 @@ const Navbar: React.FC<{ scrolled?: boolean }> = ({ scrolled = false }) => {
                   <X className="w-5 h-5" />
                 </button>
               </div>
-              <div className="flex flex-col gap-1">
-                 <hr className="border-[var(--color-border)] my-1" />
-                 <a href="/#soluciones" className="flex items-center gap-3 p-3 text-muted hover:bg-[var(--color-surface)] rounded-xl transition-colors" onClick={() => setIsMobileMenuOpen(false)}>{t.navSolutions}</a>
-                 <Link to="/carta-digital" className="flex items-center gap-3 p-3 text-muted hover:bg-[var(--color-surface)] rounded-xl transition-colors" onClick={() => setIsMobileMenuOpen(false)}>{t.navbarCartaDigital}</Link>
-                 <a href="/#exito" className="flex items-center gap-3 p-3 text-muted hover:bg-[var(--color-surface)] rounded-xl transition-colors" onClick={() => setIsMobileMenuOpen(false)}>{t.navSuccess}</a>
-                 <a href="/#contacto" className="flex items-center gap-3 p-3 text-muted hover:bg-[var(--color-surface)] rounded-xl transition-colors" onClick={() => setIsMobileMenuOpen(false)}>{t.navContact}</a>
-               </div>
+               <div className="flex flex-col gap-1">
+                  <Link to="/" className="flex items-center gap-3 p-3 text-muted hover:bg-[var(--color-surface)] rounded-xl transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
+                    <ArrowLeft className="w-5 h-5" />
+                    {t.navBack}
+                  </Link>
+                  <hr className="border-[var(--color-border)] my-1" />
+                  <a href="/#soluciones" className="flex items-center gap-3 p-3 text-muted hover:bg-[var(--color-surface)] rounded-xl transition-colors" onClick={() => setIsMobileMenuOpen(false)}>{t.navSolutions}</a>
+                  <Link to="/carta-digital" className="flex items-center gap-3 p-3 text-muted hover:bg-[var(--color-surface)] rounded-xl transition-colors" onClick={() => setIsMobileMenuOpen(false)}>{t.navbarCartaDigital}</Link>
+                  <a href="/#exito" className="flex items-center gap-3 p-3 text-muted hover:bg-[var(--color-surface)] rounded-xl transition-colors" onClick={() => setIsMobileMenuOpen(false)}>{t.navSuccess}</a>
+                  <a href="/#contacto" className="flex items-center gap-3 p-3 text-muted hover:bg-[var(--color-surface)] rounded-xl transition-colors" onClick={() => setIsMobileMenuOpen(false)}>{t.navContact}</a>
+                  <LanguageSelector />
+                </div>
             </div>
           </div>
         )}
