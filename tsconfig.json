@@ -33,7 +33,8 @@
     "noUnusedParameters": true
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    ".opencode/**/*.ts"
   ],
   "exclude": [
     "node_modules",

@@ -1,6 +1,41 @@
 # Skill Registry — smart-connect
 
-_Last updated: 2026-05-07_
+_Last updated: 2026-05-08_
+
+## Global Skills (from Engram)
+
+| Skill | Triggers (Code) | Triggers (Task) | Description |
+|-------|-----------------|-----------------|-------------|
+| work-unit-commits | `*.tsx`, `*.ts`, `src/*` | implement, commit, PR, review | Structure commits as deliverable work units instead of file-type batches, with tests and docs kept beside the code they verify. |
+| frontend-design | `*.tsx`, `src/features/*` | design, UI, component | Create distinctive, production-grade frontend interfaces with high design quality. |
+| chained-pr | `*.ts`, `*.tsx` | PR, review, split | Split large changes into chained or stacked pull requests that protect reviewer focus and stay within Gentle AI's 400-line cognitive review budget. |
+| cognitive-doc-design | `*.md`, `docs/*` | docs, documentation, guide | Design documentation that reduces reader cognitive load through progressive disclosure, chunking, signposting, tables, checklists, and recognition over recall. |
+| audit | `*.tsx`, `src/features/*` | audit, review, quality | Perform comprehensive audit of interface quality across accessibility, performance, theming, and responsive design. |
+| harden | `*.tsx`, `src/shared/utils/*` | error, i18n, edge-cases | Improve interface resilience through better error handling, i18n support, text overflow handling, and edge case management. |
+| judgment-day | `*.tsx`, `src/features/*` | review, adversarial, judge | Parallel adversarial review protocol that launches two independent blind judge sub-agents simultaneously to review the same target. |
+| smart-connect-standards | `src/*`, `docs/*`, `*.tsx`, `*.ts` | architecture, design, security, testing, rag, gemini | Global standards for SmartConnect ecosystem including architecture, testing, security, and RAG chatbot best practices.
+
+## Project Conventions
+
+| File | Description |
+|------|-------------|
+| `CLAUDE.md` | Main agent instructions, SDD orchestrator protocol, design context, brand personality, project conventions |
+| `AGENTS_AND_SKILLS.md` | Reference for agents (Code Reviewer, Security Engineer, etc.) and slash-command skills |
+| `.impeccable.md` | Design guidelines and persistent design context |
+| `.opencode/sdd-profile-free.json` | SDD FREE profile — model assignments per phase, blocked models, fallback logic |
+
+### Referenced Files from Conventions
+
+- **Standards**: `.atl/smart-connect-standards.md`
+- **Skills**: `.atl/skill-registry.md`
+
+## Deprecated Skills
+
+| Skill | Description |
+|-------|-------------|
+| qribar-standards | Deprecated in favor of `smart-connect-standards` for global project standards. |
+
+---
 
 ## Project Conventions
 
