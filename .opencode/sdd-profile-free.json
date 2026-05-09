@@ -1,100 +1,138 @@
 {
   "profile": "FREE",
-  "description": "100% Gratuito · Solo modelos realmente gratis de Mistral + OpenCode · Sin tarjeta requerida",
+  "description": "100% Gratuito · Mistral API free tier + OpenCode Zen modelos gratuitos",
   "scope": "project-only",
   "project": "smart-connect",
-  "note": "EXCLUSIVO para el proyecto smart-connect, no afecta a otros proyectos en OpenCode ni a configuraciones globales. Usa SOLO modelos verificados como gratuitos.",
-  "created": "2026-05-05",
-  "updated": "2026-05-05",
-  "verified_free_models": [
-    "mistral/mistral-large-latest",
-    "mistral/open-mixtral-8x22b",
-    "mistral/codestral-latest",
-    "mistral/devstral-medium-latest",
-    "mistral/pixtral-large-latest",
-    "mistral/mistral-nemo",
-    "mistral/ministral-8b-latest",
-    "mistral/mistral-medium-latest",
-    "mistral/pixtral-12b",
-    "opencode/big-pickle",
-    "opencode/nemotron-3-super-free",
-    "opencode/minimax-m2.5-free",
-    "opencode/hy3-preview-free"
-  ],
-  "phases": {
-    "ORCHESTRATOR": {
-      "primary": "mistral/mistral-large-latest",
-      "fallbacks": ["opencode/big-pickle", "opencode/nemotron-3-super-free", "opencode/minimax-m2.5-free"],
-      "justification": "mistral-large-latest: Mejor orquestrador 100% gratuito verificado. 128K contexto, suficiente instruction following para leer JSON de herramientas y delegar a sub-agentes. big-pickle: Modelo básico gratuito de OpenCode. nemotron-3-super-free: Gratuito, bueno para tareas simples. minimax-m2.5-free: 30,000 solicitudes cada 5 horas."
+  "updated": "2026-05-07",
+  "note": "Los modelos primarios se asignan en la UI de OpenCode (Assign Models to SDD Phases). Este archivo gestiona fallbacks, metadata y verificación.",
+
+  "orchestrator": {
+    "model": "mistral/ministral-8b-2512",
+    "configured_in": "OpenCode UI → Gentle-Orchestrator",
+    "note": "Modelo rápido con 128K contexto, sin rate limits. Ideal para coordinar fases SDD y consultas generales."
+  },
+
+  "free_models_confirmed": {
+    "mistral_api": {
+      "provider": "Mistral La Plateforme",
+      "signup": "https://console.mistral.ai/",
+      "requires_card": false,
+      "requires_phone": true,
+      "limit": "1B tokens/mes, 2 RPM en free tier",
+      "models": [
+        "mistral/mistral-large-2512",
+        "mistral/codestral-latest",
+        "mistral/devstral-2512",
+        "mistral/devstral-small-2505",
+        "mistral/pixtral-large-2411",
+        "mistral/pixtral-12b-2409",
+        "mistral/open-mistral-nemo",
+        "mistral/ministral-8b-2512",
+        "mistral/mistral-medium-2505"
+      ]
     },
+    "opencode_zen_free": {
+      "provider": "OpenCode Zen",
+      "note": "SOLO estos 3 son gratuitos. El resto de Zen es pay-as-you-go.",
+      "tier_risk": "high — gratuitos por tiempo limitado según docs oficiales",
+      "models": [
+        "opencode/big-pickle",
+        "opencode/nemotron-3-super-free",
+        "opencode/minimax-m2.5-free"
+      ]
+    }
+  },
+
+  "phases": {
     "sdd-init": {
-      "primary": "mistral/mistral-large-latest",
-      "fallbacks": ["opencode/big-pickle", "mistral/mistral-nemo", "mistral/open-mixtral-8x22b"],
-      "justification": "mistral-large-latest: 128K contexto para ingerir repositorios completos. big-pickle: Alternativa gratuita básica. mistral-nemo: 128K contexto gratuito, rápido para configuración inicial. mixtral-8x22b: Arquitectura MoE con 64K, eficiente para proyectos multi-lenguaje."
+      "primary": "mistral/mistral-medium-2505",
+      "fallbacks": ["mistral/open-mistral-nemo", "mistral/ministral-8b-2512"],
+      "tier_risk": "low",
+      "verified_date": "2026-05-08",
+      "justification": "Modelo más pequeño y sin rate limits para tareas iniciales. Nemo como fallback rápido para ingerir repo si es necesario."
     },
     "sdd-explore": {
-      "primary": "mistral/open-mixtral-8x22b",
-      "fallbacks": ["mistral/mistral-large-latest", "opencode/nemotron-3-super-free", "opencode/big-pickle"],
-      "justification": "mixtral-8x22b: Mejor modelo gratuito para exploración. MoE activa expertos por lenguaje, reduce alucinaciones al trazar dependencias. mistral-large-latest: Razonamiento analítico profundo para detectar dependencias no obvias. nemotron-3-super-free: Gratuito, bueno para seguir rastros de variables. big-pickle: Backup gratuito."
+      "primary": "mistral/ministral-8b-2512",
+      "fallbacks": ["mistral/mistral-large-2512", "mistral/devstral-2512", "opencode/nemotron-3-super-free"],
+      "tier_risk": "low",
+      "verified_date": "2026-05-08",
+      "justification": "Modelo rápido y gratuito con 128K contexto. Ideal para explorar dependencias y trazar relaciones en el código. Mistral-large-2512 como fallback para mayor precisión."
     },
     "sdd-propose": {
-      "primary": "mistral/mistral-large-latest",
-      "fallbacks": ["opencode/big-pickle", "opencode/nemotron-3-super-free", "mistral/open-mixtral-8x22b"],
-      "justification": "mistral-large-latest: Arquitecto del perfil free. 128K contexto, propone arquitecturas sólidas (Clean Architecture, patrones). big-pickle: Backup gratuito. nemotron-3-super-free: Soluciones estructuradas básicas. mixtral-8x22b: MoE activa expertos de arquitectura para patrones estándar."
+      "primary": "mistral/ministral-8b-2512",
+      "fallbacks": ["mistral/mistral-large-2512", "mistral/devstral-2512", "opencode/nemotron-3-super-free"],
+      "tier_risk": "low",
+      "verified_date": "2026-05-08",
+      "justification": "Modelo rápido y gratuito con 128K contexto. Ideal para proponer soluciones basadas en Clean Architecture y patrones SOLID. Mistral-large-2512 como fallback para mayor precisión."
     },
     "sdd-spec": {
-      "primary": "mistral/devstral-medium-latest",
-      "fallbacks": ["opencode/big-pickle", "mistral/mistral-medium-latest", "opencode/nemotron-3-super-free"],
-      "justification": "devstral-medium-latest: Especialista en specs técnicas, fine-tuneado para devs, genera criterios de aceptación testables. big-pickle: Backup gratuito. mistral-medium-latest: Sólido para texto estructurado en Markdown. nemotron-3-super-free: Sigue plantillas estrictas, garantiza estructura correcta."
+      "primary": "mistral/mistral-medium-2505",
+      "fallbacks": ["mistral/ministral-8b-2512", "mistral/mistral-large-2512"],
+      "tier_risk": "low",
+      "verified_date": "2026-05-08",
+      "justification": "Modelo más pequeño y sin rate limits para generar criterios de aceptación. Ministral-8b-2512 como fallback para mayor precisión si es necesario."
     },
     "sdd-design": {
-      "primary": "mistral/pixtral-large-latest",
-      "fallbacks": ["mistral/pixtral-12b", "opencode/big-pickle", "opencode/hy3-preview-free"],
-      "justification": "pixtral-large-latest: Mejor modelo gratuito para UI/UX. Multimodal, entiende layouts, CSS/Tailwind y separación de componentes. pixtral-12b: Hermano menor de Pixtral Large, multimodal, gratuito. big-pickle: Backup gratuito básico. hy3-preview-free: Con capacidades de visión básicas."
+      "primary": "mistral/pixtral-large-2411",
+      "fallbacks": ["mistral/pixtral-12b-2409", "mistral/mistral-large-2512", "opencode/big-pickle"],
+      "tier_risk": "low",
+      "verified_date": "2026-05-07",
+      "justification": "Único modelo gratuito multimodal. Entiende layouts, CSS/Tailwind, separación de componentes."
     },
     "sdd-tasks": {
-      "primary": "mistral/mistral-nemo",
-      "fallbacks": ["opencode/nemotron-3-super-free", "mistral/ministral-8b-latest", "opencode/minimax-m2.5-free"],
-      "justification": "mistral-nemo: Speedster gratuito, 128K contexto, genera JSON de tickets al instante. nemotron-3-super-free: Genera listas y JSON estructurado rápidamente. ministral-8b-latest: Ultra-ligero, suficiente para tareas atómicas simples. minimax-m2.5-free: 30,000 solicitudes cada 5 horas, prácticamente ilimitado."
+      "primary": "mistral/open-mistral-nemo",
+      "fallbacks": ["opencode/nemotron-3-super-free", "mistral/ministral-8b-2512", "opencode/minimax-m2.5-free"],
+      "tier_risk": "low",
+      "verified_date": "2026-05-07",
+      "justification": "Speedster gratuito. 128K contexto, genera JSON de tickets rápido. Tarea simple, no necesita modelo grande."
     },
     "sdd-apply": {
       "primary": "mistral/codestral-latest",
-      "fallbacks": ["mistral/devstral-medium-latest", "opencode/big-pickle", "mistral/mistral-nemo"],
-      "justification": "codestral-latest: Rey del código en todos los perfiles. 256K contexto, entrenado en repositorios masivos, código directo sin explicaciones. devstral-medium-latest: Fallback natural de Codestral, mantiene calidad arquitectónica. big-pickle: Backup gratuito. mistral-nemo: 128K contexto, para funciones simples y cambios menores."
+      "fallbacks": ["mistral/devstral-2512", "mistral/open-mistral-nemo"],
+      "tier_risk": "low",
+      "verified_date": "2026-05-07",
+      "justification": "Rey del código. 256K contexto, directo sin explicaciones. Devstral-2512 como fallback natural especializado."
     },
     "sdd-verify": {
       "primary": "mistral/codestral-latest",
-      "fallbacks": ["mistral/mistral-large-latest", "opencode/nemotron-3-super-free", "opencode/big-pickle"],
-      "justification": "codestral-latest: El mismo que escribe el código audita con system prompt de Senior Reviewer, detecta violaciones de SOLID. mistral-large-latest: Detecta antipatrones de lógica de negocio y mal diseño de contratos. nemotron-3-super-free: Verifica cumplimiento de spec básica y errores obvios. big-pickle: Backup gratuito."
+      "fallbacks": ["mistral/mistral-large-2512", "opencode/nemotron-3-super-free"],
+      "tier_risk": "low",
+      "verified_date": "2026-05-07",
+      "justification": "Codestral audita con system prompt Senior Reviewer. Large detecta problemas de lógica de negocio."
     },
     "sdd-archive": {
       "primary": "opencode/big-pickle",
-      "fallbacks": ["opencode/minimax-m2.5-free", "opencode/nemotron-3-super-free", "opencode/hy3-preview-free"],
-      "justification": "big-pickle: Modelo básico gratuito para comprimir texto y guardar contexto en Engram. minimax-m2.5-free: 150,000 solicitudes por mes, garantiza que el archivo no falle. nemotron-3-super-free: Alternativa gratuita estructurada. hy3-preview-free: Para resúmenes rápidos."
+      "fallbacks": ["opencode/minimax-m2.5-free", "opencode/nemotron-3-super-free", "mistral/open-mistral-nemo"],
+      "tier_risk": "high",
+      "tier_risk_reason": "Big Pickle y MiniMax son gratuitos por tiempo limitado según docs de OpenCode Zen",
+      "verified_date": "2026-05-07",
+      "justification": "Tarea trivial de compresión de texto. No necesita modelo capaz. Nemo como fallback Mistral si Zen falla."
     }
   },
-  "required_apis": {
-    "MISTRAL_API_KEY": {
-      "provider": "Mistral La Plateforme",
-      "type": "free-tier",
-      "signup_url": "https://console.mistral.ai/",
-      "note": "Registro con email, no requiere tarjeta. Incluye mistral-large-latest, mixtral-8x22b, codestral, pixtral, devstral, mistral-nemo, ministral-8b, mistral-medium, pixtral-12b."
-    },
-    "ZEN_API_KEY": {
-      "provider": "OpenCode Zen",
-      "type": "free-tier",
-      "signup_url": "https://opencode.ai/zen",
-      "note": "Incluye modelos opencode/* (big-pickle, nemotron-3-super-free, minimax-m2.5-free, hy3-preview-free). No requiere tarjeta."
-    }
+
+  "models_NOT_to_use": {
+    "reason": "Obsoletos, alias inexistentes, o cambiaron a paid",
+    "list": [
+      {"model": "mistral/open-mixtral-8x22b", "reason": "Obsoleto en 2026, superado por mistral-large-2512 a menor costo"},
+      {"model": "mistral/devstral-medium-latest", "reason": "Alias inexistente en la API de Mistral"},
+      {"model": "mistral/mistral-nemo", "reason": "Nombre incorrecto, el correcto es open-mistral-nemo"},
+      {"model": "mistral/pixtral-large-latest", "reason": "Alias no verificado, usar pixtral-large-2411"},
+      {"model": "mistral/mistral-medium-latest", "reason": "Alias ambiguo, usar mistral-medium-2505"},
+      {"model": "mistral/mistral-large-latest", "reason": "Versión antigua, usar mistral-large-2512"},
+      {"model": "opencode/hy3-preview-free", "reason": "Preview experimental, alta probabilidad de desaparecer"}
+    ]
   },
-  "api_key_note": "API keys MUST be stored in .env file (NOT in this JSON or project repo). Use exact names: MISTRAL_API_KEY, ZEN_API_KEY",
-  "cli_tools_required": ["bat", "rg", "fd", "sd", "eza"],
-  "cli_tools_installed": true,
-  "cli_tools_path": "C:\\Users\\PC\\scoop\\shims\\",
+
   "rules": {
     "no_paid_models": true,
-    "blocked_models": ["claude-sonnet-4-6", "gpt-5.4-thinking", "gpt-5.3-instant", "gemini-3.1-pro", "opencode-go/*"],
-    "fallback_logic": "Try primary -> 2° -> 3° -> 4° on rate limit or error",
-    "scope": "project-only (smart-connect), no global changes"
+    "blocked_models": [
+      "claude-sonnet-4-6",
+      "gpt-5.4-thinking",
+      "gpt-5.3-instant",
+      "gemini-3.1-pro",
+      "opencode-go/*"
+    ],
+    "fallback_logic": "Try primary -> fallbacks[0] -> fallbacks[1] -> fallbacks[2] on 429/404/402",
+    "scope": "project-only (smart-connect)"
   }
 }

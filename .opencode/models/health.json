@@ -1,0 +1,77 @@
+{
+  "summary": {
+    "total": 11,
+    "critical": 0,
+    "degraded": 0,
+    "healthy": 11
+  },
+  "models": [
+    {
+      "model": "profile",
+      "status": "healthy",
+      "error": "",
+      "lastChecked": "2026-05-09T16:27:49.806Z"
+    },
+    {
+      "model": "description",
+      "status": "healthy",
+      "error": "",
+      "lastChecked": "2026-05-09T16:27:49.807Z"
+    },
+    {
+      "model": "scope",
+      "status": "healthy",
+      "error": "",
+      "lastChecked": "2026-05-09T16:27:49.807Z"
+    },
+    {
+      "model": "project",
+      "status": "healthy",
+      "error": "",
+      "lastChecked": "2026-05-09T16:27:49.807Z"
+    },
+    {
+      "model": "updated",
+      "status": "healthy",
+      "error": "",
+      "lastChecked": "2026-05-09T16:27:49.807Z"
+    },
+    {
+      "model": "note",
+      "status": "healthy",
+      "error": "",
+      "lastChecked": "2026-05-09T16:27:49.807Z"
+    },
+    {
+      "model": "orchestrator",
+      "status": "healthy",
+      "error": "",
+      "lastChecked": "2026-05-09T16:27:49.807Z"
+    },
+    {
+      "model": "free_models_confirmed",
+      "status": "healthy",
+      "error": "",
+      "lastChecked": "2026-05-09T16:27:49.807Z"
+    },
+    {
+      "model": "phases",
+      "status": "healthy",
+      "error": "",
+      "lastChecked": "2026-05-09T16:27:49.807Z"
+    },
+    {
+      "model": "models_NOT_to_use",
+      "status": "healthy",
+      "error": "",
+      "lastChecked": "2026-05-09T16:27:49.807Z"
+    },
+    {
+      "model": "rules",
+      "status": "healthy",
+      "error": "",
+      "lastChecked": "2026-05-09T16:27:49.807Z"
+    }
+  ],
+  "lastUpdated": "2026-05-09T16:27:49.807Z"
+}
