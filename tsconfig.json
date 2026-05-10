@@ -5,17 +5,11 @@
     "useDefineForClassFields": false,
     "module": "ESNext",
     "esModuleInterop": true,
-    "lib": [
-      "ES2022",
-      "DOM",
-      "DOM.Iterable"
-    ],
+    "allowSyntheticDefaultImports": true,
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "skipLibCheck": true,
-    "types": [
-      "node",
-      "jest"
-    ],
-    "moduleResolution": "bundler",
+    "types": ["node", "jest"],
+    "moduleResolution": "node",
     "isolatedModules": true,
     "moduleDetection": "force",
     "allowJs": true,
@@ -24,22 +18,17 @@
       "@/*": ["./src/*"],
       "@core/*": ["./src/core/*"],
       "@features/*": ["./src/features/*"],
-      "@shared/*": ["./src/shared/*"],
+      "@shared/*": ["./src/shared/*"]
     },
     "allowImportingTsExtensions": true,
     "noEmit": true,
     "strict": true,
+    "strictNullChecks": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": true
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "resolveJsonModule": true
   },
-  "include": [
-    "src/**/*",
-    ".opencode/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "supabase/functions",
-    "tests/**/*"
-  ]
+  "include": ["src/**/*", ".opencode/**/*.ts"],
+  "exclude": ["node_modules", "dist", "supabase/functions", "tests/**/*"]
 }
