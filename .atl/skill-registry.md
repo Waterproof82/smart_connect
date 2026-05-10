@@ -12,8 +12,15 @@ _Last updated: 2026-05-08_
 | cognitive-doc-design | `*.md`, `docs/*` | docs, documentation, guide | Design documentation that reduces reader cognitive load through progressive disclosure, chunking, signposting, tables, checklists, and recognition over recall. |
 | audit | `*.tsx`, `src/features/*` | audit, review, quality | Perform comprehensive audit of interface quality across accessibility, performance, theming, and responsive design. |
 | harden | `*.tsx`, `src/shared/utils/*` | error, i18n, edge-cases | Improve interface resilience through better error handling, i18n support, text overflow handling, and edge case management. |
-| judgment-day | `*.tsx`, `src/features/*` | review, adversarial, judge | Parallel adversarial review protocol that launches two independent blind judge sub-agents simultaneously to review the same target. |
-| smart-connect-standards | `src/*`, `docs/*`, `*.tsx`, `*.ts` | architecture, design, security, testing, rag, gemini | Global standards for SmartConnect ecosystem including architecture, testing, security, and RAG chatbot best practices.
+| judgment-day | `*.tsx`, `src/features/*` | review, adversarial, judge | Parallel adversarial review protocol that launches two independent blind judge sub-agents simultaneously to review the same target.
+| smart-connect-standards | `src/*`, `docs/*`, `*.tsx`, `*.ts` | architecture, design, security, testing, rag, gemini, best-practices | Global standards for SmartConnect ecosystem including:
+  - Architecture: Clean Architecture, Dependency Injection
+  - Testing: Unit, Integration, E2E testing standards
+  - Security: OWASP principles, JWT, RLS
+  - RAG: Chatbot RAG implementation standards
+  - Best Practices: Environment compatibility (e.g., prefer `globalThis` over `window`), TypeScript best practices, and security guidelines.
+
+  **Reference**: [SmartConnect Standards Documentation](.atl/smart-connect-standards.md)
 
 ## Project Conventions
 
@@ -86,7 +93,16 @@ No index files with path references found in convention files.
 
 ### Project-Level Skills
 
-None found.
+| Skill | Directory | Triggers |
+|-------|-----------|----------|
+| smart-connect | `.atl/smart-connect-skill.md` | architecture, design, security, testing, rag, best-practices | Comprehensive guidelines for SmartConnect project development including architecture, testing, security, RAG chatbot implementation, and environment compatibility best practices.
+
+### Global Skills (from Engram)
+
+| Skill | Triggers (Code) | Triggers (Task) | Description |
+|-------|-----------------|-----------------|-------------|
+| work-unit-commits | `*.tsx`, `*.ts`, `src/*` | implement, commit, PR, review | Structure commits as deliverable work units instead of file-type batches, with tests and docs kept beside the code they verify. |
+| smart-connect-standards | `src/*`, `docs/*`, `*.tsx`, `*.ts` | architecture, design, security, testing, rag, gemini, best-practices | Global standards for SmartConnect ecosystem including architecture, testing, security, RAG chatbot best practices, and environment compatibility best practices (e.g., prefer `globalThis` over `window`).
 
 ## SDD Skills (Managed by SDD Orchestrator)
 

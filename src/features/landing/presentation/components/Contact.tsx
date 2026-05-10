@@ -15,7 +15,7 @@ import { useLanguage } from '@shared/context/LanguageContext';
 
 const fieldClasses = "w-full border rounded-2xl py-3 sm:py-4 px-4 sm:px-6 outline-none transition-colors text-sm text-default bg-[var(--color-surface)] border-[var(--color-border)] focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--focus-ring)] min-h-[44px]";
 
-const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const prefersReducedMotion = () => globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const errorClasses = "bg-[var(--color-error-bg)] border-[var(--color-error-border)] focus:border-[var(--color-error-text)]";
 const validClasses = "bg-[var(--color-accent-subtle)] border-[var(--color-accent-border)] focus:border-[var(--color-primary)]";
 
@@ -27,7 +27,7 @@ export const Contact: React.FC = () => {
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const sectionRef = useRef<HTMLDivElement>(null);
   const isVisible = useIntersectionObserver(sectionRef);
-  const successTimeoutRef = useRef<number | null>(null);
+  const successTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     return () => {
@@ -69,9 +69,10 @@ export const Contact: React.FC = () => {
     resolver: zodResolver(contactSchema),
     defaultValues: { name: '', company: '', email: '', service: '', message: '' },
     mode: 'onBlur',
-  });
-
-  const formValues = watch();
+});
+   
+   // eslint-disable-next-line react-hooks/incompatible-library
+   const formValues = watch();
   const hasAllRequiredFields = formValues.name && formValues.company && formValues.email && formValues.service && formValues.message;
   const canSubmit = hasAllRequiredFields && !isSubmitting && !isLoadingSettings;
 
@@ -80,7 +81,18 @@ export const Contact: React.FC = () => {
     if (touchedFields[field] && !errors[field]) return `${fieldClasses} ${validClasses}`;
     return fieldClasses;
   };
+  const getSubmitButtonClass = () => {
+    if (canSubmit) {
+      return 'bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-[var(--color-on-accent)] shadow-lg shadow-[var(--color-accent)]/25 hover:shadow-xl hover:shadow-[var(--color-accent)]/30 hover:-translate-y-0.5 active:translate-y-0 active:shadow-md';
+    }
+    return 'bg-[var(--color-overlay-medium)] text-muted cursor-not-allowed';
+  };
 
+  const renderSubmitButtonContent = () => {
+    if (isLoadingSettings) return <><Loader2 className="w-5 h-5 animate-spin" />{t.contactFormLoading}</>;
+    if (isSubmitting) return <><Loader2 className="w-5 h-5 animate-spin" />{t.contactFormSending}</>;
+    return <><span className="text-base">{t.contactFormSubmit}</span> <Send className="w-5 h-5" aria-hidden="true" /></>;
+  };
   const onSubmit = async (data: ContactFormData) => {
     const isValid = await trigger();
     if (!isValid) return;
@@ -107,14 +119,14 @@ export const Contact: React.FC = () => {
 
       if (result.success) {
         setSubmitStatus('success');
-        successTimeoutRef.current = window.setTimeout(() => { reset(); setSubmitStatus('idle'); }, 3000);
+        successTimeoutRef.current = globalThis.setTimeout(() => { reset(); setSubmitStatus('idle'); }, 3000);
       } else {
         setSubmitStatus('error');
-        successTimeoutRef.current = window.setTimeout(() => setSubmitStatus('idle'), 3000);
+        successTimeoutRef.current = globalThis.setTimeout(() => setSubmitStatus('idle'), 3000);
       }
     } catch { 
       setSubmitStatus('error'); 
-      successTimeoutRef.current = window.setTimeout(() => setSubmitStatus('idle'), 3000); 
+      successTimeoutRef.current = globalThis.setTimeout(() => setSubmitStatus('idle'), 3000); 
     }
   };
 
@@ -162,11 +174,12 @@ export const Contact: React.FC = () => {
               { id: 'whatsapp', icon: <MessageSquare className="w-6 h-6" />, title: t.contactWhatsappTitle, value: settings?.whatsappPhone || t.contactEmailLoading, desc: t.contactWhatsappDesc, color: "text-[var(--color-icon-emerald)]", href: settings?.whatsappPhone ? `https://wa.me/${settings.whatsappPhone.replaceAll(/[^\d+]/g, '')}` : undefined, external: true },
               { id: 'location', icon: <MapPin className="w-6 h-6" />, title: t.contactLocationTitle, value: settings?.physicalAddress || "Madrid, España", desc: "Hub Tecnológico de Innovación", color: "text-[var(--color-icon-purple)]", href: `https://maps.google.com/?q=${encodeURIComponent(settings?.physicalAddress || 'Madrid, España')}`, external: true }
             ].map((item, idx) => {
-              const cardClasses = `p-6 rounded-2xl flex gap-4 group hover:border-[var(--color-border)] transition-colors block ${
-                idx === 0 ? 'bg-[var(--color-surface)] border border-[var(--color-border)]' :
-                idx === 1 ? 'bg-[var(--color-bg-alt)] border-2 border-dashed border-[var(--color-border)]' :
-                'bg-[var(--color-surface)] border border-[var(--color-border)]'
-              }`;
+              const getCardBackground = () => {
+                if (idx === 0) return 'bg-[var(--color-surface)] border border-[var(--color-border)]';
+                if (idx === 1) return 'bg-[var(--color-bg-alt)] border-2 border-dashed border-[var(--color-border)]';
+                return 'bg-[var(--color-surface)] border border-[var(--color-border)]';
+              };
+              const cardClasses = `p-6 rounded-2xl flex gap-4 group hover:border-[var(--color-border)] transition-colors block ${getCardBackground()}`;
               const content = (
                 <>
                   <div className={`w-12 h-12 bg-[var(--color-surface)] rounded-xl flex items-center justify-center ${item.color}`}>{item.icon}</div>
@@ -236,10 +249,10 @@ export const Contact: React.FC = () => {
                 </div>
 
                 {submitStatus === 'success' && (
-                  <div id="contact-success-message" role="status" className="flex items-center gap-3 bg-[var(--color-success-bg)] border border-[var(--color-success-border)] rounded-2xl py-4 px-6">
+                  <output className="flex items-center gap-3 bg-[var(--color-success-bg)] border border-[var(--color-success-border)] rounded-2xl py-4 px-6">
                     <CheckCircle2 className="w-5 h-5 text-[var(--color-success-text)]" />
                     <p className="text-sm text-[var(--color-success-text)]">{t.contactSuccess}</p>
-                  </div>
+                  </output>
                 )}
 
                 {submitStatus === 'error' && (
@@ -249,8 +262,8 @@ export const Contact: React.FC = () => {
                   </div>
                 )}
 
-                <button type="submit" disabled={!canSubmit} className={`w-full py-4 sm:py-5 px-6 rounded-2xl font-bold flex items-center justify-center gap-3 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] min-h-[44px] ${canSubmit ? 'bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-[var(--color-on-accent)] shadow-lg shadow-[var(--color-accent)]/25 hover:shadow-xl hover:shadow-[var(--color-accent)]/30 hover:-translate-y-0.5 active:translate-y-0 active:shadow-md' : 'bg-[var(--color-overlay-medium)] text-muted cursor-not-allowed'}`}>
-                  {isLoadingSettings ? <><Loader2 className="w-5 h-5 animate-spin" />{t.contactFormLoading}</> : isSubmitting ? <><Loader2 className="w-5 h-5 animate-spin" />{t.contactFormSending}</> : <><span className="text-base">{t.contactFormSubmit}</span> <Send className="w-5 h-5" aria-hidden="true" /></>}
+                <button type="submit" disabled={!canSubmit} className={`w-full py-4 sm:py-5 px-6 rounded-2xl font-bold flex items-center justify-center gap-3 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] min-h-[44px] ${getSubmitButtonClass()}`}>
+                  {renderSubmitButtonContent()}
                 </button>
               </form>
             </div>

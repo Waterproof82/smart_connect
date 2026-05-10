@@ -253,13 +253,12 @@ export class SecurityLogger extends ConsoleLogger {
 
     try {
       const { error } = await this.persistence.insert({
-        event_type: log.type,
-        user_id: log.userId || null,
-        ip_address: log.ip || null,
-        user_agent: log.userAgent || null,
-        details: log.details,
-        metadata: log.metadata || {},
+        codigo: log.type,
+        mensaje: log.details,
+        modulo: 'security',
         severity: log.severity,
+        user_id: log.userId || null,
+        metadata: log.metadata || {},
         created_at: log.timestamp,
       });
 

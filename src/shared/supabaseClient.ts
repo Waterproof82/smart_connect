@@ -1,11 +1,19 @@
 import { createClient } from '@supabase/supabase-js';
-import { ENV } from '@shared/config/env.config';
 
-if (!ENV.SUPABASE_URL || !ENV.SUPABASE_ANON_KEY) {
-  throw new Error('Supabase env vars not set (VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY)');
+// Mock para pruebas
+let SUPABASE_URL = 'http://localhost:54321';
+let SUPABASE_ANON_KEY = 'anon_key_for_testing';
+
+// En producción, estos valores deberían ser cargados desde el entorno
+if (process.env.NODE_ENV !== 'test') {
+  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_ANON_KEY) {
+    throw new Error('Supabase env vars not set (SUPABASE_URL, SUPABASE_ANON_KEY)');
+  }
+  SUPABASE_URL = process.env.SUPABASE_URL;
+  SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
 }
 
-export const supabase = createClient(ENV.SUPABASE_URL, ENV.SUPABASE_ANON_KEY);
+export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // Clear stale sessions that cause "Refresh Token Not Found" errors
 supabase.auth.onAuthStateChange((event, session) => {

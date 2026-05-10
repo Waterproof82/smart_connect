@@ -49,14 +49,14 @@ El objetivo es transformar negocios mediante soluciones técnicas que aporten va
 ## 🏗️ ARQUITECTURA HÍBRIDA & STACK
 El proyecto sigue un modelo de alto rendimiento y escalabilidad:
 
-1. **Landing Page (SEO Frontend):** - **Stack:** React + Vite + TypeScript + Tailwind CSS + Zod + React Hook Form.
+1. **Landing Page (SEO Frontend):** - **Stack:** React 19 + Vite 8 + TypeScript 5.9 + Tailwind CSS 3.4 + Zod 3.25 + React Hook Form 7.71.
    - **Misión:** Indexación SEO máxima y landing de conversión para campañas de Facebook/Google.
-2. **Dashboard & Chatbot (App Frontend):** - **Stack:** React + Vite + TypeScript + Zod + React Hook Form.
+2. **Dashboard & Chatbot (App Frontend):** - **Stack:** React 19 + Vite 8 + TypeScript 5.9 + Zod 3.25 + React Hook Form 7.71.
    - **Misión:** Panel de administración y Chatbot experto con arquitectura RAG.
 3. **Orquestador (Automation Backend):** - **Stack:** n8n en Railway/VPS propio.
    - **Misión:** Gestión de leads, análisis de sentimiento y notificaciones.
-4. **Cerebro IA:** - **API:** Gemini (Google AI Studio) - Pago por uso.
-   - **Infraestructura:** Supabase (PostgreSQL + pgvector + Edge Functions).
+4. **Cerebro IA:** - **API:** Gemini 1.44 (@google/genai) - Pago por uso.
+   - **Infraestructura:** Supabase 2.99 (PostgreSQL + pgvector + Edge Functions).
 
 ---
 

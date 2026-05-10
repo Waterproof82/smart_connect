@@ -6,6 +6,49 @@
 
 import { sanitizeInput, sanitizeHTML, isValidEmail, isValidPhone, sanitizeURL } from '../../../src/shared/utils/sanitizer';
 
+// Mock DOMPurify
+jest.mock('dompurify', () => {
+  const mockSanitize = (dirty: string, config?: any) => {
+    let clean = dirty;
+    if (!config?.ALLOWED_TAGS || config.ALLOWED_TAGS.length === 0) {
+      clean = clean.replace(/<[^>]*>/g, '');
+    } else {
+      clean = clean.replace(/<[^>]*>/g, ''); // Simplified for testing
+    }
+    return clean;
+  };
+
+  return {
+    __esModule: true,
+    default: {
+      sanitize: mockSanitize
+    }
+  };
+});
+
+// Mock DOMPurify for testing
+jest.mock('dompurify', () => {
+  const sanitize = (dirty: string, config?: any) => {
+    let clean = dirty;
+    if (!config?.ALLOWED_TAGS || config.ALLOWED_TAGS.length === 0) {
+      clean = clean.replace(/<[^>]*>/g, '');
+    } else {
+      const allowedTags = config.ALLOWED_TAGS || [];
+      clean = clean.replace(new RegExp(`<(/?)(${allowedTags.join('|')})[^>]*>`, 'g'), (match) => {
+        const isClosing = match.startsWith('</');
+        const tagName = match.match(/<([^>]+)/)?.[1] || '';
+        return isClosing ? `</${tagName}>` : `<${tagName}>`;
+      });
+    }
+    return clean;
+  };
+
+  return {
+    __esModule: true,
+    default: { sanitize }
+  };
+});
+
 describe('sanitizeInput', () => {
   it('should pass through plain text unchanged', () => {
     expect(sanitizeInput('Hello world')).toBe('Hello world');

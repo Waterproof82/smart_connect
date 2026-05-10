@@ -8,12 +8,23 @@
 ## Componentes Clave
 | Componente       | Tecnología               | Función                                                                 |
 |------------------|--------------------------|-------------------------------------------------------------------------|
-| Landing          | React + Vite + TypeScript | Captación SEO y conversión de leads.                                      |
-| QRIBAR           | React + Vite             | Menú digital con pedidos en mesa.                                        |
-| Chatbot RAG      | React + Gemini API       | Asistente IA con respuestas contextuales basadas en RAG.                |
+| Landing          | React 19 + Vite 8 + TypeScript 5.9 | Captación SEO y conversión de leads.                                      |
+| QRIBAR           | React 19 + Vite 8         | Menú digital con pedidos en mesa.                                        |
+| Chatbot RAG      | React 19 + Gemini API 1.44   | Asistente IA con respuestas contextuales basadas en RAG.                |
 | n8n              | Workflows                | Automatización de leads y notificaciones.                                 |
 | Supabase         | PostgreSQL + pgvector     | Backend, autenticación y gestión de datos.                               |
 | Edge Functions   | Deno                     | Procesamiento de embeddings y respuestas de Gemini.                      |
+
+## Stack Tecnológico Actual (2026)
+- **Frontend**: React 19.2.4, React Router DOM 7.13.1, TypeScript 5.9.3
+- **Bundler**: Vite 8.0.11
+- **Styling**: Tailwind CSS 3.4.17, Lucide React 0.577.0
+- **Backend**: Supabase 2.99.0 (PostgreSQL + pgvector)
+- **AI**: Gemini API 1.44.0 (@google/genai)
+- **Forms**: React Hook Form 7.71.2, Zod 3.25.0
+- **Charts**: Recharts 3.8.0
+- **Testing**: Jest 30.2.0, @testing-library/react 16.3.2
+- **Linting**: ESLint 9.39.4, @typescript-eslint 8.56.1                      |
 
 ## Flujo de Datos
 - **Landing → QRIBAR/Chatbot → n8n → Supabase**: Flujo de datos desde la captación hasta el backend.
@@ -100,3 +111,126 @@ const validateRole = (role) => (req, res, next) => {
   ]
 }
 ```
+
+---
+
+# 🌐 SmartConnect Standards: Best Practices
+
+## Environment Compatibility
+
+### Prefer `globalThis` over `window`
+
+**Why?**
+- `globalThis` es el estándar moderno y multiplataforma para acceder a objetos globales.
+- Funciona en todos los entornos (browser, Node.js, Deno, etc.) y es más robusto.
+- `window` es específico del navegador y puede causar problemas en entornos no-navegador.
+
+**When to use:**
+- Cualquier lugar donde usarías `window` en código para navegador.
+- Al acceder a APIs del navegador como `location`, `addEventListener`, `removeEventListener`, etc.
+
+**Examples:**
+
+```typescript
+// Before (use window)
+window.addEventListener('hashchange', handleHashChange);
+const hash = window.location.hash;
+
+// After (use globalThis)
+globalThis.addEventListener('hashchange', handleHashChange);
+const hash = globalThis.location.hash;
+```
+
+**Exceptions:**
+- Si estás trabajando en un contexto solo-navegador y estás seguro de que nunca se ejecutará en un entorno no-navegador, puedes usar `window` por legibilidad.
+- Si necesitas acceder a APIs específicas del navegador que no están disponibles a través de `globalThis`.
+
+## TypeScript Best Practices
+
+### Type Safety
+- Siempre usa interfaces y tipos de TypeScript para objetos complejos.
+- Prefiere `as const` para tipos literales cuando sea posible.
+- Usa `unknown` en lugar de `any` para seguridad de tipos.
+
+**Example:**
+```typescript
+// Prefer unknown over any
+const data: unknown = fetchData();
+if (typeof data === 'string') {
+  const parsedData = data as string;
+}
+```
+
+## Security Best Practices
+
+### Sanitize User Inputs
+- Prevén ataques XSS sanitizando inputs de usuarios antes de renderizarlos.
+- Usa librerías como `DOMPurify` para sanitizar contenido HTML.
+
+**Example:**
+```typescript
+import DOMPurify from 'dompurify';
+const cleanHtml = DOMPurify.sanitize(userInput);
+```
+
+---
+
+## 📌 Skill: SmartConnect Standards
+
+### 📚 Purpose
+
+This skill provides AI agents with comprehensive guidelines for SmartConnect project development, including:
+- Architecture and design principles
+- Testing and quality standards
+- Security best practices
+- RAG chatbot implementation
+- Environment compatibility and best practices
+
+### 🌐 Environment Compatibility
+
+**Prefer `globalThis` over `window`**
+
+**Why?**
+- `globalThis` is the modern, cross-environment standard for accessing global objects.
+- Works in all environments (browser, Node.js, Deno, etc.) and is more future-proof.
+- `window` is browser-specific and can cause issues in non-browser environments.
+
+**When to use:**
+- Anywhere you would use `window` in browser code.
+- When accessing browser APIs like `location`, `addEventListener`, `removeEventListener`.
+
+**Examples:**
+```typescript
+// Before (use window)
+const hash = window.location.hash;
+window.addEventListener('hashchange', handleHashChange);
+
+// After (use globalThis)
+const hash = globalThis.location.hash;
+globalThis.addEventListener('hashchange', handleHashChange);
+```
+
+**Exceptions:**
+- If you're working in a browser-only context and are certain it will never run in a non-browser environment.
+- If you need to access browser-specific APIs not available through `globalThis`.
+
+### 📝 Usage Instructions
+
+**When to use this skill:**
+- When writing new code for SmartConnect
+- When reviewing or auditing existing code
+- When implementing new features or fixing bugs
+- When setting up testing, security, or architecture decisions
+
+**How to use this skill:**
+- Reference this skill when using the `skill` tool
+- Use the guidelines provided to ensure consistency
+- Follow the best practices to maintain code quality and security
+
+---
+
+# 🔗 References
+
+## Skill Registry Reference
+- **Global Skills**: [Skill Registry](.atl/skill-registry.md)
+  - **smart-connect-standards**: Estándares globales para arquitectura, testing, seguridad, RAG y best practices.

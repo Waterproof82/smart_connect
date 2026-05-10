@@ -19,7 +19,7 @@ import { supabase } from '../../../shared/supabaseClient';
 function createSupabasePersistence(): ISecurityLogPersistence {
   return {
     async insert(log: Record<string, unknown>) {
-      const { error } = await supabase.from('security_logs').insert(log);
+       const { error } = await supabase.from('log_errors').insert(log);
       return { error: error ? { message: error.message } : null };
     },
   };

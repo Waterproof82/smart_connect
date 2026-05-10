@@ -21,7 +21,7 @@ const StatCard: React.FC<StatProps> = ({ icon, label, quote, author, color, isIn
   const hasAnimated = useRef(false);
 
   const animate = useCallback(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       setCount(45);
       return;
     }

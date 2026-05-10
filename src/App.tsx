@@ -52,7 +52,7 @@ const ErrorBoundaryFallback: React.FC = () => {
         <h1 className="text-2xl font-bold mb-4">{t.errorBoundaryTitle}</h1>
         <p className="text-muted mb-4">{t.errorBoundaryMessage}</p>
         <button 
-          onClick={() => window.location.reload()} 
+          onClick={() => globalThis.location.reload()} 
           className="bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-[var(--color-on-accent)] px-6 py-3 rounded-xl font-bold focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] min-h-[44px]"
         >
           {t.errorBoundaryButton}
@@ -127,7 +127,7 @@ const App: React.FC = () => {
 
   React.useEffect(() => {
     const scrollToHash = () => {
-      const hash = window.location.hash;
+      const hash = globalThis.location.hash;
       if (hash) {
         setTimeout(() => {
           document.querySelector(hash)?.scrollIntoView({ behavior: 'smooth' });
@@ -136,8 +136,8 @@ const App: React.FC = () => {
     };
 
     scrollToHash();
-    window.addEventListener('hashchange', scrollToHash);
-    return () => window.removeEventListener('hashchange', scrollToHash);
+    globalThis.addEventListener('hashchange', scrollToHash);
+    return () => globalThis.removeEventListener('hashchange', scrollToHash);
   }, []);
 
   return (
