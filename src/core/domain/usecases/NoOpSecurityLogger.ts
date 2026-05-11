@@ -19,8 +19,23 @@ import { supabase } from '../../../shared/supabaseClient';
 function createSupabasePersistence(): ISecurityLogPersistence {
   return {
     async insert(log: Record<string, unknown>) {
-       const { error } = await supabase.from('log_errors').insert(log);
-      return { error: error ? { message: error.message } : null };
+      try {
+        const result = await supabase.from('log_errors').insert(log);
+        const { error } = result as { error: unknown };
+        
+        let errorMessage: string | null = null;
+        if (error && typeof error === 'object' && 'message' in error) {
+          const errorObj = error as { message?: unknown };
+          if (typeof errorObj.message === 'string') {
+            errorMessage = errorObj.message;
+          }
+        }
+        
+        return { error: errorMessage ? { message: errorMessage } : null };
+      } catch (e) {
+        const message = e instanceof Error ? e.message : String(e);
+        return { error: { message } };
+      }
     },
   };
 }

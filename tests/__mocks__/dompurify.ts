@@ -1,7 +1,12 @@
 // __mocks__/dompurify.ts
 
+interface DomPurifyConfig {
+  ALLOWED_TAGS?: string[];
+  ALLOWED_ATTR?: string[];
+}
+
 const createDOMPurify = () => ({
-  sanitize: (html: string | Node, config?: any): string | Node => {
+  sanitize: (html: string | Node, config?: DomPurifyConfig): string | Node => {
     // If config is not provided, return the html as is
     if (!config) {
       return html;

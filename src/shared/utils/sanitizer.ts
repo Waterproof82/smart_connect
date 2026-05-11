@@ -7,15 +7,11 @@
  * Implementation: DOMPurify + Pattern Detection
  * */
 
-import { JSDOM } from "jsdom";
 import DOMPurify from "dompurify";
 
-// Initialize DOMPurify - use JSDOM for Node.js, window for browser
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const domPurifyInstance: any =
-  typeof window === "undefined"
-    ? DOMPurify(new JSDOM("").window)
-    : DOMPurify(window);
+// Initialize DOMPurify with the browser's window object.
+// Note: DOMPurify is tree-shaken in tests where it's mocked.
+const domPurifyInstance = DOMPurify(window);
 
 // Singleton instance for logging security events
 const securityLogger = {
@@ -138,10 +134,6 @@ export function sanitizeHTML(
     ALLOWED_ATTR: ["href", "target", "rel", "title", "alt", "class"],
     ALLOWED_URI_REGEXP:
       /^(?:(?:(?:f|ht)tps?|mailto|tel):|[^a-z]|[a-z+.-]+(?:[^a-z+.-:]|$))/i,
-    USE_PROFILES: {
-      transformTags: true,
-      transformAttributes: true,
-    },
   });
 
   return sanitized;

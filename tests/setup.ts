@@ -1,6 +1,6 @@
 // Load environment variables from .env.local for integration/E2E tests
-import * as dotenv from 'dotenv';
-dotenv.config({ path: '.env.local' }); // Load environment variables
+import * as dotenv from "dotenv";
+dotenv.config({ path: ".env.local" }); // Load environment variables
 
 // Set VITE_ prefixed versions for consistency with Vite env (if not already set)
 if (!process.env.VITE_SUPABASE_URL && process.env.SUPABASE_URL) {
@@ -11,22 +11,24 @@ if (!process.env.VITE_SUPABASE_ANON_KEY && process.env.SUPABASE_ANON_KEY) {
 }
 
 // Mock environment variables
-jest.mock('@shared/utils/envMode', () => ({
-  getEnvMode: () => 'test',
+jest.mock("@shared/utils/envMode", () => ({
+  getEnvMode: () => "test",
 }));
 
-jest.mock('@shared/config/env.config', () => ({
+jest.mock("@shared/config/env.config", () => ({
   ENV: {
-    SUPABASE_URL: process.env.VITE_SUPABASE_URL || 'http://localhost:54321',
-    SUPABASE_ANON_KEY: process.env.VITE_SUPABASE_ANON_KEY || 'test-anon-key',
-    MODE: 'test',
+    SUPABASE_URL: process.env.VITE_SUPABASE_URL || "http://localhost:54321",
+    SUPABASE_ANON_KEY: process.env.VITE_SUPABASE_ANON_KEY || "test-anon-key",
+    MODE: "test",
     DEV: false,
     PROD: false,
   },
 }));
 
 // Mock DOMPurify
-jest.mock('dompurify', () => require('./__mocks__/dompurify'));
+jest.mock("dompurify", () => {
+  return require("./__mocks__/dompurify");
+});
 
 // Mock IntersectionObserver
 globalThis.IntersectionObserver = class IntersectionObserver {
@@ -40,14 +42,14 @@ globalThis.IntersectionObserver = class IntersectionObserver {
 
 // Mock window object for Node.js environment
 if (!globalThis.window) {
-  globalThis.window = {} as any;
+  globalThis.window = {} as unknown as Window & typeof globalThis;
 }
 
 // Mock window.matchMedia
 if (!globalThis.window.matchMedia) {
-  Object.defineProperty(globalThis.window, 'matchMedia', {
+  Object.defineProperty(globalThis.window, "matchMedia", {
     writable: true,
-    value: jest.fn().mockImplementation(query => ({
+    value: jest.fn().mockImplementation((query) => ({
       matches: false,
       media: query,
       onchange: null,
@@ -62,8 +64,8 @@ if (!globalThis.window.matchMedia) {
 
 // Polyfill for crypto.randomUUID() in Node.js < 19
 if (!globalThis.crypto) {
-  globalThis.crypto = {} as any;
+  globalThis.crypto = {} as Crypto;
 }
 if (!globalThis.crypto.randomUUID) {
-  globalThis.crypto.randomUUID = () => 'test-uuid';
+  globalThis.crypto.randomUUID = () => "test-uuid";
 }

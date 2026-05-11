@@ -14,7 +14,7 @@ if (!process.env.VITE_SUPABASE_ANON_KEY && process.env.SUPABASE_ANON_KEY) {
 jest.mock("@supabase/supabase-js", () => {
   const mockSupabase = {
     createClient: jest.fn(() => ({
-      from: jest.fn((tableName) => ({
+      from: jest.fn((_tableName) => ({
         insert: jest.fn().mockReturnThis(),
         select: jest.fn().mockReturnThis(),
         update: jest.fn().mockReturnThis(),
@@ -78,7 +78,7 @@ globalThis.IntersectionObserver = class IntersectionObserver {
 
 // Mock window object for Node.js environment
 if (!globalThis.window) {
-  globalThis.window = {} as any;
+  globalThis.window = {} as unknown as Window & typeof globalThis;
 }
 
 // Mock window.matchMedia
@@ -100,7 +100,7 @@ if (!globalThis.window.matchMedia) {
 
 // Polyfill for crypto.randomUUID() in Node.js < 19
 if (!globalThis.crypto) {
-  globalThis.crypto = {} as any;
+  globalThis.crypto = {} as Crypto;
 }
 if (!globalThis.crypto.randomUUID) {
   globalThis.crypto.randomUUID = () =>

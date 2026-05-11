@@ -1,21 +1,20 @@
 /**
  * Supabase Document Repository
- * 
+ *
  * Clean Architecture: Data Layer
- * 
+ *
  * Implementación del repositorio de documentos usando Supabase.
  */
 
-import { SupabaseClient } from '@supabase/supabase-js';
-import { supabase } from '@shared/supabaseClient';
-import { ENV } from '@shared/config/env.config';
-import { 
-  IDocumentRepository, 
-  DocumentFilters, 
+import { supabase } from "@shared/supabaseClient";
+import { ENV } from "@shared/config/env.config";
+import {
+  IDocumentRepository,
+  DocumentFilters,
   PaginationOptions,
-  PaginatedResult 
-} from '../../domain/repositories/IDocumentRepository';
-import { Document } from '../../domain/entities/Document';
+  PaginatedResult,
+} from "../../domain/repositories/IDocumentRepository";
+import { Document } from "../../domain/entities/Document";
 
 // Type alias for embedding data (can be array or JSON string from Supabase)
 type EmbeddingData = number[] | string | null;
@@ -24,14 +23,20 @@ type EmbeddingData = number[] | string | null;
  * Parses embedding data from Supabase (may come as JSON string or array).
  * Returns validated 768-dimension array or undefined.
  */
-function parseEmbedding(raw: EmbeddingData, docId?: string | number): number[] | undefined {
+function parseEmbedding(
+  raw: EmbeddingData,
+  docId?: string | number,
+): number[] | undefined {
   let embedding: EmbeddingData = raw;
 
-  if (typeof embedding === 'string') {
+  if (typeof embedding === "string") {
     try {
       embedding = JSON.parse(embedding) as number[];
     } catch (e) {
-      console.error(`Failed to parse embedding for document ${docId ?? 'unknown'}:`, e);
+      console.error(
+        `Failed to parse embedding for document ${docId ?? "unknown"}:`,
+        e,
+      );
       return undefined;
     }
   }
@@ -43,13 +48,11 @@ function parseEmbedding(raw: EmbeddingData, docId?: string | number): number[] |
 }
 
 export class SupabaseDocumentRepository implements IDocumentRepository {
-  private readonly client: SupabaseClient = supabase;
-
-
+  private readonly client = supabase;
 
   async getAll(
     filters?: DocumentFilters,
-    pagination?: PaginationOptions
+    pagination?: PaginationOptions,
   ): Promise<PaginatedResult<Document>> {
     // Configurar paginación por defecto
     const page = pagination?.page || 1;
@@ -58,31 +61,27 @@ export class SupabaseDocumentRepository implements IDocumentRepository {
     const to = from + pageSize - 1;
 
     // Construir query base
-    let query = this.client
-      .from('documents')
-      .select('*', { count: 'exact' });
+    let query = this.client.from("documents").select("*", { count: "exact" });
 
     // Aplicar filtros
     if (filters?.source) {
-      query = query.ilike('source', `%${filters.source}%`);
+      query = query.ilike("source", `%${filters.source}%`);
     }
 
     if (filters?.searchText) {
-      query = query.ilike('content', `%${filters.searchText}%`);
+      query = query.ilike("content", `%${filters.searchText}%`);
     }
 
     if (filters?.hasEmbedding !== undefined) {
       if (filters.hasEmbedding) {
-        query = query.not('embedding', 'is', null);
+        query = query.not("embedding", "is", null);
       } else {
-        query = query.is('embedding', null);
+        query = query.is("embedding", null);
       }
     }
 
     // Aplicar ordenamiento y paginación
-    query = query
-      .order('created_at', { ascending: false })
-      .range(from, to);
+    query = query.order("created_at", { ascending: false }).range(from, to);
 
     // Ejecutar query
     const { data, error, count } = await query;
@@ -93,7 +92,10 @@ export class SupabaseDocumentRepository implements IDocumentRepository {
 
     // Mapear a entidades de dominio
     const documents = (data || []).map((row: Record<string, unknown>) => {
-      const validEmbedding = parseEmbedding(row.embedding as EmbeddingData, row.id as string);
+      const validEmbedding = parseEmbedding(
+        row.embedding as EmbeddingData,
+        row.id as string,
+      );
 
       return Document.create({
         id: row.id as string,
@@ -101,7 +103,9 @@ export class SupabaseDocumentRepository implements IDocumentRepository {
         source: row.source as string,
         embedding: validEmbedding,
         createdAt: new Date(row.created_at as string),
-        updatedAt: row.created_at ? new Date(row.created_at as string) : undefined,
+        updatedAt: row.created_at
+          ? new Date(row.created_at as string)
+          : undefined,
         metadata: (row.metadata as Record<string, unknown>) || {},
       });
     });
@@ -120,13 +124,13 @@ export class SupabaseDocumentRepository implements IDocumentRepository {
 
   async getById(id: string): Promise<Document | null> {
     const { data, error } = await this.client
-      .from('documents')
-      .select('*')
-      .eq('id', id)
+      .from("documents")
+      .select("*")
+      .eq("id", id)
       .single();
 
     if (error) {
-      if (error.code === 'PGRST116') {
+      if (error.code === "PGRST116") {
         return null; // Not found
       }
       throw new Error(`Failed to fetch document: ${error.message}`);
@@ -147,8 +151,8 @@ export class SupabaseDocumentRepository implements IDocumentRepository {
 
   async count(): Promise<number> {
     const { count, error } = await this.client
-      .from('documents')
-      .select('*', { count: 'exact', head: true });
+      .from("documents")
+      .select("*", { count: "exact", head: true });
 
     if (error) {
       throw new Error(`Failed to count documents: ${error.message}`);
@@ -159,8 +163,8 @@ export class SupabaseDocumentRepository implements IDocumentRepository {
 
   async countBySource(): Promise<Record<string, number>> {
     const { data, error } = await this.client
-      .from('documents')
-      .select('source');
+      .from("documents")
+      .select("source");
 
     if (error) {
       throw new Error(`Failed to count by source: ${error.message}`);
@@ -168,9 +172,9 @@ export class SupabaseDocumentRepository implements IDocumentRepository {
 
     const counts: Record<string, number> = {};
     (data || []).forEach((row: Record<string, unknown>) => {
-      const sourceStr = (row.source as string) || 'unknown';
+      const sourceStr = (row.source as string) || "unknown";
       // Split by comma to handle multi-source documents
-      sourceStr.split(',').forEach(s => {
+      sourceStr.split(",").forEach((s) => {
         const source = s.trim();
         if (source) {
           counts[source] = (counts[source] || 0) + 1;
@@ -181,21 +185,22 @@ export class SupabaseDocumentRepository implements IDocumentRepository {
     return counts;
   }
 
-
   // countByCategory removed: use countBySource for all stats
 
   async delete(id: string): Promise<void> {
-    const { error } = await this.client
-      .from('documents')
-      .delete()
-      .eq('id', id);
+    const { error } = await this.client.from("documents").delete().eq("id", id);
 
     if (error) {
       throw new Error(`Failed to delete document: ${error.message}`);
     }
   }
 
-  async update(id: string, content: string, source?: string, metadata?: Record<string, unknown>): Promise<Document> {
+  async update(
+    id: string,
+    content: string,
+    source?: string,
+    metadata?: Record<string, unknown>,
+  ): Promise<Document> {
     // 1. Generate embedding using the same auth pattern as generateEmbedding()
     const embedding = await this.generateEmbedding(content);
     const embeddingData = { embedding };
@@ -211,7 +216,7 @@ export class SupabaseDocumentRepository implements IDocumentRepository {
     const updateData: UpdateData = {
       content,
       embedding: embeddingData?.embedding ?? null,
-      created_at: new Date().toISOString()
+      created_at: new Date().toISOString(),
     };
     if (source !== undefined) {
       updateData.source = source;
@@ -222,9 +227,9 @@ export class SupabaseDocumentRepository implements IDocumentRepository {
 
     // 3. Update en Supabase
     const { data, error } = await this.client
-      .from('documents')
+      .from("documents")
       .update(updateData)
-      .eq('id', id)
+      .eq("id", id)
       .select()
       .single();
 
@@ -240,7 +245,10 @@ export class SupabaseDocumentRepository implements IDocumentRepository {
    * Método privado para convertir la fila de la DB a la Entidad Document
    */
   private mapToDomain(row: Record<string, unknown>): Document {
-    const validEmbedding = parseEmbedding(row.embedding as EmbeddingData, row.id as string);
+    const validEmbedding = parseEmbedding(
+      row.embedding as EmbeddingData,
+      row.id as string,
+    );
 
     return Document.create({
       id: row.id as string,
@@ -254,28 +262,35 @@ export class SupabaseDocumentRepository implements IDocumentRepository {
   }
 
   async generateEmbedding(content: string): Promise<number[]> {
-    const { data: { session } } = await this.client.auth.getSession();
+    const {
+      data: { session },
+    } = await this.client.auth.getSession();
 
     if (!session?.access_token) {
-      throw new Error('No active session - please log in again');
+      throw new Error("No active session - please log in again");
     }
 
     const supabaseUrl = ENV.SUPABASE_URL;
     const anonKey = ENV.SUPABASE_ANON_KEY;
 
     if (!supabaseUrl || !anonKey) {
-      throw new Error('Missing Supabase configuration (VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY)');
+      throw new Error(
+        "Missing Supabase configuration (VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY)",
+      );
     }
 
-    const response = await fetch(`${supabaseUrl}/functions/v1/gemini-embedding`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'apikey': anonKey,
-        'Authorization': `Bearer ${session.access_token}`,
+    const response = await fetch(
+      `${supabaseUrl}/functions/v1/gemini-embedding`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          apikey: anonKey,
+          Authorization: `Bearer ${session.access_token}`,
+        },
+        body: JSON.stringify({ text: content }),
       },
-      body: JSON.stringify({ text: content })
-    });
+    );
 
     const text = await response.text();
 
@@ -284,7 +299,9 @@ export class SupabaseDocumentRepository implements IDocumentRepository {
       try {
         const err = JSON.parse(text);
         errorMsg = err.error || errorMsg;
-      } catch { /* non-JSON error body */ }
+      } catch {
+        /* non-JSON error body */
+      }
       throw new Error(errorMsg);
     }
 
@@ -292,9 +309,11 @@ export class SupabaseDocumentRepository implements IDocumentRepository {
     return data.embedding;
   }
 
-  async create(document: Omit<Document, 'id' | 'createdAt' | 'updatedAt'>): Promise<Document> {
+  async create(
+    document: Omit<Document, "id" | "createdAt" | "updatedAt">,
+  ): Promise<Document> {
     const { data, error } = await this.client
-      .from('documents')
+      .from("documents")
       .insert({
         content: document.content,
         source: document.source,
@@ -308,7 +327,10 @@ export class SupabaseDocumentRepository implements IDocumentRepository {
       throw new Error(`Failed to create document: ${error.message}`);
     }
 
-    const validEmbedding = parseEmbedding(data.embedding as EmbeddingData, data.id);
+    const validEmbedding = parseEmbedding(
+      data.embedding as EmbeddingData,
+      data.id,
+    );
 
     return Document.create({
       id: data.id,
