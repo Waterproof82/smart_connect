@@ -15,12 +15,13 @@
 | Chatbot RAG    | React 18 + Gemini API 1.44         | Asistente IA con respuestas contextuales basadas en RAG. |
 | n8n            | Workflows                          | Automatización de leads y notificaciones.                |
 | Supabase       | PostgreSQL + pgvector              | Backend, autenticación y gestión de datos.               |
+| **DB Project** | `smartconnect-rag`                 | Proyecto activo de Supabase para el frontend.            |
 | Edge Functions | Deno                               | Procesamiento de embeddings y respuestas de Gemini.      |
 
 ## Stack Tecnológico Actual (2026-05)
 
 - **Frontend**: React 18.3.1, React Router DOM 6.30.3, TypeScript 5.9.3
-- **Bundler**: Vite 8.0.11
+- **Bundler**: Vite 8.0.12
 - **Styling**: Tailwind CSS 4.3.0, Lucide React 0.375.0
 - **Backend**: Supabase 2.105.4 (PostgreSQL + pgvector)
 - **AI**: Gemini API 1.44.0 (@google/genai)
