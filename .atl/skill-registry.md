@@ -81,9 +81,13 @@ Inyectado por el orchestrator como `## Project Standards (auto-resolved)` en sub
 
 ### Stack
 
-- React 18.3.1 + Vite 8.0.11 + TypeScript 5.9.3
+- React 18.3.1 + Vite 8.0.12 + TypeScript 5.9.3
 - Tailwind CSS 4.3.0 (sintaxis: `@import "tailwindcss"`, NO directivas `@tailwind`)
 - Supabase 2.105.4 (PostgreSQL + pgvector)
+- **Database project**: `smartconnect-rag` (`tysjedvujvsmrzzrmesr`, eu-west-1)
+  - Tables: `documents` (RAG with embeddings), `security_logs`, `app_settings` (n8n webhook, email, WhatsApp)
+  - Edge Functions: `gemini-embedding`, `gemini-generate`, `chat-with-rag`
+  - ⚠️ `multi_tienda` is a SEPARATE project for QRIBAR digital menu, NOT the frontend DB
 - Gemini API 1.44.0 para AI
 - DOMPurify 3.4.2 para sanitización
 
