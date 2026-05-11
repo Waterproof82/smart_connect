@@ -2,17 +2,17 @@
 
 ## 🏆 Estado del Proyecto (2026-03-16)
 
-| Métrica | Score |
-|---------|-------|
-| **SOLID Principles** | 10/10 ✅ |
-| **Clean Architecture** | 10/10 ✅ |
-| **OWASP Compliance** | 10/10 ✅ |
-| **Security** | 10/10 ✅ |
+| Métrica                  | Score    |
+| ------------------------ | -------- |
+| **SOLID Principles**     | 10/10 ✅ |
+| **Clean Architecture**   | 10/10 ✅ |
+| **OWASP Compliance**     | 10/10 ✅ |
+| **Security**             | 10/10 ✅ |
 | **Accessibility (WCAG)** | 10/10 ✅ |
-| **Performance** | 10/10 ✅ |
-| **Responsive Design** | 10/10 ✅ |
-| **Design System** | 10/10 ✅ |
-| **Code Quality** | 10/10 ✅ |
+| **Performance**          | 10/10 ✅ |
+| **Responsive Design**    | 10/10 ✅ |
+| **Design System**        | 10/10 ✅ |
+| **Code Quality**         | 10/10 ✅ |
 
 **Auditoría completa:** `docs/audit/2026-03-16_ux-ui-audit-and-frontend-review.md`
 
@@ -34,7 +34,6 @@
 - [Setup Entorno Vercel](docs/VERCEL_ENV_SETUP.md)
 - [SEO Implementation](docs/SEO_IMPLEMENTATION.md)
 
-
 ## 🏗️ Arquitectura y Flujos Principales
 
 - **RAG Chatbot:** Arquitectura basada en Supabase + Gemini, con Edge Functions para embeddings y generación segura (ver: [RAG](docs/CHATBOT_RAG_ARCHITECTURE.md), [Guía RAG](docs/GUIA_IMPLEMENTACION_RAG.md)).
@@ -49,6 +48,7 @@
 ## 🔒 Security Improvements (v0.5.0)
 
 ### Security Headers (vercel.json + index.html)
+
 - ✅ **CSP:** Content-Security-Policy con whitelist de orígenes
 - ✅ **X-Content-Type-Options:** nosniff
 - ✅ **Referrer-Policy:** strict-origin-when-cross-origin
@@ -56,12 +56,14 @@
 - ✅ **HSTS:** Strict-Transport-Security header
 
 ### OWASP Compliance
+
 - ✅ **A02:2021 Cryptographic Failures:** PBKDF2 key derivation (10000 iterations)
 - ✅ **A03:2021 Injection:** DOMPurify 3.3.3, Zod validation
 - ✅ **A04:2021 Insecure Design:** Rate limiting with cleanup mechanism
 - ✅ **A07:2021 Authentication Failures:** Generic error messages, JWT validation
 
 ### Edge Functions Security
+
 - ✅ **Origin Validation:** Reject unknown origins instead of fallback
 - ✅ **Rate Limiter:** Memory cleanup to prevent unbounded growth
 - ✅ **CORS:** Strict whitelist validation
@@ -74,16 +76,16 @@ Este proyecto ha pasado por un proceso sistemático de mejora de calidad usando 
 
 ### Skills Ejecutados
 
-| Skill | Propósito | Mejoras Clave |
-|-------|-----------|---------------|
-| **teach-impeccable** | Contexto de diseño | Creado `.impeccable.md` con tokens de diseño, tipografía, colores |
-| **distill** | Simplificar | Eliminadas animaciones excesivas, código redundante |
-| **polish** | Accesibilidad | Focus rings, aria-describedby, role="alert", spinners |
-| **optimize** | Rendimiento | Lazy loading, Suspense, código splitting |
-| **harden** | Resiliencia | ErrorBoundary, overflow handling, text truncation |
-| **audit** | Detección issues | 36 instances de gray-400/500, text-[10px] |
-| **normalize** | Consistencia | Reemplazado gray-* → neutral-* en todos los componentes |
-| **adapt** | Responsive | Touch targets 44px, landscape support, viewport meta |
+| Skill                | Propósito          | Mejoras Clave                                                    |
+| -------------------- | ------------------ | ---------------------------------------------------------------- |
+| **teach-impeccable** | Contexto de diseño | Design context integrado en `CLAUDE.md` (antes `.impeccable.md`) |
+| **distill**          | Simplificar        | Eliminadas animaciones excesivas, código redundante              |
+| **polish**           | Accesibilidad      | Focus rings, aria-describedby, role="alert", spinners            |
+| **optimize**         | Rendimiento        | Lazy loading, Suspense, código splitting                         |
+| **harden**           | Resiliencia        | ErrorBoundary, overflow handling, text truncation                |
+| **audit**            | Detección issues   | 36 instances de gray-400/500, text-[10px]                        |
+| **normalize**        | Consistencia       | Reemplazado gray-_ → neutral-_ en todos los componentes          |
+| **adapt**            | Responsive         | Touch targets 44px, landscape support, viewport meta             |
 
 ### Mejoras de Accesibilidad (WCAG 2.1)
 
@@ -109,12 +111,13 @@ Este proyecto ha pasado por un proceso sistemático de mejora de calidad usando 
 
 ### Mejoras de Diseño
 
-- ✅ **Design tokens:** Colores neutral-*, no gray-*
+- ✅ **Design tokens:** Colores neutral-_, no gray-_
 - ✅ **Text sizing:** text-xs → text-sm (mínimo 12px→14px legible)
 - ✅ **Consistencia:** Espaciado, bordes, sombras unificados
 - ✅ **Dark/Light mode:** Soporte completo con CSS variables
 
 ---
+
 ```
 smart-connect/
 ├── src/
@@ -154,10 +157,12 @@ smart-connect/
 ### Scope Rule (Regla de Alcance)
 
 **SHARED SCOPE (Global):**
+
 - `/src/core/*` - Lógica de negocio compartida
 - `/src/shared/*` - Utilidades, componentes y configuración global
 
 **LOCAL SCOPE (Por Feature):**
+
 - `/src/features/[feature-name]/` - Lógica específica de cada funcionalidad
 - Cada feature tiene sus propias capas: `presentation/`, `domain/`, `data/`
 
@@ -178,7 +183,6 @@ smart-connect/
    - Data sources (API, Local Storage)
    - Modelos de datos
 
-
 ## 🤖 Sistema RAG (Retrieval-Augmented Generation)
 
 El chatbot utiliza una arquitectura **RAG vectorial** para responder preguntas basándose exclusivamente en la base de conocimiento del negocio:
@@ -192,6 +196,7 @@ El chatbot utiliza una arquitectura **RAG vectorial** para responder preguntas b
 ```
 
 **Flujo:**
+
 1. El usuario envía una pregunta al chatbot
 2. La Edge Function `chat-with-rag` genera un **embedding vectorial** (768 dimensiones) de la query usando `gemini-embedding-001`
 3. Se realiza una **búsqueda por similitud coseno** contra los documentos almacenados en PostgreSQL con `pgvector`
@@ -199,6 +204,7 @@ El chatbot utiliza una arquitectura **RAG vectorial** para responder preguntas b
 5. `gemini-2.5-flash` genera una respuesta basada **únicamente** en el contexto recuperado
 
 **Componentes clave:**
+
 - **Embeddings:** Modelo `gemini-embedding-001` → vectores de 768 dimensiones
 - **Vector Store:** Supabase PostgreSQL + extensión `pgvector` con índice IVFFlat
 - **Funciones SQL:** `match_documents` y `match_documents_by_source` (búsqueda por similitud coseno)
@@ -228,6 +234,7 @@ El formulario de contacto de la landing page dispara un **webhook n8n** que ejec
 ```
 
 **Flujo:**
+
 1. El usuario envía el formulario de contacto (nombre, empresa, email, servicio, mensaje)
 2. El webhook n8n recibe los datos y los envía a **Gemini 2.5 Flash** para clasificación
 3. La IA analiza el lead y devuelve: temperatura (Alta/Media/Baja), sentimiento, palabras clave y nivel de confianza
@@ -290,7 +297,6 @@ npm run lint            # Linter
 npm run type-check      # Verificación de tipos TypeScript
 ```
 
-
 ## 🧪 Metodología TDD
 
 ### Red → Green → Refactor
@@ -300,7 +306,6 @@ npm run type-check      # Verificación de tipos TypeScript
 3. **REFACTOR:** Mejora la calidad sin cambiar el comportamiento
 
 Ver `/tests/README.md` para más detalles.
-
 
 ## 🔐 Seguridad (OWASP Top 10)
 
@@ -314,39 +319,40 @@ Ver `/tests/README.md` para más detalles.
 - ✅ Headers de seguridad
 - ✅ Validación de datos sensibles
 
-
 ## 🚀 Getting Started
 
 1. **Instalar dependencias:**
+
 ```bash
 npm install
 ```
 
 2. **Configurar variables de entorno:**
+
 ```bash
 cp .env.example .env
 # Editar .env con tus credenciales
 ```
 
 3. **Ejecutar tests:**
+
 ```bash
 npm test
 ```
 
 4. **Iniciar desarrollo:**
+
 ```bash
 npm run dev
 ```
 
-
 ## 📚 Path Aliases
 
 ```typescript
-import { Button } from '@shared/components';           // Shared
-import { Hero } from '@features/landing/presentation'; // Feature
-import { Lead } from '@core/domain/entities';          // Core
+import { Button } from "@shared/components"; // Shared
+import { Hero } from "@features/landing/presentation"; // Feature
+import { Lead } from "@core/domain/entities"; // Core
 ```
-
 
 ## 📝 Versionado, Changelog y Auditoría
 
@@ -355,6 +361,7 @@ import { Lead } from '@core/domain/entities';          // Core
 - Protocolo de actualización de versiones en `package.json`, `CHANGELOG.md` y archivos de plataforma
 
 Este proyecto sigue las mejores prácticas:
+
 - Clean Architecture
 - Test-Driven Development (TDD)
 - Security by Design

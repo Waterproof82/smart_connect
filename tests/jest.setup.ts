@@ -10,6 +10,44 @@ if (!process.env.VITE_SUPABASE_ANON_KEY && process.env.SUPABASE_ANON_KEY) {
   process.env.VITE_SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
 }
 
+// Mock Supabase
+jest.mock("@supabase/supabase-js", () => {
+  const mockSupabase = {
+    createClient: jest.fn(() => ({
+      from: jest.fn((_tableName) => ({
+        insert: jest.fn().mockReturnThis(),
+        select: jest.fn().mockReturnThis(),
+        update: jest.fn().mockReturnThis(),
+        delete: jest.fn().mockReturnThis(),
+        eq: jest.fn().mockReturnThis(),
+        single: jest.fn().mockResolvedValue({
+          data: { id: "test-doc-id", content: "Test document" },
+          error: null,
+        }),
+      })),
+      auth: {
+        signUp: jest.fn().mockResolvedValue({
+          data: { user: { id: "test-user-id" } },
+          error: null,
+        }),
+        signInWithPassword: jest.fn().mockResolvedValue({
+          data: { user: { id: "test-user-id" } },
+          error: null,
+        }),
+        signOut: jest.fn().mockResolvedValue({ error: null }),
+        getSession: jest.fn().mockResolvedValue({
+          data: { user: { id: "test-user-id" } },
+          error: null,
+        }),
+        getUser: jest
+          .fn()
+          .mockResolvedValue({ data: { id: "test-user-id" }, error: null }),
+      },
+    })),
+  };
+  return mockSupabase;
+});
+
 // Mock environment variables
 jest.mock("@shared/utils/envMode", () => ({
   getEnvMode: () => "test",
@@ -25,19 +63,17 @@ jest.mock("@shared/config/env.config", () => ({
   },
 }));
 
-// Mock DOMPurify
-jest.mock("dompurify", () => {
-  return require("./__mocks__/dompurify");
-});
-
 // Mock IntersectionObserver
 globalThis.IntersectionObserver = class IntersectionObserver {
-  disconnect(): void {}
-  observe(): void {}
-  takeRecords(): IntersectionObserverEntry[] {
+  root = null;
+  rootMargin = "";
+  thresholds = [];
+  disconnect() {}
+  observe() {}
+  takeRecords() {
     return [];
   }
-  unobserve(): void {}
+  unobserve() {}
 };
 
 // Mock window object for Node.js environment
@@ -67,5 +103,6 @@ if (!globalThis.crypto) {
   globalThis.crypto = {} as Crypto;
 }
 if (!globalThis.crypto.randomUUID) {
-  globalThis.crypto.randomUUID = () => "test-uuid";
+  globalThis.crypto.randomUUID = () =>
+    "test-uuid" as `${string}-${string}-${string}-${string}-${string}`;
 }

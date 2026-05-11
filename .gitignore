@@ -38,6 +38,10 @@ Thumbs.db
 # Claude Code local settings
 .claude/settings.local.json
 
+# Local audit reports (Lighthouse, etc)
+*-report.html
+*report.html
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

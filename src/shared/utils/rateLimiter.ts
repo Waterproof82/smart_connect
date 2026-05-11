@@ -10,6 +10,9 @@
 
 import { createSecurityLogger } from '@core/domain/usecases/NoOpSecurityLogger';
 
+// Singleton instance for logging security events
+const securityLogger = createSecurityLogger();
+
 /**
  * Rate limit configuration
  */
@@ -39,7 +42,7 @@ interface RequestEntry {
  */
 export class RateLimiter {
   private readonly requests: Map<string, RequestEntry> = new Map();
-  private readonly cleanupInterval: NodeJS.Timeout;
+  private cleanupInterval: ReturnType<typeof setInterval>;
 
   constructor() {
     // Cleanup expired entries every 5 minutes
@@ -90,7 +93,7 @@ export class RateLimiter {
     // Check if limit exceeded
     if (entry.timestamps.length >= finalConfig.maxRequests) {
       // Log security event
-      createSecurityLogger().logRateLimitExceeded({
+       securityLogger.logRateLimitExceeded({
         userId: identifier,
         endpoint: 'rate-limit',
         limit: finalConfig.maxRequests,

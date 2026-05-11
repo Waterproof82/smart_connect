@@ -9,7 +9,7 @@ import { getAppSettings } from '@shared/services/settingsService';
 
 let _container: ReturnType<typeof createChatbotContainer> | null = null;
 const getContainer = () => {
-  if (!_container) _container = createChatbotContainer(supabase);
+  _container ??= createChatbotContainer(supabase);
   return _container;
 };
 
@@ -30,7 +30,7 @@ export const ExpertAssistant: React.FC = () => {
   const [whatsappPhone, setWhatsappPhone] = useState<string>('');
   const scrollRef = useRef<HTMLDivElement>(null);
   const toggleBtnRef = useRef<HTMLButtonElement>(null);
-  const modalRef = useRef<HTMLDivElement>(null);
+  const modalRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
     const fetchWhatsApp = async () => {
@@ -52,8 +52,33 @@ export const ExpertAssistant: React.FC = () => {
 
   useEffect(() => {
     if (isOpen && modalRef.current) {
-      const firstFocusable = modalRef.current.querySelector<HTMLElement>('button, input, [tabindex]:not([tabindex="-1"])');
+      const dialog = modalRef.current;
+      const firstFocusable = dialog.querySelector<HTMLElement>('button, input, [tabindex]:not([tabindex="-1"])');
       setTimeout(() => firstFocusable?.focus(), 50);
+
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') {
+          setIsOpen(false);
+          toggleBtnRef.current?.focus();
+        }
+        if (e.key === 'Tab') {
+          const focusable = dialog.querySelectorAll<HTMLElement>('button, input, [tabindex]:not([tabindex="-1"])');
+          const first = focusable[0];
+          const last = focusable[focusable.length - 1];
+          if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last?.focus();
+          } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first?.focus();
+          }
+        }
+      };
+
+      dialog.addEventListener('keydown', handleKeyDown);
+      return () => {
+        dialog.removeEventListener('keydown', handleKeyDown);
+      };
     }
   }, [isOpen]);
 
@@ -107,21 +132,9 @@ export const ExpertAssistant: React.FC = () => {
   return (
     <div className="fixed bottom-4 right-4 sm:bottom-8 sm:right-8 z-[100] flex flex-col items-end gap-4">
       {isOpen && (
-        <div
+        <dialog
           ref={modalRef}
-          role="dialog"
-          aria-modal="true"
           aria-label="Chat con asistente experto"
-          onKeyDown={(e) => {
-            if (e.key === 'Escape') { setIsOpen(false); toggleBtnRef.current?.focus(); }
-            if (e.key === 'Tab') {
-              const focusable = e.currentTarget.querySelectorAll<HTMLElement>('button, input, [tabindex]:not([tabindex="-1"])');
-              const first = focusable[0] as HTMLElement;
-              const last = focusable[focusable.length - 1] as HTMLElement;
-              if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
-              else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
-            }
-          }}
           className="mb-4 w-[85vw] sm:w-[90vw] md:w-[400px] h-[60vh] sm:h-[550px] max-h-[calc(100dvh-120px)] sm:max-h-[80vh] bg-[var(--color-bg)] border border-[var(--color-border)] rounded-3xl shadow-lg flex flex-col overflow-hidden"
         >
           <div className="p-4 bg-[var(--color-accent)] flex items-center justify-between">
@@ -197,7 +210,7 @@ export const ExpertAssistant: React.FC = () => {
               </button>
             </div>
           </div>
-        </div>
+        </dialog>
       )}
 
       <div className="flex items-center gap-3">
