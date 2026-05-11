@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Cpu,
   ChevronDown,
@@ -137,6 +137,18 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [focusedDropdownIndex, setFocusedDropdownIndex] = useState<number>(-1);
+
+  // Close mobile menu on Escape key
+  useEffect(() => {
+    if (!isMobileMenuOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsMobileMenuOpen(false);
+      }
+    };
+    globalThis.addEventListener("keydown", handleKeyDown);
+    return () => globalThis.removeEventListener("keydown", handleKeyDown);
+  }, [isMobileMenuOpen]);
 
   const isActive = (href: string, internal?: boolean) => {
     if (internal) return location.pathname === href;
@@ -350,18 +362,18 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
 
         {/* Mobile Menu Drawer */}
         {isMobileMenuOpen && (
-          <>
-            <div
-              className="fixed inset-0 z-[200] bg-black/80 backdrop-blur-sm"
+          <dialog
+            className="fixed inset-0 z-[200] w-full h-full bg-transparent !flex justify-end m-0"
+            open={isMobileMenuOpen}
+          >
+            <button
+              className="absolute inset-0 bg-black/80 backdrop-blur-sm cursor-default border-none"
               onClick={() => setIsMobileMenuOpen(false)}
               aria-hidden="true"
+              tabIndex={-1}
+              type="button"
             />
-            <dialog
-              className="fixed inset-y-0 right-0 z-[200] w-[80vw] max-w-xs bg-[var(--color-bg)] border-l border-[var(--color-border)] p-6 flex flex-col gap-6 shadow-lg animate-in slide-in-from-right"
-              open={isMobileMenuOpen}
-              onCancel={() => setIsMobileMenuOpen(false)}
-              aria-label="Menú de navegación"
-            >
+            <div className="relative w-[80vw] max-w-xs h-full bg-[var(--color-bg)] border-l border-[var(--color-border)] p-4 flex flex-col gap-4 shadow-lg animate-in slide-in-from-right overflow-y-auto z-10">
               <div className="flex items-center justify-between">
                 <span className="font-bold text-xl text-default">
                   SmartConnect{" "}
@@ -444,8 +456,8 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
                   <span>Admin</span>
                 </Link>
               </nav>
-            </dialog>
-          </>
+            </div>
+          </dialog>
         )}
       </div>
     </nav>

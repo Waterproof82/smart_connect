@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Helmet } from 'react-helmet';
-import { Hero } from './components/Hero';
-import { Features } from './components/Features';
-import { Contact } from './components/Contact';
-import { SuccessStats } from './components/SuccessStats';
-import { Navbar } from './components/Navbar';
-import { useLanguage } from '../../../shared/context/LanguageContext';
+import React, { useState, useEffect } from "react";
+import { Helmet } from "react-helmet";
+import { Hero } from "./components/Hero";
+import { Features } from "./components/Features";
+import { Contact } from "./components/Contact";
+import { SuccessStats } from "./components/SuccessStats";
+import { Navbar } from "./components/Navbar";
+import { useLanguage } from "../../../shared/context/LanguageContext";
 
 // Add missing translation keys
-declare module '../../../shared/context/LanguageContext' {
+declare module "../../../shared/context/LanguageContext" {
   interface Translation {
     seoTitle: string;
     seoDescription: string;
@@ -24,8 +24,8 @@ const LandingContainer: React.FC = () => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    globalThis.addEventListener("scroll", handleScroll);
+    return () => globalThis.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
@@ -42,41 +42,50 @@ const LandingContainer: React.FC = () => {
         <meta name="twitter:title" content={t.seoTitle} />
         <meta name="twitter:description" content={t.seoDescription} />
         <meta name="twitter:image" content="https://smartconnect.ai/logo.png" />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "LocalBusiness",
-          "name": "SmartConnect AI",
-          "description": t.seoDescription,
-          "url": "https://smartconnect.ai",
-          "logo": {
-            "@type": "ImageObject",
-            "url": "https://smartconnect.ai/logo.png",
-            "width": 512,
-            "height": 512
-          },
-          "telephone": "+34123456789",
-          "address": {
-            "@type": "PostalAddress",
-            "streetAddress": "Calle Ejemplo 123",
-            "addressLocality": "Madrid",
-            "addressRegion": "Madrid",
-            "postalCode": "28001",
-            "addressCountry": "ES"
-          },
-          "serviceType": ["Software Development", "AI Solutions", "Digital Marketing"],
-          "sameAs": [
-            "https://twitter.com/smartconnectai",
-            "https://linkedin.com/company/smartconnectai"
-          ],
-          "offers": {
-            "@type": "Offer",
-            "name": "QRIBAR",
-            "description": t.seoProductDescription,
-            "url": "https://smartconnect.ai/qribar",
-            "priceCurrency": "EUR",
-            "availability": "https://schema.org/InStock"
-          }
-        }) }} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "LocalBusiness",
+              name: "SmartConnect AI",
+              description: t.seoDescription,
+              url: "https://smartconnect.ai",
+              logo: {
+                "@type": "ImageObject",
+                url: "https://smartconnect.ai/logo.png",
+                width: 512,
+                height: 512,
+              },
+              telephone: "+34123456789",
+              address: {
+                "@type": "PostalAddress",
+                streetAddress: "Calle Ejemplo 123",
+                addressLocality: "Madrid",
+                addressRegion: "Madrid",
+                postalCode: "28001",
+                addressCountry: "ES",
+              },
+              serviceType: [
+                "Software Development",
+                "AI Solutions",
+                "Digital Marketing",
+              ],
+              sameAs: [
+                "https://twitter.com/smartconnectai",
+                "https://linkedin.com/company/smartconnectai",
+              ],
+              offers: {
+                "@type": "Offer",
+                name: "QRIBAR",
+                description: t.seoProductDescription,
+                url: "https://smartconnect.ai/qribar",
+                priceCurrency: "EUR",
+                availability: "https://schema.org/InStock",
+              },
+            }),
+          }}
+        />
       </Helmet>
       <Navbar scrolled={scrolled} />
       <Hero />
