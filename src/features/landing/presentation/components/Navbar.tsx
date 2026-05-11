@@ -241,6 +241,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
         {/* Navigation - Desktop */}
         <div className="hidden md:flex items-center gap-10 text-sm font-semibold text-muted">
           <div
+            role="none"
             className="relative group outline-none"
             onMouseEnter={() => setIsDropdownOpen(true)}
             onMouseLeave={() => {
