@@ -216,6 +216,17 @@ Leer `.opencode/active-profile.json` → usar `profiles/free.json`
 - sdd-apply requiere confirmación explícita del usuario
 - Si health.json tiene alertas CRITICAL → detener y notificar
 
+### SDD Enforcement (para el Gentle-Orchestrator)
+
+El orchestrator DEBE seguir el **SDD Enforcement Threshold** definido en `.atl/skill-registry.md` → Compact Rules. En resumen:
+
+- **1-3 archivos + cambio mecánico** → inline OK
+- **4+ archivos O lógica nueva O 2+ feature dirs** → `/sdd-new` obligatorio
+- Fixes de audit y batches → siempre SDD
+- En duda → SDD gana
+
+Esta regla se auto-inyecta via skill resolution al inicio de cada sesión.
+
 ### SEO Implementation for Landing Page (i18n)
 
 **Fases ejecutadas exitosamente:**

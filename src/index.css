@@ -179,7 +179,8 @@
   }
 
   .glow-blue {
-    box-shadow: 0 0 60px rgba(59, 130, 246, 0.15);
+    box-shadow: 0 0 60px
+      color-mix(in oklch, var(--color-primary) 15%, transparent);
   }
 }
 
@@ -233,19 +234,21 @@
   }
 }
 
-.animate-drift {
-  will-change: transform;
-  animation: drift 15s ease-in-out infinite;
-}
+@media (prefers-reduced-motion: no-preference) {
+  .animate-drift {
+    will-change: transform;
+    animation: drift 15s ease-in-out infinite;
+  }
 
-.animate-drift-slow {
-  will-change: transform;
-  animation: drift-slow 20s ease-in-out infinite;
-}
+  .animate-drift-slow {
+    will-change: transform;
+    animation: drift-slow 20s ease-in-out infinite;
+  }
 
-.animate-float-fancy {
-  will-change: transform;
-  animation: float-fancy 6s ease-in-out infinite;
+  .animate-float-fancy {
+    will-change: transform;
+    animation: float-fancy 6s ease-in-out infinite;
+  }
 }
 
 .reveal-1 {

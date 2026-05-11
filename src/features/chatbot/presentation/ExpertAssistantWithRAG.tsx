@@ -195,7 +195,7 @@ export const ExpertAssistant: React.FC = () => {
                 setIsOpen(false);
                 toggleBtnRef.current?.focus();
               }}
-              className="text-[var(--color-on-accent-muted)] hover:text-[var(--color-on-accent)] focus:outline-none focus:ring-2 focus:ring-[var(--color-on-accent-muted)] p-2 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-[var(--color-overlay-medium)] transition-colors"
+              className="text-[var(--color-on-accent-muted)] hover:text-[var(--color-on-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-on-accent-muted)] p-2 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-[var(--color-overlay-medium)] transition-colors"
               aria-label="Cerrar chat"
             >
               <X className="w-5 h-5" />
