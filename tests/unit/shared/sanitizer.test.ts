@@ -22,22 +22,21 @@ jest.mock("dompurify", () => {
     if (!config?.ALLOWED_TAGS || config.ALLOWED_TAGS.length === 0) {
       clean = clean.replace(/<[^>]*>/g, "");
     } else {
-      const allowedTags = config.ALLOWED_TAGS || [];
-      clean = clean.replace(
-        new RegExp(`<(/?)(${allowedTags.join("|")})[^>]*>`, "g"),
-        (match) => {
-          const isClosing = match.startsWith("</");
-          const tagName = match.match(/<([^>]+)/)?.[1] || "";
-          return isClosing ? `</${tagName}>` : `<${tagName}>`;
-        },
-      );
+      const allowedSet = new Set(config.ALLOWED_TAGS);
+      clean = clean.replace(/<\/?(\w+)[^>]*>/g, (match, tagName) => {
+        if (allowedSet.has(tagName.toLowerCase())) {
+          return match;
+        }
+        return ""; // strip disallowed tags, keep content
+      });
     }
     return clean;
   };
 
+  // Factory pattern: matches DOMPurify(window) in sanitizer.ts
   return {
     __esModule: true,
-    default: { sanitize },
+    default: () => ({ sanitize }),
   };
 });
 
