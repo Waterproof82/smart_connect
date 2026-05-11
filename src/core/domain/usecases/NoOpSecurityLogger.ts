@@ -6,10 +6,10 @@
  * When available, creates a SecurityLogger with Supabase persistence.
  */
 
-import { SecurityLogger } from './SecurityLogger';
-import type { ISecurityLogPersistence } from './SecurityLogger';
-import { ENV } from '@shared/config/env.config';
-import { supabase } from '../../../shared/supabaseClient';
+import { SecurityLogger } from "./SecurityLogger";
+import type { ISecurityLogPersistence } from "./SecurityLogger";
+import { ENV } from "@shared/config/env.config";
+import { supabase } from "../../../shared/supabaseClient";
 
 /**
  * Creates a Supabase-backed persistence adapter for security logs.
@@ -20,17 +20,17 @@ function createSupabasePersistence(): ISecurityLogPersistence {
   return {
     async insert(log: Record<string, unknown>) {
       try {
-        const result = await supabase.from('log_errors').insert(log);
+        const result = await supabase.from("security_logs").insert(log);
         const { error } = result as { error: unknown };
-        
+
         let errorMessage: string | null = null;
-        if (error && typeof error === 'object' && 'message' in error) {
+        if (error && typeof error === "object" && "message" in error) {
           const errorObj = error as { message?: unknown };
-          if (typeof errorObj.message === 'string') {
+          if (typeof errorObj.message === "string") {
             errorMessage = errorObj.message;
           }
         }
-        
+
         return { error: errorMessage ? { message: errorMessage } : null };
       } catch (e) {
         const message = e instanceof Error ? e.message : String(e);

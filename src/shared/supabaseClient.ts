@@ -13,7 +13,7 @@ const createMockClient = () => {
         physical_address: "",
       },
     },
-    log_errors: {},
+    security_logs: {},
     auth: {},
   };
 
