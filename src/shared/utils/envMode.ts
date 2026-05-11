@@ -1,18 +1,13 @@
 // envMode.ts
-// Universal environment mode resolver for Node, Jest, Vite, etc.
+// Universal environment mode resolver for Vite browser environments.
+// Use import.meta.env.MODE - the standard Vite way.
 
 export function getEnvMode(): string {
-  // Vite environment (browser) - check import.meta.env first
-  const viteMode = import.meta?.env?.MODE;
-  if (viteMode) {
-    return viteMode;
+  try {
+    const mode = import.meta.env.MODE;
+    if (mode) return mode;
+  } catch {
+    // import.meta.env not available (shouldn't happen in Vite)
   }
-  
-  // Node.js environment (scripts, tests)
-  if (typeof process !== 'undefined' && process?.env?.NODE_ENV) {
-    return process.env.NODE_ENV;
-  }
-  
-  // Fallback to development for local dev (safer default than production)
-  return 'development';
+  return "development";
 }

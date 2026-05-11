@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Cpu, ChevronDown, Code2, Settings2, Smartphone, Utensils, X, Menu, ArrowLeft, TrendingDown, TrendingUp, Mail, Eye, BarChart3, MonitorPlay, Bell, ShoppingCart, Globe, FileText, Phone, UserX, Search, MessageSquare } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useLanguage } from '@shared/context/LanguageContext';
+import LanguageSelector from '@shared/components/LanguageSelector';
 import { getAppSettings } from '@shared/services/settingsService';
 
 const Navbar: React.FC<{ scrolled?: boolean }> = ({ scrolled = false }) => {
@@ -153,9 +154,10 @@ const Navbar: React.FC<{ scrolled?: boolean }> = ({ scrolled = false }) => {
             </div>
           </div>
 
-          <Link to="/#exito" className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline focus-visible:outline-none transition-colors">{t.navSuccess}</Link>
-          <Link to="/#contacto" className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline focus-visible:outline-none transition-colors">{t.navContact}</Link>
-        </div>
+           <Link to="/#exito" className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline focus-visible:outline-none transition-colors">{t.navSuccess}</Link>
+           <Link to="/#contacto" className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline focus-visible:outline-none transition-colors">{t.navContact}</Link>
+           <LanguageSelector />
+         </div>
 
         {/* Hamburger for mobile */}
         <button
@@ -193,6 +195,7 @@ const Navbar: React.FC<{ scrolled?: boolean }> = ({ scrolled = false }) => {
                 <a href="/#soluciones" className="flex items-center gap-3 p-3 text-muted hover:bg-[var(--color-surface)] rounded-xl transition-colors" onClick={() => setIsMobileMenuOpen(false)}>{t.navSolutions}</a>
                 <a href="/#exito" className="flex items-center gap-3 p-3 text-muted hover:bg-[var(--color-surface)] rounded-xl transition-colors" onClick={() => setIsMobileMenuOpen(false)}>{t.navSuccess}</a>
                 <a href="/#contacto" className="flex items-center gap-3 p-3 text-muted hover:bg-[var(--color-surface)] rounded-xl transition-colors" onClick={() => setIsMobileMenuOpen(false)}>{t.navContact}</a>
+                <LanguageSelector />
               </div>
             </div>
           </div>

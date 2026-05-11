@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useCallback, ReactNode, useMemo } from 'react';
 
 type Language = 'es' | 'en';
 
@@ -1075,7 +1075,7 @@ const LanguageContext = createContext<LanguageContextValue | undefined>(undefine
 
 export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [language, setLanguage] = useState<Language>(() => {
-    if (typeof window !== 'undefined') {
+    if (globalThis.window !== undefined) {
       const saved = localStorage.getItem('language');
       if (saved === 'en' || saved === 'es') return saved;
     }
@@ -1084,16 +1084,16 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
 
   const handleSetLanguage = useCallback((lang: Language) => {
     setLanguage(lang);
-    if (typeof window !== 'undefined') {
+    if (globalThis.window !== undefined) {
       localStorage.setItem('language', lang);
     }
   }, []);
 
-  const value: LanguageContextValue = {
+  const value: LanguageContextValue = useMemo(() => ({
     language,
     setLanguage: handleSetLanguage,
     t: translations[language]
-  };
+  }), [language, handleSetLanguage]);
 
   return (
     <LanguageContext.Provider value={value}>

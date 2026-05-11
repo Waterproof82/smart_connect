@@ -1,0 +1,74 @@
+{
+  "last_check": "2026-05-08T11:58:10.485Z",
+  "summary": {
+    "total_checked": 8,
+    "ok": 8,
+    "critical": 0,
+    "warnings": 0
+  },
+  "mistral_results": [
+    {
+      "ok": true,
+      "status": "✅ OK",
+      "code": 200,
+      "checked_at": "2026-05-08T11:57:58.291Z",
+      "model": "mistral/ministral-8b-2512"
+    },
+    {
+      "ok": true,
+      "status": "✅ OK",
+      "code": 200,
+      "checked_at": "2026-05-08T11:57:58.709Z",
+      "model": "mistral/mistral-medium-2505"
+    },
+    {
+      "ok": true,
+      "status": "✅ OK",
+      "code": 200,
+      "checked_at": "2026-05-08T11:57:58.980Z",
+      "model": "mistral/open-mistral-nemo"
+    },
+    {
+      "ok": true,
+      "status": "✅ OK",
+      "code": 200,
+      "checked_at": "2026-05-08T11:58:09.162Z",
+      "model": "mistral/mistral-large-2512"
+    },
+    {
+      "ok": true,
+      "status": "✅ OK",
+      "code": 200,
+      "checked_at": "2026-05-08T11:58:09.657Z",
+      "model": "mistral/devstral-2512"
+    },
+    {
+      "ok": true,
+      "status": "✅ OK",
+      "code": 200,
+      "checked_at": "2026-05-08T11:58:09.991Z",
+      "model": "mistral/pixtral-large-2411"
+    },
+    {
+      "ok": true,
+      "status": "✅ OK",
+      "code": 200,
+      "checked_at": "2026-05-08T11:58:10.218Z",
+      "model": "mistral/pixtral-12b-2409"
+    },
+    {
+      "ok": true,
+      "status": "✅ OK",
+      "code": 200,
+      "checked_at": "2026-05-08T11:58:10.485Z",
+      "model": "mistral/codestral-latest"
+    }
+  ],
+  "orchestrator_model": {
+    "ok": true,
+    "status": "✅ OK",
+    "code": 200,
+    "checked_at": "2026-05-08T11:57:57.973Z",
+    "model": "mistral/ministral-8b-2512"
+  }
+}

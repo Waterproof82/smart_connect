@@ -33,24 +33,50 @@ const LandingContainer: React.FC = () => {
       <Helmet>
         <title>{t.seoTitle}</title>
         <meta name="description" content={t.seoDescription} />
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Product",
+        <meta property="og:title" content={t.seoTitle} />
+        <meta property="og:description" content={t.seoDescription} />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://smartconnect.ai" />
+        <meta property="og:image" content="https://smartconnect.ai/logo.png" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={t.seoTitle} />
+        <meta name="twitter:description" content={t.seoDescription} />
+        <meta name="twitter:image" content="https://smartconnect.ai/logo.png" />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "LocalBusiness",
+          "name": "SmartConnect AI",
+          "description": t.seoDescription,
+          "url": "https://smartconnect.ai",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://smartconnect.ai/logo.png",
+            "width": 512,
+            "height": 512
+          },
+          "telephone": "+34123456789",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Calle Ejemplo 123",
+            "addressLocality": "Madrid",
+            "addressRegion": "Madrid",
+            "postalCode": "28001",
+            "addressCountry": "ES"
+          },
+          "serviceType": ["Software Development", "AI Solutions", "Digital Marketing"],
+          "sameAs": [
+            "https://twitter.com/smartconnectai",
+            "https://linkedin.com/company/smartconnectai"
+          ],
+          "offers": {
+            "@type": "Offer",
             "name": "QRIBAR",
             "description": t.seoProductDescription,
-            "brand": {
-              "@type": "Brand",
-              "name": "SmartConnect AI"
-            },
-            "offers": {
-              "@type": "Offer",
-              "url": "https://smartconnect.ai/qribar",
-              "priceCurrency": "EUR",
-              "availability": "https://schema.org/InStock"
-            }
-          })}
-        </script>
+            "url": "https://smartconnect.ai/qribar",
+            "priceCurrency": "EUR",
+            "availability": "https://schema.org/InStock"
+          }
+        }) }} />
       </Helmet>
       <Navbar scrolled={scrolled} />
       <Hero />

@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { Code2, Settings2, Smartphone, Utensils, ArrowUpRight, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useIntersectionObserver } from '@shared/hooks';
-import { useLanguage } from '@shared/context/LanguageContext';
+import { useLanguage, Translation } from '@shared/context/LanguageContext';
 
 const solutions = [
   {
@@ -51,6 +51,36 @@ const solutions = [
   }
 ];
 
+const getCardBackground = (itemHasImage: boolean | undefined, idx: number): string => {
+  if (itemHasImage && idx === 0) return 'bg-[var(--color-bg-alt)] lg:col-span-2 lg:row-span-2';
+  if (idx === 0) return 'bg-[var(--color-surface)] lg:col-span-2 lg:row-span-2';
+  return 'bg-[var(--color-bg-alt)]';
+};
+
+const getCardHeadingClass = (idx: number): string => {
+  return `font-bold mb-4 text-default ${idx === 0 ? 'text-3xl lg:text-4xl' : 'text-xl lg:text-2xl'}`;
+};
+
+const getCardDescClass = (idx: number): string => {
+  return `text-muted leading-relaxed mb-6 ${idx === 0 ? 'text-lg' : ''}`;
+};
+
+const getIconContainerClass = (idx: number): string => {
+  return `relative z-10 mb-6 w-14 h-14 bg-[var(--color-surface)] rounded-2xl flex items-center justify-center motion-safe:group-hover:scale-110 transition-transform ${idx === 0 ? 'lg:w-16 lg:h-16' : ''}`;
+};
+
+const getLinkText = (item: typeof solutions[0], t: Translation): string => {
+  if (item.external) return t.featuresVisit;
+  if (item.internal) return t.featuresDetails;
+  return t.featuresContact;
+};
+
+const getLinkHref = (item: typeof solutions[0]): string => {
+  if (item.internal && item.route) return item.route;
+  if (item.external && item.href) return item.href;
+  return `#contacto?servicio=${encodeURIComponent(item.serviceValue)}`;
+};
+
 const SoftwareIAAbstract = () => (
   <div className="absolute inset-0 overflow-hidden rounded-3xl pointer-events-none">
     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300%] h-[300%]">
@@ -76,13 +106,13 @@ const SoftwareIAAbstract = () => (
     <div className="absolute inset-0 flex items-center justify-center">
       <div className="relative">
         <div className="flex items-center gap-1 text-[var(--color-primary)] opacity-40">
-          {[...Array(5)].map((_, i) => (
+          {BAR_HEIGHTS.map((height) => (
             <div 
-              key={i} 
+              key={`bar-height-${height}`} 
               className="w-1 bg-current rounded-full animate-pulse"
               style={{ 
-                height: `${BAR_HEIGHTS[i]}px`,
-                animationDelay: `${i * 0.15}s`
+                height: `${height}px`,
+                animationDelay: `${BAR_HEIGHTS.indexOf(height) * 0.15}s`
               }}
             />
           ))}
@@ -142,21 +172,15 @@ export const Features: React.FC = () => {
               isVisible 
                 ? 'opacity-100 translate-y-0' 
                 : 'opacity-0 translate-y-10'
-            } ${
-              item.hasImage && idx === 0
-                ? 'bg-[var(--color-bg-alt)] lg:col-span-2 lg:row-span-2' 
-                : idx === 0 
-                  ? 'bg-[var(--color-surface)] lg:col-span-2 lg:row-span-2' 
-                  : 'bg-[var(--color-bg-alt)]'
-            }`}
+            } ${getCardBackground(item.hasImage, idx)}`}
             style={{ transitionDelay: `${idx * 100}ms` }}
           >
             {item.hasImage && idx === 0 && <SoftwareIAAbstract />}
-            <div className={`relative z-10 mb-6 w-14 h-14 bg-[var(--color-surface)] rounded-2xl flex items-center justify-center motion-safe:group-hover:scale-110 transition-transform ${idx === 0 ? 'lg:w-16 lg:h-16' : ''}`}>
+            <div className={getIconContainerClass(idx)}>
               {item.icon}
             </div>
-            <h3 className={`font-bold mb-4 text-default ${idx === 0 ? 'text-3xl lg:text-4xl' : 'text-xl lg:text-2xl'}`}>{t[item.titleKey as keyof typeof t]}</h3>
-            <p className={`text-muted leading-relaxed mb-6 ${idx === 0 ? 'text-lg' : ''}`}>
+            <h3 className={getCardHeadingClass(idx)}>{t[item.titleKey as keyof typeof t]}</h3>
+            <p className={getCardDescClass(idx)}>
               {t[item.descriptionKey as keyof typeof t]}
             </p>
             
@@ -194,18 +218,13 @@ export const Features: React.FC = () => {
 )}
              
             <LinkWrapper
-              href={item.internal && item.route 
-                ? item.route
-                : item.external && item.href 
-                  ? item.href 
-                  : `#contacto?servicio=${encodeURIComponent(item.serviceValue)}`
-              }
+              href={getLinkHref(item)}
               external={item.external}
               internal={item.internal}
               route={item.route}
               className="inline-flex items-center gap-2 text-sm font-bold text-[var(--color-primary)] group-hover:text-[var(--color-primary)] transition-colors"
             >
-              <span>{item.external ? t.featuresVisit : item.internal ? t.featuresDetails : t.featuresContact}</span>
+              <span>{getLinkText(item, t)}</span>
               <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
             </LinkWrapper>
           </article>
