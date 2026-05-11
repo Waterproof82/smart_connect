@@ -1,7 +1,8 @@
-/**
- * README - Tests Structure
- * @description Guide for TDD methodology in SmartConnect AI
- */
+/\*\*
+
+- README - Tests Structure
+- @description Guide for TDD methodology in SmartConnect AI
+  \*/
 
 # 🧪 Tests Structure - TDD Methodology
 
@@ -18,29 +19,32 @@ tests/
 ## 🔴 Red → 🟢 Green → 🔵 Refactor
 
 ### 1. RED Phase (Write Failing Test)
+
 Write the test FIRST. It should fail because the functionality doesn't exist yet.
 
 ```typescript
 // tests/unit/chatbot/GenerateResponseUseCase.test.ts
-describe('GenerateResponseUseCase', () => {
-  it('should generate a response using RAG context', async () => {
-    const response = await useCase.execute('What is QRIBAR?');
-    expect(response.content).toContain('digital menu');
+describe("GenerateResponseUseCase", () => {
+  it("should generate a response using RAG context", async () => {
+    const response = await useCase.execute("What is QRIBAR?");
+    expect(response.content).toContain("digital menu");
   });
 });
 ```
 
 ### 2. GREEN Phase (Minimal Implementation)
+
 Write just enough code to make the test pass.
 
 ```typescript
 // src/features/lead-scoring/domain/usecases/calculateLeadScore.ts
 export const calculateLeadScore = (data: any) => {
-  return { temperature: 'HOT' };
+  return { temperature: "HOT" };
 };
 ```
 
 ### 3. REFACTOR Phase (Improve Quality)
+
 Improve the code without changing behavior. Tests should still pass.
 
 ```typescript
@@ -52,8 +56,8 @@ export interface LeadData {
 export const calculateLeadScore = (data: LeadData): LeadScore => {
   const score = data.engagement * 0.8 + (data.responseTime || 0) * 0.2;
   return {
-    temperature: score > 80 ? 'HOT' : score > 50 ? 'WARM' : 'COLD',
-    score
+    temperature: score > 80 ? "HOT" : score > 50 ? "WARM" : "COLD",
+    score,
   };
 };
 ```
@@ -84,9 +88,9 @@ npm test -- chatbot/GenerateResponseUseCase.test.ts
 ## 📋 Test Naming Convention
 
 ```typescript
-describe('[Feature/Component Name]', () => {
-  describe('[Method/Function Name]', () => {
-    it('should [expected behavior] when [condition]', () => {
+describe("[Feature/Component Name]", () => {
+  describe("[Method/Function Name]", () => {
+    it("should [expected behavior] when [condition]", () => {
       // Arrange
       // Act
       // Assert
@@ -94,3 +98,29 @@ describe('[Feature/Component Name]', () => {
   });
 });
 ```
+
+## ✅ Tests Implementados
+
+### Unit Tests
+
+- `MessageEntity`, `ChatSessionEntity` — validación y estados de chat
+- `AdminUser`, `Document` — entidades de dominio con reglas de negocio
+- `GenerateResponseUseCase`, `CreateDocumentUseCase`, `UpdateDocumentUseCase`, `DeleteDocumentUseCase`, `GetAllDocumentsUseCase` — casos de uso con control de acceso
+- `sanitizeInput`, `sanitizeHTML`, `sanitizeURL`, `isValidEmail`, `isValidPhone` — sanitización OWASP
+- `RateLimiter` — rate limiting por preset
+
+### Integration Tests
+
+- `documents-rls.test.ts` — 11 tests de políticas RLS (requiere Supabase real)
+
+### E2E Tests
+
+- `chatbotFlow.test.ts` — flujo RAG completo y generación sin contexto
+
+## ⏱️ Tiempos Esperados
+
+| Tipo            | Tiempo | Requisitos                 |
+| --------------- | ------ | -------------------------- |
+| **Unit tests**  | < 1s   | Ninguno (usan mocks)       |
+| **Integration** | 5-15s  | `.env.local` con Supabase  |
+| **E2E**         | 20-30s | Edge Functions desplegadas |
