@@ -350,17 +350,15 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
 
         {/* Mobile Menu Drawer */}
         {isMobileMenuOpen && (
-          <>
+          <div
+            className="fixed inset-0 z-[200] bg-black/80 backdrop-blur-sm flex justify-end"
+            role="dialog"
+            aria-modal="true"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
             <div
-              className="fixed inset-0 z-[200] bg-black/80 backdrop-blur-sm"
-              onClick={() => setIsMobileMenuOpen(false)}
-              aria-hidden="true"
-            />
-            <dialog
-              className="fixed inset-y-0 right-0 z-[200] w-[80vw] max-w-xs bg-[var(--color-bg)] border-l border-[var(--color-border)] p-6 flex flex-col gap-6 shadow-lg animate-in slide-in-from-right"
-              open={isMobileMenuOpen}
-              onCancel={() => setIsMobileMenuOpen(false)}
-              aria-label="Menú de navegación"
+              className="w-[80vw] max-w-xs h-full bg-[var(--color-bg)] border-l border-[var(--color-border)] p-4 flex flex-col gap-4 shadow-lg animate-in slide-in-from-right overflow-y-auto"
+              onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-center justify-between">
                 <span className="font-bold text-xl text-default">
@@ -444,8 +442,8 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
                   <span>Admin</span>
                 </Link>
               </nav>
-            </dialog>
-          </>
+            </div>
+          </div>
         )}
       </div>
     </nav>
