@@ -1,161 +1,20 @@
-// Mock Supabase client for development - the actual client has Node.js compatibility issues
-// Replace with real implementation when Supabase is properly configured
+/**
+ * Supabase Client - Real implementation
+ *
+ * Uses VITE_ prefixed env vars (safe to expose in the browser).
+ * Edge Functions are called via supabase.functions.invoke().
+ */
 
-const createMockClient = () => {
-  const mockData: Record<string, Record<string, unknown>> = {
-    documents: {},
-    app_settings: {
-      global: {
-        id: "global",
-        n8n_webhook_url: "",
-        contact_email: "",
-        whatsapp_phone: "",
-        physical_address: "",
-      },
-    },
-    security_logs: {},
-    auth: {},
-  };
+import { createClient } from "@supabase/supabase-js";
 
-  // Extract data array from table data
-  const getDataArray = (tableData: unknown): unknown[] => {
-    if (
-      tableData &&
-      typeof tableData === "object" &&
-      !Array.isArray(tableData)
-    ) {
-      return Object.values(tableData);
-    }
-    if (Array.isArray(tableData)) {
-      return tableData;
-    }
-    return [];
-  };
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-  // Filter items by key-value pair
-  const filterByKeyValue = (
-    items: unknown[],
-    key: string,
-    value: unknown,
-  ): unknown[] => {
-    return items.filter((item) => {
-      if (item && typeof item === "object") {
-        return (item as Record<string, unknown>)[key] === value;
-      }
-      return false;
-    });
-  };
+if (!supabaseUrl || !supabaseAnonKey) {
+  throw new Error(
+    "Missing Supabase credentials. Ensure VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are set in your .env file.",
+  );
+}
 
-  // Update records matching key-value pair
-  const updateRecords = (
-    tableDataObj: Record<string, unknown>,
-    key: string,
-    value: unknown,
-    newData: Record<string, unknown>,
-  ): Record<string, unknown> => {
-    const updated: Record<string, unknown> = {};
-    Object.entries(tableDataObj).forEach(([k, v]) => {
-      if (v && typeof v === "object") {
-        const vRecord = v as Record<string, unknown>;
-        if (vRecord[key] === value) {
-          updated[k] = { ...vRecord, ...newData };
-        } else {
-          updated[k] = v;
-        }
-      } else {
-        updated[k] = v;
-      }
-    });
-    return updated;
-  };
-
-  return {
-    from: (table: string) => {
-      return {
-        select: () => {
-          const tableData = mockData[table] || {};
-          let dataArray = getDataArray(tableData);
-
-          // Query builder with proper method chaining
-          const builder = {
-            eq: (key: string, value: unknown) => {
-              dataArray = filterByKeyValue(dataArray, key, value);
-              return builder;
-            },
-            single: () => {
-              const item = dataArray[0];
-              return Promise.resolve({ data: item || null, error: null });
-            },
-            order: () => builder,
-            range: () => builder,
-            ilike: () => builder,
-            not: () => builder,
-            is: () => builder,
-          };
-          return builder;
-        },
-        insert: (data: Record<string, unknown>) => {
-          const newRecord = { ...data, id: crypto.randomUUID() };
-          const tableDataObj = mockData[table];
-          if (
-            typeof tableDataObj === "object" &&
-            !Array.isArray(tableDataObj)
-          ) {
-            mockData[table] = {
-              ...tableDataObj,
-              [newRecord.id as string]: newRecord,
-            };
-          } else {
-            mockData[table] = { [newRecord.id as string]: newRecord };
-          }
-          return Promise.resolve({ data: [newRecord], error: null });
-        },
-        update: (data: Record<string, unknown>) => ({
-          eq: (key: string, value: unknown) => {
-            const tableDataObj = mockData[table];
-            if (
-              typeof tableDataObj === "object" &&
-              !Array.isArray(tableDataObj)
-            ) {
-              const updated = updateRecords(tableDataObj, key, value, data);
-              mockData[table] = updated;
-            }
-            return Promise.resolve({ data: [data], error: null });
-          },
-        }),
-        delete: () => ({
-          eq: () => Promise.resolve({ error: null }),
-        }),
-      };
-    },
-    functions: {
-      invoke: async (
-        _functionName: string,
-        _options?: Record<string, unknown>,
-      ) => {
-        return {
-          data: {
-            response:
-              "Soy el asistente experto de SmartConnect AI. Estoy en modo de desarrollo con respuestas simuladas. ¿En qué puedo ayudarte hoy? Puedo contarte sobre QRIBAR, nuestras soluciones de automatización con n8n, tarjetas NFC para Google Reviews, o agendar una reunión para conocer más sobre tu negocio.",
-            metadata: { sources: [], simulated: true },
-          },
-          error: null,
-        };
-      },
-    },
-    auth: {
-      getSession: () =>
-        Promise.resolve({ data: { session: null }, error: null }),
-      onAuthStateChange: () => ({
-        data: { subscription: { unsubscribe: () => {} } },
-      }),
-      signInWithPassword: () =>
-        Promise.resolve({ data: { user: null, session: null }, error: null }),
-      signOut: () => Promise.resolve({ error: null }),
-    },
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } as any;
-};
-
-export const supabase = createMockClient();
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 export type { SupabaseClient } from "@supabase/supabase-js";
