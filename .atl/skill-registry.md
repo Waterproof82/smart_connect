@@ -21,7 +21,6 @@ _Last updated: 2026-05-11_
 | File                              | Description                                                                                                |
 | --------------------------------- | ---------------------------------------------------------------------------------------------------------- |
 | `CLAUDE.md`                       | Main agent instructions, SDD orchestrator protocol, design context, brand personality, project conventions |
-| `.impeccable.md`                  | Design guidelines and persistent design context                                                            |
 | `.opencode/sdd-profile-free.json` | SDD FREE profile — model assignments per phase, blocked models, fallback logic                             |
 
 ## Deprecated Skills
