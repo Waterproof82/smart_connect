@@ -128,6 +128,21 @@ const createMockClient = () => {
         }),
       };
     },
+    functions: {
+      invoke: async (
+        _functionName: string,
+        _options?: Record<string, unknown>,
+      ) => {
+        return {
+          data: {
+            response:
+              "Soy el asistente experto de SmartConnect AI. Estoy en modo de desarrollo con respuestas simuladas. ¿En qué puedo ayudarte hoy? Puedo contarte sobre QRIBAR, nuestras soluciones de automatización con n8n, tarjetas NFC para Google Reviews, o agendar una reunión para conocer más sobre tu negocio.",
+            metadata: { sources: [], simulated: true },
+          },
+          error: null,
+        };
+      },
+    },
     auth: {
       getSession: () =>
         Promise.resolve({ data: { session: null }, error: null }),
