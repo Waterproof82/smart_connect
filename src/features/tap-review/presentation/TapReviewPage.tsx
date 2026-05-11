@@ -601,6 +601,18 @@ const Navbar: React.FC<{ scrolled?: boolean }> = ({ scrolled = false }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [focusedDropdownIndex, setFocusedDropdownIndex] = useState<number>(-1);
 
+  // Close mobile menu on Escape key
+  useEffect(() => {
+    if (!isMobileMenuOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsMobileMenuOpen(false);
+      }
+    };
+    globalThis.addEventListener("keydown", handleKeyDown);
+    return () => globalThis.removeEventListener("keydown", handleKeyDown);
+  }, [isMobileMenuOpen]);
+
   const solutions = [
     {
       id: "software-ia",
@@ -759,16 +771,18 @@ const Navbar: React.FC<{ scrolled?: boolean }> = ({ scrolled = false }) => {
         </button>
 
         {isMobileMenuOpen && (
-          <div
-            className="fixed inset-0 z-[200] bg-black/80 backdrop-blur-sm flex justify-end"
-            role="dialog"
-            aria-modal="true"
-            onClick={() => setIsMobileMenuOpen(false)}
+          <dialog
+            className="fixed inset-0 z-[200] w-full h-full bg-transparent !flex justify-end m-0"
+            open={isMobileMenuOpen}
           >
-            <div
-              className="w-[80vw] max-w-xs h-full bg-[var(--color-bg)] border-l border-[var(--color-border)] p-4 flex flex-col gap-4 shadow-lg animate-in slide-in-from-right overflow-y-auto"
-              onClick={(e) => e.stopPropagation()}
-            >
+            <button
+              className="absolute inset-0 bg-black/80 backdrop-blur-sm cursor-default border-none"
+              onClick={() => setIsMobileMenuOpen(false)}
+              aria-hidden="true"
+              tabIndex={-1}
+              type="button"
+            />
+            <div className="relative w-[80vw] max-w-xs h-full bg-[var(--color-bg)] border-l border-[var(--color-border)] p-4 flex flex-col gap-4 shadow-lg animate-in slide-in-from-right overflow-y-auto z-10">
               <div className="flex items-center justify-between">
                 <span className="font-bold text-xl text-default">
                   SmartConnect{" "}
@@ -853,7 +867,7 @@ const Navbar: React.FC<{ scrolled?: boolean }> = ({ scrolled = false }) => {
                 </a>
               </div>
             </div>
-          </div>
+          </dialog>
         )}
       </div>
     </nav>

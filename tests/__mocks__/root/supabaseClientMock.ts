@@ -17,7 +17,7 @@ const mockSupabase = {
     ),
   },
   from: (tableName: string) => {
-    if (tableName === "log_errors") {
+    if (tableName === "security_logs") {
       return {
         insert: jest
           .fn()
