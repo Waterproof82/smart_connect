@@ -1,31 +1,13 @@
 import React, { useState, useEffect } from "react";
-import {
-  Cpu,
-  ChevronDown,
-  Code2,
-  Settings2,
-  Smartphone,
-  Utensils,
-  Shield,
-  X,
-  Menu,
-} from "lucide-react";
+import { Cpu, ChevronDown, Shield, X, Menu } from "lucide-react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import LanguageSelector from "@shared/components/LanguageSelector";
 import { useLanguage } from "@shared/context/LanguageContext";
+import { SOLUTIONS } from "@shared/config/solutions";
+import { mapSolutions, SolutionItem } from "@shared/utils/solutionHelpers";
 
 interface NavbarProps {
   scrolled: boolean;
-}
-
-interface SolutionItem {
-  id: string;
-  icon: React.ReactNode;
-  title: string;
-  desc: string;
-  href: string;
-  internal?: boolean;
-  external?: boolean;
 }
 
 const DropdownMenuItem: React.FC<{
@@ -187,46 +169,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
     setIsMobileMenuOpen(false);
   };
 
-  const solutions: SolutionItem[] = [
-    {
-      id: "software-ia",
-      icon: <Code2 className="w-5 h-5 text-[var(--color-icon-blue)]" />,
-      title: t.navbarSoftwareIA,
-      desc: t.navbarSoftwareIADesc,
-      href: "#soluciones",
-    },
-    {
-      id: "automatizacion-n8n",
-      icon: <Settings2 className="w-5 h-5 text-[var(--color-icon-purple)]" />,
-      title: t.navbarAutomation,
-      desc: t.navbarAutomationDesc,
-      href: "#soluciones",
-    },
-    {
-      id: "tarjetas-nfc",
-      icon: <Smartphone className="w-5 h-5 text-[var(--color-icon-emerald)]" />,
-      title: t.navbarNFC,
-      desc: t.navbarNFCDesc,
-      href: "/tap-review",
-      internal: true,
-    },
-    {
-      id: "qribar",
-      icon: <Utensils className="w-5 h-5 text-[var(--color-icon-amber)]" />,
-      title: t.navbarQribar,
-      desc: t.navbarQribarDesc,
-      href: "https://qribar.es",
-      external: true,
-    },
-    {
-      id: "carta-digital",
-      icon: <Utensils className="w-5 h-5 text-[var(--color-icon-emerald)]" />,
-      title: t.navbarCartaDigital,
-      desc: t.navbarCartaDigitalDesc,
-      href: "/carta-digital",
-      internal: true,
-    },
-  ];
+  const solutions = mapSolutions(SOLUTIONS, t);
 
   return (
     <nav

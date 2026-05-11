@@ -1,13 +1,11 @@
-import React from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
+
 import {
   Cpu,
   ChevronDown,
-  Code2,
-  Settings2,
   Smartphone,
-  Utensils,
   X,
   Menu,
   ArrowLeft,
@@ -25,11 +23,14 @@ import {
   UserX,
   Search,
   MessageSquare,
+  Pause,
+  Play,
 } from "lucide-react";
-import { useState, useEffect } from "react";
 import { useLanguage } from "@shared/context/LanguageContext";
 import LanguageSelector from "@shared/components/LanguageSelector";
 import { getAppSettings } from "@shared/services/settingsService";
+import { SOLUTIONS } from "@shared/config/solutions";
+import { mapSolutions } from "@shared/utils/solutionHelpers";
 
 const Navbar: React.FC<{ scrolled?: boolean }> = ({ scrolled = false }) => {
   const { t } = useLanguage();
@@ -49,37 +50,10 @@ const Navbar: React.FC<{ scrolled?: boolean }> = ({ scrolled = false }) => {
     return () => globalThis.removeEventListener("keydown", handleKeyDown);
   }, [isMobileMenuOpen]);
 
-  const solutions = [
-    {
-      id: "software-ia",
-      icon: <Code2 className="w-5 h-5 text-[var(--color-icon-blue)]" />,
-      title: t.navbarSoftwareIA,
-      desc: t.navbarSoftwareIADesc,
-      href: "/#soluciones",
-    },
-    {
-      id: "automatizacion-n8n",
-      icon: <Settings2 className="w-5 h-5 text-[var(--color-icon-purple)]" />,
-      title: t.navbarAutomation,
-      desc: t.navbarAutomationDesc,
-      href: "/#soluciones",
-    },
-    {
-      id: "tarjetas-nfc",
-      icon: <Smartphone className="w-5 h-5 text-[var(--color-icon-emerald)]" />,
-      title: t.navbarNFC,
-      desc: t.navbarNFCDesc,
-      href: "/tap-review",
-    },
-    {
-      id: "qribar",
-      icon: <Utensils className="w-5 h-5 text-[var(--color-icon-amber)]" />,
-      title: t.navbarQribar,
-      desc: t.navbarQribarDesc,
-      href: "https://qribar.es",
-      external: true,
-    },
-  ];
+  const solutions = mapSolutions(SOLUTIONS, t, {
+    filterOut: ["carta-digital"],
+    hrefPrefix: "/",
+  });
 
   return (
     <nav
@@ -109,6 +83,7 @@ const Navbar: React.FC<{ scrolled?: boolean }> = ({ scrolled = false }) => {
             {t.navBack}
           </Link>
           <div
+            role="none"
             className="relative group"
             onMouseEnter={() => setIsDropdownOpen(true)}
             onMouseLeave={() => {
@@ -181,7 +156,7 @@ const Navbar: React.FC<{ scrolled?: boolean }> = ({ scrolled = false }) => {
                           onClick={(e) => {
                             e.preventDefault();
                             setIsDropdownOpen(false);
-                            window.location.href = item.href;
+                            globalThis.location.href = item.href;
                           }}
                           onKeyDown={(e) => {
                             if (e.key === "ArrowDown") {
@@ -235,7 +210,7 @@ const Navbar: React.FC<{ scrolled?: boolean }> = ({ scrolled = false }) => {
 
         {/* Hamburger for mobile */}
         <button
-          className="md:hidden flex items-center justify-center w-10 h-10 rounded-lg bg-[var(--color-accent)] text-[var(--color-on-accent)]"
+          className="md:hidden flex items-center justify-center min-w-[44px] min-h-[44px] rounded-lg bg-[var(--color-accent)] text-[var(--color-on-accent)]"
           onClick={() => setIsMobileMenuOpen(true)}
           aria-label="Abrir menú de navegación"
         >
@@ -265,7 +240,7 @@ const Navbar: React.FC<{ scrolled?: boolean }> = ({ scrolled = false }) => {
                   <LanguageSelector />
                   <button
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="text-default p-2 rounded-lg"
+                    className="text-default p-2 rounded-lg focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)]"
                     aria-label="Cerrar"
                     autoFocus
                   >
@@ -307,7 +282,7 @@ const Navbar: React.FC<{ scrolled?: boolean }> = ({ scrolled = false }) => {
                       onClick={(e) => {
                         e.preventDefault();
                         setIsMobileMenuOpen(false);
-                        window.location.href = item.href;
+                        globalThis.location.href = item.href;
                       }}
                     >
                       {item.icon}
@@ -322,7 +297,7 @@ const Navbar: React.FC<{ scrolled?: boolean }> = ({ scrolled = false }) => {
                   onClick={(e) => {
                     e.preventDefault();
                     setIsMobileMenuOpen(false);
-                    window.location.href = "/#exito";
+                    globalThis.location.href = "/#exito";
                   }}
                 >
                   {t.navSuccess}
@@ -333,7 +308,7 @@ const Navbar: React.FC<{ scrolled?: boolean }> = ({ scrolled = false }) => {
                   onClick={(e) => {
                     e.preventDefault();
                     setIsMobileMenuOpen(false);
-                    window.location.href = "/#contacto";
+                    globalThis.location.href = "/#contacto";
                   }}
                 >
                   {t.navContact}
@@ -460,6 +435,43 @@ const CartaDigitalPremium: React.FC = () => {
   }, []);
 
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(true);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const dialogRef = useRef<HTMLDialogElement>(null);
+
+  // Close lightbox on Escape or backdrop click
+  useEffect(() => {
+    if (!lightboxImage) return;
+    const handleGlobal = (e: KeyboardEvent | MouseEvent) => {
+      if (e instanceof KeyboardEvent && e.key === "Escape") {
+        setLightboxImage(null);
+      }
+      if (
+        e instanceof MouseEvent &&
+        dialogRef.current &&
+        e.target === dialogRef.current
+      ) {
+        setLightboxImage(null);
+      }
+    };
+    globalThis.addEventListener("keydown", handleGlobal);
+    globalThis.addEventListener("click", handleGlobal);
+    return () => {
+      globalThis.removeEventListener("keydown", handleGlobal);
+      globalThis.removeEventListener("click", handleGlobal);
+    };
+  }, [lightboxImage]);
+
+  const toggleVideo = () => {
+    if (!videoRef.current) return;
+    if (videoRef.current.paused) {
+      videoRef.current.play();
+      setIsVideoPlaying(true);
+    } else {
+      videoRef.current.pause();
+      setIsVideoPlaying(false);
+    }
+  };
 
   return (
     <>
@@ -477,7 +489,7 @@ const CartaDigitalPremium: React.FC = () => {
           className="min-h-screen flex flex-col items-center justify-center px-4 md:px-6 pt-24 pb-16 relative overflow-hidden"
           style={{
             background:
-              "radial-gradient(ellipse at 30% 50%, rgba(201,168,76,0.08) 0%, transparent 60%), radial-gradient(ellipse at 70% 20%, rgba(46,204,113,0.05) 0%, transparent 50%), var(--color-bg)",
+              "radial-gradient(ellipse at 30% 50%, color-mix(in oklch, var(--color-primary) 8%, transparent) 0%, transparent 60%), radial-gradient(ellipse at 70% 20%, color-mix(in oklch, var(--color-success-text) 5%, transparent) 0%, transparent 50%), var(--color-bg)",
           }}
         >
           <div
@@ -489,14 +501,14 @@ const CartaDigitalPremium: React.FC = () => {
 
           <div className="container mx-auto relative z-10">
             <div className="text-center max-w-4xl mx-auto">
-              <div className="inline-block text-xs font-semibold tracking-[0.25em] text-[var(--color-primary)] uppercase border border-[rgba(201,168,76,0.3)] px-4 py-2 rounded-full mb-6 md:mb-8">
+              <div className="inline-block text-xs font-semibold tracking-[0.25em] text-[var(--color-primary)] uppercase border border-[var(--color-accent-border)] px-4 py-2 rounded-full mb-6 md:mb-8">
                 {t.cartaHeroEyebrow}
               </div>
               <div className="text-sm md:text-base text-muted font-medium mb-4">
                 📍 {t.cartaHeroTenerife}
               </div>
 
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black leading-[1.1] mb-4 md:mb-6 font-['Playfair_Display','serif']">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black leading-[1.1] mb-4 md:mb-6 font-display">
                 {t.cartaHeroTitle1}
                 <br />
                 <span className="text-[var(--color-primary)] italic">
@@ -531,9 +543,9 @@ const CartaDigitalPremium: React.FC = () => {
                   { num: "0%", label: t.cartaHeroStat2Label },
                   { num: "24/7", label: t.cartaHeroStat3Label },
                   { num: "∞", label: t.cartaHeroStat4Label },
-                ].map((stat, idx) => (
-                  <div key={idx} className="text-center">
-                    <div className="text-2xl md:text-3xl lg:text-4xl font-bold text-[var(--color-primary)] font-['Playfair_Display','serif']">
+                ].map((stat) => (
+                  <div key={stat.num} className="text-center">
+                    <div className="text-2xl md:text-3xl lg:text-4xl font-bold text-[var(--color-primary)] font-display">
                       {stat.num}
                     </div>
                     <div className="text-xs text-muted uppercase tracking-widest mt-1">
@@ -556,7 +568,7 @@ const CartaDigitalPremium: React.FC = () => {
               <div className="text-xs font-semibold tracking-[0.3em] text-[var(--color-primary)] uppercase mb-3 md:mb-4">
                 {t.cartaProblemaTitle}
               </div>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-[1.15] mb-4 md:mb-6 font-['Playfair_Display','serif']">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-[1.15] mb-4 md:mb-6 font-display">
                 {t.cartaProblemaSubtitle}
               </h2>
               <p className="text-base text-muted leading-relaxed max-w-lg md:max-w-xl mb-10 md:mb-14">
@@ -601,10 +613,10 @@ const CartaDigitalPremium: React.FC = () => {
                     title: t.cartaProblemaItem6Title,
                     desc: t.cartaProblemaItem6Desc,
                   },
-                ].map((item, idx) => (
+                ].map((item) => (
                   <div
-                    key={idx}
-                    className={`bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-5 md:p-6 hover:-translate-y-1 hover:shadow-md transition-all duration-200 cursor-pointer relative overflow-hidden group ${item.color === "error" ? "hover:border-[rgba(231,76,60,0.6)]" : ""}`}
+                    key={item.title}
+                    className={`bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-5 md:p-6 hover:-translate-y-1 hover:shadow-md transition-all duration-200 cursor-pointer relative overflow-hidden group ${item.color === "error" ? "hover:border-[var(--color-error-border)]" : ""}`}
                   >
                     {/* Prominent Icon */}
                     <div className="text-[var(--color-error-text)] mb-4">
@@ -645,7 +657,7 @@ const CartaDigitalPremium: React.FC = () => {
                 <div className="text-xs font-semibold tracking-[0.3em] text-[var(--color-success-text)] uppercase mb-3 md:mb-4">
                   {t.cartaSolucionTitle}
                 </div>
-                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-[1.15] mb-6 md:mb-10 font-['Playfair_Display','serif']">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-[1.15] mb-6 md:mb-10 font-display">
                   {t.cartaSolucionSubtitle}
                 </h2>
               </div>
@@ -657,11 +669,14 @@ const CartaDigitalPremium: React.FC = () => {
                   <img
                     src="/assets/Tarjeta_NFC_negra_MontesTAP.webp"
                     alt="NFC SmartConnect Background"
+                    width="256"
+                    height="256"
+                    loading="lazy"
                     className="w-full h-full object-contain"
                   />
                 </div>
 
-                <p className="text-lg md:text-xl lg:text-2xl font-bold leading-relaxed font-['Playfair_Display','serif'] relative z-10">
+                <p className="text-lg md:text-xl lg:text-2xl font-bold leading-relaxed font-display relative z-10">
                   {t.cartaSolucionPrefix}
                   <span className="text-[var(--color-success-text)]">
                     {t.cartaSolucionHighlight}
@@ -682,9 +697,9 @@ const CartaDigitalPremium: React.FC = () => {
                     "📊 Stats",
                     "🔍 SEO",
                     "⭐ Google",
-                  ].map((pill, idx) => (
+                  ].map((pill) => (
                     <div
-                      key={idx}
+                      key={pill}
                       className="px-3 md:px-4 py-1.5 md:py-2 rounded-full bg-[var(--color-accent-subtle)] border border-[var(--color-accent-border)] text-xs md:text-sm text-[var(--color-primary)] font-medium"
                     >
                       {pill}
@@ -707,7 +722,7 @@ const CartaDigitalPremium: React.FC = () => {
                 <div className="text-xs font-semibold tracking-[0.3em] text-[var(--color-primary)] uppercase mb-3 md:mb-4">
                   {t.cartaBeneficiosTitle}
                 </div>
-                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-[1.15] font-['Playfair_Display','serif']">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-[1.15] font-display">
                   {t.cartaBeneficiosSubtitle}
                 </h2>
               </div>
@@ -764,12 +779,12 @@ const CartaDigitalPremium: React.FC = () => {
                     tag: t.cartaBeneficio7Tag,
                     fullWidth: true,
                   },
-                ].map((item, idx) => (
+                ].map((item) => (
                   <div
-                    key={idx}
+                    key={item.num}
                     className={`bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-5 md:p-6 flex gap-4 md:gap-5 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 ${item.fullWidth ? "md:col-span-2" : ""}`}
                   >
-                    <div className="text-3xl md:text-4xl lg:text-5xl font-black text-[var(--color-accent-subtle)] font-['Playfair_Display','serif'] leading-none hidden sm:block">
+                    <div className="text-3xl md:text-4xl lg:text-5xl font-black text-[var(--color-accent-subtle)] font-display leading-none hidden sm:block">
                       {item.num}
                     </div>
                     <div className="flex-1 min-w-0">
@@ -810,7 +825,7 @@ const CartaDigitalPremium: React.FC = () => {
                 <div className="text-xs font-semibold tracking-[0.3em] text-[var(--color-primary)] uppercase mb-3 md:mb-4">
                   {t.cartaFlujoTitle}
                 </div>
-                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-[1.15] font-['Playfair_Display','serif']">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-[1.15] font-display">
                   {t.cartaFlujoSubtitle}
                 </h2>
               </div>
@@ -846,9 +861,9 @@ const CartaDigitalPremium: React.FC = () => {
                     title: t.cartaFlujoStep5Title,
                     desc: t.cartaFlujoStep5Desc,
                   },
-                ].map((step, idx) => (
+                ].map((step) => (
                   <div
-                    key={idx}
+                    key={step.title}
                     className="text-center relative z-10 p-3 md:p-4 rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)] hover:border-[var(--color-primary)] transition-all hover:-translate-y-1"
                   >
                     <div className="w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 rounded-full bg-[var(--color-bg-alt)] border-2 border-[var(--color-primary)] flex items-center justify-center text-xl md:text-2xl lg:text-3xl mx-auto mb-3 md:mb-4">
@@ -877,7 +892,7 @@ const CartaDigitalPremium: React.FC = () => {
               <div className="text-xs font-semibold tracking-[0.3em] text-[var(--color-primary)] uppercase mb-3 md:mb-4">
                 {t.cartaDineroTitle}
               </div>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-[1.15] mb-4 md:mb-6 font-['Playfair_Display','serif']">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-[1.15] mb-4 md:mb-6 font-display">
                 {t.cartaDineroSubtitle}
               </h2>
               <p className="text-base text-muted leading-relaxed max-w-lg mx-auto">
@@ -914,8 +929,8 @@ const CartaDigitalPremium: React.FC = () => {
                       label: t.cartaDineroCard1Item3,
                       pct: -5,
                     },
-                  ].map((item, idx) => (
-                    <div key={idx}>
+                  ].map((item) => (
+                    <div key={item.label}>
                       <div className="flex items-center justify-between gap-3 mb-2">
                         <div className="flex items-center gap-3">
                           <span className="text-[var(--color-error-text)]">
@@ -943,7 +958,7 @@ const CartaDigitalPremium: React.FC = () => {
                   <span className="text-sm text-muted">
                     {t.cartaDineroCard1Total}
                   </span>
-                  <span className="text-2xl font-black text-[var(--color-error-text)] font-['Playfair_Display','serif']">
+                  <span className="text-2xl font-black text-[var(--color-error-text)] font-display">
                     -30%
                   </span>
                 </div>
@@ -981,8 +996,8 @@ const CartaDigitalPremium: React.FC = () => {
                       label: t.cartaDineroCard2Item4,
                       pct: 5,
                     },
-                  ].map((item, idx) => (
-                    <div key={idx}>
+                  ].map((item) => (
+                    <div key={item.label}>
                       <div className="flex items-center justify-between gap-3 mb-2">
                         <div className="flex items-center gap-3">
                           <span className="text-[var(--color-success-text)]">
@@ -1010,7 +1025,7 @@ const CartaDigitalPremium: React.FC = () => {
                   <span className="text-sm text-muted">
                     {t.cartaDineroCard2Total}
                   </span>
-                  <span className="text-2xl font-black text-[var(--color-success-text)] font-['Playfair_Display','serif']">
+                  <span className="text-2xl font-black text-[var(--color-success-text)] font-display">
                     +35%
                   </span>
                 </div>
@@ -1023,7 +1038,7 @@ const CartaDigitalPremium: React.FC = () => {
                 <span className="text-sm md:text-base font-semibold text-[var(--color-success-text)]">
                   Visibilidad + Mailings = Crecimiento real.
                 </span>
-                <span className="text-2xl font-black text-[var(--color-success-text)] font-['Playfair_Display','serif']">
+                <span className="text-2xl font-black text-[var(--color-success-text)] font-display">
                   📈
                 </span>
               </div>
@@ -1045,7 +1060,7 @@ const CartaDigitalPremium: React.FC = () => {
               <div className="text-xs font-semibold tracking-[0.3em] text-[var(--color-primary)] uppercase mb-3 md:mb-4">
                 {t.cartaBBDDTitle}
               </div>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-[1.15] mb-4 md:mb-6 font-['Playfair_Display','serif']">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-[1.15] mb-4 md:mb-6 font-display">
                 {t.cartaBBDDSubtitle}
               </h2>
               <p className="text-base text-muted leading-relaxed">
@@ -1111,7 +1126,7 @@ const CartaDigitalPremium: React.FC = () => {
               <div className="text-xs font-semibold tracking-[0.3em] text-[var(--color-primary)] uppercase mb-3 md:mb-4">
                 {t.cartaDemoTitle}
               </div>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-[1.15] font-['Playfair_Display','serif']">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-[1.15] font-display">
                 {t.cartaFlujoSubtitle}
               </h2>
             </div>
@@ -1122,6 +1137,7 @@ const CartaDigitalPremium: React.FC = () => {
                 {/* TV Frame */}
                 <div className="absolute inset-0 pointer-events-none z-10 border-[10px] md:border-[16px] border-[var(--color-bg-alt)] rounded-3xl"></div>
                 <video
+                  ref={videoRef}
                   src="/assets/video.mp4"
                   autoPlay
                   loop
@@ -1130,7 +1146,20 @@ const CartaDigitalPremium: React.FC = () => {
                   className="w-full aspect-video object-cover"
                 />
                 {/* Label */}
-                <div className="absolute bottom-4 left-4 z-20">
+                <div className="absolute bottom-4 left-4 z-20 flex items-center gap-2">
+                  <button
+                    onClick={toggleVideo}
+                    className="w-10 h-10 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center hover:bg-black/80 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                    aria-label={
+                      isVideoPlaying ? "Pausar video" : "Reanudar video"
+                    }
+                  >
+                    {isVideoPlaying ? (
+                      <Pause className="w-4 h-4 text-white" />
+                    ) : (
+                      <Play className="w-4 h-4 text-white ml-0.5" />
+                    )}
+                  </button>
                   <div className="px-4 py-2 bg-black/70 backdrop-blur-sm rounded-xl">
                     <span className="text-sm text-white font-medium">
                       {t.cartaDemoVideoLabel}
@@ -1155,14 +1184,20 @@ const CartaDigitalPremium: React.FC = () => {
                   className="relative w-full overflow-hidden"
                   style={{ aspectRatio: "16/9" }}
                 >
-                  <img
-                    src="/assets/carta-digital-cliente.png"
-                    alt="Carta digital - Vista del cliente"
-                    className="absolute inset-0 w-full h-full object-contain cursor-pointer hover:scale-[1.02] transition-transform"
+                  <button
+                    type="button"
+                    aria-label="Ampliar imagen"
+                    className="absolute inset-0 w-full h-full cursor-pointer"
                     onClick={() =>
                       setLightboxImage("/assets/carta-digital-cliente.png")
                     }
-                  />
+                  >
+                    <img
+                      src="/assets/carta-digital-cliente.png"
+                      alt=""
+                      className="w-full h-full object-contain hover:scale-[1.02] transition-transform pointer-events-none"
+                    />
+                  </button>
                 </div>
                 <div className="px-4 py-3 font-bold text-sm border-t border-[var(--color-border)] text-[var(--color-primary)] flex items-center gap-2">
                   {t.cartaDemoScreen1Title}
@@ -1183,14 +1218,20 @@ const CartaDigitalPremium: React.FC = () => {
                   className="relative w-full overflow-hidden"
                   style={{ aspectRatio: "16/9" }}
                 >
-                  <img
-                    src="/assets/carta-digital-dashboard.png"
-                    alt="Dashboard - Panel de administración"
-                    className="absolute inset-0 w-full h-full object-contain cursor-pointer hover:scale-[1.02] transition-transform"
+                  <button
+                    type="button"
+                    aria-label="Ampliar imagen"
+                    className="absolute inset-0 w-full h-full cursor-pointer"
                     onClick={() =>
                       setLightboxImage("/assets/carta-digital-dashboard.png")
                     }
-                  />
+                  >
+                    <img
+                      src="/assets/carta-digital-dashboard.png"
+                      alt=""
+                      className="w-full h-full object-contain hover:scale-[1.02] transition-transform pointer-events-none"
+                    />
+                  </button>
                 </div>
                 <div className="px-4 py-3 font-bold text-sm border-t border-[var(--color-border)] text-[var(--color-primary)] flex items-center gap-2">
                   {t.cartaDemoScreen2Title}
@@ -1211,14 +1252,20 @@ const CartaDigitalPremium: React.FC = () => {
                   className="relative w-full overflow-hidden"
                   style={{ aspectRatio: "16/9" }}
                 >
-                  <img
-                    src="/assets/carta-digital-pedidos.png"
-                    alt="Gestión de pedidos"
-                    className="absolute inset-0 w-full h-full object-contain cursor-pointer hover:scale-[1.02] transition-transform"
+                  <button
+                    type="button"
+                    aria-label="Ampliar imagen"
+                    className="absolute inset-0 w-full h-full cursor-pointer"
                     onClick={() =>
                       setLightboxImage("/assets/carta-digital-pedidos.png")
                     }
-                  />
+                  >
+                    <img
+                      src="/assets/carta-digital-pedidos.png"
+                      alt=""
+                      className="w-full h-full object-contain hover:scale-[1.02] transition-transform pointer-events-none"
+                    />
+                  </button>
                 </div>
                 <div className="px-4 py-3 font-bold text-sm border-t border-[var(--color-border)] text-[var(--color-primary)] flex items-center gap-2">
                   {t.cartaDemoScreen3Title}
@@ -1242,7 +1289,7 @@ const CartaDigitalPremium: React.FC = () => {
               <div className="text-xs font-semibold tracking-[0.25em] text-[var(--color-primary)] uppercase mb-4">
                 {t.cartaCTATitle}
               </div>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-[1.1] mb-6 font-['Playfair_Display','serif']">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-[1.1] mb-6 font-display">
                 {t.cartaCTASubtitle}
               </h2>
               <p className="text-base md:text-lg text-muted max-w-md mx-auto mb-8 md:mb-12 leading-relaxed">
@@ -1302,11 +1349,10 @@ const CartaDigitalPremium: React.FC = () => {
 
         {/* Lightbox Modal */}
         {lightboxImage && (
-          <div
+          <dialog
+            ref={dialogRef}
+            open
             className="fixed inset-0 z-[300] bg-black/95 flex items-center justify-center p-4 animate-in fade-in duration-200"
-            onClick={() => setLightboxImage(null)}
-            role="dialog"
-            aria-modal="true"
             aria-label="Ampliar imagen"
           >
             <button
@@ -1316,17 +1362,12 @@ const CartaDigitalPremium: React.FC = () => {
             >
               <X className="w-6 h-6" />
             </button>
-            <div
-              className="relative max-w-5xl w-full max-h-[90vh] animate-in zoom-in-95 duration-300"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <img
-                src={lightboxImage}
-                alt="Imagen ampliada"
-                className="w-full h-full object-contain rounded-2xl shadow-2xl"
-              />
-            </div>
-          </div>
+            <img
+              src={lightboxImage}
+              alt="Imagen ampliada"
+              className="relative max-w-5xl w-full max-h-[90vh] object-contain rounded-2xl shadow-2xl animate-in zoom-in-95 duration-300"
+            />
+          </dialog>
         )}
       </div>
     </>
