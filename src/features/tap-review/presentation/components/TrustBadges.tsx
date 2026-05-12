@@ -1,25 +1,35 @@
 import React from "react";
+import { useLanguage } from "@shared/context/LanguageContext";
+import { Shield, Zap, Users, MessageSquare } from "lucide-react";
 
 const TrustBadges: React.FC = () => {
+  const { t } = useLanguage();
+
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
-      <h2 className="text-xl font-bold mb-4">Trusted By</h2>
-      <div className="flex flex-wrap justify-center gap-6">
-        <img
-          src="/images/google-partner.png"
-          alt="Google Partner"
-          className="h-12"
-        />
-        <img
-          src="/images/facebook-verified.png"
-          alt="Facebook Verified"
-          className="h-12"
-        />
-        <img
-          src="/images/yelp-certified.png"
-          alt="Yelp Certified"
-          className="h-12"
-        />
+    <div className="border-t border-b border-[var(--color-border)] py-8 bg-[var(--color-surface)] mt-12">
+      <div className="container mx-auto px-6">
+        <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16">
+          <div className="flex items-center gap-2 text-muted">
+            <Shield className="w-5 h-5" />
+            <span className="text-sm font-medium">
+              {t.tapReviewTrust30Days}
+            </span>
+          </div>
+          <div className="flex items-center gap-2 text-muted">
+            <Zap className="w-5 h-5" />
+            <span className="text-sm font-medium">{t.tapReviewTrust24h}</span>
+          </div>
+          <div className="flex items-center gap-2 text-muted">
+            <Users className="w-5 h-5" />
+            <span className="text-sm font-medium">
+              {t.tapReviewTrustSupport}
+            </span>
+          </div>
+          <div className="flex items-center gap-2 text-muted">
+            <MessageSquare className="w-5 h-5" />
+            <span className="text-sm font-medium">{t.tapReviewTrustNoSub}</span>
+          </div>
+        </div>
       </div>
     </div>
   );

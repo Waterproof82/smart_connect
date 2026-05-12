@@ -1,13 +1,8 @@
 import React from "react";
 import { useLanguage } from "@shared/context/LanguageContext";
 import { Link } from "react-router-dom";
-import { Smartphone } from "lucide-react";
 
-interface FooterProps {
-  scrolled?: boolean;
-}
-
-const Footer: React.FC<FooterProps> = ({ scrolled = false }) => {
+const Footer: React.FC = () => {
   const { t } = useLanguage();
   return (
     <footer className="bg-[var(--color-bg-alt)] border-t border-[var(--color-border)] pt-12 md:pt-16 pb-8">
