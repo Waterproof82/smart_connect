@@ -48,7 +48,7 @@ const CartaDigitalPremium: React.FC = () => {
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
   const [isVideoPlaying, setIsVideoPlaying] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const dialogRef = useRef<HTMLDialogElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
 
   // Close lightbox on Escape or backdrop click
   useEffect(() => {
@@ -960,13 +960,15 @@ const CartaDigitalPremium: React.FC = () => {
 
         {/* Lightbox Modal */}
         {lightboxImage && (
-          <dialog
+          <div
             ref={dialogRef}
-            open
-            className="fixed inset-0 z-[300] bg-black/95 flex items-center justify-center p-4 animate-in fade-in duration-200"
+            role="dialog"
+            aria-modal="true"
             aria-label="Ampliar imagen"
+            className="fixed inset-0 z-[300] bg-black/95 flex items-center justify-center p-4 animate-in fade-in duration-200"
           >
             <button
+              type="button"
               className="absolute top-4 right-4 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors"
               onClick={() => setLightboxImage(null)}
               aria-label="Cerrar"
@@ -978,7 +980,7 @@ const CartaDigitalPremium: React.FC = () => {
               alt="Imagen ampliada"
               className="relative max-w-5xl w-full max-h-[90vh] object-contain rounded-2xl shadow-2xl animate-in zoom-in-95 duration-300"
             />
-          </dialog>
+          </div>
         )}
       </div>
     </>

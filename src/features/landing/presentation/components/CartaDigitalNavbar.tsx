@@ -189,9 +189,11 @@ const CartaDigitalNavbar: React.FC<{ scrolled?: boolean }> = ({
 
         {/* Mobile Menu Drawer */}
         {isMobileMenuOpen && (
-          <dialog
-            className="fixed inset-0 z-[200] w-full h-full bg-transparent !flex justify-end m-0"
-            open={isMobileMenuOpen}
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Menú de navegación"
+            className="fixed inset-0 z-[200] w-full h-full flex justify-end"
           >
             <button
               className="absolute inset-0 bg-black/80 backdrop-blur-sm cursor-default border-none"
@@ -285,7 +287,7 @@ const CartaDigitalNavbar: React.FC<{ scrolled?: boolean }> = ({
                 </a>
               </div>
             </div>
-          </dialog>
+          </div>
         )}
       </div>
     </nav>
