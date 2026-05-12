@@ -42,7 +42,7 @@ export const ExpertAssistant: React.FC = () => {
   const [whatsappPhone, setWhatsappPhone] = useState<string>("");
   const scrollRef = useRef<HTMLDivElement>(null);
   const toggleBtnRef = useRef<HTMLButtonElement>(null);
-  const modalRef = useRef<HTMLDialogElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchWhatsApp = async () => {
@@ -169,14 +169,16 @@ export const ExpertAssistant: React.FC = () => {
   };
 
   return (
-    <div className="fixed bottom-4 right-4 sm:bottom-8 sm:right-8 z-[100] flex flex-col items-end gap-4">
+    <div className="fixed bottom-4 right-4 sm:bottom-8 sm:right-8 z-[100] flex flex-col items-end gap-3">
       {isOpen && (
-        <dialog
+        <div
           ref={modalRef}
+          role="dialog"
+          aria-modal="true"
           aria-label="Chat con asistente experto"
-          className="mb-4 w-[85vw] sm:w-[90vw] md:w-[400px] h-[60vh] sm:h-[550px] max-h-[calc(100dvh-120px)] sm:max-h-[80vh] bg-[var(--color-bg)] border border-[var(--color-border)] rounded-3xl shadow-lg flex flex-col overflow-hidden open:flex"
+          className="w-[calc(100vw-2rem)] sm:w-[90vw] md:w-[400px] h-[65vh] sm:h-[550px] max-h-[calc(100dvh-140px)] sm:max-h-[80vh] bg-[var(--color-bg)] border border-[var(--color-border)] rounded-3xl shadow-lg flex flex-col overflow-hidden"
         >
-          <div className="p-4 bg-[var(--color-accent)] flex items-center justify-between">
+          <div className="p-4 bg-[var(--color-accent)] flex items-center justify-between shrink-0">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 bg-[var(--color-overlay-strong)] rounded-lg flex items-center justify-center">
                 <Bot className="text-[var(--color-on-accent)] w-5 h-5" />
@@ -271,7 +273,7 @@ export const ExpertAssistant: React.FC = () => {
             )}
           </div>
 
-          <div className="p-3 bg-[var(--color-bg)] border-t border-[var(--color-border)]">
+          <div className="p-3 bg-[var(--color-bg)] border-t border-[var(--color-border)] shrink-0">
             <div className="relative flex gap-2">
               <label htmlFor="chatbot-input" className="sr-only">
                 Escribe tu mensaje
@@ -298,7 +300,7 @@ export const ExpertAssistant: React.FC = () => {
               </button>
             </div>
           </div>
-        </dialog>
+        </div>
       )}
 
       <div className="flex items-center gap-3">
