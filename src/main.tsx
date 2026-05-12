@@ -10,7 +10,7 @@ import CartaDigitalPremium from "./features/landing/presentation/components/Cart
 import { TapReviewPage } from "./features/tap-review/presentation/TapReviewPage";
 import TapReviewContainer from "./features/tap-review/TapReviewContainer";
 
-// Wrapper component to fetch whatsappPhone before rendering TapReviewPage
+// Wrapper component to fetch whatsappPhone before rendering TapReviewPage (Clean Architecture: Presentation Container)
 const TapReviewPageWithData: React.FC = () => {
   const [whatsappPhone, setWhatsappPhone] = React.useState<string>("");
 
