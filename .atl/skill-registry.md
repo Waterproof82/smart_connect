@@ -73,6 +73,16 @@ _Last updated: 2026-05-11_
 
 Inyectado por el orchestrator como `## Project Standards (auto-resolved)` en sub-agentes.
 
+### SDD Enforcement Threshold ⚠️
+
+Regla obligatoria para el Gentle-Orchestrator: determina cuándo DEBE usar SDD vs editar inline.
+
+- **1-3 archivos, cambio puramente mecánico** (rename de prop, fix de import, agregar atributo): ✅ inline permitido
+- **4+ archivos O cualquier cambio con lógica nueva** (refactor, estilos nuevos, comportamientos): ❌ **DEBE** usar `/sdd-new` → pipeline SDD completo
+- **2+ feature directories afectados** (ej. `landing/` + `chatbot/`): ❌ DEBE usar SDD
+- **Batch de fixes de audit**: siempre wrappear en un change con nombre vía `/sdd-new`
+- **Duda**: si no estás seguro, usa SDD. Mejor sobre-ingeniería de proceso que cambios huérfanos.
+
 ### Architecture
 
 - **Clean Architecture**: Presentation / Domain / Data layers, strict dependency direction (Data → Domain → Presentation)

@@ -7,9 +7,8 @@
  */
 
 import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
 import {
-  GetDocumentStatsUseCase,
+  type GetDocumentStatsUseCase,
   DocumentStats,
 } from "../../domain/usecases/GetDocumentStatsUseCase";
 import { FileText } from "lucide-react";
@@ -109,7 +108,3 @@ export const StatsDashboard: React.FC<StatsDashboardProps> = React.memo(
   },
 );
 StatsDashboard.displayName = "StatsDashboard";
-
-StatsDashboard.propTypes = {
-  getStatsUseCase: PropTypes.instanceOf(GetDocumentStatsUseCase).isRequired,
-};

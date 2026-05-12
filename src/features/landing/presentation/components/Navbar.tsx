@@ -1,31 +1,14 @@
 import React, { useState, useEffect } from "react";
-import {
-  Cpu,
-  ChevronDown,
-  Code2,
-  Settings2,
-  Smartphone,
-  Utensils,
-  Shield,
-  X,
-  Menu,
-} from "lucide-react";
+import { Cpu, ChevronDown, Shield, X, Menu, Sun, Moon } from "lucide-react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import LanguageSelector from "@shared/components/LanguageSelector";
 import { useLanguage } from "@shared/context/LanguageContext";
+import { useTheme } from "@shared/context/ThemeContext";
+import { SOLUTIONS } from "@shared/config/solutions";
+import { mapSolutions, SolutionItem } from "@shared/utils/solutionHelpers";
 
 interface NavbarProps {
   scrolled: boolean;
-}
-
-interface SolutionItem {
-  id: string;
-  icon: React.ReactNode;
-  title: string;
-  desc: string;
-  href: string;
-  internal?: boolean;
-  external?: boolean;
 }
 
 const DropdownMenuItem: React.FC<{
@@ -99,7 +82,7 @@ const DropdownMenuItem: React.FC<{
   if (item.internal) {
     return (
       <Link
-        ref={itemRef as unknown as React.Ref<HTMLAnchorElement>}
+        ref={itemRef}
         to={item.href}
         tabIndex={isDropdownOpen ? 0 : -1}
         className={itemClasses}
@@ -113,7 +96,7 @@ const DropdownMenuItem: React.FC<{
 
   return (
     <a
-      ref={itemRef as React.Ref<HTMLAnchorElement>}
+      ref={itemRef}
       href={item.href}
       target={item.external ? "_blank" : undefined}
       rel={item.external ? "noopener noreferrer" : undefined}
@@ -132,6 +115,7 @@ const DropdownMenuItem: React.FC<{
 
 export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
   const { t } = useLanguage();
+  const { theme, toggleTheme } = useTheme();
   const location = useLocation();
   const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -187,46 +171,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
     setIsMobileMenuOpen(false);
   };
 
-  const solutions: SolutionItem[] = [
-    {
-      id: "software-ia",
-      icon: <Code2 className="w-5 h-5 text-[var(--color-icon-blue)]" />,
-      title: t.navbarSoftwareIA,
-      desc: t.navbarSoftwareIADesc,
-      href: "#soluciones",
-    },
-    {
-      id: "automatizacion-n8n",
-      icon: <Settings2 className="w-5 h-5 text-[var(--color-icon-purple)]" />,
-      title: t.navbarAutomation,
-      desc: t.navbarAutomationDesc,
-      href: "#soluciones",
-    },
-    {
-      id: "tarjetas-nfc",
-      icon: <Smartphone className="w-5 h-5 text-[var(--color-icon-emerald)]" />,
-      title: t.navbarNFC,
-      desc: t.navbarNFCDesc,
-      href: "/tap-review",
-      internal: true,
-    },
-    {
-      id: "qribar",
-      icon: <Utensils className="w-5 h-5 text-[var(--color-icon-amber)]" />,
-      title: t.navbarQribar,
-      desc: t.navbarQribarDesc,
-      href: "https://qribar.es",
-      external: true,
-    },
-    {
-      id: "carta-digital",
-      icon: <Utensils className="w-5 h-5 text-[var(--color-icon-emerald)]" />,
-      title: t.navbarCartaDigital,
-      desc: t.navbarCartaDigitalDesc,
-      href: "/carta-digital",
-      internal: true,
-    },
-  ];
+  const solutions = mapSolutions(SOLUTIONS, t);
 
   return (
     <nav
@@ -262,7 +207,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
             }}
             onFocus={() => setIsDropdownOpen(true)}
             onBlur={(e) => {
-              if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+              if (!e.currentTarget.contains(e.relatedTarget)) {
                 setIsDropdownOpen(false);
                 setFocusedDropdownIndex(-1);
               }
@@ -342,6 +287,19 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
             {t.navContact}
           </a>
           <LanguageSelector />
+          <button
+            onClick={toggleTheme}
+            className="p-2 rounded-lg text-muted hover:text-[var(--color-text)] hover:bg-[var(--color-surface)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] transition-colors"
+            aria-label={
+              theme === "dark" ? "Activar modo claro" : "Activar modo oscuro"
+            }
+          >
+            {theme === "dark" ? (
+              <Sun className="w-4 h-4" />
+            ) : (
+              <Moon className="w-4 h-4" />
+            )}
+          </button>
           <Link
             to="/admin"
             className="flex items-center gap-2 text-muted hover:text-[var(--color-primary)] transition-colors"
@@ -363,8 +321,14 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
         {/* Mobile Menu Drawer */}
         {isMobileMenuOpen && (
           <dialog
-            className="fixed inset-0 z-[200] w-full h-full bg-transparent !flex justify-end m-0"
             open={isMobileMenuOpen}
+            aria-modal="true"
+            aria-label="Menú de navegación"
+            className="fixed inset-0 z-[200] w-full h-full flex justify-end m-0 max-w-none max-h-none bg-transparent border-none"
+            onClose={(e) => {
+              e.preventDefault();
+              setIsMobileMenuOpen(false);
+            }}
           >
             <button
               className="absolute inset-0 bg-black/80 backdrop-blur-sm cursor-default border-none"
@@ -379,7 +343,22 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
                   SmartConnect{" "}
                   <span className="text-[var(--color-primary)]">AI</span>
                 </span>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={toggleTheme}
+                    className="p-2 rounded-lg text-muted hover:text-[var(--color-text)] hover:bg-[var(--color-surface)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] transition-colors"
+                    aria-label={
+                      theme === "dark"
+                        ? "Activar modo claro"
+                        : "Activar modo oscuro"
+                    }
+                  >
+                    {theme === "dark" ? (
+                      <Sun className="w-4 h-4" />
+                    ) : (
+                      <Moon className="w-4 h-4" />
+                    )}
+                  </button>
                   <LanguageSelector />
                   <button
                     onClick={() => setIsMobileMenuOpen(false)}

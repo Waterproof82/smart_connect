@@ -10,16 +10,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.5.0] - 2026-03-16
 
 ### Added
+
+- **Refactorización tap-review a Clean Architecture**:
+  - Separación de capas Domain, Data y Presentation
+  - Implementación de inyección de dependencias
+  - Creación de entidades, repositorios y use cases para lógica de negocio
+  - Refactorización de `TapReviewPage.tsx` para depender de la capa Domain
+  - Directorio `src/features/tap-review/presentation/components/` para componentes modulares
+
+### Changed
+
 - **Security Headers:** CSP (Content-Security-Policy), X-Content-Type-Options, Referrer-Policy, Permissions-Policy, HSTS in `vercel.json` and `index.html`
 - **Security Meta Tags:** X-Content-Type-Options, Referrer-Policy, Permissions-Policy in index.html
 - **Skip Link:** Admin panel skip link for keyboard navigation
 
 ### Changed
+
 - **DOMPurify:** Updated from 3.3.1 to 3.3.3 (XSS vulnerability fix)
 - **Encryption:** PBKDF2 key derivation with 10000 iterations for stronger security
 - **Rate Limiter:** Added cleanup mechanism to prevent memory leaks in edge functions
 
 ### Fixed
+
 - **CORS Security:** Edge functions now reject unknown origins instead of defaulting to first allowed
 - **Accessibility:** Added aria-live, role=status, aria-busy to multiple components
 - **Focus States:** Added focus-visible rings to all admin panel buttons
@@ -27,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Loading States:** Added role="status" aria-live="polite" to SettingsPanel, StatsDashboard, DocumentList
 
 ### Security
+
 - CSP policy blocks inline scripts except from trusted CDNs
 - All origins must be explicitly allowed in edge functions
 - Encryption key now uses PBKDF2 derivation
@@ -36,17 +49,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.4.1] - 2026-03-16
 
 ### Added
+
 - **Quality Section in README:** Comprehensive documentation of all quality improvements with skill execution table
 - **CLAUDE.md Metrics:** Updated to include Accessibility, Performance, Responsive scores (all 10/10)
 - **Audit Log:** Created `docs/audit/2026-03-16_quality-improvements.md` with detailed skill execution history
 
 ### Changed
-- **Design System Tokens:** Replaced gray-* with neutral-* across all components (normalize skill)
+
+- **Design System Tokens:** Replaced gray-_ with neutral-_ across all components (normalize skill)
 - **Text Sizes:** Fixed text-[10px] to text-xs (14px minimum) for WCAG readability
 - **Touch Targets:** Increased to 44x44px minimum on all interactive elements (adapt skill)
 - **Mobile Optimizations:** Added landscape media queries, viewport meta tags, larger touch targets
 
 ### Fixed
+
 - **Focus States:** Added focus rings on Hero buttons, Contact form, ExpertAssistant
 - **ARIA:** Added aria-describedby, role="alert" on form errors
 - **Overflow Handling:** Added min-w-0 and truncate where needed
@@ -54,6 +70,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Lazy Loading:** Added Suspense with skeleton for SuccessStats
 
 ### Removed
+
 - **Excessive Animations:** Removed decorative background orbs in Hero
 - **Complex IntersectionObserver:** Simplified Features scroll handling
 - **Unused Code:** Removed dead code in AdminDashboard
@@ -63,6 +80,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.4.0] - 2026-03-16
 
 ### Added
+
 - **SEO Foundation:** Meta description, keywords, Open Graph tags, Twitter cards, canonical URL, JSON-LD Organization structured data in `index.html`
 - **SEO Static Files:** `robots.txt` (Allow all, disallow /admin) and `sitemap.xml` (landing page)
 - **react-helmet-async:** Dynamic `<Helmet>` with `noindex, nofollow` on admin routes
@@ -86,6 +104,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Expanded Footer:** 3-column layout with navigation links, legal placeholders, and copyright
 
 ### Changed
+
 - **Hero Responsive Text:** `text-6xl md:text-8xl` → `text-3xl sm:text-4xl md:text-6xl lg:text-8xl` for mobile readability
 - **Hero Floating Decorators:** Hidden below `lg` breakpoint with `hidden lg:flex` to prevent mobile overflow
 - **Hero Buttons Wired:** "Empezar Ahora" scrolls to `#contacto`, "Ver Demo" scrolls to `#soluciones`
@@ -114,11 +133,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Hardcoded Colors:** Replaced `bg-[#020408]`, `bg-[#0d0d1e]` etc. with design tokens across all components
 
 ### Removed
+
 - **`supabaseEnv.ts`:** Deleted unused env wrapper (consolidated into `env.config.ts`)
 - **`@google/genai`:** Removed unused dependency from `package.json`
 - **Dead code:** Removed `isKnowledgeBaseReady` state + useEffect from App.tsx
 
 ### Security
+
 - **Login brute-force protection:** Rate limiting with sliding window (5 attempts per email per 5 minutes)
 - **Chatbot per-session rate limiting:** Session-scoped identifier via `sessionStorage`
 - **Input sanitization tests:** 32 test cases covering XSS patterns, HTML injection, email/phone/URL validation
@@ -128,6 +149,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased] - 2026-03-09
 
 ### Added
+
 - **Zod + React Hook Form:** Implemented type-safe form validation with Zod schemas and React Hook Form across all 3 forms (Contact, Login, Settings)
   - `contactSchema.ts`: 5 fields with regex, DOMPurify XSS detection, and length constraints
   - `loginSchema.ts`: Email + password validation
@@ -135,11 +157,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **CI/CD section in README:** Added pipeline diagram and description (GitHub Actions + Snyk + Dependabot + Vercel)
 
 ### Changed
+
 - **RAG threshold lowered (0.7 → 0.4):** Reduced similarity threshold across chat-with-rag Edge Function, ChatRepositoryImpl, and ExpertAssistantWithRAG to improve document retrieval for short queries
 - **match_documents_by_source ILIKE:** Changed source filter from exact match (`=`) to partial match (`ILIKE`) to support comma-separated sources (e.g., `"nfc, qribar"`)
 - **Rate limiter per-session:** Replaced shared `'anonymous'` rate limit identifier with per-tab session ID using `sessionStorage`
 
 ### Removed
+
 - **Dead code cleanup (old RAG architecture):** Removed 13 unused files from chatbot feature that were replaced by Edge Function approach:
   - `EmbeddingRepositoryImpl`, `DocumentRepositoryImpl`, `GeminiDataSource`, `SupabaseDataSource` (data layer)
   - `RAGOrchestrator`, `FallbackHandler`, `SearchDocumentsUseCase` (domain layer)
@@ -151,13 +175,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **GEMINI_API_KEY from frontend ENV:** Removed secret key exposure from client-side config (only used in Edge Functions via `Deno.env`)
 
 ### Fixed
+
 - **Hardcoded credentials removed (OWASP A02):** Removed fallback Supabase URL and anon key hardcoded in `SupabaseDocumentRepository.generateEmbedding()`; now throws if env vars are missing
 - **AdminContainer unused params:** Removed `_supabaseUrl` and `_supabaseKey` constructor params that were never used
 
 ### Security
+
 - **Security headers (OWASP A05):** Added `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: strict-origin-when-cross-origin` to all 3 Edge Functions (chat-with-rag, gemini-embedding, gemini-generate)
 
 ### Security
+
 - **CORS origin cleanup:** Removed unused placeholder domains (`smartconnect.ai`, `www.smartconnect.ai`, `smart-connect-landing.vercel.app`); only `smart-connect-olive.vercel.app` + localhost remain
 - **insert_document SECURITY INVOKER:** Changed from `SECURITY DEFINER` (bypassed RLS) to `SECURITY INVOKER` (respects RLS policies)
 - **anon grants hardened:** Revoked INSERT/UPDATE/DELETE/TRUNCATE from `anon` role on all tables; `anon` now has only SELECT on `documents` and `app_settings`, zero access to `security_logs`
@@ -176,9 +203,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Unused indexes cleanup:** Dropped 5 unused indexes (idx_documents_source, idx_documents_embedding, idx_security_logs_type, idx_security_logs_user_id, idx_security_logs_severity)
 
 ### Removed
+
 - **Orphan function:** Dropped `update_embedding_cache_updated_at()` trigger function (referenced non-existent `embedding_cache` table)
 
 ### Fixed
+
 - **Critical Syntax Bug:** Moved `update()`, `mapToDomain()`, and `generateEmbedding()` methods INSIDE the `SupabaseDocumentRepository` class (were incorrectly defined outside the class)
 - **Supabase Functions 404 Fix:** Added `gemini-embedding` to `config.toml` with `verify_jwt=false`; created missing `deno.json` import map
 - **Dev Server URL Fallback:** Added fallback URL in `generateEmbedding()` when `import.meta.env` variables are empty (common in dev environments)
@@ -187,10 +216,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Clean Architecture violation:** ExpertAssistantWithRAG now uses `getAppSettings()` service instead of direct Supabase query
 
 ### Changed
+
 - **DRY - parseEmbedding():** Extracted shared function in SupabaseDocumentRepository replacing 4 duplicated embedding parsing blocks
 - **DRY - createSecurityLogger():** Created `NoOpSecurityLogger.ts` with Proxy pattern, replacing 2 duplicated mock SecurityLogger objects in sanitizer.ts and rateLimiter.ts
 
 ### Removed
+
 - Deleted `train_rag.js` (617-line orphaned Node.js script, replaced by Edge Functions)
 - Deleted `example.test.ts` (placeholder test with no assertions)
 - Deleted `abTestUtils.ts` (zero imports across codebase)
@@ -201,10 +232,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Cleaned `shared/types/index.ts` placeholder export
 
 ### Changed
+
 - Updated `README.md` to reflect latest implementations and documentation from `docs/` (RAG, Edge Functions, Webhook, Security, Production Checklist, Logging, Admin Panel, Dependency Policy, Architecture Compliance, Vercel setup).
 - Added direct references to technical and production guides, and summarized main architecture and flows.
 
 ### Fixed
+
 - **Bundle Size Optimization (2026-02-18):**
   - Implemented React.lazy() for route-based code splitting (AdminPanel loads only on /admin)
   - Implemented lazy loading for ExpertAssistant chatbot (loads on user interaction)
@@ -245,6 +278,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Documented known warnings and manual configuration requirements
 
 ### Security
+
 - **Supabase Database Linter Compliance:**
   - All schema errors resolved
   - Known warnings documented as intentional:
@@ -253,6 +287,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - `auth_leaked_password_protection`: Requires Supabase Pro Plan ($25/mo)
 
 ### Added
+
 - **Dynamic Settings Management System:**
   - Created `app_settings` table in Supabase for configurable values
   - Fields: `n8n_webhook_url`, `contact_email`, `whatsapp_phone`, `physical_address`
@@ -279,6 +314,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Location: `src/features/chatbot/presentation/ExpertAssistantWithRAG.tsx`
 
 ### Changed
+
 - **Environment Variables Cleanup:**
   - Removed deprecated ENV variables: `VITE_CONTACT_EMAIL`, `VITE_N8N_WEBHOOK_URL`, `VITE_GOOGLE_SHEETS_ID`
   - Settings now managed entirely in Supabase database
@@ -291,18 +327,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Updated: Domain entities, Repository, Use cases, UI components
 
 ### Security
+
 - **RLS Policies for app_settings:**
   - Anon: SELECT only (for landing page)
   - Authenticated (admin/super_admin): Full CRUD
   - Service role: Full access (for Edge Functions)
 
 ### Removed
+
 - **Database Columns:**
   - Dropped `n8n_notification_email` and `google_sheets_id` from app_settings
   - These are configured in n8n workflow, not in our app
   - Location: `supabase/migrations/20260218100000_drop_unused_settings_columns.sql`
 
 ### Security
+
 - **Supabase Cryptographic Infrastructure Rotation (2026-02-17):**
   - Migrated from Legacy key system to modern ECDSA (P-256) algorithm
   - Replaced old JWT format (`eyJ...`) with new `sb_publishable` and `sb_secret` keys
@@ -320,10 +359,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Tests: `tests/integration/admin/documents-rls.test.ts`
 
 ### Fixed
+
 - Anonymous UPDATE/DELETE operations now correctly blocked by RLS
 - Admin access properly configured via JWT user_metadata role field
 
 ### Changed
+
 - Updated RAG documentation to reflect the new Gemini API endpoints (`v1beta/models/gemini-2.5-flash:generateContent` and `gemini-embedding-001`).
 - Removed all references to document citation in chatbot responses and prompts.
 - Updated all checklists and environment variable `GEMINI_API examples to clarify that_KEY` must never be exposed in the frontend.
@@ -331,26 +372,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improved prompt examples to match the new RAG flow and business requirements.
 
 ### Added
+
 - Anonymous access allowed for chat-with-rag Edge Function (role 'anon' supported).
 
 ### Changed
+
 - Role normalization: JWT 'anon' is mapped to 'anonymous' internally for permission logic.
 
 ### Fixed
+
 - Fixed error handling to properly return custom HTTP errors (401, etc).
 - Fixed useless assignment to 'prompt' and improved cacheHit condition in embedding logic.
 
 ### Removed
+
 - Removed unused `category` and `timestamp` metadata fields from RAG indexer interfaces and implementation.
 - Removed all usage and exposure of `VITE_GEMINI_API_KEY` in the frontend.
 
 ### Changed
+
 - Refactored `DocumentList.tsx` to use modular components (`SourceTag`, `DocumentCard`, `DocumentTable`, `DocumentModal`). Improved readability, maintainability, and compliance with Clean Architecture, SOLID principles, and OWASP guidelines.
 
 ### Changed
+
 - SupabaseKnowledgeLoader ahora solo incluye sources presentes en los datos (no inicializa con qribar/reviews/general vacíos).
 
 ## [0.3.3] - 2026-02-11
+
 - **Tag-Based Source Editor in Document Modal:**
   - Inline source editing with tag UI (add/remove with × button)
   - Support for multiple sources (array-based, ready for future backend)
@@ -361,12 +409,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Audit: `docs/audit/2026-02-04_source-tag-editor-implementation.md`
 
 ### Changed
+
 - **Simplified Source Classification System:**
   - Removed category field from chunk metadata (use source directly)
   - Simplified from 5 complex sources to 3 direct labels: `qribar`, `reviews`, `general`
   - Removed `_mapSourceToCategory()` from SupabaseKnowledgeLoader (18 lines)
   - Removed `_inferCategory()` from RAGIndexer (15 lines)
-  - Updated RAGSearchOptions: `category?: string` → `source?: string` 
+  - Updated RAGSearchOptions: `category?: string` → `source?: string`
   - Direct source filtering in RAG pipeline without intermediate mapping
   - Total code reduction: ~33 lines of mapping logic
   - All 174 unit tests passing after refactor
@@ -374,12 +423,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Audit: `docs/audit/2026-01-29_source-simplification-refactor.md`
 
 ### Removed
+
 - **Documents by Category Statistics Card:**
   - Removed redundant "Documents by Category" dashboard card
   - After source simplification, category equals source (duplicate information)
   - Location: `src/features/admin/presentation/components/StatsDashboard.tsx`
 
 ### Added
+
 - **Inline Document Editing with Automatic Embedding Regeneration:**
   - Edit documents directly in preview modal without page reload
   - Automatic vector embedding regeneration using Gemini API
@@ -392,6 +443,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Audit: `docs/audit/2026-01-30_document-inline-editing-implementation.md`
 
 ### Security
+
 - **Row Level Security (RLS) on Documents Table:** CRITICAL security fix for admin panel
   - Enabled RLS policies to enforce database-level access control
   - Policy 1: Admin full access (only users with admin/super_admin role in JWT)
@@ -405,6 +457,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Audit: `docs/audit/2026-02-04_admin-panel-rls-fix.md`
 
 ### Added
+
 - **Admin Panel for RAG System Management:** Complete admin interface to manage RAG documents
   - Authentication with Supabase Auth (email/password)
   - Role-based access control (admin/super_admin)
@@ -437,6 +490,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Location: `scripts/clean-duplicates.mjs`
 
 ### Fixed
+
 - **Source Filter in Admin Panel:** Changed from exact match to ILIKE pattern matching
   - Now supports partial source name filtering
   - Updated dropdown values to match actual database sources
@@ -452,9 +506,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Updated Node.js imports to use `node:` prefix
 
 ### Removed
+
 - Deprecated test file `tests/test_gemini_generate.js`
 
 ### Changed
+
 - **Clean Architecture Compliance:** Refactored chatbot feature to strict Clean Architecture with Dependency Inversion
   - Created domain interfaces (`IRAGIndexer`, `IEmbeddingCache`) to enforce dependency rule
   - Updated `RAGOrchestrator` to depend on interfaces instead of concrete implementations (CRITICAL FIX)
@@ -477,6 +533,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Maintains private `_generateEmbedding()` for internal batch operations
 
 ### Fixed
+
 - **SupabaseKnowledgeLoader Source Mapping:** Added intelligent mapping from database source values to internal categories
   - Database uses: `qribar_product`, `nfc_reviews_product`, `automation_product`, `company_philosophy`, `contact_info`
   - Mapper translates to internal categories: `qribar`, `reviews`, `general`
@@ -486,6 +543,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Location: `src/features/chatbot/data/supabase-knowledge-loader.ts` (new `_mapSourceToCategory()` method)
 
 ### Added
+
 - **Document Verification Script:** Node.js script to inspect Supabase documents from terminal
   - Shows current document distribution by source
   - Detects NULL or missing source values
@@ -556,6 +614,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Location: `src/features/chatbot/domain/rag-orchestrator.ts`
 
 ### Changed
+
 - **ChatbotContainer:** Updated DI to use RAGOrchestrator configuration object instead of separate instances
 - **GenerateResponseUseCase:** Integrated with RAGOrchestrator for semantic search and context enrichment
 - **FallbackHandler:** Refactored to eliminate code duplication using `_getInitialStats()` helper
@@ -563,6 +622,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **RAGOrchestrator:** Updated constructor to accept single configuration object for cleaner initialization
 
 ### Fixed
+
 - **GoogleGenAI API:** Updated imports and calls to @google/genai v1.39.0 compatibility
   - Changed from `GoogleGenerativeAI` to `GoogleGenAI`
   - Updated constructor to accept config object: `new GoogleGenAI({ apiKey })`
@@ -576,6 +636,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Jest Types:** Added jest types to tsconfig.json for proper test runner type checking
 
 ### Security
+
 - **Environment Variables:** Enforced validation of all required API keys before container initialization
 - **Type Safety:** Eliminated all `any` types in favor of `unknown` for safer runtime behavior
   - **Total Test Coverage:** 81 tests passing (100% success rate)
@@ -585,6 +646,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - RAGOrchestrator: 18/18 ✅
 
 ### Changed
+
 - **Jest Configuration:** Added ts-jest support for TypeScript testing with ES modules
   - Created `jest.config.cjs` with ESM preset and proper module resolution
   - Installed `ts-jest` and `@types/jest` dependencies
@@ -603,10 +665,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Enables clean imports for RAG system usage
 
 ### Fixed
+
 - **RAGIndexer Category Inference:** Changed from exact match to substring matching
   - Now uses `includes()` instead of exact `===` for category detection
   - Fixes issue where sources like "qribar_features" didn't match "qribar"
-  - Location: `src/features/chatbot/data/rag-indexer.ts` (_inferCategory method)
+  - Location: `src/features/chatbot/data/rag-indexer.ts` (\_inferCategory method)
 - **RAGOrchestrator Cache Invalidation:** Fixed method call for pattern-based invalidation
   - Changed from `cache.invalidate(pattern)` to `cache.invalidateByPattern(pattern)`
   - Aligns with EmbeddingCache API design
@@ -615,6 +678,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.3.1] - 2026-02-02
 
 ### Added
+
 - **n8n Railway Production Integration:** Complete workflow automation deployment
   - Deployed n8n to Railway with PostgreSQL database
   - Configured production webhook endpoint for lead intake
@@ -623,6 +687,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Documentation: `docs/audit/2026-02-02_n8n-railway-production-deployment.md`
 
 ### Fixed
+
 - **Build Pipeline:** Removed reference to deleted `debug-env.js` script from build command
   - Issue: Vercel builds failing after cleanup due to `node scripts/debug-env.js` in package.json
   - Solution: Changed build script to `vite build` only
@@ -637,6 +702,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Result: Environment variables properly available in Vercel production builds
 
 ### Removed
+
 - **Project Cleanup:** Removed obsolete test files and debug components (-761 lines)
   - Deleted 9 test/debug scripts: `debug-env.js`, `diagnose-form.html`, `test-*.js`, `test-webhook-railway.ps1`
   - Removed Jest configuration (`jest.config.ts`) and empty `__tests__/` directory
@@ -645,6 +711,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Updated `App.tsx` to remove debug component import
 
 ### Security
+
 - **Git Repository Audit:** Verified no exposed secrets in commit history
   - Confirmed `.env.local` properly ignored via `.gitignore`
   - Verified Gemini API key only used server-side via Supabase Edge Functions
@@ -654,26 +721,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Fixed
+
 - Fixed CORS error when submitting Contact form: Configured n8n webhook to send proper CORS headers, allowing frontend to communicate with backend.
 - Prevented frontend crash when SUPABASE_URL or SUPABASE_ANON_KEY are missing: SecurityLogger and rateLimiter now fallback to console-only logging if env vars are absent, avoiding 'supabaseUrl is required' error in production and preview builds.
 
 ## [Unreleased]
-### Changed
-- Fixed all reported code quality errors (optional chaining, void usage, globalThis usage, cognitive complexity).
-- **Environment Variables:** Unified `.env.local` for both frontend (VITE_*) and backend (no prefix) secrets. Refactored universal env resolver to use `globalThis.window` and optional chaining for maximum compatibility and security. No more ESM/Node/env runtime errors.
 
+### Changed
+
+- Fixed all reported code quality errors (optional chaining, void usage, globalThis usage, cognitive complexity).
+- **Environment Variables:** Unified `.env.local` for both frontend (VITE\_\*) and backend (no prefix) secrets. Refactored universal env resolver to use `globalThis.window` and optional chaining for maximum compatibility and security. No more ESM/Node/env runtime errors.
 
 ### Fixed
-
-
-
-
 
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
 ### Fixed
+
 - **RAG Vector Search:** Fixed embedding format incompatibility preventing document retrieval
   - Root cause: Embeddings stored as JSON arrays instead of pgvector type
   - Solution: Created `insert_document()` RPC function with explicit `::vector(768)` cast
@@ -683,13 +749,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Affected files: `populate-knowledge-base.mjs`, migrations 20260129130000 & 20260129131000, `gemini-chat/index.ts`
 
 ### Added
+
 - **Edge Functions Deployment Infrastructure:** Complete setup for secure RAG chatbot deployment
   - Created `supabase/functions/gemini-chat/index.ts`: Simplified Edge Function without RAG (3.9kB bundle)
     - Direct Gemini API integration (gemini-1.5-flash-latest)
     - Rate limiting (10 requests/minute, in-memory)
     - Conversation history support (last 5 messages)
     - CORS handling and comprehensive error handling
-    - *Note:* RAG version (with vector search) backed up to `index-rag-backup.ts` pending database setup
+    - _Note:_ RAG version (with vector search) backed up to `index-rag-backup.ts` pending database setup
   - Created `supabase/.env.example`: Environment variables template for Edge Functions
   - Created `scripts/deploy-edge-functions.ps1`: Automated deployment script (119 lines)
     - Multi-function deployment support (all|gemini-chat|gemini-generate|gemini-embedding)
@@ -709,6 +776,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - HNSW index for efficient vector search
 
 ### Fixed
+
 - **Chatbot Authentication Architecture:** Resolved 401 errors from Edge Function auth mismatch
   - Updated `GeminiDataSource.ts`: Changed from `gemini-embedding` to `gemini-chat` Edge Function
   - Updated `GenerateResponseUseCase.ts`: Removed client-side RAG logic (80+ lines simplified)
@@ -719,6 +787,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Solution: `gemini-chat` accepts Anon Key without strict user authentication
 
 ### Known Issues
+
 - **CRITICAL:** `GEMINI_API_KEY` configured in Supabase is invalid (returns 403/404)
   - Chatbot returns 503 errors until API key is updated
   - See `docs/GEMINI_API_KEY_FIX.md` for resolution steps
@@ -726,6 +795,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Action: Update `.env.local` and `supabase secrets set GEMINI_API_KEY=<new_key>`
 
 ### Security
+
 - **CRITICAL FIX:** Removed API key exposure from `vite.config.ts` browser bundle (OWASP A02:2021 - Cryptographic Failures)
   - Eliminated `process.env.GEMINI_API_KEY` from Vite define config
   - All API calls now properly routed through Supabase Edge Functions
@@ -749,6 +819,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Auto-cleanup of expired entries every 5 minutes
 
 ### Added
+
 - **Test Suite:** Unit tests for security utilities
   - `MessageEntity.test.ts`: 40+ tests for domain entity validation
   - `sanitizer.test.ts`: 35+ tests for XSS prevention and input validation
@@ -759,6 +830,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `supabase/migrations/20260129_create_security_logs.sql`: Database schema with RLS
 
 ### Fixed
+
 - **CRITICAL:** Resolved circular dependency causing ILogger export error in production build
   - Separated type exports from implementation exports in `src/core/domain/usecases/index.ts`
   - Changed export order: Logger types/classes first → SecurityLogger second (which extends ConsoleLogger)
@@ -767,6 +839,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed SecurityLogger import from LeadEntity to break circular dependency chain (Contact → Lead → SecurityLogger → Logger)
 
 ### Added
+
 - **Landing Page Complete:** Integrated all 5 sections (Navbar, Hero, Features, SuccessStats, Contact)
 - **AI Chatbot Integration:** Added ExpertAssistant component with RAG architecture
   - Floating button with WhatsApp companion in bottom-right corner
@@ -776,14 +849,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Uses ChatSessionEntity for state management and MessageEntity for validation
 
 ### Changed
+
 - Updated `src/App.tsx` to include Contact component and ExpertAssistant chatbot
 - Refactored barrel export in `@core/domain/usecases` with explicit type/implementation separation
 
 ### Known Issues
+
 - XSS logging in LeadEntity.validateMessage() temporarily disabled (TODO added for future re-implementation)
 - Chatbot requires Edge Functions deployment and RAG database training to be fully functional
 
 ### Security
+
 - **OWASP Top 10:2021 Full Compliance (8/10 categories):**
   - **A01 (Broken Access Control):** Added tenant isolation in `SupabaseDataSource.searchSimilarDocuments()` with application-layer filtering
   - **A02 (Cryptographic Failures):** Created `docs/SUPABASE_SECURITY.md` (353 lines) with RLS policies, security_logs table, and deployment checklist
@@ -799,6 +875,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.3.0] - 2026-01-28
 
 ### Added
+
 - **Core Infrastructure:** Created shared business logic layer in `src/core/`
   - Domain Entities: Custom error classes (`DomainError`, `ValidationError`, `ApiError`, `NetworkError`, etc.)
   - Data Layer: `IHttpClient` interface + `FetchHttpClient` implementation with timeout & error handling
@@ -806,6 +883,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Test Coverage: 28 unit tests for core infrastructure (all passing ✅)
 
 ### Changed
+
 - **QRIBAR Feature:** Refactored with Clean Architecture + SOLID principles
   - Domain Layer: `MenuItem` and `Restaurant` entities with business rules validation
   - Data Layer: `MenuRepositoryImpl` with `IMenuDataSource` abstraction
@@ -823,12 +901,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Test Coverage: 182 unit tests (all passing ✅)
 
 ### Removed
+
 - **Lead Scoring Feature:** Removed unused `src/features/lead-scoring/` directory
   - Feature was planned but not implemented (empty directories)
   - Lead scoring logic remains in n8n automation backend
   - Updated documentation to reflect current architecture
 
 ### Added
+
 - **Integration Tests:** Created comprehensive integration test suites
   - `chatbot-rag-flow.test.ts`: 9 test cases for complete RAG pipeline (query → embedding → search → response)
   - `lead-submission-flow.test.ts`: 17 test cases for lead submission flow (entity → repository → webhook)
@@ -841,12 +921,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Total: 29 repository tests (all passing ✅)
 
 ### Fixed
+
 - **Repository Tests:** Fixed parameter transformation expectations in repository tests
   - ChatRepositoryImpl: Corrected `userQuery` → `prompt` transformation validation
   - DocumentRepositoryImpl: Fixed `limit` → `matchCount` and `threshold` → `matchThreshold` expectations
   - All 26 repository unit tests now passing (100% pass rate)
 
 ### Changed
+
 - **Landing Feature:** Refactored contact form with Clean Architecture
   - Separated validation logic into `LeadEntity` domain entity
   - Created `SubmitLeadUseCase` for business logic orchestration
@@ -858,13 +940,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.3.0] - 2026-01-28
 
 ### Changed
+
 - **MAJOR REFACTOR:** Complete Clean Architecture implementation for chatbot feature
   - Separated concerns into Domain, Data, and Presentation layers
   - Implemented Repository Pattern with interface abstractions
   - Implemented Use Case Pattern for business logic encapsulation
   - Applied SOLID principles (Single Responsibility, Dependency Inversion, Interface Segregation)
-  
+
 ### Added
+
 - **Domain Layer:**
   - `MessageEntity`: Immutable message entity with validation (max 4000 chars)
   - `DocumentEntity`: Document entity with similarity scoring and relevance checking
@@ -881,12 +965,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Refactored `ExpertAssistantWithRAG` to use dependency injection
 
 ### Removed
+
 - Monolithic `RAGService` class (replaced by use cases and repositories)
 - Direct Supabase client instantiation in components (now injected via container)
 
 ## [0.2.1] - 2026-01-28
 
 ### Fixed
+
 - **CRITICAL:** Migrated to stable Gemini API models after deprecation
   - Updated `gemini-embedding` to use `gemini-embedding-001` (was `text-embedding-004`)
   - Updated `gemini-generate` to use `gemini-2.5-flash` (was `gemini-2.0-flash-exp`)
@@ -896,17 +982,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated training script `train_rag.js` to match Edge Function configuration
 
 ### Changed
+
 - Enhanced error logging in both Edge Functions for better debugging
 - Added request body validation in `gemini-generate` function
 - Created diagnostic test script `test_gemini_generate.js` for isolated testing
 
 ### Added
+
 - Comprehensive deployment checklist (`CHECKLIST_DESPLIEGUE.md`)
 - Audit log for model migration (`docs/audit/2026-01-28_gemini-model-migration.md`)
 
 ## [0.2.0] - 2026-01-27
 
 ### Added
+
 - Comprehensive webhook integration documentation (`docs/CONTACT_FORM_WEBHOOK.md`)
   - n8n workflow configuration for contact form processing
   - Lead temperature classification system (HOT/WARM/COLD)
@@ -927,6 +1016,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.2.0] - 2026-01-26
 
 ### Added
+
 - Supabase Edge Functions for secure API key management
   - `gemini-embedding` function for generating embeddings server-side
   - `gemini-generate` function for generating AI responses server-side
@@ -936,10 +1026,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Technical README for Edge Functions (`supabase/functions/README.md`)
 
 ### Changed
+
 - Refactored `ExpertAssistantWithRAG.tsx` to use Supabase Edge Functions instead of direct Gemini API calls
 - RAGService now calls `supabase.functions.invoke()` for embeddings and generation
 
 ### Security
+
 - **CRITICAL:** Fixed API key exposure issue in browser
 - GEMINI_API_KEY now stored server-side in Supabase secrets (not exposed to client)
 - Removed `VITE_GEMINI_API_KEY` from environment variables
@@ -948,6 +1040,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0] - 2026-01-26
 
 ### Added
+
 - Initial RAG (Retrieval-Augmented Generation) chatbot implementation
 - Supabase integration with pgvector extension
 - Vector similarity search with `match_documents` function
@@ -957,6 +1050,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - TDD setup with Jest and React Testing Library
 
 ### Fixed
+
 - RLS policy violations during document insertion
 - Embedding storage format (string to vector(768) type)
 - Function permissions for anonymous users
