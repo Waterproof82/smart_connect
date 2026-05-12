@@ -82,7 +82,7 @@ const DropdownMenuItem: React.FC<{
   if (item.internal) {
     return (
       <Link
-        ref={itemRef as unknown as React.Ref<HTMLAnchorElement>}
+        ref={itemRef}
         to={item.href}
         tabIndex={isDropdownOpen ? 0 : -1}
         className={itemClasses}
@@ -96,7 +96,7 @@ const DropdownMenuItem: React.FC<{
 
   return (
     <a
-      ref={itemRef as React.Ref<HTMLAnchorElement>}
+      ref={itemRef}
       href={item.href}
       target={item.external ? "_blank" : undefined}
       rel={item.external ? "noopener noreferrer" : undefined}
@@ -207,7 +207,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
             }}
             onFocus={() => setIsDropdownOpen(true)}
             onBlur={(e) => {
-              if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+              if (!e.currentTarget.contains(e.relatedTarget)) {
                 setIsDropdownOpen(false);
                 setFocusedDropdownIndex(-1);
               }
@@ -320,11 +320,15 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
 
         {/* Mobile Menu Drawer */}
         {isMobileMenuOpen && (
-          <div
-            role="dialog"
+          <dialog
+            open={isMobileMenuOpen}
             aria-modal="true"
             aria-label="Menú de navegación"
-            className="fixed inset-0 z-[200] w-full h-full flex justify-end"
+            className="fixed inset-0 z-[200] w-full h-full flex justify-end m-0 max-w-none max-h-none bg-transparent border-none"
+            onClose={(e) => {
+              e.preventDefault();
+              setIsMobileMenuOpen(false);
+            }}
           >
             <button
               className="absolute inset-0 bg-black/80 backdrop-blur-sm cursor-default border-none"
@@ -432,7 +436,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
                 </Link>
               </nav>
             </div>
-          </div>
+          </dialog>
         )}
       </div>
     </nav>

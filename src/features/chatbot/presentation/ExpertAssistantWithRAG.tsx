@@ -174,7 +174,7 @@ export const ExpertAssistant: React.FC = () => {
         <dialog
           ref={modalRef}
           aria-label="Chat con asistente experto"
-          className="w-[calc(100vw-2rem)] sm:w-[90vw] md:w-[400px] h-[65vh] sm:h-[550px] max-h-[calc(100dvh-140px)] sm:max-h-[80vh] m-0 p-0 border-none max-w-none max-h-none bg-transparent open:flex open:flex-col open:overflow-hidden"
+          className="w-[calc(100vw-2rem)] sm:w-[90vw] md:w-[400px] h-[65vh] sm:h-[550px] max-h-[calc(100dvh-140px)] sm:max-h-[80vh] static m-0 p-0 bg-[var(--color-bg)] border border-[var(--color-border)] rounded-3xl shadow-lg flex flex-col overflow-hidden"
           open={isOpen}
         >
           <div className="p-4 bg-[var(--color-accent)] flex items-center justify-between shrink-0">
