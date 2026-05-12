@@ -1,8 +1,15 @@
 import React from "react";
+import { useLocation } from "react-router-dom";
 import { useLanguage } from "@shared/context/LanguageContext";
 
 const CartaDigitalFooter: React.FC = () => {
   const { t } = useLanguage();
+  const { hash } = useLocation();
+
+  const linkClass = "hover:text-[var(--color-text)] transition-colors";
+  const isActive = (href: string) =>
+    href === "/" ? !hash : hash === href.replace("/#", "#");
+
   return (
     <footer className="bg-[var(--color-bg-alt)] border-t border-[var(--color-border)] pt-12 md:pt-16 pb-8">
       <div className="container mx-auto px-4 md:px-6">
@@ -24,7 +31,8 @@ const CartaDigitalFooter: React.FC = () => {
               <li>
                 <a
                   href="/"
-                  className="hover:text-[var(--color-text)] transition-colors"
+                  className={`${linkClass} ${isActive("/") ? "text-[var(--color-text)] font-medium" : ""}`}
+                  aria-current={isActive("/") ? "page" : undefined}
                 >
                   {t.footerNavInicio}
                 </a>
@@ -32,7 +40,8 @@ const CartaDigitalFooter: React.FC = () => {
               <li>
                 <a
                   href="/#soluciones"
-                  className="hover:text-[var(--color-text)] transition-colors"
+                  className={`${linkClass} ${isActive("/#soluciones") ? "text-[var(--color-text)] font-medium" : ""}`}
+                  aria-current={isActive("/#soluciones") ? "page" : undefined}
                 >
                   {t.footerNavSoluciones}
                 </a>
@@ -40,7 +49,8 @@ const CartaDigitalFooter: React.FC = () => {
               <li>
                 <a
                   href="/#exito"
-                  className="hover:text-[var(--color-text)] transition-colors"
+                  className={`${linkClass} ${isActive("/#exito") ? "text-[var(--color-text)] font-medium" : ""}`}
+                  aria-current={isActive("/#exito") ? "page" : undefined}
                 >
                   {t.footerNavExito}
                 </a>
@@ -48,7 +58,8 @@ const CartaDigitalFooter: React.FC = () => {
               <li>
                 <a
                   href="/#contacto"
-                  className="hover:text-[var(--color-text)] transition-colors"
+                  className={`${linkClass} ${isActive("/#contacto") ? "text-[var(--color-text)] font-medium" : ""}`}
+                  aria-current={isActive("/#contacto") ? "page" : undefined}
                 >
                   {t.footerNavContacto}
                 </a>

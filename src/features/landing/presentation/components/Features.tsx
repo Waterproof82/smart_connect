@@ -115,7 +115,7 @@ const SoftwareIAAbstract = () => (
           <path
             d="M 40 0 L 0 0 0 40"
             fill="none"
-            stroke="currentColor"
+            stroke="var(--color-primary)"
             strokeWidth="0.5"
             className="text-[var(--color-primary)]"
           />
@@ -172,7 +172,7 @@ const SoftwareIAAbstract = () => (
           {BAR_HEIGHTS.map((height) => (
             <div
               key={`bar-height-${height}`}
-              className="w-1 bg-current rounded-full animate-pulse"
+              className="w-1 bg-current rounded-full motion-safe:animate-pulse"
               style={{
                 height: `${height}px`,
                 animationDelay: `${BAR_HEIGHTS.indexOf(height) * 0.15}s`,
@@ -258,7 +258,7 @@ const VideoPlayer = () => {
         loop
         muted
         playsInline
-        className="w-full aspect-video object-cover"
+        className="w-full max-w-full aspect-[4/3] sm:aspect-video object-cover"
       />
       <div className="absolute bottom-4 right-4 z-20 flex items-center gap-2">
         <button
@@ -270,7 +270,7 @@ const VideoPlayer = () => {
           {isPlaying ? (
             <svg
               className="w-3.5 h-3.5 text-[var(--color-text)]"
-              fill="currentColor"
+              fill="var(--color-text)"
               viewBox="0 0 24 24"
             >
               <rect x="6" y="4" width="4" height="16" />
@@ -279,7 +279,7 @@ const VideoPlayer = () => {
           ) : (
             <svg
               className="w-3.5 h-3.5 text-[var(--color-text)] ml-0.5"
-              fill="currentColor"
+              fill="var(--color-text)"
               viewBox="0 0 24 24"
             >
               <polygon points="5,3 19,12 5,21" />

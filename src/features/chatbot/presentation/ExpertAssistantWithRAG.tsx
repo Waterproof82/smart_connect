@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   X,
   Send,
@@ -98,34 +98,34 @@ export const ExpertAssistant: React.FC = () => {
     }
   }, [isOpen]);
 
-  const handleSendMessage = useCallback(
-    async (message: string, currentMessages: Message[]) => {
-      setIsLoading(true);
-      try {
-        const response = await getContainer().generateResponseUseCase.execute({
-          userQuery: message,
-          conversationHistory: currentMessages,
-          useRAG: true,
-          ragOptions: { topK: 5, threshold: 0.4, source: null },
-        });
-        const assistantEntity = new MessageEntity({
-          role: "assistant",
-          content: response,
-        });
-        setChatSession((prev) => prev.addMessage(assistantEntity));
-      } catch {
-        const errorEntity = new MessageEntity({
-          role: "assistant",
-          content:
-            "Hubo un error al conectar con el asistente. Por favor, intenta de nuevo.",
-        });
-        setChatSession((prev) => prev.addMessage(errorEntity));
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    [],
-  );
+  const handleSendMessage = async (
+    message: string,
+    currentMessages: Message[],
+  ) => {
+    setIsLoading(true);
+    try {
+      const response = await getContainer().generateResponseUseCase.execute({
+        userQuery: message,
+        conversationHistory: currentMessages,
+        useRAG: true,
+        ragOptions: { topK: 5, threshold: 0.4, source: null },
+      });
+      const assistantEntity = new MessageEntity({
+        role: "assistant",
+        content: response,
+      });
+      setChatSession((prev) => prev.addMessage(assistantEntity));
+    } catch {
+      const errorEntity = new MessageEntity({
+        role: "assistant",
+        content:
+          "Hubo un error al conectar con el asistente. Por favor, intenta de nuevo.",
+      });
+      setChatSession((prev) => prev.addMessage(errorEntity));
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
@@ -192,6 +192,7 @@ export const ExpertAssistant: React.FC = () => {
               </div>
             </div>
             <button
+              type="button"
               onClick={() => {
                 setIsOpen(false);
                 toggleBtnRef.current?.focus();
@@ -207,7 +208,7 @@ export const ExpertAssistant: React.FC = () => {
             ref={scrollRef}
             className="flex-1 overflow-y-auto p-4 space-y-4"
             role="log"
-            aria-live="polite"
+            aria-live="assertive"
           >
             {chatSession.isEmpty() && (
               <div className="text-center py-8">
@@ -226,9 +227,10 @@ export const ExpertAssistant: React.FC = () => {
                     "Quiero automatizar mi negocio",
                   ].map((prompt) => (
                     <button
+                      type="button"
                       key={prompt}
                       onClick={() => setInput(prompt)}
-                      className="text-xs bg-[var(--color-accent-subtle)] border border-[var(--color-accent-border)] text-[var(--color-primary)] px-3 py-2 sm:py-2 rounded-full hover:bg-[var(--color-accent-border)] focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] transition-colors min-h-[44px]"
+                      className="text-xs bg-[var(--color-accent-subtle)] border border-[var(--color-accent-border)] text-[var(--color-primary)] px-3 py-2 sm:py-2 rounded-full hover:bg-[var(--color-accent-border)] focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] transition-colors min-h-[var(--touch-target-min)]"
                     >
                       {prompt}
                     </button>

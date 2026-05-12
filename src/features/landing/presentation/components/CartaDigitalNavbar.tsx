@@ -22,8 +22,8 @@ const CartaDigitalNavbar: React.FC<{ scrolled?: boolean }> = ({
         setIsMobileMenuOpen(false);
       }
     };
-    globalThis.addEventListener("keydown", handleKeyDown);
-    return () => globalThis.removeEventListener("keydown", handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
   }, [isMobileMenuOpen]);
 
   const solutions = mapSolutions(SOLUTIONS, t, {
@@ -198,8 +198,9 @@ const CartaDigitalNavbar: React.FC<{ scrolled?: boolean }> = ({
             <button
               className="absolute inset-0 bg-black/80 backdrop-blur-sm cursor-default border-none"
               onClick={() => setIsMobileMenuOpen(false)}
-              aria-hidden="true"
+              role="presentation"
               tabIndex={-1}
+              aria-hidden="false"
               type="button"
             />
             <div className="relative w-[80vw] max-w-xs h-full bg-[var(--color-bg)] border-l border-[var(--color-border)] p-4 flex flex-col gap-4 shadow-lg animate-in slide-in-from-right overflow-y-auto z-10">
