@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Cpu, ChevronDown, Shield, X, Menu } from "lucide-react";
+import { Cpu, ChevronDown, Shield, X, Menu, Sun, Moon } from "lucide-react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import LanguageSelector from "@shared/components/LanguageSelector";
 import { useLanguage } from "@shared/context/LanguageContext";
+import { useTheme } from "@shared/context/ThemeContext";
 import { SOLUTIONS } from "@shared/config/solutions";
 import { mapSolutions, SolutionItem } from "@shared/utils/solutionHelpers";
 
@@ -114,6 +115,7 @@ const DropdownMenuItem: React.FC<{
 
 export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
   const { t } = useLanguage();
+  const { theme, toggleTheme } = useTheme();
   const location = useLocation();
   const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -285,6 +287,19 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
             {t.navContact}
           </a>
           <LanguageSelector />
+          <button
+            onClick={toggleTheme}
+            className="p-2 rounded-lg text-muted hover:text-[var(--color-text)] hover:bg-[var(--color-surface)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] transition-colors"
+            aria-label={
+              theme === "dark" ? "Activar modo claro" : "Activar modo oscuro"
+            }
+          >
+            {theme === "dark" ? (
+              <Sun className="w-4 h-4" />
+            ) : (
+              <Moon className="w-4 h-4" />
+            )}
+          </button>
           <Link
             to="/admin"
             className="flex items-center gap-2 text-muted hover:text-[var(--color-primary)] transition-colors"
@@ -305,9 +320,11 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
 
         {/* Mobile Menu Drawer */}
         {isMobileMenuOpen && (
-          <dialog
-            className="fixed inset-0 z-[200] w-full h-full bg-transparent !flex justify-end m-0"
-            open={isMobileMenuOpen}
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Menú de navegación"
+            className="fixed inset-0 z-[200] w-full h-full flex justify-end"
           >
             <button
               className="absolute inset-0 bg-black/80 backdrop-blur-sm cursor-default border-none"
@@ -322,7 +339,22 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
                   SmartConnect{" "}
                   <span className="text-[var(--color-primary)]">AI</span>
                 </span>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={toggleTheme}
+                    className="p-2 rounded-lg text-muted hover:text-[var(--color-text)] hover:bg-[var(--color-surface)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] transition-colors"
+                    aria-label={
+                      theme === "dark"
+                        ? "Activar modo claro"
+                        : "Activar modo oscuro"
+                    }
+                  >
+                    {theme === "dark" ? (
+                      <Sun className="w-4 h-4" />
+                    ) : (
+                      <Moon className="w-4 h-4" />
+                    )}
+                  </button>
                   <LanguageSelector />
                   <button
                     onClick={() => setIsMobileMenuOpen(false)}
@@ -400,7 +432,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
                 </Link>
               </nav>
             </div>
-          </dialog>
+          </div>
         )}
       </div>
     </nav>

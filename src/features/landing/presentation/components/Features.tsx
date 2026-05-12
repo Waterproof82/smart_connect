@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import {
   Code2,
   Settings2,
@@ -220,7 +220,20 @@ const LinkWrapper: React.FC<{
 
 const VideoPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const inViewport = useIntersectionObserver(containerRef, { threshold: 0.2 });
+
+  // Start playing when video enters viewport
+  useEffect(() => {
+    if (inViewport && !isVisible) {
+      setIsVisible(true);
+      if (videoRef.current) {
+        videoRef.current.play().catch(() => {});
+      }
+    }
+  }, [inViewport, isVisible]);
 
   const toggle = () => {
     if (!videoRef.current) return;
@@ -234,11 +247,14 @@ const VideoPlayer = () => {
   };
 
   return (
-    <div className="relative bg-black rounded-2xl overflow-hidden">
+    <div
+      ref={containerRef}
+      className="relative bg-[var(--color-bg)] rounded-2xl overflow-hidden"
+    >
       <video
         ref={videoRef}
         src="/assets/video.mp4"
-        autoPlay
+        preload={isVisible ? "auto" : "none"}
         loop
         muted
         playsInline
@@ -246,13 +262,14 @@ const VideoPlayer = () => {
       />
       <div className="absolute bottom-4 right-4 z-20 flex items-center gap-2">
         <button
+          type="button"
           onClick={toggle}
-          className="w-8 h-8 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center hover:bg-black/80 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+          className="w-8 h-8 rounded-full bg-[var(--color-overlay-strong)]/80 backdrop-blur-sm flex items-center justify-center hover:bg-[var(--color-overlay-strong)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-text)]"
           aria-label={isPlaying ? "Pausar video" : "Reanudar video"}
         >
           {isPlaying ? (
             <svg
-              className="w-3.5 h-3.5 text-white"
+              className="w-3.5 h-3.5 text-[var(--color-text)]"
               fill="currentColor"
               viewBox="0 0 24 24"
             >
@@ -261,7 +278,7 @@ const VideoPlayer = () => {
             </svg>
           ) : (
             <svg
-              className="w-3.5 h-3.5 text-white ml-0.5"
+              className="w-3.5 h-3.5 text-[var(--color-text)] ml-0.5"
               fill="currentColor"
               viewBox="0 0 24 24"
             >
@@ -269,7 +286,7 @@ const VideoPlayer = () => {
             </svg>
           )}
         </button>
-        <div className="px-2 py-1 bg-black/60 backdrop-blur rounded text-xs text-white/80">
+        <div className="px-2 py-1 bg-[var(--color-overlay-strong)]/80 backdrop-blur rounded text-xs text-[var(--color-text)]/80">
           ▶ Ejemplo de plato
         </div>
       </div>
@@ -332,10 +349,10 @@ export const Features: React.FC = () => {
 
             {item.hasVideo && idx === 4 && (
               <div className="relative z-10 mt-4 rounded-2xl overflow-hidden border border-[var(--color-border)] shadow-lg group/video">
-                <div className="relative bg-black rounded-2xl overflow-hidden">
-                  <div className="absolute inset-0 pointer-events-none z-10 border-[8px] md:border-[12px] border-[#1a1a1a] rounded-2xl"></div>
-                  <div className="absolute top-0 left-0 right-0 h-6 md:h-8 bg-gradient-to-b from-black/50 to-transparent z-10"></div>
-                  <div className="absolute bottom-0 left-0 right-0 h-6 md:h-8 bg-gradient-to-t from-black/50 to-transparent z-10"></div>
+                <div className="relative bg-[var(--color-bg)] rounded-2xl overflow-hidden">
+                  <div className="absolute inset-0 pointer-events-none z-10 border-[8px] md:border-[12px] border-[var(--color-bg-alt)] rounded-2xl"></div>
+                  <div className="absolute top-0 left-0 right-0 h-6 md:h-8 bg-gradient-to-b from-[var(--color-bg)]/50 to-transparent z-10"></div>
+                  <div className="absolute bottom-0 left-0 right-0 h-6 md:h-8 bg-gradient-to-t from-[var(--color-bg)]/50 to-transparent z-10"></div>
                   <VideoPlayer />
                 </div>
               </div>

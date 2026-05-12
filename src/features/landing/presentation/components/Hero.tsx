@@ -114,14 +114,14 @@ export const Hero: React.FC = () => {
               className="absolute -left-16 top-1/3 bg-[var(--color-accent)] border border-[var(--color-accent)]/50 backdrop-blur-xl px-6 py-4 rounded-2xl flex items-center gap-4 shadow-[0_20px_50px_rgba(37,99,235,0.4)] animate-float-fancy"
               style={{ animationDelay: "-2s" }}
             >
-              <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-[var(--color-overlay-strong)] rounded-lg flex items-center justify-center">
                 <Sparkles className="w-4 h-4 text-[var(--color-on-accent)]" />
               </div>
               <div className="flex flex-col">
-                <span className="text-[10px] font-black text-white/70 uppercase tracking-tighter">
+                <span className="text-[10px] font-black text-[var(--color-on-accent-muted)] uppercase tracking-tighter">
                   AI Core
                 </span>
-                <span className="text-xs font-bold text-white">
+                <span className="text-xs font-bold text-[var(--color-on-accent)]">
                   Procesando...
                 </span>
               </div>

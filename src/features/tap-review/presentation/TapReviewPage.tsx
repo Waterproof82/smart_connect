@@ -37,7 +37,7 @@ const StarRating: React.FC<{ rating: number }> = ({ rating }) => (
     {[...Array(5)].map((_, i) => (
       <Star
         key={i}
-        className={`w-4 h-4 ${i < Math.floor(rating) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}`}
+        className={`w-4 h-4 ${i < Math.floor(rating) ? "fill-[var(--color-icon-amber)] text-[var(--color-icon-amber)]" : "text-[var(--color-text-muted)]"}`}
       />
     ))}
   </div>
@@ -406,7 +406,7 @@ const SocialProof: React.FC = () => {
                 {[...Array(5)].map((_, i) => (
                   <Star
                     key={i}
-                    className="w-5 h-5 fill-yellow-400 text-yellow-400"
+                    className="w-5 h-5 fill-[var(--color-icon-amber)] text-[var(--color-icon-amber)]"
                   />
                 ))}
               </div>

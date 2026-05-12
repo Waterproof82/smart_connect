@@ -1,10 +1,12 @@
 import React, { Suspense, lazy, Component, ReactNode } from "react";
+import { Link } from "react-router-dom";
 import { Navbar } from "@features/landing/presentation/components/Navbar";
 import { Hero } from "@features/landing/presentation/components/Hero";
 import { Features } from "@features/landing/presentation/components/Features";
 import { Contact } from "@features/landing/presentation/components/Contact";
 import { ConsoleLogger } from "@core/domain/usecases/Logger";
 import { useLanguage } from "@shared/context/LanguageContext";
+import { ThemeProvider } from "@shared/context/ThemeContext";
 
 const logger = new ConsoleLogger("[ErrorBoundary]");
 
@@ -143,139 +145,141 @@ const App: React.FC = () => {
 
   return (
     <ErrorBoundary>
-      <div className="min-h-screen bg-base text-default">
-        <div
-          ref={sentinelRef}
-          className="absolute top-[50px] h-px w-px"
-          aria-hidden="true"
-        />
-        <a
-          href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:bg-[var(--color-accent)] focus:text-[var(--color-on-accent)] focus:px-4 focus:py-2 focus:rounded-lg focus:text-sm focus:font-bold"
-        >
-          {t.skipLink}
-        </a>
-        <Navbar scrolled={scrolled} />
-        <main id="main" aria-label="Contenido principal">
-          <section id="inicio" aria-label="Inicio">
-            <Hero />
-          </section>
-          <section
-            id="soluciones"
-            aria-label="Nuestras Soluciones"
-            className="py-20 md:py-32"
+      <ThemeProvider>
+        <div className="min-h-screen bg-base text-default">
+          <div
+            ref={sentinelRef}
+            className="absolute top-[50px] h-px w-px"
+            aria-hidden="true"
+          />
+          <a
+            href="#main"
+            className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:bg-[var(--color-accent)] focus:text-[var(--color-on-accent)] focus:px-4 focus:py-2 focus:rounded-lg focus:text-sm focus:font-bold"
           >
-            <Features />
-          </section>
-          <section
-            id="exito"
-            aria-label="Casos de Éxito"
-            className="py-20 md:py-32"
-          >
-            <Suspense fallback={<SectionLoading />}>
-              <SuccessStats />
-            </Suspense>
-          </section>
-          <section id="contacto" aria-label="Contacto">
-            <Contact />
-          </section>
-        </main>
+            {t.skipLink}
+          </a>
+          <Navbar scrolled={scrolled} />
+          <main id="main" aria-label="Contenido principal">
+            <section id="inicio" aria-label="Inicio">
+              <Hero />
+            </section>
+            <section
+              id="soluciones"
+              aria-label="Nuestras Soluciones"
+              className="py-20 md:py-32"
+            >
+              <Features />
+            </section>
+            <section
+              id="exito"
+              aria-label="Casos de Éxito"
+              className="py-20 md:py-32"
+            >
+              <Suspense fallback={<SectionLoading />}>
+                <SuccessStats />
+              </Suspense>
+            </section>
+            <section id="contacto" aria-label="Contacto">
+              <Contact />
+            </section>
+          </main>
 
-        {/* AI Chatbot Assistant - Always visible */}
-        <Suspense fallback={<ChatbotLoading />}>
-          <ExpertAssistant />
-        </Suspense>
+          {/* AI Chatbot Assistant - Always visible */}
+          <Suspense fallback={<ChatbotLoading />}>
+            <ExpertAssistant />
+          </Suspense>
 
-        {/* Footer */}
-        <footer className="bg-[var(--color-bg-alt)] border-t border-[var(--color-border)] pt-16 pb-8">
-          <div className="container mx-auto px-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-12 mb-12">
-              <div>
-                <span className="font-bold text-xl text-default">
-                  SmartConnect{" "}
-                  <span className="text-[var(--color-primary)]">AI</span>
-                </span>
-                <p className="text-muted text-sm mt-3 leading-relaxed">
-                  {t.footerTagline}
-                </p>
+          {/* Footer */}
+          <footer className="bg-[var(--color-bg-alt)] border-t border-[var(--color-border)] pt-16 pb-8">
+            <div className="container mx-auto px-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-12 mb-12">
+                <div>
+                  <span className="font-bold text-xl text-default">
+                    SmartConnect{" "}
+                    <span className="text-[var(--color-primary)]">AI</span>
+                  </span>
+                  <p className="text-muted text-sm mt-3 leading-relaxed">
+                    {t.footerTagline}
+                  </p>
+                </div>
+                <nav aria-label="Navegación del footer">
+                  <h3 className="text-sm font-bold text-muted uppercase tracking-wider mb-4">
+                    {t.footerNavTitle}
+                  </h3>
+                  <ul className="space-y-2 text-sm text-muted">
+                    <li>
+                      <a
+                        href="#inicio"
+                        className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors"
+                      >
+                        {t.footerNavInicio}
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="#soluciones"
+                        className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors"
+                      >
+                        {t.footerNavSoluciones}
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="#exito"
+                        className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors"
+                      >
+                        {t.footerNavExito}
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="#contacto"
+                        className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors"
+                      >
+                        {t.footerNavContacto}
+                      </a>
+                    </li>
+                  </ul>
+                </nav>
+                <div>
+                  <h3 className="text-sm font-bold text-muted uppercase tracking-wider mb-4">
+                    {t.footerLegalTitle}
+                  </h3>
+                  <ul className="space-y-2 text-sm text-muted">
+                    <li>
+                      <Link
+                        to="/legal/aviso"
+                        className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors"
+                      >
+                        {t.footerLegalAviso}
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to="/legal/privacidad"
+                        className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors"
+                      >
+                        {t.footerLegalPrivacidad}
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to="/legal/cookies"
+                        className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors"
+                      >
+                        {t.footerLegalCookies}
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
               </div>
-              <nav aria-label="Navegación del footer">
-                <h3 className="text-sm font-bold text-muted uppercase tracking-wider mb-4">
-                  {t.footerNavTitle}
-                </h3>
-                <ul className="space-y-2 text-sm text-muted">
-                  <li>
-                    <a
-                      href="#inicio"
-                      className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors"
-                    >
-                      {t.footerNavInicio}
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#soluciones"
-                      className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors"
-                    >
-                      {t.footerNavSoluciones}
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#exito"
-                      className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors"
-                    >
-                      {t.footerNavExito}
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#contacto"
-                      className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors"
-                    >
-                      {t.footerNavContacto}
-                    </a>
-                  </li>
-                </ul>
-              </nav>
-              <div>
-                <h3 className="text-sm font-bold text-muted uppercase tracking-wider mb-4">
-                  {t.footerLegalTitle}
-                </h3>
-                <ul className="space-y-2 text-sm text-muted">
-                  <li>
-                    <a
-                      href="mailto:legal@smartconnect.ai?subject=Aviso%20Legal"
-                      className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors"
-                    >
-                      {t.footerLegalAviso}
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="mailto:legal@smartconnect.ai?subject=Privacidad"
-                      className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors"
-                    >
-                      {t.footerLegalPrivacidad}
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="mailto:legal@smartconnect.ai?subject=Cookies"
-                      className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors"
-                    >
-                      {t.footerLegalCookies}
-                    </a>
-                  </li>
-                </ul>
+              <div className="border-t border-[var(--color-border)] pt-8 text-center text-muted text-sm">
+                <p>&copy; {t.footerCopyright}</p>
               </div>
             </div>
-            <div className="border-t border-[var(--color-border)] pt-8 text-center text-muted text-sm">
-              <p>&copy; {t.footerCopyright}</p>
-            </div>
-          </div>
-        </footer>
-      </div>
+          </footer>
+        </div>
+      </ThemeProvider>
     </ErrorBoundary>
   );
 };

@@ -239,9 +239,7 @@ export const Contact: React.FC = () => {
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--color-accent-subtle)] border border-[var(--color-accent-border)] text-[var(--color-primary)] text-xs font-bold mb-6 tracking-wider uppercase">
             {t.heroEyebrow}
           </div>
-          <h2 className="text-5xl font-extrabold mb-6">
-            Contact Us for QRIBAR & NFC Cards
-          </h2>
+          <h2 className="text-5xl font-extrabold mb-6">{t.contactTitle}</h2>
           <p className="text-muted text-lg leading-relaxed">
             Get a demo of our digital menu and NFC solutions for restaurants.
             Learn more about{" "}

@@ -12,7 +12,9 @@ export const LanguageSelector: React.FC = () => {
         value={language}
         onChange={(e) => setLanguage(e.target.value as "es" | "en")}
         className="bg-transparent text-sm font-semibold text-muted cursor-pointer border-none outline-none hover:text-[var(--color-text)] focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded transition-colors"
-        aria-label="Seleccionar idioma"
+        aria-label={
+          language === "es" ? "Seleccionar idioma" : "Select language"
+        }
       >
         <option value="es" className="text-default bg-[var(--color-bg)]">
           ES

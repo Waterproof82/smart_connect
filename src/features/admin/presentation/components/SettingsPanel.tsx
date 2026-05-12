@@ -138,7 +138,7 @@ export const SettingsPanel: React.FC = () => {
   }
 
   return (
-    <form
+    <div
       className="bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded-lg p-6"
       aria-label="Configuración de la aplicación"
     >
@@ -338,6 +338,6 @@ export const SettingsPanel: React.FC = () => {
           Última actualización: {settings.updatedAt.toLocaleString("es-AR")}
         </div>
       )}
-    </form>
+    </div>
   );
 };
