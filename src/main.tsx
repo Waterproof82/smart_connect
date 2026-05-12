@@ -7,7 +7,38 @@ import { ScrollToTop } from "@shared/components/ScrollToTop";
 import "./index.css";
 import App from "./App";
 import CartaDigitalPremium from "./features/landing/presentation/components/CartaDigitalPremium";
-import { TapReviewPage } from "./features/tap-review/presentation";
+import { TapReviewPage } from "./features/tap-review/presentation/TapReviewPage";
+import TapReviewContainer from "./features/tap-review/TapReviewContainer";
+
+// Wrapper component to fetch whatsappPhone before rendering TapReviewPage (Clean Architecture: Presentation Container)
+const TapReviewPageWithData: React.FC = () => {
+  const [whatsappPhone, setWhatsappPhone] = React.useState<string>("");
+
+  React.useEffect(() => {
+    const fetchWhatsApp = async () => {
+      try {
+        const settings = await TapReviewContainer.getInstance()
+          .getGetAppSettingsUseCase()
+          .execute();
+        if (settings?.value) {
+          const pairs = settings.value.split(";");
+          for (const pair of pairs) {
+            const [key, value] = pair.split("=");
+            if (key === "whatsappPhone" && value) {
+              setWhatsappPhone(value.replaceAll(/[^\d+]/g, ""));
+              break;
+            }
+          }
+        }
+      } catch {
+        // Silently fail, WhatsApp button will fallback to contacto
+      }
+    };
+    fetchWhatsApp();
+  }, []);
+
+  return <TapReviewPage whatsappPhone={whatsappPhone} />;
+};
 
 const getInitialTheme = (): "light" | "dark" => {
   if (typeof window === "undefined") return "dark";
@@ -72,7 +103,7 @@ root.render(
               <Route path="/" element={<App />} />
               <Route path="/admin" element={<AdminPanel />} />
               <Route path="/carta-digital" element={<CartaDigitalPremium />} />
-              <Route path="/tap-review" element={<TapReviewPage />} />
+              <Route path="/tap-review" element={<TapReviewPageWithData />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
