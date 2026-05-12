@@ -30,7 +30,6 @@ import {
 import { useIntersectionObserver } from "@shared/hooks";
 import { useLanguage } from "@shared/context/LanguageContext";
 import LanguageSelector from "@shared/components/LanguageSelector";
-import { getAppSettings } from "@shared/services/settingsService";
 
 const StarRating: React.FC<{ rating: number }> = ({ rating }) => (
   <div className="flex gap-0.5">
@@ -968,23 +967,14 @@ const Footer: React.FC = () => {
   );
 };
 
-export const TapReviewPage: React.FC = () => {
-  const { t } = useLanguage();
-  const [whatsappPhone, setWhatsappPhone] = useState<string>("");
+interface TapReviewPageProps {
+  whatsappPhone?: string;
+}
 
-  useEffect(() => {
-    const fetchWhatsApp = async () => {
-      try {
-        const settings = await getAppSettings();
-        if (settings.whatsappPhone) {
-          setWhatsappPhone(settings.whatsappPhone.replaceAll(/[^\d+]/g, ""));
-        }
-      } catch {
-        // Silently fail, WhatsApp button will fallback to contacto
-      }
-    };
-    fetchWhatsApp();
-  }, []);
+export const TapReviewPage: React.FC<TapReviewPageProps> = ({
+  whatsappPhone = "",
+}) => {
+  const { t } = useLanguage();
 
   return (
     <>
