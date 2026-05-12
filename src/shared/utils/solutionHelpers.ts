@@ -44,6 +44,21 @@ export function mapSolutions(
     .filter((solution) => !options.filterOut?.includes(solution.id))
     .map((solution) => {
       const IconComponent = iconComponentMap[solution.icon];
+
+      // Build href - avoid double slashes when combining prefix + href
+      let href: string;
+      if (options.hrefPrefix) {
+        const prefix = options.hrefPrefix.endsWith("/")
+          ? options.hrefPrefix.slice(0, -1)
+          : options.hrefPrefix;
+        const path = solution.href.startsWith("/")
+          ? solution.href
+          : "/" + solution.href;
+        href = prefix + path;
+      } else {
+        href = solution.href;
+      }
+
       return {
         id: solution.id,
         icon: React.createElement(IconComponent, {
@@ -51,9 +66,7 @@ export function mapSolutions(
         }),
         title: translations[solution.titleKey as keyof Translation],
         desc: translations[solution.descKey as keyof Translation],
-        href: options.hrefPrefix
-          ? `${options.hrefPrefix}${solution.href}`
-          : solution.href,
+        href,
         internal: solution.internal,
         external: solution.external,
       };
