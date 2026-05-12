@@ -42,7 +42,7 @@ export const ExpertAssistant: React.FC = () => {
   const [whatsappPhone, setWhatsappPhone] = useState<string>("");
   const scrollRef = useRef<HTMLDivElement>(null);
   const toggleBtnRef = useRef<HTMLButtonElement>(null);
-  const modalRef = useRef<HTMLDivElement>(null);
+  const modalRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
     const fetchWhatsApp = async () => {
@@ -171,12 +171,11 @@ export const ExpertAssistant: React.FC = () => {
   return (
     <div className="fixed bottom-4 right-4 sm:bottom-8 sm:right-8 z-[100] flex flex-col items-end gap-3">
       {isOpen && (
-        <div
+        <dialog
           ref={modalRef}
-          role="dialog"
-          aria-modal="true"
           aria-label="Chat con asistente experto"
-          className="w-[calc(100vw-2rem)] sm:w-[90vw] md:w-[400px] h-[65vh] sm:h-[550px] max-h-[calc(100dvh-140px)] sm:max-h-[80vh] bg-[var(--color-bg)] border border-[var(--color-border)] rounded-3xl shadow-lg flex flex-col overflow-hidden"
+          className="w-[calc(100vw-2rem)] sm:w-[90vw] md:w-[400px] h-[65vh] sm:h-[550px] max-h-[calc(100dvh-140px)] sm:max-h-[80vh] m-0 p-0 border-none max-w-none max-h-none bg-transparent open:flex open:flex-col open:overflow-hidden"
+          open={isOpen}
         >
           <div className="p-4 bg-[var(--color-accent)] flex items-center justify-between shrink-0">
             <div className="flex items-center gap-3">
@@ -300,7 +299,7 @@ export const ExpertAssistant: React.FC = () => {
               </button>
             </div>
           </div>
-        </div>
+        </dialog>
       )}
 
       <div className="flex items-center gap-3">
