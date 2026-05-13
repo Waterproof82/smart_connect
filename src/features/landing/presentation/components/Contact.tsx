@@ -10,11 +10,11 @@ import {
   AlertCircle,
   ChevronDown,
   Loader2,
-  Youtube,
+  YoutubeIcon,
   Twitter,
   Linkedin,
-  Instagram,
-  Facebook,
+  InstagramIcon,
+  FacebookIcon,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { getAppSettings, AppSettings } from "@shared/services/settingsService";
@@ -620,7 +620,7 @@ export const Contact: React.FC = () => {
           <div className="flex items-center justify-center gap-4">
             {[
               {
-                icon: Youtube,
+                icon: YoutubeIcon,
                 href: "https://youtube.com/@TODO",
                 label: "YouTube",
               },
@@ -635,12 +635,12 @@ export const Contact: React.FC = () => {
                 label: "LinkedIn",
               },
               {
-                icon: Instagram,
+                icon: InstagramIcon,
                 href: "https://instagram.com/TODO",
                 label: "Instagram",
               },
               {
-                icon: Facebook,
+                icon: FacebookIcon,
                 href: "https://facebook.com/TODO",
                 label: "Facebook",
               },
