@@ -1,0 +1,69 @@
+# SmartConnect AI Services
+
+## About SmartConnect
+
+SmartConnect AI is a digital transformation agency specializing in helping local businesses leverage software, automation, and AI to grow their operations. Our mission is to empower businesses with cutting-edge technology solutions that drive efficiency and innovation.
+
+## Main Services
+
+1. **QRIBAR** - Digital menu solution with integrated ordering system for restaurants and cafes.
+2. **Tap-to-Review NFC Cards** - Customizable NFC cards that help businesses collect Google Reviews and Instagram mentions.
+3. **Carta Digital Premium** - Advanced digital menu system with AI-powered features.
+4. **n8n Automation** - Custom workflow automation for business processes.
+
+## Key Pages
+
+- Home: https://smart-connect-olive.vercel.app/
+- QRIBAR: https://smart-connect-olive.vercel.app/qribar
+- Tap-to-Review: https://smart-connect-olive.vercel.app/tap-review
+- Contact: https://smart-connect-olive.vercel.app/contact
+
+## API Resources
+
+- RAG Chatbot API: https://smartconnect-rag.supabase.co/functions/v1/chat-with-rag
+- API Documentation: https://smart-connect-olive.vercel.app/docs/api
+
+## Supported Languages
+
+- Spanish (es)
+- English (en)
+
+## Contact Information
+
+- Email: info@smartconnect.ai
+- Phone: +34 123 456 789
+- Address: Calle Ejemplo 123, Madrid, Spain
+
+## AI Agent Guidelines
+
+This site is designed to be AI-friendly. For AI agents, please:
+1. Use the provided API endpoints for programmatic access
+2. Respect the robots.txt rules for crawling
+3. Contact us through the form at /contact for business inquiries
+4. Follow the JSON-LD structured data for semantic understanding
+
+## Technical Specifications
+
+- Framework: React 19
+- Build Tool: Vite 8
+- Language: TypeScript 5.9
+- Styling: Tailwind CSS 3.4
+- Form Validation: Zod 3.25
+- Form Handling: React Hook Form 7.71
+
+## Accessibility
+
+SmartConnect AI is committed to providing an accessible experience for all users. Our website follows WCAG 2.1 AA standards and includes:
+- Semantic HTML
+- ARIA attributes where appropriate
+- Keyboard navigation support
+- High contrast mode
+- Reduced motion options
+
+## Privacy Policy
+
+For information about how we handle your data, please review our Privacy Policy at: https://smart-connect-olive.vercel.app/privacy
+
+## Terms of Service
+
+Our Terms of Service are available at: https://smart-connect-olive.vercel.app/terms

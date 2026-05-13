@@ -10,6 +10,7 @@ export default defineConfig({
     headers: {
       "Cross-Origin-Embedder-Policy": "require-corp",
       "Cross-Origin-Opener-Policy": "same-origin",
+      Link: '</.well-known/api-catalog>; rel="api-catalog", </llms.txt>; rel="ai-readable"',
     },
   },
   build: {

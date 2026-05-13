@@ -1,0 +1,38 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://smart-connect-olive.vercel.app",
+      "links": [
+        {
+          "rel": "service-desc",
+          "href": "https://tysjedvujvsmrzzrmesr.supabase.co/functions/v1/gemini-embedding",
+          "type": "application/json"
+        },
+        {
+          "rel": "service-desc",
+          "href": "https://tysjedvujvsmrzzrmesr.supabase.co/functions/v1/gemini-generate",
+          "type": "application/json"
+        },
+        {
+          "rel": "service-desc",
+          "href": "https://tysjedvujvsmrzzrmesr.supabase.co/functions/v1/chat-with-rag",
+          "type": "application/json"
+        },
+        {
+          "rel": "service-doc",
+          "href": "https://smart-connect-olive.vercel.app/docs/api",
+          "type": "text/html"
+        },
+        {
+          "rel": "oauth2-authorization-server",
+          "href": "https://tysjedvujvsmrzzrmesr.supabase.co"
+        },
+        {
+          "rel": "privacy-policy",
+          "href": "https://smart-connect-olive.vercel.app/privacy",
+          "type": "text/html"
+        }
+      ]
+    }
+  ]
+}

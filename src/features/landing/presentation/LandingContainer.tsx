@@ -54,42 +54,85 @@ const LandingContainer: React.FC = () => {
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
-              "@type": "LocalBusiness",
-              name: "SmartConnect AI",
-              description: t.seoDescription,
-              url: "https://smartconnect.ai",
-              logo: {
-                "@type": "ImageObject",
-                url: "https://smartconnect.ai/logo.png",
-                width: 512,
-                height: 512,
-              },
-              telephone: "+34123456789",
-              address: {
-                "@type": "PostalAddress",
-                streetAddress: "Calle Ejemplo 123",
-                addressLocality: "Madrid",
-                addressRegion: "Madrid",
-                postalCode: "28001",
-                addressCountry: "ES",
-              },
-              serviceType: [
-                "Software Development",
-                "AI Solutions",
-                "Digital Marketing",
+              "@graph": [
+                {
+                  "@type": "LocalBusiness",
+                  name: "SmartConnect AI",
+                  description: t.seoDescription,
+                  url: "https://smartconnect.ai",
+                  logo: {
+                    "@type": "ImageObject",
+                    url: "https://smartconnect.ai/logo.png",
+                    width: 512,
+                    height: 512,
+                  },
+                  telephone: "+34123456789",
+                  address: {
+                    "@type": "PostalAddress",
+                    streetAddress: "Calle Ejemplo 123",
+                    addressLocality: "Madrid",
+                    addressRegion: "Madrid",
+                    postalCode: "28001",
+                    addressCountry: "ES",
+                  },
+                  serviceType: [
+                    "Software Development",
+                    "AI Solutions",
+                    "Digital Marketing",
+                  ],
+                  sameAs: [
+                    "https://twitter.com/smartconnectai",
+                    "https://linkedin.com/company/smartconnectai",
+                  ],
+                  offers: {
+                    "@type": "Offer",
+                    name: "QRIBAR",
+                    description: t.seoProductDescription,
+                    url: "https://smartconnect.ai/qribar",
+                    priceCurrency: "EUR",
+                    availability: "https://schema.org/InStock",
+                  },
+                },
+                {
+                  "@type": "WebPage",
+                  "@id": "https://smartconnect.ai",
+                  url: "https://smartconnect.ai",
+                  name: t.seoTitle,
+                  description: t.seoDescription,
+                  inLanguage: "es",
+                  author: {
+                    "@type": "Organization",
+                    name: "SmartConnect AI",
+                    url: "https://smartconnect.ai",
+                    logo: {
+                      "@type": "ImageObject",
+                      url: "https://smartconnect.ai/logo.png",
+                      width: 512,
+                      height: 512,
+                    },
+                  },
+                  publisher: {
+                    "@type": "Organization",
+                    name: "SmartConnect AI",
+                    url: "https://smartconnect.ai",
+                    logo: {
+                      "@type": "ImageObject",
+                      url: "https://smartconnect.ai/logo.png",
+                    },
+                  },
+                  breadcrumb: {
+                    "@type": "BreadcrumbList",
+                    itemListElement: [
+                      {
+                        "@type": "ListItem",
+                        position: 1,
+                        name: "Inicio",
+                        item: "https://smartconnect.ai",
+                      },
+                    ],
+                  },
+                },
               ],
-              sameAs: [
-                "https://twitter.com/smartconnectai",
-                "https://linkedin.com/company/smartconnectai",
-              ],
-              offers: {
-                "@type": "Offer",
-                name: "QRIBAR",
-                description: t.seoProductDescription,
-                url: "https://smartconnect.ai/qribar",
-                priceCurrency: "EUR",
-                availability: "https://schema.org/InStock",
-              },
             }),
           }}
         />

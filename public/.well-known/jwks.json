@@ -1,0 +1,13 @@
+{
+  "keys": [
+    {
+      "kty": "RSA",
+      "use": "sig",
+      "alg": "RS256",
+      "kid": "default",
+      "n": "",
+      "e": "AQAB",
+      "note": "JWKS endpoints are managed by Supabase. For production key rotation, configure at https://supabase.com/dashboard/project/tysjedvujvsmrzzrmesr/auth/providers"
+    }
+  ]
+}
