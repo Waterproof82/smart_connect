@@ -184,7 +184,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
         {/* Logo */}
         <a
           href="#inicio"
-          className="flex items-center gap-2 group"
+          className="flex items-center gap-2 group min-h-[48px]"
           onClick={(e) => handleNavClick(e, "#inicio")}
         >
           <div className="w-10 h-10 bg-[var(--color-accent)] rounded-xl flex items-center justify-center shadow-lg motion-safe:group-hover:scale-110 transition-transform">
@@ -231,7 +231,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
             }}
           >
             <button
-              className="flex items-center gap-1.5 hover:text-[var(--color-text)] transition-colors py-2 outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-lg"
+              className="flex items-center gap-1.5 hover:text-[var(--color-text)] transition-colors min-h-[48px] px-2 outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-lg"
               aria-haspopup="true"
               aria-expanded={isDropdownOpen}
             >
@@ -274,14 +274,14 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
 
           <a
             href="#exito"
-            className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline focus-visible:outline-none transition-colors"
+            className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline focus-visible:outline-none transition-colors min-h-[48px] flex items-center"
             onClick={(e) => handleNavClick(e, "#exito")}
           >
             {t.navSuccess}
           </a>
           <a
             href="#contacto"
-            className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline focus-visible:outline-none transition-colors"
+            className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline focus-visible:outline-none transition-colors min-h-[48px] flex items-center"
             onClick={(e) => handleNavClick(e, "#contacto")}
           >
             {t.navContact}
@@ -289,7 +289,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
           <LanguageSelector />
           <button
             onClick={toggleTheme}
-            className="p-2 rounded-lg text-muted hover:text-[var(--color-text)] hover:bg-[var(--color-surface)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] transition-colors"
+            className="min-w-[48px] min-h-[48px] flex items-center justify-center rounded-lg text-muted hover:text-[var(--color-text)] hover:bg-[var(--color-surface)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] transition-colors"
             aria-label={
               theme === "dark" ? "Activar modo claro" : "Activar modo oscuro"
             }
@@ -302,7 +302,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
           </button>
           <Link
             to="/admin"
-            className="flex items-center gap-2 text-muted hover:text-[var(--color-primary)] transition-colors"
+            className="flex items-center gap-2 min-h-[48px] text-muted hover:text-[var(--color-primary)] transition-colors"
           >
             <Shield className="w-4 h-4" />
             <span>{t.navAdmin}</span>
@@ -381,7 +381,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
                       {item.internal ? (
                         <Link
                           to={item.href}
-                          className={`flex items-center gap-3 p-3 min-h-[44px] hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-xl transition-colors ${active ? "bg-[var(--color-accent-subtle)] text-[var(--color-primary)]" : "text-muted"}`}
+                          className={`flex items-center gap-3 p-3 min-h-[48px] hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-xl transition-colors ${active ? "bg-[var(--color-accent-subtle)] text-[var(--color-primary)]" : "text-muted"}`}
                           onClick={() => setIsMobileMenuOpen(false)}
                         >
                           {item.icon}
@@ -390,7 +390,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
                       ) : (
                         <a
                           href={item.href}
-                          className={`flex items-center gap-3 p-3 min-h-[44px] hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-xl transition-colors ${active ? "bg-[var(--color-accent-subtle)] text-[var(--color-primary)]" : "text-muted"}`}
+                          className={`flex items-center gap-3 p-3 min-h-[48px] hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-xl transition-colors ${active ? "bg-[var(--color-accent-subtle)] text-[var(--color-primary)]" : "text-muted"}`}
                           target={item.external ? "_blank" : undefined}
                           rel={
                             item.external ? "noopener noreferrer" : undefined
@@ -414,21 +414,21 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
                 <hr className="border-[var(--color-border)] my-2" />
                 <a
                   href="#exito"
-                  className="text-muted p-3 min-h-[44px] flex items-center hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-xl transition-colors"
+                  className="text-muted p-3 min-h-[48px] flex items-center hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-xl transition-colors"
                   onClick={(e) => handleNavClick(e, "#exito")}
                 >
                   {t.navSuccess}
                 </a>
                 <a
                   href="#contacto"
-                  className="text-muted p-3 min-h-[44px] flex items-center hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-xl transition-colors"
+                  className="text-muted p-3 min-h-[48px] flex items-center hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-xl transition-colors"
                   onClick={(e) => handleNavClick(e, "#contacto")}
                 >
                   {t.navContact}
                 </a>
                 <Link
                   to="/admin"
-                  className="text-muted flex items-center gap-2 p-3 min-h-[44px] hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-xl transition-colors"
+                  className="text-muted flex items-center gap-2 p-3 min-h-[48px] hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-xl transition-colors"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   <Shield className="w-4 h-4" />

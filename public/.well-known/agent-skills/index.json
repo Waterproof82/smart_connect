@@ -1,5 +1,4 @@
 {
-  "$schema": "https://agentgateway.ai/schemas/agent-skills-index/v1.json",
   "name": "SmartConnect Agent Skills",
   "description": "Available agent interaction capabilities for SmartConnect landing page",
   "skills": [

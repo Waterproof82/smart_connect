@@ -34,6 +34,9 @@ interface Translation {
   // Features
   featuresTitle: string;
   featuresSubtitle: string;
+  featuresContent1: string;
+  featuresContent2: string;
+  featuresContent3: string;
   featuresSoftwareIA: string;
   featuresSoftwareIADesc: string;
   featuresAutomation: string;
@@ -109,6 +112,7 @@ interface Translation {
 
   // Footer
   footerTagline: string;
+  footerSocialTitle: string;
   footerNavTitle: string;
   footerNavInicio: string;
   footerNavSoluciones: string;
@@ -411,6 +415,12 @@ const translations: Record<Language, Translation> = {
     featuresTitle: "Nuestras Soluciones",
     featuresSubtitle:
       "Herramientas avanzadas diseñadas para la era digital, desde el hardware hasta el código.",
+    featuresContent1:
+      "En SmartConnect AI combinamos inteligencia artificial, automatización y hardware inteligente para transformar la forma en que los negocios locales atraen, retienen y fidelizan clientes. Nuestra plataforma integra menús digitales QRIBAR con pedidos en tiempo real, tarjetas NFC para reseñas instantáneas en Google, y flujos de automatización con n8n que conectan cada interacción del cliente.",
+    featuresContent2:
+      "Con QRIBAR, tus clientes piden desde su móvil escaneando un código QR en la mesa. El pedido llega directamente a barra y cocina en tiempo real, eliminando tiempos de espera y aumentando la rotación de mesas. Sin comisiones, sin intermediarios.",
+    featuresContent3:
+      "Nuestras tarjetas NFC Tap-to-Review permiten a cualquier cliente dejar una reseña en Google con un solo toque. Más reseñas significan mejor posicionamiento en Google Maps y más clientes nuevos. Todo con tecnología de alto rendimiento, sin suscripciones y con configuración inmediata.",
     featuresSoftwareIA: "Software & IA",
     featuresSoftwareIADesc:
       "Desarrollo de herramientas personalizadas que se integran perfectamente con tus sistemas actuales. Soluciones a medida impulsadas por algoritmos inteligentes.",
@@ -457,10 +467,9 @@ const translations: Record<Language, Translation> = {
     successStat4Author: "Comunidad Hostelera",
 
     // SEO
-    seoTitle:
-      "Atrae Más Clientes a Tu Restaurante | Menú QR, NFC y Sistema de Pedidos - SmartConnect QRIBAR",
+    seoTitle: "SmartConnect AI: IA y Automatización para Negocios",
     seoDescription:
-      "Aumenta las ventas de tu restaurante y atrae más clientes con QRIBAR. Menú digital con pedidos por código QR, tarjetas NFC y sistema de pedidos automatizado para aumentar la rotación de mesas y los ingresos.",
+      "SmartConnect AI: automatización con IA, n8n, NFC para Google Reviews y menús digitales. Digitaliza tu negocio.",
     seoProductDescription:
       "Plataforma de crecimiento para restaurantes con menú digital, pedidos por QR y tecnología NFC diseñada para aumentar pedidos, reducir tiempos de espera y maximizar ingresos por mesa.",
 
@@ -522,6 +531,7 @@ const translations: Record<Language, Translation> = {
 
     // Footer
     footerTagline: "Tecnología de próxima generación para negocios locales.",
+    footerSocialTitle: "Síguenos",
     footerNavTitle: "Navegación",
     footerNavInicio: "Inicio",
     footerNavSoluciones: "Soluciones",
@@ -845,6 +855,12 @@ const translations: Record<Language, Translation> = {
     featuresTitle: "Our Solutions",
     featuresSubtitle:
       "Advanced tools designed for the digital era, from hardware to code.",
+    featuresContent1:
+      "At SmartConnect AI we combine artificial intelligence, automation, and smart hardware to transform how local businesses attract, retain, and build loyalty with customers. Our platform integrates QRIBAR digital menus with real-time ordering, NFC cards for instant Google reviews, and n8n automation workflows that connect every customer interaction.",
+    featuresContent2:
+      "With QRIBAR, your customers order from their phone by scanning a QR code at the table. Orders arrive directly to the bar and kitchen in real-time, eliminating wait times and increasing table turnover. No commissions, no intermediaries.",
+    featuresContent3:
+      "Our Tap-to-Review NFC cards let any customer leave a Google review with a single tap. More reviews mean better Google Maps positioning and more new customers. High-performance technology, no subscriptions, instant setup.",
     featuresSoftwareIA: "Software & AI",
     featuresSoftwareIADesc:
       "Custom tool development that integrates perfectly with your existing systems. Tailored solutions powered by intelligent algorithms.",
@@ -891,10 +907,9 @@ const translations: Record<Language, Translation> = {
     successStat4Author: "Hospitality Community",
 
     // SEO
-    seoTitle:
-      "Get More Customers for Your Restaurant | QR Menu, NFC & Ordering System - SmartConnect QRIBAR",
+    seoTitle: "SmartConnect AI: AI & Automation for Businesses",
     seoDescription:
-      "Increase restaurant sales and attract more customers with QRIBAR. Digital menu with QR code ordering, NFC cards, and automated ordering system to boost table turnover and revenue.",
+      "SmartConnect AI: AI automation, n8n workflows, NFC for Google Reviews & digital menus. Digitize your business.",
     seoProductDescription:
       "Restaurant growth platform with digital menu, QR ordering, and NFC technology designed to increase orders, reduce wait times, and maximize revenue per table.",
 
@@ -956,6 +971,7 @@ const translations: Record<Language, Translation> = {
 
     // Footer
     footerTagline: "Next-generation technology for local businesses.",
+    footerSocialTitle: "Follow Us",
     footerNavTitle: "Navigation",
     footerNavInicio: "Home",
     footerNavSoluciones: "Solutions",
