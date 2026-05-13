@@ -338,7 +338,7 @@ export const Features: React.FC = () => {
               <div className="relative z-10 mt-4 rounded-2xl overflow-hidden border border-[var(--color-border)] shadow-lg">
                 <img
                   src="/assets/Tarjeta_NFC_negra_MontesTAP.webp"
-                  alt="Tarjeta NFC Tap-to-Review"
+                  alt={t.seoAltTextNFC}
                   width="400"
                   height="400"
                   loading="lazy"

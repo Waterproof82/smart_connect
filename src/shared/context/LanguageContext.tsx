@@ -76,6 +76,8 @@ interface Translation {
   seoTitle: string;
   seoDescription: string;
   seoProductDescription: string;
+  seoAltTextNFC: string;
+  seoAltTextQribar: string;
 
   // Contact
   contactTitle: string;
@@ -472,6 +474,8 @@ const translations: Record<Language, Translation> = {
       "SmartConnect AI: automatización con IA, n8n, NFC para Google Reviews y menús digitales. Digitaliza tu negocio.",
     seoProductDescription:
       "Plataforma de crecimiento para restaurantes con menú digital, pedidos por QR y tecnología NFC diseñada para aumentar pedidos, reducir tiempos de espera y maximizar ingresos por mesa.",
+    seoAltTextNFC: "Tarjeta NFC Tap-to-Review para obtener reseñas en Google",
+    seoAltTextQribar: "Menú digital QRIBAR con pedidos en tiempo real",
 
     // Contact
     contactTitle: "Impulsa tu Negocio Hoy",
@@ -912,6 +916,8 @@ const translations: Record<Language, Translation> = {
       "SmartConnect AI: AI automation, n8n workflows, NFC for Google Reviews & digital menus. Digitize your business.",
     seoProductDescription:
       "Restaurant growth platform with digital menu, QR ordering, and NFC technology designed to increase orders, reduce wait times, and maximize revenue per table.",
+    seoAltTextNFC: "Tap-to-Review NFC card to get Google reviews",
+    seoAltTextQribar: "QRIBAR digital menu with real-time orders",
 
     // Contact
     contactTitle: "Boost Your Business Today",
