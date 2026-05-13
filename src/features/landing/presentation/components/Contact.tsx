@@ -10,6 +10,11 @@ import {
   AlertCircle,
   ChevronDown,
   Loader2,
+  Youtube,
+  Twitter,
+  Linkedin,
+  Instagram,
+  Facebook,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { getAppSettings, AppSettings } from "@shared/services/settingsService";
@@ -604,6 +609,53 @@ export const Contact: React.FC = () => {
                 </button>
               </form>
             </div>
+          </div>
+        </div>
+
+        {/* Social Media Links */}
+        <div className="mt-16 pt-12 border-t border-[var(--color-border)] text-center">
+          <h3 className="text-sm font-bold text-muted uppercase tracking-widest mb-6">
+            {t.footerSocialTitle}
+          </h3>
+          <div className="flex items-center justify-center gap-4">
+            {[
+              {
+                icon: Youtube,
+                href: "https://youtube.com/@TODO",
+                label: "YouTube",
+              },
+              {
+                icon: Twitter,
+                href: "https://x.com/TODO",
+                label: "X (Twitter)",
+              },
+              {
+                icon: Linkedin,
+                href: "https://linkedin.com/company/TODO",
+                label: "LinkedIn",
+              },
+              {
+                icon: Instagram,
+                href: "https://instagram.com/TODO",
+                label: "Instagram",
+              },
+              {
+                icon: Facebook,
+                href: "https://facebook.com/TODO",
+                label: "Facebook",
+              },
+            ].map(({ icon: Icon, href, label }) => (
+              <a
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={label}
+                className="w-12 h-12 flex items-center justify-center rounded-xl bg-[var(--color-surface)] border border-[var(--color-border)] text-muted hover:text-[var(--color-primary)] hover:border-[var(--color-accent-border)] hover:bg-[var(--color-accent-subtle)] transition-all duration-300"
+              >
+                <Icon className="w-5 h-5" />
+              </a>
+            ))}
           </div>
         </div>
       </div>

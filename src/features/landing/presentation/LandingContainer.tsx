@@ -83,6 +83,9 @@ const LandingContainer: React.FC = () => {
                   sameAs: [
                     "https://twitter.com/smartconnectai",
                     "https://linkedin.com/company/smartconnectai",
+                    "https://instagram.com/smartconnectai",
+                    "https://facebook.com/smartconnectai",
+                    "https://youtube.com/@smartconnectai",
                   ],
                   offers: {
                     "@type": "Offer",

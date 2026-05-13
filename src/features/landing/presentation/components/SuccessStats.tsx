@@ -108,9 +108,9 @@ const StatCard: React.FC<StatProps> = ({
           <span className="text-[var(--color-primary)]">{count}%</span>
         </div>
 
-        <p className="text-muted text-xs font-bold uppercase tracking-[0.2em] text-wrap mb-4">
+        <h3 className="text-muted text-xs font-bold uppercase tracking-[0.2em] text-wrap mb-4">
           {label}
-        </p>
+        </h3>
 
         {quote && (
           <div className="relative max-w-xs">

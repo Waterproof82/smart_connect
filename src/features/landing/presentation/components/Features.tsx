@@ -371,6 +371,13 @@ export const Features: React.FC = () => {
           </article>
         ))}
       </div>
+
+      {/* Descriptive content for SEO */}
+      <div className="mt-20 max-w-4xl mx-auto space-y-6 text-muted leading-relaxed">
+        <p className="text-base md:text-lg">{t.featuresContent1}</p>
+        <p className="text-base md:text-lg">{t.featuresContent2}</p>
+        <p className="text-base md:text-lg">{t.featuresContent3}</p>
+      </div>
     </div>
   );
 };

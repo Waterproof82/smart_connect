@@ -29,7 +29,8 @@ export const Hero: React.FC = () => {
             {t.heroTitle} <br />
             <span className="text-[var(--color-primary)]">
               {t.heroTitleAccent}
-            </span>
+            </span>{" "}
+            {t.heroTitleEnd}
           </h1>
 
           <p className="reveal-3 text-xl text-muted mb-12 leading-relaxed max-w-xl">
