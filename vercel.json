@@ -23,6 +23,10 @@
         {
           "key": "Strict-Transport-Security",
           "value": "max-age=31536000; includeSubDomains"
+        },
+        {
+          "key": "Link",
+          "value": "</.well-known/api-catalog>; rel=\"api-catalog\", </llms.txt>; rel=\"ai-readable\", </.well-known/mcp/server-card.json>; rel=\"api-catalog\", </.well-known/openid-configuration>; rel=\"oauth2-authorization-server\", </.well-known/oauth-protected-resource>; rel=\"protected-resource\""
         }
       ]
     }

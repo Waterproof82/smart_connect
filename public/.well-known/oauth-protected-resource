@@ -1,0 +1,65 @@
+{
+  "resource": "https://smart-connect-olive.vercel.app",
+  "authorization_servers": [
+    "https://tysjedvujvsmrzzrmesr.supabase.co"
+  ],
+  "scopes_supported": [
+    "openid",
+    "profile",
+    "email",
+    "offline_access"
+  ],
+  "bearer_method": [
+    "header",
+    "query"
+  ],
+  "resource_signing_alg_values_supported": [
+    "HS256",
+    "RS256"
+  ],
+  "protected_resources": [
+    {
+      "name": "gemini-embedding",
+      "type": "api",
+      "endpoints": [
+        "https://tysjedvujvsmrzzrmesr.supabase.co/functions/v1/gemini-embedding"
+      ],
+      "authorization_servers": [
+        "https://tysjedvujvsmrzzrmesr.supabase.co"
+      ],
+      "scopes_required": ["openid"],
+      "authentication_methods": ["jwt"]
+    },
+    {
+      "name": "gemini-generate",
+      "type": "api",
+      "endpoints": [
+        "https://tysjedvujvsmrzzrmesr.supabase.co/functions/v1/gemini-generate"
+      ],
+      "authorization_servers": [
+        "https://tysjedvujvsmrzzrmesr.supabase.co"
+      ],
+      "scopes_required": ["openid"],
+      "authentication_methods": ["jwt"],
+      "rate_limit": {
+        "requests": 10,
+        "window": "1 minute"
+      }
+    },
+    {
+      "name": "chat-with-rag",
+      "type": "api",
+      "endpoints": [
+        "https://tysjedvujvsmrzzrmesr.supabase.co/functions/v1/chat-with-rag"
+      ],
+      "authorization_servers": [
+        "https://tysjedvujvsmrzzrmesr.supabase.co"
+      ],
+      "scopes_required": [],
+      "authentication_methods": ["jwt"],
+      "anonymous_access": true,
+      "note": "Public chatbot with optional auth for personalized responses"
+    }
+  ],
+  "documentation": "https://smart-connect-olive.vercel.app/docs/api"
+}

@@ -5,14 +5,65 @@ export interface SettingsType {
   createdAt: Date;
   updatedAt: Date;
   rating?: number;
-  products?: any[];
-  stats?: any;
-  howItWorks?: any[];
-  features?: any[];
-  reviews?: any[];
-  faq?: any[];
+  products?: Product[];
+  stats?: Stats;
+  howItWorks?: HowItWorksStep[];
+  features?: Feature[];
+  reviews?: Review[];
+  faq?: FAQItem[];
   cta?: string;
-  trustBadges?: any[];
+  trustBadges?: TrustBadge[];
+}
+
+interface Product {
+  id: string;
+  name: string;
+  description?: string;
+  price?: number;
+  imageUrl?: string;
+}
+
+interface Stats {
+  totalReviews?: number;
+  averageRating?: number;
+  totalScans?: number;
+  [key: string]: number | string | undefined;
+}
+
+interface HowItWorksStep {
+  id: string;
+  title: string;
+  description: string;
+  icon?: string;
+}
+
+interface Feature {
+  id: string;
+  title: string;
+  description: string;
+  icon?: string;
+}
+
+interface Review {
+  id: string;
+  rating: number;
+  comment: string;
+  author: string;
+  businessName?: string;
+  date?: string;
+}
+
+interface FAQItem {
+  id: string;
+  question: string;
+  answer: string;
+  order?: number;
+}
+
+interface TrustBadge {
+  id: string;
+  text: string;
+  icon?: string;
 }
 
 export interface NavbarProps {
