@@ -112,6 +112,27 @@ const SectionLoading = () => (
   </div>
 );
 
+/* Heading structure:
+  H1: Potencia tu Negocio con IA y Automatización
+  H2: Nuestras Soluciones
+    H3: Software & IA
+    H3: Automatización (n8n)
+    H3: Tarjetas Tap-to-Review
+    H3: QRIBAR
+    H3: Carta Digital Premium
+  H2: Resultados reales que transforman negocios
+    H3: Aumento Promedio
+    H3: Satisfacción
+    H3: Reseñas Ganadas
+    H3: Clientes Activos
+  H2: Impulsa tu Negocio Hoy
+    H3: [Email]
+    H3: [WhatsApp]
+    H3: [Location]
+    H3: Síguenos
+  (No heading levels skipped — valid H1→H2→H3 hierarchy)
+*/
+
 const App: React.FC = () => {
   const [scrolled, setScrolled] = React.useState(false);
   const sentinelRef = React.useRef<HTMLDivElement>(null);

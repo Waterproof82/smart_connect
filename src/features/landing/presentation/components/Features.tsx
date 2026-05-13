@@ -142,28 +142,11 @@ const SoftwareIAAbstract = () => (
       <circle
         cx="200"
         cy="200"
-        r="80"
-        fill="none"
-        stroke="url(#glow)"
-        strokeWidth="1"
-      />
-      <circle
-        cx="200"
-        cy="200"
         r="120"
         fill="none"
         stroke="url(#glow)"
         strokeWidth="0.5"
         strokeDasharray="4 8"
-      />
-      <circle
-        cx="200"
-        cy="200"
-        r="160"
-        fill="none"
-        stroke="url(#glow)"
-        strokeWidth="0.3"
-        strokeDasharray="2 12"
       />
     </svg>
     <div className="absolute inset-0 flex items-center justify-center">
@@ -372,11 +355,14 @@ export const Features: React.FC = () => {
         ))}
       </div>
 
-      {/* Descriptive content for SEO */}
+      {/* Descriptive content for SEO (~500+ words total visible body text) */}
       <div className="mt-20 max-w-4xl mx-auto space-y-6 text-muted leading-relaxed">
         <p className="text-base md:text-lg">{t.featuresContent1}</p>
         <p className="text-base md:text-lg">{t.featuresContent2}</p>
         <p className="text-base md:text-lg">{t.featuresContent3}</p>
+        <p className="text-base md:text-lg">{t.featuresContent4}</p>
+        <p className="text-base md:text-lg">{t.featuresContent5}</p>
+        <p className="text-base md:text-lg">{t.featuresContent6}</p>
       </div>
     </div>
   );
