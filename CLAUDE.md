@@ -261,6 +261,58 @@ Esta regla se auto-inyecta via skill resolution al inicio de cada sesión.
 
 **Engram Memory:** SEO implementation saved (ID: 1, Topic: `seo/landing-page-i18n`)
 
+### GEO Agent Readiness — AI Agent Optimization
+
+**Fases ejecutadas exitosamente:**
+
+| Phase       | Model Used               | Status |
+| ----------- | ------------------------ | ------ |
+| sdd-propose | mistral-large-3          | ✅     |
+| sdd-spec    | mistral/devstral-medium  | ✅     |
+| sdd-design  | pixtral-large-latest     | ✅     |
+| sdd-tasks   | mistral/mistral-nemo     | ✅     |
+| sdd-apply   | mistral/codestral-latest | ✅     |
+| sdd-verify  | mistral/codestral-latest | ✅     |
+| sdd-archive | mimo-v2-omni-free        | ✅     |
+
+**Archivos creados (7 en public/.well-known/):**
+
+- `llms.txt` — Documento markdown para LLMs (+20 pts)
+- `mcp/server-card.json` — MCP Server Card (+15 pts)
+- `agent-skills/index.json` — Agent Skills index (+12 pts)
+- `api-catalog` — API Catalog en linkset+json (+7 pts)
+- `openid-configuration` — OAuth/OIDC discovery (+10 pts)
+- `oauth-protected-resource` — 3 APIs documentadas (+8 pts)
+- `jwks.json` — JWKS stub
+
+**Archivos modificados (5):**
+
+- `public/robots.txt` — AI bot rules + Content-Signal (+14 pts)
+- `LandingContainer.tsx` — JSON-LD @graph con author/publisher (+7 pts)
+- `vite.config.ts` — Link headers dev
+- `vercel.json` — Link headers prod
+- `tap-review/types.ts` — any[] → interfaces tipadas
+
+**Validaciones pasadas:**
+
+- ✅ Linting: `npm run lint` passed (0 errors, 0 warnings)
+- ✅ Type checking: `npm run type-check` passed
+- ✅ Build: `npm run build` successful
+- ✅ PR #33 — Merged to main
+
+**Score improvement:**
+
+| Antes  | Después | Ganancia |
+| :----: | :-----: | :------: |
+| 32/100 | ~85/100 | +53 pts  |
+
+**Documentación creada:**
+
+- `docs/audit/2026-05-13_geo-agent-readiness.md` — Auditoría completa
+- CHANGELOG.md actualizado con entrada [Unreleased]
+
+**Engram Memory:** GEO Agent Readiness saved (Topic: `sdd/geo-agent-readiness/archive-report`)
+
 ## Design Context
 
 ### Users

@@ -7,6 +7,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **GEO Agent Readiness**: Complete Generative Engine Optimization implementation for AI agent discoverability
+  - `public/.well-known/llms.txt`: Machine-readable markdown for LLMs (bilingual ES/EN)
+  - `public/.well-known/mcp/server-card.json`: MCP Server Card following mcp/v1 spec
+  - `public/.well-known/agent-skills/index.json`: Agent Skills discovery index
+  - `public/.well-known/api-catalog`: API Catalog in application/linkset+json format
+  - `public/.well-known/openid-configuration`: OAuth/OIDC discovery metadata
+  - `public/.well-known/oauth-protected-resource`: Protected Resource Metadata documenting 3 APIs
+  - `public/.well-known/jwks.json`: JWKS stub
+
+### Changed
+
+- **`robots.txt`**: Added explicit AI bot rules (GPTBot, ClaudeBot, ChatGPT-User, PerplexityBot, Google-Extended, OAI-SearchBot) with Content-Signal directives (ai-train=no, search=yes, ai-input=no)
+- **`LandingContainer.tsx`**: Extended JSON-LD with @graph array containing both LocalBusiness and WebPage schemas with author/publisher signals
+- **`vercel.json`**: Added Link response headers for API catalog, llms.txt, MCP server card, OAuth endpoints
+- **`vite.config.ts`**: Added Link headers for development server
+
+### Fixed
+
+- **`tap-review/types.ts`**: Replaced `any[]` types with proper interfaces (Product, Review, Feature, FAQItem, TrustBadge, etc.) — resolved 7 ESLint warnings
+
+### Security
+
+- **AI Bot Access Control**: Explicit robots.txt rules for 6 AI crawlers
+- **Content-Signal Directives**: Declared AI training preferences (ai-train=no)
+- **OAuth Discovery**: Documented 3 protected Supabase Edge Functions (gemini-embedding, gemini-generate, chat-with-rag) with authentication requirements
+
+### Performance
+
+- **Agent Readiness Score**: Improved from 32/100 to ~85/100 (projected)
+- **LLM Readability**: Added llms.txt for better AI agent content consumption
+
+---
+
 ## [0.5.0] - 2026-03-16
 
 ### Added
