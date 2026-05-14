@@ -238,7 +238,7 @@ SUPABASE_SERVICE_ROLE_KEY=your-service-role-key # ⚠️ NEVER expose to client
 GEMINI_API_KEY=AIzaSy... # From Google AI Studio
 
 # CORS Configuration
-ALLOWED_ORIGIN=https://smart-connect-olive.vercel.app # Production domain
+ALLOWED_ORIGIN=https://digitalizatenerife.es # Production domain
 ALLOWED_ORIGIN_DEV=http://localhost:5173 # Development
 
 # Rate Limiting

@@ -13,15 +13,15 @@ SmartConnect AI is a digital transformation agency specializing in helping local
 
 ## Key Pages
 
-- Home: https://smart-connect-olive.vercel.app/
-- QRIBAR: https://smart-connect-olive.vercel.app/qribar
-- Tap-to-Review: https://smart-connect-olive.vercel.app/tap-review
-- Contact: https://smart-connect-olive.vercel.app/contact
+- Home: https://digitalizatenerife.es/
+- QRIBAR: https://digitalizatenerife.es/qribar
+- Tap-to-Review: https://digitalizatenerife.es/tap-review
+- Contact: https://digitalizatenerife.es/contact
 
 ## API Resources
 
 - RAG Chatbot API: https://smartconnect-rag.supabase.co/functions/v1/chat-with-rag
-- API Documentation: https://smart-connect-olive.vercel.app/docs/api
+- API Documentation: https://digitalizatenerife.es/docs/api
 
 ## Supported Languages
 
@@ -62,8 +62,8 @@ SmartConnect AI is committed to providing an accessible experience for all users
 
 ## Privacy Policy
 
-For information about how we handle your data, please review our Privacy Policy at: https://smart-connect-olive.vercel.app/privacy
+For information about how we handle your data, please review our Privacy Policy at: https://digitalizatenerife.es/privacy
 
 ## Terms of Service
 
-Our Terms of Service are available at: https://smart-connect-olive.vercel.app/terms
+Our Terms of Service are available at: https://digitalizatenerife.es/terms

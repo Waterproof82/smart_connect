@@ -1,7 +1,7 @@
 {
   "linkset": [
     {
-      "anchor": "https://smart-connect-olive.vercel.app",
+      "anchor": "https://digitalizatenerife.es",
       "links": [
         {
           "rel": "service-desc",
@@ -20,7 +20,7 @@
         },
         {
           "rel": "service-doc",
-          "href": "https://smart-connect-olive.vercel.app/docs/api",
+          "href": "https://digitalizatenerife.es/docs/api",
           "type": "text/html"
         },
         {
@@ -29,7 +29,7 @@
         },
         {
           "rel": "privacy-policy",
-          "href": "https://smart-connect-olive.vercel.app/privacy",
+          "href": "https://digitalizatenerife.es/privacy",
           "type": "text/html"
         }
       ]

@@ -2,7 +2,7 @@
   "@context": "https://www.w3.org/ns/mcp/v1",
   "name": "SmartConnect Landing Page",
   "description": "SmartConnect AI landing page for local business digital transformation. Provides information about QRIBAR, NFC review cards, digital menus, and automation services.",
-  "homepage": "https://smart-connect-olive.vercel.app",
+  "homepage": "https://digitalizatenerife.es",
   "version": "1.0.0",
   "capabilities": [
     {

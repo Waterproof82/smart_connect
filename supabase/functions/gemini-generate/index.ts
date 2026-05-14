@@ -52,7 +52,7 @@ function checkRateLimit(userId: string): { allowed: boolean; remaining: number }
 Deno.serve(async (req) => {
   // CORS headers
   const ALLOWED_ORIGINS = [
-    'https://smart-connect-olive.vercel.app',
+    'https://digitalizatenerife.es',
     'http://localhost:5173',
     'http://localhost:3000',
   ];

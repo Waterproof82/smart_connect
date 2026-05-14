@@ -39,7 +39,7 @@
     --chart-bar: oklch(60% 0.18 230);
     --chart-tick: oklch(45% 0.02 250);
     --chart-tooltip: oklch(20% 0.015 250);
-    --touch-target-min: 44px;
+    --touch-target-min: 48px;
   }
 
   .light {
@@ -79,7 +79,7 @@
     --chart-bar: oklch(55% 0.18 230);
     --chart-tick: oklch(45% 0.025 250);
     --chart-tooltip: oklch(98% 0.005 250);
-    --touch-target-min: 44px;
+    --touch-target-min: 48px;
   }
 
   body {
@@ -346,8 +346,8 @@
   select,
   textarea,
   [role="button"] {
-    min-height: 44px;
-    min-width: 44px;
+    min-height: 48px;
+    min-width: 48px;
   }
 }
 

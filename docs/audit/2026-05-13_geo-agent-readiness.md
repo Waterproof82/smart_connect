@@ -29,7 +29,7 @@ Documento markdown bilingüe (ES/EN) diseñado para consumo de LLMs. Incluye:
 - Guidelines para agentes IA
 - Información de contacto
 
-**Validación**: `curl https://smart-connect-olive.vercel.app/llms.txt`
+**Validación**: `curl https://digitalizatenerife.es/llms.txt`
 
 ---
 
@@ -44,7 +44,7 @@ MCP Server Card siguiendo el estándar SEP-2127:
   "@context": "https://www.w3.org/ns/mcp/v1",
   "name": "SmartConnect Landing Page",
   "description": "...",
-  "homepage": "https://smart-connect-olive.vercel.app",
+  "homepage": "https://digitalizatenerife.es",
   "version": "1.0.0",
   "capabilities": [...]
 }

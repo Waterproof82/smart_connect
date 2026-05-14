@@ -69,7 +69,7 @@ Espera 1-2 minutos a que termine el build.
 
 ## 🧪 VERIFICAR que funcionó:
 
-1. Abre tu sitio: https://smart-connect-olive.vercel.app
+1. Abre tu sitio: https://digitalizatenerife.es
 2. Abre la consola del navegador (F12 → Console)
 3. **Si ya NO ves** el error `❌ CRITICAL: VITE_N8N_WEBHOOK_URL is not configured` → ✅ ÉXITO
 4. Prueba el formulario de contacto

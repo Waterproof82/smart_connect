@@ -6,14 +6,14 @@
       "name": "product-information",
       "type": "information",
       "description": "Get detailed information about SmartConnect products: QRIBAR, Tap-to-Review NFC, Carta Digital Premium, and n8n automation",
-      "url": "https://smart-connect-olive.vercel.app/llms.txt",
+      "url": "https://digitalizatenerife.es/llms.txt",
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
     {
       "name": "contact-request",
       "type": "action",
       "description": "Submit a contact request for sales or demo. POST to the contact form with name, company, email, service, and message",
-      "url": "https://smart-connect-olive.vercel.app/contact",
+      "url": "https://digitalizatenerife.es/contact",
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     }
   ]

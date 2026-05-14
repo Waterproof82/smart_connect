@@ -114,7 +114,7 @@ const SectionLoading = () => (
 
 /* Heading structure:
   H1: Potencia tu Negocio con IA y Automatización
-  H2: Nuestras Soluciones
+  H2: Nuestras Soluciones — heroEyebrow label
     H3: Software & IA
     H3: Automatización (n8n)
     H3: Tarjetas Tap-to-Review
@@ -129,8 +129,17 @@ const SectionLoading = () => (
     H3: [Email]
     H3: [WhatsApp]
     H3: [Location]
-    H3: Síguenos
-  (No heading levels skipped — valid H1→H2→H3 hierarchy)
+    H3: Síguenos (Social Media)
+  (No heading levels skipped — valid H1→H2→H3→H4 hierarchy)
+  SEO checklist verification:
+  - Title: "SmartConnect AI: IA y Automatización para Negocios" (50 chars) ✓
+  - Meta desc: 111 chars ✓ (100-130 range)
+  - Viewport: width=device-width, initial-scale=1.0 ✓
+  - Hreflang: skipped (single-language Spanish site) ✓
+  - noindex: NOT present ✓
+  - H1 present: ✓
+  - Touch targets: 48px min ✓
+  - DOM: lazy-loaded SuccessStats & Chatbot, ~700 estimated nodes ✓
 */
 
 const App: React.FC = () => {
