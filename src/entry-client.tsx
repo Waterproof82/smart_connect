@@ -4,6 +4,7 @@ import { HelmetProvider } from "react-helmet-async";
 import { Suspense, lazy } from "react";
 import { LanguageProvider } from "@shared/context/LanguageContext";
 import { ScrollToTop } from "@shared/components/ScrollToTop";
+import "./index.css";
 import App from "./App";
 
 // Lazy-loaded routes — not prerendered, remain SPA after hydration
