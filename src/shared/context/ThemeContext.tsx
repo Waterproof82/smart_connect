@@ -45,50 +45,45 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [theme, setThemeState] = useState<Theme>(getInitialTheme);
 
-  // Post-hydration: sync React state with the html class set by the inline script
-  // and restore saved preference if one exists. Runs once on mount.
+  // Post-hydration: sync React state with the html class set by the inline script.
+  // Clears any stale localStorage value from the removed theme toggle.
+  // Runs once on mount.
   useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved === "light" || saved === "dark") {
-      setThemeState(saved);
-      applyTheme(saved);
-    } else {
-      // No saved preference → sync with html class (set by inline script)
-      const systemTheme = document.documentElement.classList.contains("light")
-        ? "light"
-        : "dark";
-      if (systemTheme !== theme) {
-        setThemeState(systemTheme);
-      }
-      applyTheme(systemTheme);
+    // Clear stale localStorage (the old theme toggle was removed)
+    localStorage.removeItem(STORAGE_KEY);
+
+    const systemTheme = document.documentElement.classList.contains("light")
+      ? "light"
+      : "dark";
+    if (systemTheme !== theme) {
+      setThemeState(systemTheme);
     }
+    applyTheme(systemTheme);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Listen for system preference changes when no explicit choice is saved
+  // Keep DOM in sync whenever React state changes
+  useEffect(() => {
+    applyTheme(theme);
+  }, [theme]);
+
+  // Listen for system preference changes and update React state
   useEffect(() => {
     const mql = window.matchMedia("(prefers-color-scheme: light)");
     const handleChange = (e: MediaQueryListEvent) => {
-      if (!localStorage.getItem(STORAGE_KEY)) {
-        const newTheme = e.matches ? "light" : "dark";
-        setThemeState(newTheme);
-      }
+      const newTheme = e.matches ? "light" : "dark";
+      setThemeState(newTheme);
     };
     mql.addEventListener("change", handleChange);
     return () => mql.removeEventListener("change", handleChange);
   }, []);
 
   const setTheme = useCallback((newTheme: Theme) => {
-    localStorage.setItem(STORAGE_KEY, newTheme);
     setThemeState(newTheme);
   }, []);
 
   const toggleTheme = useCallback(() => {
-    setThemeState((prev) => {
-      const next = prev === "dark" ? "light" : "dark";
-      localStorage.setItem(STORAGE_KEY, next);
-      return next;
-    });
+    setThemeState((prev) => (prev === "dark" ? "light" : "dark"));
   }, []);
 
   const value = useMemo(

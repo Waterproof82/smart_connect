@@ -73,14 +73,3 @@ if (hasSSRContent) {
 } else {
   createRoot(rootElement).render(app);
 }
-
-// Listen for system theme changes during session
-window
-  .matchMedia("(prefers-color-scheme: light)")
-  .addEventListener("change", (e) => {
-    if (e.matches) {
-      document.documentElement.classList.add("light");
-    } else {
-      document.documentElement.classList.remove("light");
-    }
-  });

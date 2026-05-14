@@ -73,21 +73,12 @@
       }
     </style>
 
-    <!-- Inline theme init (prevents FOUC, respects saved preference) -->
+    <!-- Inline theme init (prevents FOUC, uses system preference only) -->
     <script>
       (function () {
-        try {
-          var saved = localStorage.getItem("sc_theme");
-          if (saved === "light" || saved === "dark") {
-            if (saved === "light")
-              document.documentElement.classList.add("light");
-            return;
-          }
-        } catch (e) {}
-        var t = window.matchMedia("(prefers-color-scheme: light)").matches
-          ? "light"
-          : "dark";
-        if (t === "light") document.documentElement.classList.add("light");
+        if (window.matchMedia("(prefers-color-scheme: light)").matches) {
+          document.documentElement.classList.add("light");
+        }
       })();
     </script>
   </head>
