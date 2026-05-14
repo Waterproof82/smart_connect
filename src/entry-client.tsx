@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { Suspense, lazy } from "react";
 import { LanguageProvider } from "@shared/context/LanguageContext";
+import { ThemeProvider } from "@shared/context/ThemeContext";
 import { ScrollToTop } from "@shared/components/ScrollToTop";
 import "./index.css";
 import App from "./App";
@@ -43,20 +44,22 @@ hydrateRoot(
     <BrowserRouter
       future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
     >
-      <LanguageProvider>
-        <ScrollToTop />
-        <Suspense fallback={<LoadingFallback />}>
-          <Routes>
-            <Route path="/" element={<App />} />
-            <Route path="/servicios" element={<App />} />
-            <Route path="/contacto" element={<App />} />
-            <Route path="/admin" element={<AdminPanel />} />
-            <Route path="/carta-digital" element={<CartaDigitalPremium />} />
-            <Route path="/tap-review" element={<TapReviewPageWithData />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Suspense>
-      </LanguageProvider>
+      <ThemeProvider>
+        <LanguageProvider>
+          <ScrollToTop />
+          <Suspense fallback={<LoadingFallback />}>
+            <Routes>
+              <Route path="/" element={<App />} />
+              <Route path="/servicios" element={<App />} />
+              <Route path="/contacto" element={<App />} />
+              <Route path="/admin" element={<AdminPanel />} />
+              <Route path="/carta-digital" element={<CartaDigitalPremium />} />
+              <Route path="/tap-review" element={<TapReviewPageWithData />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Suspense>
+        </LanguageProvider>
+      </ThemeProvider>
     </BrowserRouter>
   </HelmetProvider>,
 );
