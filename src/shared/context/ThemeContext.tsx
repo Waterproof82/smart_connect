@@ -29,15 +29,11 @@ const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 
 const STORAGE_KEY = "sc_theme";
 
-const getInitialTheme = (): Theme => {
-  if (typeof window === "undefined") return "dark";
-  // Read from the <html> class set by the inline theme script in index.html.
-  // The inline script uses matchMedia BEFORE React hydrates and adds 'light'
-  // to <html> if needed. Reading from the DOM instead of re-evaluating
-  // matchMedia/localStorage ensures SSR and client produce the same tree.
-  if (document.documentElement.classList.contains("light")) return "light";
-  return "dark";
-};
+// Always return "dark" as the initial value for SSR/client consistency.
+// On SSG builds the server has no window, so it returns "dark" unconditionally.
+// The client MUST also return "dark" so the first render matches the SSR HTML.
+// Post-hydration, useEffect reads localStorage / html class to set the correct theme.
+const getInitialTheme = (): Theme => "dark";
 
 const applyTheme = (theme: Theme) => {
   document.documentElement.classList.toggle("light", theme === "light");
@@ -49,16 +45,25 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [theme, setThemeState] = useState<Theme>(getInitialTheme);
 
-  // Apply theme on mount and restore saved preference post-hydration
+  // Post-hydration: sync React state with the html class set by the inline script
+  // and restore saved preference if one exists. Runs once on mount.
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved === "light" || saved === "dark") {
       setThemeState(saved);
       applyTheme(saved);
     } else {
-      applyTheme(theme);
+      // No saved preference → sync with html class (set by inline script)
+      const systemTheme = document.documentElement.classList.contains("light")
+        ? "light"
+        : "dark";
+      if (systemTheme !== theme) {
+        setThemeState(systemTheme);
+      }
+      applyTheme(systemTheme);
     }
-  }, [theme]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Listen for system preference changes when no explicit choice is saved
   useEffect(() => {
