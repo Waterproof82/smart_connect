@@ -1,5 +1,5 @@
 {
-  "resource": "https://smart-connect-olive.vercel.app",
+  "resource": "https://digitalizatenerife.es",
   "authorization_servers": [
     "https://tysjedvujvsmrzzrmesr.supabase.co"
   ],
@@ -61,5 +61,5 @@
       "note": "Public chatbot with optional auth for personalized responses"
     }
   ],
-  "documentation": "https://smart-connect-olive.vercel.app/docs/api"
+  "documentation": "https://digitalizatenerife.es/docs/api"
 }

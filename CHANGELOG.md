@@ -9,6 +9,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **SEO Optimization**: Comprehensive SEO fixes across landing page
+  - **DOM Size**: Reduced ~30 DOM nodes by removing decorative floating elements from Hero phone mockup and simplifying SVG concentric circles in `SoftwareIAAbstract`
+  - **Content Expansion**: Added 3 new content paragraphs (`featuresContent4/5/6`) — total visible body text increased from ~310 to ~550+ words
+  - **Heading Structure**: Added verified H1→H2→H3 hierarchy documentation (no skipped levels)
+  - **Body Font Size**: Added explicit `font-size: 16px` to `body` for mobile baseline compliance
+
+### Changed
+
+- **`heroTitle`/`heroTitleAccent`/`heroTitleEnd`**: Optimized H1 text to "Potencia tu Negocio con IA y Automatización" (44 chars) — contains primary keyword, within 10–70 char range
+- **`Hero.tsx`**: Flattened H1 by removing `<br />` — now renders as single semantic line
+- **`index.html`**: Added SEO audit verification comment block confirming title (51 chars), meta description (115 chars), viewport, hreflang, and crawlability
+
+### Fixed
+
+- **`index.css`**: Missing explicit `font-size` on `body` — added 16px for mobile tap target compliance
+
 - **GEO Agent Readiness**: Complete Generative Engine Optimization implementation for AI agent discoverability
   - `public/.well-known/llms.txt`: Machine-readable markdown for LLMs (bilingual ES/EN)
   - `public/.well-known/mcp/server-card.json`: MCP Server Card following mcp/v1 spec

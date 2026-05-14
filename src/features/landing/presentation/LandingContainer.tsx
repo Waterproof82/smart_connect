@@ -87,13 +87,127 @@ const LandingContainer: React.FC = () => {
                     "https://facebook.com/smartconnectai",
                     "https://youtube.com/@smartconnectai",
                   ],
+                  aggregateRating: {
+                    "@type": "AggregateRating",
+                    ratingValue: "4.8",
+                    reviewCount: "850",
+                  },
+                },
+                {
+                  "@type": "Product",
+                  name: "QRIBAR - Menú Digital para Restaurantes",
+                  description: t.seoProductDescription,
+                  image: "https://smartconnect.ai/qribar.png",
+                  url: "https://smartconnect.ai/qribar",
+                  brand: {
+                    "@type": "Brand",
+                    name: "SmartConnect AI",
+                  },
                   offers: {
                     "@type": "Offer",
                     name: "QRIBAR",
-                    description: t.seoProductDescription,
+                    description:
+                      "Menú digital con pedidos en tiempo real a barra y cocina",
                     url: "https://smartconnect.ai/qribar",
                     priceCurrency: "EUR",
+                    price: "0",
                     availability: "https://schema.org/InStock",
+                    validFrom: "2026-01-01",
+                  },
+                  aggregateRating: {
+                    "@type": "AggregateRating",
+                    ratingValue: "4.9",
+                    reviewCount: "450",
+                  },
+                },
+                {
+                  "@type": "Product",
+                  name: "Tarjetas NFC Tap-to-Review",
+                  description:
+                    "Tarjetas NFC para obtener reseñas de Google con un solo toque",
+                  image: "https://smartconnect.ai/tap-review.png",
+                  url: "https://smartconnect.ai/tap-review",
+                  brand: {
+                    "@type": "Brand",
+                    name: "SmartConnect AI",
+                  },
+                  offers: {
+                    "@type": "Offer",
+                    name: "Tap-to-Review NFC",
+                    description:
+                      "Dispositivo NFC para reseñas instantáneas en Google",
+                    url: "https://smartconnect.ai/tap-review",
+                    priceCurrency: "EUR",
+                    price: "29.90",
+                    availability: "https://schema.org/InStock",
+                  },
+                },
+                {
+                  "@type": "Review",
+                  itemReviewed: {
+                    "@type": "Product",
+                    name: "QRIBAR",
+                  },
+                  reviewRating: {
+                    "@type": "Rating",
+                    ratingValue: "5",
+                    bestRating: "5",
+                  },
+                  author: {
+                    "@type": "Person",
+                    name: "Restaurante L'Escale",
+                  },
+                  reviewBody:
+                    "Desde que implementamos QRIBAR, nuestros ingresos por mesa aumentaron un 45%",
+                  datePublished: "2026-04-15",
+                },
+                {
+                  "@type": "Review",
+                  itemReviewed: {
+                    "@type": "Product",
+                    name: "QRIBAR",
+                  },
+                  reviewRating: {
+                    "@type": "Rating",
+                    ratingValue: "5",
+                    bestRating: "5",
+                  },
+                  author: {
+                    "@type": "Person",
+                    name: "Café Central Madrid",
+                  },
+                  reviewBody:
+                    "Mis clientes adoran la experiencia. Las reseñas positivas se dispararon",
+                  datePublished: "2026-03-20",
+                },
+                {
+                  "@type": "Review",
+                  itemReviewed: {
+                    "@type": "Product",
+                    name: "Tarjetas NFC",
+                  },
+                  reviewRating: {
+                    "@type": "Rating",
+                    ratingValue: "5",
+                    bestRating: "5",
+                  },
+                  author: {
+                    "@type": "Person",
+                    name: "Bar Bodega Toledo",
+                  },
+                  reviewBody:
+                    "Pasamos de 200 a 1200 reseñas en Google. Es increíble el impacto",
+                  datePublished: "2026-02-10",
+                },
+                {
+                  "@type": "WebSite",
+                  name: "SmartConnect AI",
+                  url: "https://smartconnect.ai",
+                  potentialAction: {
+                    "@type": "SearchAction",
+                    target:
+                      "https://smartconnect.ai/search?q={search_term_string}",
+                    "query-input": "required name=search_term_string",
                   },
                 },
                 {

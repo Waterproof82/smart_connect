@@ -40,27 +40,16 @@ const TapReviewPageWithData: React.FC = () => {
   return <TapReviewPage whatsappPhone={whatsappPhone} />;
 };
 
-const getInitialTheme = (): "light" | "dark" => {
-  if (typeof window === "undefined") return "dark";
-  return window.matchMedia("(prefers-color-scheme: light)").matches
-    ? "light"
-    : "dark";
-};
-
-const applyTheme = (theme: "light" | "dark") => {
-  if (theme === "light") {
-    document.documentElement.classList.add("light");
-  } else {
-    document.documentElement.classList.remove("light");
-  }
-};
-
-applyTheme(getInitialTheme());
-
+// Theme init moved to inline script in index.html (improves INP)
+// Listener for system preference changes during session
 window
   .matchMedia("(prefers-color-scheme: light)")
   .addEventListener("change", (e) => {
-    applyTheme(e.matches ? "light" : "dark");
+    if (e.matches) {
+      document.documentElement.classList.add("light");
+    } else {
+      document.documentElement.classList.remove("light");
+    }
   });
 
 // Lazy loading para rutas - AdminPanel solo se carga cuando se necesita

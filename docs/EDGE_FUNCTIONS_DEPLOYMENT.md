@@ -226,7 +226,7 @@ Las Edge Functions ya incluyen headers CORS. Si persiste:
 1. Verifica que el código de las funciones tenga:
 ```typescript
 const ALLOWED_ORIGINS = [
-  'https://smart-connect-olive.vercel.app',
+  'https://digitalizatenerife.es',
   'http://localhost:5173',
   'http://localhost:3000',
 ]

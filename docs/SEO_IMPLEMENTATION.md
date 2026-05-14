@@ -236,13 +236,13 @@ Content-Signal: ai-input=no
 
 ```bash
 # Test llms.txt accessibility
-curl https://smart-connect-olive.vercel.app/llms.txt
+curl https://digitalizatenerife.es/llms.txt
 
 # Test API catalog
-curl -H "Accept: application/linkset+json" https://smart-connect-olive.vercel.app/.well-known/api-catalog
+curl -H "Accept: application/linkset+json" https://digitalizatenerife.es/.well-known/api-catalog
 
 # Test Link headers
-curl -I https://smart-connect-olive.vercel.app/
+curl -I https://digitalizatenerife.es/
 ```
 
 ### References

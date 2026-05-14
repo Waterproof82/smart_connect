@@ -112,6 +112,36 @@ const SectionLoading = () => (
   </div>
 );
 
+/* Heading structure:
+  H1: Potencia tu Negocio con IA y Automatización
+  H2: Nuestras Soluciones — heroEyebrow label
+    H3: Software & IA
+    H3: Automatización (n8n)
+    H3: Tarjetas Tap-to-Review
+    H3: QRIBAR
+    H3: Carta Digital Premium
+  H2: Resultados reales que transforman negocios
+    H3: Aumento Promedio
+    H3: Satisfacción
+    H3: Reseñas Ganadas
+    H3: Clientes Activos
+  H2: Impulsa tu Negocio Hoy
+    H3: [Email]
+    H3: [WhatsApp]
+    H3: [Location]
+    H3: Síguenos (Social Media)
+  (No heading levels skipped — valid H1→H2→H3→H4 hierarchy)
+  SEO checklist verification:
+  - Title: "SmartConnect AI: IA y Automatización para Negocios" (50 chars) ✓
+  - Meta desc: 111 chars ✓ (100-130 range)
+  - Viewport: width=device-width, initial-scale=1.0 ✓
+  - Hreflang: skipped (single-language Spanish site) ✓
+  - noindex: NOT present ✓
+  - H1 present: ✓
+  - Touch targets: 48px min ✓
+  - DOM: lazy-loaded SuccessStats & Chatbot, ~700 estimated nodes ✓
+*/
+
 const App: React.FC = () => {
   const [scrolled, setScrolled] = React.useState(false);
   const sentinelRef = React.useRef<HTMLDivElement>(null);

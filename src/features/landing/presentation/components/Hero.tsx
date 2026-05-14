@@ -25,8 +25,8 @@ export const Hero: React.FC = () => {
             {t.heroEyebrow}
           </div>
 
-          <h1 className="reveal-2 text-3xl sm:text-4xl md:text-6xl lg:text-8xl font-extrabold leading-[1.05] mb-8 tracking-tight">
-            {t.heroTitle} <br />
+          <h1 className="reveal-2 text-3xl sm:text-4xl md:text-6xl lg:text-8xl font-extrabold leading-[1.1] mb-8 tracking-tight">
+            {t.heroTitle}{" "}
             <span className="text-[var(--color-primary)]">
               {t.heroTitleAccent}
             </span>{" "}
@@ -111,39 +111,7 @@ export const Hero: React.FC = () => {
               </div>
             </div>
 
-            <div
-              className="absolute -left-16 top-1/3 bg-[var(--color-accent)] border border-[var(--color-accent)]/50 backdrop-blur-xl px-6 py-4 rounded-2xl flex items-center gap-4 shadow-[0_20px_50px_rgba(37,99,235,0.4)] animate-float-fancy"
-              style={{ animationDelay: "-2s" }}
-            >
-              <div className="w-8 h-8 bg-[var(--color-overlay-strong)] rounded-lg flex items-center justify-center">
-                <Sparkles className="w-4 h-4 text-[var(--color-on-accent)]" />
-              </div>
-              <div className="flex flex-col">
-                <span className="text-[10px] font-black text-[var(--color-on-accent-muted)] uppercase tracking-tighter">
-                  AI Core
-                </span>
-                <span className="text-xs font-bold text-[var(--color-on-accent)]">
-                  Procesando...
-                </span>
-              </div>
-            </div>
-
-            <div
-              className="absolute -right-12 bottom-1/4 bg-[var(--color-surface)] border border-[var(--color-border)] backdrop-blur-md p-4 rounded-2xl flex flex-col gap-1 shadow-lg animate-float-fancy"
-              style={{ animationDelay: "-4s" }}
-            >
-              <div className="flex gap-1">
-                {[1, 2, 3].map((i) => (
-                  <div
-                    key={i}
-                    className="w-6 h-1 bg-[var(--color-primary)]/40 rounded-full"
-                  ></div>
-                ))}
-              </div>
-              <span className="text-[9px] text-muted font-medium">
-                Uplink Stable
-              </span>
-            </div>
+            {/* Decorative elements removed to reduce DOM size (~20 nodes saved) */}
           </div>
         </div>
       </div>
