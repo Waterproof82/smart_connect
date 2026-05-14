@@ -120,8 +120,13 @@ const App: React.FC = () => {
     const scrollToHash = () => {
       const hash = globalThis.location.hash;
       if (hash) {
+        // Strip query params (e.g. #contacto?servicio=X → #contacto)
+        // to avoid invalid CSS selectors like '#contacto?servicio=X'
+        const anchor = hash.includes("?") ? hash.split("?")[0] : hash;
         setTimeout(() => {
-          document.querySelector(hash)?.scrollIntoView({ behavior: "smooth" });
+          document
+            .querySelector(anchor)
+            ?.scrollIntoView({ behavior: "smooth" });
         }, 100);
       }
     };

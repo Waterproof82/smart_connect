@@ -272,28 +272,23 @@ export const Contact: React.FC = () => {
   };
 
   useEffect(() => {
-    const updateServiceFromURL = () => {
+    const updateServiceFromHash = () => {
+      // Parse hash query params (e.g., #contacto?servicio=Consultor%C3%ADa%20IA)
       const hash = globalThis.location.hash;
       if (!hash.includes("?")) return;
+
       const params = new URLSearchParams(hash.split("?")[1]);
       const servicio = params.get("servicio");
       if (servicio) {
         setValue("service", decodeURIComponent(servicio), {
           shouldValidate: true,
         });
-        setTimeout(
-          () =>
-            document
-              .querySelector("#contacto")
-              ?.scrollIntoView({ behavior: "smooth" }),
-          100,
-        );
       }
     };
-    updateServiceFromURL();
-    globalThis.addEventListener("hashchange", updateServiceFromURL);
+    updateServiceFromHash();
+    globalThis.addEventListener("hashchange", updateServiceFromHash);
     return () =>
-      globalThis.removeEventListener("hashchange", updateServiceFromURL);
+      globalThis.removeEventListener("hashchange", updateServiceFromHash);
   }, [setValue]);
 
   const { ref: nameRegRef, ...nameRegProps } = register("name");
