@@ -111,7 +111,41 @@ export const Hero: React.FC = () => {
               </div>
             </div>
 
-            {/* Decorative elements removed to reduce DOM size (~20 nodes saved) */}
+            {/* Floating AI Core processing badge */}
+            <div
+              className="absolute -left-16 top-1/3 bg-[var(--color-accent)] border border-[var(--color-accent)]/50 backdrop-blur-xl px-5 py-3 rounded-2xl flex items-center gap-3 shadow-[0_20px_50px_rgba(37,99,235,0.4)] animate-float-fancy"
+              style={{ animationDelay: "-2s" }}
+            >
+              <div className="w-7 h-7 bg-[var(--color-overlay-strong)] rounded-lg flex items-center justify-center shrink-0">
+                <Sparkles className="w-3.5 h-3.5 text-[var(--color-on-accent)]" />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-[10px] font-black text-[var(--color-on-accent-muted)] uppercase tracking-tighter leading-none">
+                  AI Core
+                </span>
+                <span className="text-xs font-bold text-[var(--color-on-accent)] leading-tight mt-0.5">
+                  Procesando...
+                </span>
+              </div>
+            </div>
+
+            {/* Floating Uplink Stable indicator */}
+            <div
+              className="absolute -right-12 bottom-1/4 bg-[var(--color-surface)] border border-[var(--color-border)] backdrop-blur-md p-3.5 rounded-2xl flex flex-col gap-1.5 shadow-lg animate-float-fancy"
+              style={{ animationDelay: "-4s" }}
+            >
+              <div className="flex gap-1">
+                {[1, 2, 3].map((i) => (
+                  <div
+                    key={i}
+                    className="w-5 h-1 bg-[var(--color-primary)]/40 rounded-full"
+                  />
+                ))}
+              </div>
+              <span className="text-[9px] text-muted font-medium leading-none">
+                Uplink Stable
+              </span>
+            </div>
           </div>
         </div>
       </div>
