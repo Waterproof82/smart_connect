@@ -31,11 +31,12 @@ const STORAGE_KEY = "sc_theme";
 
 const getInitialTheme = (): Theme => {
   if (typeof window === "undefined") return "dark";
-  const stored = localStorage.getItem(STORAGE_KEY);
-  if (stored === "light" || stored === "dark") return stored;
-  return window.matchMedia("(prefers-color-scheme: light)").matches
-    ? "light"
-    : "dark";
+  // Read from the <html> class set by the inline theme script in index.html.
+  // The inline script uses matchMedia BEFORE React hydrates and adds 'light'
+  // to <html> if needed. Reading from the DOM instead of re-evaluating
+  // matchMedia/localStorage ensures SSR and client produce the same tree.
+  if (document.documentElement.classList.contains("light")) return "light";
+  return "dark";
 };
 
 const applyTheme = (theme: Theme) => {
@@ -48,9 +49,15 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [theme, setThemeState] = useState<Theme>(getInitialTheme);
 
-  // Apply theme on mount
+  // Apply theme on mount and restore saved preference post-hydration
   useEffect(() => {
-    applyTheme(theme);
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved === "light" || saved === "dark") {
+      setThemeState(saved);
+      applyTheme(saved);
+    } else {
+      applyTheme(theme);
+    }
   }, [theme]);
 
   // Listen for system preference changes when no explicit choice is saved
