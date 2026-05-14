@@ -160,10 +160,12 @@ SmartConnect usa SSG custom con `react-dom/server` (renderToString). El servidor
 
 ### Seguridad de Tema (Theme SSR)
 
-El `useState(getInitialTheme)` se ejecuta durante la hidratación. Debe retornar el MISMO valor que en SSR:
+El `useState(getInitialTheme)` se ejecuta durante la hidratación. Debe retornar el MISMO valor que en SSR para evitar error #418.
+
+**Regla de oro**: `getInitialTheme()` debe retornar SIEMPRE el mismo valor, sin importar el entorno (SSR o cliente).
 
 ```typescript
-// ❌ MAL: matchMedia puede dar distinto entre SSR y cliente
+// ❌ MAL: matchMedia da distinto entre SSR y cliente
 const getInitialTheme = () => {
   if (typeof window === "undefined") return "dark";
   return window.matchMedia("(prefers-color-scheme: light)").matches
@@ -171,12 +173,36 @@ const getInitialTheme = () => {
     : "dark";
 };
 
-// ✅ BIEN: lee del <html> class seteado por inline script pre-hydration
-const getInitialTheme = (): Theme => {
+// ❌ MAL: leer del <html> class también da distinto (SSR no tiene document)
+const getInitialTheme = () => {
   if (typeof window === "undefined") return "dark";
   if (document.documentElement.classList.contains("light")) return "light";
   return "dark";
 };
+
+// ✅ BIEN: valor fijo para SSR y 1er render del cliente
+const getInitialTheme = (): Theme => "dark";
+```
+
+**Post-hydratación**: usar un `useEffect` con deps `[]` para sincronizar el estado de React con la preferencia real del usuario:
+
+```typescript
+useEffect(() => {
+  const saved = localStorage.getItem("sc_theme");
+  if (saved === "light" || saved === "dark") {
+    setThemeState(saved);
+    applyTheme(saved);
+  } else {
+    // Sin preferencia guardada → sincronizar con html class (seteado por inline script)
+    const systemTheme = document.documentElement.classList.contains("light")
+      ? "light"
+      : "dark";
+    if (systemTheme !== theme) {
+      setThemeState(systemTheme);
+    }
+    applyTheme(systemTheme);
+  }
+}, []); // ← deps vacío: corre UNA VEZ post-hydratación
 ```
 
 ### Lazy Supabase Proxy
@@ -194,6 +220,44 @@ export const supabase = new Proxy<SupabaseClient>({} as SupabaseClient, {
     return value;
   },
 });
+```
+
+### SPA Hydration Safety
+
+Las páginas SPA (carta-digital, tap-review, admin) se sirven con `_spa.html`, que NO tiene contenido SSR real — solo contiene `<!--ssr-outlet-->`.
+
+**No se puede usar `hydrateRoot` en páginas sin contenido SSR.** React espera encontrar elementos DOM reales, encuentra un comentario → error #418/#423.
+
+**Detección y decisión**:
+
+```typescript
+const hasSSRContent = rootElement.children.length > 0;
+// children cuenta solo Element nodes, no Comment nodes
+// Prerendered: tiene hijos <div>, <nav> → hasSSRContent = true → hydrateRoot
+// SPA: solo tiene <!--ssr-outlet--> → hasSSRContent = false → createRoot
+
+if (hasSSRContent) {
+  hydrateRoot(rootElement, app);
+} else {
+  createRoot(rootElement).render(app);
+}
+```
+
+**ThemeProvider debe envolver TODAS las rutas**, no solo las de landing. Si solo está en `App.tsx`, las SPA pages se quedan sin contexto de tema:
+
+```typescript
+// ✅ entry-client.tsx: ThemeProvider wrapping ALL routes
+<ThemeProvider>
+  <LanguageProvider>
+    <Routes>
+      <Route path="/" element={<App />} />
+      <Route path="/carta-digital" element={<CartaDigitalPremium />} />
+      <Route path="/tap-review" element={<TapReviewPageWithData />} />
+    </Routes>
+  </LanguageProvider>
+</ThemeProvider>
+
+// ❌ MAL: ThemeProvider solo en App.tsx — SPA routes no lo heredan
 ```
 
 ## 🌐 SmartConnect Standards: Best Practices

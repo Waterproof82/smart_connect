@@ -138,12 +138,24 @@ Reglas para evitar React error #418 (hydration mismatch) con SSG custom (react-d
 - **No lazy() en landing routes**: Los componentes de landing (Hero, Features, Contact, SuccessStats, ExpertAssistant) deben ser eager imports en App.tsx. `renderToString` CRASHEA con lazy() + Suspense.
 - **Verificación**: El HTML prerenderizado debe tener `<!--$-->` (Suspense SSR marker). Usá `grep '<!--$-->' dist/index.html` para confirmar.
 
+### SPA Hydration Safety (CRITICAL) ⚠️
+
+Controla cómo React se monta en páginas que NO tienen contenido SSR (servidas via `_spa.html`).
+
+- **Regla**: `entry-client.tsx` debe DETECTAR si hay contenido SSR real en `#root` antes de decidir entre `hydrateRoot` y `createRoot`.
+- **Detección**: `rootElement.children.length > 0` — las páginas prerenderizadas tienen hijos Element (`<div>`, `<nav>`, etc.), las SPA pages solo tienen un Comment node (`<!--ssr-outlet-->`).
+- **Prerendered → `hydrateRoot`**: páginas `/`, `/servicios`, `/contacto` tienen HTML real → hidratar.
+- **SPA → `createRoot`**: páginas `/carta-digital`, `/tap-review`, `/admin` se sirven con `_spa.html` que solo tiene `<!--ssr-outlet-->` → NO se puede hidratar, usar `createRoot` + `.render()`.
+- **ThemeProvider debe envolver TODAS las rutas** en `entry-client.tsx` y `entry-server.tsx`, NO solo dentro de `App.tsx`. Si solo está en App, las SPA pages no tienen contexto de tema.
+
 ### Theme SSR Safety (CRITICAL) ⚠️
 
 - `useState(getInitialTheme)` se ejecuta DURANTE la hidratación del cliente. Debe retornar el MISMO valor que en SSR, o componentes que renderizan JSX distinto según el tema (ej. Navbar con SVG de luna/sol) causarán error #418.
-- **NUNCA** uses `matchMedia()` o `localStorage.getItem()` directamente en `getInitialTheme()` — en SSR `typeof window === "undefined"` retorna "dark", pero en el cliente `matchMedia` puede retornar "light", causando mismatch.
-- **Fix**: Leé del `<html>` class que el inline script ya seteó antes de React hydrate: `document.documentElement.classList.contains("light") ? "light" : "dark"`.
-- **Post-hydration**: En un `useEffect` de mount, verificá `localStorage` para restaurar la preferencia guardada sin causar crash.
+- **NUNCA** uses `matchMedia()` o `localStorage.getItem()` en `getInitialTheme()` — darían distinto valor en SSR vs cliente.
+- **NUNCA** leas del `<html>` class en `getInitialTheme()` aunque el inline script lo haya seteado — en SSR no hay document, retorna "dark", pero en cliente puede retornar "light" → mismatch.
+- **Fix**: `getInitialTheme()` debe SIEMPRE retornar `"dark"` (tanto en SSR como en cliente). El useEffect post-hydratación (con deps `[]`) corrige el estado leyendo del html class o localStorage.
+- **Post-hydration useEffect**: leer `document.documentElement.classList.contains("light")` o `localStorage.getItem("sc_theme")`. Solo hacer `setThemeState` si el valor es distinto de "dark" para evitar re-renders innecesarios.
+- **applyTheme()** debe llamarse en el useEffect con el valor corregido para sincronizar el html class.
 
 ### Supabase Client Proxy (CRITICAL) ⚠️
 
