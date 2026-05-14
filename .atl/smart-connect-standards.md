@@ -131,9 +131,74 @@ const validateRole = (role) => (req, res, next) => {
 
 ---
 
-# 🌐 SmartConnect Standards: Best Practices
+# 🏗️ SmartConnect Standards: SSR & Hydration
 
-## Environment Compatibility
+## Critical: Hydration Safety
+
+SmartConnect usa SSG custom con `react-dom/server` (renderToString). El servidor prerenderiza HTML y el cliente lo hidrata. Si el árbol de componentes difiere entre servidor y cliente, React lanza error #418 y se cae toda la hidratación.
+
+### Regla de Oro
+
+**El árbol de componentes de `entry-server.tsx` debe ser ESTRUCTURALMENTE IDÉNTICO al de `entry-client.tsx`.**
+
+### Checklist de Componentes SSR
+
+| Componente                           | entry-server.tsx      | entry-client.tsx     |
+| ------------------------------------ | --------------------- | -------------------- |
+| `<HelmetProvider>`                   | ✅                    | ✅                   |
+| `<StaticRouter>` / `<BrowserRouter>` | ✅ (StaticRouter)     | ✅ (BrowserRouter)   |
+| `<LanguageProvider>`                 | ✅                    | ✅                   |
+| `<ScrollToTop />`                    | ✅ OBLIGATORIO        | ✅                   |
+| `<Suspense>`                         | ✅ OBLIGATORIO        | ✅                   |
+| `<Routes>`                           | ✅ (3 landing routes) | ✅ (7 routes + lazy) |
+
+### Qué NO hacer en SSR
+
+- ❌ NO uses `window`, `document`, `localStorage`, `matchMedia` durante el render (ni en `useState` initializer, ni en render functions, ni en módulo-level code)
+- ❌ NO uses `lazy()` en componentes de landing que se renderizan en SSR (Hero, Features, Contact, SuccessStats, ExpertAssistant)
+- ❌ NO dejes fuera del server componentes que retornan `null` (como `ScrollToTop`) — cuentan como elementos estructurales
+
+### Seguridad de Tema (Theme SSR)
+
+El `useState(getInitialTheme)` se ejecuta durante la hidratación. Debe retornar el MISMO valor que en SSR:
+
+```typescript
+// ❌ MAL: matchMedia puede dar distinto entre SSR y cliente
+const getInitialTheme = () => {
+  if (typeof window === "undefined") return "dark";
+  return window.matchMedia("(prefers-color-scheme: light)").matches
+    ? "light"
+    : "dark";
+};
+
+// ✅ BIEN: lee del <html> class seteado por inline script pre-hydration
+const getInitialTheme = (): Theme => {
+  if (typeof window === "undefined") return "dark";
+  if (document.documentElement.classList.contains("light")) return "light";
+  return "dark";
+};
+```
+
+### Lazy Supabase Proxy
+
+```typescript
+// ✅ Proxy correcto: bracket access + bind + then guard
+export const supabase = new Proxy<SupabaseClient>({} as SupabaseClient, {
+  get(_, prop) {
+    const client = getClient();
+    if (prop === "then") return undefined;
+    const value = (client as unknown as Record<string, unknown>)[
+      prop as string
+    ];
+    if (typeof value === "function") return value.bind(client);
+    return value;
+  },
+});
+```
+
+## 🌐 SmartConnect Standards: Best Practices
+
+### Environment Compatibility
 
 ### Prefer `globalThis` over `window`
 

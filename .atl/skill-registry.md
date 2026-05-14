@@ -1,6 +1,6 @@
 # Skill Registry — smart-connect
 
-_Last updated: 2026-05-11_
+_Last updated: 2026-05-14_
 
 ## Global Skills (from Engram)
 
@@ -127,6 +127,47 @@ Regla obligatoria para el Gentle-Orchestrator: determina cuándo DEBE usar SDD v
 - Búsqueda: similarity search en Supabase
 - Respuesta: `gemini-2.5-flash` con contexto
 - Cache: TTL 7 días
+
+### SSR / Hydration (CRITICAL) ⚠️
+
+Reglas para evitar React error #418 (hydration mismatch) con SSG custom (react-dom/server).
+
+- **Tree must match**: `entry-server.tsx` y `entry-client.tsx` deben tener la MISMA estructura de componentes. Cada wrapper en el cliente debe estar también en el servidor.
+- **Suspense**: `renderToString()` en React 18 no soporta Suspense nativamente pero renderiza a través del boundary. Incluí `<Suspense>` en AMBOS trees aunque no haga nada en SSR — el cliente necesita encontrarlo durante la hidratación.
+- **ScrollToTop y null components**: Componentes que retornan `null` (como `ScrollToTop`) cuentan como elementos estructurales. Si están en el cliente, deben estar en el servidor también.
+- **No lazy() en landing routes**: Los componentes de landing (Hero, Features, Contact, SuccessStats, ExpertAssistant) deben ser eager imports en App.tsx. `renderToString` CRASHEA con lazy() + Suspense.
+- **Verificación**: El HTML prerenderizado debe tener `<!--$-->` (Suspense SSR marker). Usá `grep '<!--$-->' dist/index.html` para confirmar.
+
+### Theme SSR Safety (CRITICAL) ⚠️
+
+- `useState(getInitialTheme)` se ejecuta DURANTE la hidratación del cliente. Debe retornar el MISMO valor que en SSR, o componentes que renderizan JSX distinto según el tema (ej. Navbar con SVG de luna/sol) causarán error #418.
+- **NUNCA** uses `matchMedia()` o `localStorage.getItem()` directamente en `getInitialTheme()` — en SSR `typeof window === "undefined"` retorna "dark", pero en el cliente `matchMedia` puede retornar "light", causando mismatch.
+- **Fix**: Leé del `<html>` class que el inline script ya seteó antes de React hydrate: `document.documentElement.classList.contains("light") ? "light" : "dark"`.
+- **Post-hydration**: En un `useEffect` de mount, verificá `localStorage` para restaurar la preferencia guardada sin causar crash.
+
+### Supabase Client Proxy (CRITICAL) ⚠️
+
+El lazy Proxy para `supabase` difiere `createClient()` hasta el primer acceso para evitar crashes en SSR cuando no hay `.env`.
+
+```typescript
+export const supabase = new Proxy<SupabaseClient>({} as SupabaseClient, {
+  get(_, prop) {
+    const client = getClient();
+    if (prop === "then") return undefined; // evitar que sea tratado como Promise
+    const value = (client as unknown as Record<string, unknown>)[
+      prop as string
+    ];
+    if (typeof value === "function") return value.bind(client);
+    return value;
+  },
+});
+```
+
+Reglas:
+
+- Usá bracket access (`client[prop]`), NO `Reflect.get(client, prop, prop)` — el tercer arg es `receiver`, no la propiedad
+- Funciones deben bindearse al cliente: `value.bind(client)` para mantener el `this` correcto
+- `prop === "then"` debe retornar `undefined` para evitar que el Proxy sea tratado como thenable/Promise
 
 See also: [SmartConnect Standards](.atl/smart-connect-standards.md) for full documentation.
 
