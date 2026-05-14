@@ -26,4 +26,4 @@ Content-Signal: ai-train=no
 Content-Signal: search=yes
 Content-Signal: ai-input=no
 
-Sitemap: https://smart-connect-olive.vercel.app/sitemap.xml
+Sitemap: https://digitalizatenerife.es/sitemap.xml

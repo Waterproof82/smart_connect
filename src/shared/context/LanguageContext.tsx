@@ -37,6 +37,9 @@ interface Translation {
   featuresContent1: string;
   featuresContent2: string;
   featuresContent3: string;
+  featuresContent4: string;
+  featuresContent5: string;
+  featuresContent6: string;
   featuresSoftwareIA: string;
   featuresSoftwareIADesc: string;
   featuresAutomation: string;
@@ -76,6 +79,8 @@ interface Translation {
   seoTitle: string;
   seoDescription: string;
   seoProductDescription: string;
+  seoAltTextNFC: string;
+  seoAltTextQribar: string;
 
   // Contact
   contactTitle: string;
@@ -399,9 +404,9 @@ const translations: Record<Language, Translation> = {
 
     // Hero
     heroEyebrow: "La revolución digital para negocios locales",
-    heroTitle: "Impulsa tu negocio con",
-    heroTitleAccent: "Inteligencia Artificial",
-    heroTitleEnd: "y automatización",
+    heroTitle: "Potencia tu Negocio con",
+    heroTitleAccent: "IA",
+    heroTitleEnd: "y Automatización",
     heroSubtitle:
       "Tecnología de próxima generación para negocios locales. Automatiza tareas, fideliza clientes y escala tu empresa con soluciones inteligentes.",
     heroButtonDemo: "Ver Demo",
@@ -421,6 +426,12 @@ const translations: Record<Language, Translation> = {
       "Con QRIBAR, tus clientes piden desde su móvil escaneando un código QR en la mesa. El pedido llega directamente a barra y cocina en tiempo real, eliminando tiempos de espera y aumentando la rotación de mesas. Sin comisiones, sin intermediarios.",
     featuresContent3:
       "Nuestras tarjetas NFC Tap-to-Review permiten a cualquier cliente dejar una reseña en Google con un solo toque. Más reseñas significan mejor posicionamiento en Google Maps y más clientes nuevos. Todo con tecnología de alto rendimiento, sin suscripciones y con configuración inmediata.",
+    featuresContent4:
+      "Imagina un flujo de trabajo donde cada lead se captura, analiza y responde automáticamente. Con nuestras automatizaciones n8n, conectamos tu CRM, email, WhatsApp y redes sociales en un solo ecosistema. Cada interacción con un cliente potencial genera acciones en cadena: análisis de sentimiento con IA, asignación de temperatura del lead, y notificaciones en tiempo real a tu equipo comercial.",
+    featuresContent5:
+      "QRIBAR no es solo un menú digital: es tu nuevo canal de ventas directo. Cada mesa escanea un código QR, explora platos con fotos y vídeos profesionales en 5 idiomas, y envía el pedido directamente a barra y cocina. Sin comisiones, sin esperas, sin intermediarios. Los datos de cada cliente se almacenan en tu base de datos para campañas de fidelización automatizadas.",
+    featuresContent6:
+      "Las tarjetas NFC Tap-to-Review convierten cada visita en una reseña de Google. Coloca el expositor en tu local, el cliente acerca su móvil, y en 5 segundos tiene abierta la página de reseñas. Más reseñas = mejor posicionamiento local en Google Maps = más clientes nuevos. Un ciclo virtuoso que multiplica tu visibilidad sin inversión publicitaria recurrente.",
     featuresSoftwareIA: "Software & IA",
     featuresSoftwareIADesc:
       "Desarrollo de herramientas personalizadas que se integran perfectamente con tus sistemas actuales. Soluciones a medida impulsadas por algoritmos inteligentes.",
@@ -472,6 +483,8 @@ const translations: Record<Language, Translation> = {
       "SmartConnect AI: automatización con IA, n8n, NFC para Google Reviews y menús digitales. Digitaliza tu negocio.",
     seoProductDescription:
       "Plataforma de crecimiento para restaurantes con menú digital, pedidos por QR y tecnología NFC diseñada para aumentar pedidos, reducir tiempos de espera y maximizar ingresos por mesa.",
+    seoAltTextNFC: "Tarjeta NFC Tap-to-Review para obtener reseñas en Google",
+    seoAltTextQribar: "Menú digital QRIBAR con pedidos en tiempo real",
 
     // Contact
     contactTitle: "Impulsa tu Negocio Hoy",
@@ -861,6 +874,12 @@ const translations: Record<Language, Translation> = {
       "With QRIBAR, your customers order from their phone by scanning a QR code at the table. Orders arrive directly to the bar and kitchen in real-time, eliminating wait times and increasing table turnover. No commissions, no intermediaries.",
     featuresContent3:
       "Our Tap-to-Review NFC cards let any customer leave a Google review with a single tap. More reviews mean better Google Maps positioning and more new customers. High-performance technology, no subscriptions, instant setup.",
+    featuresContent4:
+      "Imagine a workflow where every lead is captured, analyzed, and responded to automatically. With our n8n automations, we connect your CRM, email, WhatsApp, and social media in a single ecosystem. Each prospect interaction triggers chain actions: AI sentiment analysis, lead temperature scoring, and real-time notifications to your sales team.",
+    featuresContent5:
+      "QRIBAR is not just a digital menu — it's your new direct sales channel. Every table scans a QR code, explores dishes with professional photos and videos in 5 languages, and sends orders directly to the bar and kitchen. No commissions, no waiting, no intermediaries. Customer data is stored in your database for automated loyalty campaigns.",
+    featuresContent6:
+      "NFC Tap-to-Review cards turn every visit into a Google review. Place the display in your venue, customers tap their phone, and in 5 seconds the review page opens. More reviews = better local Google Maps ranking = more new customers. A virtuous cycle that multiplies your visibility without recurring ad spend.",
     featuresSoftwareIA: "Software & AI",
     featuresSoftwareIADesc:
       "Custom tool development that integrates perfectly with your existing systems. Tailored solutions powered by intelligent algorithms.",
@@ -912,6 +931,8 @@ const translations: Record<Language, Translation> = {
       "SmartConnect AI: AI automation, n8n workflows, NFC for Google Reviews & digital menus. Digitize your business.",
     seoProductDescription:
       "Restaurant growth platform with digital menu, QR ordering, and NFC technology designed to increase orders, reduce wait times, and maximize revenue per table.",
+    seoAltTextNFC: "Tap-to-Review NFC card to get Google reviews",
+    seoAltTextQribar: "QRIBAR digital menu with real-time orders",
 
     // Contact
     contactTitle: "Boost Your Business Today",
