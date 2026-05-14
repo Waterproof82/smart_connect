@@ -1307,27 +1307,22 @@ const LanguageContext = createContext<LanguageContextValue | undefined>(
 export const LanguageProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [language, setLanguage] = useState<Language>(() => {
-    if (globalThis.window !== undefined) {
-      const saved = localStorage.getItem("language");
-      if (saved === "en" || saved === "es") return saved;
-    }
-    return "es";
-  });
+  // Always init as "es" (same on SSR and client) to prevent hydration mismatch.
+  // Post-hydration, restore saved preference via useEffect.
+  const [language, setLanguage] = useState<Language>("es");
 
   const handleSetLanguage = useCallback((lang: Language) => {
     setLanguage(lang);
-    if (globalThis.window !== undefined) {
-      localStorage.setItem("language", lang);
-    }
+    localStorage.setItem("language", lang);
   }, []);
 
-  // Update html lang attribute for screen readers
+  // Post-hydration: restore saved language preference and update html lang
   useEffect(() => {
-    if (globalThis.window !== undefined) {
-      document.documentElement.lang = language;
-    }
-  }, [language]);
+    const saved = localStorage.getItem("language");
+    const lang = saved === "es" || saved === "en" ? saved : "es";
+    setLanguage(lang);
+    document.documentElement.lang = lang;
+  }, []);
 
   const value: LanguageContextValue = useMemo(
     () => ({
