@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Cpu, ChevronDown, Shield, X, Menu, Sun, Moon } from "lucide-react";
+import { Cpu, ChevronDown, Shield, X, Menu } from "lucide-react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import LanguageSelector from "@shared/components/LanguageSelector";
 import { useLanguage } from "@shared/context/LanguageContext";
-import { useTheme } from "@shared/context/ThemeContext";
 
 import { SOLUTIONS } from "@shared/config/solutions";
 import { mapSolutions, SolutionItem } from "@shared/utils/solutionHelpers";
@@ -116,7 +115,6 @@ const DropdownMenuItem: React.FC<{
 
 export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
   const { t } = useLanguage();
-  const { theme, toggleTheme } = useTheme();
   const location = useLocation();
   const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -288,19 +286,6 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
             {t.navContact}
           </a>
           <LanguageSelector />
-          <button
-            onClick={toggleTheme}
-            className="flex items-center justify-center w-10 h-10 rounded-xl text-muted hover:text-[var(--color-primary)] hover:bg-[var(--color-accent-subtle)] transition-colors min-h-[48px] min-w-[48px]"
-            aria-label={
-              theme === "dark" ? "Activar modo claro" : "Activar modo oscuro"
-            }
-          >
-            {theme === "dark" ? (
-              <Sun className="w-5 h-5" />
-            ) : (
-              <Moon className="w-5 h-5" />
-            )}
-          </button>
           <Link
             to="/admin"
             className="flex items-center gap-2 min-h-[48px] text-muted hover:text-[var(--color-primary)] transition-colors"
@@ -346,21 +331,6 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
                 </span>
                 <div className="flex items-center gap-2">
                   <LanguageSelector />
-                  <button
-                    onClick={toggleTheme}
-                    className="text-muted hover:text-[var(--color-primary)] p-2 rounded-lg transition-colors"
-                    aria-label={
-                      theme === "dark"
-                        ? "Activar modo claro"
-                        : "Activar modo oscuro"
-                    }
-                  >
-                    {theme === "dark" ? (
-                      <Sun className="w-5 h-5" />
-                    ) : (
-                      <Moon className="w-5 h-5" />
-                    )}
-                  </button>
                   <button
                     onClick={() => setIsMobileMenuOpen(false)}
                     className="text-default p-2 rounded-lg focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)]"
