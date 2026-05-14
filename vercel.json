@@ -17,6 +17,10 @@
           "value": "DENY"
         },
         {
+          "key": "X-Robots-Tag",
+          "value": "index, follow"
+        },
+        {
           "key": "Referrer-Policy",
           "value": "strict-origin-when-cross-origin"
         },
@@ -29,6 +33,18 @@
           "value": "</.well-known/api-catalog>; rel=\"api-catalog\", </llms.txt>; rel=\"ai-readable\", </.well-known/mcp/server-card.json>; rel=\"api-catalog\", </.well-known/openid-configuration>; rel=\"oauth2-authorization-server\", </.well-known/oauth-protected-resource>; rel=\"protected-resource\""
         }
       ]
+    },
+    {
+      "source": "/",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=3600" }]
+    },
+    {
+      "source": "/servicios",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=3600" }]
+    },
+    {
+      "source": "/contacto",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=3600" }]
     }
   ],
   "rewrites": [

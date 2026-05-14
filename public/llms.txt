@@ -1,0 +1,42 @@
+# SmartConnect AI
+
+> IA, automatización y hardware inteligente para negocios locales en Tenerife y Canarias.
+
+## Servicios principales
+
+1. **QRIBAR** — Menú digital con pedidos en tiempo real desde la mesa a barra y cocina. Sin comisiones.
+2. **Tap-to-Review NFC** — Tarjetas NFC para que los clientes dejen reseñas en Google con un solo toque.
+3. **Automatización n8n** — Flujos de trabajo automatizados que conectan CRM, email, WhatsApp y redes sociales.
+4. **Carta Digital Premium** — Menú digital avanzado con fotos, vídeos y 5 idiomas.
+
+## Páginas clave
+
+- Inicio: https://digitalizatenerife.es/
+- Servicios: https://digitalizatenerife.es/servicios
+- Contacto: https://digitalizatenerife.es/contacto
+- Menú digital QRIBAR: https://digitalizatenerife.es/carta-digital
+- Tap-to-Review NFC: https://digitalizatenerife.es/tap-review
+
+## Stack técnico
+
+- Framework: React 18
+- Build: Vite 8
+- Lenguaje: TypeScript 5.x
+- Estilos: Tailwind CSS 4
+- SEO: SSG pre-renderizado (react-dom/server)
+- AI-ready: robots.txt configurado para crawlers de IA
+
+## Contacto
+
+- Email: info@smartconnect.ai
+- Web: https://digitalizatenerife.es
+
+## Structured Data
+
+- Schema.org LocalBusiness: https://digitalizatenerife.es/ (JSON-LD en head)
+- API docs: contacto directo
+
+## Idiomas
+
+- Español (es) — principal
+- English (en) — secundario

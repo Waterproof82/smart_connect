@@ -9,21 +9,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- **SEO Optimization**: Comprehensive SEO fixes across landing page
-  - **DOM Size**: Reduced ~30 DOM nodes by removing decorative floating elements from Hero phone mockup and simplifying SVG concentric circles in `SoftwareIAAbstract`
-  - **Content Expansion**: Added 3 new content paragraphs (`featuresContent4/5/6`) — total visible body text increased from ~310 to ~550+ words
-  - **Heading Structure**: Added verified H1→H2→H3 hierarchy documentation (no skipped levels)
-  - **Body Font Size**: Added explicit `font-size: 16px` to `body` for mobile baseline compliance
+- **SSG (Static Site Generation)**: Custom prerendering with `react-dom/server` for landing page
+  - `src/entry-server.tsx` — SSR entry with `renderToString`, `StaticRouter`, `HelmetProvider`
+  - `src/entry-client.tsx` — Client hydration entry with `hydrateRoot`, `BrowserRouter`, all routes
+  - `scripts/prerender.mjs` — Build-time script generating static HTML for `/`, `/servicios`, `/contacto`
+  - `public/llms.txt` — LLM-readable markdown in public root for AI crawlers
+  - `vite.config.ts` — Dual-mode config (SSR build + client build)
+  - `package.json` — `build:ssr`, `prerender`, combined `build` pipeline with `cross-env`
+  - SSR safety: DOMPurify lazy init + `prefersReducedMotion` guard + ThemeContext guard
+- **On-page SEO**: Helmet meta tags in `App.tsx` (title, description, canonical, hreflang, OG, Twitter, LocalBusiness JSON-LD)
+- **Content expansion**: New "¿Por qué SmartConnect AI?" section (~400 words, 5 paragraphs) covering mission, four pillars, transparent pricing, results (200+ businesses), digital imperative
+- **Social links**: New 4th footer column with YouTube, X, LinkedIn, Instagram, Facebook
+- **Crawlability**: `X-Robots-Tag: index, follow` header + Cache-Control per route in `vercel.json`
+- **Sitemap**: Expanded to 8 routes including /servicios and /contacto with proper priorities
 
 ### Changed
 
-- **`heroTitle`/`heroTitleAccent`/`heroTitleEnd`**: Optimized H1 text to "Potencia tu Negocio con IA y Automatización" (44 chars) — contains primary keyword, within 10–70 char range
-- **`Hero.tsx`**: Flattened H1 by removing `<br />` — now renders as single semantic line
-- **`index.html`**: Added SEO audit verification comment block confirming title (51 chars), meta description (115 chars), viewport, hreflang, and crawlability
+- **`index.html`**: Replaced static H1 fallback with `<!--ssr-outlet-->`, entry-client.tsx with `defer`, removed all hardcoded meta/OG/structured data (now via Helmet), viewport simplified
+- **`src/shared/context/LanguageContext.tsx`**: Expanded all 6 `featuresContent` paragraphs, renamed `featuresTitle` → "Nuestros Servicios", `contactTitle` → "Contacto"
+- **`public/sitemap.xml`**: Added 2 new routes, removed `lastmod` fields
 
 ### Fixed
 
-- **`index.css`**: Missing explicit `font-size` on `body` — added 16px for mobile tap target compliance
+- **`src/shared/utils/sanitizer.ts`**: DOMPurify now lazy-initialized — prevents SSR crash when `window` is undefined
+- **`src/features/landing/presentation/components/Contact.tsx`**: Added `globalThis.matchMedia === undefined` guard for SSR
+- **`vercel.json`**: Added Cache-Control headers for prerendered routes (/, /servicios, /contacto)
 
 - **GEO Agent Readiness**: Complete Generative Engine Optimization implementation for AI agent discoverability
   - `public/.well-known/llms.txt`: Machine-readable markdown for LLMs (bilingual ES/EN)

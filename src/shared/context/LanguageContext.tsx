@@ -417,21 +417,21 @@ const translations: Record<Language, Translation> = {
     heroStatsInfinite: "Integraciones",
 
     // Features
-    featuresTitle: "Nuestras Soluciones",
+    featuresTitle: "Nuestros Servicios",
     featuresSubtitle:
       "Herramientas avanzadas diseñadas para la era digital, desde el hardware hasta el código.",
     featuresContent1:
-      "En SmartConnect AI combinamos inteligencia artificial, automatización y hardware inteligente para transformar la forma en que los negocios locales atraen, retienen y fidelizan clientes. Nuestra plataforma integra menús digitales QRIBAR con pedidos en tiempo real, tarjetas NFC para reseñas instantáneas en Google, y flujos de automatización con n8n que conectan cada interacción del cliente.",
+      "En SmartConnect AI combinamos inteligencia artificial, automatización y hardware inteligente para transformar la forma en que los negocios locales atraen, retienen y fidelizan clientes. Nuestra plataforma integra menús digitales QRIBAR con pedidos en tiempo real, tarjetas NFC para reseñas instantáneas en Google, y flujos de automatización con n8n que conectan cada interacción del cliente. Somos el aliado tecnológico que tu negocio en Tenerife y Canarias necesita para dar el salto digital definitivo.",
     featuresContent2:
-      "Con QRIBAR, tus clientes piden desde su móvil escaneando un código QR en la mesa. El pedido llega directamente a barra y cocina en tiempo real, eliminando tiempos de espera y aumentando la rotación de mesas. Sin comisiones, sin intermediarios.",
+      "Con QRIBAR, tus clientes piden desde su móvil escaneando un código QR en la mesa. El pedido llega directamente a barra y cocina en tiempo real, eliminando tiempos de espera y aumentando la rotación de mesas. Sin comisiones, sin intermediarios. Cada mesa se convierte en un punto de venta digital que opera 24/7, recopilando datos valiosos de cada comensal para campañas de marketing automatizadas.",
     featuresContent3:
-      "Nuestras tarjetas NFC Tap-to-Review permiten a cualquier cliente dejar una reseña en Google con un solo toque. Más reseñas significan mejor posicionamiento en Google Maps y más clientes nuevos. Todo con tecnología de alto rendimiento, sin suscripciones y con configuración inmediata.",
+      "Nuestras tarjetas NFC Tap-to-Review permiten a cualquier cliente dejar una reseña en Google con un solo toque. Más reseñas significan mejor posicionamiento en Google Maps y más clientes nuevos. Todo con tecnología de alto rendimiento, sin suscripciones y con configuración inmediata. Estudios demuestran que los negocios con más de 50 reseñas en Google reciben hasta un 40% más de visitas que aquellos con menos de 10 reseñas.",
     featuresContent4:
-      "Imagina un flujo de trabajo donde cada lead se captura, analiza y responde automáticamente. Con nuestras automatizaciones n8n, conectamos tu CRM, email, WhatsApp y redes sociales en un solo ecosistema. Cada interacción con un cliente potencial genera acciones en cadena: análisis de sentimiento con IA, asignación de temperatura del lead, y notificaciones en tiempo real a tu equipo comercial.",
+      "Imagina un flujo de trabajo donde cada lead se captura, analiza y responde automáticamente. Con nuestras automatizaciones n8n, conectamos tu CRM, email, WhatsApp y redes sociales en un solo ecosistema. Cada interacción con un cliente potencial genera acciones en cadena: análisis de sentimiento con IA, asignación de temperatura del lead, y notificaciones en tiempo real a tu equipo comercial. Todo sin intervención manual, liberando horas de trabajo cada semana.",
     featuresContent5:
-      "QRIBAR no es solo un menú digital: es tu nuevo canal de ventas directo. Cada mesa escanea un código QR, explora platos con fotos y vídeos profesionales en 5 idiomas, y envía el pedido directamente a barra y cocina. Sin comisiones, sin esperas, sin intermediarios. Los datos de cada cliente se almacenan en tu base de datos para campañas de fidelización automatizadas.",
+      "QRIBAR no es solo un menú digital: es tu nuevo canal de ventas directo. Cada mesa escanea un código QR, explora platos con fotos y vídeos profesionales en 5 idiomas, y envía el pedido directamente a barra y cocina. Los datos de cada cliente se almacenan en tu base de datos para campañas de fidelización automatizadas. El resultado: mesas que rotan más rápido, tickets promedio más altos y clientes que vuelven porque la experiencia es impecable.",
     featuresContent6:
-      "Las tarjetas NFC Tap-to-Review convierten cada visita en una reseña de Google. Coloca el expositor en tu local, el cliente acerca su móvil, y en 5 segundos tiene abierta la página de reseñas. Más reseñas = mejor posicionamiento local en Google Maps = más clientes nuevos. Un ciclo virtuoso que multiplica tu visibilidad sin inversión publicitaria recurrente.",
+      "Las tarjetas NFC Tap-to-Review convierten cada visita en una reseña de Google. Coloca el expositor en tu local, el cliente acerca su móvil, y en 5 segundos tiene abierta la página de reseñas. Más reseñas significan mejor posicionamiento local en Google Maps y, por tanto, más clientes nuevos cada mes. Es un ciclo virtuoso que multiplica tu visibilidad sin inversión publicitaria recurrente. Nuestros clientes multiplican sus reseñas por 6 en los primeros 90 días.",
     featuresSoftwareIA: "Software & IA",
     featuresSoftwareIADesc:
       "Desarrollo de herramientas personalizadas que se integran perfectamente con tus sistemas actuales. Soluciones a medida impulsadas por algoritmos inteligentes.",
@@ -487,7 +487,7 @@ const translations: Record<Language, Translation> = {
     seoAltTextQribar: "Menú digital QRIBAR con pedidos en tiempo real",
 
     // Contact
-    contactTitle: "Impulsa tu Negocio Hoy",
+    contactTitle: "Contacto",
     contactSubtitle:
       "¿Hablamos? Estamos listos para auditar tu proceso actual y mostrarte cómo la IA y la automatización pueden ahorrarte cientos de horas mensuales.",
     contactEmailTitle: "Email Directo",

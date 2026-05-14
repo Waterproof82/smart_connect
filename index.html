@@ -1,20 +1,19 @@
 <!doctype html>
 <!--
   SEO Audit Verification:
-  - Title: 51 chars ✓ (50-60 range)
-  - Meta description: 115 chars ✓ (100-130 range)
-  - Viewport: width=device-width, initial-scale=1.0 ✓
-  - Hreflang: skipped (single-language Spanish site) ✓
-  - noindex: NOT present ✓ (page is publicly crawlable)
-  - robots.txt: Allows /, Disallows /admin ✓
+  - Title: set via Helmet (SSG prerendered) ✓
+  - Meta description: set via Helmet (SSG prerendered) ✓
+  - Viewport: width=device-width, initial-scale=1 ✓
+  - Hreflang: set via Helmet (SSG prerendered) ✓
+  - Canonical: set via Helmet (SSG prerendered) ✓
+  - Schema.org LocalBusiness: set via Helmet (SSG prerendered) ✓
+  - noindex: NOT present ✓
+  - robots.txt: Allows / ✓
 -->
 <html lang="es" class="bg-sc-dark min-h-full">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=5.0"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="theme-color"
       media="(prefers-color-scheme: dark)"
@@ -31,7 +30,6 @@
       name="apple-mobile-web-app-status-bar-style"
       content="black-translucent"
     />
-
     <meta name="format-detection" content="telephone=no" />
 
     <!-- Security -->
@@ -42,52 +40,6 @@
       http-equiv="Permissions-Policy"
       content="camera=(), microphone=(), geolocation=()"
     />
-    <!-- hreflang skipped: single-language Spanish site, no regional variants -->
-    <title>SmartConnect AI: IA y Automatización para Negocios</title>
-    <meta
-      name="description"
-      content="SmartConnect AI: automatización con IA, n8n, NFC para Google Reviews y menús digitales. Digitaliza tu negocio."
-    />
-    <meta
-      name="keywords"
-      content="SmartConnect AI, automatizacion, n8n, NFC, QRIBAR, menu digital, inteligencia artificial, negocio local, Google Reviews, carta digital"
-    />
-
-    <!-- Open Graph -->
-    <meta property="og:type" content="website" />
-    <meta
-      property="og:title"
-      content="SmartConnect AI - Potencia tu Negocio con IA"
-    />
-    <meta
-      property="og:description"
-      content="Escalamos tu negocio con IA, automatizacion n8n, tarjetas NFC y menus digitales QRIBAR."
-    />
-    <meta property="og:url" content="https://digitalizatenerife.es/" />
-    <meta
-      property="og:image"
-      content="https://digitalizatenerife.es/icon.png"
-    />
-    <meta property="og:site_name" content="SmartConnect AI" />
-    <meta property="og:locale" content="es_ES" />
-
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary" />
-    <meta
-      name="twitter:title"
-      content="SmartConnect AI - Potencia tu Negocio con IA"
-    />
-    <meta
-      name="twitter:description"
-      content="Escalamos tu negocio con IA, automatizacion n8n, tarjetas NFC y menus digitales QRIBAR."
-    />
-    <meta
-      name="twitter:image"
-      content="https://digitalizatenerife.es/icon.png"
-    />
-
-    <!-- Canonical -->
-    <link rel="canonical" href="https://digitalizatenerife.es/" />
 
     <!-- Preconnect -->
     <link rel="preconnect" href="https://tysjedvujvsmrzzrmesr.supabase.co" />
@@ -109,25 +61,6 @@
     <link rel="icon" type="image/png" href="/icon.png" />
     <link rel="apple-touch-icon" href="/icon.png" />
 
-    <!-- Structured Data -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "SmartConnect AI",
-        "url": "https://digitalizatenerife.es",
-        "logo": "https://digitalizatenerife.es/icon.png",
-        "description": "Potenciamos negocios locales con IA, automatizacion y herramientas digitales.",
-        "sameAs": [
-          "https://youtube.com/@TODO",
-          "https://x.com/TODO",
-          "https://linkedin.com/company/TODO",
-          "https://instagram.com/TODO",
-          "https://facebook.com/TODO"
-        ]
-      }
-    </script>
-
     <style>
       html {
         background-color: var(--color-bg, #030508);
@@ -136,10 +69,11 @@
       body {
         min-height: 100%;
         margin: 0;
+        font-size: 16px;
       }
     </style>
 
-    <!-- Inline theme init (prevents FOUC, removes blocking JS from main bundle) -->
+    <!-- Inline theme init (prevents FOUC) -->
     <script>
       (function () {
         var t = window.matchMedia("(prefers-color-scheme: light)").matches
@@ -150,79 +84,7 @@
     </script>
   </head>
   <body class="bg-sc-dark min-h-full">
-    <div id="root" class="min-h-full">
-      <!-- Static fallback for SEO crawlers / JS not yet loaded (replaced by React on hydration) -->
-      <div
-        class="min-h-screen flex flex-col items-center justify-center px-6 text-center"
-        style="background: #030508; color: #e2e8f0"
-      >
-        <h1
-          style="
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            font-weight: 800;
-            line-height: 1.1;
-            margin-bottom: 1rem;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-          "
-        >
-          SmartConnect AI: IA y Automatización para Negocios
-        </h1>
-        <p
-          style="
-            font-size: clamp(1rem, 2vw, 1.25rem);
-            color: #94a3b8;
-            max-width: 600px;
-            line-height: 1.6;
-          "
-        >
-          Tecnología de próxima generación para negocios locales. Automatiza
-          tareas con n8n, consigue reseñas en Google con NFC y digitaliza tu
-          menú con QRIBAR.
-        </p>
-        <div
-          style="
-            margin-top: 2rem;
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            justify-content: center;
-          "
-        >
-          <span
-            style="
-              padding: 0.5rem 1.5rem;
-              border-radius: 1rem;
-              background: #6366f1;
-              color: white;
-              font-weight: 700;
-            "
-            >Automatización n8n</span
-          >
-          <span
-            style="
-              padding: 0.5rem 1.5rem;
-              border-radius: 1rem;
-              border: 1px solid #334155;
-              color: #e2e8f0;
-              font-weight: 600;
-            "
-            >Tarjetas NFC</span
-          >
-          <span
-            style="
-              padding: 0.5rem 1.5rem;
-              border-radius: 1rem;
-              border: 1px solid #334155;
-              color: #e2e8f0;
-              font-weight: 600;
-            "
-            >Menú Digital QRIBAR</span
-          >
-        </div>
-      </div>
-    </div>
-    <script type="module" src="/src/main.tsx"></script>
+    <div id="root" class="min-h-full"><!--ssr-outlet--></div>
+    <script defer type="module" src="/src/entry-client.tsx"></script>
   </body>
 </html>

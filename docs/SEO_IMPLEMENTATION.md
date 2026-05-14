@@ -254,6 +254,121 @@ curl -I https://digitalizatenerife.es/
 
 ---
 
+---
+
+## ⚡ SSG & SEO Overhaul (2026-05-14)
+
+### Overview
+
+Complete Static Site Generation (SSG) implementation using custom `react-dom/server` prerendering + comprehensive SEO overhaul. The landing page was a SPA with zero Google indexation — now serves prerendered HTML for all public routes.
+
+**Date**: 2026-05-14  
+**Audit Log**: `docs/audit/2026-05-14_ssg-seo-overhaul.md`
+
+---
+
+### 🏗️ Architecture
+
+#### SSG Pipeline
+
+```
+npm run build
+  → vite build              (client build → dist/)
+  → vite build --mode ssr   (SSR build → dist/server/)
+  → node scripts/prerender   (prerenders HTML for /, /servicios, /contacto)
+```
+
+#### Dual Entry Points
+
+| Entry                  | Purpose                         | Routes                         | Tech                                                 |
+| ---------------------- | ------------------------------- | ------------------------------ | ---------------------------------------------------- |
+| `src/entry-server.tsx` | SSR render for prerender script | `/`, `/servicios`, `/contacto` | `renderToString` + `StaticRouter` + `HelmetProvider` |
+| `src/entry-client.tsx` | Client hydration                | All routes (incl. lazy-loaded) | `hydrateRoot` + `BrowserRouter` + `HelmetProvider`   |
+
+#### Files Created
+
+| File                        | Purpose                                                      |
+| --------------------------- | ------------------------------------------------------------ |
+| `src/entry-server.tsx`      | SSR render entry — `renderToString()` with Helmet extraction |
+| `src/entry-client.tsx`      | Client hydration entry — `hydrateRoot()` with all routes     |
+| `src/TapReviewHydrator.tsx` | Data-fetching wrapper for TapReviewPage (no SSR fetching)    |
+| `scripts/prerender.mjs`     | Build-time script — generates static HTML for each route     |
+| `public/llms.txt`           | LLM-readable markdown in public root (for AI crawlers)       |
+
+#### Files Modified
+
+| File                                     | Change                                                                                                                    |
+| ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `index.html`                             | `<!--ssr-outlet-->` for SSR content, `entry-client.tsx` with `defer`, removed all hardcoded meta/structured data          |
+| `vite.config.ts`                         | Dual-mode: SSR build (`mode=ssr`) + client build with manualChunks                                                        |
+| `package.json`                           | `build:ssr`, `prerender`, combined `build` pipeline                                                                       |
+| `public/sitemap.xml`                     | 8 routes incl. /servicios, /contacto; removed lastmod                                                                     |
+| `public/robots.txt`                      | Restored with Allow all + AI bot rules + Content-Signal                                                                   |
+| `src/App.tsx`                            | Helmet (title, description, canonical, hreflang, OG, Twitter, LocalBusiness JSON-LD) + "¿Por qué?" section + social links |
+| `src/shared/context/LanguageContext.tsx` | Expanded featuresContent 1-6, featuresTitle, contactTitle                                                                 |
+| `vercel.json`                            | `X-Robots-Tag: index, follow`, Cache-Control per route                                                                    |
+
+### 🔤 SEO Improvements
+
+#### On-Page SEO
+
+- **Meta tags**: title, description, canonical, hreflang (es + x-default) via Helmet
+- **Open Graph**: og:title, og:description, og:type, og:url, og:image
+- **Twitter Card**: summary_large_image
+- **Structured Data**: LocalBusiness JSON-LD schema (LocalBusiness type with areaServed, serviceType)
+- **New section**: "¿Por qué SmartConnect AI?" — ~400 words, 5 paragraphs covering mission, 4 pillars, pricing, results (200+ businesses), digital imperative
+- **Expanded content**: All 6 feature descriptions enriched with data, local context, and results
+- **Heading fix**: "Nuestras Soluciones" → "Nuestros Servicios", features → "Contacto"
+- **Social links**: New 4th footer column (YouTube, X, LinkedIn, Instagram, Facebook)
+- **Total visible body text**: ~873 words
+
+#### Technical SEO
+
+- **SSG prerendering**: /, /servicios, /contacto → static HTML with full content
+- **Viewport**: `maximum-scale=5.0` removed → clean `width=device-width, initial-scale=1`
+- **Font-size**: Explicit `16px` on `body` for mobile tap targets
+- **Script loading**: Changed from blocking to `defer` for non-blocking execution
+- **Crawlability**: `X-Robots-Tag: index, follow` in Vercel headers
+- **Cache-Control**: `public, max-age=3600` per route for CDN caching
+- **Sitemap**: 8 routes with priority hierarchy (1.0 → 0.3)
+
+### 🛡️ SSR Safety (CRITICAL)
+
+| Module             | Issue                                                  | Fix                                                                       |
+| ------------------ | ------------------------------------------------------ | ------------------------------------------------------------------------- |
+| `sanitizer.ts`     | `DOMPurify(window)` at module level crashes in Node.js | Lazy init via `getDomPurify()` with `typeof window === 'undefined'` guard |
+| `Contact.tsx`      | `globalThis.matchMedia()` during render crashes in SSR | Added `globalThis.matchMedia === undefined` early return                  |
+| `ThemeContext.tsx` | `getInitialTheme()` uses `matchMedia`                  | Already had `typeof window === 'undefined'` guard ✅                      |
+
+### 📊 Validation
+
+- ✅ `npm run lint` — 0 errors, 0 warnings
+- ✅ `npm run type-check` — passes (HelmetServerState type)
+- ✅ `npm run build` — full pipeline succeeds (client + SSR + prerender)
+- ✅ No hardcoded meta tags — all SEO via Helmet
+- ✅ i18n compliance — all text via `t.*` keys
+- ✅ Valid JSON-LD — LocalBusiness schema with areaServed
+
+### Build Output
+
+```
+dist/
+├── index.html              # Prerendered /
+├── servicios/index.html    # Prerendered /servicios
+├── contacto/index.html     # Prerendered /contacto
+├── assets/                 # JS/CSS bundles
+└── server/
+    └── entry-server.js     # SSR build
+```
+
+### ⚠️ Known Issues / TODOs
+
+1. **Social URLs**: Footer social links have `TODO` placeholders — need real URLs
+2. **Deploy pending**: Build is local, needs Vercel deploy
+3. **Hydration test**: Verify no hydration mismatches post-deploy
+
+---
+
 ## 📝 Notes
 
 - **Helmet Library**: Already installed (`react-helmet`), no additional setup needed
