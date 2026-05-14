@@ -1,10 +1,12 @@
-import React, { Suspense, lazy, Component, ReactNode } from "react";
+import React, { Component, ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { Navbar } from "@features/landing/presentation/components/Navbar";
 import { Hero } from "@features/landing/presentation/components/Hero";
 import { Features } from "@features/landing/presentation/components/Features";
 import { Contact } from "@features/landing/presentation/components/Contact";
+import { SuccessStats } from "@features/landing/presentation/components/SuccessStats";
+import { ExpertAssistant } from "@features/chatbot/presentation";
 import { ConsoleLogger } from "@core/domain/usecases/Logger";
 import { useLanguage } from "@shared/context/LanguageContext";
 import { ThemeProvider } from "@shared/context/ThemeContext";
@@ -64,54 +66,10 @@ const ErrorBoundaryFallback: React.FC = () => {
   );
 };
 
-// Lazy loading para componentes below-the-fold - reduce initial bundle
-const SuccessStats = lazy(() =>
-  import("@features/landing/presentation/components/SuccessStats").then(
-    (module) => ({
-      default: module.SuccessStats,
-    }),
-  ),
-);
-
-// Lazy loading para el Chatbot - solo se carga cuando el usuario interactúa
-const ExpertAssistant = lazy(() =>
-  import("@features/chatbot/presentation").then((module) => ({
-    default: module.ExpertAssistant,
-  })),
-);
-
-const ChatbotLoading = () => (
-  <div className="fixed bottom-4 right-4 w-16 h-16 bg-[var(--color-accent)] rounded-full flex items-center justify-center shadow-lg">
-    <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[var(--color-on-accent)]"></div>
-  </div>
-);
-
-const SectionLoading = () => (
-  <div className="py-20 md:py-32">
-    <div className="container mx-auto px-6">
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-        {/* Main large card */}
-        <div className="md:col-span-7 bg-[var(--color-surface)] border border-[var(--color-border)] p-8 rounded-[2.5rem] animate-pulse">
-          <div className="w-16 h-16 bg-[var(--color-border)] rounded-2xl mb-6"></div>
-          <div className="h-12 bg-[var(--color-border)] rounded mb-4 w-2/3"></div>
-          <div className="h-4 bg-[var(--color-border)] rounded w-full"></div>
-          <div className="h-4 bg-[var(--color-border)] rounded w-4/5 mt-2"></div>
-        </div>
-        {/* Two smaller cards */}
-        <div className="md:col-span-5 grid gap-6">
-          <div className="bg-[var(--color-surface)] border border-[var(--color-border)] p-6 rounded-2xl animate-pulse">
-            <div className="w-12 h-12 bg-[var(--color-border)] rounded-xl mb-4"></div>
-            <div className="h-8 bg-[var(--color-border)] rounded w-1/2"></div>
-          </div>
-          <div className="bg-[var(--color-surface)] border border-[var(--color-border)] p-6 rounded-2xl animate-pulse">
-            <div className="w-12 h-12 bg-[var(--color-border)] rounded-xl mb-4"></div>
-            <div className="h-8 bg-[var(--color-border)] rounded w-1/2"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-);
+// Note: SuccessStats and ExpertAssistant are eagerly imported (not lazy)
+// because renderToString does not support Suspense boundaries.
+// Code-splitting these landing-page components provides negligible benefit
+// since they're always rendered on the landing page.
 
 /* Heading structure:
   H1: Potencia tu Negocio con IA y Automatización
@@ -308,19 +266,15 @@ const App: React.FC = () => {
               aria-label="Casos de Éxito"
               className="py-20 md:py-32"
             >
-              <Suspense fallback={<SectionLoading />}>
-                <SuccessStats />
-              </Suspense>
+              <SuccessStats />
             </section>
             <section id="contacto" aria-label="Contacto">
               <Contact />
             </section>
           </main>
 
-          {/* AI Chatbot Assistant - Always visible */}
-          <Suspense fallback={<ChatbotLoading />}>
-            <ExpertAssistant />
-          </Suspense>
+          {/* AI Chatbot Assistant */}
+          <ExpertAssistant />
 
           {/* Footer */}
           <footer className="bg-[var(--color-bg-alt)] border-t border-[var(--color-border)] pt-16 pb-8">
