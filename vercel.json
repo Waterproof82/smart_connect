@@ -48,9 +48,12 @@
     }
   ],
   "rewrites": [
-    { "source": "/admin/:path*", "destination": "/index.html" },
-    { "source": "/panel/:path*", "destination": "/index.html" },
-    { "source": "/login/:path*", "destination": "/index.html" },
-    { "source": "/:path*", "destination": "/index.html" }
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/servicios", "destination": "/servicios/index.html" },
+    { "source": "/contacto", "destination": "/contacto/index.html" },
+    { "source": "/admin/:path*", "destination": "/_spa.html" },
+    { "source": "/panel/:path*", "destination": "/_spa.html" },
+    { "source": "/login/:path*", "destination": "/_spa.html" },
+    { "source": "/:path*", "destination": "/_spa.html" }
   ]
 }

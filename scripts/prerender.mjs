@@ -17,7 +17,14 @@ async function prerender() {
     process.exit(1);
   }
 
+  // Save the original SPA shell before overwriting it with prerendered content.
+  // This is used by Vercel for non-prerendered routes (tap-review, admin, etc.).
+  const spaFallbackPath = path.resolve(distDir, "_spa.html");
   const template = fs.readFileSync(templatePath, "utf-8");
+  // Remove the ssr-outlet comment so the SPA shell shows nothing on first paint
+  const spaHtml = template.replace("<!--ssr-outlet-->", "");
+  fs.writeFileSync(spaFallbackPath, spaHtml);
+  console.log(`💾 SPA fallback saved: ${spaFallbackPath}`);
 
   // Dynamically import the server build
   let render;
