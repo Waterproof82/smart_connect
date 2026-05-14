@@ -1,4 +1,4 @@
-import { hydrateRoot } from "react-dom/client";
+import { hydrateRoot, createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { Suspense, lazy } from "react";
@@ -38,8 +38,12 @@ const LoadingFallback = () => (
 const rootElement = document.getElementById("root");
 if (!rootElement) throw new Error("Could not find root element to mount to");
 
-hydrateRoot(
-  rootElement,
+// Prerendered pages (/, /servicios, /contacto) have SSR HTML content inside #root
+// → use hydrateRoot. SPA routes (tap-review, carta-digital, admin) serve _spa.html
+// with only a <!--ssr-outlet--> comment → use createRoot to avoid hydration errors.
+const hasSSRContent = rootElement.children.length > 0;
+
+const app = (
   <HelmetProvider>
     <BrowserRouter
       future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
@@ -61,8 +65,14 @@ hydrateRoot(
         </LanguageProvider>
       </ThemeProvider>
     </BrowserRouter>
-  </HelmetProvider>,
+  </HelmetProvider>
 );
+
+if (hasSSRContent) {
+  hydrateRoot(rootElement, app);
+} else {
+  createRoot(rootElement).render(app);
+}
 
 // Listen for system theme changes during session
 window
