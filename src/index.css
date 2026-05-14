@@ -282,6 +282,17 @@
   animation: revealExit 0.4s ease-in forwards;
 }
 
+/* Ensure headings are always visible for SEO crawlers and reduced-motion users */
+@media (prefers-reduced-motion: reduce) {
+  .reveal-1,
+  .reveal-2,
+  .reveal-3 {
+    opacity: 1 !important;
+    animation: none;
+    transform: translateY(0);
+  }
+}
+
 @keyframes revealExit {
   from {
     opacity: 1;

@@ -150,7 +150,79 @@
     </script>
   </head>
   <body class="bg-sc-dark min-h-full">
-    <div id="root" class="min-h-full"></div>
+    <div id="root" class="min-h-full">
+      <!-- Static fallback for SEO crawlers / JS not yet loaded (replaced by React on hydration) -->
+      <div
+        class="min-h-screen flex flex-col items-center justify-center px-6 text-center"
+        style="background: #030508; color: #e2e8f0"
+      >
+        <h1
+          style="
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+          "
+        >
+          SmartConnect AI: IA y Automatización para Negocios
+        </h1>
+        <p
+          style="
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            color: #94a3b8;
+            max-width: 600px;
+            line-height: 1.6;
+          "
+        >
+          Tecnología de próxima generación para negocios locales. Automatiza
+          tareas con n8n, consigue reseñas en Google con NFC y digitaliza tu
+          menú con QRIBAR.
+        </p>
+        <div
+          style="
+            margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+          "
+        >
+          <span
+            style="
+              padding: 0.5rem 1.5rem;
+              border-radius: 1rem;
+              background: #6366f1;
+              color: white;
+              font-weight: 700;
+            "
+            >Automatización n8n</span
+          >
+          <span
+            style="
+              padding: 0.5rem 1.5rem;
+              border-radius: 1rem;
+              border: 1px solid #334155;
+              color: #e2e8f0;
+              font-weight: 600;
+            "
+            >Tarjetas NFC</span
+          >
+          <span
+            style="
+              padding: 0.5rem 1.5rem;
+              border-radius: 1rem;
+              border: 1px solid #334155;
+              color: #e2e8f0;
+              font-weight: 600;
+            "
+            >Menú Digital QRIBAR</span
+          >
+        </div>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
