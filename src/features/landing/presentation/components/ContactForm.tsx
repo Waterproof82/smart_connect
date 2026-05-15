@@ -25,9 +25,8 @@ const ContactForm: React.FC = () => {
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (_data: FormData) => {
     // TODO: Implement form submission logic
-    console.log(data);
   };
 
   return (

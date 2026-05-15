@@ -29,6 +29,10 @@
     "noFallthroughCasesInSwitch": true,
     "resolveJsonModule": true
   },
-  "include": ["src/**/*", ".opencode/**/*.ts"],
+  "include": [
+    "src/**/*",
+    ".opencode/**/*.ts",
+    "src/shared/context/LanguageContext.d.ts"
+  ],
   "exclude": ["node_modules", "dist", "supabase/functions", "tests/**/*"]
 }

@@ -1,61 +1,62 @@
-import React from "react";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
+import { LanguageProvider } from "@shared/context/LanguageContext";
 import { HelmetProvider } from "react-helmet-async";
-import TableOrdersContainer from "./TableOrdersContainer";
+import WhatsappAutomationContainer from "./WhatsappAutomationContainer";
 
-// Mock shared components
+// Mock shared components to isolate the container test
 vi.mock("@features/landing/presentation/components/Hero", () => ({
   Hero: () => <div>Hero Component</div>,
 }));
+
 vi.mock("@shared/presentation/components/TestimonialCarousel", () => ({
   default: () => <div>Testimonial Carousel</div>,
 }));
+
 vi.mock("@shared/presentation/components/FAQAccordion", () => ({
   default: () => <div>FAQ Accordion</div>,
 }));
+
 vi.mock("@features/landing/presentation/components/Navbar", () => ({
   Navbar: () => <div>Navbar</div>,
 }));
+
 vi.mock("@features/landing/presentation/components/Contact", () => ({
   Contact: () => <div>Contact Form</div>,
 }));
 
-// Mock LanguageContext
-const LanguageProvider = ({ children }: { children: React.ReactNode }) =>
-  children;
-vi.mock("@shared/context/LanguageContext", () => ({
-  LanguageProvider,
-  useLanguage: () => ({ t: {} }),
-}));
+describe("WhatsappAutomationContainer", () => {
+  const renderComponent = () => {
+    return render(
+      <MemoryRouter>
+        <HelmetProvider>
+          <LanguageProvider>
+            <WhatsappAutomationContainer />
+          </LanguageProvider>
+        </HelmetProvider>
+      </MemoryRouter>,
+    );
+  };
 
-const renderComponent = (_language?: string) => {
-  return render(
-    <MemoryRouter>
-      <HelmetProvider>
-        <LanguageProvider>
-          <TableOrdersContainer />
-        </LanguageProvider>
-      </HelmetProvider>
-    </MemoryRouter>,
-  );
-};
-
-describe("TableOrdersContainer", () => {
   it("should render the hero title and subtitle", () => {
     renderComponent();
     expect(
-      screen.getByText("Pedidos a Mesa con QR: Más Rápido, Más Ventas"),
+      screen.getByRole("heading", {
+        name: "Automatización WhatsApp para Restaurantes",
+      }),
     ).toBeInTheDocument();
     expect(
-      screen.getByText(/Elimina las esperas y aumenta el ticket medio/),
+      screen.getByText(
+        /Soporte y pedidos por WhatsApp automatizados para reducir tiempos/,
+      ),
     ).toBeInTheDocument();
   });
 
-  it("should render main sections", () => {
+  it("should render the main sections of the page", () => {
     renderComponent();
     expect(screen.getByText("Testimonial Carousel")).toBeInTheDocument();
     expect(screen.getByText("FAQ Accordion")).toBeInTheDocument();
     expect(screen.getByText("Contact Form")).toBeInTheDocument();
+    expect(screen.getByText("Hero Component")).toBeInTheDocument();
   });
 });

@@ -17,7 +17,6 @@ interface Translation {
   navContact: string;
   navAdmin: string;
   navBack: string;
-
   // Hero
   heroEyebrow: string;
   heroTitle: string;
@@ -30,7 +29,6 @@ interface Translation {
   heroStats0Commission: string;
   heroStats247: string;
   heroStatsInfinite: string;
-
   // Features
   featuresTitle: string;
   featuresSubtitle: string;
@@ -53,7 +51,6 @@ interface Translation {
   featuresVisit: string;
   featuresContact: string;
   featuresDetails: string;
-
   // Success Stats
   successTitle: string;
   successSubtitle: string;
@@ -74,14 +71,12 @@ interface Translation {
   successStat4Label: string;
   successStat4Quote: string;
   successStat4Author: string;
-
   // SEO
   seoTitle: string;
   seoDescription: string;
   seoProductDescription: string;
   seoAltTextNFC: string;
   seoAltTextQribar: string;
-
   // Contact
   contactTitle: string;
   contactSubtitle: string;
@@ -114,7 +109,6 @@ interface Translation {
   contactFormServiceRequired: string;
   contactFormMessageRequired: string;
   contactFormMessageMinLength: string;
-
   // Footer
   footerTagline: string;
   footerSocialTitle: string;
@@ -128,7 +122,6 @@ interface Translation {
   footerLegalPrivacidad: string;
   footerLegalCookies: string;
   footerCopyright: string;
-
   // Navbar Solutions
   navbarSoftwareIA: string;
   navbarSoftwareIADesc: string;
@@ -140,22 +133,18 @@ interface Translation {
   navbarQribarDesc: string;
   navbarCartaDigital: string;
   navbarCartaDigitalDesc: string;
-
   // Service options
   serviceCartaDigital: string;
   serviceQribar: string;
   serviceAutomation: string;
   serviceNFC: string;
   serviceConsultoria: string;
-
   // Error Boundary
   errorBoundaryTitle: string;
   errorBoundaryMessage: string;
   errorBoundaryButton: string;
-
   // Skip Link
   skipLink: string;
-
   // Dashboard Preview
   dashboardTitle: string;
   dashboardDesc: string;
@@ -175,7 +164,6 @@ interface Translation {
   dashboardActivityScan: string;
   dashboardActivityReview: string;
   dashboardActivityWebhook: string;
-
   // Carta Digital Page
   cartaHeroEyebrow: string;
   cartaHeroTenerife: string;
@@ -190,7 +178,6 @@ interface Translation {
   cartaHeroStat3Label: string;
   cartaHeroStat4Label: string;
   cartaHeroCardLabel: string;
-
   cartaProblemaTitle: string;
   cartaProblemaSubtitle: string;
   cartaProblemaDesc: string;
@@ -206,7 +193,6 @@ interface Translation {
   cartaProblemaItem5Desc: string;
   cartaProblemaItem6Title: string;
   cartaProblemaItem6Desc: string;
-
   cartaSolucionTitle: string;
   cartaSolucionSubtitle: string;
   cartaSolucionHighlight: string;
@@ -214,7 +200,6 @@ interface Translation {
   cartaSolucionSuffix: string;
   cartaSolucionDesc: string;
   cartaSolucionTenerife: string;
-
   cartaBeneficiosTitle: string;
   cartaBeneficiosSubtitle: string;
   cartaBeneficio1Title: string;
@@ -238,7 +223,6 @@ interface Translation {
   cartaBeneficio7Title: string;
   cartaBeneficio7Desc: string;
   cartaBeneficio7Tag: string;
-
   cartaFlujoTitle: string;
   cartaFlujoSubtitle: string;
   cartaFlujoStep5Title: string;
@@ -251,59 +235,21 @@ interface Translation {
   cartaFlujoStep3Desc: string;
   cartaFlujoStep4Title: string;
   cartaFlujoStep4Desc: string;
-
   // --- COMPARATIVA DINERO ---
   cartaDineroTitle: string;
   cartaDineroSubtitle: string;
   cartaDineroCalcDesc: string;
-
-  // Card 1: Pérdidas
   cartaDineroCard1Title: string;
   cartaDineroCard1Item1: string;
   cartaDineroCard1Item2: string;
   cartaDineroCard1Item3: string;
   cartaDineroCard1Total: string;
-
-  // Card 2: Ganancias
   cartaDineroCard2Title: string;
   cartaDineroCard2Item1: string;
   cartaDineroCard2Item2: string;
   cartaDineroCard2Item3: string;
   cartaDineroCard2Item4: string;
   cartaDineroCard2Total: string;
-
-  cartaBBDDTitle: string;
-  cartaBBDDSubtitle: string;
-  cartaBBDDDesc: string;
-  cartaBBDDLabel1: string;
-  cartaBBDDLabel2: string;
-  cartaBBDDLabelTuBBDD: string;
-  cartaBBDDData1: string;
-  cartaBBDDData2: string;
-  cartaBBDDData3: string;
-  cartaBBDDData4: string;
-  cartaBBDDAction1: string;
-  cartaBBDDAction2: string;
-  cartaBBDDAction3: string;
-
-  cartaDemoTitle: string;
-  cartaDemoVideoLabel: string;
-  cartaDemoScreen1Title: string;
-  cartaDemoScreen1Label: string;
-  cartaDemoScreen2Title: string;
-  cartaDemoScreen2Label: string;
-  cartaDemoScreen3Title: string;
-  cartaDemoScreen3Label: string;
-
-  cartaCTATitle: string;
-  cartaCTASubtitle: string;
-  cartaCTABtnDemo: string;
-  cartaCTABtnContact: string;
-  cartaCTANoContract: string;
-  cartaCTASignup48h: string;
-  cartaCTASupport: string;
-  cartaCTANoComm: string;
-
   // Tap Review (NFC)
   tapReviewMetaTitle: string;
   tapReviewMetaDesc: string;
@@ -316,18 +262,15 @@ interface Translation {
   tapReviewHeroFeature1: string;
   tapReviewHeroFeature2: string;
   tapReviewHeroFeature3: string;
-
   tapReviewProductExhibitorWhite: string;
   tapReviewProductExhibitorWhiteAlt: string;
   tapReviewProductExhibitorBlack: string;
   tapReviewProductExhibitorBlackAlt: string;
   tapReviewProductStand: string;
   tapReviewProductStandAlt: string;
-
   tapReviewStatsBusinesses: string;
   tapReviewStatsReviews: string;
   tapReviewStatsDaily: string;
-
   tapReviewHowTitle: string;
   tapReviewHowSubtitle: string;
   tapReviewHowStep1Title: string;
@@ -336,7 +279,6 @@ interface Translation {
   tapReviewHowStep2Desc: string;
   tapReviewHowStep3Title: string;
   tapReviewHowStep3Desc: string;
-
   tapReviewFeatTitle: string;
   tapReviewFeatSubtitle: string;
   tapReviewFeatNFC: string;
@@ -347,7 +289,6 @@ interface Translation {
   tapReviewFeatGoogleDesc: string;
   tapReviewFeatNoSub: string;
   tapReviewFeatNoSubDesc: string;
-
   tapReviewSocialTitle: string;
   tapReviewSocialSubtitle: string;
   tapReviewTestimonial1Quote: string;
@@ -359,7 +300,6 @@ interface Translation {
   tapReviewTestimonial3Quote: string;
   tapReviewTestimonial3Author: string;
   tapReviewTestimonial3Business: string;
-
   tapReviewFAQTitle: string;
   tapReviewFAQ1Question: string;
   tapReviewFAQ1Answer: string;
@@ -367,19 +307,16 @@ interface Translation {
   tapReviewFAQ2Answer: string;
   tapReviewFAQ3Question: string;
   tapReviewFAQ3Answer: string;
-
   tapReviewCTATitle: string;
   tapReviewCTASubtitle: string;
   tapReviewCTABtnPrimary: string;
   tapReviewCTAFeature1: string;
   tapReviewCTAFeature2: string;
   tapReviewCTAFeature3: string;
-
   tapReviewTrust30Days: string;
   tapReviewTrust24h: string;
   tapReviewTrustSupport: string;
   tapReviewTrustNoSub: string;
-
   // QRIBAR
   qribarSector: string;
   qribarTitle: string;
@@ -391,33 +328,63 @@ interface Translation {
   qribarButton: string;
   qribarError: string;
   qribarLoading: string;
-
   // Digital Menu Landing
   digitalMenuHeroTitle: string;
   digitalMenuHeroSubtitle: string;
   digitalMenuHeroCta: string;
-
   // Menu QR Landing
   menuQrHeroTitle: string;
   menuQrHeroSubtitle: string;
   menuQrHeroCta: string;
-
   // Table Orders Landing
   tableOrdersHeroTitle: string;
   tableOrdersHeroSubtitle: string;
   tableOrdersHeroCta: string;
-
   // Digital Menu SEO
   digitalMenuSeoTitle: string;
   digitalMenuSeoDescription: string;
-
   // Menu QR SEO
   menuQrSeoTitle: string;
   menuQrSeoDescription: string;
-
   // Table Orders SEO
   tableOrdersSeoTitle: string;
   tableOrdersSeoDescription: string;
+  // NFC Reviews Landing Page
+  nfcReviewsSeoTitle: string;
+  nfcReviewsSeoDescription: string;
+  nfcReviewsHeroTitle: string;
+  nfcReviewsHeroSubtitle: string;
+  nfcReviewsHeroCta: string;
+  // n8n Automation Landing Page
+  n8nAutomationSeoTitle: string;
+  n8nAutomationSeoDescription: string;
+  n8nAutomationHeroTitle: string;
+  n8nAutomationHeroSubtitle: string;
+  n8nAutomationHeroCta: string;
+  // WhatsApp Automation Landing Page
+  whatsappAutomationSeoTitle: string;
+  whatsappAutomationSeoDescription: string;
+  whatsAppAutomationHeroTitle: string;
+  whatsAppAutomationHeroSubtitle: string;
+  whatsAppAutomationHeroCta: string;
+  // Software Canarias Landing Page
+  softwareCanariasSeoTitle: string;
+  softwareCanariasSeoDescription: string;
+  softwareCanariasHeroTitle: string;
+  softwareCanariasHeroSubtitle: string;
+  softwareCanariasHeroCta: string;
+  // Digitalization Tenerife Landing Page
+  digitalizationTenerifeSeoTitle: string;
+  digitalizationTenerifeSeoDescription: string;
+  digitalizationTenerifeHeroTitle: string;
+  digitalizationTenerifeHeroSubtitle: string;
+  digitalizationTenerifeHeroCta: string;
+  // Menu Digital sin App Landing Page
+  menuDigitalSinAppSeoTitle: string;
+  menuDigitalSinAppSeoDescription: string;
+  menuDigitalSinAppHeroTitle: string;
+  menuDigitalSinAppHeroSubtitle: string;
+  menuDigitalSinAppHeroCta: string;
 }
 
 const translations: Record<Language, Translation> = {
@@ -570,14 +537,28 @@ const translations: Record<Language, Translation> = {
     dashboardActivityReview: "Nueva Reseña 5★",
     dashboardActivityWebhook: "Webhook Ejecutado",
 
+    // Navbar Solutions
+    navbarNFCReview: "NFC Tap-to-Review",
+    navbarNFCReviewDesc: "Increase Google reviews with NFC",
+    navbarAutomationN8n: "n8n Automation",
+    navbarAutomationN8nDesc: "Automated workflows for hospitality",
+    navbarWhatsAppAutomation: "WhatsApp Automation",
+    navbarWhatsAppAutomationDesc: "Automated support and orders",
+    navbarSoftwareCanarias: "Software for Canary Islands",
+    navbarSoftwareCanariasDesc: "Digital solutions for restaurants",
+    navbarDigitalizationTenerife: "Digitalization Tenerife",
+    navbarDigitalizationTenerifeDesc: "Tools to modernize your business",
+    navbarMenuDigitalSinApp: "Digital Menu without App",
+    navbarMenuDigitalSinAppDesc: "Interactive menu with QR code",
+
     // Footer
-    footerTagline: "Tecnología de próxima generación para negocios locales.",
-    footerSocialTitle: "Síguenos",
-    footerNavTitle: "Navegación",
-    footerNavInicio: "Inicio",
-    footerNavSoluciones: "Soluciones",
-    footerNavExito: "Casos de Éxito",
-    footerNavContacto: "Contacto",
+    footerTagline: "Next-generation technology for local businesses.",
+    footerSocialTitle: "Follow Us",
+    footerNavTitle: "Navigation",
+    footerNavInicio: "Home",
+    footerNavSoluciones: "Solutions",
+    footerNavExito: "Success Stories",
+    footerNavContacto: "Contact",
     footerLegalTitle: "Legal",
     footerLegalAviso: "Aviso Legal",
     footerLegalPrivacidad: "Política de Privacidad",
@@ -595,6 +576,18 @@ const translations: Record<Language, Translation> = {
     navbarQribarDesc: "Pedido en tiempo real a barra y cocina",
     navbarCartaDigital: "Carta Digital Premium",
     navbarCartaDigitalDesc: "0% comisiones, 5 idiomas",
+    navbarNFCReview: "NFC Tap-to-Review",
+    navbarNFCReviewDesc: "Multiplica tus reseñas en Google",
+    navbarAutomationN8n: "Automatización n8n",
+    navbarAutomationN8nDesc: "Flujos automatizados para hostelería",
+    navbarWhatsAppAutomation: "WhatsApp Automation",
+    navbarWhatsAppAutomationDesc: "Soporte y pedidos automatizados",
+    navbarSoftwareCanarias: "Software para Canarias",
+    navbarSoftwareCanariasDesc: "Soluciones digitales para restaurantes",
+    navbarDigitalizationTenerife: "Digitalización Tenerife",
+    navbarDigitalizationTenerifeDesc: "Herramientas para modernizar tu negocio",
+    navbarMenuDigitalSinApp: "Menú Digital sin App",
+    navbarMenuDigitalSinAppDesc: "Menú interactivo con QR",
 
     // Service options
     serviceCartaDigital: "Carta Digital Premium",
@@ -905,6 +898,64 @@ const translations: Record<Language, Translation> = {
       "Pedidos QR desde la Mesa en Tenerife | Aumenta Ventas y Eficiencia",
     tableOrdersSeoDescription:
       "Implementa un sistema de pedidos QR en tu restaurante de Tenerife. Reduce esperas, aumenta el ticket medio y mejora la experiencia de cliente.",
+
+    // NFC Reviews Landing Page
+    nfcReviewsSeoTitle:
+      "Tarjetas NFC para Reseñas Google en Restaurantes Tenerife",
+    nfcReviewsSeoDescription:
+      "Tarjetas NFC Tap-to-Review para conseguir reseñas en Google de forma automática. Solo un toque y tus clientes te valoran con 5 estrellas.",
+    nfcReviewsHeroTitle: "Tarjetas NFC: Más Reseñas, Más Clientes",
+    nfcReviewsHeroSubtitle:
+      "Dispositivos NFC para conseguir reseñas en Google de forma automática. Solo un toque y tus clientes te valoran con 5 estrellas.",
+    nfcReviewsHeroCta: "Quiero implementar NFC en mi restaurante",
+
+    // n8n Automation Landing Page
+    n8nAutomationSeoTitle: "Automatización n8n para Restaurantes en Canarias",
+    n8nAutomationSeoDescription:
+      "Automatiza tus procesos de restaurante con n8n. Conecta CRM, WhatsApp, Google Reviews y más para aumentar ventas y reducir tiempos.",
+    n8nAutomationHeroTitle: "Automatización n8n para Restaurantes",
+    n8nAutomationHeroSubtitle:
+      "Flujos inteligentes que conectan CRM, WhatsApp, Google Reviews y más para aumentar ventas y reducir tiempos.",
+    n8nAutomationHeroCta: "Quiero automatizar mi restaurante",
+
+    // WhatsApp Automation Landing Page
+    whatsappAutomationSeoTitle:
+      "Automatización WhatsApp para Restaurantes Tenerife",
+    whatsappAutomationSeoDescription:
+      "Automatiza el soporte y pedidos por WhatsApp en tu restaurante. Respuestas automáticas, notificaciones y más.",
+    whatsappAutomationHeroTitle: "Automatización WhatsApp para Restaurantes",
+    whatsappAutomationHeroSubtitle:
+      "Soporte y pedidos por WhatsApp automatizados para reducir tiempos y mejorar experiencia de cliente.",
+    whatsappAutomationHeroCta: "Quiero automatizar WhatsApp",
+
+    // Software Canarias Landing Page
+    softwareCanariasSeoTitle: "Software para Restaurantes en Canarias",
+    softwareCanariasSeoDescription:
+      "Soluciones digitales para restaurantes en Canarias. Menús digitales, pedidos por QR, automatización y más.",
+    softwareCanariasHeroTitle: "Software para Restaurantes en Canarias",
+    softwareCanariasHeroSubtitle:
+      "Herramientas digitales para aumentar ventas y reducir tiempos en tu restaurante.",
+    softwareCanariasHeroCta: "Quiero digitalizar mi restaurante",
+
+    // Digitalization Tenerife Landing Page
+    digitalizationTenerifeSeoTitle: "Digitalización para Restaurantes Tenerife",
+    digitalizationTenerifeSeoDescription:
+      "Digitaliza tu restaurante en Tenerife con menús QR, pedidos por móvil y automatización.",
+    digitalizationTenerifeHeroTitle:
+      "Digitalización para Restaurantes Tenerife",
+    digitalizationTenerifeHeroSubtitle:
+      "Transforma tu restaurante con herramientas digitales para aumentar ventas y mejorar experiencia de cliente.",
+    digitalizationTenerifeHeroCta: "Quiero digitalizar mi restaurante",
+
+    // Menu Digital sin App Landing Page
+    menuDigitalSinAppSeoTitle:
+      "Menú Digital sin App para Restaurantes Tenerife",
+    menuDigitalSinAppSeoDescription:
+      "Menú digital QR para tu restaurante en Tenerife. Sin necesidad de app, fácil de actualizar y sin comisiones.",
+    menuDigitalSinAppHeroTitle: "Menú Digital sin App",
+    menuDigitalSinAppHeroSubtitle:
+      "Menú digital QR para tu restaurante en Tenerife. Sin necesidad de app, fácil de actualizar y sin comisiones.",
+    menuDigitalSinAppHeroCta: "Quiero un menú digital sin app",
   },
   en: {
     // Navigation
@@ -962,6 +1013,18 @@ const translations: Record<Language, Translation> = {
     featuresVisit: "Visit",
     featuresContact: "Contact",
     featuresDetails: "View details",
+    navbarNFCReview: "NFC Tap-to-Review",
+    navbarNFCReviewDesc: "Increase Google reviews with NFC",
+    navbarAutomationN8n: "n8n Automation",
+    navbarAutomationN8nDesc: "Automated workflows for hospitality",
+    navbarWhatsAppAutomation: "WhatsApp Automation",
+    navbarWhatsAppAutomationDesc: "Automated support and orders",
+    navbarSoftwareCanarias: "Software for Canary Islands",
+    navbarSoftwareCanariasDesc: "Digital solutions for restaurants",
+    navbarDigitalizationTenerife: "Digitalization Tenerife",
+    navbarDigitalizationTenerifeDesc: "Tools to modernize your business",
+    navbarMenuDigitalSinApp: "Digital Menu without App",
+    navbarMenuDigitalSinAppDesc: "Interactive menu with QR code",
 
     // Success Stats
     successTitle: "Success Stories",
