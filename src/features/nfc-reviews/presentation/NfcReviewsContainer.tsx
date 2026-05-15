@@ -30,25 +30,6 @@ const mockTestimonials: TestimonialType[] = [
   },
 ];
 
-const mockTestimonials: TestimonialType[] = [
-  {
-    id: 1,
-    quote:
-      "Las tarjetas NFC han multiplicado nuestras reseñas en Google. ¡Más clientes y mejor posicionamiento!",
-    name: "Juan Pérez",
-    title: "Propietario, Restaurante La Terraza",
-    avatarUrl: "/avatars/juan-perez.jpg",
-  },
-  {
-    id: 2,
-    quote:
-      "Fácil de implementar y los clientes lo agradecen. En solo un mes tenemos 30 reseñas más.",
-    name: "María López",
-    title: "Gerente, Bar El Rincón",
-    avatarUrl: "/avatars/maria-lopez.jpg",
-  },
-];
-
 const mockFaqs: FAQType[] = [
   {
     id: 1,

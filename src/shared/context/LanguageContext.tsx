@@ -250,6 +250,38 @@ interface Translation {
   cartaDineroCard2Item3: string;
   cartaDineroCard2Item4: string;
   cartaDineroCard2Total: string;
+  // BBDD Section
+  cartaBBDDTitle: string;
+  cartaBBDDSubtitle: string;
+  cartaBBDDDesc: string;
+  cartaBBDDLabel1: string;
+  cartaBBDDLabel2: string;
+  cartaBBDDLabelTuBBDD: string;
+  cartaBBDDData1: string;
+  cartaBBDDData2: string;
+  cartaBBDDData3: string;
+  cartaBBDDData4: string;
+  cartaBBDDAction1: string;
+  cartaBBDDAction2: string;
+  cartaBBDDAction3: string;
+  // CTA Final Section
+  cartaCTATitle: string;
+  cartaCTASubtitle: string;
+  cartaCTABtnDemo: string;
+  cartaCTABtnContact: string;
+  cartaCTANoContract: string;
+  cartaCTASignup48h: string;
+  cartaCTASupport: string;
+  cartaCTANoComm: string;
+  // Demo Section
+  cartaDemoTitle: string;
+  cartaDemoVideoLabel: string;
+  cartaDemoScreen1Title: string;
+  cartaDemoScreen1Label: string;
+  cartaDemoScreen2Title: string;
+  cartaDemoScreen2Label: string;
+  cartaDemoScreen3Title: string;
+  cartaDemoScreen3Label: string;
   // Tap Review (NFC)
   tapReviewMetaTitle: string;
   tapReviewMetaDesc: string;
@@ -385,6 +417,19 @@ interface Translation {
   menuDigitalSinAppHeroTitle: string;
   menuDigitalSinAppHeroSubtitle: string;
   menuDigitalSinAppHeroCta: string;
+  // Navbar Solutions (Silo 2)
+  navbarNFCReview: string;
+  navbarNFCReviewDesc: string;
+  navbarAutomationN8n: string;
+  navbarAutomationN8nDesc: string;
+  navbarWhatsAppAutomation: string;
+  navbarWhatsAppAutomationDesc: string;
+  navbarSoftwareCanarias: string;
+  navbarSoftwareCanariasDesc: string;
+  navbarDigitalizationTenerife: string;
+  navbarDigitalizationTenerifeDesc: string;
+  navbarMenuDigitalSinApp: string;
+  navbarMenuDigitalSinAppDesc: string;
 }
 
 const translations: Record<Language, Translation> = {
@@ -536,20 +581,6 @@ const translations: Record<Language, Translation> = {
     dashboardActivityScan: "Usuario Escaneo NFC",
     dashboardActivityReview: "Nueva Reseña 5★",
     dashboardActivityWebhook: "Webhook Ejecutado",
-
-    // Navbar Solutions
-    navbarNFCReview: "NFC Tap-to-Review",
-    navbarNFCReviewDesc: "Increase Google reviews with NFC",
-    navbarAutomationN8n: "n8n Automation",
-    navbarAutomationN8nDesc: "Automated workflows for hospitality",
-    navbarWhatsAppAutomation: "WhatsApp Automation",
-    navbarWhatsAppAutomationDesc: "Automated support and orders",
-    navbarSoftwareCanarias: "Software for Canary Islands",
-    navbarSoftwareCanariasDesc: "Digital solutions for restaurants",
-    navbarDigitalizationTenerife: "Digitalization Tenerife",
-    navbarDigitalizationTenerifeDesc: "Tools to modernize your business",
-    navbarMenuDigitalSinApp: "Digital Menu without App",
-    navbarMenuDigitalSinAppDesc: "Interactive menu with QR code",
 
     // Footer
     footerTagline: "Next-generation technology for local businesses.",
@@ -923,10 +954,10 @@ const translations: Record<Language, Translation> = {
       "Automatización WhatsApp para Restaurantes Tenerife",
     whatsappAutomationSeoDescription:
       "Automatiza el soporte y pedidos por WhatsApp en tu restaurante. Respuestas automáticas, notificaciones y más.",
-    whatsappAutomationHeroTitle: "Automatización WhatsApp para Restaurantes",
-    whatsappAutomationHeroSubtitle:
+    whatsAppAutomationHeroTitle: "Automatización WhatsApp para Restaurantes",
+    whatsAppAutomationHeroSubtitle:
       "Soporte y pedidos por WhatsApp automatizados para reducir tiempos y mejorar experiencia de cliente.",
-    whatsappAutomationHeroCta: "Quiero automatizar WhatsApp",
+    whatsAppAutomationHeroCta: "Quiero automatizar WhatsApp",
 
     // Software Canarias Landing Page
     softwareCanariasSeoTitle: "Software para Restaurantes en Canarias",
@@ -1455,6 +1486,65 @@ const translations: Record<Language, Translation> = {
       "QR Table Orders in Tenerife | Increase Sales & Efficiency",
     tableOrdersSeoDescription:
       "Implement a QR ordering system in your Tenerife restaurant. Reduce waits, increase average ticket, and improve customer experience.",
+
+    // NFC Reviews Landing Page
+    nfcReviewsSeoTitle:
+      "NFC Tap-to-Review Cards for Google Reviews in Tenerife Restaurants",
+    nfcReviewsSeoDescription:
+      "NFC Tap-to-Review cards to automatically get Google reviews. Just one tap and your customers rate you with 5 stars.",
+    nfcReviewsHeroTitle: "NFC Cards: More Reviews, More Customers",
+    nfcReviewsHeroSubtitle:
+      "NFC devices to automatically get Google reviews. Just one tap and your customers rate you with 5 stars.",
+    nfcReviewsHeroCta: "I want to implement NFC in my restaurant",
+
+    // n8n Automation Landing Page
+    n8nAutomationSeoTitle: "n8n Automation for Restaurants in Canary Islands",
+    n8nAutomationSeoDescription:
+      "Automate your restaurant processes with n8n. Connect CRM, WhatsApp, Google Reviews and more to increase sales and reduce times.",
+    n8nAutomationHeroTitle: "n8n Automation for Restaurants",
+    n8nAutomationHeroSubtitle:
+      "Smart workflows connecting CRM, WhatsApp, Google Reviews and more to increase sales and reduce times.",
+    n8nAutomationHeroCta: "I want to automate my restaurant",
+
+    // WhatsApp Automation Landing Page
+    whatsappAutomationSeoTitle:
+      "WhatsApp Automation for Restaurants in Tenerife",
+    whatsappAutomationSeoDescription:
+      "Automate WhatsApp support and orders for your restaurant. Auto replies, notifications and more.",
+    whatsAppAutomationHeroTitle: "WhatsApp Automation for Restaurants",
+    whatsAppAutomationHeroSubtitle:
+      "Automated WhatsApp support and orders to reduce response times and improve customer experience.",
+    whatsAppAutomationHeroCta: "I want to automate WhatsApp",
+
+    // Software Canarias Landing Page
+    softwareCanariasSeoTitle: "Software for Restaurants in Canary Islands",
+    softwareCanariasSeoDescription:
+      "Digital solutions for restaurants in the Canary Islands. Digital menus, QR ordering, automation and more.",
+    softwareCanariasHeroTitle: "Software for Restaurants in Canary Islands",
+    softwareCanariasHeroSubtitle:
+      "Digital tools to increase sales and reduce times in your restaurant.",
+    softwareCanariasHeroCta: "I want to digitize my restaurant",
+
+    // Digitalization Tenerife Landing Page
+    digitalizationTenerifeSeoTitle:
+      "Digitalization for Restaurants in Tenerife",
+    digitalizationTenerifeSeoDescription:
+      "Digitize your restaurant in Tenerife with QR menus, mobile ordering and automation.",
+    digitalizationTenerifeHeroTitle:
+      "Digitalization for Restaurants in Tenerife",
+    digitalizationTenerifeHeroSubtitle:
+      "Transform your restaurant with digital tools to increase sales and improve customer experience.",
+    digitalizationTenerifeHeroCta: "I want to digitize my restaurant",
+
+    // Menu Digital sin App Landing Page
+    menuDigitalSinAppSeoTitle:
+      "Digital Menu without App for Restaurants Tenerife",
+    menuDigitalSinAppSeoDescription:
+      "QR digital menu for your restaurant in Tenerife. No app needed, easy to update and no commissions.",
+    menuDigitalSinAppHeroTitle: "Digital Menu without App",
+    menuDigitalSinAppHeroSubtitle:
+      "QR digital menu for your restaurant in Tenerife. No app needed, easy to update and no commissions.",
+    menuDigitalSinAppHeroCta: "I want a digital menu without app",
   },
 };
 

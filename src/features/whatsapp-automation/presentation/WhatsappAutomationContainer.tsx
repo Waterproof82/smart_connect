@@ -58,17 +58,17 @@ const WhatsappAutomationContainer: React.FC = () => {
         <Hero />
         <div className="container mx-auto px-6 text-center -mt-48 md:-mt-64 relative z-10">
           <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold text-white mb-4">
-            {t.whatsappAutomationHeroTitle}
+            {t.whatsAppAutomationHeroTitle}
           </h1>
           <p className="text-lg md:text-xl text-white/90 max-w-3xl mx-auto">
-            {t.whatsappAutomationHeroSubtitle}
+            {t.whatsAppAutomationHeroSubtitle}
           </p>
           <div className="mt-8">
             <a
               href="#contacto"
               className="inline-block w-full rounded border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-opacity-75 sm:w-auto"
             >
-              {t.whatsappAutomationHeroCta}
+              {t.whatsAppAutomationHeroCta}
             </a>
           </div>
         </div>
