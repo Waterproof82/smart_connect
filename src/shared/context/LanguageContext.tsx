@@ -410,6 +410,14 @@ interface Translation {
   // Digital Menu SEO
   digitalMenuSeoTitle: string;
   digitalMenuSeoDescription: string;
+
+  // Menu QR SEO
+  menuQrSeoTitle: string;
+  menuQrSeoDescription: string;
+
+  // Table Orders SEO
+  tableOrdersSeoTitle: string;
+  tableOrdersSeoDescription: string;
 }
 
 const translations: Record<Language, Translation> = {
@@ -885,6 +893,18 @@ const translations: Record<Language, Translation> = {
       "Carta Digital para Restaurantes en Tenerife | Optimiza y Vende Más",
     digitalMenuSeoDescription:
       "Crea tu carta digital QR en Tenerife. Atrae más clientes, aumenta el ticket medio y elimina comisiones. Solución para restaurantes, bares y hoteles en Canarias.",
+
+    // Menu QR SEO
+    menuQrSeoTitle:
+      "Menú QR para Restaurantes en Canarias | Interactivo y Rápido",
+    menuQrSeoDescription:
+      "Ofrece a tus clientes un menú QR interactivo y visual en Canarias. Fácil de actualizar, sin necesidad de apps, y optimizado para una experiencia móvil perfecta.",
+
+    // Table Orders SEO
+    tableOrdersSeoTitle:
+      "Pedidos QR desde la Mesa en Tenerife | Aumenta Ventas y Eficiencia",
+    tableOrdersSeoDescription:
+      "Implementa un sistema de pedidos QR en tu restaurante de Tenerife. Reduce esperas, aumenta el ticket medio y mejora la experiencia de cliente.",
   },
   en: {
     // Navigation
@@ -1360,6 +1380,18 @@ const translations: Record<Language, Translation> = {
       "Digital Menu for Restaurants in Tenerife | Optimize & Sell More",
     digitalMenuSeoDescription:
       "Create your QR digital menu in Tenerife. Attract more customers, increase average ticket size, and eliminate commissions. Solution for restaurants, bars, and hotels in the Canary Islands.",
+
+    // Menu QR SEO
+    menuQrSeoTitle:
+      "QR Menu for Restaurants in Canary Islands | Interactive & Fast",
+    menuQrSeoDescription:
+      "Offer your customers an interactive and visual QR menu in the Canary Islands. Easy to update, no app needed, and optimized for a perfect mobile experience.",
+
+    // Table Orders SEO
+    tableOrdersSeoTitle:
+      "QR Table Orders in Tenerife | Increase Sales & Efficiency",
+    tableOrdersSeoDescription:
+      "Implement a QR ordering system in your Tenerife restaurant. Reduce waits, increase average ticket, and improve customer experience.",
   },
 };
 

@@ -1,16 +1,12 @@
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { LanguageProvider } from "@shared/context/LanguageContext";
+import { HelmetProvider } from "react-helmet-async";
 import MenuQrContainer from "./MenuQrContainer";
 
 // Mock shared components
-vi.mock("@shared/presentation/components/Hero", () => ({
-  default: ({ title, subtitle }: { title: string; subtitle: string }) => (
-    <div>
-      <h1>{title}</h1>
-      <p>{subtitle}</p>
-    </div>
-  ),
+vi.mock("@features/landing/presentation/components/Hero", () => ({
+  Hero: () => <div>Hero Component</div>,
 }));
 vi.mock("@shared/presentation/components/TestimonialCarousel", () => ({
   default: () => <div>Testimonial Carousel</div>,
@@ -29,17 +25,21 @@ describe("MenuQrContainer", () => {
   const renderComponent = () => {
     return render(
       <MemoryRouter>
-        <LanguageProvider>
-          <MenuQrContainer />
-        </LanguageProvider>
+        <HelmetProvider>
+          <LanguageProvider>
+            <MenuQrContainer />
+          </LanguageProvider>
+        </HelmetProvider>
       </MemoryRouter>,
     );
   };
 
-  it("should render the hero section with the correct title and subtitle", () => {
+  it("should render the hero title and subtitle", () => {
     renderComponent();
     expect(
-      screen.getByText("Menú QR Interactivo para Restaurantes Modernos"),
+      screen.getByRole("heading", {
+        name: "Menú QR Interactivo para Restaurantes Modernos",
+      }),
     ).toBeInTheDocument();
     expect(
       screen.getByText(/Ofrece a tus clientes una experiencia visual/),

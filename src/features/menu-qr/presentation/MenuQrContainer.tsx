@@ -43,24 +43,29 @@ const MenuQrContainer: React.FC = () => {
 
   return (
     <>
+      <Helmet>
+        <title>{t.menuQrSeoTitle}</title>
+        <meta name="description" content={t.menuQrSeoDescription} />
+      </Helmet>
       <Navbar scrolled={true} />
       <main>
         <Hero />
-          <Helmet>
-        <title>{t.menuQrHeroTitle}</title>
-        <meta name="description" content={t.menuQrHeroSubtitle} />
-      </Helmet>
-      <main>
-        <Hero />
-        <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">{t.menuQrHeroTitle}</h1>
-        <p className="mt-6 text-lg leading-8 text-gray-600">{t.menuQrHeroSubtitle}</p>
-        <a
-            href="#contacto"
-            className="block w-full rounded border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white hover:bg-transparent hover:text-white focus:outline-none focus:ring active:text-opacity-75 sm:w-auto"
-          >
-            {t.menuQrHeroCta}
-          </a>
-        </Hero>
+        <div className="container mx-auto px-6 text-center -mt-48 md:-mt-64 relative z-10">
+          <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold text-white mb-4">
+            {t.menuQrHeroTitle}
+          </h1>
+          <p className="text-lg md:text-xl text-white/90 max-w-3xl mx-auto">
+            {t.menuQrHeroSubtitle}
+          </p>
+          <div className="mt-8">
+            <a
+              href="#contacto"
+              className="inline-block w-full rounded border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-opacity-75 sm:w-auto"
+            >
+              {t.menuQrHeroCta}
+            </a>
+          </div>
+        </div>
 
         <TestimonialCarousel testimonials={mockTestimonials} />
 

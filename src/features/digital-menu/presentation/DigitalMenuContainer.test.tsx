@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { LanguageProvider } from "@shared/context/LanguageContext";
+import { HelmetProvider } from "react-helmet-async";
 import DigitalMenuContainer from "./DigitalMenuContainer";
 
 // Mock shared components to isolate the container test
@@ -32,9 +33,11 @@ describe("DigitalMenuContainer", () => {
   const renderComponent = () => {
     return render(
       <MemoryRouter>
-        <LanguageProvider>
-          <DigitalMenuContainer />
-        </LanguageProvider>
+        <HelmetProvider>
+          <LanguageProvider>
+            <DigitalMenuContainer />
+          </LanguageProvider>
+        </HelmetProvider>
       </MemoryRouter>,
     );
   };

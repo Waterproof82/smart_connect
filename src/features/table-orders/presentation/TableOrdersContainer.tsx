@@ -1,6 +1,6 @@
 import React from "react";
 import { useLanguage } from "@shared/context/LanguageContext";
-import Hero from "@shared/presentation/components/Hero";
+import { Hero } from "@features/landing/presentation/components/Hero";
 import TestimonialCarousel, {
   Testimonial,
 } from "@shared/presentation/components/TestimonialCarousel";
@@ -9,6 +9,7 @@ import FAQAccordion, {
 } from "@shared/presentation/components/FAQAccordion";
 import { Navbar } from "@features/landing/presentation/components/Navbar";
 import { Contact } from "@features/landing/presentation/components/Contact";
+import { Helmet } from "react-helmet-async";
 
 const mockTestimonials: Testimonial[] = [
   {
@@ -41,19 +42,29 @@ const TableOrdersContainer: React.FC = () => {
 
   return (
     <>
+      <Helmet>
+        <title>{t.tableOrdersSeoTitle}</title>
+        <meta name="description" content={t.tableOrdersSeoDescription} />
+      </Helmet>
       <Navbar scrolled={true} />
       <main>
-        <Hero
-          title={t.tableOrdersHeroTitle}
-          subtitle={t.tableOrdersHeroSubtitle}
-        >
-          <a
-            href="#contacto"
-            className="block w-full rounded border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white hover:bg-transparent hover:text-white focus:outline-none focus:ring active:text-opacity-75 sm:w-auto"
-          >
-            {t.tableOrdersHeroCta}
-          </a>
-        </Hero>
+        <Hero />
+        <div className="container mx-auto px-6 text-center -mt-48 md:-mt-64 relative z-10">
+          <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold text-white mb-4">
+            {t.tableOrdersHeroTitle}
+          </h1>
+          <p className="text-lg md:text-xl text-white/90 max-w-3xl mx-auto">
+            {t.tableOrdersHeroSubtitle}
+          </p>
+          <div className="mt-8">
+            <a
+              href="#contacto"
+              className="inline-block w-full rounded border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-opacity-75 sm:w-auto"
+            >
+              {t.tableOrdersHeroCta}
+            </a>
+          </div>
+        </div>
 
         <TestimonialCarousel testimonials={mockTestimonials} />
 
