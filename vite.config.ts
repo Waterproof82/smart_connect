@@ -1,8 +1,15 @@
+/// <reference types="vitest" />
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
 export default defineConfig(({ mode }) => ({
+  test: {
+    globals: true,
+    environment: "jsdom",
+    setupFiles: "src/setupTests.ts",
+    include: ["src/shared/presentation/components/**/*.test.tsx"],
+  },
   plugins: [react()],
 
   server: {
