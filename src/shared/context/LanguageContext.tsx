@@ -408,7 +408,7 @@ const translations: Record<Language, Translation> = {
     heroTitleAccent: "IA",
     heroTitleEnd: "y Automatización",
     heroSubtitle:
-      "Tecnología de próxima generación para negocios locales. Automatiza tareas, fideliza clientes y escala tu empresa con soluciones inteligentes.",
+      "Tecnología de próxima generación para restaurantes en Tenerife y Canarias. Automatiza pedidos, aumenta ingresos por mesa, reduce tiempos de espera y fideliza clientes con soluciones digitales sin comisiones ni intermediarios.",
     heroButtonDemo: "Ver Demo",
     heroButtonContact: "Contactar",
     heroStats5Lang: "Idiomas",
@@ -421,17 +421,17 @@ const translations: Record<Language, Translation> = {
     featuresSubtitle:
       "Herramientas avanzadas diseñadas para la era digital, desde el hardware hasta el código.",
     featuresContent1:
-      "En SmartConnect AI combinamos inteligencia artificial, automatización y hardware inteligente para transformar la forma en que los negocios locales atraen, retienen y fidelizan clientes. Nuestra plataforma integra menús digitales QRIBAR con pedidos en tiempo real, tarjetas NFC para reseñas instantáneas en Google, y flujos de automatización con n8n que conectan cada interacción del cliente. Somos el aliado tecnológico que tu negocio en Tenerife y Canarias necesita para dar el salto digital definitivo.",
+      "En SmartConnect AI transformamos la experiencia de los restaurantes en Tenerife y Canarias. Con IA, automatización y hardware inteligente, ayudamos a atraer, retener y fidelizar clientes. Nuestras soluciones incluyen menús digitales QRIBAR con pedidos en tiempo real, tarjetas NFC para reseñas instantáneas en Google y automatización con n8n que conecta cada interacción del cliente. ¡El salto digital que tu negocio necesita para crecer!",
     featuresContent2:
-      "Con QRIBAR, tus clientes piden desde su móvil escaneando un código QR en la mesa. El pedido llega directamente a barra y cocina en tiempo real, eliminando tiempos de espera y aumentando la rotación de mesas. Sin comisiones, sin intermediarios. Cada mesa se convierte en un punto de venta digital que opera 24/7, recopilando datos valiosos de cada comensal para campañas de marketing automatizadas.",
+      "Con QRIBAR, tus clientes en Tenerife y Canarias pueden pedir desde su móvil escaneando un código QR en la mesa. El pedido llega directamente a barra y cocina en tiempo real, reduciendo tiempos de espera y aumentando la rotación de mesas. Sin comisiones ni intermediarios, cada mesa se convierte en un punto de venta digital que opera 24/7, recopilando datos valiosos para campañas de marketing automatizadas y fidelización.",
     featuresContent3:
-      "Nuestras tarjetas NFC Tap-to-Review permiten a cualquier cliente dejar una reseña en Google con un solo toque. Más reseñas significan mejor posicionamiento en Google Maps y más clientes nuevos. Todo con tecnología de alto rendimiento, sin suscripciones y con configuración inmediata. Estudios demuestran que los negocios con más de 50 reseñas en Google reciben hasta un 40% más de visitas que aquellos con menos de 10 reseñas.",
+      "Nuestras tarjetas NFC Tap-to-Review permiten a tus clientes dejar reseñas en Google con un solo toque. Más reseñas significan mejor posicionamiento en Google Maps y atraerás más clientes nuevos a tu restaurante en Tenerife y Canarias. Tecnología de alto rendimiento, sin suscripciones y configuración inmediata. Estudios demuestran que los negocios con más de 50 reseñas en Google reciben hasta un 40% más de visitas.",
     featuresContent4:
-      "Imagina un flujo de trabajo donde cada lead se captura, analiza y responde automáticamente. Con nuestras automatizaciones n8n, conectamos tu CRM, email, WhatsApp y redes sociales en un solo ecosistema. Cada interacción con un cliente potencial genera acciones en cadena: análisis de sentimiento con IA, asignación de temperatura del lead, y notificaciones en tiempo real a tu equipo comercial. Todo sin intervención manual, liberando horas de trabajo cada semana.",
+      "Imagina un flujo de trabajo automatizado donde cada lead se captura, analiza y responde automáticamente. Con nuestras automatizaciones n8n, conectamos tu CRM, email, WhatsApp y redes sociales en un solo ecosistema. Cada interacción con clientes potenciales genera acciones en cadena: análisis de sentimiento con IA, asignación de temperatura del lead y notificaciones en tiempo real a tu equipo comercial. ¡Libera horas de trabajo cada semana!",
     featuresContent5:
-      "QRIBAR no es solo un menú digital: es tu nuevo canal de ventas directo. Cada mesa escanea un código QR, explora platos con fotos y vídeos profesionales en 5 idiomas, y envía el pedido directamente a barra y cocina. Los datos de cada cliente se almacenan en tu base de datos para campañas de fidelización automatizadas. El resultado: mesas que rotan más rápido, tickets promedio más altos y clientes que vuelven porque la experiencia es impecable.",
+      "QRIBAR no es solo un menú digital: es tu nuevo canal de ventas directo para restaurantes en Tenerife y Canarias. Cada mesa escanea un código QR, explora platos con fotos y vídeos profesionales en 5 idiomas, y envía el pedido directamente a barra y cocina. Los datos de cada cliente se almacenan en tu base de datos para campañas de fidelización automatizadas. El resultado: mesas que rotan más rápido, tickets promedio más altos y clientes que vuelven por la experiencia impecable.",
     featuresContent6:
-      "Las tarjetas NFC Tap-to-Review convierten cada visita en una reseña de Google. Coloca el expositor en tu local, el cliente acerca su móvil, y en 5 segundos tiene abierta la página de reseñas. Más reseñas significan mejor posicionamiento local en Google Maps y, por tanto, más clientes nuevos cada mes. Es un ciclo virtuoso que multiplica tu visibilidad sin inversión publicitaria recurrente. Nuestros clientes multiplican sus reseñas por 6 en los primeros 90 días.",
+      "Las tarjetas NFC Tap-to-Review convierten cada visita en una reseña de Google para tu restaurante en Tenerife y Canarias. Coloca el expositor en tu local, el cliente acerca su móvil, y en 5 segundos tiene abierta la página de reseñas. Más reseñas significan mejor posicionamiento local en Google Maps y atraen más clientes nuevos cada mes. Es un ciclo virtuoso que multiplica tu visibilidad sin inversión publicitaria recurrente. ¡Multiplica tus reseñas por 6 en los primeros 90 días!",
     featuresSoftwareIA: "Software & IA",
     featuresSoftwareIADesc:
       "Desarrollo de herramientas personalizadas que se integran perfectamente con tus sistemas actuales. Soluciones a medida impulsadas por algoritmos inteligentes.",
@@ -478,11 +478,12 @@ const translations: Record<Language, Translation> = {
     successStat4Author: "Comunidad Hostelera",
 
     // SEO
-    seoTitle: "SmartConnect AI: IA y Automatización para Negocios",
+    seoTitle:
+      "SmartConnect AI: Soluciones Digitales para Restaurantes en Tenerife y Canarias",
     seoDescription:
-      "SmartConnect AI: automatización con IA, n8n, NFC para Google Reviews y menús digitales. Digitaliza tu negocio.",
+      "SmartConnect AI: automatización con IA, n8n, tarjetas NFC para Google Reviews y menús digitales QRIBAR. Digitaliza tu restaurante en Tenerife y Canarias para aumentar pedidos, reducir tiempos de espera y maximizar ingresos por mesa. Sin comisiones, sin intermediarios.",
     seoProductDescription:
-      "Plataforma de crecimiento para restaurantes con menú digital, pedidos por QR y tecnología NFC diseñada para aumentar pedidos, reducir tiempos de espera y maximizar ingresos por mesa.",
+      "Plataforma de crecimiento para restaurantes en Tenerife y Canarias con menú digital QRIBAR, pedidos por QR, tecnología NFC Tap-to-Review y automatización n8n. Diseñada para aumentar pedidos, reducir tiempos de espera, maximizar ingresos por mesa y obtener más reseñas en Google. Ideal para bares, restaurantes y hostelería en Canarias.",
     seoAltTextNFC: "Tarjeta NFC Tap-to-Review para obtener reseñas en Google",
     seoAltTextQribar: "Menú digital QRIBAR con pedidos en tiempo real",
 
@@ -856,7 +857,7 @@ const translations: Record<Language, Translation> = {
     heroTitleAccent: "Artificial Intelligence",
     heroTitleEnd: "and automation",
     heroSubtitle:
-      "Next-generation technology for local businesses. Automate tasks, retain customers and scale your company with smart solutions.",
+      "Next-generation technology for restaurants in Tenerife and Canary Islands. Automate orders, increase revenue per table, reduce wait times, and retain customers with digital solutions that have no commissions or intermediaries.",
     heroButtonDemo: "View Demo",
     heroButtonContact: "Contact Us",
     heroStats5Lang: "Languages",
@@ -926,11 +927,12 @@ const translations: Record<Language, Translation> = {
     successStat4Author: "Hospitality Community",
 
     // SEO
-    seoTitle: "SmartConnect AI: AI & Automation for Businesses",
+    seoTitle:
+      "SmartConnect AI: Digital Solutions for Restaurants in Tenerife and Canary Islands",
     seoDescription:
-      "SmartConnect AI: AI automation, n8n workflows, NFC for Google Reviews & digital menus. Digitize your business.",
+      "SmartConnect AI offers AI automation, n8n workflows, NFC cards for Google Reviews, and QRIBAR digital menus. Digitize your restaurant in Tenerife and Canary Islands to increase orders, reduce wait times, and maximize revenue per table. No commissions, no intermediaries.",
     seoProductDescription:
-      "Restaurant growth platform with digital menu, QR ordering, and NFC technology designed to increase orders, reduce wait times, and maximize revenue per table.",
+      "Growth platform for restaurants in Tenerife and Canary Islands with QRIBAR digital menus, QR ordering, NFC Tap-to-Review technology, and n8n automation. Designed to increase orders, reduce wait times, maximize revenue per table, and get more Google reviews. Ideal for bars, restaurants, and hospitality in Canary Islands.",
     seoAltTextNFC: "Tap-to-Review NFC card to get Google reviews",
     seoAltTextQribar: "QRIBAR digital menu with real-time orders",
 
