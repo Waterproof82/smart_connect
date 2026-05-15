@@ -391,6 +391,25 @@ interface Translation {
   qribarButton: string;
   qribarError: string;
   qribarLoading: string;
+
+  // Digital Menu Landing
+  digitalMenuHeroTitle: string;
+  digitalMenuHeroSubtitle: string;
+  digitalMenuHeroCta: string;
+
+  // Menu QR Landing
+  menuQrHeroTitle: string;
+  menuQrHeroSubtitle: string;
+  menuQrHeroCta: string;
+
+  // Table Orders Landing
+  tableOrdersHeroTitle: string;
+  tableOrdersHeroSubtitle: string;
+  tableOrdersHeroCta: string;
+
+  // Digital Menu SEO
+  digitalMenuSeoTitle: string;
+  digitalMenuSeoDescription: string;
 }
 
 const translations: Record<Language, Translation> = {
@@ -842,6 +861,30 @@ const translations: Record<Language, Translation> = {
     qribarButton: "Más información",
     qribarError: "Error al cargar el menú",
     qribarLoading: "Cargando menú...",
+
+    // Digital Menu Landing
+    digitalMenuHeroTitle: "La Carta Digital que Vende por Ti en Tenerife",
+    digitalMenuHeroSubtitle:
+      "Transforma tu menú de papel en una herramienta de marketing y ventas que tus clientes amarán. Sin comisiones, sin intermediarios, 100% tuyo.",
+    digitalMenuHeroCta: "Descubre cómo",
+
+    // Menu QR Landing
+    menuQrHeroTitle: "Menú QR Interactivo para Restaurantes Modernos",
+    menuQrHeroSubtitle:
+      "Ofrece a tus clientes una experiencia visual, rápida y sin contacto. Actualiza tu carta en segundos y destaca sobre tu competencia en Canarias.",
+    menuQrHeroCta: "Solicitar Información",
+
+    // Table Orders Landing
+    tableOrdersHeroTitle: "Pedidos a Mesa con QR: Más Rápido, Más Ventas",
+    tableOrdersHeroSubtitle:
+      "Elimina las esperas y aumenta el ticket medio. Tus clientes piden y pagan desde su móvil, y el pedido llega directo a cocina.",
+    tableOrdersHeroCta: "Ver Demo",
+
+    // Digital Menu SEO
+    digitalMenuSeoTitle:
+      "Carta Digital para Restaurantes en Tenerife | Optimiza y Vende Más",
+    digitalMenuSeoDescription:
+      "Crea tu carta digital QR en Tenerife. Atrae más clientes, aumenta el ticket medio y elimina comisiones. Solución para restaurantes, bares y hoteles en Canarias.",
   },
   en: {
     // Navigation
@@ -1293,6 +1336,30 @@ const translations: Record<Language, Translation> = {
     qribarButton: "More information",
     qribarError: "Error loading menu",
     qribarLoading: "Loading menu...",
+
+    // Digital Menu Landing
+    digitalMenuHeroTitle: "The Digital Menu that Sells for You in Tenerife",
+    digitalMenuHeroSubtitle:
+      "Transform your paper menu into a marketing and sales tool your customers will love. No commissions, no intermediaries, 100% yours.",
+    digitalMenuHeroCta: "Discover How",
+
+    // Menu QR Landing
+    menuQrHeroTitle: "Interactive QR Menu for Modern Restaurants",
+    menuQrHeroSubtitle:
+      "Offer your customers a visual, fast, and contactless experience. Update your menu in seconds and stand out from your competition in the Canary Islands.",
+    menuQrHeroCta: "Request Information",
+
+    // Table Orders Landing
+    tableOrdersHeroTitle: "QR Table Orders: Faster Service, More Sales",
+    tableOrdersHeroSubtitle:
+      "Eliminate waiting times and increase the average ticket. Your customers order and pay from their mobile, and the order goes straight to the kitchen.",
+    tableOrdersHeroCta: "View Demo",
+
+    // Digital Menu SEO
+    digitalMenuSeoTitle:
+      "Digital Menu for Restaurants in Tenerife | Optimize & Sell More",
+    digitalMenuSeoDescription:
+      "Create your QR digital menu in Tenerife. Attract more customers, increase average ticket size, and eliminate commissions. Solution for restaurants, bars, and hotels in the Canary Islands.",
   },
 };
 

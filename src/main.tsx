@@ -9,6 +9,9 @@ import App from "./App";
 import CartaDigitalPremium from "./features/landing/presentation/components/CartaDigitalPremium";
 import { TapReviewPage } from "./features/tap-review/presentation/TapReviewPage";
 import TapReviewContainer from "./features/tap-review/TapReviewContainer";
+import DigitalMenuContainer from "./features/digital-menu/presentation/DigitalMenuContainer";
+import MenuQrContainer from "./features/menu-qr/presentation/MenuQrContainer";
+import TableOrdersContainer from "./features/table-orders/presentation/TableOrdersContainer";
 
 // Wrapper component to fetch whatsappPhone before rendering TapReviewPage (Clean Architecture: Presentation Container)
 const TapReviewPageWithData: React.FC = () => {
@@ -93,6 +96,18 @@ root.render(
               <Route path="/admin" element={<AdminPanel />} />
               <Route path="/carta-digital" element={<CartaDigitalPremium />} />
               <Route path="/tap-review" element={<TapReviewPageWithData />} />
+              <Route
+                path="/carta-digital-restaurante-tenerife"
+                element={<DigitalMenuContainer />}
+              />
+              <Route
+                path="/menu-qr-restaurante"
+                element={<MenuQrContainer />}
+              />
+              <Route
+                path="/pedidos-qr-desde-mesa"
+                element={<TableOrdersContainer />}
+              />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
