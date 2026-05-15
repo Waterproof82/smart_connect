@@ -29,14 +29,11 @@ const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 
 const STORAGE_KEY = "sc_theme";
 
-const getInitialTheme = (): Theme => {
-  if (typeof window === "undefined") return "dark";
-  const stored = localStorage.getItem(STORAGE_KEY);
-  if (stored === "light" || stored === "dark") return stored;
-  return window.matchMedia("(prefers-color-scheme: light)").matches
-    ? "light"
-    : "dark";
-};
+// Always return "dark" as the initial value for SSR/client consistency.
+// On SSG builds the server has no window, so it returns "dark" unconditionally.
+// The client MUST also return "dark" so the first render matches the SSR HTML.
+// Post-hydration, useEffect reads localStorage / html class to set the correct theme.
+const getInitialTheme = (): Theme => "dark";
 
 const applyTheme = (theme: Theme) => {
   document.documentElement.classList.toggle("light", theme === "light");
@@ -48,35 +45,45 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [theme, setThemeState] = useState<Theme>(getInitialTheme);
 
-  // Apply theme on mount
+  // Post-hydration: sync React state with the html class set by the inline script.
+  // Clears any stale localStorage value from the removed theme toggle.
+  // Runs once on mount.
+  useEffect(() => {
+    // Clear stale localStorage (the old theme toggle was removed)
+    localStorage.removeItem(STORAGE_KEY);
+
+    const systemTheme = document.documentElement.classList.contains("light")
+      ? "light"
+      : "dark";
+    if (systemTheme !== theme) {
+      setThemeState(systemTheme);
+    }
+    applyTheme(systemTheme);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Keep DOM in sync whenever React state changes
   useEffect(() => {
     applyTheme(theme);
   }, [theme]);
 
-  // Listen for system preference changes when no explicit choice is saved
+  // Listen for system preference changes and update React state
   useEffect(() => {
     const mql = window.matchMedia("(prefers-color-scheme: light)");
     const handleChange = (e: MediaQueryListEvent) => {
-      if (!localStorage.getItem(STORAGE_KEY)) {
-        const newTheme = e.matches ? "light" : "dark";
-        setThemeState(newTheme);
-      }
+      const newTheme = e.matches ? "light" : "dark";
+      setThemeState(newTheme);
     };
     mql.addEventListener("change", handleChange);
     return () => mql.removeEventListener("change", handleChange);
   }, []);
 
   const setTheme = useCallback((newTheme: Theme) => {
-    localStorage.setItem(STORAGE_KEY, newTheme);
     setThemeState(newTheme);
   }, []);
 
   const toggleTheme = useCallback(() => {
-    setThemeState((prev) => {
-      const next = prev === "dark" ? "light" : "dark";
-      localStorage.setItem(STORAGE_KEY, next);
-      return next;
-    });
+    setThemeState((prev) => (prev === "dark" ? "light" : "dark"));
   }, []);
 
   const value = useMemo(

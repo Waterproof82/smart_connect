@@ -82,13 +82,13 @@ const getIconContainerClass = (idx: number): string => {
 
 const getLinkText = (item: (typeof solutions)[0], t: Translation): string => {
   if (item.external) return t.featuresVisit;
-  if (item.internal) return t.featuresDetails;
-  return t.featuresContact;
+  return t.featuresDetails;
 };
 
 const getLinkHref = (item: (typeof solutions)[0]): string => {
   if (item.internal && item.route) return item.route;
   if (item.external && item.href) return item.href;
+  // Include service as hash query param - will be parsed by Contact.tsx
   return `#contacto?servicio=${encodeURIComponent(item.serviceValue)}`;
 };
 

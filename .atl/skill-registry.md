@@ -1,6 +1,6 @@
 # Skill Registry — smart-connect
 
-_Last updated: 2026-05-11_
+_Last updated: 2026-05-14_
 
 ## Global Skills (from Engram)
 
@@ -127,6 +127,59 @@ Regla obligatoria para el Gentle-Orchestrator: determina cuándo DEBE usar SDD v
 - Búsqueda: similarity search en Supabase
 - Respuesta: `gemini-2.5-flash` con contexto
 - Cache: TTL 7 días
+
+### SSR / Hydration (CRITICAL) ⚠️
+
+Reglas para evitar React error #418 (hydration mismatch) con SSG custom (react-dom/server).
+
+- **Tree must match**: `entry-server.tsx` y `entry-client.tsx` deben tener la MISMA estructura de componentes. Cada wrapper en el cliente debe estar también en el servidor.
+- **Suspense**: `renderToString()` en React 18 no soporta Suspense nativamente pero renderiza a través del boundary. Incluí `<Suspense>` en AMBOS trees aunque no haga nada en SSR — el cliente necesita encontrarlo durante la hidratación.
+- **ScrollToTop y null components**: Componentes que retornan `null` (como `ScrollToTop`) cuentan como elementos estructurales. Si están en el cliente, deben estar en el servidor también.
+- **No lazy() en landing routes**: Los componentes de landing (Hero, Features, Contact, SuccessStats, ExpertAssistant) deben ser eager imports en App.tsx. `renderToString` CRASHEA con lazy() + Suspense.
+- **Verificación**: El HTML prerenderizado debe tener `<!--$-->` (Suspense SSR marker). Usá `grep '<!--$-->' dist/index.html` para confirmar.
+
+### SPA Hydration Safety (CRITICAL) ⚠️
+
+Controla cómo React se monta en páginas que NO tienen contenido SSR (servidas via `_spa.html`).
+
+- **Regla**: `entry-client.tsx` debe DETECTAR si hay contenido SSR real en `#root` antes de decidir entre `hydrateRoot` y `createRoot`.
+- **Detección**: `rootElement.children.length > 0` — las páginas prerenderizadas tienen hijos Element (`<div>`, `<nav>`, etc.), las SPA pages solo tienen un Comment node (`<!--ssr-outlet-->`).
+- **Prerendered → `hydrateRoot`**: páginas `/`, `/servicios`, `/contacto` tienen HTML real → hidratar.
+- **SPA → `createRoot`**: páginas `/carta-digital`, `/tap-review`, `/admin` se sirven con `_spa.html` que solo tiene `<!--ssr-outlet-->` → NO se puede hidratar, usar `createRoot` + `.render()`.
+- **ThemeProvider debe envolver TODAS las rutas** en `entry-client.tsx` y `entry-server.tsx`, NO solo dentro de `App.tsx`. Si solo está en App, las SPA pages no tienen contexto de tema.
+
+### Theme SSR Safety (CRITICAL) ⚠️
+
+- `useState(getInitialTheme)` se ejecuta DURANTE la hidratación del cliente. Debe retornar el MISMO valor que en SSR, o componentes que renderizan JSX distinto según el tema (ej. Navbar con SVG de luna/sol) causarán error #418.
+- **NUNCA** uses `matchMedia()` o `localStorage.getItem()` en `getInitialTheme()` — darían distinto valor en SSR vs cliente.
+- **NUNCA** leas del `<html>` class en `getInitialTheme()` aunque el inline script lo haya seteado — en SSR no hay document, retorna "dark", pero en cliente puede retornar "light" → mismatch.
+- **Fix**: `getInitialTheme()` debe SIEMPRE retornar `"dark"` (tanto en SSR como en cliente). El useEffect post-hydratación (con deps `[]`) corrige el estado leyendo del html class o localStorage.
+- **Post-hydration useEffect**: leer `document.documentElement.classList.contains("light")` o `localStorage.getItem("sc_theme")`. Solo hacer `setThemeState` si el valor es distinto de "dark" para evitar re-renders innecesarios.
+- **applyTheme()** debe llamarse en el useEffect con el valor corregido para sincronizar el html class.
+
+### Supabase Client Proxy (CRITICAL) ⚠️
+
+El lazy Proxy para `supabase` difiere `createClient()` hasta el primer acceso para evitar crashes en SSR cuando no hay `.env`.
+
+```typescript
+export const supabase = new Proxy<SupabaseClient>({} as SupabaseClient, {
+  get(_, prop) {
+    const client = getClient();
+    if (prop === "then") return undefined; // evitar que sea tratado como Promise
+    const value = (client as unknown as Record<string, unknown>)[
+      prop as string
+    ];
+    if (typeof value === "function") return value.bind(client);
+    return value;
+  },
+});
+```
+
+Reglas:
+
+- Usá bracket access (`client[prop]`), NO `Reflect.get(client, prop, prop)` — el tercer arg es `receiver`, no la propiedad
+- Funciones deben bindearse al cliente: `value.bind(client)` para mantener el `this` correcto
+- `prop === "then"` debe retornar `undefined` para evitar que el Proxy sea tratado como thenable/Promise
 
 See also: [SmartConnect Standards](.atl/smart-connect-standards.md) for full documentation.
 

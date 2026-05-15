@@ -9,9 +9,15 @@
 
 import DOMPurify from "dompurify";
 
-// Initialize DOMPurify with the browser's window object.
-// Note: DOMPurify is tree-shaken in tests where it's mocked.
-const domPurifyInstance = DOMPurify(window);
+// Lazy DOMPurify initializer — avoids crashing during SSR where window is undefined.
+let _domPurifyInstance: ReturnType<typeof DOMPurify> | null = null;
+function getDomPurify(): ReturnType<typeof DOMPurify> | null {
+  if (typeof window === "undefined") return null;
+  if (!_domPurifyInstance) {
+    _domPurifyInstance = DOMPurify(window);
+  }
+  return _domPurifyInstance;
+}
 
 // Singleton instance for logging security events
 const securityLogger = {
@@ -74,7 +80,9 @@ export function sanitizeInput(
   }
 
   // Sanitize using DOMPurify (removes all HTML tags)
-  const sanitized = domPurifyInstance.sanitize(input, {
+  const purify = getDomPurify();
+  if (!purify) return input.trim();
+  const sanitized = purify.sanitize(input, {
     ALLOWED_TAGS: [], // No HTML allowed
     ALLOWED_ATTR: [], // No attributes allowed
     KEEP_CONTENT: true, // Keep text content
@@ -110,7 +118,9 @@ export function sanitizeHTML(
   }
 
   // Sanitize allowing safe HTML tags
-  const sanitized = domPurifyInstance.sanitize(html, {
+  const purify = getDomPurify();
+  if (!purify) return html;
+  const sanitized = purify.sanitize(html, {
     ALLOWED_TAGS: [
       "a",
       "b",

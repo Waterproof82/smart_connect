@@ -25,6 +25,7 @@ const fieldClasses =
   "w-full border rounded-2xl py-3 sm:py-4 px-4 sm:px-6 outline-none transition-colors text-sm text-default bg-[var(--color-surface)] border-[var(--color-border)] focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--focus-ring)] min-h-[44px]";
 
 const prefersReducedMotion = () => {
+  if (globalThis.matchMedia === undefined) return true;
   const mql = globalThis.matchMedia("(prefers-reduced-motion: reduce)");
   return mql.matches;
 };
@@ -271,28 +272,23 @@ export const Contact: React.FC = () => {
   };
 
   useEffect(() => {
-    const updateServiceFromURL = () => {
+    const updateServiceFromHash = () => {
+      // Parse hash query params (e.g., #contacto?servicio=Consultor%C3%ADa%20IA)
       const hash = globalThis.location.hash;
       if (!hash.includes("?")) return;
+
       const params = new URLSearchParams(hash.split("?")[1]);
       const servicio = params.get("servicio");
       if (servicio) {
         setValue("service", decodeURIComponent(servicio), {
           shouldValidate: true,
         });
-        setTimeout(
-          () =>
-            document
-              .querySelector("#contacto")
-              ?.scrollIntoView({ behavior: "smooth" }),
-          100,
-        );
       }
     };
-    updateServiceFromURL();
-    globalThis.addEventListener("hashchange", updateServiceFromURL);
+    updateServiceFromHash();
+    globalThis.addEventListener("hashchange", updateServiceFromHash);
     return () =>
-      globalThis.removeEventListener("hashchange", updateServiceFromURL);
+      globalThis.removeEventListener("hashchange", updateServiceFromHash);
   }, [setValue]);
 
   const { ref: nameRegRef, ...nameRegProps } = register("name");
