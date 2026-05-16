@@ -146,11 +146,11 @@ const App: React.FC = () => {
         description:
           "Automatización con IA, n8n, NFC para Google Reviews y menús digitales QRIBAR para negocios en Tenerife y Canarias.",
         areaServed: "Tenerife, Canarias, España",
-        serviceType: [
+        knowsAbout: [
           "Automatización de negocios",
           "Inteligencia Artificial",
-          "Menús digitales",
-          "NFC Google Reviews",
+          "Menús digitales NFC",
+          "Google Reviews",
         ],
         image: "https://digitalizatenerife.es/icon.png",
         telephone: "+34922123456",
