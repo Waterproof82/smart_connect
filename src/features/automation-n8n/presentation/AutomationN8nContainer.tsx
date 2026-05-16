@@ -30,72 +30,83 @@ import {
   Workflow,
 } from "lucide-react";
 
-const mockTestimonials: TestimonialType[] = [
-  {
-    id: 1,
-    quote:
-      "Automatizamos las notificaciones de nuevas reseñas, los mensajes de WhatsApp y las respuestas a clientes. Ahorramos horas cada semana.",
-    name: "Carlos Ruiz",
-    title: "Gerente, Restaurante El Rincón, Tenerife",
-    avatarUrl: "/avatars/carlos-ruiz.jpg",
-  },
-  {
-    id: 2,
-    quote:
-      "Conectamos el CRM, el WhatsApp Business y las plantillas de email en un solo flujo. Ahora cada lead recibe seguimiento automático. Espectacular.",
-    name: "Ana García",
-    title: "Directora, Café Central, La Laguna",
-    avatarUrl: "/avatars/ana-garcia.jpg",
-  },
-];
-
-const mockFaqs: FAQType[] = [
-  {
-    id: 1,
-    question: "¿Qué es n8n y cómo ayuda a mi restaurante?",
-    answer:
-      "n8n es una herramienta de automatización que conecta tus aplicaciones favoritas. Para tu restaurante, puede conectar CRM, WhatsApp, Google Reviews y más, reduciendo tiempos y mejorando la experiencia del cliente.",
-  },
-  {
-    id: 2,
-    question: "¿Necesito conocimientos técnicos para configurarlo?",
-    answer:
-      "No. SmartConnect AI se encarga de la configuración. Solo necesitas indicarnos qué aplicaciones quieres conectar.",
-  },
-  {
-    id: 3,
-    question: "¿Qué procesos puedo automatizar en mi restaurante?",
-    answer:
-      "Puedes automatizar la gestión de reseñas de Google, respuestas automáticas por WhatsApp, notificaciones de nuevos pedidos, seguimiento de leads, campañas de email marketing y la integración con tu CRM.",
-  },
-  {
-    id: 4,
-    question: "¿Cuánto tiempo tarda la implementación?",
-    answer:
-      "La implementación de flujos básicos toma entre 2 y 3 días. Proyectos más complejos con múltiples integraciones pueden llevar hasta una semana.",
-  },
-  {
-    id: 5,
-    question: "¿Se integra con mi sistema actual?",
-    answer:
-      "Sí, n8n se integra con cientos de aplicaciones y servicios. Trabajamos con tu stack tecnológico actual para crear flujos personalizados.",
-  },
-  {
-    id: 6,
-    question: "¿Hay soporte técnico después de la implementación?",
-    answer:
-      "Sí, ofrecemos soporte técnico 24/7 para garantizar que tus automatizaciones funcionen sin interrupciones.",
-  },
-];
-
 const AutomationN8nContainer: React.FC = () => {
   const { t } = useLanguage();
+
+  const mockTestimonials: TestimonialType[] = [
+    {
+      id: 1,
+      quote: t.n8nAutomationTestimonial1Quote,
+      name: t.n8nAutomationTestimonial1Name,
+      title: t.n8nAutomationTestimonial1Title,
+      avatarUrl: "/avatars/carlos-ruiz.jpg",
+    },
+    {
+      id: 2,
+      quote: t.n8nAutomationTestimonial2Quote,
+      name: t.n8nAutomationTestimonial2Name,
+      title: t.n8nAutomationTestimonial2Title,
+      avatarUrl: "/avatars/ana-garcia.jpg",
+    },
+  ];
+
+  const mockFaqs: FAQType[] = [
+    {
+      id: 1,
+      question: t.n8nAutomationFaq1Question,
+      answer: t.n8nAutomationFaq1Answer,
+    },
+    {
+      id: 2,
+      question: t.n8nAutomationFaq2Question,
+      answer: t.n8nAutomationFaq2Answer,
+    },
+    {
+      id: 3,
+      question: t.n8nAutomationFaq3Question,
+      answer: t.n8nAutomationFaq3Answer,
+    },
+    {
+      id: 4,
+      question: t.n8nAutomationFaq4Question,
+      answer: t.n8nAutomationFaq4Answer,
+    },
+    {
+      id: 5,
+      question: t.n8nAutomationFaq5Question,
+      answer: t.n8nAutomationFaq5Answer,
+    },
+    {
+      id: 6,
+      question: t.n8nAutomationFaq6Question,
+      answer: t.n8nAutomationFaq6Answer,
+    },
+  ];
 
   return (
     <>
       <Helmet>
         <title>{t.n8nAutomationSeoTitle}</title>
         <meta name="description" content={t.n8nAutomationSeoDescription} />
+        <link
+          rel="canonical"
+          href="https://digitalizatenerife.es/automatizacion-restaurantes-n8n"
+        />
+        <link
+          rel="alternate"
+          hrefLang="es"
+          href="https://digitalizatenerife.es/automatizacion-restaurantes-n8n"
+        />
+        <link
+          rel="alternate"
+          hrefLang="x-default"
+          href="https://digitalizatenerife.es/automatizacion-restaurantes-n8n"
+        />
+        <link
+          rel="alternate"
+          hrefLang="en"
+          href="https://digitalizatenerife.es/automatizacion-restaurantes-n8n"
+        />
         <meta property="og:title" content={t.n8nAutomationSeoTitle} />
         <meta
           property="og:description"
@@ -105,6 +116,12 @@ const AutomationN8nContainer: React.FC = () => {
           property="og:url"
           content="https://digitalizatenerife.es/automatizacion-restaurantes-n8n"
         />
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:image"
+          content="https://digitalizatenerife.es/og-image.jpg"
+        />
+        <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={t.n8nAutomationSeoTitle} />
         <meta
           name="twitter:description"
@@ -123,6 +140,10 @@ const AutomationN8nContainer: React.FC = () => {
           addressRegion: "Tenerife",
           postalCode: "38001",
           addressCountry: "ES",
+        }}
+        geo={{
+          latitude: 28.46824,
+          longitude: -16.25462,
         }}
         areaServed={["Tenerife", "Canarias"]}
       />
@@ -186,8 +207,7 @@ const AutomationN8nContainer: React.FC = () => {
             {
               icon: <TrendingUp className="w-6 h-6" />,
               title: t.n8nAutomationBenefit4Title,
-              description:
-                "A medida que crece tu negocio, las automatizaciones crecen contigo. Atiendes más clientes, gestionas más reseñas y procesas más pedidos sin necesidad de ampliar tu equipo.",
+              description: t.n8nAutomationBenefit4Desc,
             },
           ]}
         />
@@ -233,8 +253,11 @@ const AutomationN8nContainer: React.FC = () => {
           serviceArea={t.n8nAutomationServiceArea}
         />
 
-        <TestimonialCarousel testimonials={mockTestimonials} />
-        <FAQAccordion items={mockFaqs} />
+        <TestimonialCarousel
+          title={t.n8nAutomationTestimonialsTitle}
+          testimonials={mockTestimonials}
+        />
+        <FAQAccordion title={t.n8nAutomationFaqsTitle} items={mockFaqs} />
 
         <InternalLinks
           title={t.n8nAutomationInternalLinksTitle}
@@ -246,18 +269,18 @@ const AutomationN8nContainer: React.FC = () => {
             },
             {
               href: "/tap-review",
-              label: "NFC para reseñas Google",
-              description: "Multiplica reseñas automáticamente",
+              label: t.n8nAutomationInternalLink2Label,
+              description: t.n8nAutomationInternalLink2Desc,
             },
             {
               href: "/carta-digital",
-              label: "Carta digital QR",
-              description: "Digitaliza tu menú",
+              label: t.n8nAutomationInternalLink3Label,
+              description: t.n8nAutomationInternalLink3Desc,
             },
             {
               href: "/software-restaurantes-canarias",
-              label: "Software restaurantes",
-              description: "Suite completa de herramientas",
+              label: t.n8nAutomationInternalLink4Label,
+              description: t.n8nAutomationInternalLink4Desc,
             },
           ]}
         />

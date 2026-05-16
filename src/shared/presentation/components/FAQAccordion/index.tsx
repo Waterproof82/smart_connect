@@ -8,16 +8,20 @@ export interface FAQItem {
 
 interface FAQAccordionProps {
   items: FAQItem[];
+  title?: string;
 }
 
-const FAQAccordion: React.FC<FAQAccordionProps> = ({ items }) => {
+const FAQAccordion: React.FC<FAQAccordionProps> = ({
+  items,
+  title = "Preguntas Frecuentes",
+}) => {
   const [open, setOpen] = useState<string | number | null>(null);
 
   return (
     <section className="bg-white dark:bg-gray-900">
       <div className="container max-w-4xl px-6 py-10 mx-auto">
         <h1 className="text-2xl font-semibold text-center text-gray-800 lg:text-3xl dark:text-white">
-          Preguntas Frecuentes
+          {title}
         </h1>
 
         <div className="mt-12 space-y-8">

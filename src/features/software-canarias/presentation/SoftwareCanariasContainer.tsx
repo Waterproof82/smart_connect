@@ -30,67 +30,58 @@ import {
   ArrowRight,
 } from "lucide-react";
 
-const mockTestimonials: TestimonialType[] = [
-  {
-    id: 1,
-    quote:
-      "SmartConnect AI nos ha dado todas las herramientas para digitalizar el restaurante: carta QR, WhatsApp automatizado, reseñas NFC... Ahora todo funciona solo.",
-    name: "Carlos García",
-    title: "Propietario, Restaurante El Puerto, Santa Cruz",
-    avatarUrl: "/avatars/carlos-garcia.jpg",
-  },
-  {
-    id: 2,
-    quote:
-      "Todo en uno: menú digital, pedidos QR y automatización. Además, el soporte está en Tenerife, lo que marca la diferencia cuando necesitas ayuda.",
-    name: "Ana Fernández",
-    title: "Gerente, Café La Costa, La Laguna",
-    avatarUrl: "/avatars/ana-fernandez.jpg",
-  },
-];
-
-const mockFaqs: FAQType[] = [
-  {
-    id: 1,
-    question: "¿Qué incluye el software para restaurantes en Canarias?",
-    answer:
-      "SmartConnect AI es una suite completa: carta digital QR, menú interactivo, pedidos desde la mesa, tarjetas NFC para reseñas Google, automatización n8n y WhatsApp Business. Todo lo que necesita un restaurante moderno en Canarias.",
-  },
-  {
-    id: 2,
-    question: "¿Es fácil de implementar?",
-    answer:
-      "Sí. La mayoría de herramientas se configuran en 24 horas. Nuestro equipo se encarga de todo: instalación, configuración y capacitación. No necesitas conocimientos técnicos.",
-  },
-  {
-    id: 3,
-    question:
-      "¿Puedo contratar servicios por separado o es obligatorio el pack completo?",
-    answer:
-      "Puedes contratar los servicios que necesites por separado: solo la carta digital, solo las tarjetas NFC, solo la automatización... Cada herramienta funciona de forma independiente. Eso sí, cuando las combinas, los resultados son mucho mejores.",
-  },
-  {
-    id: 4,
-    question: "¿Hay soporte técnico en Canarias?",
-    answer:
-      "Sí, nuestro equipo está en Tenerife. Ofrecemos soporte presencial en la isla y soporte remoto para el resto de Canarias. Resolvemos incidencias en horas, no en días.",
-  },
-  {
-    id: 5,
-    question: "¿Qué precio tiene el software para restaurantes?",
-    answer:
-      "Los precios empiezan desde una cuota mensual muy baja por herramienta. Ofrecemos packs con descuento si contratas varias. Sin permanencia, sin comisiones, sin sorpresas. Solicita una demo y te enviamos un presupuesto personalizado.",
-  },
-  {
-    id: 6,
-    question: "¿Funciona para cualquier tipo de negocio hostelero?",
-    answer:
-      "Sí, nuestras herramientas funcionan para restaurantes, bares, cafeterías, guachinches, beach clubs, hoteles, food trucks y cualquier negocio de hostelería en Canarias.",
-  },
-];
-
 const SoftwareCanariasContainer: React.FC = () => {
   const { t } = useLanguage();
+
+  const mockTestimonials: TestimonialType[] = [
+    {
+      id: 1,
+      quote: t.softwareCanariasTestimonial1Quote,
+      name: t.softwareCanariasTestimonial1Name,
+      title: t.softwareCanariasTestimonial1Title,
+      avatarUrl: "/avatars/carlos-garcia.jpg",
+    },
+    {
+      id: 2,
+      quote: t.softwareCanariasTestimonial2Quote,
+      name: t.softwareCanariasTestimonial2Name,
+      title: t.softwareCanariasTestimonial2Title,
+      avatarUrl: "/avatars/ana-fernandez.jpg",
+    },
+  ];
+
+  const mockFaqs: FAQType[] = [
+    {
+      id: 1,
+      question: t.softwareCanariasFaq1Question,
+      answer: t.softwareCanariasFaq1Answer,
+    },
+    {
+      id: 2,
+      question: t.softwareCanariasFaq2Question,
+      answer: t.softwareCanariasFaq2Answer,
+    },
+    {
+      id: 3,
+      question: t.softwareCanariasFaq3Question,
+      answer: t.softwareCanariasFaq3Answer,
+    },
+    {
+      id: 4,
+      question: t.softwareCanariasFaq4Question,
+      answer: t.softwareCanariasFaq4Answer,
+    },
+    {
+      id: 5,
+      question: t.softwareCanariasFaq5Question,
+      answer: t.softwareCanariasFaq5Answer,
+    },
+    {
+      id: 6,
+      question: t.softwareCanariasFaq6Question,
+      answer: t.softwareCanariasFaq6Answer,
+    },
+  ];
 
   return (
     <>
@@ -109,6 +100,11 @@ const SoftwareCanariasContainer: React.FC = () => {
         <link
           rel="alternate"
           hrefLang="x-default"
+          href="https://digitalizatenerife.es/software-restaurantes-canarias"
+        />
+        <link
+          rel="alternate"
+          hrefLang="en"
           href="https://digitalizatenerife.es/software-restaurantes-canarias"
         />
         <meta property="og:title" content={t.softwareCanariasSeoTitle} />
@@ -136,7 +132,7 @@ const SoftwareCanariasContainer: React.FC = () => {
       <SeoFaqSchema faqs={mockFaqs} />
       <LocalBusinessSchema
         name="SmartConnect AI - Software Restaurantes Canarias"
-        description="Software para restaurantes en Canarias. Carta digital, menú QR, pedidos, NFC y automatización. Todo en uno."
+        description={t.softwareCanariasSeoDescription}
         url="https://digitalizatenerife.es/software-restaurantes-canarias"
         address={{
           streetAddress: "Santa Cruz de Tenerife",
@@ -169,83 +165,76 @@ const SoftwareCanariasContainer: React.FC = () => {
                 className="inline-flex items-center justify-center gap-2 rounded-lg border border-white/20 px-8 py-3 text-sm font-medium text-white hover:bg-white/5 transition-all"
               >
                 <Smartphone className="w-4 h-4" />
-                Habla por WhatsApp
+                {t.softwareCanariasWhatsAppText}
               </a>
             </>
           }
         />
         <StatsBar
           stats={[
-            { value: "50+", label: "Restaurantes digitalizados" },
-            { value: "24h", label: "Implementación" },
-            { value: "6", label: "Herramientas integradas" },
-            { value: "0%", label: "Comisiones" },
+            { value: "50+", label: t.softwareCanariasStat1Label },
+            { value: "24h", label: t.softwareCanariasStat2Label },
+            { value: "6", label: t.softwareCanariasStat3Label },
+            { value: "0%", label: t.softwareCanariasStat4Label },
           ]}
         />
 
         <BenefitsGrid
-          title="Todo lo que necesitas para digitalizar tu restaurante"
-          subtitle="Una suite completa de herramientas diseñadas para la hostelería canaria"
+          title={t.softwareCanariasBenefitsTitle}
+          subtitle={t.softwareCanariasBenefitsSubtitle}
           columns={2}
           benefits={[
             {
               icon: <QrCode className="w-6 h-6" />,
-              title: "Carta digital QR + Menú interactivo",
-              description:
-                "Tu carta en formato digital con fotos, precios y alérgenos. Los clientes la ven escaneando un QR. Sin apps, sin descargas, sin comisiones.",
+              title: t.softwareCanariasBenefit1Title,
+              description: t.softwareCanariasBenefit1Desc,
             },
             {
               icon: <Zap className="w-6 h-6" />,
-              title: "Automatización n8n + WhatsApp",
-              description:
-                "Conecta todas tus herramientas y automatiza procesos. Responder WhatsApp, gestionar reseñas, enviar emails... Todo funcionando solo.",
+              title: t.softwareCanariasBenefit2Title,
+              description: t.softwareCanariasBenefit2Desc,
             },
             {
               icon: <Star className="w-6 h-6" />,
-              title: "Tarjetas NFC para reseñas Google",
-              description:
-                "Multiplica tus reseñas en Google con tarjetas NFC. Un toque y el cliente deja su opinión. Más reseñas = mejor posicionamiento en Google.",
+              title: t.softwareCanariasBenefit3Title,
+              description: t.softwareCanariasBenefit3Desc,
             },
             {
               icon: <MapPin className="w-6 h-6" />,
-              title: "Hecho en Canarias para Canarias",
-              description:
-                "Somos un equipo local con presencia en Tenerife. Entendemos el mercado canario, sus necesidades y su idiosincrasia. Soporte presencial y cercano.",
+              title: t.softwareCanariasBenefit4Title,
+              description: t.softwareCanariasBenefit4Desc,
             },
           ]}
         />
 
         <HowItWorks
-          title="Cómo empezar con SmartConnect AI"
-          subtitle="De cero a digitalizado en 3 pasos"
+          title={t.softwareCanariasHowItWorksTitle}
+          subtitle={t.softwareCanariasHowItWorksSubtitle}
           steps={[
             {
               number: "1",
               icon: <Package className="w-6 h-6" />,
-              title: "Elige tus herramientas",
-              description:
-                "Selecciona los servicios que necesitas: carta digital, NFC, automatización... Una herramienta o todas. Tú decides.",
+              title: t.softwareCanariasStep1Title,
+              description: t.softwareCanariasStep1Desc,
             },
             {
               number: "2",
               icon: <Zap className="w-6 h-6" />,
-              title: "Lo configuramos todo",
-              description:
-                "Nuestro equipo configura todas las herramientas y las adapta a tu restaurante. En 24 horas tienes todo funcionando.",
+              title: t.softwareCanariasStep2Title,
+              description: t.softwareCanariasStep2Desc,
             },
             {
               number: "3",
               icon: <TrendingUp className="w-6 h-6" />,
-              title: "Disfruta de los resultados",
-              description:
-                "Más clientes, mejores reseñas, menos trabajo manual. Tu restaurante funciona mejor mientras tú te centras en lo que importa: dar de comer bien.",
+              title: t.softwareCanariasStep3Title,
+              description: t.softwareCanariasStep3Desc,
             },
           ]}
         />
 
         <GeoCoverage
-          title="Disponible en todas las Islas Canarias"
-          subtitle="SmartConnect AI funciona para restaurantes en cualquier isla"
+          title={t.softwareCanariasGeoCoverageTitle}
+          subtitle={t.softwareCanariasGeoCoverageSubtitle}
           cities={[
             "Santa Cruz de Tenerife",
             "San Cristóbal de La Laguna",
@@ -256,39 +245,42 @@ const SoftwareCanariasContainer: React.FC = () => {
             "Lanzarote",
             "La Palma",
           ]}
-          serviceArea="Servicio en todo el archipiélago canario. Soporte presencial en Tenerife y remoto en el resto de islas."
+          serviceArea={t.softwareCanariasServiceArea}
         />
 
-        <TestimonialCarousel testimonials={mockTestimonials} />
-        <FAQAccordion items={mockFaqs} />
+        <TestimonialCarousel
+          title={t.softwareCanariasTestimonialsTitle}
+          testimonials={mockTestimonials}
+        />
+        <FAQAccordion title={t.softwareCanariasFaqsTitle} items={mockFaqs} />
 
         <InternalLinks
-          title="Explora cada herramienta"
+          title={t.softwareCanariasInternalLinksTitle}
           links={[
             {
               href: "/carta-digital",
-              label: "Carta digital QR",
-              description: "Tu menú en digital",
+              label: t.softwareCanariasInternalLink1Label,
+              description: t.softwareCanariasInternalLink1Desc,
             },
             {
               href: "/tap-review",
-              label: "Tarjetas NFC reseñas",
-              description: "Multiplica reseñas Google",
+              label: t.softwareCanariasInternalLink2Label,
+              description: t.softwareCanariasInternalLink2Desc,
             },
             {
               href: "/automatizacion-restaurantes-n8n",
-              label: "Automatización n8n",
-              description: "Procesos automatizados",
+              label: t.softwareCanariasInternalLink3Label,
+              description: t.softwareCanariasInternalLink3Desc,
             },
             {
               href: "/automatizacion-whatsapp-restaurante",
-              label: "WhatsApp Automático",
-              description: "Atención 24/7",
+              label: t.softwareCanariasInternalLink4Label,
+              description: t.softwareCanariasInternalLink4Desc,
             },
             {
               href: "/carta-digital",
-              label: "Menú sin app",
-              description: "Acceso directo al menú",
+              label: t.softwareCanariasInternalLink5Label,
+              description: t.softwareCanariasInternalLink5Desc,
             },
           ]}
         />

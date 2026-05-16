@@ -29,73 +29,63 @@ import {
   ArrowRight,
 } from "lucide-react";
 
-const mockTestimonials: TestimonialType[] = [
-  {
-    id: 1,
-    quote:
-      "Desde que automatizamos el WhatsApp, respondemos al instante las 24 horas. Hemos recuperado clientes que antes se perdían porque nadie respondía.",
-    name: "Laura Martínez",
-    title: "Gerente, Restaurante El Mirador, Puerto de la Cruz",
-    avatarUrl: "/avatars/laura-martinez.jpg",
-  },
-  {
-    id: 2,
-    quote:
-      "Configuramos respuestas automáticas para preguntas frecuentes: horarios, ubicación, menú. Los clientes reciben respuesta al segundo y nosotros ahorramos horas.",
-    name: "Javier López",
-    title: "Propietario, Café La Playa, Los Cristianos",
-    avatarUrl: "/avatars/javier-lopez.jpg",
-  },
-];
-
-const mockFaqs: FAQType[] = [
-  {
-    id: 1,
-    question: "¿Cómo funciona la automatización de WhatsApp?",
-    answer:
-      "Conectamos tu WhatsApp Business con nuestras herramientas para que puedas responder preguntas frecuentes, enviar notificaciones de pedidos y dar seguimiento a clientes de forma automática. Todo configurado a medida para tu restaurante.",
-  },
-  {
-    id: 2,
-    question: "¿Puedo personalizar las respuestas automáticas?",
-    answer:
-      "Sí, completamente. Tú decides qué respuestas automáticas quieres, en qué idioma, con qué tono y para qué preguntas. Puedes tener respuestas para horarios, menú del día, reservas, ubicación y más.",
-  },
-  {
-    id: 3,
-    question: "¿El cliente nota que es un bot o parece humano?",
-    answer:
-      "Las respuestas están diseñadas para sonar naturales y cercanas. Puedes personalizar el tono: formal, informal, canario... Además, si la conversación se complica, el sistema deriva al cliente a un humano automáticamente.",
-  },
-  {
-    id: 4,
-    question: "¿Funciona con mi número de WhatsApp actual?",
-    answer:
-      "Funciona con WhatsApp Business API. Si tienes un número normal de WhatsApp, podemos ayudarte a migrar a WhatsApp Business sin perder tus conversaciones. Es un proceso sencillo.",
-  },
-  {
-    id: 5,
-    question: "¿Qué tipos de mensajes puedo automatizar?",
-    answer:
-      "Puedes automatizar: respuestas a preguntas frecuentes, confirmaciones de reserva, recordatorios de cita, notificaciones de pedido listo, mensajes de agradecimiento post-visita, ofertas especiales y mucho más.",
-  },
-  {
-    id: 6,
-    question: "¿Cuánto cuesta la automatización de WhatsApp?",
-    answer:
-      "El coste depende del volumen de mensajes y la complejidad de las automatizaciones. Ofrecemos planes desde una cuota mensual baja. Solicita una demo y te preparamos un presupuesto sin compromiso para tu negocio en Tenerife.",
-  },
-  {
-    id: 7,
-    question:
-      "¿Esto sirve para aumentar ventas o solo para atención al cliente?",
-    answer:
-      "Para ambas. Puedes enviar ofertas personalizadas, recordar a clientes que vuelvan, recomendar platos del día y hasta gestionar pedidos por WhatsApp. Es una herramienta de ventas y atención a la vez.",
-  },
-];
-
 const WhatsappAutomationContainer: React.FC = () => {
   const { t } = useLanguage();
+
+  const mockTestimonials: TestimonialType[] = [
+    {
+      id: 1,
+      quote: t.whatsAppAutomationTestimonial1Quote,
+      name: t.whatsAppAutomationTestimonial1Name,
+      title: t.whatsAppAutomationTestimonial1Title,
+      avatarUrl: "/avatars/laura-martinez.jpg",
+    },
+    {
+      id: 2,
+      quote: t.whatsAppAutomationTestimonial2Quote,
+      name: t.whatsAppAutomationTestimonial2Name,
+      title: t.whatsAppAutomationTestimonial2Title,
+      avatarUrl: "/avatars/javier-lopez.jpg",
+    },
+  ];
+
+  const mockFaqs: FAQType[] = [
+    {
+      id: 1,
+      question: t.whatsAppAutomationFaq1Question,
+      answer: t.whatsAppAutomationFaq1Answer,
+    },
+    {
+      id: 2,
+      question: t.whatsAppAutomationFaq2Question,
+      answer: t.whatsAppAutomationFaq2Answer,
+    },
+    {
+      id: 3,
+      question: t.whatsAppAutomationFaq3Question,
+      answer: t.whatsAppAutomationFaq3Answer,
+    },
+    {
+      id: 4,
+      question: t.whatsAppAutomationFaq4Question,
+      answer: t.whatsAppAutomationFaq4Answer,
+    },
+    {
+      id: 5,
+      question: t.whatsAppAutomationFaq5Question,
+      answer: t.whatsAppAutomationFaq5Answer,
+    },
+    {
+      id: 6,
+      question: t.whatsAppAutomationFaq6Question,
+      answer: t.whatsAppAutomationFaq6Answer,
+    },
+    {
+      id: 7,
+      question: t.whatsAppAutomationFaq7Question,
+      answer: t.whatsAppAutomationFaq7Answer,
+    },
+  ];
 
   return (
     <>
@@ -114,6 +104,11 @@ const WhatsappAutomationContainer: React.FC = () => {
         <link
           rel="alternate"
           hrefLang="x-default"
+          href="https://digitalizatenerife.es/automatizacion-whatsapp-restaurante"
+        />
+        <link
+          rel="alternate"
+          hrefLang="en"
           href="https://digitalizatenerife.es/automatizacion-whatsapp-restaurante"
         />
         <meta property="og:title" content={t.whatsappAutomationSeoTitle} />
@@ -141,7 +136,7 @@ const WhatsappAutomationContainer: React.FC = () => {
       <SeoFaqSchema faqs={mockFaqs} />
       <LocalBusinessSchema
         name="SmartConnect AI - Automatización WhatsApp Restaurantes"
-        description="Automatización de WhatsApp para restaurantes en Tenerife. Responde al instante, automaticamente."
+        description={t.whatsappAutomationSeoDescription}
         url="https://digitalizatenerife.es/automatizacion-whatsapp-restaurante"
         address={{
           streetAddress: "Santa Cruz de Tenerife",
@@ -174,83 +169,76 @@ const WhatsappAutomationContainer: React.FC = () => {
                 className="inline-flex items-center justify-center gap-2 rounded-lg border border-white/20 px-8 py-3 text-sm font-medium text-white hover:bg-white/5 transition-all"
               >
                 <Smartphone className="w-4 h-4" />
-                Escríbenos ahora
+                {t.whatsAppAutomationWhatsAppText}
               </a>
             </>
           }
         />
         <StatsBar
           stats={[
-            { value: "24/7", label: "Atención continua" },
-            { value: "<1s", label: "Tiempo de respuesta" },
-            { value: "90%", label: "Preguntas automatizables" },
-            { value: "1d", label: "Configuración" },
+            { value: "24/7", label: t.whatsAppAutomationStat1Label },
+            { value: "<1s", label: t.whatsAppAutomationStat2Label },
+            { value: "90%", label: t.whatsAppAutomationStat3Label },
+            { value: "1d", label: t.whatsAppAutomationStat4Label },
           ]}
         />
 
         <BenefitsGrid
-          title="¿Por qué automatizar el WhatsApp de tu restaurante?"
-          subtitle="No pierdas más clientes por no responder a tiempo"
+          title={t.whatsAppAutomationBenefitsTitle}
+          subtitle={t.whatsAppAutomationBenefitsSubtitle}
           columns={2}
           benefits={[
             {
               icon: <Clock className="w-6 h-6" />,
-              title: "Responde al instante, siempre",
-              description:
-                "Tus clientes reciben respuesta automática al segundo, incluso cuando estás cerrado, cocinando o atendiendo a otros clientes. Nunca más pierdas una reserva o consulta.",
+              title: t.whatsAppAutomationBenefit1Title,
+              description: t.whatsAppAutomationBenefit1Desc,
             },
             {
               icon: <MessageSquare className="w-6 h-6" />,
-              title: "Ahorra horas de trabajo",
-              description:
-                "Deja de escribir las mismas respuestas una y otra vez. El bot responde automáticamente a las preguntas más frecuentes: horarios, menú, ubicación, reservas.",
+              title: t.whatsAppAutomationBenefit2Title,
+              description: t.whatsAppAutomationBenefit2Desc,
             },
             {
               icon: <Bot className="w-6 h-6" />,
-              title: "Parece humano, no robot",
-              description:
-                "Respuestas personalizadas con tu tono y estilo. El cliente no nota que habla con un bot. Y si necesita ayuda humana, se deriva automáticamente a tu equipo.",
+              title: t.whatsAppAutomationBenefit3Title,
+              description: t.whatsAppAutomationBenefit3Desc,
             },
             {
               icon: <Star className="w-6 h-6" />,
-              title: "Convierte consultas en clientes",
-              description:
-                "Cada consulta de WhatsApp es una oportunidad de venta. Con respuestas rápidas y profesionales, conviertes más dudas en reservas y pedidos. Más clientes para tu restaurante.",
+              title: t.whatsAppAutomationBenefit4Title,
+              description: t.whatsAppAutomationBenefit4Desc,
             },
           ]}
         />
 
         <HowItWorks
-          title="Cómo activar tu WhatsApp automático en 3 pasos"
-          subtitle="Empieza a automatizar en menos de 24 horas"
+          title={t.whatsAppAutomationHowItWorksTitle}
+          subtitle={t.whatsAppAutomationHowItWorksSubtitle}
           steps={[
             {
               number: "1",
               icon: <MessageSquare className="w-6 h-6" />,
-              title: "Conectamos tu WhatsApp",
-              description:
-                "Vinculamos tu número de WhatsApp Business con nuestra plataforma. Sin cambios en tu número actual, sin perder conversaciones.",
+              title: t.whatsAppAutomationStep1Title,
+              description: t.whatsAppAutomationStep1Desc,
             },
             {
               number: "2",
               icon: <Bot className="w-6 h-6" />,
-              title: "Configuramos las respuestas",
-              description:
-                "Tú nos dices qué preguntas recibes más y cómo quieres responder. Creamos respuestas automáticas con tu tono y personalidad.",
+              title: t.whatsAppAutomationStep2Title,
+              description: t.whatsAppAutomationStep2Desc,
             },
             {
               number: "3",
               icon: <Send className="w-6 h-6" />,
-              title: "Empieza a recibir clientes",
-              description:
-                "El sistema responde automáticamente 24/7. Recibes informes semanales y ajustamos lo que necesites. Más clientes, menos trabajo.",
+              title: t.whatsAppAutomationStep3Title,
+              description: t.whatsAppAutomationStep3Desc,
             },
           ]}
         />
 
         <GeoCoverage
-          title="Disponible en toda Canarias"
-          subtitle="Automatización de WhatsApp para restaurantes en cualquier isla"
+          title={t.whatsAppAutomationGeoCoverageTitle}
+          subtitle={t.whatsAppAutomationGeoCoverageSubtitle}
           cities={[
             "Santa Cruz de Tenerife",
             "San Cristóbal de La Laguna",
@@ -261,34 +249,37 @@ const WhatsappAutomationContainer: React.FC = () => {
             "Las Palmas de GC",
             "Maspalomas",
           ]}
-          serviceArea="Configuración remota para toda Canarias. Soporte en Tenerife."
+          serviceArea={t.whatsAppAutomationServiceArea}
         />
 
-        <TestimonialCarousel testimonials={mockTestimonials} />
-        <FAQAccordion items={mockFaqs} />
+        <TestimonialCarousel
+          title={t.whatsAppAutomationTestimonialsTitle}
+          testimonials={mockTestimonials}
+        />
+        <FAQAccordion title={t.whatsAppAutomationFaqsTitle} items={mockFaqs} />
 
         <InternalLinks
-          title="Más soluciones para tu restaurante"
+          title={t.whatsAppAutomationInternalLinksTitle}
           links={[
             {
               href: "/automatizacion-restaurantes-n8n",
-              label: "Automatización n8n",
-              description: "Conecta todas tus herramientas",
+              label: t.whatsAppAutomationInternalLink1Label,
+              description: t.whatsAppAutomationInternalLink1Desc,
             },
             {
               href: "/tap-review",
-              label: "NFC para reseñas Google",
-              description: "Multiplica reseñas automáticamente",
+              label: t.whatsAppAutomationInternalLink2Label,
+              description: t.whatsAppAutomationInternalLink2Desc,
             },
             {
               href: "/carta-digital",
-              label: "Carta digital QR",
-              description: "Menú digital interactivo",
+              label: t.whatsAppAutomationInternalLink3Label,
+              description: t.whatsAppAutomationInternalLink3Desc,
             },
             {
               href: "/carta-digital",
-              label: "Pedidos desde la mesa",
-              description: "Pide desde el móvil",
+              label: t.whatsAppAutomationInternalLink4Label,
+              description: t.whatsAppAutomationInternalLink4Desc,
             },
           ]}
         />

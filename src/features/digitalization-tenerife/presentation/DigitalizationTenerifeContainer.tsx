@@ -30,74 +30,63 @@ import {
   ArrowRight,
 } from "lucide-react";
 
-const mockTestimonials: TestimonialType[] = [
-  {
-    id: 1,
-    quote:
-      "Digitalizamos completamente el restaurante: carta QR, pedidos desde mesa, tarjetas NFC. Ahora todo es más eficiente y nuestros clientes están más contentos.",
-    name: "María López",
-    title: "Gerente, Restaurante El Mirador, Adeje",
-    avatarUrl: "/avatars/maria-lopez.jpg",
-  },
-  {
-    id: 2,
-    quote:
-      "Pasamos de tener 5 reseñas en Google a más de 60 en dos meses. La digitalización ha sido la mejor inversión para nuestro bar en La Laguna.",
-    name: "Javier García",
-    title: "Propietario, Café La Costa, La Laguna",
-    avatarUrl: "/avatars/javier-garcia.jpg",
-  },
-];
-
-const mockFaqs: FAQType[] = [
-  {
-    id: 1,
-    question: "¿Qué significa digitalizar un restaurante en Tenerife?",
-    answer:
-      "Digitalizar un restaurante es incorporar herramientas tecnológicas para mejorar la experiencia del cliente y la eficiencia del negocio. Incluye carta digital QR, pedidos desde el móvil, automatización de procesos, tarjetas NFC para reseñas Google y gestión digital de reservas y pedidos.",
-  },
-  {
-    id: 2,
-    question: "¿Es caro digitalizar un restaurante?",
-    answer:
-      "No tiene por qué. Empezamos con cuotas mensuales muy asequibles y sin permanencia. El retorno de la inversión es rápido: más ticket medio, menos costes de impresión, más reseñas en Google y más clientes recurrentes.",
-  },
-  {
-    id: 3,
-    question: "¿Por qué es importante digitalizar la hostelería en Tenerife?",
-    answer:
-      "Tenerife recibe millones de turistas al año que buscan experiencias rápidas y modernas. Un restaurante digitalizado atrae más clientes, aparece mejor en Google y ofrece una experiencia superior. Además, reduces costes y errores.",
-  },
-  {
-    id: 4,
-    question: "¿Cuánto tiempo se tarda en digitalizar un restaurante?",
-    answer:
-      "Depende de las herramientas que elijas. Una carta digital se implanta en 24 horas. Un sistema completo con pedidos QR, NFC y automatización puede estar listo en 2-3 días. Todo sin obras ni instalaciones complejas.",
-  },
-  {
-    id: 5,
-    question: "¿Ofrecéis soporte presencial en Tenerife?",
-    answer:
-      "Sí, tenemos equipo en Santa Cruz de Tenerife y damos soporte presencial en toda la isla. Para el resto de Canarias ofrecemos soporte remoto y visitas periódicas.",
-  },
-  {
-    id: 6,
-    question:
-      "¿Qué tipos de negocio hostelero se benefician más de la digitalización?",
-    answer:
-      "Todos. Restaurantes, bares, cafeterías, guachinches, beach clubs, hoteles, food trucks... Cualquier negocio que atienda clientes en mesa se beneficia de la digitalización: más eficiencia, más ventas y mejores reseñas.",
-  },
-  {
-    id: 7,
-    question:
-      "¿Qué resultados puedo esperar después de digitalizar mi restaurante?",
-    answer:
-      "Nuestros clientes en Tenerife reportan: aumento del 20-30% en ticket medio, reducción de errores en comandas, multiplicación de reseñas Google (5x o más), ahorro en impresión de cartas y mayor satisfacción del cliente.",
-  },
-];
-
 const DigitalizationTenerifeContainer: React.FC = () => {
   const { t } = useLanguage();
+
+  const mockTestimonials: TestimonialType[] = [
+    {
+      id: 1,
+      quote: t.digitalizationTenerifeTestimonial1Quote,
+      name: t.digitalizationTenerifeTestimonial1Name,
+      title: t.digitalizationTenerifeTestimonial1Title,
+      avatarUrl: "/avatars/maria-lopez.jpg",
+    },
+    {
+      id: 2,
+      quote: t.digitalizationTenerifeTestimonial2Quote,
+      name: t.digitalizationTenerifeTestimonial2Name,
+      title: t.digitalizationTenerifeTestimonial2Title,
+      avatarUrl: "/avatars/javier-garcia.jpg",
+    },
+  ];
+
+  const mockFaqs: FAQType[] = [
+    {
+      id: 1,
+      question: t.digitalizationTenerifeFaq1Question,
+      answer: t.digitalizationTenerifeFaq1Answer,
+    },
+    {
+      id: 2,
+      question: t.digitalizationTenerifeFaq2Question,
+      answer: t.digitalizationTenerifeFaq2Answer,
+    },
+    {
+      id: 3,
+      question: t.digitalizationTenerifeFaq3Question,
+      answer: t.digitalizationTenerifeFaq3Answer,
+    },
+    {
+      id: 4,
+      question: t.digitalizationTenerifeFaq4Question,
+      answer: t.digitalizationTenerifeFaq4Answer,
+    },
+    {
+      id: 5,
+      question: t.digitalizationTenerifeFaq5Question,
+      answer: t.digitalizationTenerifeFaq5Answer,
+    },
+    {
+      id: 6,
+      question: t.digitalizationTenerifeFaq6Question,
+      answer: t.digitalizationTenerifeFaq6Answer,
+    },
+    {
+      id: 7,
+      question: t.digitalizationTenerifeFaq7Question,
+      answer: t.digitalizationTenerifeFaq7Answer,
+    },
+  ];
 
   return (
     <>
@@ -119,6 +108,11 @@ const DigitalizationTenerifeContainer: React.FC = () => {
         <link
           rel="alternate"
           hrefLang="x-default"
+          href="https://digitalizatenerife.es/digitalizacion-hosteleria-tenerife"
+        />
+        <link
+          rel="alternate"
+          hrefLang="en"
           href="https://digitalizatenerife.es/digitalizacion-hosteleria-tenerife"
         />
         <meta property="og:title" content={t.digitalizationTenerifeSeoTitle} />
@@ -146,7 +140,7 @@ const DigitalizationTenerifeContainer: React.FC = () => {
       <SeoFaqSchema faqs={mockFaqs} />
       <LocalBusinessSchema
         name="SmartConnect AI - Digitalización Hostelería Tenerife"
-        description="Digitalización para restaurantes en Tenerife. Menú QR, pedidos, NFC, automatización. Transforma tu negocio."
+        description={t.digitalizationTenerifeSeoDescription}
         url="https://digitalizatenerife.es/digitalizacion-hosteleria-tenerife"
         address={{
           streetAddress: "Santa Cruz de Tenerife",
@@ -183,7 +177,7 @@ const DigitalizationTenerifeContainer: React.FC = () => {
                 className="inline-flex items-center justify-center gap-2 rounded-lg border border-white/20 px-8 py-3 text-sm font-medium text-white hover:bg-white/5 transition-all"
               >
                 <Smartphone className="w-4 h-4" />
-                Consulta por WhatsApp
+                {t.digitalizationTenerifeWhatsAppText}
               </a>
             </>
           }
@@ -191,76 +185,69 @@ const DigitalizationTenerifeContainer: React.FC = () => {
 
         <StatsBar
           stats={[
-            { value: "50+", label: "Negocios digitalizados en Tenerife" },
-            { value: "24h", label: "Tu carta QR activa" },
-            { value: "+30%", label: "Aumento de ticket medio" },
-            { value: "0%", label: "Comisiones" },
+            { value: "50+", label: t.digitalizationTenerifeStat1Label },
+            { value: "24h", label: t.digitalizationTenerifeStat2Label },
+            { value: "+30%", label: t.digitalizationTenerifeStat3Label },
+            { value: "0%", label: t.digitalizationTenerifeStat4Label },
           ]}
         />
 
         <BenefitsGrid
-          title="Digitaliza tu restaurante en Tenerife y nota la diferencia"
-          subtitle="Tecnología accesible para negocios locales canarios"
+          title={t.digitalizationTenerifeBenefitsTitle}
+          subtitle={t.digitalizationTenerifeBenefitsSubtitle}
           columns={2}
           benefits={[
             {
               icon: <QrCode className="w-6 h-6" />,
-              title: "Carta digital y menú QR",
-              description:
-                "Tu menú en formato digital, siempre actualizado, sin costes de impresión. Los clientes lo ven escaneando un QR desde su móvil. Sin apps, sin complicaciones.",
+              title: t.digitalizationTenerifeBenefit1Title,
+              description: t.digitalizationTenerifeBenefit1Desc,
             },
             {
               icon: <Cloud className="w-6 h-6" />,
-              title: "Automatización inteligente",
-              description:
-                "Conecta tus herramientas y automatiza procesos: respuestas de WhatsApp, notificaciones de reseñas, emails de seguimiento. Ahorra tiempo y no pierdas oportunidades.",
+              title: t.digitalizationTenerifeBenefit2Title,
+              description: t.digitalizationTenerifeBenefit2Desc,
             },
             {
               icon: <Star className="w-6 h-6" />,
-              title: "Más reseñas en Google",
-              description:
-                "Con nuestras tarjetas NFC, tus clientes dejan reseñas en Google con un solo toque. Más reseñas = mejor posicionamiento = más clientes.",
+              title: t.digitalizationTenerifeBenefit3Title,
+              description: t.digitalizationTenerifeBenefit3Desc,
             },
             {
               icon: <MapPin className="w-6 h-6" />,
-              title: "Hecho por y para Tenerife",
-              description:
-                "Somos un equipo local. Entendemos el mercado canario, sus oportunidades y sus retos. Soporte presencial en toda la isla. Hablamos tu mismo idioma.",
+              title: t.digitalizationTenerifeBenefit4Title,
+              description: t.digitalizationTenerifeBenefit4Desc,
             },
           ]}
         />
 
         <HowItWorks
-          title="Digitaliza tu negocio en 3 pasos"
-          subtitle="De principio a fin, sin complicaciones"
+          title={t.digitalizationTenerifeHowItWorksTitle}
+          subtitle={t.digitalizationTenerifeHowItWorksSubtitle}
           steps={[
             {
               number: "1",
               icon: <Cloud className="w-6 h-6" />,
-              title: "Diagnóstico gratuito",
-              description:
-                "Analizamos tu restaurante y te recomendamos las mejores herramientas digitales para tu caso concreto. Sin compromiso.",
+              title: t.digitalizationTenerifeStep1Title,
+              description: t.digitalizationTenerifeStep1Desc,
             },
             {
               number: "2",
               icon: <Zap className="w-6 h-6" />,
-              title: "Implementación exprés",
-              description:
-                "En 24-48 horas tienes todo configurado y funcionando. Sin obras, sin instalaciones. Solo resultados.",
+              title: t.digitalizationTenerifeStep2Title,
+              description: t.digitalizationTenerifeStep2Desc,
             },
             {
               number: "3",
               icon: <TrendingUp className="w-6 h-6" />,
-              title: "Resultados visibles",
-              description:
-                "Más clientes, mejores reseñas, menos trabajo manual. Te ayudamos a medir el impacto de la digitalización en tu negocio.",
+              title: t.digitalizationTenerifeStep3Title,
+              description: t.digitalizationTenerifeStep3Desc,
             },
           ]}
         />
 
         <GeoCoverage
-          title="Digitalización hostelera en toda Canarias"
-          subtitle="Especialistas en digitalización de restaurantes en Tenerife y Canarias"
+          title={t.digitalizationTenerifeGeoCoverageTitle}
+          subtitle={t.digitalizationTenerifeGeoCoverageSubtitle}
           cities={[
             "Santa Cruz de Tenerife",
             "San Cristóbal de La Laguna",
@@ -271,44 +258,50 @@ const DigitalizationTenerifeContainer: React.FC = () => {
             "Granadilla de Abona",
             "Las Palmas de GC",
           ]}
-          serviceArea="Servicio en toda Canarias con presencia local en Tenerife."
+          serviceArea={t.digitalizationTenerifeServiceArea}
         />
 
-        <TestimonialCarousel testimonials={mockTestimonials} />
-        <FAQAccordion items={mockFaqs} />
+        <TestimonialCarousel
+          title={t.digitalizationTenerifeTestimonialsTitle}
+          testimonials={mockTestimonials}
+        />
+        <FAQAccordion
+          title={t.digitalizationTenerifeFaqsTitle}
+          items={mockFaqs}
+        />
 
         <InternalLinks
-          title="Todas nuestras soluciones"
+          title={t.digitalizationTenerifeInternalLinksTitle}
           links={[
             {
               href: "/carta-digital",
-              label: "Carta digital QR",
-              description: "Tu menú siempre actualizado",
+              label: t.digitalizationTenerifeInternalLink1Label,
+              description: t.digitalizationTenerifeInternalLink1Desc,
             },
             {
               href: "/carta-digital",
-              label: "Menú QR interactivo",
-              description: "Navegación visual del menú",
+              label: t.digitalizationTenerifeInternalLink2Label,
+              description: t.digitalizationTenerifeInternalLink2Desc,
             },
             {
               href: "/tap-review",
-              label: "Tarjetas NFC reseñas",
-              description: "Multiplica reseñas Google",
+              label: t.digitalizationTenerifeInternalLink3Label,
+              description: t.digitalizationTenerifeInternalLink3Desc,
             },
             {
               href: "/automatizacion-whatsapp-restaurante",
-              label: "Automatización WhatsApp",
-              description: "Atención 24/7 automática",
+              label: t.digitalizationTenerifeInternalLink4Label,
+              description: t.digitalizationTenerifeInternalLink4Desc,
             },
             {
               href: "/carta-digital",
-              label: "Pedidos QR mesa",
-              description: "Pide sin esperar",
+              label: t.digitalizationTenerifeInternalLink5Label,
+              description: t.digitalizationTenerifeInternalLink5Desc,
             },
             {
               href: "/software-restaurantes-canarias",
-              label: "Software completo",
-              description: "Suite de herramientas digitales",
+              label: t.digitalizationTenerifeInternalLink6Label,
+              description: t.digitalizationTenerifeInternalLink6Desc,
             },
           ]}
         />

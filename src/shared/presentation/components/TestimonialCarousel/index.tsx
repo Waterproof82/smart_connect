@@ -15,16 +15,18 @@ export interface Testimonial {
 
 interface TestimonialCarouselProps {
   testimonials: Testimonial[];
+  title?: string;
 }
 
 const TestimonialCarousel: React.FC<TestimonialCarouselProps> = ({
   testimonials,
+  title = "Lo que nuestros clientes en Canarias dicen",
 }) => {
   return (
     <section className="bg-white dark:bg-gray-900">
       <div className="container px-6 py-10 mx-auto">
         <h1 className="text-2xl font-semibold text-center text-gray-800 capitalize lg:text-3xl dark:text-white">
-          Lo que nuestros clientes en Canarias dicen
+          {title}
         </h1>
 
         <div className="flex justify-center mx-auto mt-6">
