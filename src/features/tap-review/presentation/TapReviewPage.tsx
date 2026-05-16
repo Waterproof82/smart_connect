@@ -94,6 +94,73 @@ export const TapReviewPage: React.FC<TapReviewPageProps> = ({
           }),
         }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: [
+              {
+                "@type": "Question",
+                name: "¿Qué es Tap Review?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Tap Review es una solución NFC que permite a tus clientes dejar reseñas en Google e Instagram con solo acercar su móvil a una tarjeta. Sin apps, sin códigos complicados.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "¿Cómo funciona la tarjeta NFC?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Coloca la tarjeta Tapstar en un lugar visible. El cliente acerca su móvil (sin necesidad de app) y es redirigido automáticamente a Google Reviews o Instagram para dejar su opinión.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "¿Se necesita suscripción mensual?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "No. Las tarjetas NFC Tap-to-Review no requieren suscripción mensual. Compra las tarjetas una vez y úsalas sin costes recurrentes.",
+                },
+              },
+            ],
+          }),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "HowTo",
+            name: "Cómo conseguir reseñas con Tap-to-Review",
+            description:
+              "Guía paso a paso para empezar a recibir reseñas en Google con tarjetas NFC.",
+            step: [
+              {
+                "@type": "HowToStep",
+                position: 1,
+                name: "Coloca el dispositivo",
+                text: "Pon el expositor Tapstar con la tarjeta NFC en un lugar visible de tu local, como la barra, la caja o cada mesa.",
+              },
+              {
+                "@type": "HowToStep",
+                position: 2,
+                name: "El cliente acerca su móvil",
+                text: "El cliente acerca su teléfono al chip NFC. En menos de un segundo, se abre la página de reseñas de Google.",
+              },
+              {
+                "@type": "HowToStep",
+                position: 3,
+                name: "Deja la reseña",
+                text: "El cliente escribe su opinión y la publica. Todo el proceso toma menos de 30 segundos.",
+              },
+            ],
+          }),
+        }}
+      />
 
       <Navbar />
 

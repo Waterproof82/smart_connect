@@ -35,11 +35,17 @@ interface Translation {
   featuresTitle: string;
   featuresSubtitle: string;
   featuresContent1: string;
+  featuresContent1Title: string;
   featuresContent2: string;
+  featuresContent2Title: string;
   featuresContent3: string;
+  featuresContent3Title: string;
   featuresContent4: string;
+  featuresContent4Title: string;
   featuresContent5: string;
+  featuresContent5Title: string;
   featuresContent6: string;
+  featuresContent6Title: string;
   featuresSoftwareIA: string;
   featuresSoftwareIADesc: string;
   featuresAutomation: string;
@@ -677,16 +683,22 @@ const translations: Record<Language, Translation> = {
       "Herramientas avanzadas diseñadas para la era digital, desde el hardware hasta el código.",
     featuresContent1:
       "En SmartConnect AI transformamos la experiencia de los restaurantes en Tenerife y Canarias. Con IA, automatización y hardware inteligente, ayudamos a atraer, retener y fidelizar clientes. Nuestras soluciones incluyen menús digitales QRIBAR con pedidos en tiempo real, tarjetas NFC para reseñas instantáneas en Google y automatización con n8n que conecta cada interacción del cliente. ¡El salto digital que tu negocio necesita para crecer!",
+    featuresContent1Title: "QRIBAR: Menú Digital Inteligente",
     featuresContent2:
       "Con QRIBAR, tus clientes en Tenerife y Canarias pueden pedir desde su móvil escaneando un código QR en la mesa. El pedido llega directamente a barra y cocina en tiempo real, reduciendo tiempos de espera y aumentando la rotación de mesas. Sin comisiones ni intermediarios, cada mesa se convierte en un punto de venta digital que opera 24/7, recopilando datos valiosos para campañas de marketing automatizadas y fidelización.",
+    featuresContent2Title: "Tap-to-Review NFC",
     featuresContent3:
       "Nuestras tarjetas NFC Tap-to-Review permiten a tus clientes dejar reseñas en Google con un solo toque. Más reseñas significan mejor posicionamiento en Google Maps y atraerás más clientes nuevos a tu restaurante en Tenerife y Canarias. Tecnología de alto rendimiento, sin suscripciones y configuración inmediata. Estudios demuestran que los negocios con más de 50 reseñas en Google reciben hasta un 40% más de visitas.",
+    featuresContent3Title: "Automatización con n8n",
     featuresContent4:
       "Imagina un flujo de trabajo automatizado donde cada lead se captura, analiza y responde automáticamente. Con nuestras automatizaciones n8n, conectamos tu CRM, email, WhatsApp y redes sociales en un solo ecosistema. Cada interacción con clientes potenciales genera acciones en cadena: análisis de sentimiento con IA, asignación de temperatura del lead y notificaciones en tiempo real a tu equipo comercial. ¡Libera horas de trabajo cada semana!",
+    featuresContent4Title: "IA Conversacional para tu Negocio",
     featuresContent5:
       "QRIBAR no es solo un menú digital: es tu nuevo canal de ventas directo para restaurantes en Tenerife y Canarias. Cada mesa escanea un código QR, explora platos con fotos y vídeos profesionales en 5 idiomas, y envía el pedido directamente a barra y cocina. Los datos de cada cliente se almacenan en tu base de datos para campañas de fidelización automatizadas. El resultado: mesas que rotan más rápido, tickets promedio más altos y clientes que vuelven por la experiencia impecable.",
+    featuresContent5Title: "QRIBAR Sin Comisiones",
     featuresContent6:
       "Las tarjetas NFC Tap-to-Review convierten cada visita en una reseña de Google para tu restaurante en Tenerife y Canarias. Coloca el expositor en tu local, el cliente acerca su móvil, y en 5 segundos tiene abierta la página de reseñas. Más reseñas significan mejor posicionamiento local en Google Maps y atraen más clientes nuevos cada mes. Es un ciclo virtuoso que multiplica tu visibilidad sin inversión publicitaria recurrente. ¡Multiplica tus reseñas por 6 en los primeros 90 días!",
+    featuresContent6Title: "NFC Tap-to-Review",
     featuresSoftwareIA: "Software & IA",
     featuresSoftwareIADesc:
       "Desarrollo de herramientas personalizadas que se integran perfectamente con tus sistemas actuales. Soluciones a medida impulsadas por algoritmos inteligentes.",
@@ -1545,16 +1557,22 @@ const translations: Record<Language, Translation> = {
       "Advanced tools designed for the digital era, from hardware to code.",
     featuresContent1:
       "At SmartConnect AI we combine artificial intelligence, automation, and smart hardware to transform how local businesses attract, retain, and build loyalty with customers. Our platform integrates QRIBAR digital menus with real-time ordering, NFC cards for instant Google reviews, and n8n automation workflows that connect every customer interaction.",
+    featuresContent1Title: "QRIBAR: Smart Digital Menu",
     featuresContent2:
       "With QRIBAR, your customers order from their phone by scanning a QR code at the table. Orders arrive directly to the bar and kitchen in real-time, eliminating wait times and increasing table turnover. No commissions, no intermediaries.",
+    featuresContent2Title: "Tap-to-Review NFC",
     featuresContent3:
       "Our Tap-to-Review NFC cards let any customer leave a Google review with a single tap. More reviews mean better Google Maps positioning and more new customers. High-performance technology, no subscriptions, instant setup.",
+    featuresContent3Title: "n8n Automation",
     featuresContent4:
       "Imagine a workflow where every lead is captured, analyzed, and responded to automatically. With our n8n automations, we connect your CRM, email, WhatsApp, and social media in a single ecosystem. Each prospect interaction triggers chain actions: AI sentiment analysis, lead temperature scoring, and real-time notifications to your sales team.",
+    featuresContent4Title: "Conversational AI for Your Business",
     featuresContent5:
       "QRIBAR is not just a digital menu — it's your new direct sales channel. Every table scans a QR code, explores dishes with professional photos and videos in 5 languages, and sends orders directly to the bar and kitchen. No commissions, no waiting, no intermediaries. Customer data is stored in your database for automated loyalty campaigns.",
+    featuresContent5Title: "QRIBAR No Commissions",
     featuresContent6:
       "NFC Tap-to-Review cards turn every visit into a Google review. Place the display in your venue, customers tap their phone, and in 5 seconds the review page opens. More reviews = better local Google Maps ranking = more new customers. A virtuous cycle that multiplies your visibility without recurring ad spend.",
+    featuresContent6Title: "NFC Tap-to-Review",
     featuresSoftwareIA: "Software & AI",
     featuresSoftwareIADesc:
       "Custom tool development that integrates perfectly with your existing systems. Tailored solutions powered by intelligent algorithms.",

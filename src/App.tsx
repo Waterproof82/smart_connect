@@ -74,7 +74,7 @@ const ErrorBoundaryFallback: React.FC = () => {
   / → H1: Potencia tu Negocio con IA y Automatización
   /servicios → H1: Soluciones de IA y Automatización para tu Negocio
   /contacto → H1: Hablemos de tu Proyecto
-  H2: Nuestras Soluciones — heroEyebrow label (home) / skip on servicios/contacto
+  H2: Nuestras Soluciones — heroEyebrow label (home)
     H3: Software & IA
     H3: Automatización (n8n)
     H3: Tarjetas Tap-to-Review
@@ -158,6 +158,7 @@ const App: React.FC = () => {
     "@graph": [
       {
         "@type": "LocalBusiness",
+        "@id": "https://digitalizatenerife.es/#organization",
         name: "SmartConnect AI",
         url: "https://digitalizatenerife.es",
         description:
@@ -216,6 +217,113 @@ const App: React.FC = () => {
           },
         },
       },
+      // Services
+      {
+        "@type": "Service",
+        "@id": "https://digitalizatenerife.es/#service-qribar",
+        name: "QRIBAR - Menú Digital",
+        description:
+          "Menú digital con pedidos en tiempo real desde la mesa a barra y cocina. Sin comisiones por pedido.",
+        url: "https://digitalizatenerife.es/carta-digital",
+        provider: { "@id": "https://digitalizatenerife.es/#organization" },
+        areaServed: ["Tenerife", "Gran Canaria", "Lanzarote", "Canarias"],
+        serviceType: "Digital Menu Platform",
+      },
+      {
+        "@type": "Service",
+        "@id": "https://digitalizatenerife.es/#service-nfc",
+        name: "Tap-to-Review NFC",
+        description:
+          "Tarjetas NFC para que los clientes dejen reseñas en Google e Instagram con un solo toque.",
+        url: "https://digitalizatenerife.es/tap-review",
+        provider: { "@id": "https://digitalizatenerife.es/#organization" },
+        areaServed: ["Tenerife", "Canarias", "España"],
+        serviceType: "NFC Review Solution",
+      },
+      {
+        "@type": "Service",
+        "@id": "https://digitalizatenerife.es/#service-n8n",
+        name: "Automatización con n8n",
+        description:
+          "Flujos de trabajo automatizados que conectan CRM, email, WhatsApp y redes sociales para captación y fidelización.",
+        url: "https://digitalizatenerife.es/automatizacion-restaurantes-n8n",
+        provider: { "@id": "https://digitalizatenerife.es/#organization" },
+        areaServed: ["Tenerife", "Canarias"],
+        serviceType: "Workflow Automation",
+      },
+      {
+        "@type": "Service",
+        "@id": "https://digitalizatenerife.es/#service-whatsapp",
+        name: "Automatización WhatsApp",
+        description:
+          "Respuestas automáticas 24/7 para reservas, consultas y pedidos vía WhatsApp Business.",
+        url: "https://digitalizatenerife.es/automatizacion-whatsapp-restaurante",
+        provider: { "@id": "https://digitalizatenerife.es/#organization" },
+        areaServed: ["Tenerife", "Canarias"],
+        serviceType: "WhatsApp Automation",
+      },
+      {
+        "@type": "Service",
+        "@id": "https://digitalizatenerife.es/#service-software",
+        name: "Software Canarias",
+        description:
+          "Soluciones de software a medida para hostelería y comercios locales en Canarias.",
+        url: "https://digitalizatenerife.es/software-restaurantes-canarias",
+        provider: { "@id": "https://digitalizatenerife.es/#organization" },
+        areaServed: ["Tenerife", "Canarias"],
+        serviceType: "Custom Software",
+      },
+      {
+        "@type": "Service",
+        "@id": "https://digitalizatenerife.es/#service-digitalizacion",
+        name: "Digitalización Tenerife",
+        description:
+          "Transformación digital completa para restaurantes y bares en Tenerife: menús QR, NFC, automatización e IA.",
+        url: "https://digitalizatenerife.es/digitalizacion-hosteleria-tenerife",
+        provider: { "@id": "https://digitalizatenerife.es/#organization" },
+        areaServed: ["Tenerife", "Canarias"],
+        serviceType: "Digital Transformation",
+      },
+      // ItemList
+      {
+        "@type": "ItemList",
+        name: "Soluciones SmartConnect AI",
+        description:
+          "Nuestras soluciones tecnológicas para hostelería: menús digitales, NFC, automatización e IA.",
+        url: "https://digitalizatenerife.es/#soluciones",
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "Software e IA",
+            url: "https://digitalizatenerife.es/software-restaurantes-canarias",
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "Automatización n8n",
+            url: "https://digitalizatenerife.es/automatizacion-restaurantes-n8n",
+          },
+          {
+            "@type": "ListItem",
+            position: 3,
+            name: "Tarjetas NFC Tap-to-Review",
+            url: "https://digitalizatenerife.es/tap-review",
+          },
+          {
+            "@type": "ListItem",
+            position: 4,
+            name: "QRIBAR Menú Digital",
+            url: "https://digitalizatenerife.es/carta-digital",
+          },
+          {
+            "@type": "ListItem",
+            position: 5,
+            name: "Automatización WhatsApp",
+            url: "https://digitalizatenerife.es/automatizacion-whatsapp-restaurante",
+          },
+        ],
+      },
     ],
   };
 
@@ -260,6 +368,50 @@ const App: React.FC = () => {
             {JSON.stringify(schemaData)}
           </script>
         )}
+        {isServicios && (
+          <script type="application/ld+json">
+            {JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                {
+                  "@type": "ListItem",
+                  position: 1,
+                  name: "Inicio",
+                  item: "https://digitalizatenerife.es/",
+                },
+                {
+                  "@type": "ListItem",
+                  position: 2,
+                  name: "Servicios",
+                  item: "https://digitalizatenerife.es/servicios",
+                },
+              ],
+            })}
+          </script>
+        )}
+        {isContacto && (
+          <script type="application/ld+json">
+            {JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                {
+                  "@type": "ListItem",
+                  position: 1,
+                  name: "Inicio",
+                  item: "https://digitalizatenerife.es/",
+                },
+                {
+                  "@type": "ListItem",
+                  position: 2,
+                  name: "Contacto",
+                  item: "https://digitalizatenerife.es/contacto",
+                },
+              ],
+            })}
+          </script>
+        )}
       </Helmet>
       <div className="min-h-screen bg-base text-default">
         <div
@@ -298,44 +450,78 @@ const App: React.FC = () => {
               <h2 className="text-4xl md:text-5xl font-bold mb-6 text-center">
                 ¿Por qué SmartConnect AI?
               </h2>
-              <div className="max-w-4xl mx-auto space-y-6 text-muted leading-relaxed mt-12">
-                <p className="text-base md:text-lg">
-                  SmartConnect AI nació en Tenerife con una misión clara:
-                  democratizar el acceso a la tecnología para los negocios
-                  locales de Canarias. No creemos en soluciones genéricas — cada
-                  bar, restaurante o comercio tiene necesidades únicas, y merece
-                  herramientas diseñadas para su realidad.
-                </p>
-                <p className="text-base md:text-lg">
-                  Nuestra plataforma integra cuatro pilares fundamentales:
-                  automatización inteligente con n8n, menús digitales QRIBAR con
-                  pedidos en tiempo real, tarjetas NFC para reseñas en Google, y
-                  soluciones de IA conversacional. Todo funciona como un
-                  ecosistema unificado, no como piezas sueltas.
-                </p>
-                <p className="text-base md:text-lg">
-                  Mientras otras empresas cobran comisiones por cada pedido o
-                  suscripciones mensuales que se disparan, nosotros apostamos
-                  por un modelo transparente y sin sorpresas. QRIBAR no cobra
-                  comisiones por pedido. Las tarjetas NFC no requieren
-                  suscripción. La automatización con n8n escala contigo sin
-                  costes ocultos.
-                </p>
-                <p className="text-base md:text-lg">
-                  ¿El resultado? Negocios que multiplican sus reseñas en Google,
-                  mesas que rotan más rápido, equipos que dedican menos tiempo a
-                  tareas repetitivas y más a lo que importa: atender bien a sus
-                  clientes. En los últimos 12 meses, hemos ayudado a más de 200
-                  negocios en Tenerife, Gran Canaria y Lanzarote a dar el salto
-                  digital que sus clientes esperaban.
-                </p>
-                <p className="text-base md:text-lg">
-                  Digitalizar tu negocio ya no es una opción — es una necesidad.
-                  Los clientes buscan restaurantes en Google, leen reseñas antes
-                  de visitar un local, y esperan poder pedir desde su móvil. Con
-                  SmartConnect AI, no solo te pones al día — te adelantas a la
-                  competencia.
-                </p>
+              <div className="max-w-4xl mx-auto space-y-8 text-muted leading-relaxed mt-12">
+                <section>
+                  <h3 className="text-xl md:text-2xl font-bold mb-4 text-default">
+                    Misión y Visión
+                  </h3>
+                  <ul className="space-y-3 list-disc list-inside">
+                    <li className="text-base md:text-lg">
+                      Democratizar el acceso a la tecnología para los negocios
+                      locales de Canarias. No creemos en soluciones genéricas —
+                      cada bar, restaurante o comercio tiene necesidades únicas,
+                      y merece herramientas diseñadas para su realidad.
+                    </li>
+                    <li className="text-base md:text-lg">
+                      Nuestra plataforma integra cuatro pilares fundamentales:
+                      automatización inteligente con n8n, menús digitales QRIBAR
+                      con pedidos en tiempo real, tarjetas NFC para reseñas en
+                      Google, y soluciones de IA conversacional. Todo funciona
+                      como un ecosistema unificado, no como piezas sueltas.
+                    </li>
+                  </ul>
+                </section>
+
+                <section>
+                  <h3 className="text-xl md:text-2xl font-bold mb-4 text-default">
+                    Pilares Tecnológicos
+                  </h3>
+                  <ul className="space-y-3 list-disc list-inside">
+                    <li className="text-base md:text-lg">
+                      <strong>Automatización con n8n:</strong> Flujos que
+                      conectan CRM, email, WhatsApp y redes sociales.
+                    </li>
+                    <li className="text-base md:text-lg">
+                      <strong>Menús digitales QRIBAR:</strong> Pedidos en tiempo
+                      real desde la mesa a barra y cocina.
+                    </li>
+                    <li className="text-base md:text-lg">
+                      <strong>Tarjetas NFC Tap-to-Review:</strong> Multiplica
+                      las reseñas en Google con un solo toque.
+                    </li>
+                    <li className="text-base md:text-lg">
+                      <strong>IA Conversacional:</strong> Chatbot experto que
+                      responde dudas 24/7 sobre tus servicios.
+                    </li>
+                  </ul>
+                </section>
+
+                <section>
+                  <h3 className="text-xl md:text-2xl font-bold mb-4 text-default">
+                    Resultados y Transparencia
+                  </h3>
+                  <ul className="space-y-3 list-disc list-inside">
+                    <li className="text-base md:text-lg">
+                      <strong>Sin comisiones por pedido:</strong> QRIBAR no
+                      cobra por transacción, a diferencia de otras plataformas.
+                    </li>
+                    <li className="text-base md:text-lg">
+                      <strong>Más de 200 negocios</strong> en Tenerife, Gran
+                      Canaria y Lanzarote ya confían en nosotros.
+                    </li>
+                    <li className="text-base md:text-lg">
+                      <strong>Todo en un ecosistema unificado:</strong> No
+                      piezas sueltas, una plataforma integral.
+                    </li>
+                    <li className="text-base md:text-lg">
+                      Digitalizar tu negocio ya no es una opción — es una
+                      necesidad. Los clientes buscan restaurantes en Google,
+                      leen reseñas antes de visitar un local, y esperan poder
+                      pedir desde su móvil. Con SmartConnect AI, no solo te
+                      pones al día — te adelantas a la competencia.
+                    </li>
+                  </ul>
+                </section>
               </div>
             </div>
           </section>

@@ -360,13 +360,43 @@ export const Features: React.FC = () => {
       </div>
 
       {/* Descriptive content for SEO (~500+ words total visible body text) */}
-      <div className="mt-20 max-w-4xl mx-auto space-y-6 text-muted leading-relaxed">
-        <p className="text-base md:text-lg">{t.featuresContent1}</p>
-        <p className="text-base md:text-lg">{t.featuresContent2}</p>
-        <p className="text-base md:text-lg">{t.featuresContent3}</p>
-        <p className="text-base md:text-lg">{t.featuresContent4}</p>
-        <p className="text-base md:text-lg">{t.featuresContent5}</p>
-        <p className="text-base md:text-lg">{t.featuresContent6}</p>
+      <div className="mt-20 max-w-4xl mx-auto space-y-8 text-muted leading-relaxed">
+        <section>
+          <h3 className="text-lg md:text-xl font-bold mb-2 text-default">
+            {t.featuresContent1Title}
+          </h3>
+          <p className="text-base md:text-lg">{t.featuresContent1}</p>
+        </section>
+        <section>
+          <h3 className="text-lg md:text-xl font-bold mb-2 text-default">
+            {t.featuresContent2Title}
+          </h3>
+          <p className="text-base md:text-lg">{t.featuresContent2}</p>
+        </section>
+        <section>
+          <h3 className="text-lg md:text-xl font-bold mb-2 text-default">
+            {t.featuresContent3Title}
+          </h3>
+          <p className="text-base md:text-lg">{t.featuresContent3}</p>
+        </section>
+        <section>
+          <h3 className="text-lg md:text-xl font-bold mb-2 text-default">
+            {t.featuresContent4Title}
+          </h3>
+          <p className="text-base md:text-lg">{t.featuresContent4}</p>
+        </section>
+        <section>
+          <h3 className="text-lg md:text-xl font-bold mb-2 text-default">
+            {t.featuresContent5Title}
+          </h3>
+          <p className="text-base md:text-lg">{t.featuresContent5}</p>
+        </section>
+        <section>
+          <h3 className="text-lg md:text-xl font-bold mb-2 text-default">
+            {t.featuresContent6Title}
+          </h3>
+          <p className="text-base md:text-lg">{t.featuresContent6}</p>
+        </section>
       </div>
     </div>
   );
