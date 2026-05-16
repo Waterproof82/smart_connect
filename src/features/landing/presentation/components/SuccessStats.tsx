@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { TrendingUp, Heart, Star, Users, Quote } from "lucide-react";
 import { useIntersectionObserver } from "@shared/hooks";
 import { useLanguage } from "@shared/context/LanguageContext";
+import { ReviewSchema } from "@shared/presentation/components/SeoSchema";
 
 interface StatProps {
   icon: React.ReactElement;
@@ -167,64 +168,70 @@ export const SuccessStats: React.FC = () => {
   ];
 
   return (
-    <div className="container mx-auto px-6" ref={sectionRef}>
-      <div className="text-center mb-12 md:mb-16">
-        <div className="text-xs font-bold tracking-[0.3em] text-[var(--color-primary)] uppercase mb-3 md:mb-4">
-          {t.successTitle}
+    <>
+      <ReviewSchema author={stats[0].author} text={stats[0].quote} />
+      <ReviewSchema author={stats[1].author} text={stats[1].quote} />
+      <ReviewSchema author={stats[2].author} text={stats[2].quote} />
+      <ReviewSchema author={stats[3].author} text={stats[3].quote} />
+      <div className="container mx-auto px-6" ref={sectionRef}>
+        <div className="text-center mb-12 md:mb-16">
+          <div className="text-xs font-bold tracking-[0.3em] text-[var(--color-primary)] uppercase mb-3 md:mb-4">
+            {t.successTitle}
+          </div>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-[1.15] mb-4 md:mb-6 font-display">
+            {t.successSubtitle}
+          </h2>
+          <p className="text-base text-muted leading-relaxed max-w-2xl mx-auto">
+            {t.successDesc}
+          </p>
         </div>
-        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-[1.15] mb-4 md:mb-6 font-display">
-          {t.successSubtitle}
-        </h2>
-        <p className="text-base text-muted leading-relaxed max-w-2xl mx-auto">
-          {t.successDesc}
-        </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6">
+          <div className="md:col-span-2 lg:col-span-4">
+            <StatCard
+              icon={stats[0].icon}
+              label={stats[0].label}
+              quote={stats[0].quote}
+              author={stats[0].author}
+              color={stats[0].color}
+              isInView={isVisible}
+              delay={stats[0].delay}
+              prominent
+            />
+          </div>
+          <div className="md:col-span-1 lg:col-span-4 grid gap-6">
+            <StatCard
+              icon={stats[1].icon}
+              label={stats[1].label}
+              quote={stats[1].quote}
+              author={stats[1].author}
+              color={stats[1].color}
+              isInView={isVisible}
+              delay={stats[1].delay}
+            />
+            <StatCard
+              icon={stats[2].icon}
+              label={stats[2].label}
+              quote={stats[2].quote}
+              author={stats[2].author}
+              color={stats[2].color}
+              isInView={isVisible}
+              delay={stats[2].delay}
+            />
+          </div>
+          <div className="md:col-span-1 lg:col-span-4">
+            <StatCard
+              icon={stats[3].icon}
+              label={stats[3].label}
+              quote={stats[3].quote}
+              author={stats[3].author}
+              color={stats[3].color}
+              isInView={isVisible}
+              delay={stats[3].delay}
+              prominent
+            />
+          </div>
+        </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6">
-        <div className="md:col-span-2 lg:col-span-4">
-          <StatCard
-            icon={stats[0].icon}
-            label={stats[0].label}
-            quote={stats[0].quote}
-            author={stats[0].author}
-            color={stats[0].color}
-            isInView={isVisible}
-            delay={stats[0].delay}
-            prominent
-          />
-        </div>
-        <div className="md:col-span-1 lg:col-span-4 grid gap-6">
-          <StatCard
-            icon={stats[1].icon}
-            label={stats[1].label}
-            quote={stats[1].quote}
-            author={stats[1].author}
-            color={stats[1].color}
-            isInView={isVisible}
-            delay={stats[1].delay}
-          />
-          <StatCard
-            icon={stats[2].icon}
-            label={stats[2].label}
-            quote={stats[2].quote}
-            author={stats[2].author}
-            color={stats[2].color}
-            isInView={isVisible}
-            delay={stats[2].delay}
-          />
-        </div>
-        <div className="md:col-span-1 lg:col-span-4">
-          <StatCard
-            icon={stats[3].icon}
-            label={stats[3].label}
-            quote={stats[3].quote}
-            author={stats[3].author}
-            color={stats[3].color}
-            isInView={isVisible}
-            delay={stats[3].delay}
-            prominent
-          />
-        </div>
-      </div>
-    </div>
+    </>
   );
 };
