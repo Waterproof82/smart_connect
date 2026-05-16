@@ -13,6 +13,7 @@ import AutomationN8nContainer from "./features/automation-n8n/presentation/Autom
 import WhatsappAutomationContainer from "./features/whatsapp-automation/presentation/WhatsappAutomationContainer";
 import SoftwareCanariasContainer from "./features/software-canarias/presentation/SoftwareCanariasContainer";
 import DigitalizationTenerifeContainer from "./features/digitalization-tenerife/presentation/DigitalizationTenerifeContainer";
+import AboutPage from "./features/landing/presentation/components/AboutPage";
 
 export function render(url: string): { html: string; head: string } {
   const helmetContext = {} as { helmet?: HelmetServerState };
@@ -49,6 +50,7 @@ export function render(url: string): { html: string; head: string } {
                   path="/digitalizacion-hosteleria-tenerife"
                   element={<DigitalizationTenerifeContainer />}
                 />
+                <Route path="/about" element={<AboutPage />} />
               </Routes>
             </Suspense>
           </LanguageProvider>

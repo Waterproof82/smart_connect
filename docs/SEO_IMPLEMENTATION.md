@@ -256,6 +256,158 @@ curl -I https://digitalizatenerife.es/
 
 ---
 
+---
+
+## 🧠 AI Readiness Deepening — Content Negotiation, WebMCP & Authorship (2026-05-16)
+
+### Overview
+
+Segunda ronda de mejoras GEO/AI-readiness. Cierra los 3 puntos pendientes del audit anterior más contenido adicional:
+
+| Issue                                 | Antes | Después |  Score  |
+| ------------------------------------- | :---: | :-----: | :-----: |
+| Markdown Content Negotiation          | 0/10  | ~10/10  | +10 pts |
+| Agent Skills Index ($schema + hashes) | 0/12  | ~12/12  | +12 pts |
+| WebMCP Tools                          | 0/10  | ~10/10  | +10 pts |
+| Authorship & Authority Signals        |  0/7  |  ~7/7   | +7 pts  |
+
+**Score total estimado**: ~85 → ~124/100+
+
+**Date**: 2026-05-16
+
+---
+
+### 1️⃣ Markdown Content Negotiation — Arquitectura
+
+```
+Request → Vercel Edge Middleware (middleware.ts)
+  ├─ Accept: text/markdown? → rewrite to /api/negotiate?path=...
+  │   └─ Serverless Function → reads prerendered HTML → turndown → text/markdown
+  └─ Normal → next() → serve static files (sin penalización)
+```
+
+#### Files Created
+
+| File                            | Propósito                                           | Runtime        |
+| ------------------------------- | --------------------------------------------------- | -------------- |
+| `middleware.ts`                 | Edge Middleware: intercepta Accept header           | Vercel Edge    |
+| `api/negotiate.mjs`             | Serverless Function: lee HTML, convierte a Markdown | Node.js 18+    |
+| `vite-plugin-md-negotiation.ts` | Vite plugin: SSR + conversión en dev                | Node.js (Vite) |
+
+#### Files Modified
+
+| File             | Cambio                                 |
+| ---------------- | -------------------------------------- |
+| `vite.config.ts` | Agregado `markdownNegotiationPlugin()` |
+
+#### Uso
+
+```bash
+curl -H "Accept: text/markdown" https://digitalizatenerife.es/
+# → Devuelve el contenido como Markdown limpio, con frontmatter (título, descripción, source)
+```
+
+#### Dependencias
+
+- `turndown` — Conversión HTML→Markdown (Node.js)
+- `@types/turndown` — Types para TypeScript
+- `@vercel/edge` — Types para Edge Middleware
+
+---
+
+### 2️⃣ Agent Skills Index — Mejora
+
+#### File Modified
+
+`public/.well-known/agent-skills/index.json`
+
+| Cambio        | Detalle                                                                        |
+| ------------- | ------------------------------------------------------------------------------ |
+| `$schema`     | Agregado `"$schema": "https://agentskills.io/schema/index.json"`               |
+| sha256        | Reemplazado hash vacío (`e3b0c4...`) con hash REAL de `llms.txt` (`d2ea2b...`) |
+| Nuevos skills | `markdown-negotiation` + `webmcp-tools` como type `capability`                 |
+
+---
+
+### 3️⃣ WebMCP — Implementation
+
+#### Files Created
+
+| File            | Propósito                                                         |
+| --------------- | ----------------------------------------------------------------- |
+| `src/WebMCP.ts` | 4 tools registradas via `navigator.modelContext.provideContext()` |
+
+#### Files Modified
+
+| File                   | Cambio                                                                             |
+| ---------------------- | ---------------------------------------------------------------------------------- |
+| `src/entry-client.tsx` | `import { registerWebMCPTools } from "./WebMCP"` + `registerWebMCPTools()` al boot |
+
+#### Tools Registradas
+
+| Tool                        | Descripción                                                         |
+| --------------------------- | ------------------------------------------------------------------- |
+| `get_product_info`          | Info detallada de producto (QRIBAR, NFC, etc.) con soporte bilingüe |
+| `get_contact_info`          | Información de contacto (email, WhatsApp, oficina)                  |
+| `list_products`             | Listado completo de productos/servicios                             |
+| `get_page_content_markdown` | Fetch de página como Markdown (usa Accept header internamente)      |
+
+---
+
+### 4️⃣ Authorship & Authority Signals
+
+#### Files Modified
+
+| File                                                     | Cambio                                                                                             |
+| -------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `src/App.tsx`                                            | `<link rel="author">` + JSON-LD expandido a `@graph` con WebPage (author + publisher Organization) |
+| `src/features/landing/presentation/LandingContainer.tsx` | URLs corregidas de `smartconnect.ai` → `digitalizatenerife.es` + `rel="author"`                    |
+| `src/entry-server.tsx`                                   | Ruta `/about` agregada                                                                             |
+| `src/entry-client.tsx`                                   | Ruta `/about` agregada (lazy)                                                                      |
+| `scripts/prerender.mjs`                                  | `/about` agregado a rutas prerenderizadas                                                          |
+| `vercel.json`                                            | Rewrite + cache-control para `/about`                                                              |
+
+#### Files Created
+
+| File                                                         | Propósito                                                                                  |
+| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `src/features/landing/presentation/components/AboutPage.tsx` | Página `/about` con Organization JSON-LD, rel="author" en links, misión, valores, contacto |
+
+#### Señales Implementadas
+
+- `<link rel="author" href="https://digitalizatenerife.es/about" title="SmartConnect AI">` en `<head>` de todas las páginas prerenderizadas
+- JSON-LD `@graph` con `WebPage.author` (Organization) + `WebPage.publisher` (Organization)
+- Página `/about` con Organization schema completo (dirección, email, teléfono, redes, foundingDate)
+- `rel="author"` en links de email y web dentro de AboutPage
+
+#### Corrección de URLs
+
+Todas las URLs JSON-LD y OG tags fueron corregidas de `smartconnect.ai` → `digitalizatenerife.es` (dominio oficial).
+
+---
+
+### 📊 Validation
+
+- ✅ `npx tsc --noEmit` — 0 errors
+- ✅ `npx eslint . --ext ts,tsx --max-warnings 0` — 0 errors, 0 warnings
+- ✅ `npm run build` — client build exitoso
+- ✅ `npm run build:ssr` — SSR build exitoso
+- ✅ Prerender — `/about` incluido, 10 rutas total
+- ✅ `rel="author"` — presente en `dist/index.html` (1) y `dist/about/index.html` (3)
+- ✅ JSON-LD `@graph` — presente en `dist/index.html` con WebPage + author + publisher
+- ✅ URLs corregidas — `digitalizatenerife.es` en lugar de `smartconnect.ai`
+
+---
+
+### 📝 Dependencies Added
+
+```bash
+npm install turndown
+npm install --save-dev @types/turndown @vercel/edge
+```
+
+---
+
 ## ⚡ SSG & SEO Overhaul (2026-05-14)
 
 ### Overview

@@ -138,17 +138,56 @@ const App: React.FC = () => {
 
   const schemaData = {
     "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    name: "SmartConnect AI",
-    url: "https://digitalizatenerife.es",
-    description:
-      "Automatización con IA, n8n, NFC para Google Reviews y menús digitales QRIBAR para negocios en Tenerife y Canarias.",
-    areaServed: "Tenerife, Canarias, España",
-    serviceType: [
-      "Automatización de negocios",
-      "Inteligencia Artificial",
-      "Menús digitales",
-      "NFC Google Reviews",
+    "@graph": [
+      {
+        "@type": "LocalBusiness",
+        name: "SmartConnect AI",
+        url: "https://digitalizatenerife.es",
+        description:
+          "Automatización con IA, n8n, NFC para Google Reviews y menús digitales QRIBAR para negocios en Tenerife y Canarias.",
+        areaServed: "Tenerife, Canarias, España",
+        serviceType: [
+          "Automatización de negocios",
+          "Inteligencia Artificial",
+          "Menús digitales",
+          "NFC Google Reviews",
+        ],
+        logo: {
+          "@type": "ImageObject",
+          url: "https://digitalizatenerife.es/icon.png",
+          width: 512,
+          height: 512,
+        },
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://digitalizatenerife.es",
+        url: "https://digitalizatenerife.es",
+        name: "SmartConnect AI | Automatización e IA para Empresas",
+        description:
+          "SmartConnect AI: automatización con IA, n8n, NFC para Google Reviews y menús digitales. Digitaliza tu negocio.",
+        inLanguage: "es",
+        author: {
+          "@type": "Organization",
+          name: "SmartConnect AI",
+          url: "https://digitalizatenerife.es",
+          logo: {
+            "@type": "ImageObject",
+            url: "https://digitalizatenerife.es/icon.png",
+            width: 512,
+            height: 512,
+          },
+        },
+        publisher: {
+          "@type": "Organization",
+          name: "SmartConnect AI",
+          url: "https://digitalizatenerife.es",
+          logo: {
+            "@type": "ImageObject",
+            url: "https://digitalizatenerife.es/icon.png",
+          },
+        },
+      },
     ],
   };
 
@@ -161,6 +200,11 @@ const App: React.FC = () => {
           content="SmartConnect AI: automatización con IA, n8n, NFC para Google Reviews y menús digitales. Digitaliza tu negocio."
         />
         <link rel="canonical" href="https://digitalizatenerife.es/" />
+        <link
+          rel="author"
+          href="https://digitalizatenerife.es/about"
+          title="SmartConnect AI"
+        />
         <link
           rel="alternate"
           hrefLang="es"

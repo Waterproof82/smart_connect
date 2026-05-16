@@ -395,9 +395,149 @@ globalThis.addEventListener("hashchange", handleHashChange);
 
 ---
 
+---
+
+# 🤖 SmartConnect Standards: AI Readiness & LLM Optimization
+
+## Overview
+
+SmartConnect implementa 4 capacidades clave para optimizar la interacción con agentes de IA, LLMs y crawlers de propósito general:
+
+| Capability                     | Score Impact | Archivos clave                                                        |
+| ------------------------------ | :----------: | --------------------------------------------------------------------- |
+| Markdown Content Negotiation   |   +10 pts    | `middleware.ts`, `api/negotiate.mjs`, `vite-plugin-md-negotiation.ts` |
+| Agent Skills Index             |   +12 pts    | `public/.well-known/agent-skills/index.json`                          |
+| WebMCP Tools                   |   +10 pts    | `src/WebMCP.ts`                                                       |
+| Authorship & Authority Signals |    +7 pts    | `src/App.tsx`, `AboutPage.tsx`, `LandingContainer.tsx`                |
+
+---
+
+## 1. Markdown Content Negotiation
+
+### Arquitectura
+
+```
+Request → Vercel Edge Middleware (middleware.ts)
+  ├─ Accept: text/markdown? → rewrite to /api/negotiate?path=...
+  │   └─ Serverless Function → reads prerendered HTML → turndown → text/markdown
+  └─ Normal → next() → serve static files (no added latency)
+```
+
+### Capas
+
+| Capa                | Archivo                         | Runtime        | Función                                                    |
+| ------------------- | ------------------------------- | -------------- | ---------------------------------------------------------- |
+| Edge Middleware     | `middleware.ts`                 | Vercel Edge    | Intercepta `Accept: text/markdown`, reescribe a la API     |
+| Serverless Function | `api/negotiate.mjs`             | Node.js 18+    | Lee HTML del disco, extrae `#root`, convierte con turndown |
+| Dev Plugin          | `vite-plugin-md-negotiation.ts` | Node.js (Vite) | SSR-renderiza en dev y convierte a Markdown                |
+
+### Cómo probar
+
+```bash
+# Dev
+curl -H "Accept: text/markdown" http://localhost:5173/
+
+# Production
+curl -H "Accept: text/markdown" https://digitalizatenerife.es/
+```
+
+### Reglas
+
+- El middleware SOLO intercepta `Accept: text/markdown` — requests normales NO tienen penalización de latency.
+- La serverless function usa `turndown` para conversión HTML→Markdown con `headingStyle: 'atx'`, `codeBlockStyle: 'fenced'`.
+- Incluye frontmatter con título + descripción + source link.
+
+---
+
+## 2. Agent Skills Index
+
+### Ubicación
+
+`public/.well-known/agent-skills/index.json`
+
+### Schema
+
+```json
+{
+  "$schema": "https://agentskills.io/schema/index.json",
+  "name": "SmartConnect Agent Skills",
+  "description": "...",
+  "skills": [
+    {
+      "name": "product-information",
+      "type": "information",
+      "description": "...",
+      "url": "https://digitalizatenerife.es/llms.txt",
+      "sha256": "<hash-of-llms.txt>"
+    }
+  ]
+}
+```
+
+### Reglas
+
+- **Debe** incluir `$schema` field apuntando a `https://agentskills.io/schema/index.json`.
+- `sha256` debe ser el hash REAL del contenido en `url`, no un placeholder.
+- Skills documentados actualmente: `product-information`, `contact-request`, `markdown-negotiation`, `webmcp-tools`.
+
+---
+
+## 3. WebMCP Tools
+
+### Implementación
+
+`src/WebMCP.ts` se registra automáticamente en `entry-client.tsx` al boot:
+
+```typescript
+import { registerWebMCPTools } from "./WebMCP";
+registerWebMCPTools();
+```
+
+### Tools Disponibles
+
+| Tool                        | Descripción                               | Input                                |
+| --------------------------- | ----------------------------------------- | ------------------------------------ |
+| `get_product_info`          | Info detallada de productos               | `product` (enum), `language` (es/en) |
+| `get_contact_info`          | Información de contacto                   | `language` (es/en)                   |
+| `list_products`             | Lista todos los productos                 | `language` (es/en)                   |
+| `get_page_content_markdown` | Obtiene contenido de página como Markdown | `path` (enum de rutas)               |
+
+### Reglas
+
+- Usa `navigator.modelContext.provideContext()` — API disponible en navegadores con capacidades de IA.
+- Si `modelContext` no está disponible, falla silenciosamente (sin console.log).
+- Cada tool tiene: `name`, `description`, `inputSchema` (JSON Schema), `execute` callback.
+- Las tools bilingües responden en `es` o `en` según el parámetro `language`.
+
+---
+
+## 4. Authorship & Authority Signals
+
+### Señales Implementadas
+
+| Señal                   | Dónde                              | Detalle                                                       |
+| ----------------------- | ---------------------------------- | ------------------------------------------------------------- |
+| `<link rel="author">`   | `App.tsx` y `AboutPage.tsx`        | Apunta a `/about` con title                                   |
+| JSON-LD `author`        | `App.tsx` y `LandingContainer.tsx` | Organization + logo en WebPage schema                         |
+| JSON-LD `publisher`     | `App.tsx` y `LandingContainer.tsx` | Organization + logo en WebPage schema                         |
+| Página `/about`         | `AboutPage.tsx`                    | Organization info completa (JSON-LD, dirección, email, redes) |
+| `rel="author"` en links | `AboutPage.tsx`                    | En email y web link                                           |
+
+### Reglas
+
+- **TODAS** las URLs JSON-LD deben usar `https://digitalizatenerife.es/` — NUNCA `smartconnect.ai`.
+- Las páginas prerenderizadas deben incluir `<link rel="author">` en el `<head>`.
+- La página `/about` es prerenderizada y debe mantenerse actualizada con información de la organización.
+
+---
+
 # 🔗 References
 
 ## Skill Registry Reference
 
 - **Global Skills**: [Skill Registry](.atl/skill-registry.md)
   - **smart-connect-standards**: Estándares globales para arquitectura, testing, seguridad, RAG y best practices.
+  - **markdown-negotiation**: Content negotiation para `Accept: text/markdown`.
+  - **webmcp-tools**: WebMCP tools via `navigator.modelContext.provideContext()`.
+  - **authorship-signals**: Señales de autoría y autoridad (rel="author", JSON-LD, /about).
+  - **agent-skills**: Agent Skills discovery index con $schema.
