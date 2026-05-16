@@ -625,6 +625,19 @@ interface Translation {
   n8nAutomationFaq5Answer: string;
   n8nAutomationFaq6Question: string;
   n8nAutomationFaq6Answer: string;
+
+  // Legal pages
+  legalAvisoTitle: string;
+  legalAvisoDescription: string;
+  legalAvisoBackLink: string;
+  legalPrivacidadTitle: string;
+  legalPrivacidadDescription: string;
+  legalPrivacidadBackLink: string;
+  legalPrivacidadUpdated: string;
+  legalCookiesTitle: string;
+  legalCookiesDescription: string;
+  legalCookiesBackLink: string;
+  legalCookiesUpdated: string;
 }
 
 const translations: Record<Language, Translation> = {
@@ -1473,6 +1486,22 @@ const translations: Record<Language, Translation> = {
       "¿Hay soporte técnico después de la implementación?",
     n8nAutomationFaq6Answer:
       "Sí, ofrecemos soporte técnico 24/7 para garantizar que tus automatizaciones funcionen sin interrupciones.",
+
+    // Legal pages
+    legalAvisoTitle: "Aviso Legal - SmartConnect AI",
+    legalAvisoDescription:
+      "Aviso legal de SmartConnect AI. Información sobre términos de uso, propiedad intelectual, responsabilidades y condiciones generales del sitio web.",
+    legalAvisoBackLink: "Volver al inicio",
+    legalPrivacidadTitle: "Política de Privacidad - SmartConnect AI",
+    legalPrivacidadDescription:
+      "Política de privacidad de SmartConnect AI. Información sobre recogida, uso y protección de datos personales.",
+    legalPrivacidadBackLink: "Volver al inicio",
+    legalPrivacidadUpdated: "Última actualización: 2026",
+    legalCookiesTitle: "Política de Cookies - SmartConnect AI",
+    legalCookiesDescription:
+      "Política de cookies de SmartConnect AI. Información sobre el uso de cookies y tecnologías similares.",
+    legalCookiesBackLink: "Volver al inicio",
+    legalCookiesUpdated: "Última actualización: 2026",
   },
   en: {
     // Navigation
@@ -2319,6 +2348,22 @@ const translations: Record<Language, Translation> = {
       "Is there technical support after implementation?",
     n8nAutomationFaq6Answer:
       "Yes, we offer 24/7 technical support to ensure your automations run without interruptions.",
+
+    // Legal pages
+    legalAvisoTitle: "Legal Notice - SmartConnect AI",
+    legalAvisoDescription:
+      "Legal notice of SmartConnect AI. Information about terms of use, intellectual property, liabilities and general conditions of the website.",
+    legalAvisoBackLink: "Back to home",
+    legalPrivacidadTitle: "Privacy Policy - SmartConnect AI",
+    legalPrivacidadDescription:
+      "Privacy policy of SmartConnect AI. Information about collection, use and protection of personal data.",
+    legalPrivacidadBackLink: "Back to home",
+    legalPrivacidadUpdated: "Last updated: 2026",
+    legalCookiesTitle: "Cookies Policy - SmartConnect AI",
+    legalCookiesDescription:
+      "Cookies policy of SmartConnect AI. Information about the use of cookies and similar technologies.",
+    legalCookiesBackLink: "Back to home",
+    legalCookiesUpdated: "Last updated: 2026",
   },
 };
 
