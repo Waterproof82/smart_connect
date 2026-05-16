@@ -62,6 +62,40 @@ const CartaDigitalPremium: React.FC = () => {
       <Helmet>
         <title>{t.navbarCartaDigital} — Presentación | SmartConnect AI</title>
         <meta name="description" content={t.featuresCartaDigitalDesc} />
+        <link
+          rel="canonical"
+          href="https://digitalizatenerife.es/carta-digital"
+        />
+        <link
+          rel="alternate"
+          hrefLang="es"
+          href="https://digitalizatenerife.es/carta-digital"
+        />
+        <link
+          rel="alternate"
+          hrefLang="x-default"
+          href="https://digitalizatenerife.es/carta-digital"
+        />
+        <meta
+          property="og:title"
+          content={`${t.navbarCartaDigital} — Presentación | SmartConnect AI`}
+        />
+        <meta property="og:description" content={t.featuresCartaDigitalDesc} />
+        <meta
+          property="og:url"
+          content="https://digitalizatenerife.es/carta-digital"
+        />
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:image"
+          content="https://digitalizatenerife.es/og-image.jpg"
+        />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:title"
+          content={`${t.navbarCartaDigital} — Presentación | SmartConnect AI`}
+        />
+        <meta name="twitter:description" content={t.featuresCartaDigitalDesc} />
       </Helmet>
 
       <div className="min-h-screen bg-[var(--color-bg)] text-default">

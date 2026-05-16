@@ -19,6 +19,8 @@ const solutions = [
     descriptionKey: "featuresSoftwareIADesc",
     serviceValue: "Consultoría IA",
     hasImage: true,
+    internal: true,
+    route: "/software-restaurantes-canarias",
   },
   {
     id: "automatizacion-n8n",
@@ -26,6 +28,8 @@ const solutions = [
     titleKey: "featuresAutomation",
     descriptionKey: "featuresAutomationDesc",
     serviceValue: "Automatización n8n",
+    internal: true,
+    route: "/automatizacion-restaurantes-n8n",
   },
   {
     id: "tarjetas-nfc",

@@ -1,5 +1,15 @@
 import { SolutionConfig } from "../config/solutions";
-import { Code2, Settings2, Smartphone, Utensils } from "lucide-react";
+import {
+  Code2,
+  Settings2,
+  Smartphone,
+  Utensils,
+  MessageSquare,
+  MapPin,
+  Cloud,
+  QrCode,
+  ShoppingCart,
+} from "lucide-react";
 import { Translation } from "../context/LanguageContext";
 import React from "react";
 
@@ -21,6 +31,11 @@ const iconComponentMap: Record<
   Settings2,
   Smartphone,
   Utensils,
+  MessageSquare,
+  MapPin,
+  Cloud,
+  QrCode,
+  ShoppingCart,
 };
 
 // SolutionItem type

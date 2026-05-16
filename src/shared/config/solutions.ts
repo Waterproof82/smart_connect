@@ -11,20 +11,13 @@ export interface SolutionConfig {
 
 export const SOLUTIONS: SolutionConfig[] = [
   {
-    id: "software-ia",
-    icon: "Code2",
-    titleKey: "navbarSoftwareIA",
-    descKey: "navbarSoftwareIADesc",
-    href: "#soluciones",
-    iconColor: "text-[var(--color-icon-blue)]",
-  },
-  {
-    id: "automatizacion-n8n",
-    icon: "Settings2",
-    titleKey: "navbarAutomation",
-    descKey: "navbarAutomationDesc",
-    href: "#soluciones",
-    iconColor: "text-[var(--color-icon-purple)]",
+    id: "carta-digital",
+    icon: "Utensils",
+    titleKey: "navbarCartaDigital",
+    descKey: "navbarCartaDigitalDesc",
+    href: "/carta-digital",
+    internal: true,
+    iconColor: "text-[var(--color-icon-emerald)]",
   },
   {
     id: "tarjetas-nfc",
@@ -45,12 +38,49 @@ export const SOLUTIONS: SolutionConfig[] = [
     iconColor: "text-[var(--color-icon-amber)]",
   },
   {
-    id: "carta-digital",
-    icon: "Utensils",
-    titleKey: "navbarCartaDigital",
-    descKey: "navbarCartaDigitalDesc",
-    href: "/carta-digital",
+    id: "automation-n8n",
+    icon: "Settings2",
+    titleKey: "navbarAutomationN8n",
+    descKey: "navbarAutomationN8nDesc",
+    href: "/automatizacion-restaurantes-n8n",
+    internal: true,
+    iconColor: "text-[var(--color-icon-purple)]",
+  },
+  {
+    id: "whatsapp-automation",
+    icon: "MessageSquare",
+    titleKey: "navbarWhatsAppAutomation",
+    descKey: "navbarWhatsAppAutomationDesc",
+    href: "/automatizacion-whatsapp-restaurante",
+    internal: true,
+    iconColor: "text-[var(--color-icon-blue)]",
+  },
+  {
+    id: "software-canarias",
+    icon: "MapPin",
+    titleKey: "navbarSoftwareCanarias",
+    descKey: "navbarSoftwareCanariasDesc",
+    href: "/software-restaurantes-canarias",
+    internal: true,
+    iconColor: "text-[var(--color-icon-blue)]",
+  },
+  {
+    id: "digitalization-tenerife",
+    icon: "Cloud",
+    titleKey: "navbarDigitalizationTenerife",
+    descKey: "navbarDigitalizationTenerifeDesc",
+    href: "/digitalizacion-hosteleria-tenerife",
     internal: true,
     iconColor: "text-[var(--color-icon-emerald)]",
   },
 ];
+
+// Map route paths to solution IDs for navbar filtering
+export const ROUTE_TO_SOLUTION_ID: Record<string, string> = {
+  "/carta-digital": "carta-digital",
+  "/tap-review": "tarjetas-nfc",
+  "/automatizacion-restaurantes-n8n": "automation-n8n",
+  "/automatizacion-whatsapp-restaurante": "whatsapp-automation",
+  "/software-restaurantes-canarias": "software-canarias",
+  "/digitalizacion-hosteleria-tenerife": "digitalization-tenerife",
+};

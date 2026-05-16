@@ -76,7 +76,7 @@ export const Hero: React.FC = () => {
               </div>
               <div className="flex items-center gap-2 bg-[var(--color-success-bg)] border border-[var(--color-success-border)] px-4 py-1.5 rounded-full text-xs text-[var(--color-success-text)] font-extrabold tracking-widest uppercase">
                 <CheckCircle2 className="w-3.5 h-3.5" />
-                NFC Active
+                {t.nfcActive}
               </div>
             </div>
 
@@ -88,10 +88,10 @@ export const Hero: React.FC = () => {
               </div>
               <div>
                 <div className="text-3xl font-extrabold mb-1 text-default">
-                  SmartConnect
+                  {t.smartConnect}
                 </div>
                 <div className="text-muted text-xs font-bold tracking-[0.2em] uppercase">
-                  Enterprise AI Node
+                  {t.enterpriseAINode}
                 </div>
               </div>
             </div>
@@ -121,10 +121,10 @@ export const Hero: React.FC = () => {
               </div>
               <div className="flex flex-col">
                 <span className="text-[10px] font-black text-[var(--color-on-accent-muted)] uppercase tracking-tighter leading-none">
-                  AI Core
+                  {t.aiCore}
                 </span>
                 <span className="text-xs font-bold text-[var(--color-on-accent)] leading-tight mt-0.5">
-                  Procesando...
+                  {t.processing}
                 </span>
               </div>
             </div>
@@ -143,7 +143,7 @@ export const Hero: React.FC = () => {
                 ))}
               </div>
               <span className="text-[9px] text-muted font-medium leading-none">
-                Uplink Stable
+                {t.uplinkStable}
               </span>
             </div>
           </div>

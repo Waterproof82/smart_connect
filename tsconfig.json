@@ -8,7 +8,7 @@
     "allowSyntheticDefaultImports": true,
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "skipLibCheck": true,
-    "types": ["node", "jest"],
+    "types": ["node", "vitest/globals"],
     "moduleResolution": "node",
     "isolatedModules": true,
     "moduleDetection": "force",
@@ -29,6 +29,10 @@
     "noFallthroughCasesInSwitch": true,
     "resolveJsonModule": true
   },
-  "include": ["src/**/*", ".opencode/**/*.ts"],
+  "include": [
+    "src/**/*",
+    ".opencode/**/*.ts",
+    "src/shared/context/LanguageContext.d.ts"
+  ],
   "exclude": ["node_modules", "dist", "supabase/functions", "tests/**/*"]
 }

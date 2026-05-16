@@ -108,6 +108,15 @@ Regla obligatoria para el Gentle-Orchestrator: determina cuándo DEBE usar SDD v
 - **Patrón AAA** (Arrange, Act, Assert)
 - **Coverage mínimo**: 80%
 
+### TypeScript: tsc --noEmit (MANDATORY) ⚠️
+
+**`npx tsc --noEmit` DEBE ejecutarse antes de finalizar cualquier implementación.** Vite/esbuild transpila sin type-checking — un build verde NO garantiza tipos correctos.
+
+- `tsc --noEmit` es obligatorio al final de `sdd-apply` (Step 8) y en `sdd-verify` (Step 6c)
+- Si falla, se deben corregir TODOS los errores antes de continuar
+- Esto aplica a cualquier cambio que toque archivos `.ts` / `.tsx`
+- Excepción: proyectos sin `tsconfig.json` (no TypeScript) — skipear
+
 ### Security (OWASP)
 
 - **Access Control**: validar roles, prevenir IDOR
