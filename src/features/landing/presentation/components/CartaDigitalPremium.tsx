@@ -9,6 +9,10 @@ import React, { useRef, useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { useLanguage } from "@shared/context/LanguageContext";
 import { getAppSettings } from "@shared/services/settingsService";
+import {
+  ServiceSchema,
+  BreadcrumbListSchema,
+} from "@shared/presentation/components/SeoSchema";
 
 // Import components from same directory (Clean Architecture)
 import CartaDigitalNavbar from "./CartaDigitalNavbar";
@@ -127,6 +131,25 @@ const CartaDigitalPremium: React.FC = () => {
             },
           }),
         }}
+      />
+      <ServiceSchema
+        name="QRIBAR - Menú Digital"
+        description="Menú digital con pedidos en tiempo real desde la mesa a barra y cocina. Sin comisiones por pedido."
+        url="https://digitalizatenerife.es/carta-digital"
+        providerName="SmartConnect AI"
+        providerUrl="https://digitalizatenerife.es"
+        providerLogoUrl="https://digitalizatenerife.es/icon.png"
+        areaServed={["Tenerife", "Canarias"]}
+        serviceType="DigitalMenu"
+      />
+      <BreadcrumbListSchema
+        breadcrumbs={[
+          { name: "Inicio", url: "https://digitalizatenerife.es/" },
+          {
+            name: "Carta Digital",
+            url: "https://digitalizatenerife.es/carta-digital",
+          },
+        ]}
       />
 
       <div className="min-h-screen bg-[var(--color-bg)] text-default">

@@ -13,6 +13,8 @@ import { Helmet } from "react-helmet-async";
 import {
   SeoFaqSchema,
   LocalBusinessSchema,
+  ServiceSchema,
+  BreadcrumbListSchema,
   BenefitsGrid,
   HowItWorks,
   StatsBar,
@@ -154,6 +156,25 @@ const DigitalizationTenerifeContainer: React.FC = () => {
           longitude: -16.25462,
         }}
         areaServed={["Tenerife"]}
+      />
+      <ServiceSchema
+        name="Digitalización para Hostelería en Tenerife"
+        description={t.digitalizationTenerifeSeoDescription}
+        url="https://digitalizatenerife.es/digitalizacion-hosteleria-tenerife"
+        providerName="SmartConnect AI"
+        providerUrl="https://digitalizatenerife.es"
+        providerLogoUrl="https://digitalizatenerife.es/icon.png"
+        areaServed={["Tenerife"]}
+        serviceType="DigitalTransformation"
+      />
+      <BreadcrumbListSchema
+        breadcrumbs={[
+          { name: "Inicio", url: "https://digitalizatenerife.es/" },
+          {
+            name: "Digitalización Hostelería Tenerife",
+            url: "https://digitalizatenerife.es/digitalizacion-hosteleria-tenerife",
+          },
+        ]}
       />
 
       <Navbar scrolled={true} />

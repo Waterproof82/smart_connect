@@ -10,6 +10,10 @@ import React from "react";
 import { Helmet } from "react-helmet-async";
 import { Check, Smartphone, ChevronDown } from "lucide-react";
 import { useLanguage } from "@shared/context/LanguageContext";
+import {
+  ServiceSchema,
+  BreadcrumbListSchema,
+} from "@shared/presentation/components/SeoSchema";
 
 // Import components from presentation/components/ (Clean Architecture)
 import Navbar from "./components/Navbar";
@@ -160,6 +164,25 @@ export const TapReviewPage: React.FC<TapReviewPageProps> = ({
             ],
           }),
         }}
+      />
+      <ServiceSchema
+        name="Tap-to-Review NFC"
+        description="Tarjetas NFC para que los clientes dejen reseñas en Google e Instagram con un solo toque. Sin suscripción mensual."
+        url="https://digitalizatenerife.es/tap-review"
+        providerName="SmartConnect AI"
+        providerUrl="https://digitalizatenerife.es"
+        providerLogoUrl="https://digitalizatenerife.es/icon.png"
+        areaServed={["Tenerife", "Canarias", "España"]}
+        serviceType="NFCReviews"
+      />
+      <BreadcrumbListSchema
+        breadcrumbs={[
+          { name: "Inicio", url: "https://digitalizatenerife.es/" },
+          {
+            name: "Tap-to-Review",
+            url: "https://digitalizatenerife.es/tap-review",
+          },
+        ]}
       />
 
       <Navbar />

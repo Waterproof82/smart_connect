@@ -13,6 +13,8 @@ import { Helmet } from "react-helmet-async";
 import {
   SeoFaqSchema,
   LocalBusinessSchema,
+  ServiceSchema,
+  BreadcrumbListSchema,
   BenefitsGrid,
   HowItWorks,
   StatsBar,
@@ -142,6 +144,25 @@ const SoftwareCanariasContainer: React.FC = () => {
           addressCountry: "ES",
         }}
         areaServed={["Canarias"]}
+      />
+      <ServiceSchema
+        name="Software para Restaurantes en Canarias"
+        description={t.softwareCanariasSeoDescription}
+        url="https://digitalizatenerife.es/software-restaurantes-canarias"
+        providerName="SmartConnect AI"
+        providerUrl="https://digitalizatenerife.es"
+        providerLogoUrl="https://digitalizatenerife.es/icon.png"
+        areaServed={["Canarias"]}
+        serviceType="HospitalitySoftware"
+      />
+      <BreadcrumbListSchema
+        breadcrumbs={[
+          { name: "Inicio", url: "https://digitalizatenerife.es/" },
+          {
+            name: "Software Restaurantes Canarias",
+            url: "https://digitalizatenerife.es/software-restaurantes-canarias",
+          },
+        ]}
       />
 
       <Navbar scrolled={true} />

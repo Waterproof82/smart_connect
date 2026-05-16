@@ -12,6 +12,8 @@ import { Helmet } from "react-helmet-async";
 import {
   SeoFaqSchema,
   LocalBusinessSchema,
+  ServiceSchema,
+  BreadcrumbListSchema,
   BenefitsGrid,
   HowItWorks,
   StatsBar,
@@ -146,6 +148,25 @@ const WhatsappAutomationContainer: React.FC = () => {
           addressCountry: "ES",
         }}
         areaServed={["Tenerife", "Canarias"]}
+      />
+      <ServiceSchema
+        name="Automatización WhatsApp para Restaurantes"
+        description={t.whatsappAutomationSeoDescription}
+        url="https://digitalizatenerife.es/automatizacion-whatsapp-restaurante"
+        providerName="SmartConnect AI"
+        providerUrl="https://digitalizatenerife.es"
+        providerLogoUrl="https://digitalizatenerife.es/icon.png"
+        areaServed={["Tenerife", "Canarias"]}
+        serviceType="WhatsAppAutomation"
+      />
+      <BreadcrumbListSchema
+        breadcrumbs={[
+          { name: "Inicio", url: "https://digitalizatenerife.es/" },
+          {
+            name: "Automatización WhatsApp Restaurante",
+            url: "https://digitalizatenerife.es/automatizacion-whatsapp-restaurante",
+          },
+        ]}
       />
 
       <Navbar scrolled={true} />

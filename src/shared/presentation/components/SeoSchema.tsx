@@ -359,3 +359,126 @@ export const InternalLinks: React.FC<InternalLinksProps> = ({
     </section>
   );
 };
+
+// ─── Service Schema ────────────────────────────────────────────
+interface ServiceSchemaProps {
+  name: string;
+  description: string;
+  url: string;
+  providerName: string;
+  providerUrl: string;
+  providerLogoUrl?: string;
+  areaServed?: string[];
+  serviceType?: string;
+}
+
+export const ServiceSchema: React.FC<ServiceSchemaProps> = ({
+  name,
+  description,
+  url,
+  providerName,
+  providerUrl,
+  providerLogoUrl,
+  areaServed,
+  serviceType,
+}) => {
+  const schema: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "@id": `${url}#service`,
+    name,
+    description,
+    url,
+    provider: {
+      "@type": "Organization",
+      name: providerName,
+      url: providerUrl,
+    },
+  };
+  if (providerLogoUrl) {
+    (schema.provider as Record<string, unknown>).logo = {
+      "@type": "ImageObject",
+      url: providerLogoUrl,
+    };
+  }
+  if (areaServed) schema.areaServed = areaServed;
+  if (serviceType) schema.serviceType = serviceType;
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+};
+
+// ─── BreadcrumbList Schema ─────────────────────────────────────
+interface BreadcrumbItem {
+  name: string;
+  url: string;
+}
+
+interface BreadcrumbListSchemaProps {
+  breadcrumbs: BreadcrumbItem[];
+}
+
+export const BreadcrumbListSchema: React.FC<BreadcrumbListSchemaProps> = ({
+  breadcrumbs,
+}) => {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: breadcrumbs.map((crumb, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: crumb.name,
+      item: crumb.url,
+    })),
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+};
+
+// ─── Review Schema ─────────────────────────────────────────────
+interface ReviewSchemaProps {
+  author: string;
+  text: string;
+  rating?: number;
+  datePublished?: string;
+}
+
+export const ReviewSchema: React.FC<ReviewSchemaProps> = ({
+  author,
+  text,
+  rating = 5,
+  datePublished = new Date().toISOString().split("T")[0],
+}) => {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "Review",
+    reviewBody: text,
+    datePublished,
+    author: {
+      "@type": "Person",
+      name: author,
+    },
+    reviewRating: {
+      "@type": "Rating",
+      ratingValue: rating,
+      bestRating: 5,
+      worstRating: 1,
+    },
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+};
