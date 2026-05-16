@@ -1,5 +1,5 @@
 import React from "react";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import { useLanguage } from "../../../../shared/context/LanguageContext";
 import { Cpu, Mail, MapPin, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -32,54 +32,54 @@ const AboutPage: React.FC = () => {
           href="https://digitalizatenerife.es/about"
           title="SmartConnect AI"
         />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "AboutPage",
-              name: "Sobre SmartConnect AI",
-              description:
-                "Información sobre SmartConnect AI, empresa tecnológica especializada en IA, automatización y hardware inteligente para negocios locales en Tenerife y Canarias.",
-              mainEntity: {
-                "@type": "Organization",
-                name: "SmartConnect AI",
-                description:
-                  "Empresa tecnológica especializada en IA, automatización y hardware inteligente para negocios locales en Tenerife y Canarias.",
-                url: "https://digitalizatenerife.es",
-                logo: {
-                  "@type": "ImageObject",
-                  url: "https://digitalizatenerife.es/icon.png",
-                  width: 512,
-                  height: 512,
-                },
-                email: "info@smartconnect.ai",
-                telephone: "+34922123456",
-                address: {
-                  "@type": "PostalAddress",
-                  streetAddress: "Calle Las Palmas 123",
-                  addressLocality: "Santa Cruz de Tenerife",
-                  addressRegion: "Canary Islands",
-                  postalCode: "38001",
-                  addressCountry: "ES",
-                },
-                foundingDate: "2025",
-                founder: {
-                  "@type": "Person",
-                  name: "SmartConnect AI Team",
-                },
-                sameAs: [
-                  "https://twitter.com/smartconnectai",
-                  "https://linkedin.com/company/smartconnectai",
-                  "https://instagram.com/smartconnectai",
-                  "https://facebook.com/smartconnectai",
-                  "https://youtube.com/@smartconnectai",
-                ],
-              },
-            }),
-          }}
-        />
       </Helmet>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "AboutPage",
+            name: "Sobre SmartConnect AI",
+            description:
+              "Información sobre SmartConnect AI, empresa tecnológica especializada en IA, automatización y hardware inteligente para negocios locales en Tenerife y Canarias.",
+            mainEntity: {
+              "@type": "Organization",
+              name: "SmartConnect AI",
+              description:
+                "Empresa tecnológica especializada en IA, automatización y hardware inteligente para negocios locales en Tenerife y Canarias.",
+              url: "https://digitalizatenerife.es",
+              logo: {
+                "@type": "ImageObject",
+                url: "https://digitalizatenerife.es/icon.png",
+                width: 512,
+                height: 512,
+              },
+              email: "info@smartconnect.ai",
+              telephone: "+34922123456",
+              address: {
+                "@type": "PostalAddress",
+                streetAddress: "Calle Las Palmas 123",
+                addressLocality: "Santa Cruz de Tenerife",
+                addressRegion: "Canary Islands",
+                postalCode: "38001",
+                addressCountry: "ES",
+              },
+              foundingDate: "2025",
+              founder: {
+                "@type": "Person",
+                name: "SmartConnect AI Team",
+              },
+              sameAs: [
+                "https://twitter.com/smartconnectai",
+                "https://linkedin.com/company/smartconnectai",
+                "https://instagram.com/smartconnectai",
+                "https://facebook.com/smartconnectai",
+                "https://youtube.com/@smartconnectai",
+              ],
+            },
+          }),
+        }}
+      />
 
       <div className="min-h-screen bg-base text-white">
         {/* Navigation */}

@@ -1,0 +1,11 @@
+{
+  "keys": [],
+  "metadata": {
+    "description": "HTTP Message Signatures Directory for AI bot authentication",
+    "specification": "draft-meunier-http-message-signatures-directory-05",
+    "server": "SmartConnect AI",
+    "server_url": "https://digitalizatenerife.es",
+    "support": "https://digitalizatenerife.es/.well-known/agent-skills/index.json",
+    "last_updated": "2026-05-16"
+  }
+}

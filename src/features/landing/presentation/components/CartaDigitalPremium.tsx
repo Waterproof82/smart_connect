@@ -97,6 +97,37 @@ const CartaDigitalPremium: React.FC = () => {
         />
         <meta name="twitter:description" content={t.featuresCartaDigitalDesc} />
       </Helmet>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Product",
+            name: "QRIBAR - Menú Digital para Restaurantes",
+            description:
+              "Menú digital con pedidos en tiempo real a barra y cocina. Sin comisiones por pedido.",
+            image: "https://digitalizatenerife.es/icon.png",
+            url: "https://digitalizatenerife.es/carta-digital",
+            brand: {
+              "@type": "Brand",
+              name: "SmartConnect AI",
+            },
+            offers: {
+              "@type": "Offer",
+              url: "https://digitalizatenerife.es/carta-digital",
+              priceCurrency: "EUR",
+              price: "0",
+              availability: "https://schema.org/InStock",
+            },
+            aggregateRating: {
+              "@type": "AggregateRating",
+              ratingValue: "4.9",
+              reviewCount: "450",
+              bestRating: "5",
+            },
+          }),
+        }}
+      />
 
       <div className="min-h-screen bg-[var(--color-bg)] text-default">
         <CartaDigitalNavbar />

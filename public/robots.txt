@@ -22,6 +22,18 @@ Allow: /
 User-agent: OAI-SearchBot
 Allow: /
 
+User-agent: Amazonbot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Meta-ExternalAgent
+Allow: /
+
 Content-Signal: ai-train=no
 Content-Signal: search=yes
 Content-Signal: ai-input=no

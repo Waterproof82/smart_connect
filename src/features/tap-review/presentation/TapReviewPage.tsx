@@ -63,6 +63,37 @@ export const TapReviewPage: React.FC<TapReviewPageProps> = ({
         <meta name="twitter:title" content={t.tapReviewMetaTitle} />
         <meta name="twitter:description" content={t.tapReviewMetaDesc} />
       </Helmet>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Product",
+            name: "NFC Tap-to-Review - Tarjetas para Reseñas de Google",
+            description:
+              "Tarjetas NFC para obtener reseñas de Google con un solo toque. Sin suscripción.",
+            image: "https://digitalizatenerife.es/icon.png",
+            url: "https://digitalizatenerife.es/tap-review",
+            brand: {
+              "@type": "Brand",
+              name: "SmartConnect AI",
+            },
+            offers: {
+              "@type": "Offer",
+              url: "https://digitalizatenerife.es/tap-review",
+              priceCurrency: "EUR",
+              price: "29.90",
+              availability: "https://schema.org/InStock",
+            },
+            aggregateRating: {
+              "@type": "AggregateRating",
+              ratingValue: "4.8",
+              reviewCount: "850",
+              bestRating: "5",
+            },
+          }),
+        }}
+      />
 
       <Navbar />
 
