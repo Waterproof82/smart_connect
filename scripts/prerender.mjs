@@ -17,6 +17,7 @@ const routes = [
   "/automatizacion-whatsapp-restaurante",
   "/software-restaurantes-canarias",
   "/digitalizacion-hosteleria-tenerife",
+  "/about",
 ];
 
 async function prerender() {

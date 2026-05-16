@@ -1,19 +1,34 @@
 {
+  "$schema": "https://agentskills.io/schema/index.json",
   "name": "SmartConnect Agent Skills",
-  "description": "Available agent interaction capabilities for SmartConnect landing page",
+  "description": "Available agent interaction capabilities for SmartConnect landing page. Provides structured tools for AI agents to discover products, get contact info, and interact with SmartConnect AI services for local business digitalization in Tenerife and Canary Islands.",
   "skills": [
     {
       "name": "product-information",
       "type": "information",
-      "description": "Get detailed information about SmartConnect products: QRIBAR, Tap-to-Review NFC, Carta Digital Premium, and n8n automation",
+      "description": "Get detailed information about SmartConnect products: QRIBAR, Tap-to-Review NFC, Carta Digital Premium, n8n automation, WhatsApp automation, software for Canarias, and digitalization for Tenerife.",
       "url": "https://digitalizatenerife.es/llms.txt",
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      "sha256": "d2ea2b4d3734562636d08933021d6665d02090c9c6b26542e40aee61c244ab93"
     },
     {
       "name": "contact-request",
       "type": "action",
-      "description": "Submit a contact request for sales or demo. POST to the contact form with name, company, email, service, and message",
-      "url": "https://digitalizatenerife.es/contact",
+      "description": "Submit a contact request for sales or demo. POST to the contact form with name, company, email, service, and message.",
+      "url": "https://digitalizatenerife.es/contacto",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "markdown-negotiation",
+      "type": "capability",
+      "description": "The site supports content negotiation via Accept: text/markdown header. Request any page with this header to get the content as clean Markdown instead of HTML.",
+      "url": "https://digitalizatenerife.es/",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "webmcp-tools",
+      "type": "capability",
+      "description": "WebMCP tools available via navigator.modelContext.provideContext(). Tools include: get_product_info, get_contact_info, list_products, get_page_content_markdown.",
+      "url": "https://digitalizatenerife.es/",
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     }
   ]

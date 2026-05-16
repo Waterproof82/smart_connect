@@ -2,6 +2,7 @@
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import { markdownNegotiationPlugin } from "./vite-plugin-md-negotiation";
 
 export default defineConfig(({ mode }) => ({
   test: {
@@ -13,7 +14,7 @@ export default defineConfig(({ mode }) => ({
       "src/features/**/*.test.tsx",
     ],
   },
-  plugins: [react()],
+  plugins: [react(), markdownNegotiationPlugin()],
 
   server: {
     port: 5173,

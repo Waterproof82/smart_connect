@@ -47,7 +47,7 @@ Fecha: 2026-02-18
 - [x] Vendor chunks separated (React, Supabase)
 - [x] No build warnings about chunk sizes
 
-## 9. GEO Agent Readiness (AI Agent Optimization)
+## 9. GEO Agent Readiness — Phase 1 (AI Agent Optimization, 2026-05-13)
 
 - [x] `llms.txt` — Machine-readable markdown for LLMs
 - [x] `mcp/server-card.json` — MCP Server Card
@@ -59,6 +59,38 @@ Fecha: 2026-02-18
 - [x] Link headers — API discovery endpoints
 - [x] JSON-LD authorship signals — author/publisher/breadcrumb
 - [ ] Verify Agent Readiness Score in production
+
+## 10. GEO Agent Readiness — Phase 2 (AI Readiness Deepening, 2026-05-16)
+
+- [x] `middleware.ts` — Vercel Edge Middleware for markdown content negotiation
+- [x] `api/negotiate.mjs` — Serverless Function for HTML→Markdown conversion
+- [x] `vite-plugin-md-negotiation.ts` — Dev-mode content negotiation via SSR
+- [x] `vite.config.ts` — Plugin registered
+- [x] `src/WebMCP.ts` — 4 WebMCP tools (get_product_info, get_contact_info, list_products, get_page_content_markdown)
+- [x] `src/entry-client.tsx` — WebMCP registration at boot
+- [x] `public/.well-known/agent-skills/index.json` — $schema + real sha256 + 4 skills
+- [x] `src/App.tsx` — rel="author" + @graph JSON-LD with author/publisher
+- [x] `src/features/landing/presentation/LandingContainer.tsx` — URLs fixed to digitalizatenerife.es
+- [x] `AboutPage.tsx` — New /about page with Organization schema
+- [x] `/about` route in entry-server.tsx, entry-client.tsx, prerender.mjs, vercel.json
+- [x] TypeScript: `npx tsc --noEmit` passes
+- [x] Lint: `npm run lint` passes
+- [x] Build: client + SSR + prerender succeeds
+- [ ] Deploy to Vercel and verify production URLs
+- [ ] Test `curl -H "Accept: text/markdown" https://digitalizatenerife.es/`
+
+### Testing Commands
+
+```bash
+# Dev: markdown negotiation
+curl -H "Accept: text/markdown" http://localhost:5173/
+
+# Dev: about page
+curl http://localhost:5173/about
+
+# Production (after deploy): markdown negotiation
+curl -H "Accept: text/markdown" https://digitalizatenerife.es/
+```
 
 ### Build Output Expectations
 

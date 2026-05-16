@@ -43,12 +43,23 @@ const LandingContainer: React.FC = () => {
         <meta property="og:title" content={t.seoTitle} />
         <meta property="og:description" content={t.seoDescription} />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://smartconnect.ai" />
-        <meta property="og:image" content="https://smartconnect.ai/logo.png" />
+        <meta property="og:url" content="https://digitalizatenerife.es" />
+        <meta
+          property="og:image"
+          content="https://digitalizatenerife.es/icon.png"
+        />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={t.seoTitle} />
         <meta name="twitter:description" content={t.seoDescription} />
-        <meta name="twitter:image" content="https://smartconnect.ai/logo.png" />
+        <meta
+          name="twitter:image"
+          content="https://digitalizatenerife.es/icon.png"
+        />
+        <link
+          rel="author"
+          href="https://digitalizatenerife.es/about"
+          title="SmartConnect AI"
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -59,10 +70,10 @@ const LandingContainer: React.FC = () => {
                   "@type": "LocalBusiness",
                   name: "SmartConnect AI",
                   description: t.seoDescription,
-                  url: "https://smartconnect.ai",
+                  url: "https://digitalizatenerife.es",
                   logo: {
                     "@type": "ImageObject",
-                    url: "https://smartconnect.ai/logo.png",
+                    url: "https://digitalizatenerife.es/icon.png",
                     width: 512,
                     height: 512,
                   },
@@ -103,8 +114,8 @@ const LandingContainer: React.FC = () => {
                   "@type": "Product",
                   name: "QRIBAR - Menú Digital para Restaurantes",
                   description: t.seoProductDescription,
-                  image: "https://smartconnect.ai/qribar.png",
-                  url: "https://smartconnect.ai/qribar",
+                  image: "https://digitalizatenerife.es/icon.png",
+                  url: "https://digitalizatenerife.es/carta-digital",
                   brand: {
                     "@type": "Brand",
                     name: "SmartConnect AI",
@@ -114,7 +125,7 @@ const LandingContainer: React.FC = () => {
                     name: "QRIBAR",
                     description:
                       "Menú digital con pedidos en tiempo real a barra y cocina",
-                    url: "https://smartconnect.ai/qribar",
+                    url: "https://digitalizatenerife.es/carta-digital",
                     priceCurrency: "EUR",
                     price: "0",
                     availability: "https://schema.org/InStock",
@@ -131,8 +142,8 @@ const LandingContainer: React.FC = () => {
                   name: "Tarjetas NFC Tap-to-Review",
                   description:
                     "Tarjetas NFC para obtener reseñas de Google con un solo toque",
-                  image: "https://smartconnect.ai/tap-review.png",
-                  url: "https://smartconnect.ai/tap-review",
+                  image: "https://digitalizatenerife.es/icon.png",
+                  url: "https://digitalizatenerife.es/tap-review",
                   brand: {
                     "@type": "Brand",
                     name: "SmartConnect AI",
@@ -142,7 +153,7 @@ const LandingContainer: React.FC = () => {
                     name: "Tap-to-Review NFC",
                     description:
                       "Dispositivo NFC para reseñas instantáneas en Google",
-                    url: "https://smartconnect.ai/tap-review",
+                    url: "https://digitalizatenerife.es/tap-review",
                     priceCurrency: "EUR",
                     price: "29.90",
                     availability: "https://schema.org/InStock",
@@ -208,28 +219,28 @@ const LandingContainer: React.FC = () => {
                 {
                   "@type": "WebSite",
                   name: "SmartConnect AI",
-                  url: "https://smartconnect.ai",
+                  url: "https://digitalizatenerife.es",
                   potentialAction: {
                     "@type": "SearchAction",
                     target:
-                      "https://smartconnect.ai/search?q={search_term_string}",
+                      "https://digitalizatenerife.es/search?q={search_term_string}",
                     "query-input": "required name=search_term_string",
                   },
                 },
                 {
                   "@type": "WebPage",
-                  "@id": "https://smartconnect.ai",
-                  url: "https://smartconnect.ai",
+                  "@id": "https://digitalizatenerife.es",
+                  url: "https://digitalizatenerife.es",
                   name: t.seoTitle,
                   description: t.seoDescription,
                   inLanguage: "es",
                   author: {
                     "@type": "Organization",
                     name: "SmartConnect AI",
-                    url: "https://smartconnect.ai",
+                    url: "https://digitalizatenerife.es",
                     logo: {
                       "@type": "ImageObject",
-                      url: "https://smartconnect.ai/logo.png",
+                      url: "https://digitalizatenerife.es/icon.png",
                       width: 512,
                       height: 512,
                     },
@@ -237,10 +248,10 @@ const LandingContainer: React.FC = () => {
                   publisher: {
                     "@type": "Organization",
                     name: "SmartConnect AI",
-                    url: "https://smartconnect.ai",
+                    url: "https://digitalizatenerife.es",
                     logo: {
                       "@type": "ImageObject",
-                      url: "https://smartconnect.ai/logo.png",
+                      url: "https://digitalizatenerife.es/icon.png",
                     },
                   },
                   breadcrumb: {
@@ -250,7 +261,7 @@ const LandingContainer: React.FC = () => {
                         "@type": "ListItem",
                         position: 1,
                         name: "Inicio",
-                        item: "https://smartconnect.ai",
+                        item: "https://digitalizatenerife.es",
                       },
                     ],
                   },

@@ -5,8 +5,12 @@ import { Suspense, lazy } from "react";
 import { LanguageProvider } from "@shared/context/LanguageContext";
 import { ThemeProvider } from "@shared/context/ThemeContext";
 import { ScrollToTop } from "@shared/components/ScrollToTop";
+import { registerWebMCPTools } from "./WebMCP";
 import "./index.css";
 import App from "./App";
+
+// Register WebMCP tools for AI agent discovery
+registerWebMCPTools();
 
 // Lazy-loaded routes — not prerendered, remain SPA after hydration
 const AdminPanel = lazy(() =>
@@ -45,6 +49,12 @@ const DigitalizationTenerifeContainer = lazy(() =>
   import("@features/digitalization-tenerife/presentation/DigitalizationTenerifeContainer").then(
     (m) => ({ default: m.default }),
   ),
+);
+
+const AboutPage = lazy(() =>
+  import("@features/landing/presentation/components/AboutPage").then((m) => ({
+    default: m.default,
+  })),
 );
 
 const NotFound = lazy(() =>
@@ -99,6 +109,7 @@ const app = (
                 path="/digitalizacion-hosteleria-tenerife"
                 element={<DigitalizationTenerifeContainer />}
               />
+              <Route path="/about" element={<AboutPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
