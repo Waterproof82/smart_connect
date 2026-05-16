@@ -11,7 +11,7 @@
 
 1. **security_logs INSERT policy:**
    - Before: `WITH CHECK (true)` → Any authenticated user could insert
-   - After: Email-based check → Only `admin@smartconnect.ai` can insert
+   - After: Email-based check → Only `info@digitalizatenerife.es` can insert
 
 2. **Edge Functions JWT validation:**
    - All functions now validate JWT internally (verify_jwt=false in config.toml)
@@ -29,6 +29,7 @@
 ### Manual Action Required
 
 Enable **Leaked Password Protection** in Supabase Dashboard:
+
 1. Authentication → Providers → Email
 2. Enable: "Enable leaked password protection"
 
@@ -59,8 +60,9 @@ The Supabase Anonymous Key (`VITE_SUPABASE_ANON_KEY`) is **intentionally public*
 **Purpose:** Stores embedded documents for RAG chatbot (menu items, FAQs, product info, etc.)
 
 **Security Model:**
+
 - **SELECT (Read):** Público (anon) - necesario para el chatbot RAG
-- **INSERT/UPDATE/DELETE:** Solo admin@smartconnect.ai (verificado por email en JWT)
+- **INSERT/UPDATE/DELETE:** Solo info@digitalizatenerife.es (verificado por email en JWT)
 
 **Required Policies:**
 
@@ -76,16 +78,16 @@ TO public
 USING (true);
 
 -- Policy 2: Admin full access (specific email only - most secure)
--- Only admin@smartconnect.ai can INSERT/UPDATE/DELETE
+-- Only info@digitalizatenerife.es can INSERT/UPDATE/DELETE
 CREATE POLICY admin_full_access_documents
 ON documents
 FOR ALL
 TO authenticated
 USING (
-  (auth.jwt() ->> 'email') = 'admin@smartconnect.ai'
+  (auth.jwt() ->> 'email') = 'info@digitalizatenerife.es'
 )
 WITH CHECK (
-  (auth.jwt() ->> 'email') = 'admin@smartconnect.ai'
+  (auth.jwt() ->> 'email') = 'info@digitalizatenerife.es'
 );
 
 -- Policy 3: Service role bypass (for Edge Functions)
@@ -97,12 +99,12 @@ USING (true);
 ```
 
 **Access Matrix:**
-| Operation | Anonymous (anon) | admin@smartconnect.ai | Other Authenticated | Service Role |
+| Operation | Anonymous (anon) | info@digitalizatenerife.es | Other Authenticated | Service Role |
 |-----------|------------------|----------------------|--------------------|--------------|
-| SELECT    | ✅ Allowed       | ✅ Allowed           | ✅ Allowed        | ✅ Allowed   |
-| INSERT    | ❌ Blocked       | ✅ Allowed           | ❌ Blocked        | ✅ Allowed   |
-| UPDATE    | ❌ Blocked       | ✅ Allowed           | ❌ Blocked        | ✅ Allowed   |
-| DELETE    | ❌ Blocked       | ✅ Allowed           | ❌ Blocked        | ✅ Allowed   |
+| SELECT | ✅ Allowed | ✅ Allowed | ✅ Allowed | ✅ Allowed |
+| INSERT | ❌ Blocked | ✅ Allowed | ❌ Blocked | ✅ Allowed |
+| UPDATE | ❌ Blocked | ✅ Allowed | ❌ Blocked | ✅ Allowed |
+| DELETE | ❌ Blocked | ✅ Allowed | ❌ Blocked | ✅ Allowed |
 
 -- Policy 3: Allow authenticated users with admin/super_admin role to UPDATE
 CREATE POLICY admin_update_documents
@@ -110,56 +112,59 @@ ON documents
 FOR UPDATE
 TO authenticated
 USING (
-  (auth.jwt() -> 'app_metadata' ->> 'role') = ANY (ARRAY['admin'::text, 'super_admin'::text])
+(auth.jwt() -> 'app_metadata' ->> 'role') = ANY (ARRAY['admin'::text, 'super_admin'::text])
 )
 WITH CHECK (
-  (auth.jwt() -> 'app_metadata' ->> 'role') = ANY (ARRAY['admin'::text, 'super_admin'::text])
+(auth.jwt() -> 'app_metadata' ->> 'role') = ANY (ARRAY['admin'::text, 'super_admin'::text])
 );
 
 **Access Matrix:**
-| Operation | Anonymous (anon) | admin@smartconnect.ai | Other Authenticated | Service Role |
+| Operation | Anonymous (anon) | info@digitalizatenerife.es | Other Authenticated | Service Role |
 |-----------|------------------|----------------------|--------------------|--------------|
-| SELECT    | ✅ Allowed       | ✅ Allowed           | ✅ Allowed        | ✅ Allowed   |
-| INSERT    | ❌ Blocked       | ✅ Allowed           | ❌ Blocked        | ✅ Allowed   |
-| UPDATE    | ❌ Blocked       | ✅ Allowed           | ❌ Blocked        | ✅ Allowed   |
-| DELETE    | ❌ Blocked       | ✅ Allowed           | ❌ Blocked        | ✅ Allowed   |
+| SELECT | ✅ Allowed | ✅ Allowed | ✅ Allowed | ✅ Allowed |
+| INSERT | ❌ Blocked | ✅ Allowed | ❌ Blocked | ✅ Allowed |
+| UPDATE | ❌ Blocked | ✅ Allowed | ❌ Blocked | ✅ Allowed |
+| DELETE | ❌ Blocked | ✅ Allowed | ❌ Blocked | ✅ Allowed |
 
 > ⚠️ **SEGURIDAD SIMPLIFICADA**: En lugar de usar roles (app_metadata), verificamos el email específico del admin en el JWT.
+>
 > - El email en JWT está verificado por Supabase Auth (no modificable)
-> - Solo admin@smartconnect.ai tiene acceso de escritura
+> - Solo info@digitalizatenerife.es tiene acceso de escritura
 > - Cualquier usuario puede LEER (necesario para el chatbot RAG)
 
 ### Cómo Gestionar el Admin
 
-**Solo existe un admin:** admin@smartconnect.ai
+**Solo existe un admin:** info@digitalizatenerife.es
 
 Para cambiar la contraseña o gestionar este usuario:
+
 1. Ir a Supabase Dashboard → Authentication → Users
-2. Buscar admin@smartconnect.ai
+2. Buscar info@digitalizatenerife.es
 3. Gestionar usuario (reset password, etc.)
 
 > ❌ **NO crear más admins** - El sistema está diseñado para un solo administrador.
 
 const supabaseAdmin = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!  // ⚠️ Solo en servidor
+process.env.SUPABASE_URL!,
+process.env.SUPABASE_SERVICE_ROLE_KEY! // ⚠️ Solo en servidor
 );
 
 // Crear usuario y asignar rol en app_metadata
 const { data, error } = await supabaseAdmin.auth.admin.createUser({
-  email: 'admin@smartconnect.ai',
-  password: 'secure-password',
-  email_confirm: true,
-  app_metadata: {
-    role: 'super_admin'  // ✅ Se guarda en app_metadata
-  }
+email: 'info@digitalizatenerife.es',
+password: 'secure-password',
+email_confirm: true,
+app_metadata: {
+role: 'super_admin' // ✅ Se guarda en app_metadata
+}
 });
 
 // O actualizar usuario existente
 await supabaseAdmin.auth.admin.updateUser(userId, {
-  app_metadata: { role: 'admin' }
+app_metadata: { role: 'admin' }
 });
-```
+
+````
 
 ```python
 # Python (usando supabase-py)
@@ -171,20 +176,21 @@ supabase.auth.admin.update_user(
   user_id,
   {"app_metadata": {"role": "admin"}}
 )
-```
+````
 
 > ❌ **NUNCA** hagas esto en el cliente:
+>
 > ```typescript
 > // ❌ INSEGURO - user_metadata es editable por el usuario
 > await supabase.auth.signUp({
->   email: 'admin@test.com',
->   password: 'password',
+>   email: "admin@test.com",
+>   password: "password",
 >   options: {
 >     data: {
->       role: 'admin'  // Se guarda en user_metadata - INSEGURO!
->     }
->   }
-> })
+>       role: "admin", // Se guarda en user_metadata - INSEGURO!
+>     },
+>   },
+> });
 > ```
 
 #### B. `security_logs` Table (To be created)
@@ -285,10 +291,10 @@ BEGIN
     documents.metadata,
     1 - (documents.embedding <=> query_embedding) AS similarity
   FROM documents
-  WHERE 
+  WHERE
     (1 - (documents.embedding <=> query_embedding)) > match_threshold
     AND (
-      tenant_id IS NULL 
+      tenant_id IS NULL
       OR documents.metadata->>'tenant_id' = tenant_id
     )
   ORDER BY documents.embedding <=> query_embedding
@@ -323,12 +329,12 @@ Supabase Dashboard → Settings → API:
 
 ### ⚠️ CRITICAL: Key Exposure Matrix
 
-| Key Type | Exposed to Client? | Usage |
-|----------|-------------------|-------|
-| `VITE_SUPABASE_URL` | ✅ Yes (public) | Client-side queries |
-| `VITE_SUPABASE_ANON_KEY` | ✅ Yes (public) | Client-side queries (RLS enforced) |
-| `SUPABASE_SERVICE_ROLE_KEY` | 🔴 **NEVER** | Server-side only (bypasses RLS) |
-| `GEMINI_API_KEY` | 🔴 **NEVER** | Edge Functions only |
+| Key Type                    | Exposed to Client? | Usage                              |
+| --------------------------- | ------------------ | ---------------------------------- |
+| `VITE_SUPABASE_URL`         | ✅ Yes (public)    | Client-side queries                |
+| `VITE_SUPABASE_ANON_KEY`    | ✅ Yes (public)    | Client-side queries (RLS enforced) |
+| `SUPABASE_SERVICE_ROLE_KEY` | 🔴 **NEVER**       | Server-side only (bypasses RLS)    |
+| `GEMINI_API_KEY`            | 🔴 **NEVER**       | Edge Functions only                |
 
 ### Key Rotation Strategy
 
@@ -390,33 +396,30 @@ Before deploying to production, verify:
 // Run in browser console with anonymous user
 const { createClient } = supabase;
 
-const supabase = createClient(
-  'YOUR_SUPABASE_URL',
-  'YOUR_ANON_KEY'
-);
+const supabase = createClient("YOUR_SUPABASE_URL", "YOUR_ANON_KEY");
 
 // Test 1: Anonymous user can read public documents
 const { data: publicDocs, error: publicError } = await supabase
-  .from('documents')
-  .select('*')
+  .from("documents")
+  .select("*")
   .limit(1);
 
-console.log('Public docs accessible:', !publicError);
+console.log("Public docs accessible:", !publicError);
 
 // Test 2: Anonymous user CANNOT insert documents
 const { data: insertData, error: insertError } = await supabase
-  .from('documents')
-  .insert({ content: 'test', source: 'test', embedding: [] });
+  .from("documents")
+  .insert({ content: "test", source: "test", embedding: [] });
 
-console.log('Insert blocked:', !!insertError); // Should be true
+console.log("Insert blocked:", !!insertError); // Should be true
 
 // Test 3: Anonymous user CANNOT delete documents
 const { data: deleteData, error: deleteError } = await supabase
-  .from('documents')
+  .from("documents")
   .delete()
-  .eq('id', 'some-uuid');
+  .eq("id", "some-uuid");
 
-console.log('Delete blocked:', !!deleteError); // Should be true
+console.log("Delete blocked:", !!deleteError); // Should be true
 ```
 
 ---
@@ -434,7 +437,7 @@ console.log('Delete blocked:', !!deleteError); // Should be true
 
 ### Contact Information
 
-- **Security Team:** security@smartconnect.ai
+- **Security Team:** info@digitalizatenerife.es
 - **Supabase Support:** https://supabase.com/support
 - **Emergency Hotline:** [Add your team's emergency contact]
 

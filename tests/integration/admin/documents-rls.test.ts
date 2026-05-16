@@ -180,7 +180,7 @@ describeIfConfigured("Documents Table - RLS Policies", () => {
     let adminClient: SupabaseClient;
 
     beforeAll(async () => {
-      // Note: RLS policy checks for specific admin email (admin@smartconnect.ai)
+      // Note: RLS policy checks for specific admin email (info@digitalizatenerife.es)
       // This test requires the actual admin credentials or service_role
       // Skipping admin-specific tests as they need real admin credentials
 

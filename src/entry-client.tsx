@@ -57,6 +57,24 @@ const AboutPage = lazy(() =>
   })),
 );
 
+const AvisoLegalPage = lazy(() =>
+  import("@features/legal/presentation/AvisoLegalPage").then((m) => ({
+    default: m.default,
+  })),
+);
+
+const PrivacidadPage = lazy(() =>
+  import("@features/legal/presentation/PrivacidadPage").then((m) => ({
+    default: m.default,
+  })),
+);
+
+const CookiesPage = lazy(() =>
+  import("@features/legal/presentation/CookiesPage").then((m) => ({
+    default: m.default,
+  })),
+);
+
 const NotFound = lazy(() =>
   import("@features/landing/presentation/components/NotFound").then((m) => ({
     default: m.NotFound,
@@ -110,6 +128,9 @@ const app = (
                 element={<DigitalizationTenerifeContainer />}
               />
               <Route path="/about" element={<AboutPage />} />
+              <Route path="/legal/aviso" element={<AvisoLegalPage />} />
+              <Route path="/legal/privacidad" element={<PrivacidadPage />} />
+              <Route path="/legal/cookies" element={<CookiesPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>

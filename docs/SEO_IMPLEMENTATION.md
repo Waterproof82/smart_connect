@@ -521,6 +521,109 @@ dist/
 
 ---
 
+---
+
+## 📋 SEO Maintenance Rules (2026-05-16)
+
+Reglas de obligatorio cumplimiento para mantener la calidad SEO del sitio. Toda modificación debe pasar por esta checklist.
+
+### 🔧 Robots.txt
+
+```
+User-agent: Googlebot       ← EXPLÍCITO (no confiar solo en *)
+Allow: /
+
+User-agent: Google-Extended ← AI bots permitidos
+Allow: /
+
+User-agent: *               ← catch-all al FINAL
+Disallow: /admin
+Disallow: /panel
+Disallow: /login
+
+Sitemap: https://digitalizatenerife.es/sitemap.xml
+```
+
+**Reglas:**
+
+- `User-agent: Googlebot` debe estar primero con `Allow: /` explícito
+- `User-agent: *` debe ir al FINAL, solo con `Disallow:` (sin `Allow:` antes de `Disallow:` — confunde parsers)
+- Cada AI bot debe tener su propio bloque `User-agent:` + `Allow: /`
+- No poner directivas `Content-Signal` en robots.txt (son HTTP headers, ver `vercel.json`)
+
+### 🚫 NotFound (404)
+
+`src/features/landing/presentation/components/NotFound.tsx` **SIEMPRE** debe tener:
+
+```tsx
+<Helmet>
+  <title>Página no encontrada - SmartConnect AI</title>
+  <meta name="description" content="La página que buscas no existe..." />
+  <meta name="robots" content="noindex, nofollow" />
+</Helmet>
+```
+
+### 🔄 Entry Client ↔ Prerender Sync
+
+Toda ruta pública agregada en `src/entry-client.tsx` debe tener su par en `scripts/prerender.mjs`.
+
+**Regla:** Si está en `entry-client.tsx` como `<Route path="/foo">` → debe estar en `routes[]` de `prerender.mjs`.
+
+Excepciones:
+
+- `/admin` y sub-rutas de admin → NO prerender (requiere auth)
+- `*` catch-all → NO prerender (es 404)
+
+### 📍 H1 Único por Ruta
+
+Cada página debe tener EXACTAMENTE UN `<h1>`. No compartir entre rutas.
+
+| Ruta                                   | H1 location                                                       |
+| -------------------------------------- | ----------------------------------------------------------------- |
+| `/`                                    | `Hero.tsx` — `{t.heroTitle} {t.heroTitleAccent} {t.heroTitleEnd}` |
+| `/servicios`                           | `Hero.tsx` (mismo componente — ideal: separar)                    |
+| `/contacto`                            | `Hero.tsx` (mismo componente — ideal: separar)                    |
+| `/carta-digital`                       | `CartaDigitalHeroSection.tsx`                                     |
+| `/tap-review`                          | `TapReviewPage.tsx`                                               |
+| `/automatizacion-restaurantes-n8n`     | `PageHero` en `AutomationN8nContainer.tsx`                        |
+| `/automatizacion-whatsapp-restaurante` | `PageHero` en `WhatsappAutomationContainer.tsx`                   |
+| `/software-restaurantes-canarias`      | `PageHero` en `SoftwareCanariasContainer.tsx`                     |
+| `/digitalizacion-hosteleria-tenerife`  | `PageHero` en `DigitalizationTenerifeContainer.tsx`               |
+| `/about`                               | `AboutPage.tsx`                                                   |
+| `/legal/*`                             | `LegalPage.tsx`                                                   |
+| `*` (404)                              | `NotFound.tsx`                                                    |
+
+### 🔗 Links Sociales
+
+No dejar URLs con `@TODO` o placeholders. Usar `href="#"` hasta tener la URL real.
+
+**Verificar en:**
+
+- `src/App.tsx` — footer social links
+- `src/features/landing/presentation/components/Contact.tsx` — social icon links
+
+### 🗺️ Sitemap
+
+`public/sitemap.xml` debe incluir:
+
+- ✅ Todas las rutas prerenderizadas
+- ✅ Prioridad: home=1.0, landing pages=0.9, about=0.7, legales=0.3
+- ❌ NO incluir `/admin` o páginas protegidas
+- ❌ NO incluir `lastmod` (evita crawls innecesarios)
+
+### ✅ Pre-Deploy Checklist
+
+Antes de cada deploy:
+
+1. `npm run type-check` — 0 errors
+2. `npm run lint` — 0 errors, 0 warnings
+3. `npm run build` — cliente + SSR + prerender exitoso
+4. Verificar `dist/` tenga HTML prerenderizado para todas las rutas públicas
+5. Verificar que `robots.txt` tenga `User-agent: Googlebot` explícito
+6. Verificar sitemap.xml tenga todas las rutas nuevas
+
+---
+
 ## 📝 Notes
 
 - **Helmet Library**: Already installed (`react-helmet`), no additional setup needed

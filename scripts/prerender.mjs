@@ -18,6 +18,9 @@ const routes = [
   "/software-restaurantes-canarias",
   "/digitalizacion-hosteleria-tenerife",
   "/about",
+  "/legal/aviso",
+  "/legal/privacidad",
+  "/legal/cookies",
 ];
 
 async function prerender() {

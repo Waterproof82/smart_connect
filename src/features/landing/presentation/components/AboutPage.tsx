@@ -54,7 +54,7 @@ const AboutPage: React.FC = () => {
                 width: 512,
                 height: 512,
               },
-              email: "info@smartconnect.ai",
+              email: "info@digitalizatenerife.es",
               telephone: "+34922123456",
               address: {
                 "@type": "PostalAddress",
@@ -200,11 +200,11 @@ const AboutPage: React.FC = () => {
                 <h3 className="font-semibold mb-2">Email</h3>
                 <p className="text-white/60 text-sm">
                   <a
-                    href="mailto:info@smartconnect.ai"
+                    href="mailto:info@digitalizatenerife.es"
                     className="text-blue-400 hover:text-blue-300 transition-colors"
                     rel="author"
                   >
-                    info@smartconnect.ai
+                    info@digitalizatenerife.es
                   </a>
                 </p>
               </div>

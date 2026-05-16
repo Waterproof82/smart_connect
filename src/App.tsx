@@ -1,5 +1,5 @@
 import React, { Component, ReactNode } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { Navbar } from "@features/landing/presentation/components/Navbar";
 import { Hero } from "@features/landing/presentation/components/Hero";
@@ -104,6 +104,21 @@ const App: React.FC = () => {
   const [scrolled, setScrolled] = React.useState(false);
   const sentinelRef = React.useRef<HTMLDivElement>(null);
   const { t } = useLanguage();
+  const location = useLocation();
+  const isServicios = location.pathname === "/servicios";
+  const isContacto = location.pathname === "/contacto";
+
+  const pageTitle = isServicios
+    ? "Servicios de Automatización e IA para Empresas | SmartConnect AI"
+    : isContacto
+      ? "Contacto | SmartConnect AI"
+      : "SmartConnect AI | Automatización e IA para Empresas";
+
+  const pageDescription = isServicios
+    ? "Descubre nuestros servicios: automatización n8n, menús digitales QRIBAR, tarjetas NFC para reseñas y asistente IA. Soluciones para tu negocio."
+    : isContacto
+      ? "Contacta con SmartConnect AI. Solicita información sobre automatización, menús digitales, NFC y soluciones IA para tu negocio en Tenerife."
+      : "SmartConnect AI: automatización con IA, n8n, NFC para Google Reviews y menús digitales. Digitaliza tu negocio.";
 
   React.useEffect(() => {
     const sentinel = sentinelRef.current;
@@ -205,12 +220,12 @@ const App: React.FC = () => {
   return (
     <ErrorBoundary>
       <Helmet>
-        <title>SmartConnect AI | Automatización e IA para Empresas</title>
-        <meta
-          name="description"
-          content="SmartConnect AI: automatización con IA, n8n, NFC para Google Reviews y menús digitales. Digitaliza tu negocio."
+        <title>{pageTitle}</title>
+        <meta name="description" content={pageDescription} />
+        <link
+          rel="canonical"
+          href={`https://digitalizatenerife.es${location.pathname}`}
         />
-        <link rel="canonical" href="https://digitalizatenerife.es/" />
         <link
           rel="author"
           href="https://digitalizatenerife.es/about"
@@ -219,29 +234,30 @@ const App: React.FC = () => {
         <link
           rel="alternate"
           hrefLang="es"
-          href="https://digitalizatenerife.es/"
+          href={`https://digitalizatenerife.es${location.pathname}`}
         />
         <link
           rel="alternate"
           hrefLang="x-default"
-          href="https://digitalizatenerife.es/"
+          href={`https://digitalizatenerife.es${location.pathname}`}
         />
-        <meta
-          property="og:title"
-          content="SmartConnect AI | Automatización e IA para Empresas"
-        />
-        <meta
-          property="og:description"
-          content="Automatización con IA, n8n, NFC para Google Reviews y menús digitales QRIBAR para negocios en Tenerife y Canarias."
-        />
+        <meta property="og:title" content={pageTitle} />
+        <meta property="og:description" content={pageDescription} />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://digitalizatenerife.es" />
+        <meta
+          property="og:url"
+          content={`https://digitalizatenerife.es${location.pathname}`}
+        />
         <meta
           property="og:image"
           content="https://digitalizatenerife.es/icon.png"
         />
         <meta name="twitter:card" content="summary_large_image" />
-        <script type="application/ld+json">{JSON.stringify(schemaData)}</script>
+        {!isServicios && !isContacto && (
+          <script type="application/ld+json">
+            {JSON.stringify(schemaData)}
+          </script>
+        )}
       </Helmet>
       <div className="min-h-screen bg-base text-default">
         <div
@@ -399,7 +415,7 @@ const App: React.FC = () => {
                 <ul className="space-y-3 text-sm text-muted">
                   <li>
                     <a
-                      href="https://youtube.com/@TODO"
+                      href="#"
                       rel="noopener noreferrer"
                       aria-label="YouTube"
                       className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors"
@@ -409,7 +425,7 @@ const App: React.FC = () => {
                   </li>
                   <li>
                     <a
-                      href="https://x.com/TODO"
+                      href="#"
                       rel="noopener noreferrer"
                       aria-label="X (Twitter)"
                       className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors"
@@ -419,7 +435,7 @@ const App: React.FC = () => {
                   </li>
                   <li>
                     <a
-                      href="https://linkedin.com/company/TODO"
+                      href="#"
                       rel="noopener noreferrer"
                       aria-label="LinkedIn"
                       className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors"
@@ -429,7 +445,7 @@ const App: React.FC = () => {
                   </li>
                   <li>
                     <a
-                      href="https://instagram.com/TODO"
+                      href="#"
                       rel="noopener noreferrer"
                       aria-label="Instagram"
                       className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors"
@@ -439,7 +455,7 @@ const App: React.FC = () => {
                   </li>
                   <li>
                     <a
-                      href="https://facebook.com/TODO"
+                      href="#"
                       rel="noopener noreferrer"
                       aria-label="Facebook"
                       className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors"

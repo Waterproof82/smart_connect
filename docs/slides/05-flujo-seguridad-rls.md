@@ -55,16 +55,16 @@
 │                                                                         │
 │  documents:                                                               │
 │  • SELECT: public (anon + authenticated) - for chatbot RAG             │
-│  • ALL: admin@smartconnect.ai only                                        │
+│  • ALL: info@digitalizatenerife.es only                                        │
 │  • service_role: full access                                             │
 │                                                                         │
 │  app_settings:                                                            │
 │  • SELECT: public (anon) - for landing page contact info                │
-│  • ALL: admin@smartconnect.ai only                                        │
+│  • ALL: info@digitalizatenerife.es only                                        │
 │  • service_role: full access                                             │
 │                                                                         │
 │  security_logs:                                                           │
-│  • SELECT: admin@smartconnect.ai only                                     │
+│  • SELECT: info@digitalizatenerife.es only                                     │
 │  • ALL: service_role only                                                │
 │                                                                         │
 └─────────────────────────────────────────────────────────────────────────────┘
@@ -178,16 +178,16 @@ FOR SELECT
 TO authenticated
 USING (true);
 
--- 3. INSERT/UPDATE/DELETE: Only admin@smartconnect.ai (email verified in JWT)
+-- 3. INSERT/UPDATE/DELETE: Only info@digitalizatenerife.es (email verified in JWT)
 CREATE POLICY "Admin full access to documents"
 ON public.documents
 FOR ALL
 TO authenticated
 USING (
-  (auth.jwt() ->> 'email') = 'admin@smartconnect.ai'
+  (auth.jwt() ->> 'email') = 'info@digitalizatenerife.es'
 )
 WITH CHECK (
-  (auth.jwt() ->> 'email') = 'admin@smartconnect.ai'
+  (auth.jwt() ->> 'email') = 'info@digitalizatenerife.es'
 );
 
 -- 4. Service role bypass (for Edge Functions)
@@ -233,9 +233,9 @@ USING (true);
 
 ## OWASP Compliance
 
-| OWASP Category | Protection | Implementation |
-|---------------|------------|----------------|
-| A01: Broken Access Control | ✅ | RLS policies + JWT role check |
-| A02: Cryptographic Failures | ✅ | API keys in Edge Functions |
-| A03: Injection | ✅ | Parameterized queries |
-| A07: Auth Failures | ✅ | Supabase Auth + JWT |
+| OWASP Category              | Protection | Implementation                |
+| --------------------------- | ---------- | ----------------------------- |
+| A01: Broken Access Control  | ✅         | RLS policies + JWT role check |
+| A02: Cryptographic Failures | ✅         | API keys in Edge Functions    |
+| A03: Injection              | ✅         | Parameterized queries         |
+| A07: Auth Failures          | ✅         | Supabase Auth + JWT           |

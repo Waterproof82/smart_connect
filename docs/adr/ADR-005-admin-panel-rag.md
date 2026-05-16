@@ -72,8 +72,8 @@ El sistema RAG contiene documentos en Supabase que alimentan el chatbot experto.
 
 ```typescript
 enum Role {
-  admin = 'admin',          // Solo lectura
-  super_admin = 'super_admin' // Lectura + Escritura + Eliminación
+  admin = "admin", // Solo lectura
+  super_admin = "super_admin", // Lectura + Escritura + Eliminación
 }
 
 // Implementado en AdminUser.canPerform()
@@ -90,7 +90,7 @@ enum Role {
    ↓
 4. Login → Supabase Auth (email/password)
    ↓
-5. Verificar email === 'admin@smartconnect.ai' (único admin)
+5. Verificar email === 'info@digitalizatenerife.es' (único admin)
    ↓
 6. Si válido → AdminDashboard
    ↓
@@ -118,14 +118,14 @@ async function deleteDoc(id: string) {
 ```typescript
 // BIEN: Validar en servidor con entidad de dominio
 async function deleteDoc(id: string, user: AdminUser) {
-  if (!user.canPerform('delete')) {
-    throw new Error('Insufficient permissions'); // ✅ SEGURO
+  if (!user.canPerform("delete")) {
+    throw new Error("Insufficient permissions"); // ✅ SEGURO
   }
-  
+
   // Verificar que el documento existe
   const doc = await repo.getById(id);
-  if (!doc) throw new Error('Not found');
-  
+  if (!doc) throw new Error("Not found");
+
   await repo.delete(id);
 }
 ```
@@ -160,16 +160,16 @@ async function deleteDoc(id: string, user: AdminUser) {
 1. **Configuración Inicial de Usuarios Admin**
    - Solución: Crear usuarios admin manualmente en Supabase con:
      ```sql
-     UPDATE auth.users 
+     UPDATE auth.users
      SET raw_user_meta_data = '{"role": "super_admin"}'
-     WHERE email = 'admin@smartconnect.ai';
+     WHERE email = 'info@digitalizatenerife.es';
      ```
 
 2. **Migración de Supabase RLS**
    - Solución: Políticas RLS deben permitir lectura autenticada:
      ```sql
-     CREATE POLICY "Allow authenticated read" 
-     ON documents FOR SELECT 
+     CREATE POLICY "Allow authenticated read"
+     ON documents FOR SELECT
      TO authenticated USING (true);
      ```
 
@@ -196,8 +196,8 @@ async function deleteDoc(id: string, user: AdminUser) {
 export function getAdminContainer(): AdminContainer {
   if (!containerInstance) {
     containerInstance = new AdminContainer(
-      VITE_SUPABASE_URL, 
-      VITE_SUPABASE_ANON_KEY
+      VITE_SUPABASE_URL,
+      VITE_SUPABASE_ANON_KEY,
     );
   }
   return containerInstance;
@@ -233,14 +233,14 @@ interface PaginationOptions {
 ### Tests de Seguridad Críticos
 
 ```typescript
-it('should PREVENT regular admin from deleting documents', async () => {
+it("should PREVENT regular admin from deleting documents", async () => {
   const regularAdmin = AdminUser.create({
-    role: 'admin', // ❌ No tiene permisos de delete
+    role: "admin", // ❌ No tiene permisos de delete
   });
 
-  await expect(
-    deleteUseCase.execute('doc-1', regularAdmin)
-  ).rejects.toThrow('Insufficient permissions');
+  await expect(deleteUseCase.execute("doc-1", regularAdmin)).rejects.toThrow(
+    "Insufficient permissions",
+  );
 });
 ```
 
@@ -257,12 +257,13 @@ it('should PREVENT regular admin from deleting documents', async () => {
 ```typescript
 // ✅ CORRECTO: Atomicidad garantizada
 const embedding = await repository.generateEmbedding(content);
-if (!embedding) throw new Error('Embedding generation failed');
+if (!embedding) throw new Error("Embedding generation failed");
 const doc = Document.create({ content, embedding });
 await repository.create(doc);
 ```
 
 **Beneficios:**
+
 - **Consistencia:** Todos los documentos tienen embedding desde creación
 - **Validación:** Content + Source validados antes de llamar Gemini API
 - **Seguridad OWASP A01:** Solo `super_admin` puede crear documentos

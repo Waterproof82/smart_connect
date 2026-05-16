@@ -5,7 +5,7 @@
  *
  * Implementación del repositorio de autenticación usando Supabase Auth.
  *
- * SECURITY: Verifica email específico (admin@smartconnect.ai) en lugar de roles.
+ * SECURITY: Verifica email específico (info@digitalizatenerife.es) en lugar de roles.
  * El email en JWT está verificado por Supabase Auth y no puede ser modificado por el usuario.
  */
 
@@ -19,7 +19,7 @@ import {
 } from "../../domain/repositories/IAuthRepository";
 import { AdminUser } from "../../domain/entities/AdminUser";
 
-const ADMIN_EMAIL = "admin@smartconnect.ai";
+const ADMIN_EMAIL = "info@digitalizatenerife.es";
 
 export class SupabaseAuthRepository implements IAuthRepository {
   private readonly client = supabase;

@@ -131,7 +131,7 @@ const tools: WebMCPTool[] = [
         return [
           "SmartConnect AI — Contact Information",
           "",
-          "- Email: info@smartconnect.ai",
+          "- Email: info@digitalizatenerife.es",
           "- WhatsApp: available via the contact page",
           "- Office: Santa Cruz de Tenerife, Canary Islands, Spain",
           "- Website: https://digitalizatenerife.es",
@@ -141,7 +141,7 @@ const tools: WebMCPTool[] = [
       return [
         "SmartConnect AI — Información de Contacto",
         "",
-        "- Email: info@smartconnect.ai",
+        "- Email: info@digitalizatenerife.es",
         "- WhatsApp: disponible a través de la página de contacto",
         "- Oficina: Santa Cruz de Tenerife, Islas Canarias, España",
         "- Web: https://digitalizatenerife.es",
