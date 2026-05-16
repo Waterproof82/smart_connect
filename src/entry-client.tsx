@@ -23,6 +23,30 @@ const CartaDigitalPremium = lazy(() =>
 
 const TapReviewPageWithData = lazy(() => import("./TapReviewHydrator"));
 
+const AutomationN8nContainer = lazy(() =>
+  import("@features/automation-n8n/presentation/AutomationN8nContainer").then(
+    (m) => ({ default: m.default }),
+  ),
+);
+
+const WhatsappAutomationContainer = lazy(() =>
+  import("@features/whatsapp-automation/presentation/WhatsappAutomationContainer").then(
+    (m) => ({ default: m.default }),
+  ),
+);
+
+const SoftwareCanariasContainer = lazy(() =>
+  import("@features/software-canarias/presentation/SoftwareCanariasContainer").then(
+    (m) => ({ default: m.default }),
+  ),
+);
+
+const DigitalizationTenerifeContainer = lazy(() =>
+  import("@features/digitalization-tenerife/presentation/DigitalizationTenerifeContainer").then(
+    (m) => ({ default: m.default }),
+  ),
+);
+
 const NotFound = lazy(() =>
   import("@features/landing/presentation/components/NotFound").then((m) => ({
     default: m.NotFound,
@@ -59,6 +83,22 @@ const app = (
               <Route path="/admin" element={<AdminPanel />} />
               <Route path="/carta-digital" element={<CartaDigitalPremium />} />
               <Route path="/tap-review" element={<TapReviewPageWithData />} />
+              <Route
+                path="/automatizacion-restaurantes-n8n"
+                element={<AutomationN8nContainer />}
+              />
+              <Route
+                path="/automatizacion-whatsapp-restaurante"
+                element={<WhatsappAutomationContainer />}
+              />
+              <Route
+                path="/software-restaurantes-canarias"
+                element={<SoftwareCanariasContainer />}
+              />
+              <Route
+                path="/digitalizacion-hosteleria-tenerife"
+                element={<DigitalizationTenerifeContainer />}
+              />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>

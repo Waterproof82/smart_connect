@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Cpu, ChevronDown, Shield, X, Menu } from "lucide-react";
+import { Cpu, ChevronDown, ArrowLeft, Shield, X, Menu } from "lucide-react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import LanguageSelector from "@shared/components/LanguageSelector";
 import { useLanguage } from "@shared/context/LanguageContext";
 
-import { SOLUTIONS } from "@shared/config/solutions";
+import { SOLUTIONS, ROUTE_TO_SOLUTION_ID } from "@shared/config/solutions";
 import { mapSolutions, SolutionItem } from "@shared/utils/solutionHelpers";
 
 interface NavbarProps {
@@ -170,7 +170,13 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
     setIsMobileMenuOpen(false);
   };
 
-  const solutions = mapSolutions(SOLUTIONS, t);
+  const isHomePage = location.pathname === "/";
+
+  const solutions = mapSolutions(SOLUTIONS, t, {
+    filterOut: ROUTE_TO_SOLUTION_ID[location.pathname]
+      ? [ROUTE_TO_SOLUTION_ID[location.pathname]]
+      : [],
+  });
 
   return (
     <nav
@@ -196,6 +202,15 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
 
         {/* Navigation - Desktop */}
         <div className="hidden md:flex items-center gap-10 text-sm font-semibold text-muted">
+          {!isHomePage && (
+            <Link
+              to="/"
+              className="flex items-center gap-1.5 hover:text-[var(--color-text)] transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              {t.navBack}
+            </Link>
+          )}
           <div
             role="none"
             className="relative group outline-none"
@@ -286,13 +301,15 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
             {t.navContact}
           </a>
           <LanguageSelector />
-          <Link
-            to="/admin"
-            className="flex items-center gap-2 min-h-[48px] text-muted hover:text-[var(--color-primary)] transition-colors"
-          >
-            <Shield className="w-4 h-4" />
-            <span>{t.navAdmin}</span>
-          </Link>
+          {isHomePage && (
+            <Link
+              to="/admin"
+              className="flex items-center gap-2 min-h-[48px] text-muted hover:text-[var(--color-primary)] transition-colors"
+            >
+              <Shield className="w-4 h-4" />
+              <span>{t.navAdmin}</span>
+            </Link>
+          )}
         </div>
 
         {/* Hamburger for mobile */}
@@ -345,6 +362,19 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
                 className="flex flex-col gap-1"
                 aria-label="Enlaces de navegación"
               >
+                {!isHomePage && (
+                  <Link
+                    to="/"
+                    className="flex items-center gap-3 p-3 text-muted hover:bg-[var(--color-surface)] rounded-xl transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <ArrowLeft className="w-5 h-5" />
+                    {t.navBack}
+                  </Link>
+                )}
+                {!isHomePage && (
+                  <hr className="border-[var(--color-border)] my-1" />
+                )}
                 {solutions.map((item) => {
                   const active = isActive(item.href, item.internal);
                   return (
@@ -397,14 +427,16 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
                 >
                   {t.navContact}
                 </a>
-                <Link
-                  to="/admin"
-                  className="text-muted flex items-center gap-2 p-3 min-h-[48px] hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-xl transition-colors"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  <Shield className="w-4 h-4" />
-                  <span>Admin</span>
-                </Link>
+                {isHomePage && (
+                  <Link
+                    to="/admin"
+                    className="text-muted flex items-center gap-2 p-3 min-h-[48px] hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-xl transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <Shield className="w-4 h-4" />
+                    <span>Admin</span>
+                  </Link>
+                )}
               </nav>
             </div>
           </dialog>
