@@ -76,6 +76,9 @@ n8n/
 # Supabase temp files
 supabase/.temp/
 
+# SDD orchestration artifacts
+openspec/
+
 # Sensitive data
 *.pem
 *.key
