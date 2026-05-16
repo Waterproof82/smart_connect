@@ -1,31 +1,42 @@
 /**
- * WebMCP — Web Machine Learning Community Protocol
+ * WebMCP — Web Model Context Protocol
  *
- * Implements navigator.modelContext.provideContext() with tool definitions
- * for AI agents visiting the page. Each tool has: name, description,
- * inputSchema (JSON Schema), and an execute callback.
+ * Registers tools on navigator.modelContext for AI agents visiting the page.
+ * Uses @mcp-b/webmcp-polyfill to work in all browsers (not just Chrome 146+).
  *
- * Spec: https://webmachinelearning.github.io/
- *       https://developer.chrome.com/docs/ai/webmcp
+ * Each tool has: name, description, inputSchema (JSON Schema), execute callback.
  *
- * This module is loaded once at page boot (entry-client.tsx).
- * It registers tools that LLM agents on the page can discover and invoke.
+ * Spec: https://webmachinelearning.github.io/webmcp/
+ *       https://docs.mcp-b.ai/
  */
 
-interface WebMCPTool {
-  name: string;
-  description: string;
-  inputSchema: Record<string, unknown>;
-  execute: (args: Record<string, unknown>) => unknown | Promise<unknown>;
+import "@mcp-b/webmcp-polyfill";
+
+// --- Types ---
+
+interface ToolContentBlock {
+  type: "text";
+  text: string;
 }
 
-interface ModelContext {
-  provideContext: (tools: WebMCPTool[]) => void;
+interface ToolResult {
+  content: ToolContentBlock[];
 }
+
+interface ToolDescriptor {
+  name: string;
+  description: string;
+  inputSchema?: Record<string, unknown>;
+  execute: (args: Record<string, unknown>) => ToolResult | Promise<ToolResult>;
+}
+
+const tk = (text: string): ToolResult => ({
+  content: [{ type: "text", text }],
+});
 
 // --- Tool implementations ---
 
-const tools: WebMCPTool[] = [
+const tools: ToolDescriptor[] = [
   {
     name: "get_product_info",
     description:
@@ -54,7 +65,7 @@ const tools: WebMCPTool[] = [
       },
       required: ["product"],
     },
-    execute: (args: Record<string, unknown>): string => {
+    execute: (args: Record<string, unknown>): ToolResult => {
       const productMap: Record<string, { es: string; en: string }> = {
         qribar: {
           es: "QRIBAR: Menú digital con pedidos en tiempo real desde la mesa a barra y cocina. Sin comisiones. Los clientes escanean un código QR en la mesa, exploran platos con fotos y vídeos, y envían el pedido directamente.",
@@ -70,7 +81,7 @@ const tools: WebMCPTool[] = [
         },
         "n8n-automation": {
           es: "Automatización n8n: Flujos de trabajo que conectan CRM, email, WhatsApp y redes sociales. Automatiza captación, análisis de sentimiento y notificaciones.",
-          en: "n8n Automation: Workflows connecting CRM, email, WhatsApp and social media. Automate lead capture, sentiment analysis, and notifications.",
+          en: "n8n Automation: Workflows connecting CRM, email, WhatsApp and social media. Automatize lead capture, sentiment analysis, and notifications.",
         },
         "whatsapp-automation": {
           es: "Automatización WhatsApp: Respuestas automáticas 24/7 para reservas, consultas y pedidos. Se integra con tu número existente de WhatsApp Business.",
@@ -91,7 +102,9 @@ const tools: WebMCPTool[] = [
       const info = productMap[product];
 
       if (!info) {
-        return `Product "${product}" not found. Available: ${Object.keys(productMap).join(", ")}`;
+        return tk(
+          `Product "${product}" not found. Available: ${Object.keys(productMap).join(", ")}`,
+        );
       }
 
       const urls: Record<string, string> = {
@@ -108,7 +121,9 @@ const tools: WebMCPTool[] = [
           "https://digitalizatenerife.es/digitalizacion-hosteleria-tenerife",
       };
 
-      return `${info[lang]}\n\nMore info: ${urls[product] || "https://digitalizatenerife.es"}`;
+      return tk(
+        `${info[lang]}\n\nMore info: ${urls[product] || "https://digitalizatenerife.es"}`,
+      );
     },
   },
   {
@@ -125,28 +140,32 @@ const tools: WebMCPTool[] = [
         },
       },
     },
-    execute: (args: Record<string, unknown>): string => {
+    execute: (args: Record<string, unknown>): ToolResult => {
       const lang = args.language === "en" ? "en" : "es";
       if (lang === "en") {
-        return [
-          "SmartConnect AI — Contact Information",
+        return tk(
+          [
+            "SmartConnect AI — Contact Information",
+            "",
+            "- Email: info@digitalizatenerife.es",
+            "- WhatsApp: available via the contact page",
+            "- Office: Santa Cruz de Tenerife, Canary Islands, Spain",
+            "- Website: https://digitalizatenerife.es",
+            "- Contact page: https://digitalizatenerife.es/contacto",
+          ].join("\n"),
+        );
+      }
+      return tk(
+        [
+          "SmartConnect AI — Información de Contacto",
           "",
           "- Email: info@digitalizatenerife.es",
-          "- WhatsApp: available via the contact page",
-          "- Office: Santa Cruz de Tenerife, Canary Islands, Spain",
-          "- Website: https://digitalizatenerife.es",
-          "- Contact page: https://digitalizatenerife.es/contacto",
-        ].join("\n");
-      }
-      return [
-        "SmartConnect AI — Información de Contacto",
-        "",
-        "- Email: info@digitalizatenerife.es",
-        "- WhatsApp: disponible a través de la página de contacto",
-        "- Oficina: Santa Cruz de Tenerife, Islas Canarias, España",
-        "- Web: https://digitalizatenerife.es",
-        "- Página de contacto: https://digitalizatenerife.es/contacto",
-      ].join("\n");
+          "- WhatsApp: disponible a través de la página de contacto",
+          "- Oficina: Santa Cruz de Tenerife, Islas Canarias, España",
+          "- Web: https://digitalizatenerife.es",
+          "- Página de contacto: https://digitalizatenerife.es/contacto",
+        ].join("\n"),
+      );
     },
   },
   {
@@ -163,36 +182,40 @@ const tools: WebMCPTool[] = [
         },
       },
     },
-    execute: (args: Record<string, unknown>): string => {
+    execute: (args: Record<string, unknown>): ToolResult => {
       const lang = args.language === "en" ? "en" : "es";
       if (lang === "en") {
-        return [
-          "SmartConnect AI — Products & Services",
-          "",
-          "1. QRIBAR — Digital menu with real-time orders (no commissions)",
-          "2. Tap-to-Review NFC — Google review NFC cards",
-          "3. Carta Digital Premium — Premium digital menu with 5 languages",
-          "4. n8n Automation — Workflow automation for hospitality",
-          "5. WhatsApp Automation — 24/7 automated messaging",
-          "6. Software Canarias — Custom software for Canary Islands businesses",
-          "7. Digitalización Tenerife — Complete digital transformation in Tenerife",
-          "",
-          "Website: https://digitalizatenerife.es",
-        ].join("\n");
+        return tk(
+          [
+            "SmartConnect AI — Products & Services",
+            "",
+            "1. QRIBAR — Digital menu with real-time orders (no commissions)",
+            "2. Tap-to-Review NFC — Google review NFC cards",
+            "3. Carta Digital Premium — Premium digital menu with 5 languages",
+            "4. n8n Automation — Workflow automation for hospitality",
+            "5. WhatsApp Automation — 24/7 automated messaging",
+            "6. Software Canarias — Custom software for Canary Islands businesses",
+            "7. Digitalización Tenerife — Complete digital transformation in Tenerife",
+            "",
+            "Website: https://digitalizatenerife.es",
+          ].join("\n"),
+        );
       }
-      return [
-        "SmartConnect AI — Productos y Servicios",
-        "",
-        "1. QRIBAR — Menú digital con pedidos en tiempo real (sin comisiones)",
-        "2. Tap-to-Review NFC — Tarjetas NFC para reseñas en Google",
-        "3. Carta Digital Premium — Menú digital premium con 5 idiomas",
-        "4. Automatización n8n — Automatización de flujos para hostelería",
-        "5. Automatización WhatsApp — Mensajería automatizada 24/7",
-        "6. Software Canarias — Software a medida para empresas canarias",
-        "7. Digitalización Tenerife — Transformación digital completa en Tenerife",
-        "",
-        "Web: https://digitalizatenerife.es",
-      ].join("\n");
+      return tk(
+        [
+          "SmartConnect AI — Productos y Servicios",
+          "",
+          "1. QRIBAR — Menú digital con pedidos en tiempo real (sin comisiones)",
+          "2. Tap-to-Review NFC — Tarjetas NFC para reseñas en Google",
+          "3. Carta Digital Premium — Menú digital premium con 5 idiomas",
+          "4. Automatización n8n — Automatización de flujos para hostelería",
+          "5. Automatización WhatsApp — Mensajería automatizada 24/7",
+          "6. Software Canarias — Software a medida para empresas canarias",
+          "7. Digitalización Tenerife — Transformación digital completa en Tenerife",
+          "",
+          "Web: https://digitalizatenerife.es",
+        ].join("\n"),
+      );
     },
   },
   {
@@ -215,27 +238,32 @@ const tools: WebMCPTool[] = [
             "/software-restaurantes-canarias",
             "/digitalizacion-hosteleria-tenerife",
             "/about",
+            "/legal/aviso",
+            "/legal/privacidad",
+            "/legal/cookies",
           ],
           description: "The URL path of the page to fetch content from.",
         },
       },
       required: ["path"],
     },
-    execute: async (args: Record<string, unknown>): Promise<string> => {
+    execute: async (args: Record<string, unknown>): Promise<ToolResult> => {
       const pagePath = String(args.path || "/");
       try {
         const response = await fetch(
           `https://digitalizatenerife.es${pagePath}`,
-          {
-            headers: { Accept: "text/markdown" },
-          },
+          { headers: { Accept: "text/markdown" } },
         );
         if (response.ok) {
-          return await response.text();
+          return tk(await response.text());
         }
-        return `Could not fetch content for ${pagePath}. Status: ${response.status}`;
+        return tk(
+          `Could not fetch content for ${pagePath}. Status: ${response.status}`,
+        );
       } catch {
-        return `Error fetching content for ${pagePath}. The page might not be accessible.`;
+        return tk(
+          `Error fetching content for ${pagePath}. The page might not be accessible.`,
+        );
       }
     },
   },
@@ -243,23 +271,27 @@ const tools: WebMCPTool[] = [
 
 // --- Registration ---
 
-export function registerWebMCPTools(): void {
-  try {
-    const nav = globalThis.navigator as Navigator & {
-      modelContext?: ModelContext;
-    };
+const REGISTERED_KEY = "__webmcp_registered";
 
-    if (
-      nav.modelContext &&
-      typeof nav.modelContext.provideContext === "function"
-    ) {
-      nav.modelContext.provideContext(tools);
-      // tools registered successfully — no console needed
-    } else {
-      // WebMCP not available — this is normal in most browsers.
-      // The API is available in AI-enhanced browsers and agents.
+export function registerWebMCPTools(): void {
+  // Prevent double registration (e.g. in dev HMR)
+  if ((globalThis as Record<string, unknown>)[REGISTERED_KEY]) {
+    return;
+  }
+
+  try {
+    const mc = (navigator as unknown as Record<string, unknown>)
+      .modelContext as
+      | { registerTool?: (tool: ToolDescriptor) => void }
+      | undefined;
+
+    if (mc && typeof mc.registerTool === "function") {
+      for (const tool of tools) {
+        mc.registerTool(tool);
+      }
+      (globalThis as Record<string, unknown>)[REGISTERED_KEY] = true;
     }
   } catch {
-    // WebMCP registration failed — non-critical, skip silently
+    // Registration failed — non-critical, skip silently
   }
 }

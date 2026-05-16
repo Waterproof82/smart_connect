@@ -22,6 +22,12 @@ interface Translation {
   heroTitle: string;
   heroTitleAccent: string;
   heroTitleEnd: string;
+  heroServiciosTitle: string;
+  heroServiciosTitleAccent: string;
+  heroServiciosTitleEnd: string;
+  heroContactoTitle: string;
+  heroContactoTitleAccent: string;
+  heroContactoTitleEnd: string;
   heroSubtitle: string;
   heroButtonDemo: string;
   heroButtonContact: string;
@@ -654,6 +660,12 @@ const translations: Record<Language, Translation> = {
     heroTitle: "Potencia tu Negocio con",
     heroTitleAccent: "IA",
     heroTitleEnd: "y Automatización",
+    heroServiciosTitle: "Soluciones de",
+    heroServiciosTitleAccent: "IA y Automatización",
+    heroServiciosTitleEnd: "para tu Negocio",
+    heroContactoTitle: "Hablemos de tu",
+    heroContactoTitleAccent: "Proyecto",
+    heroContactoTitleEnd: "",
     heroSubtitle:
       "Tecnología de próxima generación para restaurantes en Tenerife y Canarias. Automatiza pedidos, aumenta ingresos por mesa, reduce tiempos de espera y fideliza clientes con soluciones digitales sin comisiones ni intermediarios.",
     heroButtonDemo: "Ver Demo",
@@ -1516,6 +1528,12 @@ const translations: Record<Language, Translation> = {
     heroTitle: "Boost your business with",
     heroTitleAccent: "Artificial Intelligence",
     heroTitleEnd: "and automation",
+    heroServiciosTitle: "AI and Automation",
+    heroServiciosTitleAccent: "Solutions",
+    heroServiciosTitleEnd: "for Your Business",
+    heroContactoTitle: "Let's Talk About",
+    heroContactoTitleAccent: "Your Project",
+    heroContactoTitleEnd: "",
     heroSubtitle:
       "Next-generation technology for restaurants in Tenerife and Canary Islands. Automate orders, increase revenue per table, reduce wait times, and retain customers with digital solutions that have no commissions or intermediaries.",
     heroButtonDemo: "View Demo",

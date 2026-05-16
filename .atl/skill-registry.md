@@ -15,7 +15,7 @@ _Last updated: 2026-05-14_
 | smart-connect-standards | `src/*`, `docs/*`, `*.tsx`, `*.ts` | architecture, design, security, testing, rag, gemini, best-practices | Global standards for SmartConnect ecosystem: Clean Architecture, DI, Jest+RTL testing, OWASP security, RAG chatbot, environment compatibility.                  |
 
 | markdown-negotiation | `*.ts`, `middleware.ts`, `api/*.mjs` | markdown, negotiate, Accept header, LLM, content-type | Content negotiation via `Accept: text/markdown`. Vite plugin for dev, Edge Middleware + Serverless Function for prod. Returns page content as clean Markdown for LLMs. |
-| webmcp-tools | `src/*.ts`, `src/entry-client.tsx` | webmcp, modelContext, provideContext, AI tools | WebMCP tools registered via `navigator.modelContext.provideContext()`. 4 tools: product info, contact, list, page content. |
+| webmcp-tools | `src/*.ts`, `src/entry-client.tsx`, `*.tsx` | webmcp, modelContext, registerTool, AI tools | WebMCP tools registered via `navigator.modelContext.registerTool()` con `@mcp-b/webmcp-polyfill`. Return type `{ content: [{ type: 'text', text }] }`. 4 tools: product info, contact, list, page content. |
 | authorship-signals | `*.tsx`, `src/App.tsx`, `AboutPage.tsx` | author, rel-author, publisher, JSON-LD, authority | Authorship signals: `<link rel="author">`, JSON-LD `author`/`publisher` in `@graph`, `/about` page with Organization schema. |
 | agent-skills | `public/.well-known/agent-skills/*` | agent skills, $schema, sha256, capability              | Agent Skills discovery index at `/.well-known/agent-skills/index.json` with `$schema` and proper sha256 hashes. |
 
@@ -66,6 +66,7 @@ _Last updated: 2026-05-14_
 | quieter              | `.claude/skills/quieter/`                       | Reduce visual intensity, tone down bold designs                         |
 | skill-creator        | `.config/opencode/skills/skill-creator/`        | Create new AI agent skills following spec                               |
 | teach-impeccable     | `.claude/skills/teach-impeccable/`              | One-time design context setup, persistent guidelines                    |
+| webmcp               | `.config/opencode/skills/webmcp/`               | Register WebMCP tools via navigator.modelContext.registerTool()         |
 | work-unit-commits    | `.config/opencode/skills/work-unit-commits/`    | Structure commits as deliverable work units                             |
 
 ### Project-Level Skills
@@ -127,7 +128,7 @@ Regla obligatoria para el Gentle-Orchestrator: determina cuándo DEBE usar SDD v
 El sitio soporta estas capacidades para crawlers de IA y LLMs:
 
 - **Markdown Negotiation**: Cualquier página acepta `Accept: text/markdown` → devuelve el contenido como Markdown plano. Implementado via `middleware.ts` (Vercel Edge) + `api/negotiate.mjs` (Serverless) + `vite-plugin-md-negotiation.ts` (dev).
-- **WebMCP**: Tools registradas via `navigator.modelContext.provideContext()` en `src/WebMCP.ts`. Tools: `get_product_info`, `get_contact_info`, `list_products`, `get_page_content_markdown`.
+- **WebMCP**: Tools registradas via `navigator.modelContext.registerTool()` en `src/WebMCP.ts` con polyfill `@mcp-b/webmcp-polyfill` (cross-browser). Tools: `get_product_info`, `get_contact_info`, `list_products`, `get_page_content_markdown`. ⚠️ `provideContext()` fue ELIMINADA del spec en Marzo 2026 — usar `registerTool()` individualmente. `execute` debe retornar `{ content: [{ type: 'text', text }] }`.
 - **Agent Skills Index**: `public/.well-known/agent-skills/index.json` con `$schema` y skills documentados.
 - **Authorship Signals**: JSON-LD con `author`/`publisher` Organization en `@graph`, `<link rel="author">` en `<head>`, página `/about` con Organization schema.
 - **Dominio oficial**: TODAS las URLs deben usar `https://digitalizatenerife.es/`. NO usar `smartconnect.ai`.

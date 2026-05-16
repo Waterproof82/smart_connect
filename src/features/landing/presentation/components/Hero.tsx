@@ -8,8 +8,31 @@ import {
 } from "lucide-react";
 import { useLanguage } from "@shared/context/LanguageContext";
 
-export const Hero: React.FC = () => {
+interface HeroProps {
+  variant?: "home" | "servicios" | "contacto";
+}
+
+export const Hero: React.FC<HeroProps> = ({ variant = "home" }) => {
   const { t } = useLanguage();
+
+  const heroTitle =
+    variant === "servicios"
+      ? t.heroServiciosTitle
+      : variant === "contacto"
+        ? t.heroContactoTitle
+        : t.heroTitle;
+  const heroTitleAccent =
+    variant === "servicios"
+      ? t.heroServiciosTitleAccent
+      : variant === "contacto"
+        ? t.heroContactoTitleAccent
+        : t.heroTitleAccent;
+  const heroTitleEnd =
+    variant === "servicios"
+      ? t.heroServiciosTitleEnd
+      : variant === "contacto"
+        ? t.heroContactoTitleEnd
+        : t.heroTitleEnd;
 
   return (
     <div className="relative pt-32 pb-20 overflow-hidden min-h-[90vh] flex items-center">
@@ -26,11 +49,11 @@ export const Hero: React.FC = () => {
           </div>
 
           <h1 className="reveal-2 text-3xl sm:text-4xl md:text-6xl lg:text-8xl font-extrabold leading-[1.1] mb-8 tracking-tight">
-            {t.heroTitle}{" "}
+            {heroTitle}{" "}
             <span className="text-[var(--color-primary)]">
-              {t.heroTitleAccent}
+              {heroTitleAccent}
             </span>{" "}
-            {t.heroTitleEnd}
+            {heroTitleEnd}
           </h1>
 
           <p className="reveal-3 text-xl text-muted mb-12 leading-relaxed max-w-xl">

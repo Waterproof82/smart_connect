@@ -71,8 +71,10 @@ const ErrorBoundaryFallback: React.FC = () => {
 // since they're always rendered on the landing page.
 
 /* Heading structure:
-  H1: Potencia tu Negocio con IA y Automatización
-  H2: Nuestras Soluciones — heroEyebrow label
+  / → H1: Potencia tu Negocio con IA y Automatización
+  /servicios → H1: Soluciones de IA y Automatización para tu Negocio
+  /contacto → H1: Hablemos de tu Proyecto
+  H2: Nuestras Soluciones — heroEyebrow label (home) / skip on servicios/contacto
     H3: Software & IA
     H3: Automatización (n8n)
     H3: Tarjetas Tap-to-Review
@@ -95,7 +97,7 @@ const ErrorBoundaryFallback: React.FC = () => {
   - Viewport: width=device-width, initial-scale=1.0 ✓
   - Hreflang: skipped (single-language Spanish site) ✓
   - noindex: NOT present ✓
-  - H1 present: ✓
+  - H1 present: ✓ (unique per route)
   - Touch targets: 48px min ✓
   - DOM: lazy-loaded SuccessStats & Chatbot, ~700 estimated nodes ✓
 */
@@ -274,7 +276,11 @@ const App: React.FC = () => {
         <Navbar scrolled={scrolled} />
         <main id="main" aria-label="Contenido principal">
           <section id="inicio" aria-label="Inicio">
-            <Hero />
+            <Hero
+              variant={
+                isServicios ? "servicios" : isContacto ? "contacto" : "home"
+              }
+            />
           </section>
           <section
             id="soluciones"
