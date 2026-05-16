@@ -3,7 +3,7 @@ import { useLanguage } from "@shared/context/LanguageContext";
 import { useIntersectionObserver } from "@shared/hooks";
 import { ChevronDown } from "lucide-react";
 
-const FAQ: React.FC = () => {
+const Faq: React.FC = () => {
   const { t } = useLanguage();
   const sectionRef = useRef<HTMLDivElement>(null);
   const isVisible = useIntersectionObserver(sectionRef, {
@@ -74,4 +74,4 @@ const FAQ: React.FC = () => {
   );
 };
 
-export default FAQ;
+export default Faq;
