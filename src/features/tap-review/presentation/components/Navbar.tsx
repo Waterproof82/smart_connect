@@ -1,17 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import {
-  Cpu,
-  ChevronDown,
-  ArrowLeft,
-  Menu,
-  X,
-  Code2,
-  Settings2,
-  Utensils,
-} from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
+import { Cpu, ChevronDown, ArrowLeft, Menu, X } from "lucide-react";
 import { useLanguage } from "@shared/context/LanguageContext";
 import LanguageSelector from "@shared/components/LanguageSelector";
+import { SOLUTIONS, ROUTE_TO_SOLUTION_ID } from "@shared/config/solutions";
+import { mapSolutions } from "@shared/utils/solutionHelpers";
 
 interface NavbarProps {
   scrolled?: boolean;
@@ -19,10 +12,12 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ scrolled = false }) => {
   const { t } = useLanguage();
+  const location = useLocation();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [focusedDropdownIndex, setFocusedDropdownIndex] = useState<number>(-1);
 
+  // Close mobile menu on Escape key
   useEffect(() => {
     if (!isMobileMenuOpen) return;
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -34,37 +29,12 @@ const Navbar: React.FC<NavbarProps> = ({ scrolled = false }) => {
     return () => globalThis.removeEventListener("keydown", handleKeyDown);
   }, [isMobileMenuOpen]);
 
-  const solutions = [
-    {
-      id: "software-ia",
-      icon: <Code2 className="w-5 h-5 text-[var(--color-icon-blue)]" />,
-      title: t.navbarSoftwareIA,
-      desc: t.navbarSoftwareIADesc,
-      href: "/#soluciones",
-    },
-    {
-      id: "automatizacion-n8n",
-      icon: <Settings2 className="w-5 h-5 text-[var(--color-icon-purple)]" />,
-      title: t.navbarAutomation,
-      desc: t.navbarAutomationDesc,
-      href: "/#soluciones",
-    },
-    {
-      id: "qribar",
-      icon: <Utensils className="w-5 h-5 text-[var(--color-icon-amber)]" />,
-      title: t.navbarQribar,
-      desc: t.navbarQribarDesc,
-      href: "https://qribar.es",
-      external: true,
-    },
-    {
-      id: "carta-digital",
-      icon: <Utensils className="w-5 h-5 text-[var(--color-icon-emerald)]" />,
-      title: t.navbarCartaDigital,
-      desc: t.navbarCartaDigitalDesc,
-      href: "/carta-digital",
-    },
-  ];
+  const solutions = mapSolutions(SOLUTIONS, t, {
+    filterOut: ROUTE_TO_SOLUTION_ID[location.pathname]
+      ? [ROUTE_TO_SOLUTION_ID[location.pathname]]
+      : [],
+    hrefPrefix: "/",
+  });
 
   const handleDropdownLinkClick = (e?: React.MouseEvent<HTMLAnchorElement>) => {
     setIsDropdownOpen(false);

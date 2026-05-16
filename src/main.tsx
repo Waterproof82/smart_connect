@@ -7,17 +7,12 @@ import { ScrollToTop } from "@shared/components/ScrollToTop";
 import "./index.css";
 import App from "./App";
 import CartaDigitalPremium from "./features/landing/presentation/components/CartaDigitalPremium";
-import { TapReviewPage } from "./features/tap-review/presentation/TapReviewPage";
 import TapReviewContainer from "./features/tap-review/TapReviewContainer";
-import DigitalMenuContainer from "./features/digital-menu/presentation/DigitalMenuContainer";
-import MenuQrContainer from "./features/menu-qr/presentation/MenuQrContainer";
-import TableOrdersContainer from "./features/table-orders/presentation/TableOrdersContainer";
-import NfcReviewsContainer from "./features/nfc-reviews/presentation/NfcReviewsContainer";
+import { TapReviewPage } from "./features/tap-review/presentation/TapReviewPage";
 import AutomationN8nContainer from "./features/automation-n8n/presentation/AutomationN8nContainer";
 import WhatsappAutomationContainer from "./features/whatsapp-automation/presentation/WhatsappAutomationContainer";
 import SoftwareCanariasContainer from "./features/software-canarias/presentation/SoftwareCanariasContainer";
 import DigitalizationTenerifeContainer from "./features/digitalization-tenerife/presentation/DigitalizationTenerifeContainer";
-import MenuDigitalSinAppContainer from "./features/menu-digital-sin-app/presentation/MenuDigitalSinAppContainer";
 
 // Wrapper component to fetch whatsappPhone before rendering TapReviewPage (Clean Architecture: Presentation Container)
 const TapReviewPageWithData: React.FC = () => {
@@ -102,41 +97,41 @@ root.render(
               <Route path="/admin" element={<AdminPanel />} />
               <Route path="/carta-digital" element={<CartaDigitalPremium />} />
               <Route path="/tap-review" element={<TapReviewPageWithData />} />
+              {/* Automatización n8n */}
               <Route
-                path="/carta-digital-restaurante-tenerife"
-                element={<DigitalMenuContainer />}
-              />
-              <Route
-                path="/menu-qr-restaurante"
-                element={<MenuQrContainer />}
-              />
-              <Route
-                path="/nfc-tap-to-review"
-                element={<NfcReviewsContainer />}
+                path="/automatizacion-restaurantes-n8n"
+                element={<AutomationN8nContainer />}
               />
               <Route
                 path="/automation-n8n"
                 element={<AutomationN8nContainer />}
               />
+              {/* Automatización WhatsApp */}
+              <Route
+                path="/automatizacion-whatsapp-restaurante"
+                element={<WhatsappAutomationContainer />}
+              />
               <Route
                 path="/whatsapp-automation"
                 element={<WhatsappAutomationContainer />}
+              />
+              {/* Software Canarias */}
+              <Route
+                path="/software-restaurantes-canarias"
+                element={<SoftwareCanariasContainer />}
               />
               <Route
                 path="/software-canarias"
                 element={<SoftwareCanariasContainer />}
               />
+              {/* Digitalización Hostelería Tenerife */}
               <Route
-                path="/digitalization-tenerife"
+                path="/digitalizacion-hosteleria-tenerife"
                 element={<DigitalizationTenerifeContainer />}
               />
               <Route
-                path="/menu-digital-sin-app"
-                element={<MenuDigitalSinAppContainer />}
-              />
-              <Route
-                path="/pedidos-qr-desde-mesa"
-                element={<TableOrdersContainer />}
+                path="/digitalization-tenerife"
+                element={<DigitalizationTenerifeContainer />}
               />
               <Route path="*" element={<NotFound />} />
             </Routes>

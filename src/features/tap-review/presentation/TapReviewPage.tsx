@@ -37,6 +37,31 @@ export const TapReviewPage: React.FC<TapReviewPageProps> = ({
       <Helmet>
         <title>{t.tapReviewMetaTitle}</title>
         <meta name="description" content={t.tapReviewMetaDesc} />
+        <link rel="canonical" href="https://digitalizatenerife.es/tap-review" />
+        <link
+          rel="alternate"
+          hrefLang="es"
+          href="https://digitalizatenerife.es/tap-review"
+        />
+        <link
+          rel="alternate"
+          hrefLang="x-default"
+          href="https://digitalizatenerife.es/tap-review"
+        />
+        <meta property="og:title" content={t.tapReviewMetaTitle} />
+        <meta property="og:description" content={t.tapReviewMetaDesc} />
+        <meta
+          property="og:url"
+          content="https://digitalizatenerife.es/tap-review"
+        />
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:image"
+          content="https://digitalizatenerife.es/og-image.jpg"
+        />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={t.tapReviewMetaTitle} />
+        <meta name="twitter:description" content={t.tapReviewMetaDesc} />
       </Helmet>
 
       <Navbar />

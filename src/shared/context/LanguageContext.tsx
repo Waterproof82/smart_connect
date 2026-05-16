@@ -430,6 +430,42 @@ interface Translation {
   navbarDigitalizationTenerifeDesc: string;
   navbarMenuDigitalSinApp: string;
   navbarMenuDigitalSinAppDesc: string;
+  // Hero Additional Keys
+  smartConnect: string;
+  enterpriseAINode: string;
+  aiCore: string;
+  processing: string;
+  uplinkStable: string;
+  nfcActive: string;
+  // n8n Automation — Stats & Benefits
+  n8nAutomationStat1Label: string;
+  n8nAutomationStat2Label: string;
+  n8nAutomationStat3Label: string;
+  n8nAutomationStat4Label: string;
+  n8nAutomationBenefitsTitle: string;
+  n8nAutomationBenefitsSubtitle: string;
+  n8nAutomationBenefit1Title: string;
+  n8nAutomationBenefit1Desc: string;
+  n8nAutomationBenefit2Title: string;
+  n8nAutomationBenefit2Desc: string;
+  n8nAutomationBenefit3Title: string;
+  n8nAutomationBenefit3Desc: string;
+  n8nAutomationBenefit4Title: string;
+  n8nAutomationHowItWorksTitle: string;
+  n8nAutomationHowItWorksSubtitle: string;
+  n8nAutomationStep1Title: string;
+  n8nAutomationStep1Desc: string;
+  n8nAutomationStep2Title: string;
+  n8nAutomationStep2Desc: string;
+  n8nAutomationStep3Title: string;
+  n8nAutomationStep3Desc: string;
+  n8nAutomationGeoCoverageTitle: string;
+  n8nAutomationGeoCoverageSubtitle: string;
+  n8nAutomationServiceArea: string;
+  n8nAutomationInternalLinksTitle: string;
+  n8nAutomationInternalLink1Label: string;
+  n8nAutomationInternalLink1Desc: string;
+  n8nAutomationWhatsAppText: string;
 }
 
 const translations: Record<Language, Translation> = {
@@ -987,6 +1023,52 @@ const translations: Record<Language, Translation> = {
     menuDigitalSinAppHeroSubtitle:
       "Menú digital QR para tu restaurante en Tenerife. Sin necesidad de app, fácil de actualizar y sin comisiones.",
     menuDigitalSinAppHeroCta: "Quiero un menú digital sin app",
+
+    // Hero Additional Keys
+    smartConnect: "SmartConnect",
+    enterpriseAINode: "Enterprise AI Node",
+    aiCore: "AI Core",
+    processing: "Procesando...",
+    uplinkStable: "Uplink Estable",
+    nfcActive: "NFC Activo",
+
+    // n8n Automation — Stats
+    n8nAutomationStat1Label: "Eficiencia",
+    n8nAutomationStat2Label: "Soporte 24/7",
+    n8nAutomationStat3Label: "Integraciones",
+    n8nAutomationStat4Label: "Tiempo Implantación",
+    n8nAutomationBenefitsTitle: "Por qué Automatizar con n8n",
+    n8nAutomationBenefitsSubtitle:
+      "Optimiza las operaciones de tu restaurante con flujos de trabajo inteligentes",
+    n8nAutomationBenefit1Title: "Ahorro de Tiempo",
+    n8nAutomationBenefit1Desc:
+      "Automatiza tareas repetitivas para liberar el tiempo de tu equipo en trabajo estratégico",
+    n8nAutomationBenefit2Title: "Engagement del Cliente",
+    n8nAutomationBenefit2Desc:
+      "Crea experiencias personalizadas conectando todos los puntos de contacto con el cliente",
+    n8nAutomationBenefit3Title: "Reducción de Errores",
+    n8nAutomationBenefit3Desc:
+      "Minimiza errores humanos en la entrada de datos y ejecución de procesos",
+    n8nAutomationBenefit4Title: "Escalabilidad",
+    n8nAutomationHowItWorksTitle: "Cómo Funciona",
+    n8nAutomationHowItWorksSubtitle: "Te guiamos durante todo el proceso",
+    n8nAutomationStep1Title: "Auditoría",
+    n8nAutomationStep1Desc:
+      "Analizamos tus procesos actuales e identificamos oportunidades de automatización",
+    n8nAutomationStep2Title: "Diseño",
+    n8nAutomationStep2Desc:
+      "Diseñamos flujos de trabajo personalizados para tu negocio",
+    n8nAutomationStep3Title: "Implementación",
+    n8nAutomationStep3Desc:
+      "Desplegamos las automatizaciones y formamos a tu equipo",
+    n8nAutomationGeoCoverageTitle: "Cobertura Geográfica",
+    n8nAutomationGeoCoverageSubtitle: "Dónde operamos",
+    n8nAutomationServiceArea:
+      "Tenerife, Gran Canaria, Lanzarote, Fuerteventura y toda Canarias",
+    n8nAutomationInternalLinksTitle: "Descubre Más",
+    n8nAutomationInternalLink1Label: "Carta Digital QRIBAR",
+    n8nAutomationInternalLink1Desc: "Menú digital con pedidos desde la mesa",
+    n8nAutomationWhatsAppText: "Escríbenos por WhatsApp",
   },
   en: {
     // Navigation
@@ -1545,6 +1627,51 @@ const translations: Record<Language, Translation> = {
     menuDigitalSinAppHeroSubtitle:
       "QR digital menu for your restaurant in Tenerife. No app needed, easy to update and no commissions.",
     menuDigitalSinAppHeroCta: "I want a digital menu without app",
+
+    // Hero Additional Keys
+    smartConnect: "SmartConnect",
+    enterpriseAINode: "Enterprise AI Node",
+    aiCore: "AI Core",
+    processing: "Processing...",
+    uplinkStable: "Uplink Stable",
+    nfcActive: "NFC Active",
+
+    // n8n Automation — Stats
+    n8nAutomationStat1Label: "Efficiency",
+    n8nAutomationStat2Label: "24/7 Support",
+    n8nAutomationStat3Label: "Integrations",
+    n8nAutomationStat4Label: "Implementation Time",
+    n8nAutomationBenefitsTitle: "Why Automate with n8n",
+    n8nAutomationBenefitsSubtitle:
+      "Streamline your restaurant operations with intelligent workflows",
+    n8nAutomationBenefit1Title: "Time Savings",
+    n8nAutomationBenefit1Desc:
+      "Automate repetitive tasks to free up your team's time for more strategic work",
+    n8nAutomationBenefit2Title: "Customer Engagement",
+    n8nAutomationBenefit2Desc:
+      "Create personalized experiences by connecting all customer touchpoints",
+    n8nAutomationBenefit3Title: "Error Reduction",
+    n8nAutomationBenefit3Desc:
+      "Minimize human errors in data entry and process execution",
+    n8nAutomationBenefit4Title: "Scalability",
+    n8nAutomationHowItWorksTitle: "How It Works",
+    n8nAutomationHowItWorksSubtitle: "We guide you through the entire process",
+    n8nAutomationStep1Title: "Audit",
+    n8nAutomationStep1Desc:
+      "We analyze your current processes and identify automation opportunities",
+    n8nAutomationStep2Title: "Design",
+    n8nAutomationStep2Desc:
+      "We design custom workflows tailored to your business",
+    n8nAutomationStep3Title: "Implementation",
+    n8nAutomationStep3Desc: "We deploy the automations and train your team",
+    n8nAutomationGeoCoverageTitle: "Geographic Coverage",
+    n8nAutomationGeoCoverageSubtitle: "Where we operate",
+    n8nAutomationServiceArea:
+      "Tenerife, Gran Canaria, Lanzarote, Fuerteventura and all Canary Islands",
+    n8nAutomationInternalLinksTitle: "Discover More",
+    n8nAutomationInternalLink1Label: "QRIBAR Digital Menu",
+    n8nAutomationInternalLink1Desc: "Digital menu with table ordering",
+    n8nAutomationWhatsAppText: "Write us on WhatsApp",
   },
 };
 

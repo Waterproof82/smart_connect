@@ -11,7 +11,6 @@ import {
   ChevronDown,
   Loader2,
 } from "lucide-react";
-import { Link } from "react-router-dom";
 import { getAppSettings, AppSettings } from "@shared/services/settingsService";
 import { getLandingContainer } from "../LandingContainer";
 import { LeadEntity } from "../../domain/entities";
@@ -310,22 +309,7 @@ export const Contact: React.FC = () => {
           </div>
           <h2 className="text-5xl font-extrabold mb-6">{t.contactTitle}</h2>
           <p className="text-muted text-lg leading-relaxed">
-            Get a demo of our digital menu and NFC solutions for restaurants.
-            Learn more about{" "}
-            <Link
-              to="/tap-review"
-              className="text-[var(--color-primary)] hover:underline"
-            >
-              NFC cards for Google Reviews
-            </Link>{" "}
-            or explore our{" "}
-            <Link
-              to="/chatbot"
-              className="text-[var(--color-primary)] hover:underline"
-            >
-              AI-powered chatbot
-            </Link>
-            .
+            {t.contactSubtitle}
           </p>
         </div>
 

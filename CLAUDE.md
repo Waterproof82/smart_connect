@@ -91,6 +91,14 @@ Se aplican los estándares de calidad del Máster de Desarrollo con IA:
 
 ---
 
+## 🌐 DOMINIO OFICIAL
+
+- **URL producción**: `https://digitalizatenerife.es/`
+- ⚠️ **NO uses `smartconnectai.es`** — ese dominio no es oficial.
+- Todas las URLs (canónicas, OG, hreflang, sitemap, schema) deben usar `https://digitalizatenerife.es/`.
+
+---
+
 ## 📋 INSTRUCCIONES PARA LA IA (TU ROL)
 
 ### Métricas del Proyecto (2026-03-16)

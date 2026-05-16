@@ -7,6 +7,8 @@ import {
   MessageSquare,
   MapPin,
   Cloud,
+  QrCode,
+  ShoppingCart,
 } from "lucide-react";
 import { Translation } from "../context/LanguageContext";
 import React from "react";
@@ -32,6 +34,8 @@ const iconComponentMap: Record<
   MessageSquare,
   MapPin,
   Cloud,
+  QrCode,
+  ShoppingCart,
 };
 
 // SolutionItem type

@@ -1,5 +1,11 @@
 # 🏗️ SmartConnect Standards: Arquitectura y Diseño
 
+## 🌐 Official Domain
+
+- **Production URL**: `https://digitalizatenerife.es/`
+- ⚠️ **DO NOT use `smartconnectai.es`** — ese dominio no es oficial.
+- Todas las URLs canónicas, OG tags, hreflang, sitemap y schema LocalBusiness deben apuntar a `https://digitalizatenerife.es/`.
+
 ## Arquitectura
 
 - **Clean Architecture**: Separación clara entre capas (Presentación, Dominio, Datos).
