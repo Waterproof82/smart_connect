@@ -152,6 +152,17 @@ const App: React.FC = () => {
           "Menús digitales",
           "NFC Google Reviews",
         ],
+        image: "https://digitalizatenerife.es/icon.png",
+        telephone: "+34922123456",
+        priceRange: "€€",
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: "Calle Las Palmas 123",
+          addressLocality: "Santa Cruz de Tenerife",
+          addressRegion: "Canary Islands",
+          postalCode: "38001",
+          addressCountry: "ES",
+        },
         logo: {
           "@type": "ImageObject",
           url: "https://digitalizatenerife.es/icon.png",
