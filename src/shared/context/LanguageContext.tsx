@@ -25,10 +25,6 @@ interface Translation {
   heroSubtitle: string;
   heroButtonDemo: string;
   heroButtonContact: string;
-  heroStats5Lang: string;
-  heroStats0Commission: string;
-  heroStats247: string;
-  heroStatsInfinite: string;
   // Features
   featuresTitle: string;
   featuresSubtitle: string;
@@ -49,25 +45,20 @@ interface Translation {
   featuresCartaDigital: string;
   featuresCartaDigitalDesc: string;
   featuresVisit: string;
-  featuresContact: string;
   featuresDetails: string;
   // Success Stats
   successTitle: string;
   successSubtitle: string;
   successDesc: string;
-  successStat1Value: string;
   successStat1Label: string;
   successStat1Quote: string;
   successStat1Author: string;
-  successStat2Value: string;
   successStat2Label: string;
   successStat2Quote: string;
   successStat2Author: string;
-  successStat3Value: string;
   successStat3Label: string;
   successStat3Quote: string;
   successStat3Author: string;
-  successStat4Value: string;
   successStat4Label: string;
   successStat4Quote: string;
   successStat4Author: string;
@@ -76,7 +67,6 @@ interface Translation {
   seoDescription: string;
   seoProductDescription: string;
   seoAltTextNFC: string;
-  seoAltTextQribar: string;
   // Contact
   contactTitle: string;
   contactSubtitle: string;
@@ -104,10 +94,8 @@ interface Translation {
   contactPlaceholderMessage: string;
   contactFormNameRequired: string;
   contactFormCompanyRequired: string;
-  contactFormEmailRequired: string;
   contactFormEmailInvalid: string;
   contactFormServiceRequired: string;
-  contactFormMessageRequired: string;
   contactFormMessageMinLength: string;
   // Footer
   footerTagline: string;
@@ -123,10 +111,6 @@ interface Translation {
   footerLegalCookies: string;
   footerCopyright: string;
   // Navbar Solutions
-  navbarSoftwareIA: string;
-  navbarSoftwareIADesc: string;
-  navbarAutomation: string;
-  navbarAutomationDesc: string;
   navbarNFC: string;
   navbarNFCDesc: string;
   navbarQribar: string;
@@ -177,7 +161,6 @@ interface Translation {
   cartaHeroStat2Label: string;
   cartaHeroStat3Label: string;
   cartaHeroStat4Label: string;
-  cartaHeroCardLabel: string;
   cartaProblemaTitle: string;
   cartaProblemaSubtitle: string;
   cartaProblemaDesc: string;
@@ -199,7 +182,6 @@ interface Translation {
   cartaSolucionPrefix: string;
   cartaSolucionSuffix: string;
   cartaSolucionDesc: string;
-  cartaSolucionTenerife: string;
   cartaBeneficiosTitle: string;
   cartaBeneficiosSubtitle: string;
   cartaBeneficio1Title: string;
@@ -361,32 +343,12 @@ interface Translation {
   qribarError: string;
   qribarLoading: string;
   // Digital Menu Landing
-  digitalMenuHeroTitle: string;
-  digitalMenuHeroSubtitle: string;
-  digitalMenuHeroCta: string;
   // Menu QR Landing
-  menuQrHeroTitle: string;
-  menuQrHeroSubtitle: string;
-  menuQrHeroCta: string;
   // Table Orders Landing
-  tableOrdersHeroTitle: string;
-  tableOrdersHeroSubtitle: string;
-  tableOrdersHeroCta: string;
   // Digital Menu SEO
-  digitalMenuSeoTitle: string;
-  digitalMenuSeoDescription: string;
   // Menu QR SEO
-  menuQrSeoTitle: string;
-  menuQrSeoDescription: string;
   // Table Orders SEO
-  tableOrdersSeoTitle: string;
-  tableOrdersSeoDescription: string;
   // NFC Reviews Landing Page
-  nfcReviewsSeoTitle: string;
-  nfcReviewsSeoDescription: string;
-  nfcReviewsHeroTitle: string;
-  nfcReviewsHeroSubtitle: string;
-  nfcReviewsHeroCta: string;
   // n8n Automation Landing Page
   n8nAutomationSeoTitle: string;
   n8nAutomationSeoDescription: string;
@@ -412,14 +374,7 @@ interface Translation {
   digitalizationTenerifeHeroSubtitle: string;
   digitalizationTenerifeHeroCta: string;
   // Menu Digital sin App Landing Page
-  menuDigitalSinAppSeoTitle: string;
-  menuDigitalSinAppSeoDescription: string;
-  menuDigitalSinAppHeroTitle: string;
-  menuDigitalSinAppHeroSubtitle: string;
-  menuDigitalSinAppHeroCta: string;
   // Navbar Solutions (Silo 2)
-  navbarNFCReview: string;
-  navbarNFCReviewDesc: string;
   navbarAutomationN8n: string;
   navbarAutomationN8nDesc: string;
   navbarWhatsAppAutomation: string;
@@ -428,8 +383,6 @@ interface Translation {
   navbarSoftwareCanariasDesc: string;
   navbarDigitalizationTenerife: string;
   navbarDigitalizationTenerifeDesc: string;
-  navbarMenuDigitalSinApp: string;
-  navbarMenuDigitalSinAppDesc: string;
   // Hero Additional Keys
   smartConnect: string;
   enterpriseAINode: string;
@@ -486,10 +439,6 @@ const translations: Record<Language, Translation> = {
       "Tecnología de próxima generación para restaurantes en Tenerife y Canarias. Automatiza pedidos, aumenta ingresos por mesa, reduce tiempos de espera y fideliza clientes con soluciones digitales sin comisiones ni intermediarios.",
     heroButtonDemo: "Ver Demo",
     heroButtonContact: "Contactar",
-    heroStats5Lang: "Idiomas",
-    heroStats0Commission: "Sin comisiones",
-    heroStats247: "Soporte 24/7",
-    heroStatsInfinite: "Integraciones",
 
     // Features
     featuresTitle: "Nuestros Servicios",
@@ -523,7 +472,6 @@ const translations: Record<Language, Translation> = {
     featuresCartaDigitalDesc:
       "La carta digital que elimina intermediarios. 0% comisiones, 5 idiomas, pedidos por WhatsApp y tu propia base de datos de clientes.",
     featuresVisit: "Visitar",
-    featuresContact: "Contactar",
     featuresDetails: "Ver detalles",
 
     // Success Stats
@@ -531,22 +479,18 @@ const translations: Record<Language, Translation> = {
     successSubtitle: "Resultados reales que transforman negocios",
     successDesc:
       "Empresas que ya confían en nosotros y han transformado su operación.",
-    successStat1Value: "50+",
     successStat1Label: "Aumento Promedio",
     successStat1Quote:
       "Desde que implementamos QRIBAR, nuestros ingresos por mesa aumentaron un 45%",
     successStat1Author: "Restaurante L'Escale",
-    successStat2Value: "98%",
     successStat2Label: "Satisfacción",
     successStat2Quote:
       "Mis clientes adoran la experiencia. Las reseñas positivas se dispararon",
     successStat2Author: "Café Central Madrid",
-    successStat3Value: "45%",
     successStat3Label: "Reseñas Ganadas",
     successStat3Quote:
       "Pasamos de 200 a 1200 reseñas en Google. Es increíble el impacto",
     successStat3Author: "Bar Bodega Toledo",
-    successStat4Value: "850+",
     successStat4Label: "Clientes Activos",
     successStat4Quote:
       "Más de 850 negocios confían en SmartConnect para su transformación digital",
@@ -560,7 +504,6 @@ const translations: Record<Language, Translation> = {
     seoProductDescription:
       "Plataforma de crecimiento para restaurantes en Tenerife y Canarias con menú digital QRIBAR, pedidos por QR, tecnología NFC Tap-to-Review y automatización n8n. Diseñada para aumentar pedidos, reducir tiempos de espera, maximizar ingresos por mesa y obtener más reseñas en Google. Ideal para bares, restaurantes y hostelería en Canarias.",
     seoAltTextNFC: "Tarjeta NFC Tap-to-Review para obtener reseñas en Google",
-    seoAltTextQribar: "Menú digital QRIBAR con pedidos en tiempo real",
 
     // Contact
     contactTitle: "Contacto",
@@ -591,10 +534,8 @@ const translations: Record<Language, Translation> = {
     contactPlaceholderMessage: "Cuéntanos brevemente sobre tu proyecto...",
     contactFormNameRequired: "El nombre es obligatorio",
     contactFormCompanyRequired: "La empresa es obligatoria",
-    contactFormEmailRequired: "El email es obligatorio",
     contactFormEmailInvalid: "El email no es válido",
     contactFormServiceRequired: "Selecciona un servicio",
-    contactFormMessageRequired: "El mensaje es obligatorio",
     contactFormMessageMinLength: "El mensaje debe tener al menos 10 caracteres",
 
     // Dashboard Preview
@@ -633,18 +574,12 @@ const translations: Record<Language, Translation> = {
     footerCopyright: "© 2026 SmartConnect AI. Todos los derechos reservados.",
 
     // Navbar Solutions
-    navbarSoftwareIA: "Software & IA",
-    navbarSoftwareIADesc: "Soluciones a medida",
-    navbarAutomation: "Automatización n8n",
-    navbarAutomationDesc: "Flujos inteligentes",
     navbarNFC: "Tarjetas NFC",
     navbarNFCDesc: "Reseñas al instante",
     navbarQribar: "QRIBAR",
     navbarQribarDesc: "Pedido en tiempo real a barra y cocina",
     navbarCartaDigital: "Carta Digital Premium",
     navbarCartaDigitalDesc: "0% comisiones, 5 idiomas",
-    navbarNFCReview: "NFC Tap-to-Review",
-    navbarNFCReviewDesc: "Multiplica tus reseñas en Google",
     navbarAutomationN8n: "Automatización n8n",
     navbarAutomationN8nDesc: "Flujos automatizados para hostelería",
     navbarWhatsAppAutomation: "WhatsApp Automation",
@@ -653,8 +588,6 @@ const translations: Record<Language, Translation> = {
     navbarSoftwareCanariasDesc: "Soluciones digitales para restaurantes",
     navbarDigitalizationTenerife: "Digitalización Tenerife",
     navbarDigitalizationTenerifeDesc: "Herramientas para modernizar tu negocio",
-    navbarMenuDigitalSinApp: "Menú Digital sin App",
-    navbarMenuDigitalSinAppDesc: "Menú interactivo con QR",
 
     // Service options
     serviceCartaDigital: "Carta Digital Premium",
@@ -686,7 +619,6 @@ const translations: Record<Language, Translation> = {
     cartaHeroStat2Label: "Comisiones",
     cartaHeroStat3Label: "Pedidos online",
     cartaHeroStat4Label: "Clientes",
-    cartaHeroCardLabel: "Tap-to-Review NFC",
 
     cartaProblemaTitle: "¿Cuánto dinero",
     cartaProblemaSubtitle: "estás perdiendo hoy?",
@@ -720,8 +652,6 @@ const translations: Record<Language, Translation> = {
       " que trabaja para ti las 24 horas: dentro del local, en Google y en redes sociales.",
     cartaSolucionDesc:
       "Tus clientes ven los platos con fotos, vídeos y descripciones en 5 idiomas escaneando el QR de la mesa. Los nuevos clientes encuentran tu carta en Google y hacen pedidos take away directamente. Tú recibes el pedido por WhatsApp, acumulas su contacto en tu base de datos y les fidelizas con promociones. Sin intermediarios. Sin comisiones. Sin depender de nadie.",
-    cartaSolucionTenerife:
-      "Especial para clientes en Tenerife: bares, restaurantes y empresas. Atención en persona con explicación de demos in situ.",
 
     cartaBeneficiosTitle: "7 beneficios que",
     cartaBeneficiosSubtitle: "cambian tu negocio",
@@ -931,50 +861,18 @@ const translations: Record<Language, Translation> = {
     qribarLoading: "Cargando menú...",
 
     // Digital Menu Landing
-    digitalMenuHeroTitle: "La Carta Digital que Vende por Ti en Tenerife",
-    digitalMenuHeroSubtitle:
-      "Transforma tu menú de papel en una herramienta de marketing y ventas que tus clientes amarán. Sin comisiones, sin intermediarios, 100% tuyo.",
-    digitalMenuHeroCta: "Descubre cómo",
 
     // Menu QR Landing
-    menuQrHeroTitle: "Menú QR Interactivo para Restaurantes Modernos",
-    menuQrHeroSubtitle:
-      "Ofrece a tus clientes una experiencia visual, rápida y sin contacto. Actualiza tu carta en segundos y destaca sobre tu competencia en Canarias.",
-    menuQrHeroCta: "Solicitar Información",
 
     // Table Orders Landing
-    tableOrdersHeroTitle: "Pedidos a Mesa con QR: Más Rápido, Más Ventas",
-    tableOrdersHeroSubtitle:
-      "Elimina las esperas y aumenta el ticket medio. Tus clientes piden y pagan desde su móvil, y el pedido llega directo a cocina.",
-    tableOrdersHeroCta: "Ver Demo",
 
     // Digital Menu SEO
-    digitalMenuSeoTitle:
-      "Carta Digital para Restaurantes en Tenerife | Optimiza y Vende Más",
-    digitalMenuSeoDescription:
-      "Crea tu carta digital QR en Tenerife. Atrae más clientes, aumenta el ticket medio y elimina comisiones. Solución para restaurantes, bares y hoteles en Canarias.",
 
     // Menu QR SEO
-    menuQrSeoTitle:
-      "Menú QR para Restaurantes en Canarias | Interactivo y Rápido",
-    menuQrSeoDescription:
-      "Ofrece a tus clientes un menú QR interactivo y visual en Canarias. Fácil de actualizar, sin necesidad de apps, y optimizado para una experiencia móvil perfecta.",
 
     // Table Orders SEO
-    tableOrdersSeoTitle:
-      "Pedidos QR desde la Mesa en Tenerife | Aumenta Ventas y Eficiencia",
-    tableOrdersSeoDescription:
-      "Implementa un sistema de pedidos QR en tu restaurante de Tenerife. Reduce esperas, aumenta el ticket medio y mejora la experiencia de cliente.",
 
     // NFC Reviews Landing Page
-    nfcReviewsSeoTitle:
-      "Tarjetas NFC para Reseñas Google en Restaurantes Tenerife",
-    nfcReviewsSeoDescription:
-      "Tarjetas NFC Tap-to-Review para conseguir reseñas en Google de forma automática. Solo un toque y tus clientes te valoran con 5 estrellas.",
-    nfcReviewsHeroTitle: "Tarjetas NFC: Más Reseñas, Más Clientes",
-    nfcReviewsHeroSubtitle:
-      "Dispositivos NFC para conseguir reseñas en Google de forma automática. Solo un toque y tus clientes te valoran con 5 estrellas.",
-    nfcReviewsHeroCta: "Quiero implementar NFC en mi restaurante",
 
     // n8n Automation Landing Page
     n8nAutomationSeoTitle: "Automatización n8n para Restaurantes en Canarias",
@@ -1015,14 +913,6 @@ const translations: Record<Language, Translation> = {
     digitalizationTenerifeHeroCta: "Quiero digitalizar mi restaurante",
 
     // Menu Digital sin App Landing Page
-    menuDigitalSinAppSeoTitle:
-      "Menú Digital sin App para Restaurantes Tenerife",
-    menuDigitalSinAppSeoDescription:
-      "Menú digital QR para tu restaurante en Tenerife. Sin necesidad de app, fácil de actualizar y sin comisiones.",
-    menuDigitalSinAppHeroTitle: "Menú Digital sin App",
-    menuDigitalSinAppHeroSubtitle:
-      "Menú digital QR para tu restaurante en Tenerife. Sin necesidad de app, fácil de actualizar y sin comisiones.",
-    menuDigitalSinAppHeroCta: "Quiero un menú digital sin app",
 
     // Hero Additional Keys
     smartConnect: "SmartConnect",
@@ -1087,10 +977,6 @@ const translations: Record<Language, Translation> = {
       "Next-generation technology for restaurants in Tenerife and Canary Islands. Automate orders, increase revenue per table, reduce wait times, and retain customers with digital solutions that have no commissions or intermediaries.",
     heroButtonDemo: "View Demo",
     heroButtonContact: "Contact Us",
-    heroStats5Lang: "Languages",
-    heroStats0Commission: "No commissions",
-    heroStats247: "Support 24/7",
-    heroStatsInfinite: "Integrations",
 
     // Features
     featuresTitle: "Our Solutions",
@@ -1124,10 +1010,7 @@ const translations: Record<Language, Translation> = {
     featuresCartaDigitalDesc:
       "The digital menu that eliminates intermediaries. 0% commissions, 5 languages, WhatsApp orders and your own customer database.",
     featuresVisit: "Visit",
-    featuresContact: "Contact",
     featuresDetails: "View details",
-    navbarNFCReview: "NFC Tap-to-Review",
-    navbarNFCReviewDesc: "Increase Google reviews with NFC",
     navbarAutomationN8n: "n8n Automation",
     navbarAutomationN8nDesc: "Automated workflows for hospitality",
     navbarWhatsAppAutomation: "WhatsApp Automation",
@@ -1136,30 +1019,24 @@ const translations: Record<Language, Translation> = {
     navbarSoftwareCanariasDesc: "Digital solutions for restaurants",
     navbarDigitalizationTenerife: "Digitalization Tenerife",
     navbarDigitalizationTenerifeDesc: "Tools to modernize your business",
-    navbarMenuDigitalSinApp: "Digital Menu without App",
-    navbarMenuDigitalSinAppDesc: "Interactive menu with QR code",
 
     // Success Stats
     successTitle: "Success Stories",
     successSubtitle: "Real results that transform businesses",
     successDesc:
       "Companies that already trust us and have transformed their operation.",
-    successStat1Value: "50+",
     successStat1Label: "Average Increase",
     successStat1Quote:
       "Since we implemented QRIBAR, our revenue per table increased by 45%",
     successStat1Author: "Restaurante L'Escale",
-    successStat2Value: "98%",
     successStat2Label: "Satisfaction",
     successStat2Quote:
       "My clients love the experience. Positive reviews skyrocketed",
     successStat2Author: "Café Central Madrid",
-    successStat3Value: "45%",
     successStat3Label: "Reviews Gained",
     successStat3Quote:
       "We went from 200 to 1200 Google reviews. The impact is incredible",
     successStat3Author: "Bar Bodega Toledo",
-    successStat4Value: "850+",
     successStat4Label: "Active Clients",
     successStat4Quote:
       "More than 850 businesses trust SmartConnect for their digital transformation",
@@ -1173,7 +1050,6 @@ const translations: Record<Language, Translation> = {
     seoProductDescription:
       "Growth platform for restaurants in Tenerife and Canary Islands with QRIBAR digital menus, QR ordering, NFC Tap-to-Review technology, and n8n automation. Designed to increase orders, reduce wait times, maximize revenue per table, and get more Google reviews. Ideal for bars, restaurants, and hospitality in Canary Islands.",
     seoAltTextNFC: "Tap-to-Review NFC card to get Google reviews",
-    seoAltTextQribar: "QRIBAR digital menu with real-time orders",
 
     // Contact
     contactTitle: "Boost Your Business Today",
@@ -1204,10 +1080,8 @@ const translations: Record<Language, Translation> = {
     contactPlaceholderMessage: "Tell us briefly about your project...",
     contactFormNameRequired: "Name is required",
     contactFormCompanyRequired: "Company is required",
-    contactFormEmailRequired: "Email is required",
     contactFormEmailInvalid: "Email is not valid",
     contactFormServiceRequired: "Please select a service",
-    contactFormMessageRequired: "Message is required",
     contactFormMessageMinLength: "Message must be at least 10 characters",
 
     // Dashboard Preview
@@ -1246,10 +1120,6 @@ const translations: Record<Language, Translation> = {
     footerCopyright: "© 2026 SmartConnect AI. All rights reserved.",
 
     // Navbar Solutions
-    navbarSoftwareIA: "Software & AI",
-    navbarSoftwareIADesc: "Tailored solutions",
-    navbarAutomation: "Automation n8n",
-    navbarAutomationDesc: "Smart workflows",
     navbarNFC: "NFC Cards",
     navbarNFCDesc: "Instant reviews",
     navbarQribar: "QRIBAR",
@@ -1287,7 +1157,6 @@ const translations: Record<Language, Translation> = {
     cartaHeroStat2Label: "Commissions",
     cartaHeroStat3Label: "Online orders",
     cartaHeroStat4Label: "Customers",
-    cartaHeroCardLabel: "Tap-to-Review NFC",
 
     cartaProblemaTitle: "How much money",
     cartaProblemaSubtitle: "are you losing today?",
@@ -1320,8 +1189,6 @@ const translations: Record<Language, Translation> = {
       " that works for you 24/7: in your venue, on Google, and on social media.",
     cartaSolucionDesc:
       "Your customers see dishes with photos, videos and descriptions in 5 languages by scanning the table QR. New customers find your menu on Google and order take away directly. You receive orders via WhatsApp, accumulate their contact in your database and fidelize them with promotions. No intermediaries. No commissions. Depending on no one.",
-    cartaSolucionTenerife:
-      "Special for clients in Tenerife: bars, restaurants and companies. On-site demos and personalized attention.",
 
     cartaBeneficiosTitle: "7 benefits that",
     cartaBeneficiosSubtitle: "change your business",
@@ -1534,50 +1401,18 @@ const translations: Record<Language, Translation> = {
     qribarLoading: "Loading menu...",
 
     // Digital Menu Landing
-    digitalMenuHeroTitle: "The Digital Menu that Sells for You in Tenerife",
-    digitalMenuHeroSubtitle:
-      "Transform your paper menu into a marketing and sales tool your customers will love. No commissions, no intermediaries, 100% yours.",
-    digitalMenuHeroCta: "Discover How",
 
     // Menu QR Landing
-    menuQrHeroTitle: "Interactive QR Menu for Modern Restaurants",
-    menuQrHeroSubtitle:
-      "Offer your customers a visual, fast, and contactless experience. Update your menu in seconds and stand out from your competition in the Canary Islands.",
-    menuQrHeroCta: "Request Information",
 
     // Table Orders Landing
-    tableOrdersHeroTitle: "QR Table Orders: Faster Service, More Sales",
-    tableOrdersHeroSubtitle:
-      "Eliminate waiting times and increase the average ticket. Your customers order and pay from their mobile, and the order goes straight to the kitchen.",
-    tableOrdersHeroCta: "View Demo",
 
     // Digital Menu SEO
-    digitalMenuSeoTitle:
-      "Digital Menu for Restaurants in Tenerife | Optimize & Sell More",
-    digitalMenuSeoDescription:
-      "Create your QR digital menu in Tenerife. Attract more customers, increase average ticket size, and eliminate commissions. Solution for restaurants, bars, and hotels in the Canary Islands.",
 
     // Menu QR SEO
-    menuQrSeoTitle:
-      "QR Menu for Restaurants in Canary Islands | Interactive & Fast",
-    menuQrSeoDescription:
-      "Offer your customers an interactive and visual QR menu in the Canary Islands. Easy to update, no app needed, and optimized for a perfect mobile experience.",
 
     // Table Orders SEO
-    tableOrdersSeoTitle:
-      "QR Table Orders in Tenerife | Increase Sales & Efficiency",
-    tableOrdersSeoDescription:
-      "Implement a QR ordering system in your Tenerife restaurant. Reduce waits, increase average ticket, and improve customer experience.",
 
     // NFC Reviews Landing Page
-    nfcReviewsSeoTitle:
-      "NFC Tap-to-Review Cards for Google Reviews in Tenerife Restaurants",
-    nfcReviewsSeoDescription:
-      "NFC Tap-to-Review cards to automatically get Google reviews. Just one tap and your customers rate you with 5 stars.",
-    nfcReviewsHeroTitle: "NFC Cards: More Reviews, More Customers",
-    nfcReviewsHeroSubtitle:
-      "NFC devices to automatically get Google reviews. Just one tap and your customers rate you with 5 stars.",
-    nfcReviewsHeroCta: "I want to implement NFC in my restaurant",
 
     // n8n Automation Landing Page
     n8nAutomationSeoTitle: "n8n Automation for Restaurants in Canary Islands",
@@ -1619,14 +1454,6 @@ const translations: Record<Language, Translation> = {
     digitalizationTenerifeHeroCta: "I want to digitize my restaurant",
 
     // Menu Digital sin App Landing Page
-    menuDigitalSinAppSeoTitle:
-      "Digital Menu without App for Restaurants Tenerife",
-    menuDigitalSinAppSeoDescription:
-      "QR digital menu for your restaurant in Tenerife. No app needed, easy to update and no commissions.",
-    menuDigitalSinAppHeroTitle: "Digital Menu without App",
-    menuDigitalSinAppHeroSubtitle:
-      "QR digital menu for your restaurant in Tenerife. No app needed, easy to update and no commissions.",
-    menuDigitalSinAppHeroCta: "I want a digital menu without app",
 
     // Hero Additional Keys
     smartConnect: "SmartConnect",
