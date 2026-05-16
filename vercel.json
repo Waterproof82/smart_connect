@@ -45,12 +45,17 @@
     {
       "source": "/contacto",
       "headers": [{ "key": "Cache-Control", "value": "public, max-age=3600" }]
+    },
+    {
+      "source": "/about",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=3600" }]
     }
   ],
   "rewrites": [
     { "source": "/", "destination": "/index.html" },
     { "source": "/servicios", "destination": "/servicios/index.html" },
     { "source": "/contacto", "destination": "/contacto/index.html" },
+    { "source": "/about", "destination": "/about/index.html" },
     { "source": "/admin/:path*", "destination": "/_spa.html" },
     { "source": "/panel/:path*", "destination": "/_spa.html" },
     { "source": "/login/:path*", "destination": "/_spa.html" },
