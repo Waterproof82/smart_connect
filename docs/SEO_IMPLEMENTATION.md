@@ -630,3 +630,113 @@ Antes de cada deploy:
 - **Translation Keys**: Must be added to BOTH language objects to satisfy TypeScript
 - **SDD Profile**: Follows `.opencode/sdd-profile-free.json` with Mistral models for each phase
 - **Engram Memory**: SEO implementation saved to Engram (ID: 1, Topic: `seo/landing-page-i18n`)
+
+---
+
+## 🧩 Structured Data Schema Library & Google Validation (2026-05-17)
+
+### Overview
+
+Expansión de cobertura de datos estructurados con 4 nuevos schemas + fix crítico de validación de Google Rich Results para `ReviewSchema`.
+
+**Date**: 2026-05-17  
+**Audit Log**: `docs/audit/2026-05-16_structured-data-enhancement.md`
+
+---
+
+### New Schemas Added
+
+| Schema                      | `@type`               | `@id`            | Google Rich Results |
+| --------------------------- | --------------------- | ---------------- | ------------------- |
+| `HowToSchema`               | `HowTo`               | _(none)_         | ✅ HowTo            |
+| `CollectionPageSchema`      | `CollectionPage`      | _(none)_         | ✅ Collection       |
+| `SoftwareApplicationSchema` | `SoftwareApplication` | `{url}#software` | ✅ Software App     |
+| `WebApplicationSchema`      | `WebApplication`      | `{url}#webapp`   | ✅ Web App          |
+
+All schemas in `src/shared/presentation/components/SeoSchema.tsx`.
+
+---
+
+### Critical Fix: `ReviewSchema` `itemReviewed`
+
+**Problem**: Google Rich Results Test showed critical error: "El tipo de objeto del campo 'itemReviewed' no es válido".
+
+**Root cause**: The `itemReviewed` field used `@type: "Service"` which is **NOT** a supported type for Google Review rich results.
+
+**Fix flow** (4 iterations):
+
+| Iteration | Change                                                                         | Result                                            |
+| :-------: | ------------------------------------------------------------------------------ | ------------------------------------------------- |
+|     1     | Added `itemReviewed` prop to `ReviewSchema`                                    | ❌ Critical error — `Service` type not supported  |
+|     2     | Added `@id` referencing `#service`                                             | ❌ Same error — `@id` doesn't fix invalid `@type` |
+|     3     | Changed `@type` from `Service` → `SoftwareApplication`                         | ✅ Type accepted, but missing required fields     |
+|     4     | Added `applicationCategory` + `operatingSystem` + `offers` + `aggregateRating` | ✅ All warnings cleared                           |
+
+**Key learnings:**
+
+- `Service` is **not valid** for `itemReviewed` in Google Review snippets
+- Valid types: `Product`, `LocalBusiness`, `SoftwareApplication`, `Book`, `Course`, etc.
+- `SoftwareApplication` requires ≥2 of: `offers`, `aggregateRating`, `applicationCategory`, `operatingSystem`
+- `@id` references do NOT help when the `@type` itself is invalid
+- Best practice: provide all 4 recommended properties to silence warnings
+
+---
+
+### Files Modified
+
+| File                                                                                    | Change                                                  |
+| --------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| `src/shared/presentation/components/SeoSchema.tsx`                                      | Added 4 new schemas + fixed ReviewSchema `itemReviewed` |
+| `src/features/landing/presentation/LandingContainer.tsx`                                | Added `SoftwareApplicationSchema` to `@graph`           |
+| `src/features/tap-review/presentation/TapReviewPage.tsx`                                | Added `WebApplicationSchema`                            |
+| `src/features/whatsapp-automation/presentation/WhatsappAutomationContainer.tsx`         | Added `WebApplicationSchema`                            |
+| `src/features/digitalization-tenerife/presentation/DigitalizationTenerifeContainer.tsx` | Added `WebApplicationSchema` + fixed TS typo            |
+| `src/features/software-canarias/presentation/SoftwareCanariasContainer.tsx`             | Added `WebApplicationSchema`                            |
+| `src/features/automation-n8n/presentation/AutomationN8nContainer.tsx`                   | Added `WebApplicationSchema` (fixed file corruption)    |
+| `src/features/tap-review/presentation/components/FAQ.tsx`                               | Added `SeoFaqSchema` + DOMPurify sanitization           |
+| `src/features/tap-review/presentation/components/HowItWorks.tsx`                        | Added `HowToSchema` + DOMPurify sanitization            |
+| `src/shared/presentation/components/TestimonialCarousel/index.tsx`                      | Added `CollectionPageSchema`                            |
+| `CHANGELOG.md`                                                                          | Updated with all changes                                |
+
+---
+
+### Integration Pattern
+
+```tsx
+// Example: service page with all schemas
+return (
+  <>
+    <Helmet>...</Helmet>
+    <ServiceSchema ... />
+    <WebApplicationSchema ... />
+    <BreadcrumbListSchema ... />
+    {/* Components */}
+  </>
+);
+```
+
+For landing page (`LandingContainer.tsx`), schemas are embedded in the `@graph` array for efficiency.
+
+---
+
+### DOMPurify in Components
+
+When rendering user-facing content from translation keys that goes into JSON-LD:
+
+```tsx
+import DOMPurify from "dompurify";
+
+// Sanitize content for structured data
+DOMPurify.sanitize(t.someKey);
+```
+
+**Note**: `dompurify` is a devDependency but used in component code (imported in FAQ.tsx, HowItWorks.tsx). The `@types/dompurify` is in regular dependencies for type-checking.
+
+---
+
+### Validation
+
+- ✅ `npx tsc --noEmit` — 0 errors
+- ✅ `npx vite build` — exitsoso
+- ✅ Google Rich Results Test — 0 critical errors, 0 warnings (all 4 Review schemas pass)
+- ✅ All 132 Jest tests pass

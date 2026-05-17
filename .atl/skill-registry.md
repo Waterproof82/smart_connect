@@ -1,6 +1,6 @@
 # Skill Registry — smart-connect
 
-_Last updated: 2026-05-14_
+_Last updated: 2026-05-17_
 
 ## Global Skills (from Engram)
 
@@ -17,7 +17,8 @@ _Last updated: 2026-05-14_
 | markdown-negotiation | `*.ts`, `middleware.ts`, `api/*.mjs` | markdown, negotiate, Accept header, LLM, content-type | Content negotiation via `Accept: text/markdown`. Vite plugin for dev, Edge Middleware + Serverless Function for prod. Returns page content as clean Markdown for LLMs. |
 | webmcp-tools | `src/*.ts`, `src/entry-client.tsx`, `*.tsx` | webmcp, modelContext, registerTool, AI tools | WebMCP tools registered via `navigator.modelContext.registerTool()` con `@mcp-b/webmcp-polyfill`. Return type `{ content: [{ type: 'text', text }] }`. 4 tools: product info, contact, list, page content. |
 | authorship-signals | `*.tsx`, `src/App.tsx`, `AboutPage.tsx` | author, rel-author, publisher, JSON-LD, authority | Authorship signals: `<link rel="author">`, JSON-LD `author`/`publisher` in `@graph`, `/about` page with Organization schema. |
-| agent-skills | `public/.well-known/agent-skills/*` | agent skills, $schema, sha256, capability              | Agent Skills discovery index at `/.well-known/agent-skills/index.json` with `$schema` and proper sha256 hashes. |
+| agent-skills | `public/.well-known/agent-skills/*` | agent skills, $schema, sha256, capability              | Agent Skills discovery index at `/.well-known/agent-skills/index.json` with `$schema`and proper sha256 hashes. |
+| structured-data |`*.tsx`, `src/shared/presentation/components/SeoSchema.tsx`, `*Container.tsx`| schema, JSON-LD, structured data, rich results, Review, SoftwareApplication, WebApplication, HowTo, CollectionPage, FAQPage | Structured data (JSON-LD) patterns for Google Rich Results. Schemas in`SeoSchema.tsx`: ServiceSchema, LocalBusinessSchema, BreadcrumbListSchema, ReviewSchema, SeoFaqSchema, CollectionPageSchema, HowToSchema, SoftwareApplicationSchema, WebApplicationSchema. |
 
 **Reference**: [SmartConnect Standards Documentation](.atl/smart-connect-standards.md)
 
@@ -154,6 +155,57 @@ El sitio soporta estas capacidades para crawlers de IA y LLMs:
 - Búsqueda: similarity search en Supabase
 - Respuesta: `gemini-2.5-flash` con contexto
 - Cache: TTL 7 días
+
+### Structured Data (JSON-LD) ⚠️
+
+Reglas para schemas de datos estructurados compatibles con Google Rich Results.
+
+#### Schemas disponibles en `src/shared/presentation/components/SeoSchema.tsx`
+
+| Schema                      | `@type`                   | `@id` pattern       | Google Rich Results |
+| --------------------------- | ------------------------- | ------------------- | ------------------- |
+| `LocalBusinessSchema`       | `LocalBusiness`           | _(ninguno)_         | ✅ Local Business   |
+| `ServiceSchema`             | `Service`                 | `{url}#service`     | ❌ No eligible      |
+| `BreadcrumbListSchema`      | `BreadcrumbList`          | _(ninguno)_         | ✅ Breadcrumbs      |
+| `ReviewSchema`              | `Review` + `itemReviewed` | _(ninguno, inline)_ | ✅ Review snippets  |
+| `SeoFaqSchema`              | `FAQPage`                 | _(ninguno)_         | ✅ FAQ              |
+| `CollectionPageSchema`      | `CollectionPage`          | _(ninguno)_         | ✅ Collection       |
+| `HowToSchema`               | `HowTo`                   | _(ninguno)_         | ✅ HowTo            |
+| `SoftwareApplicationSchema` | `SoftwareApplication`     | `{url}#software`    | ✅ Software App     |
+| `WebApplicationSchema`      | `WebApplication`          | `{url}#webapp`      | ✅ Web App          |
+
+#### Reglas para `ReviewSchema` ⚠️
+
+- **`itemReviewed`**: El `@type` del `itemReviewed` DEBE ser uno de los tipos que Google acepta para Review rich results. **`Service` NO es válido.** Tipos válidos: `Product`, `LocalBusiness`, `SoftwareApplication`, `Book`, `Course`, `Event`, `HowTo`, `Movie`, `MusicPlaylist`, `MusicRecording`, `Organization`, `Recipe`.
+- **`SoftwareApplication` requirements**: Cuando `itemReviewed` es `SoftwareApplication`, debe incluir al menos 2 de: `offers`, `aggregateRating`, `applicationCategory`, `operatingSystem`. Incluir las 4 silencia todos los warnings.
+- Usar `Record<string, unknown>` para `itemReviewed` prop type si se necesitan propiedades dinámicas.
+- No usar `@id` en `itemReviewed` de ReviewSchema — Google lo trata como entidad inline y el `@id` no resuelve el error si el `@type` es inválido.
+
+#### Patrón de integración
+
+Cada página con schemas sigue este patrón en su Container:
+
+```tsx
+<ServiceSchema />        // Identifica el servicio (No elegible, pero informativo)
+<SoftwareApplicationSchema />  // O WebApplicationSchema según la página
+<BreadcrumbListSchema />       // Navegación
+<ReviewSchema />               // Reseñas (con itemReviewed correcto)
+<SeoFaqSchema />               // FAQ
+```
+
+Los schemas se renderizan FUERA del `<main>` y `<Helmet>`, como siblings directos del Fragment:
+
+```tsx
+return (
+  <>
+    <Helmet>...</Helmet>
+    <ServiceSchema ... />
+    <BreadcrumbListSchema ... />
+    <Navbar />
+    <main>...</main>
+  </>
+);
+```
 
 ### SSR / Hydration (CRITICAL) ⚠️
 
