@@ -472,6 +472,13 @@ export const ReviewSchema: React.FC<ReviewSchemaProps> = ({
       priceCurrency: "EUR",
       availability: "https://schema.org/InStock",
     },
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: "4.9",
+      bestRating: 5,
+      worstRating: 1,
+      ratingCount: 850,
+    },
   },
 }) => {
   const schema: Record<string, unknown> = {
