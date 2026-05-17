@@ -13,6 +13,7 @@ import {
   SeoFaqSchema,
   LocalBusinessSchema,
   ServiceSchema,
+  WebApplicationSchema,
   BreadcrumbListSchema,
   BenefitsGrid,
   HowItWorks,
@@ -167,6 +168,18 @@ const AutomationN8nContainer: React.FC = () => {
             url: "https://digitalizatenerife.es/automatizacion-restaurantes-n8n",
           },
         ]}
+      />
+      <WebApplicationSchema
+        name="Panel de Control Automatización n8n"
+        description="Dashboard web para gestionar automatizaciones, conectar CRMs y analizar flujos de trabajo en tiempo real."
+        url="https://digitalizatenerife.es/automatizacion-restaurantes-n8n"
+        offers={{
+          price: "29.90",
+          priceCurrency: "EUR",
+          availability: "https://schema.org/InStock",
+        }}
+        authorName="SmartConnect AI"
+        authorUrl="https://digitalizatenerife.es"
       />
 
       <Navbar scrolled={true} />

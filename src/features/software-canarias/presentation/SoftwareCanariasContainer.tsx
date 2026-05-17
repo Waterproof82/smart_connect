@@ -14,6 +14,7 @@ import {
   SeoFaqSchema,
   LocalBusinessSchema,
   ServiceSchema,
+  WebApplicationSchema,
   BreadcrumbListSchema,
   BenefitsGrid,
   HowItWorks,
@@ -154,6 +155,18 @@ const SoftwareCanariasContainer: React.FC = () => {
         providerLogoUrl="https://digitalizatenerife.es/icon.png"
         areaServed={["Canarias"]}
         serviceType="HospitalitySoftware"
+      />
+      <WebApplicationSchema
+        name="Panel de Control"
+        description={t.softwareCanariasSeoDescription}
+        url="https://digitalizatenerife.es/software-canarias"
+        offers={{
+          price: "29.90",
+          priceCurrency: "EUR",
+          availability: "https://schema.org/InStock",
+        }}
+        authorName="SmartConnect AI"
+        authorUrl="https://digitalizatenerife.es"
       />
       <BreadcrumbListSchema
         breadcrumbs={[

@@ -266,6 +266,27 @@ const LandingContainer: React.FC = () => {
                     ],
                   },
                 },
+                {
+                  "@type": "SoftwareApplication",
+                  "@id": "https://digitalizatenerife.es#software",
+                  name: "SmartConnect AI",
+                  description:
+                    "Plataforma SaaS de transformación digital para negocios locales. Incluye carta digital QRIBAR, sistema NFC de reseñas, chatbot con IA y automatización de marketing.",
+                  url: "https://digitalizatenerife.es",
+                  applicationCategory: "BusinessApplication",
+                  operatingSystem: "Web, iOS, Android",
+                  offers: {
+                    "@type": "Offer",
+                    price: "29.90",
+                    priceCurrency: "EUR",
+                    availability: "https://schema.org/InStock",
+                  },
+                  author: {
+                    "@type": "Organization",
+                    name: "SmartConnect AI",
+                    url: "https://digitalizatenerife.es",
+                  },
+                },
               ],
             }),
           }}

@@ -450,6 +450,13 @@ interface ReviewSchemaProps {
   text: string;
   rating?: number;
   datePublished?: string;
+  /** The item being reviewed (required by Schema.org validation).
+   *  Defaults to SmartConnect AI Service if not provided. */
+  itemReviewed?: {
+    "@type": string;
+    name: string;
+    url?: string;
+  };
 }
 
 export const ReviewSchema: React.FC<ReviewSchemaProps> = ({
@@ -457,12 +464,17 @@ export const ReviewSchema: React.FC<ReviewSchemaProps> = ({
   text,
   rating = 5,
   datePublished = new Date().toISOString().split("T")[0],
+  itemReviewed = {
+    "@type": "Service",
+    name: "SmartConnect AI",
+  },
 }) => {
-  const schema = {
+  const schema: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "Review",
     reviewBody: text,
     datePublished,
+    itemReviewed,
     author: {
       "@type": "Person",
       name: author,
@@ -474,6 +486,237 @@ export const ReviewSchema: React.FC<ReviewSchemaProps> = ({
       worstRating: 1,
     },
   };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+};
+
+interface CollectionPageItem {
+  name: string;
+  description?: string;
+  image?: string;
+  url?: string;
+}
+
+interface CollectionPageSchemaProps {
+  title: string;
+  description?: string;
+  items: CollectionPageItem[];
+}
+
+export const CollectionPageSchema: React.FC<CollectionPageSchemaProps> = ({
+  title,
+  description,
+  items,
+}) => {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: title,
+    ...(description && {
+      description,
+    }),
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      ...(item.description && {
+        description: item.description,
+      }),
+      ...(item.image && {
+        image: {
+          "@type": "ImageObject",
+          url: item.image,
+        },
+      }),
+      url: item.url,
+    })),
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+};
+
+interface HowToStep {
+  name: string;
+  text: string;
+  image?: string;
+  video?: string;
+  thumbnail?: string;
+}
+
+interface HowToSchemaProps {
+  title: string;
+  description: string;
+  steps: HowToStep[];
+}
+
+export const HowToSchema: React.FC<HowToSchemaProps> = ({
+  title,
+  description,
+  steps,
+}) => {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: title,
+    description,
+    step: steps.map((step, index) => ({
+      "@type": "HowToStep",
+      name: step.name,
+      text: step.text,
+      ...(step.image && {
+        image: {
+          "@type": "ImageObject",
+          url: step.image,
+        },
+      }),
+      ...(step.video && {
+        video: {
+          "@type": "VideoObject",
+          url: step.video,
+          ...(step.thumbnail && {
+            thumbnailUrl: step.thumbnail,
+          }),
+        },
+      }),
+      position: index + 1,
+    })),
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+};
+
+// ─── SoftwareApplication Schema ─────────────────────────────────
+interface SoftwareApplicationSchemaProps {
+  name: string;
+  description: string;
+  url: string;
+  applicationCategory?: string;
+  operatingSystem?: string;
+  offers?: {
+    price: string;
+    priceCurrency: string;
+    availability?: string;
+  };
+  authorName?: string;
+  authorUrl?: string;
+}
+
+export const SoftwareApplicationSchema: React.FC<
+  SoftwareApplicationSchemaProps
+> = ({
+  name,
+  description,
+  url,
+  applicationCategory = "BusinessApplication",
+  operatingSystem = "Web, iOS, Android",
+  offers,
+  authorName,
+  authorUrl,
+}) => {
+  const schema: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "@id": `${url}#software`,
+    name,
+    description,
+    url,
+    applicationCategory,
+    operatingSystem,
+  };
+
+  if (offers) {
+    schema.offers = {
+      "@type": "Offer",
+      price: offers.price,
+      priceCurrency: offers.priceCurrency,
+      ...(offers.availability && { availability: offers.availability }),
+    };
+  }
+
+  if (authorName) {
+    schema.author = {
+      "@type": "Organization",
+      name: authorName,
+      ...(authorUrl && { url: authorUrl }),
+    };
+  }
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+};
+
+// ─── WebApplication Schema (extends SoftwareApplication) ────────
+interface WebApplicationSchemaProps {
+  name: string;
+  description: string;
+  url: string;
+  browserRequirements?: string;
+  applicationCategory?: string;
+  offers?: {
+    price: string;
+    priceCurrency: string;
+    availability?: string;
+  };
+  authorName?: string;
+  authorUrl?: string;
+}
+
+export const WebApplicationSchema: React.FC<WebApplicationSchemaProps> = ({
+  name,
+  description,
+  url,
+  browserRequirements = "Requiere navegador moderno (Chrome, Firefox, Safari, Edge)",
+  applicationCategory = "BusinessApplication",
+  offers,
+  authorName,
+  authorUrl,
+}) => {
+  const schema: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "@id": `${url}#webapp`,
+    name,
+    description,
+    url,
+    applicationCategory,
+    browserRequirements,
+  };
+
+  if (offers) {
+    schema.offers = {
+      "@type": "Offer",
+      price: offers.price,
+      priceCurrency: offers.priceCurrency,
+      ...(offers.availability && { availability: offers.availability }),
+    };
+  }
+
+  if (authorName) {
+    schema.author = {
+      "@type": "Organization",
+      name: authorName,
+      ...(authorUrl && { url: authorUrl }),
+    };
+  }
 
   return (
     <script

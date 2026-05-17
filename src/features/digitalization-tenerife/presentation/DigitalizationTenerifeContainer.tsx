@@ -14,6 +14,7 @@ import {
   SeoFaqSchema,
   LocalBusinessSchema,
   ServiceSchema,
+  WebApplicationSchema,
   BreadcrumbListSchema,
   BenefitsGrid,
   HowItWorks,
@@ -166,6 +167,18 @@ const DigitalizationTenerifeContainer: React.FC = () => {
         providerLogoUrl="https://digitalizatenerife.es/icon.png"
         areaServed={["Tenerife"]}
         serviceType="DigitalTransformation"
+      />
+      <WebApplicationSchema
+        name="Panel de Control"
+        description={t.digitalizationSeoDescription}
+        url="https://digitalizatenerife.es/digitalizacion-tenerife"
+        offers={{
+          price: "29.90",
+          priceCurrency: "EUR",
+          availability: "https://schema.org/InStock",
+        }}
+        authorName="SmartConnect AI"
+        authorUrl="https://digitalizatenerife.es"
       />
       <BreadcrumbListSchema
         breadcrumbs={[

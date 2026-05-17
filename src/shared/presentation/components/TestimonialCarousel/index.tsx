@@ -4,7 +4,10 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Navigation, Pagination, A11y } from "swiper/modules";
-import { ReviewSchema } from "@shared/presentation/components/SeoSchema";
+import {
+  ReviewSchema,
+  CollectionPageSchema,
+} from "@shared/presentation/components/SeoSchema";
 
 export interface Testimonial {
   id: string | number;
@@ -28,6 +31,13 @@ const TestimonialCarousel: React.FC<TestimonialCarouselProps> = ({
       {testimonials.map((t) => (
         <ReviewSchema key={`review-${t.id}`} author={t.name} text={t.quote} />
       ))}
+      <CollectionPageSchema
+        title={title}
+        items={testimonials.map((testimonial) => ({
+          name: `${testimonial.name} - ${testimonial.title}`,
+          description: testimonial.quote,
+        }))}
+      />
       <section className="bg-white dark:bg-gray-900">
         <div className="container px-6 py-10 mx-auto">
           <h1 className="text-2xl font-semibold text-center text-gray-800 capitalize lg:text-3xl dark:text-white">

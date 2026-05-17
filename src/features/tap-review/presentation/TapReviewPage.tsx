@@ -13,6 +13,7 @@ import { useLanguage } from "@shared/context/LanguageContext";
 import {
   ServiceSchema,
   BreadcrumbListSchema,
+  WebApplicationSchema,
 } from "@shared/presentation/components/SeoSchema";
 
 // Import components from presentation/components/ (Clean Architecture)
@@ -174,6 +175,18 @@ export const TapReviewPage: React.FC<TapReviewPageProps> = ({
         providerLogoUrl="https://digitalizatenerife.es/icon.png"
         areaServed={["Tenerife", "Canarias", "España"]}
         serviceType="NFCReviews"
+      />
+      <WebApplicationSchema
+        name="Panel de Control Tap-to-Review"
+        description="Dashboard web para gestionar campañas NFC, ver estadísticas de reseñas y analizar el rendimiento en tiempo real."
+        url="https://digitalizatenerife.es/tap-review"
+        offers={{
+          price: "29.90",
+          priceCurrency: "EUR",
+          availability: "https://schema.org/InStock",
+        }}
+        authorName="SmartConnect AI"
+        authorUrl="https://digitalizatenerife.es"
       />
       <BreadcrumbListSchema
         breadcrumbs={[

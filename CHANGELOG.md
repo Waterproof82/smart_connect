@@ -22,6 +22,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Social links**: New 4th footer column with YouTube, X, LinkedIn, Instagram, Facebook
 - **Crawlability**: `X-Robots-Tag: index, follow` header + Cache-Control per route in `vercel.json`
 - **Sitemap**: Expanded to 8 routes including /servicios and /contacto with proper priorities
+- **Structured data — FAQPage schema**: Integrated `SeoFaqSchema` into Tap Review FAQ component for rich FAQ results
+  - `src/features/tap-review/presentation/components/FAQ.tsx`
+- **Structured data — CollectionPage schema**: Integrated `CollectionPageSchema` into TestimonialCarousel for review collection rich results
+  - `src/shared/presentation/components/TestimonialCarousel/index.tsx`
+- **Structured data — HowTo schema**: Integrated `HowToSchema` into Tap Review HowItWorks component for process rich results
+  - `src/features/tap-review/presentation/components/HowItWorks.tsx`
+- **Schema components**: Added `HowToSchema`, `CollectionPageSchema`, `SoftwareApplicationSchema`, and `WebApplicationSchema` to shared schema library
+  - `src/shared/presentation/components/SeoSchema.tsx`
+- **Structured data — SoftwareApplication schema**: Integrated `SoftwareApplicationSchema` into landing page @graph
+  - `src/features/landing/presentation/LandingContainer.tsx`
+- **Structured data — WebApplication schema**: Integrated `WebApplicationSchema` into Tap Review, WhatsApp Automation, Digitalización, Software Canarias, and n8n Automation pages
+  - `src/features/tap-review/presentation/TapReviewPage.tsx`
+  - `src/features/whatsapp-automation/presentation/WhatsappAutomationContainer.tsx`
+  - `src/features/digitalization-tenerife/presentation/DigitalizationTenerifeContainer.tsx`
+  - `src/features/software-canarias/presentation/SoftwareCanariasContainer.tsx`
+  - `src/features/automation-n8n/presentation/AutomationN8nContainer.tsx`
+- **Fix — itemReviewed**: Added required `itemReviewed` field to `ReviewSchema` component to fix Google Rich Results validation error
+  - `src/shared/presentation/components/SeoSchema.tsx`
 
 ### Changed
 

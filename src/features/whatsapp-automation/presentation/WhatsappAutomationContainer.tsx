@@ -13,6 +13,7 @@ import {
   SeoFaqSchema,
   LocalBusinessSchema,
   ServiceSchema,
+  WebApplicationSchema,
   BreadcrumbListSchema,
   BenefitsGrid,
   HowItWorks,
@@ -158,6 +159,18 @@ const WhatsappAutomationContainer: React.FC = () => {
         providerLogoUrl="https://digitalizatenerife.es/icon.png"
         areaServed={["Tenerife", "Canarias"]}
         serviceType="WhatsAppAutomation"
+      />
+      <WebApplicationSchema
+        name="Panel de Control"
+        description={t.whatsappAutomationSeoDescription}
+        url="https://digitalizatenerife.es/automatizacion-whatsapp-restaurante"
+        offers={{
+          price: "29.90",
+          priceCurrency: "EUR",
+          availability: "https://schema.org/InStock",
+        }}
+        authorName="SmartConnect AI"
+        authorUrl="https://digitalizatenerife.es"
       />
       <BreadcrumbListSchema
         breadcrumbs={[
