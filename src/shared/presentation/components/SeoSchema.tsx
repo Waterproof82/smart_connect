@@ -453,13 +453,7 @@ interface ReviewSchemaProps {
   /** The item being reviewed (required by Schema.org validation).
    *  Google requires SoftwareApplication to have at least 2 of:
    *  offers, aggregateRating, applicationCategory, operatingSystem. */
-  itemReviewed?: {
-    "@type": string;
-    name: string;
-    url?: string;
-    applicationCategory?: string;
-    operatingSystem?: string;
-  };
+  itemReviewed?: Record<string, unknown>;
 }
 
 export const ReviewSchema: React.FC<ReviewSchemaProps> = ({
@@ -472,6 +466,12 @@ export const ReviewSchema: React.FC<ReviewSchemaProps> = ({
     name: "SmartConnect AI",
     applicationCategory: "BusinessApplication",
     operatingSystem: "Web, iOS, Android",
+    offers: {
+      "@type": "Offer",
+      price: "29.90",
+      priceCurrency: "EUR",
+      availability: "https://schema.org/InStock",
+    },
   },
 }) => {
   const schema: Record<string, unknown> = {
