@@ -451,10 +451,11 @@ interface ReviewSchemaProps {
   rating?: number;
   datePublished?: string;
   /** The item being reviewed (required by Schema.org validation).
-   *  Defaults to SmartConnect AI Service if not provided. */
+   *  Defaults to SmartConnect AI Service with @id to reference the ServiceSchema on the page. */
   itemReviewed?: {
     "@type": string;
-    name: string;
+    "@id": string;
+    name?: string;
     url?: string;
   };
 }
@@ -466,6 +467,7 @@ export const ReviewSchema: React.FC<ReviewSchemaProps> = ({
   datePublished = new Date().toISOString().split("T")[0],
   itemReviewed = {
     "@type": "Service",
+    "@id": "https://digitalizatenerife.es/#service",
     name: "SmartConnect AI",
   },
 }) => {
