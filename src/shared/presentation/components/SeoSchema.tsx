@@ -451,11 +451,11 @@ interface ReviewSchemaProps {
   rating?: number;
   datePublished?: string;
   /** The item being reviewed (required by Schema.org validation).
-   *  Defaults to SmartConnect AI Service with @id to reference the ServiceSchema on the page. */
+   *  Google accepts Product, LocalBusiness, SoftwareApplication, etc.
+   *  NOT Service. Defaults to SoftwareApplication (SmartConnect is a SaaS platform). */
   itemReviewed?: {
     "@type": string;
-    "@id": string;
-    name?: string;
+    name: string;
     url?: string;
   };
 }
@@ -466,8 +466,7 @@ export const ReviewSchema: React.FC<ReviewSchemaProps> = ({
   rating = 5,
   datePublished = new Date().toISOString().split("T")[0],
   itemReviewed = {
-    "@type": "Service",
-    "@id": "https://digitalizatenerife.es/#service",
+    "@type": "SoftwareApplication",
     name: "SmartConnect AI",
   },
 }) => {
