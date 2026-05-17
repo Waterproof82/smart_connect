@@ -451,12 +451,14 @@ interface ReviewSchemaProps {
   rating?: number;
   datePublished?: string;
   /** The item being reviewed (required by Schema.org validation).
-   *  Google accepts Product, LocalBusiness, SoftwareApplication, etc.
-   *  NOT Service. Defaults to SoftwareApplication (SmartConnect is a SaaS platform). */
+   *  Google requires SoftwareApplication to have at least 2 of:
+   *  offers, aggregateRating, applicationCategory, operatingSystem. */
   itemReviewed?: {
     "@type": string;
     name: string;
     url?: string;
+    applicationCategory?: string;
+    operatingSystem?: string;
   };
 }
 
@@ -468,6 +470,8 @@ export const ReviewSchema: React.FC<ReviewSchemaProps> = ({
   itemReviewed = {
     "@type": "SoftwareApplication",
     name: "SmartConnect AI",
+    applicationCategory: "BusinessApplication",
+    operatingSystem: "Web, iOS, Android",
   },
 }) => {
   const schema: Record<string, unknown> = {
