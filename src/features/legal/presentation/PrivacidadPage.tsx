@@ -31,6 +31,7 @@ const PrivacidadPage: React.FC = () => {
 
   return (
     <LegalPage
+      url="https://digitalizatenerife.es/legal/privacidad"
       titleKey="legalPrivacidadTitle"
       descriptionKey="legalPrivacidadDescription"
       sections={sections}

@@ -23,6 +23,7 @@ const CookiesPage: React.FC = () => {
 
   return (
     <LegalPage
+      url="https://digitalizatenerife.es/legal/cookies"
       titleKey="legalCookiesTitle"
       descriptionKey="legalCookiesDescription"
       sections={sections}

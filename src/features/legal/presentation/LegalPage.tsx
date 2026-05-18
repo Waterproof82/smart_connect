@@ -5,6 +5,7 @@ import { Navbar } from "@features/landing/presentation/components/Navbar";
 import { Contact } from "@features/landing/presentation/components/Contact";
 
 interface LegalPageProps {
+  url: string;
   titleKey: string;
   descriptionKey: string;
   sections: {
@@ -16,6 +17,7 @@ interface LegalPageProps {
 }
 
 const LegalPage: React.FC<LegalPageProps> = ({
+  url,
   titleKey,
   descriptionKey,
   sections,
@@ -31,6 +33,7 @@ const LegalPage: React.FC<LegalPageProps> = ({
       <Helmet>
         <title>{tr(titleKey)}</title>
         <meta name="description" content={tr(descriptionKey)} />
+        <link rel="canonical" href={url} />
       </Helmet>
       <Navbar scrolled={true} />
       <div className="container mx-auto px-6 py-24 max-w-3xl">
