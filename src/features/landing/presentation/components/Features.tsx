@@ -81,7 +81,7 @@ const getCardDescClass = (idx: number): string => {
 };
 
 const getIconContainerClass = (idx: number): string => {
-  return `relative z-10 mb-6 w-14 h-14 bg-[var(--color-surface)] rounded-2xl flex items-center justify-center motion-safe:group-hover:scale-110 transition-transform ${idx === 0 ? "lg:w-16 lg:h-16" : ""}`;
+  return `relative z-10 mb-6 w-14 h-14 bg-[var(--color-surface)] rounded-2xl flex items-center justify-center motion-safe:group-hover:scale-110 transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] ${idx === 0 ? "lg:w-16 lg:h-16" : ""}`;
 };
 
 const getLinkText = (item: (typeof solutions)[0], t: Translation): string => {
@@ -291,7 +291,7 @@ export const Features: React.FC = () => {
   return (
     <div className="container mx-auto px-6" ref={sectionRef}>
       <div
-        className={`text-center max-w-3xl mx-auto mb-20 transition-all duration-1000 ${
+        className={`text-left max-w-none mb-20 transition-[opacity,transform] duration-500 ${
           isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
         }`}
       >
@@ -305,12 +305,12 @@ export const Features: React.FC = () => {
         {solutions.map((item, idx) => (
           <article
             key={item.id}
-            className={`relative p-8 lg:p-10 rounded-3xl transition-all duration-700 cursor-pointer group overflow-hidden ${
+            className={`relative p-8 lg:p-10 rounded-3xl transition-[opacity,transform] duration-300 cursor-pointer group overflow-hidden ${
               isVisible
                 ? "opacity-100 translate-y-0"
                 : "opacity-0 translate-y-10"
             } ${getCardBackground(item.hasImage, idx)}`}
-            style={{ transitionDelay: `${idx * 100}ms` }}
+            style={{ transitionDelay: `${idx * 60}ms` }}
           >
             {item.hasImage && idx === 0 && <SoftwareIAAbstract />}
             <div className={getIconContainerClass(idx)}>{item.icon}</div>
@@ -350,7 +350,7 @@ export const Features: React.FC = () => {
               external={item.external}
               internal={item.internal}
               route={item.route}
-              className="inline-flex items-center gap-2 text-sm font-bold text-[var(--color-primary)] group-hover:text-[var(--color-primary)] transition-colors"
+              className="inline-flex items-center gap-2 text-sm font-bold text-[var(--color-primary)] group-hover:text-[var(--color-primary)] transition-[color] duration-150"
             >
               <span>{getLinkText(item, t)}</span>
               <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
