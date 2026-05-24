@@ -30,8 +30,6 @@ export function render(url: string): { html: string; head: string } {
             <Suspense fallback={null}>
               <Routes>
                 <Route path="/" element={<App />} />
-                <Route path="/servicios" element={<App />} />
-                <Route path="/contacto" element={<App />} />
                 <Route
                   path="/carta-digital"
                   element={<CartaDigitalPremium />}

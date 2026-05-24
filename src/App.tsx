@@ -664,6 +664,14 @@ const App: React.FC = () => {
                 <ul className="space-y-2 text-sm text-muted">
                   <li>
                     <Link
+                      to="/about"
+                      className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors"
+                    >
+                      Sobre Nosotros
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
                       to="/legal/aviso"
                       className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors"
                     >

@@ -122,7 +122,7 @@ const SoftwareCanariasContainer: React.FC = () => {
         <meta property="og:type" content="website" />
         <meta
           property="og:image"
-          content="https://digitalizatenerife.es/og-image.jpg"
+          content="https://digitalizatenerife.es/icon.png"
         />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={t.softwareCanariasSeoTitle} />
