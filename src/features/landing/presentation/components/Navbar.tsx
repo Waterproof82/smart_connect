@@ -61,11 +61,11 @@ const DropdownMenuItem: React.FC<{
     }
   }, [focusedDropdownIndex, idx]);
 
-  const itemClasses = `flex items-center gap-4 p-3 rounded-2xl transition-colors group/item ${active ? "bg-[var(--color-accent-subtle)]" : "hover:bg-[var(--color-bg-alt)]"} ${focusedDropdownIndex === idx ? "bg-[var(--color-bg-alt)]" : ""}`;
+  const itemClasses = `flex items-center gap-4 p-3 rounded-2xl transition-[background-color] duration-100 group/item ${active ? "bg-[var(--color-accent-subtle)]" : "hover:bg-[var(--color-bg-alt)]"} ${focusedDropdownIndex === idx ? "bg-[var(--color-bg-alt)]" : ""}`;
 
   const itemContent = (
     <>
-      <div className="w-10 h-10 bg-[var(--color-surface)] rounded-xl flex items-center justify-center group-hover/item:scale-110 transition-transform">
+      <div className="w-10 h-10 bg-[var(--color-surface)] rounded-xl flex items-center justify-center group-hover/item:scale-110 transition-transform duration-150" style={{ transitionTimingFunction: "cubic-bezier(0.23, 1, 0.32, 1)" }}>
         {item.icon}
       </div>
       <div>
@@ -181,7 +181,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
   return (
     <nav
       aria-label="Navegación principal"
-      className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 border-b border-[var(--color-border)] bg-[var(--color-bg)] ${
+      className={`fixed top-0 left-0 right-0 z-[100] transition-[padding,background-color] duration-200 border-b border-[var(--color-border)] bg-[var(--color-bg)] ${
         scrolled ? "py-2 md:py-3" : "py-3 md:py-6"
       }`}
     >
@@ -192,7 +192,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
           className="flex items-center gap-2 group min-h-[48px]"
           onClick={(e) => handleNavClick(e, "#inicio")}
         >
-          <div className="w-10 h-10 bg-[var(--color-accent)] rounded-xl flex items-center justify-center shadow-lg motion-safe:group-hover:scale-110 transition-transform">
+          <div className="w-10 h-10 bg-[var(--color-accent)] rounded-xl flex items-center justify-center shadow-lg motion-safe:group-hover:scale-110 transition-transform duration-150" style={{ transitionTimingFunction: "cubic-bezier(0.23, 1, 0.32, 1)" }}>
             <Cpu className="text-[var(--color-on-accent)] w-6 h-6" />
           </div>
           <span className="font-bold text-xl tracking-tighter text-default">
@@ -251,16 +251,18 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
             >
               {t.navSolutions}
               <ChevronDown
-                className={`w-4 h-4 transition-transform duration-300 ${isDropdownOpen ? "rotate-180" : ""}`}
+                className={`w-4 h-4 transition-transform duration-150 ${isDropdownOpen ? "rotate-180" : ""}`}
+                style={{ transitionTimingFunction: "cubic-bezier(0.23, 1, 0.32, 1)" }}
               />
             </button>
 
             <div
-              className={`absolute top-full left-1/2 -translate-x-1/2 pt-4 transition-all duration-300 ${
+              className={`absolute top-full left-1/2 -translate-x-1/2 pt-4 transition-[opacity,transform] duration-150 origin-top ${
                 isDropdownOpen
-                  ? "opacity-100 translate-y-0 pointer-events-auto"
-                  : "opacity-0 translate-y-4 pointer-events-none"
+                  ? "opacity-100 scale-100 pointer-events-auto"
+                  : "opacity-0 scale-95 pointer-events-none"
               }`}
+              style={{ transitionTimingFunction: "cubic-bezier(0.23, 1, 0.32, 1)" }}
             >
               <div className="w-[280px] bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[2rem] p-4 shadow-lg">
                 <div className="grid gap-2">
