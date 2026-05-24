@@ -81,7 +81,7 @@ const getCardDescClass = (idx: number): string => {
 };
 
 const getIconContainerClass = (idx: number): string => {
-  return `relative z-10 mb-6 w-14 h-14 bg-[var(--color-surface)] rounded-2xl flex items-center justify-center motion-safe:group-hover:scale-110 transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] ${idx === 0 ? "lg:w-16 lg:h-16" : ""}`;
+  return `relative z-10 mb-6 w-14 h-14 bg-[var(--color-surface)] rounded-2xl flex items-center justify-center motion-safe:group-hover:scale-110 transition-transform duration-150 ease-[var(--ease-out)] ${idx === 0 ? "lg:w-16 lg:h-16" : ""}`;
 };
 
 const getLinkText = (item: (typeof solutions)[0], t: Translation): string => {
