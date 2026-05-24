@@ -65,7 +65,7 @@ const DropdownMenuItem: React.FC<{
 
   const itemContent = (
     <>
-      <div className="w-10 h-10 bg-[var(--color-surface)] rounded-xl flex items-center justify-center group-hover/item:scale-110 transition-transform duration-150" style={{ transitionTimingFunction: "cubic-bezier(0.23, 1, 0.32, 1)" }}>
+      <div className="w-10 h-10 bg-[var(--color-surface)] rounded-xl flex items-center justify-center group-hover/item:scale-110 transition-transform duration-150" style={{ transitionTimingFunction: "var(--ease-out)" }}>
         {item.icon}
       </div>
       <div>
@@ -192,7 +192,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
           className="flex items-center gap-2 group min-h-[48px]"
           onClick={(e) => handleNavClick(e, "#inicio")}
         >
-          <div className="w-10 h-10 bg-[var(--color-accent)] rounded-xl flex items-center justify-center shadow-lg motion-safe:group-hover:scale-110 transition-transform duration-150" style={{ transitionTimingFunction: "cubic-bezier(0.23, 1, 0.32, 1)" }}>
+          <div className="w-10 h-10 bg-[var(--color-accent)] rounded-xl flex items-center justify-center shadow-lg motion-safe:group-hover:scale-110 transition-transform duration-150" style={{ transitionTimingFunction: "var(--ease-out)" }}>
             <Cpu className="text-[var(--color-on-accent)] w-6 h-6" />
           </div>
           <span className="font-bold text-xl tracking-tighter text-default">
@@ -252,7 +252,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
               {t.navSolutions}
               <ChevronDown
                 className={`w-4 h-4 transition-transform duration-150 ${isDropdownOpen ? "rotate-180" : ""}`}
-                style={{ transitionTimingFunction: "cubic-bezier(0.23, 1, 0.32, 1)" }}
+                style={{ transitionTimingFunction: "var(--ease-out)" }}
               />
             </button>
 
@@ -262,7 +262,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
                   ? "opacity-100 scale-100 pointer-events-auto"
                   : "opacity-0 scale-95 pointer-events-none"
               }`}
-              style={{ transitionTimingFunction: "cubic-bezier(0.23, 1, 0.32, 1)" }}
+              style={{ transitionTimingFunction: "var(--ease-out)" }}
             >
               <div className="w-[280px] bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[2rem] p-4 shadow-lg">
                 <div className="grid gap-2">
