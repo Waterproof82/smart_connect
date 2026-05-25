@@ -57,7 +57,7 @@ const TestimonialCarousel: React.FC<TestimonialCarouselProps> = ({
                 <SwiperSlide key={testimonial.id}>
                   <div className="p-8 border border-[var(--color-border)] rounded-2xl bg-[var(--color-surface)] mb-10">
                     <p className="leading-relaxed text-muted text-base mb-8">
-                      "{testimonial.quote}"
+                      &ldquo;{testimonial.quote}&rdquo;
                     </p>
 
                     <div className="flex items-center gap-3">
