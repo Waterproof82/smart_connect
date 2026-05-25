@@ -119,14 +119,19 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
   const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobileMenuClosing, setIsMobileMenuClosing] = useState(false);
   const [focusedDropdownIndex, setFocusedDropdownIndex] = useState<number>(-1);
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuClosing(true);
+  };
 
   // Close mobile menu on Escape key
   useEffect(() => {
     if (!isMobileMenuOpen) return;
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        setIsMobileMenuOpen(false);
+        closeMobileMenu();
       }
     };
     globalThis.addEventListener("keydown", handleKeyDown);
@@ -332,17 +337,25 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
             className="fixed inset-0 z-[200] w-full h-full flex justify-end m-0 max-w-none max-h-none bg-transparent border-none"
             onClose={(e) => {
               e.preventDefault();
-              setIsMobileMenuOpen(false);
+              closeMobileMenu();
             }}
           >
             <button
               className="absolute inset-0 bg-black/80 backdrop-blur-sm cursor-default border-none"
-              onClick={() => setIsMobileMenuOpen(false)}
+              onClick={closeMobileMenu}
               aria-hidden="true"
               tabIndex={-1}
               type="button"
             />
-            <div className="relative w-[80vw] max-w-xs h-full bg-[var(--color-bg)] border-l border-[var(--color-border)] p-4 flex flex-col gap-4 shadow-lg animate-in slide-in-from-right overflow-y-auto z-10">
+            <div
+              className={`relative w-[80vw] max-w-xs h-full bg-[var(--color-bg)] border-l border-[var(--color-border)] p-4 flex flex-col gap-4 shadow-lg overflow-y-auto z-10 ${isMobileMenuClosing ? "animate-in slide-in-from-right [animation-direction:reverse] [animation-duration:200ms]" : "animate-in slide-in-from-right"}`}
+              onAnimationEnd={() => {
+                if (isMobileMenuClosing) {
+                  setIsMobileMenuOpen(false);
+                  setIsMobileMenuClosing(false);
+                }
+              }}
+            >
               <div className="flex items-center justify-between">
                 <span className="font-bold text-xl text-default">
                   SmartConnect{" "}
@@ -351,7 +364,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
                 <div className="flex items-center gap-2">
                   <LanguageSelector />
                   <button
-                    onClick={() => setIsMobileMenuOpen(false)}
+                    onClick={closeMobileMenu}
                     className="text-default p-2 rounded-lg focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)]"
                     aria-label="Cerrar menu"
                     autoFocus
@@ -368,7 +381,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
                   <Link
                     to="/"
                     className="flex items-center gap-3 p-3 text-muted hover:bg-[var(--color-surface)] rounded-xl transition-colors"
-                    onClick={() => setIsMobileMenuOpen(false)}
+                    onClick={closeMobileMenu}
                   >
                     <ArrowLeft className="w-5 h-5" />
                     {t.navBack}
@@ -385,7 +398,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
                         <Link
                           to={item.href}
                           className={`flex items-center gap-3 p-3 min-h-[48px] hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-xl transition-colors ${active ? "bg-[var(--color-accent-subtle)] text-[var(--color-primary)]" : "text-muted"}`}
-                          onClick={() => setIsMobileMenuOpen(false)}
+                          onClick={closeMobileMenu}
                         >
                           {item.icon}
                           <span className="font-semibold">{item.title}</span>
@@ -433,7 +446,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
                   <Link
                     to="/admin"
                     className="text-muted flex items-center gap-2 p-3 min-h-[48px] hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-xl transition-colors"
-                    onClick={() => setIsMobileMenuOpen(false)}
+                    onClick={closeMobileMenu}
                   >
                     <Shield className="w-4 h-4" />
                     <span>Admin</span>

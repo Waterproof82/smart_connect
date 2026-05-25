@@ -38,22 +38,16 @@ const TestimonialCarousel: React.FC<TestimonialCarouselProps> = ({
           description: testimonial.quote,
         }))}
       />
-      <section className="bg-white dark:bg-gray-900">
-        <div className="container px-6 py-10 mx-auto">
-          <h1 className="text-2xl font-semibold text-center text-gray-800 capitalize lg:text-3xl dark:text-white">
+      <section className="bg-[var(--color-bg-alt)] py-16 md:py-24">
+        <div className="container px-6 mx-auto">
+          <h2 className="text-2xl font-bold text-center text-default capitalize lg:text-3xl mb-12">
             {title}
-          </h1>
+          </h2>
 
-          <div className="flex justify-center mx-auto mt-6">
-            <span className="inline-block w-40 h-1 bg-blue-500 rounded-full"></span>
-            <span className="inline-block w-3 h-1 mx-1 bg-blue-500 rounded-full"></span>
-            <span className="inline-block w-1 h-1 bg-blue-500 rounded-full"></span>
-          </div>
-
-          <div className="flex items-start max-w-6xl mx-auto mt-16">
+          <div className="max-w-4xl mx-auto">
             <Swiper
               modules={[Navigation, Pagination, A11y]}
-              spaceBetween={50}
+              spaceBetween={32}
               slidesPerView={1}
               navigation
               pagination={{ clickable: true }}
@@ -61,23 +55,22 @@ const TestimonialCarousel: React.FC<TestimonialCarouselProps> = ({
             >
               {testimonials.map((testimonial) => (
                 <SwiperSlide key={testimonial.id}>
-                  <div className="p-8 border rounded-lg dark:border-gray-700">
-                    <p className="leading-loose text-gray-500 dark:text-gray-400">
-                      {testimonial.quote}
+                  <div className="p-8 border border-[var(--color-border)] rounded-2xl bg-[var(--color-surface)] mb-10">
+                    <p className="leading-relaxed text-muted text-base mb-8">
+                      "{testimonial.quote}"
                     </p>
 
-                    <div className="flex items-center mt-8 -mx-2">
-                      <img
-                        className="object-cover mx-2 rounded-full w-14 shrink-0 h-14"
-                        src={testimonial.avatarUrl}
-                        alt={testimonial.name}
-                      />
-
-                      <div className="mx-2">
-                        <h1 className="font-semibold text-gray-800 dark:text-white">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-full bg-[var(--color-accent-subtle)] border border-[var(--color-accent-border)] flex items-center justify-center shrink-0">
+                        <span className="text-[var(--color-primary)] font-bold text-lg">
+                          {testimonial.name.charAt(0)}
+                        </span>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-default text-sm">
                           {testimonial.name}
-                        </h1>
-                        <span className="text-sm text-gray-500 dark:text-gray-400">
+                        </p>
+                        <span className="text-xs text-muted">
                           {testimonial.title}
                         </span>
                       </div>

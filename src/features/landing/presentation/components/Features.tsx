@@ -353,50 +353,41 @@ export const Features: React.FC = () => {
               className="inline-flex items-center gap-2 text-sm font-bold text-[var(--color-primary)] group-hover:text-[var(--color-primary)] transition-[color] duration-150"
             >
               <span>{getLinkText(item, t)}</span>
-              <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+              <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-150 ease-[var(--ease-out)]" />
             </LinkWrapper>
           </article>
         ))}
       </div>
 
-      {/* Descriptive content for SEO (~500+ words total visible body text) */}
-      <div className="mt-20 max-w-4xl mx-auto space-y-8 text-muted leading-relaxed">
-        <section>
-          <h3 className="text-lg md:text-xl font-bold mb-2 text-default">
-            {t.featuresContent1Title}
-          </h3>
-          <p className="text-base md:text-lg">{t.featuresContent1}</p>
-        </section>
-        <section>
-          <h3 className="text-lg md:text-xl font-bold mb-2 text-default">
-            {t.featuresContent2Title}
-          </h3>
-          <p className="text-base md:text-lg">{t.featuresContent2}</p>
-        </section>
-        <section>
-          <h3 className="text-lg md:text-xl font-bold mb-2 text-default">
-            {t.featuresContent3Title}
-          </h3>
-          <p className="text-base md:text-lg">{t.featuresContent3}</p>
-        </section>
-        <section>
-          <h3 className="text-lg md:text-xl font-bold mb-2 text-default">
-            {t.featuresContent4Title}
-          </h3>
-          <p className="text-base md:text-lg">{t.featuresContent4}</p>
-        </section>
-        <section>
-          <h3 className="text-lg md:text-xl font-bold mb-2 text-default">
-            {t.featuresContent5Title}
-          </h3>
-          <p className="text-base md:text-lg">{t.featuresContent5}</p>
-        </section>
-        <section>
-          <h3 className="text-lg md:text-xl font-bold mb-2 text-default">
-            {t.featuresContent6Title}
-          </h3>
-          <p className="text-base md:text-lg">{t.featuresContent6}</p>
-        </section>
+      {/* Descriptive content for SEO — editorial numbered layout */}
+      <div className="mt-28 border-t border-[var(--color-border)]">
+        {(
+          [
+            { num: "01", title: t.featuresContent1Title, content: t.featuresContent1 },
+            { num: "02", title: t.featuresContent2Title, content: t.featuresContent2 },
+            { num: "03", title: t.featuresContent3Title, content: t.featuresContent3 },
+            { num: "04", title: t.featuresContent4Title, content: t.featuresContent4 },
+            { num: "05", title: t.featuresContent5Title, content: t.featuresContent5 },
+            { num: "06", title: t.featuresContent6Title, content: t.featuresContent6 },
+          ] as const
+        ).map((item) => (
+          <div
+            key={item.num}
+            className="grid grid-cols-[2.5rem_1fr] md:grid-cols-[6rem_1fr] gap-4 md:gap-12 py-10 border-b border-[var(--color-border)]"
+          >
+            <span className="text-[var(--color-primary)] font-mono text-xs font-bold opacity-50 pt-1.5 tabular-nums select-none">
+              {item.num}
+            </span>
+            <div className="md:grid md:grid-cols-[15rem_1fr] md:gap-10 items-start">
+              <h3 className="text-base md:text-lg font-bold text-default mb-2 md:mb-0 leading-snug">
+                {item.title}
+              </h3>
+              <p className="text-muted leading-relaxed text-base max-w-[65ch]">
+                {item.content}
+              </p>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

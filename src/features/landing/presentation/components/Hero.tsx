@@ -67,10 +67,10 @@ export const Hero: React.FC<HeroProps> = ({ variant = "home" }) => {
                   .querySelector("#contacto")
                   ?.scrollIntoView({ behavior: "smooth" })
               }
-              className="bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg)] text-[var(--color-on-accent)] px-6 md:px-10 py-4 md:py-5 rounded-2xl font-bold flex items-center gap-3 transition-[transform,background-color,box-shadow] shadow-xl motion-safe:active:scale-95 group min-h-[44px]"
+              className="bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg)] text-[var(--color-on-accent)] px-6 md:px-10 py-4 md:py-5 rounded-2xl font-bold flex items-center gap-3 transition-[transform,background-color,box-shadow] shadow-xl motion-safe:active:scale-[0.97] group min-h-[44px]"
             >
               {t.heroButtonContact}
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-150 ease-[var(--ease-out)]" />
             </button>
             <button
               onClick={() =>
@@ -78,10 +78,10 @@ export const Hero: React.FC<HeroProps> = ({ variant = "home" }) => {
                   .querySelector("#soluciones")
                   ?.scrollIntoView({ behavior: "smooth" })
               }
-              className="bg-[var(--color-overlay-subtle)] hover:bg-[var(--color-overlay-medium)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg)] border border-[var(--color-border)] px-6 md:px-10 py-4 md:py-5 rounded-2xl font-bold flex items-center gap-3 transition-[transform,background-color] motion-safe:active:scale-95 group min-h-[44px]"
+              className="bg-[var(--color-overlay-subtle)] hover:bg-[var(--color-overlay-medium)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg)] border border-[var(--color-border)] px-6 md:px-10 py-4 md:py-5 rounded-2xl font-bold flex items-center gap-3 transition-[transform,background-color] motion-safe:active:scale-[0.97] group min-h-[44px]"
             >
               {t.heroButtonDemo}
-              <div className="w-8 h-8 bg-[var(--color-overlay-medium)] rounded-full flex items-center justify-center group-hover:bg-[var(--color-overlay-strong)] transition-colors">
+              <div className="w-8 h-8 bg-[var(--color-overlay-medium)] rounded-full flex items-center justify-center group-hover:bg-[var(--color-overlay-strong)] transition-[background-color] duration-150">
                 <Play className="w-3 h-3 fill-[var(--color-text)] ml-0.5" />
               </div>
             </button>
