@@ -7,6 +7,7 @@ import { Features } from "@features/landing/presentation/components/Features";
 import { Contact } from "@features/landing/presentation/components/Contact";
 import { SuccessStats } from "@features/landing/presentation/components/SuccessStats";
 import { ExpertAssistant } from "@features/chatbot/presentation";
+import HomeFaqSection from "@features/landing/presentation/components/HomeFaqSection";
 import { ConsoleLogger } from "@core/domain/usecases/Logger";
 import { useLanguage } from "@shared/context/LanguageContext";
 
@@ -547,6 +548,13 @@ const App: React.FC = () => {
             className="py-20 md:py-32"
           >
             <SuccessStats />
+          </section>
+          <section
+            id="faq"
+            aria-label="Preguntas Frecuentes"
+            className="py-20 md:py-32"
+          >
+            <HomeFaqSection />
           </section>
           <section id="contacto" aria-label="Contacto">
             <Contact />

@@ -17,6 +17,13 @@ const PAGE_TITLES = {
   "/carta-digital": "Carta Digital Premium — SmartConnect AI",
   "/tap-review": "Tap-to-Review NFC — SmartConnect AI",
   "/about": "Sobre SmartConnect AI",
+  "/automatizacion-restaurantes-n8n": "Automatización con n8n para Restaurantes | SmartConnect AI",
+  "/automatizacion-whatsapp-restaurante": "Automatización WhatsApp para Restaurantes | SmartConnect AI",
+  "/software-restaurantes-canarias": "Software para Restaurantes en Canarias | SmartConnect AI",
+  "/digitalizacion-hosteleria-tenerife": "Digitalización Hostelería Tenerife | SmartConnect AI",
+  "/legal/aviso": "Aviso Legal — SmartConnect AI",
+  "/legal/privacidad": "Política de Privacidad — SmartConnect AI",
+  "/legal/cookies": "Política de Cookies — SmartConnect AI",
 };
 
 /**

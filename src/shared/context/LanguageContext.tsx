@@ -650,6 +650,67 @@ interface Translation {
   legalCookiesDescription: string;
   legalCookiesBackLink: string;
   legalCookiesUpdated: string;
+  // Home FAQ
+  homeFaqTitle: string;
+  homeFaqQ1: string;
+  homeFaqA1: string;
+  homeFaqQ2: string;
+  homeFaqA2: string;
+  homeFaqQ3: string;
+  homeFaqA3: string;
+  homeFaqQ4: string;
+  homeFaqA4: string;
+  homeFaqQ5: string;
+  homeFaqA5: string;
+  homeFaqQ6: string;
+  homeFaqA6: string;
+  // CartaDigital FAQ & HowTo
+  cartaFaqTitle: string;
+  cartaFaqQ1: string;
+  cartaFaqA1: string;
+  cartaFaqQ2: string;
+  cartaFaqA2: string;
+  cartaFaqQ3: string;
+  cartaFaqA3: string;
+  cartaFaqQ4: string;
+  cartaFaqA4: string;
+  cartaFaqQ5: string;
+  cartaFaqA5: string;
+  cartaHowToTitle: string;
+  cartaHowToDesc: string;
+  cartaHowToStep1Name: string;
+  cartaHowToStep1Text: string;
+  cartaHowToStep2Name: string;
+  cartaHowToStep2Text: string;
+  cartaHowToStep3Name: string;
+  cartaHowToStep3Text: string;
+  // CartaDigital Comparison Table
+  cartaComparTitle: string;
+  cartaComparSubtitle: string;
+  cartaComparHeaderCriterio: string;
+  cartaComparHeaderQribar: string;
+  cartaComparHeaderPapel: string;
+  cartaComparHeaderOtras: string;
+  cartaComparRow1Label: string;
+  cartaComparRow1Qribar: string;
+  cartaComparRow1Papel: string;
+  cartaComparRow1Otras: string;
+  cartaComparRow2Label: string;
+  cartaComparRow2Qribar: string;
+  cartaComparRow2Papel: string;
+  cartaComparRow2Otras: string;
+  cartaComparRow3Label: string;
+  cartaComparRow3Qribar: string;
+  cartaComparRow3Papel: string;
+  cartaComparRow3Otras: string;
+  cartaComparRow4Label: string;
+  cartaComparRow4Qribar: string;
+  cartaComparRow4Papel: string;
+  cartaComparRow4Otras: string;
+  cartaComparRow5Label: string;
+  cartaComparRow5Qribar: string;
+  cartaComparRow5Papel: string;
+  cartaComparRow5Otras: string;
 }
 
 const translations: Record<Language, Translation> = {
@@ -1526,6 +1587,70 @@ const translations: Record<Language, Translation> = {
       "Política de cookies de SmartConnect AI. Información sobre el uso de cookies y tecnologías similares.",
     legalCookiesBackLink: "Volver al inicio",
     legalCookiesUpdated: "Última actualización: 2026",
+
+    // Home FAQ
+    homeFaqTitle: "Preguntas Frecuentes",
+    homeFaqQ1: "¿Qué es SmartConnect AI?",
+    homeFaqA1: "SmartConnect AI es una agencia de transformación digital especializada en hostelería y comercios locales de Canarias. Ofrecemos menús digitales, tarjetas NFC para reseñas, automatización con n8n e IA conversacional.",
+    homeFaqQ2: "¿Cuánto cuesta el menú digital QRIBAR?",
+    homeFaqA2: "QRIBAR no tiene comisiones por pedido. El precio depende del plan y del tamaño del negocio. Contactá con nosotros para un presupuesto personalizado sin compromiso.",
+    homeFaqQ3: "¿Cómo funcionan las tarjetas NFC Tap-to-Review?",
+    homeFaqA3: "El cliente acerca su móvil a la tarjeta NFC y se abre directamente la página de reseñas de Google de tu negocio. Sin apps, sin fricción. Nuestros clientes multiplican sus reseñas por 6 en 90 días.",
+    homeFaqQ4: "¿Sus soluciones sirven para negocios fuera de Canarias?",
+    homeFaqA4: "Sí. Aunque nos especializamos en Tenerife y Canarias, nuestras soluciones digitales funcionan en cualquier negocio de España y Europa.",
+    homeFaqQ5: "¿Necesito conocimientos técnicos para usar vuestras herramientas?",
+    homeFaqA5: "No. Nuestras soluciones están diseñadas para propietarios de negocios sin experiencia técnica. Te damos formación, soporte y configuramos todo por ti.",
+    homeFaqQ6: "¿Cuánto tiempo lleva implementar el sistema?",
+    homeFaqA6: "La mayoría de nuestros sistemas están operativos en menos de 48 horas tras la firma del contrato. El menú digital QRIBAR puede estar listo el mismo día.",
+
+    // CartaDigital FAQ & HowTo
+    cartaFaqTitle: "Preguntas Frecuentes — Carta Digital",
+    cartaFaqQ1: "¿Qué es QRIBAR?",
+    cartaFaqA1: "QRIBAR es el sistema de carta digital de SmartConnect AI. Permite a los clientes ver el menú y hacer pedidos desde su móvil, enviando el pedido directamente a barra y cocina en tiempo real, sin comisiones por pedido.",
+    cartaFaqQ2: "¿Necesito una app para usar el menú digital?",
+    cartaFaqA2: "No. Los clientes simplemente escanean el QR de la mesa con la cámara del móvil. No se necesita descargar ninguna aplicación.",
+    cartaFaqQ3: "¿Cuántos idiomas soporta la carta?",
+    cartaFaqA3: "La carta digital QRIBAR soporta hasta 5 idiomas de forma simultánea, lo que es clave para la hostelería turística de Canarias.",
+    cartaFaqQ4: "¿Hay comisiones por pedido?",
+    cartaFaqA4: "No. A diferencia de plataformas como Glovo o Uber Eats, QRIBAR no cobra ninguna comisión por pedido. Pagás una tarifa fija mensual.",
+    cartaFaqQ5: "¿Cuánto tiempo lleva la puesta en marcha?",
+    cartaFaqA5: "La carta digital puede estar operativa el mismo día. Configuramos el menú, generamos los QR y formamos a tu equipo en menos de 24 horas.",
+    cartaHowToTitle: "Cómo funciona QRIBAR — Menú Digital",
+    cartaHowToDesc: "Sistema de pedidos digitales en 3 simples pasos para restaurantes, bares y cafeterías.",
+    cartaHowToStep1Name: "Escanear el QR",
+    cartaHowToStep1Text: "El cliente escanea el código QR de la mesa con la cámara del móvil. En segundos ve la carta completa con fotos y precios actualizados.",
+    cartaHowToStep2Name: "Hacer el pedido",
+    cartaHowToStep2Text: "El cliente selecciona los platos y confirma el pedido desde su móvil. Sin esperar al camarero, sin errores de comunicación.",
+    cartaHowToStep3Name: "Cocina recibe al instante",
+    cartaHowToStep3Text: "El pedido llega simultáneamente a la pantalla de barra y a la cocina en tiempo real. Tiempo de respuesta: menos de 2 segundos.",
+
+    // CartaDigital Comparison Table
+    cartaComparTitle: "QRIBAR vs. Alternativas",
+    cartaComparSubtitle: "Comparar y decidir con datos reales",
+    cartaComparHeaderCriterio: "Criterio",
+    cartaComparHeaderQribar: "QRIBAR",
+    cartaComparHeaderPapel: "Carta en papel",
+    cartaComparHeaderOtras: "Otras apps",
+    cartaComparRow1Label: "Comisiones",
+    cartaComparRow1Qribar: "0%",
+    cartaComparRow1Papel: "Sin comisiones",
+    cartaComparRow1Otras: "15–30%",
+    cartaComparRow2Label: "Actualización de precios",
+    cartaComparRow2Qribar: "Tiempo real",
+    cartaComparRow2Papel: "Reimpresión",
+    cartaComparRow2Otras: "Manual",
+    cartaComparRow3Label: "Idiomas",
+    cartaComparRow3Qribar: "Hasta 5",
+    cartaComparRow3Papel: "1 (reimpresión)",
+    cartaComparRow3Otras: "1–2",
+    cartaComparRow4Label: "Pedidos digitales",
+    cartaComparRow4Qribar: "Sí, a barra y cocina",
+    cartaComparRow4Papel: "No",
+    cartaComparRow4Otras: "Sí (con comisión)",
+    cartaComparRow5Label: "Puesta en marcha",
+    cartaComparRow5Qribar: "Mismo día",
+    cartaComparRow5Papel: "Semanas",
+    cartaComparRow5Otras: "Semanas",
   },
   en: {
     // Navigation
@@ -2400,6 +2525,70 @@ const translations: Record<Language, Translation> = {
       "Cookies policy of SmartConnect AI. Information about the use of cookies and similar technologies.",
     legalCookiesBackLink: "Back to home",
     legalCookiesUpdated: "Last updated: 2026",
+
+    // Home FAQ
+    homeFaqTitle: "Frequently Asked Questions",
+    homeFaqQ1: "What is SmartConnect AI?",
+    homeFaqA1: "SmartConnect AI is a digital transformation agency specializing in hospitality and local businesses in the Canary Islands. We offer digital menus, NFC review cards, n8n automation, and conversational AI.",
+    homeFaqQ2: "How much does the QRIBAR digital menu cost?",
+    homeFaqA2: "QRIBAR has no per-order commissions. Pricing depends on the plan and business size. Contact us for a free personalized quote.",
+    homeFaqQ3: "How do Tap-to-Review NFC cards work?",
+    homeFaqA3: "The customer taps their phone on the NFC card and your Google review page opens instantly — no app needed. Our clients multiply their reviews 6x in 90 days.",
+    homeFaqQ4: "Do your solutions work for businesses outside the Canary Islands?",
+    homeFaqA4: "Yes. While we specialize in Tenerife and the Canary Islands, our digital solutions work for any business across Spain and Europe.",
+    homeFaqQ5: "Do I need technical knowledge to use your tools?",
+    homeFaqA5: "No. Our solutions are designed for business owners with no technical background. We provide training, support, and handle the full setup.",
+    homeFaqQ6: "How long does implementation take?",
+    homeFaqA6: "Most of our systems are live within 48 hours of signing. The QRIBAR digital menu can be ready the same day.",
+
+    // CartaDigital FAQ & HowTo
+    cartaFaqTitle: "FAQ — Digital Menu",
+    cartaFaqQ1: "What is QRIBAR?",
+    cartaFaqA1: "QRIBAR is SmartConnect AI's digital menu system. Customers view the menu and place orders from their phone, sending orders directly to the bar and kitchen in real time, with no per-order commissions.",
+    cartaFaqQ2: "Do customers need an app?",
+    cartaFaqA2: "No. Customers just scan the table QR code with their phone camera. No app download required.",
+    cartaFaqQ3: "How many languages does the menu support?",
+    cartaFaqA3: "The QRIBAR digital menu supports up to 5 languages simultaneously — essential for tourist hospitality in the Canary Islands.",
+    cartaFaqQ4: "Are there per-order commissions?",
+    cartaFaqA4: "No. Unlike platforms such as Glovo or Uber Eats, QRIBAR charges zero per-order commissions. You pay a fixed monthly fee.",
+    cartaFaqQ5: "How long does setup take?",
+    cartaFaqA5: "The digital menu can go live the same day. We configure your menu, generate QR codes, and train your team in under 24 hours.",
+    cartaHowToTitle: "How QRIBAR Digital Menu Works",
+    cartaHowToDesc: "Digital ordering system in 3 simple steps for restaurants, bars, and cafes.",
+    cartaHowToStep1Name: "Scan the QR code",
+    cartaHowToStep1Text: "The customer scans the table QR code with their phone camera. In seconds they see the full menu with photos and up-to-date prices.",
+    cartaHowToStep2Name: "Place the order",
+    cartaHowToStep2Text: "The customer selects dishes and confirms the order from their phone. No waiting for staff, no miscommunication.",
+    cartaHowToStep3Name: "Kitchen receives instantly",
+    cartaHowToStep3Text: "The order arrives simultaneously on the bar screen and kitchen display in real time. Response time: under 2 seconds.",
+
+    // CartaDigital Comparison Table
+    cartaComparTitle: "QRIBAR vs. Alternatives",
+    cartaComparSubtitle: "Compare and decide with real data",
+    cartaComparHeaderCriterio: "Criteria",
+    cartaComparHeaderQribar: "QRIBAR",
+    cartaComparHeaderPapel: "Paper menu",
+    cartaComparHeaderOtras: "Other apps",
+    cartaComparRow1Label: "Commissions",
+    cartaComparRow1Qribar: "0%",
+    cartaComparRow1Papel: "No commissions",
+    cartaComparRow1Otras: "15–30%",
+    cartaComparRow2Label: "Price updates",
+    cartaComparRow2Qribar: "Real time",
+    cartaComparRow2Papel: "Reprint",
+    cartaComparRow2Otras: "Manual",
+    cartaComparRow3Label: "Languages",
+    cartaComparRow3Qribar: "Up to 5",
+    cartaComparRow3Papel: "1 (reprint)",
+    cartaComparRow3Otras: "1–2",
+    cartaComparRow4Label: "Digital orders",
+    cartaComparRow4Qribar: "Yes, bar & kitchen",
+    cartaComparRow4Papel: "No",
+    cartaComparRow4Otras: "Yes (with commission)",
+    cartaComparRow5Label: "Setup time",
+    cartaComparRow5Qribar: "Same day",
+    cartaComparRow5Papel: "Weeks",
+    cartaComparRow5Otras: "Weeks",
   },
 };
 

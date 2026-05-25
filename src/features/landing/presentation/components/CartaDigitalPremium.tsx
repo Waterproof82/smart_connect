@@ -24,6 +24,8 @@ import CartaDigitalBeneficiosSection from "./CartaDigitalBeneficiosSection";
 import CartaDigitalComoFuncionaSection from "./CartaDigitalComoFuncionaSection";
 import CartaDigitalDineroSection from "./CartaDigitalDineroSection";
 import CartaDigitalBBDDSection from "./CartaDigitalBBDDSection";
+import CartaDigitalComparacionSection from "./CartaDigitalComparacionSection";
+import CartaDigitalFaqSection from "./CartaDigitalFaqSection";
 import CartaDigitalDemoSection from "./CartaDigitalDemoSection";
 import CartaDigitalCTAFinalSection from "./CartaDigitalCTAFinalSection";
 import CartaDigitalLightbox from "./CartaDigitalLightbox";
@@ -161,7 +163,9 @@ const CartaDigitalPremium: React.FC = () => {
         <CartaDigitalBeneficiosSection />
         <CartaDigitalComoFuncionaSection />
         <CartaDigitalDineroSection />
+        <CartaDigitalComparacionSection />
         <CartaDigitalBBDDSection />
+        <CartaDigitalFaqSection />
         <CartaDigitalDemoSection
           videoRef={videoRef}
           isVideoPlaying={isVideoPlaying}

@@ -73,11 +73,11 @@ const CartaDigitalBeneficiosSection: React.FC = () => {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+          <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 list-none">
             {beneficios.map((item) => (
+              <li key={item.num} className={item.fullWidth ? "md:col-span-2" : ""}>
               <div
-                key={item.num}
-                className={`bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-5 md:p-6 flex gap-4 md:gap-5 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 ${item.fullWidth ? "md:col-span-2" : ""}`}
+                className={`bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-5 md:p-6 flex gap-4 md:gap-5 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200`}
               >
                 <div className="text-3xl md:text-4xl lg:text-5xl font-black text-[var(--color-accent-subtle)] font-display leading-none hidden sm:block">
                   {item.num}
@@ -106,8 +106,9 @@ const CartaDigitalBeneficiosSection: React.FC = () => {
                   </div>
                 </div>
               </div>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
       </div>
     </section>
