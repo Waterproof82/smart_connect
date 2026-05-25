@@ -447,81 +447,97 @@ const App: React.FC = () => {
             className="py-20 md:py-32 bg-[var(--color-bg-alt)]"
           >
             <div className="container mx-auto px-6">
-              <h2 className="text-4xl md:text-5xl font-bold mb-6 text-center">
-                ¿Por qué SmartConnect AI?
-              </h2>
-              <div className="max-w-4xl mx-auto space-y-8 text-muted leading-relaxed mt-12">
-                <section>
-                  <h3 className="text-xl md:text-2xl font-bold mb-4 text-default">
+              {/* Left-aligned header */}
+              <div className="max-w-2xl mb-16">
+                <h2 className="text-4xl md:text-5xl font-bold mb-4">
+                  ¿Por qué SmartConnect AI?
+                </h2>
+                <p className="text-muted leading-relaxed text-lg">
+                  Democratizamos el acceso a la tecnología para los negocios
+                  locales de Canarias. No creemos en soluciones genéricas.
+                </p>
+              </div>
+
+              {/* Stats strip */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 py-8 border-y border-[var(--color-border)] mb-16">
+                {(
+                  [
+                    { value: "200+", label: "Negocios en Canarias" },
+                    { value: "0%", label: "Comisiones por pedido" },
+                    { value: "6×", label: "Más reseñas en 90 días" },
+                    { value: "40%", label: "Más visitas con reseñas" },
+                  ] as const
+                ).map((stat) => (
+                  <div key={stat.label}>
+                    <div className="text-3xl md:text-4xl font-bold text-default tabular-nums">
+                      {stat.value}
+                    </div>
+                    <div className="text-sm text-muted mt-1">{stat.label}</div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Asymmetric grid: Misión (1fr) + Pilares (2fr) */}
+              <div className="grid md:grid-cols-[1fr_2fr] gap-12 mb-16">
+                <div>
+                  <p className="text-xs font-bold text-[var(--color-primary)] uppercase tracking-wider mb-4 opacity-70">
                     Misión y Visión
-                  </h3>
-                  <ul className="space-y-3 list-disc list-inside">
-                    <li className="text-base md:text-lg">
-                      Democratizar el acceso a la tecnología para los negocios
-                      locales de Canarias. No creemos en soluciones genéricas —
-                      cada bar, restaurante o comercio tiene necesidades únicas,
-                      y merece herramientas diseñadas para su realidad.
-                    </li>
-                    <li className="text-base md:text-lg">
-                      Nuestra plataforma integra cuatro pilares fundamentales:
-                      automatización inteligente con n8n, menús digitales QRIBAR
-                      con pedidos en tiempo real, tarjetas NFC para reseñas en
-                      Google, y soluciones de IA conversacional. Todo funciona
-                      como un ecosistema unificado, no como piezas sueltas.
-                    </li>
-                  </ul>
-                </section>
+                  </p>
+                  <p className="text-muted leading-relaxed text-base mb-4">
+                    Cada bar, restaurante o comercio tiene necesidades únicas y
+                    merece herramientas diseñadas para su realidad.
+                  </p>
+                  <p className="text-muted leading-relaxed text-base">
+                    Nuestra plataforma funciona como un ecosistema unificado,
+                    no como piezas sueltas.
+                  </p>
+                </div>
 
-                <section>
-                  <h3 className="text-xl md:text-2xl font-bold mb-4 text-default">
+                <div>
+                  <p className="text-xs font-bold text-[var(--color-primary)] uppercase tracking-wider mb-4 opacity-70">
                     Pilares Tecnológicos
-                  </h3>
-                  <ul className="space-y-3 list-disc list-inside">
-                    <li className="text-base md:text-lg">
-                      <strong>Automatización con n8n:</strong> Flujos que
-                      conectan CRM, email, WhatsApp y redes sociales.
-                    </li>
-                    <li className="text-base md:text-lg">
-                      <strong>Menús digitales QRIBAR:</strong> Pedidos en tiempo
-                      real desde la mesa a barra y cocina.
-                    </li>
-                    <li className="text-base md:text-lg">
-                      <strong>Tarjetas NFC Tap-to-Review:</strong> Multiplica
-                      las reseñas en Google con un solo toque.
-                    </li>
-                    <li className="text-base md:text-lg">
-                      <strong>IA Conversacional:</strong> Chatbot experto que
-                      responde dudas 24/7 sobre tus servicios.
-                    </li>
-                  </ul>
-                </section>
+                  </p>
+                  <div className="divide-y divide-[var(--color-border)]">
+                    {(
+                      [
+                        {
+                          title: "Automatización con n8n",
+                          desc: "Flujos que conectan CRM, email, WhatsApp y redes sociales.",
+                        },
+                        {
+                          title: "Menús digitales QRIBAR",
+                          desc: "Pedidos en tiempo real desde la mesa a barra y cocina.",
+                        },
+                        {
+                          title: "Tarjetas NFC Tap-to-Review",
+                          desc: "Multiplica las reseñas en Google con un solo toque.",
+                        },
+                        {
+                          title: "IA Conversacional",
+                          desc: "Chatbot experto que responde dudas 24/7 sobre tus servicios.",
+                        },
+                      ] as const
+                    ).map((pilar) => (
+                      <div key={pilar.title} className="py-4">
+                        <div className="font-semibold text-default text-sm mb-0.5">
+                          {pilar.title}
+                        </div>
+                        <div className="text-muted text-sm">{pilar.desc}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
 
-                <section>
-                  <h3 className="text-xl md:text-2xl font-bold mb-4 text-default">
-                    Resultados y Transparencia
-                  </h3>
-                  <ul className="space-y-3 list-disc list-inside">
-                    <li className="text-base md:text-lg">
-                      <strong>Sin comisiones por pedido:</strong> QRIBAR no
-                      cobra por transacción, a diferencia de otras plataformas.
-                    </li>
-                    <li className="text-base md:text-lg">
-                      <strong>Más de 200 negocios</strong> en Tenerife, Gran
-                      Canaria y Lanzarote ya confían en nosotros.
-                    </li>
-                    <li className="text-base md:text-lg">
-                      <strong>Todo en un ecosistema unificado:</strong> No
-                      piezas sueltas, una plataforma integral.
-                    </li>
-                    <li className="text-base md:text-lg">
-                      Digitalizar tu negocio ya no es una opción — es una
-                      necesidad. Los clientes buscan restaurantes en Google,
-                      leen reseñas antes de visitar un local, y esperan poder
-                      pedir desde su móvil. Con SmartConnect AI, no solo te
-                      pones al día — te adelantas a la competencia.
-                    </li>
-                  </ul>
-                </section>
+              {/* Closing statement */}
+              <div className="border-t border-[var(--color-border)] pt-10">
+                <p className="text-base text-muted leading-relaxed max-w-3xl">
+                  Digitalizar tu negocio ya no es una opción — es una necesidad.
+                  Los clientes buscan restaurantes en Google, leen reseñas antes
+                  de visitar un local, y esperan poder pedir desde su móvil. Con
+                  SmartConnect AI, no solo te ponés al día — te adelantás a la
+                  competencia.
+                </p>
               </div>
             </div>
           </section>
@@ -662,6 +678,14 @@ const App: React.FC = () => {
                   {t.footerLegalTitle}
                 </h3>
                 <ul className="space-y-2 text-sm text-muted">
+                  <li>
+                    <Link
+                      to="/about"
+                      className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors"
+                    >
+                      Sobre Nosotros
+                    </Link>
+                  </li>
                   <li>
                     <Link
                       to="/legal/aviso"

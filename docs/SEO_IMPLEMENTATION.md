@@ -505,12 +505,21 @@ npm run build
 
 ```
 dist/
-├── index.html              # Prerendered /
-├── servicios/index.html    # Prerendered /servicios
-├── contacto/index.html     # Prerendered /contacto
-├── assets/                 # JS/CSS bundles
+├── index.html                              # Prerendered /
+├── carta-digital/index.html                # Prerendered /carta-digital
+├── tap-review/index.html                   # Prerendered /tap-review
+├── automatizacion-restaurantes-n8n/        # Prerendered /automatizacion-*
+├── automatizacion-whatsapp-restaurante/
+├── software-restaurantes-canarias/
+├── digitalizacion-hosteleria-tenerife/
+├── about/index.html                        # Prerendered /about
+├── legal/aviso/index.html                  # Prerendered /legal/*
+├── legal/privacidad/index.html
+├── legal/cookies/index.html
+├── _spa.html                               # Fallback para rutas no prerenderizadas
+├── assets/                                 # JS/CSS bundles
 └── server/
-    └── entry-server.js     # SSR build
+    └── entry-server.js                     # SSR build
 ```
 
 ### ⚠️ Known Issues / TODOs
@@ -563,16 +572,22 @@ Sitemap: https://digitalizatenerife.es/sitemap.xml
 </Helmet>
 ```
 
-### 🔄 Entry Client ↔ Prerender Sync
+### 🔄 Sincronización de Rutas (CRÍTICO)
 
-Toda ruta pública agregada en `src/entry-client.tsx` debe tener su par en `scripts/prerender.mjs`.
+Las rutas públicas deben estar en sync entre **3 archivos**:
 
-**Regla:** Si está en `entry-client.tsx` como `<Route path="/foo">` → debe estar en `routes[]` de `prerender.mjs`.
+| Archivo | Propósito |
+|---|---|
+| `src/main.tsx` | Router SPA cliente (hydration + client-side nav) |
+| `src/entry-server.tsx` | SSR prerender |
+| `scripts/prerender.mjs` | Lista de rutas a prerenderizar |
 
-Excepciones:
+**Regla:** Toda ruta pública nueva → agregarla en los 3. Si falta en `main.tsx`, los links de footer la muestran como 404. Si falta en `entry-server.tsx` o `prerender.mjs`, Google recibe JS vacío.
 
-- `/admin` y sub-rutas de admin → NO prerender (requiere auth)
-- `*` catch-all → NO prerender (es 404)
+**Excepciones (NO van en ninguno de los 3):**
+- Rutas con 301 redirect (`/servicios`, `/contacto`, alias en inglés) → van en `vercel.json` como `redirects`
+- `/admin` y sub-rutas → solo en `main.tsx` (lazy, sin prerender)
+- `*` catch-all → solo en `main.tsx`
 
 ### 📍 H1 Único por Ruta
 
@@ -581,8 +596,6 @@ Cada página debe tener EXACTAMENTE UN `<h1>`. No compartir entre rutas.
 | Ruta                                   | H1 location                                                       |
 | -------------------------------------- | ----------------------------------------------------------------- |
 | `/`                                    | `Hero.tsx` — `{t.heroTitle} {t.heroTitleAccent} {t.heroTitleEnd}` |
-| `/servicios`                           | `Hero.tsx` (mismo componente — ideal: separar)                    |
-| `/contacto`                            | `Hero.tsx` (mismo componente — ideal: separar)                    |
 | `/carta-digital`                       | `CartaDigitalHeroSection.tsx`                                     |
 | `/tap-review`                          | `TapReviewPage.tsx`                                               |
 | `/automatizacion-restaurantes-n8n`     | `PageHero` en `AutomationN8nContainer.tsx`                        |
@@ -592,6 +605,8 @@ Cada página debe tener EXACTAMENTE UN `<h1>`. No compartir entre rutas.
 | `/about`                               | `AboutPage.tsx`                                                   |
 | `/legal/*`                             | `LegalPage.tsx`                                                   |
 | `*` (404)                              | `NotFound.tsx`                                                    |
+
+> **Nota**: `/servicios` y `/contacto` son 301 redirects a `/#contacto` — no tienen H1 propio.
 
 ### 🔗 Links Sociales
 
@@ -607,9 +622,10 @@ No dejar URLs con `@TODO` o placeholders. Usar `href="#"` hasta tener la URL rea
 `public/sitemap.xml` debe incluir:
 
 - ✅ Todas las rutas prerenderizadas
-- ✅ Prioridad: home=1.0, landing pages=0.9, about=0.7, legales=0.3
+- ✅ Prioridad: home=1.0, producto=1.0, servicios=0.9, about=0.7, legales=0.3
+- ✅ `<lastmod>` en todas las URLs — Google lo usa para priorizar re-crawl
 - ❌ NO incluir `/admin` o páginas protegidas
-- ❌ NO incluir `lastmod` (evita crawls innecesarios)
+- ❌ NO incluir rutas con 301 redirect (ej. `/servicios`, `/contacto`, alias en inglés)
 
 ### ✅ Pre-Deploy Checklist
 
@@ -740,3 +756,79 @@ DOMPurify.sanitize(t.someKey);
 - ✅ `npx vite build` — exitsoso
 - ✅ Google Rich Results Test — 0 critical errors, 0 warnings (all 4 Review schemas pass)
 - ✅ All 132 Jest tests pass
+
+---
+
+## 🚦 GSC Indexing Fixes & SEO Audit (2026-05-24)
+
+### Overview
+
+Resolución de 4 tipos de problemas reportados en Google Search Console + audit de calidad SEO completo aplicando la skill `audit`.
+
+---
+
+### 🔎 Google Search Console — Problemas Resueltos
+
+| Problema GSC | Causa raíz | Fix |
+|---|---|---|
+| Página con redirección (1) | www → non-www redirect de Vercel (nivel DNS, no code) | — |
+| Duplicada: Google eligió canónica diferente (1) | `/servicios` y `/contacto` renderizaban el mismo contenido que `/` | 301 redirect → `/` y `/#contacto` |
+| Descubierta sin indexar (8) | Alias en inglés servidos como `_spa.html` — Googlebot no ejecuta JS para leer canonicals | 301 redirects en `vercel.json` |
+| Rastreada sin indexar (3) | `/about`, `/legal/*` faltaban en `main.tsx` — footer links mostraban NotFound | Rutas añadidas a `main.tsx` |
+
+#### Redirects 301 añadidos en `vercel.json`
+
+```json
+{ "source": "/automation-n8n",         "destination": "/automatizacion-restaurantes-n8n",    "permanent": true },
+{ "source": "/whatsapp-automation",     "destination": "/automatizacion-whatsapp-restaurante", "permanent": true },
+{ "source": "/software-canarias",       "destination": "/software-restaurantes-canarias",      "permanent": true },
+{ "source": "/digitalization-tenerife", "destination": "/digitalizacion-hosteleria-tenerife",  "permanent": true },
+{ "source": "/servicios",               "destination": "/",                                    "permanent": true },
+{ "source": "/contacto",               "destination": "/#contacto",                            "permanent": true }
+```
+
+> **Aprendizaje clave**: Los alias de rutas en inglés NO deben estar en React Router. Deben ser redirects HTTP en `vercel.json`. Googlebot no ejecuta JavaScript para leer `<link rel="canonical">` en páginas servidas como `_spa.html`.
+
+---
+
+### 🔍 SEO Audit — Fixes Aplicados
+
+#### 🔴 Crítico
+
+**`og:image` inexistente**: 6 páginas referenciaban `og-image.jpg` que no existía en `/public/`. Reemplazado con `icon.png` (sí existe). Páginas afectadas: `TapReviewPage`, `CartaDigitalPremium`, y los 4 containers de servicio.
+
+> **Regla nueva**: Antes de referenciar cualquier asset en `og:image`, verificar que existe en `public/` con `Glob public/*.{jpg,png,webp}`.
+
+#### 🟠 Alto
+
+- **`AboutPage.tsx`**: Añadidos `og:image`, `twitter:card/title/description/image`, `hrefLang` alternates. JSON-LD movido de `dangerouslySetInnerHTML` fuera del `<Helmet>` a `JSON.stringify()` dentro de `<Helmet>` (patrón correcto para SSG).
+- **`LegalPage.tsx`**: Añadidos `og:title/description/type/url/image` y `twitter:card/title/description`. Añadido `sanitizeHTML()` de `@shared/utils/sanitizer` en `dangerouslySetInnerHTML`.
+- **Código muerto eliminado**: `LandingContainer.tsx` + `LandingContainer.test.tsx` — el componente nunca se renderizaba (no estaba en `main.tsx` ni `entry-server.tsx`).
+
+#### 🟡 Medio
+
+- **Sitemap `<lastmod>`**: Añadidas fechas reales a las 11 URLs. Google las usa para priorizar re-crawl.
+- **Prioridades**: `/carta-digital` y `/tap-review` subidas de `0.9` a `1.0` (páginas de máxima conversión).
+
+#### 🟢 Bajo
+
+- **Footer App.tsx**: Añadido enlace "Sobre Nosotros" → `/about` en la columna legal.
+
+---
+
+### 🖼️ Meta Social — Checklist por tipo de página
+
+| Tipo | `og:image` | `twitter:card` | `hrefLang` | canonical |
+|---|---|---|---|---|
+| Landing (`/`) | ✅ icon.png | ✅ summary_large_image | ✅ es + x-default | ✅ |
+| Producto (`/carta-digital`, `/tap-review`) | ✅ icon.png | ✅ | ✅ | ✅ |
+| Servicio (4 containers) | ✅ icon.png | ✅ | ✅ | ✅ |
+| About (`/about`) | ✅ icon.png | ✅ summary_large_image | ✅ es + x-default | ✅ |
+| Legal (`/legal/*`) | ✅ icon.png | ✅ summary | ❌ (no necesario) | ✅ |
+
+---
+
+### 📊 Validation
+
+- ✅ `npx tsc --noEmit` — 0 errors
+- ✅ `npx eslint . --max-warnings 0` — 0 errors, 0 warnings

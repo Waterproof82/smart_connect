@@ -13,6 +13,10 @@ import AutomationN8nContainer from "./features/automation-n8n/presentation/Autom
 import WhatsappAutomationContainer from "./features/whatsapp-automation/presentation/WhatsappAutomationContainer";
 import SoftwareCanariasContainer from "./features/software-canarias/presentation/SoftwareCanariasContainer";
 import DigitalizationTenerifeContainer from "./features/digitalization-tenerife/presentation/DigitalizationTenerifeContainer";
+import AboutPage from "./features/landing/presentation/components/AboutPage";
+import AvisoLegalPage from "./features/legal/presentation/AvisoLegalPage";
+import PrivacidadPage from "./features/legal/presentation/PrivacidadPage";
+import CookiesPage from "./features/legal/presentation/CookiesPage";
 
 // Wrapper component to fetch whatsappPhone before rendering TapReviewPage (Clean Architecture: Presentation Container)
 const TapReviewPageWithData: React.FC = () => {
@@ -102,17 +106,9 @@ root.render(
                 path="/automatizacion-restaurantes-n8n"
                 element={<AutomationN8nContainer />}
               />
-              <Route
-                path="/automation-n8n"
-                element={<AutomationN8nContainer />}
-              />
               {/* Automatización WhatsApp */}
               <Route
                 path="/automatizacion-whatsapp-restaurante"
-                element={<WhatsappAutomationContainer />}
-              />
-              <Route
-                path="/whatsapp-automation"
                 element={<WhatsappAutomationContainer />}
               />
               {/* Software Canarias */}
@@ -120,19 +116,15 @@ root.render(
                 path="/software-restaurantes-canarias"
                 element={<SoftwareCanariasContainer />}
               />
-              <Route
-                path="/software-canarias"
-                element={<SoftwareCanariasContainer />}
-              />
               {/* Digitalización Hostelería Tenerife */}
               <Route
                 path="/digitalizacion-hosteleria-tenerife"
                 element={<DigitalizationTenerifeContainer />}
               />
-              <Route
-                path="/digitalization-tenerife"
-                element={<DigitalizationTenerifeContainer />}
-              />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/legal/aviso" element={<AvisoLegalPage />} />
+              <Route path="/legal/privacidad" element={<PrivacidadPage />} />
+              <Route path="/legal/cookies" element={<CookiesPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
