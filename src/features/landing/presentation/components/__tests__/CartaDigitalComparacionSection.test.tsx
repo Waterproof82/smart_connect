@@ -14,7 +14,7 @@ describe("CartaDigitalComparacionSection", () => {
   it("renders the section title", () => {
     renderWithLanguage();
     expect(
-      screen.getByRole("heading", { name: /QRIBAR vs. Alternativas/i }),
+      screen.getByRole("heading", { name: /Carta Digital vs. Alternativas/i }),
     ).toBeInTheDocument();
   });
 
@@ -30,9 +30,9 @@ describe("CartaDigitalComparacionSection", () => {
     expect(container.querySelector("tbody")).toBeInTheDocument();
   });
 
-  it("renders column headers for QRIBAR and paper menu", () => {
+  it("renders column headers for Carta Digital and paper menu", () => {
     renderWithLanguage();
-    expect(screen.getAllByText("QRIBAR").length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText("Carta Digital").length).toBeGreaterThanOrEqual(1);
     expect(screen.getByText("Carta en papel")).toBeInTheDocument();
     expect(screen.getByText("Otras apps")).toBeInTheDocument();
   });

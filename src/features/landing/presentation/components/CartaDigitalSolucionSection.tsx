@@ -5,15 +5,15 @@ const CartaDigitalSolucionSection: React.FC = () => {
   const { t } = useLanguage();
 
   const pills = [
-    "📱 QR",
-    "🌍 5 idiomas",
-    "🎬 Media",
-    "🛒 Take Away",
-    "💬 WhatsApp",
-    "📧 Email",
-    "📊 Stats",
-    "🔍 SEO",
-    "⭐ Google",
+    t.cartaSolucionPill1,
+    t.cartaSolucionPill2,
+    t.cartaSolucionPill3,
+    t.cartaSolucionPill4,
+    t.cartaSolucionPill5,
+    t.cartaSolucionPill6,
+    t.cartaSolucionPill7,
+    t.cartaSolucionPill8,
+    t.cartaSolucionPill9,
   ];
 
   return (

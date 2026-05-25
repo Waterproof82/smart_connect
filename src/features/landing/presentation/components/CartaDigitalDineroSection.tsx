@@ -159,7 +159,7 @@ const CartaDigitalDineroSection: React.FC = () => {
         <div className="text-center">
           <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-[var(--color-success-bg)] border border-[var(--color-success-border)]">
             <span className="text-sm md:text-base font-semibold text-[var(--color-success-text)]">
-              Visibilidad + Mailings = Crecimiento real.
+              {t.cartaDineroGrowthLabel}
             </span>
             <span className="text-2xl font-black text-[var(--color-success-text)] font-display">
               📈

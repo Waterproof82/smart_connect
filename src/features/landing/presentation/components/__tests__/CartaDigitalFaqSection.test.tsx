@@ -20,7 +20,7 @@ describe("CartaDigitalFaqSection", () => {
 
   it("renders at least 5 FAQ questions", () => {
     renderWithLanguage();
-    expect(screen.getByText(/¿Qué es QRIBAR\?/)).toBeInTheDocument();
+    expect(screen.getByText(/¿Qué es la Carta Digital\?/)).toBeInTheDocument();
     expect(screen.getByText(/¿Necesito una app para usar el menú digital\?/)).toBeInTheDocument();
     expect(screen.getByText(/¿Cuántos idiomas soporta la carta\?/)).toBeInTheDocument();
     expect(screen.getByText(/¿Hay comisiones por pedido\?/)).toBeInTheDocument();
@@ -30,7 +30,7 @@ describe("CartaDigitalFaqSection", () => {
   it("renders the HowTo section title", () => {
     renderWithLanguage();
     expect(
-      screen.getByText(/Cómo funciona QRIBAR — Menú Digital/i),
+      screen.getByText(/Cómo funciona la Carta Digital/i),
     ).toBeInTheDocument();
   });
 
@@ -38,7 +38,7 @@ describe("CartaDigitalFaqSection", () => {
     renderWithLanguage();
     expect(screen.getByText(/Escanear el QR/)).toBeInTheDocument();
     expect(screen.getByText(/Hacer el pedido/)).toBeInTheDocument();
-    expect(screen.getByText(/Cocina recibe al instante/)).toBeInTheDocument();
+    expect(screen.getByText(/Telegram recibe el pedido/)).toBeInTheDocument();
   });
 
   it("renders both FAQ and HowTo JSON-LD schema scripts", () => {

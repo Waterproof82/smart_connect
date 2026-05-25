@@ -29,6 +29,9 @@ import CartaDigitalFaqSection from "./CartaDigitalFaqSection";
 import CartaDigitalDemoSection from "./CartaDigitalDemoSection";
 import CartaDigitalCTAFinalSection from "./CartaDigitalCTAFinalSection";
 import CartaDigitalLightbox from "./CartaDigitalLightbox";
+import CartaDigitalTelegramSection from "./CartaDigitalTelegramSection";
+import CartaDigitalModosSection from "./CartaDigitalModosSection";
+import CartaDigitalAntidesperdicioSection from "./CartaDigitalAntidesperdicioSection";
 
 const CartaDigitalPremium: React.FC = () => {
   const { t } = useLanguage();
@@ -66,8 +69,8 @@ const CartaDigitalPremium: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>{t.navbarCartaDigital} — Presentación | SmartConnect AI</title>
-        <meta name="description" content={t.featuresCartaDigitalDesc} />
+        <title>{t.cartaPageTitle}</title>
+        <meta name="description" content={t.cartaPageDescription} />
         <link
           rel="canonical"
           href="https://digitalizatenerife.es/carta-digital"
@@ -84,9 +87,9 @@ const CartaDigitalPremium: React.FC = () => {
         />
         <meta
           property="og:title"
-          content={`${t.navbarCartaDigital} — Presentación | SmartConnect AI`}
+          content={t.cartaPageTitle}
         />
-        <meta property="og:description" content={t.featuresCartaDigitalDesc} />
+        <meta property="og:description" content={t.cartaPageDescription} />
         <meta
           property="og:url"
           content="https://digitalizatenerife.es/carta-digital"
@@ -99,9 +102,9 @@ const CartaDigitalPremium: React.FC = () => {
         <meta name="twitter:card" content="summary_large_image" />
         <meta
           name="twitter:title"
-          content={`${t.navbarCartaDigital} — Presentación | SmartConnect AI`}
+          content={t.cartaPageTitle}
         />
-        <meta name="twitter:description" content={t.featuresCartaDigitalDesc} />
+        <meta name="twitter:description" content={t.cartaPageDescription} />
       </Helmet>
       <script
         type="application/ld+json"
@@ -109,9 +112,8 @@ const CartaDigitalPremium: React.FC = () => {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Product",
-            name: "QRIBAR - Menú Digital para Restaurantes",
-            description:
-              "Menú digital con pedidos en tiempo real a barra y cocina. Sin comisiones por pedido.",
+            name: t.cartaPageTitle,
+            description: t.cartaPageDescription,
             image: "https://digitalizatenerife.es/icon.png",
             url: "https://digitalizatenerife.es/carta-digital",
             brand: {
@@ -135,8 +137,8 @@ const CartaDigitalPremium: React.FC = () => {
         }}
       />
       <ServiceSchema
-        name="QRIBAR - Menú Digital"
-        description="Menú digital con pedidos en tiempo real desde la mesa a barra y cocina. Sin comisiones por pedido."
+        name={t.cartaPageTitle}
+        description={t.cartaPageDescription}
         url="https://digitalizatenerife.es/carta-digital"
         providerName="SmartConnect AI"
         providerUrl="https://digitalizatenerife.es"
@@ -161,7 +163,10 @@ const CartaDigitalPremium: React.FC = () => {
         <CartaDigitalProblemaSection />
         <CartaDigitalSolucionSection />
         <CartaDigitalBeneficiosSection />
+        <CartaDigitalTelegramSection />
+        <CartaDigitalModosSection />
         <CartaDigitalComoFuncionaSection />
+        <CartaDigitalAntidesperdicioSection />
         <CartaDigitalDineroSection />
         <CartaDigitalComparacionSection />
         <CartaDigitalBBDDSection />
