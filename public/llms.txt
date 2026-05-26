@@ -4,23 +4,21 @@
 
 ## Servicios principales
 
-1. **QRIBAR** — Menú digital con pedidos en tiempo real desde la mesa a barra y cocina. Sin comisiones.
+1. **Carta Digital** — Menú digital con fotos, vídeos, 5 idiomas y gestión de pedidos por Telegram. Sin comisiones.
 2. **Tap-to-Review NFC** — Tarjetas NFC para que los clientes dejen reseñas en Google con un solo toque.
 3. **Automatización n8n** — Flujos de trabajo automatizados que conectan CRM, email, WhatsApp y redes sociales.
-4. **Carta Digital Premium** — Menú digital avanzado con fotos, vídeos y 5 idiomas.
+4. **Automatización WhatsApp** — Respuestas automáticas 24/7 para reservas, consultas y pedidos.
 
 ## Páginas clave
 
 - Inicio: https://digitalizatenerife.es/
-- Servicios: https://digitalizatenerife.es/servicios
-- Contacto: https://digitalizatenerife.es/contacto
-- Menú digital QRIBAR: https://digitalizatenerife.es/carta-digital
+- Carta Digital: https://digitalizatenerife.es/carta-digital
 - Tap-to-Review NFC: https://digitalizatenerife.es/tap-review
-- Sobre nosotros: https://digitalizatenerife.es/about
 - Automatización n8n: https://digitalizatenerife.es/automatizacion-restaurantes-n8n
 - Automatización WhatsApp: https://digitalizatenerife.es/automatizacion-whatsapp-restaurante
 - Software restaurantes Canarias: https://digitalizatenerife.es/software-restaurantes-canarias
 - Digitalización hostelería Tenerife: https://digitalizatenerife.es/digitalizacion-hosteleria-tenerife
+- Sobre nosotros: https://digitalizatenerife.es/about
 
 ## Stack técnico
 
@@ -46,7 +44,6 @@
 ## Structured Data
 
 - Schema.org LocalBusiness: https://digitalizatenerife.es/ (JSON-LD en head)
-- API docs: contacto directo
 
 ## Idiomas
 

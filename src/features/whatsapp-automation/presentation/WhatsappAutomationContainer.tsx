@@ -134,6 +134,8 @@ const WhatsappAutomationContainer: React.FC = () => {
           name="twitter:description"
           content={t.whatsappAutomationSeoDescription}
         />
+        <meta property="og:locale" content="es_ES" />
+        <meta property="og:site_name" content="SmartConnect AI" />
       </Helmet>
 
       <SeoFaqSchema faqs={mockFaqs} />

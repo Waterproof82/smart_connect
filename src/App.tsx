@@ -172,7 +172,7 @@ const App: React.FC = () => {
           "Google Reviews",
         ],
         image: "https://digitalizatenerife.es/icon.png",
-        telephone: "+34922123456",
+        telephone: "+34 601 39 64 19",
         priceRange: "€€",
         address: {
           "@type": "PostalAddress",
@@ -352,6 +352,13 @@ const App: React.FC = () => {
           hrefLang="x-default"
           href={`https://digitalizatenerife.es${location.pathname}`}
         />
+        <link
+          rel="alternate"
+          hrefLang="en"
+          href={`https://digitalizatenerife.es${location.pathname}`}
+        />
+        <meta property="og:locale" content="es_ES" />
+        <meta property="og:site_name" content="SmartConnect AI" />
         <meta property="og:title" content={pageTitle} />
         <meta property="og:description" content={pageDescription} />
         <meta property="og:type" content="website" />

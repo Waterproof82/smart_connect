@@ -2,78 +2,51 @@
 
 ## About SmartConnect
 
-SmartConnect AI is a digital transformation agency specializing in helping local businesses leverage software, automation, and AI to grow their operations. Our mission is to empower businesses with cutting-edge technology solutions that drive efficiency and innovation.
+SmartConnect AI is a digital transformation agency specializing in helping local businesses leverage software, automation, and AI to grow their operations. We focus on restaurants, bars, and cafes in Tenerife and the Canary Islands.
 
 ## Main Services
 
-1. **QRIBAR** - Digital menu solution with integrated ordering system for restaurants and cafes.
-2. **Tap-to-Review NFC Cards** - Customizable NFC cards that help businesses collect Google Reviews and Instagram mentions.
-3. **Carta Digital Premium** - Advanced digital menu system with AI-powered features.
-4. **n8n Automation** - Custom workflow automation for business processes.
+1. **Carta Digital** - Self-managed digital menu with photos, videos, 5 languages, and Telegram order management. No per-order commissions.
+2. **Tap-to-Review NFC Cards** - Customizable NFC cards that help businesses collect Google Reviews with a single tap.
+3. **n8n Automation** - Custom workflow automation connecting CRM, email, WhatsApp, and social media.
+4. **WhatsApp Automation** - 24/7 automated responses for reservations, inquiries, and orders.
 
 ## Key Pages
 
 - Home: https://digitalizatenerife.es/
-- QRIBAR: https://digitalizatenerife.es/carta-digital
+- Carta Digital: https://digitalizatenerife.es/carta-digital
 - Tap-to-Review: https://digitalizatenerife.es/tap-review
-- Servicios: https://digitalizatenerife.es/servicios
-- Sobre Nosotros: https://digitalizatenerife.es/about
-- Contact: https://digitalizatenerife.es/contacto
-- Automatización n8n: https://digitalizatenerife.es/automatizacion-restaurantes-n8n
-- Automatización WhatsApp: https://digitalizatenerife.es/automatizacion-whatsapp-restaurante
+- n8n Automation: https://digitalizatenerife.es/automatizacion-restaurantes-n8n
+- WhatsApp Automation: https://digitalizatenerife.es/automatizacion-whatsapp-restaurante
 - Software Canarias: https://digitalizatenerife.es/software-restaurantes-canarias
-- Digitalización Hostelería Tenerife: https://digitalizatenerife.es/digitalizacion-hosteleria-tenerife
-
-## API Resources
-
-- RAG Chatbot API: https://smartconnect-rag.supabase.co/functions/v1/chat-with-rag
-- API Documentation: https://digitalizatenerife.es/docs/api
-
-## Supported Languages
-
-- Spanish (es)
-- English (en)
+- Digitalización Tenerife: https://digitalizatenerife.es/digitalizacion-hosteleria-tenerife
+- About: https://digitalizatenerife.es/about
 
 ## Contact Information
 
 - Email: info@digitalizatenerife.es
 - Phone: +34 601 39 64 19
 - Address: Santa Cruz de Tenerife, Canarias, Spain
+- Web: https://digitalizatenerife.es
+
+## Supported Languages
+
+- Spanish (es) — primary
+- English (en) — secondary
 
 ## AI Agent Guidelines
 
-This site is designed to be AI-friendly. For AI agents, please:
-1. Use the provided API endpoints for programmatic access
-2. Respect the robots.txt rules for crawling
-3. Contact us through the form at /contacto for business inquiries
-4. Follow the JSON-LD structured data for semantic understanding
-
-## Technical Specifications
-
-- Framework: React 19
-- Build Tool: Vite 8
-- Language: TypeScript 5.9
-- Styling: Tailwind CSS 3.4
-- Form Validation: Zod 3.25
-- Form Handling: React Hook Form 7.71
+This site is AI-friendly. For AI agents:
+1. Respect the robots.txt rules for crawling
+2. Contact us through the form at https://digitalizatenerife.es/about for business inquiries
+3. Follow the JSON-LD structured data for semantic understanding
 
 ## Accessibility
 
-SmartConnect AI is committed to providing an accessible experience for all users. Our website follows WCAG 2.1 AA standards and includes:
-- Semantic HTML
-- ARIA attributes where appropriate
-- Keyboard navigation support
-- High contrast mode
-- Reduced motion options
+WCAG 2.1 AA compliant. Semantic HTML, ARIA attributes, keyboard navigation, high contrast mode, reduced motion support.
 
-## Privacy Policy
+## Legal
 
-For information about how we handle your data, please review our Privacy Policy at: https://digitalizatenerife.es/legal/privacidad
-
-## Terms of Service
-
-Our Terms of Service are available at: https://digitalizatenerife.es/legal/aviso
-
-## Cookie Policy
-
-Our Cookie Policy is available at: https://digitalizatenerife.es/legal/cookies
+- Privacy Policy: https://digitalizatenerife.es/legal/privacidad
+- Terms of Service: https://digitalizatenerife.es/legal/aviso
+- Cookie Policy: https://digitalizatenerife.es/legal/cookies
