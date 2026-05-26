@@ -159,7 +159,7 @@ const SoftwareCanariasContainer: React.FC = () => {
       <WebApplicationSchema
         name="Panel de Control"
         description={t.softwareCanariasSeoDescription}
-        url="https://digitalizatenerife.es/software-canarias"
+        url="https://digitalizatenerife.es/software-restaurantes-canarias"
         offers={{
           price: "29.90",
           priceCurrency: "EUR",

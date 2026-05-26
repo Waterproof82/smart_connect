@@ -171,7 +171,7 @@ const DigitalizationTenerifeContainer: React.FC = () => {
       <WebApplicationSchema
         name="Panel de Control"
         description={t.digitalizationTenerifeSeoDescription}
-        url="https://digitalizatenerife.es/digitalizacion-tenerife"
+        url="https://digitalizatenerife.es/digitalizacion-hosteleria-tenerife"
         offers={{
           price: "29.90",
           priceCurrency: "EUR",
