@@ -98,6 +98,7 @@ root.render(
           <Suspense fallback={<LoadingFallback />}>
             <Routes>
               <Route path="/" element={<App />} />
+              <Route path="/servicios" element={<App />} />
               <Route path="/admin" element={<AdminPanel />} />
               <Route path="/carta-digital" element={<CartaDigitalPremium />} />
               <Route path="/tap-review" element={<TapReviewPageWithData />} />
