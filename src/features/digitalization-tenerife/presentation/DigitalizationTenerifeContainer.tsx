@@ -138,6 +138,8 @@ const DigitalizationTenerifeContainer: React.FC = () => {
           name="twitter:description"
           content={t.digitalizationTenerifeSeoDescription}
         />
+        <meta property="og:locale" content="es_ES" />
+        <meta property="og:site_name" content="SmartConnect AI" />
       </Helmet>
 
       <SeoFaqSchema faqs={mockFaqs} />
