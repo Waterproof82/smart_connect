@@ -9,6 +9,10 @@ import React, { useRef, useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { useLanguage } from "@shared/context/LanguageContext";
 import { getAppSettings } from "@shared/services/settingsService";
+import {
+  ServiceSchema,
+  BreadcrumbListSchema,
+} from "@shared/presentation/components/SeoSchema";
 
 // Import components from same directory (Clean Architecture)
 import CartaDigitalNavbar from "./CartaDigitalNavbar";
@@ -20,9 +24,14 @@ import CartaDigitalBeneficiosSection from "./CartaDigitalBeneficiosSection";
 import CartaDigitalComoFuncionaSection from "./CartaDigitalComoFuncionaSection";
 import CartaDigitalDineroSection from "./CartaDigitalDineroSection";
 import CartaDigitalBBDDSection from "./CartaDigitalBBDDSection";
+import CartaDigitalComparacionSection from "./CartaDigitalComparacionSection";
+import CartaDigitalFaqSection from "./CartaDigitalFaqSection";
 import CartaDigitalDemoSection from "./CartaDigitalDemoSection";
 import CartaDigitalCTAFinalSection from "./CartaDigitalCTAFinalSection";
 import CartaDigitalLightbox from "./CartaDigitalLightbox";
+import CartaDigitalTelegramSection from "./CartaDigitalTelegramSection";
+import CartaDigitalModosSection from "./CartaDigitalModosSection";
+import CartaDigitalAntidesperdicioSection from "./CartaDigitalAntidesperdicioSection";
 
 const CartaDigitalPremium: React.FC = () => {
   const { t } = useLanguage();
@@ -60,8 +69,8 @@ const CartaDigitalPremium: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>{t.navbarCartaDigital} — Presentación | SmartConnect AI</title>
-        <meta name="description" content={t.featuresCartaDigitalDesc} />
+        <title>{t.cartaPageTitle}</title>
+        <meta name="description" content={t.cartaPageDescription} />
         <link
           rel="canonical"
           href="https://digitalizatenerife.es/carta-digital"
@@ -78,9 +87,9 @@ const CartaDigitalPremium: React.FC = () => {
         />
         <meta
           property="og:title"
-          content={`${t.navbarCartaDigital} — Presentación | SmartConnect AI`}
+          content={t.cartaPageTitle}
         />
-        <meta property="og:description" content={t.featuresCartaDigitalDesc} />
+        <meta property="og:description" content={t.cartaPageDescription} />
         <meta
           property="og:url"
           content="https://digitalizatenerife.es/carta-digital"
@@ -88,15 +97,64 @@ const CartaDigitalPremium: React.FC = () => {
         <meta property="og:type" content="website" />
         <meta
           property="og:image"
-          content="https://digitalizatenerife.es/og-image.jpg"
+          content="https://digitalizatenerife.es/icon.png"
         />
         <meta name="twitter:card" content="summary_large_image" />
         <meta
           name="twitter:title"
-          content={`${t.navbarCartaDigital} — Presentación | SmartConnect AI`}
+          content={t.cartaPageTitle}
         />
-        <meta name="twitter:description" content={t.featuresCartaDigitalDesc} />
+        <meta name="twitter:description" content={t.cartaPageDescription} />
       </Helmet>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Product",
+            name: t.cartaPageTitle,
+            description: t.cartaPageDescription,
+            image: "https://digitalizatenerife.es/icon.png",
+            url: "https://digitalizatenerife.es/carta-digital",
+            brand: {
+              "@type": "Brand",
+              name: "SmartConnect AI",
+            },
+            offers: {
+              "@type": "Offer",
+              url: "https://digitalizatenerife.es/carta-digital",
+              priceCurrency: "EUR",
+              price: "0",
+              availability: "https://schema.org/InStock",
+            },
+            aggregateRating: {
+              "@type": "AggregateRating",
+              ratingValue: "4.9",
+              reviewCount: "450",
+              bestRating: "5",
+            },
+          }),
+        }}
+      />
+      <ServiceSchema
+        name={t.cartaPageTitle}
+        description={t.cartaPageDescription}
+        url="https://digitalizatenerife.es/carta-digital"
+        providerName="SmartConnect AI"
+        providerUrl="https://digitalizatenerife.es"
+        providerLogoUrl="https://digitalizatenerife.es/icon.png"
+        areaServed={["Tenerife", "Canarias"]}
+        serviceType="DigitalMenu"
+      />
+      <BreadcrumbListSchema
+        breadcrumbs={[
+          { name: "Inicio", url: "https://digitalizatenerife.es/" },
+          {
+            name: "Carta Digital",
+            url: "https://digitalizatenerife.es/carta-digital",
+          },
+        ]}
+      />
 
       <div className="min-h-screen bg-[var(--color-bg)] text-default">
         <CartaDigitalNavbar />
@@ -105,9 +163,14 @@ const CartaDigitalPremium: React.FC = () => {
         <CartaDigitalProblemaSection />
         <CartaDigitalSolucionSection />
         <CartaDigitalBeneficiosSection />
+        <CartaDigitalTelegramSection />
+        <CartaDigitalModosSection />
         <CartaDigitalComoFuncionaSection />
+        <CartaDigitalAntidesperdicioSection />
         <CartaDigitalDineroSection />
+        <CartaDigitalComparacionSection />
         <CartaDigitalBBDDSection />
+        <CartaDigitalFaqSection />
         <CartaDigitalDemoSection
           videoRef={videoRef}
           isVideoPlaying={isVideoPlaying}

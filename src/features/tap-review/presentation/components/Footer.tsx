@@ -63,7 +63,7 @@ const Footer: React.FC = () => {
             <ul className="space-y-2 text-sm text-muted">
               <li>
                 <a
-                  href="mailto:legal@smartconnect.ai"
+                  href="mailto:info@digitalizatenerife.es"
                   className="hover:text-[var(--color-text)] transition-colors"
                 >
                   {t.footerLegalAviso}
@@ -71,7 +71,7 @@ const Footer: React.FC = () => {
               </li>
               <li>
                 <a
-                  href="mailto:legal@smartconnect.ai"
+                  href="mailto:info@digitalizatenerife.es"
                   className="hover:text-[var(--color-text)] transition-colors"
                 >
                   {t.footerLegalPrivacidad}
@@ -79,7 +79,7 @@ const Footer: React.FC = () => {
               </li>
               <li>
                 <a
-                  href="mailto:legal@smartconnect.ai"
+                  href="mailto:info@digitalizatenerife.es"
                   className="hover:text-[var(--color-text)] transition-colors"
                 >
                   {t.footerLegalCookies}

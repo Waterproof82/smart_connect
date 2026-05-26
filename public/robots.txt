@@ -1,8 +1,8 @@
-User-agent: *
+User-agent: Googlebot
 Allow: /
-Disallow: /admin
-Disallow: /panel
-Disallow: /login
+
+User-agent: Google-Extended
+Allow: /
 
 User-agent: GPTBot
 Allow: /
@@ -16,14 +16,24 @@ Allow: /
 User-agent: PerplexityBot
 Allow: /
 
-User-agent: Google-Extended
-Allow: /
-
 User-agent: OAI-SearchBot
 Allow: /
 
-Content-Signal: ai-train=no
-Content-Signal: search=yes
-Content-Signal: ai-input=no
+User-agent: Amazonbot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Meta-ExternalAgent
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: *
+Disallow: /admin
+Disallow: /panel
+Disallow: /login
 
 Sitemap: https://digitalizatenerife.es/sitemap.xml

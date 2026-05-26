@@ -62,7 +62,7 @@
                                              ▼
                                   ╔═══════════════════════════╗
                                   ║  email =                  ║
-                                  ║  'admin@smartconnect.ai'? ║
+                                  ║  'info@digitalizatenerife.es'? ║
                                   ║    → Full access          ║
                                   ║  Otherwise?               ║
                                   ║    → Denied               ║
@@ -79,7 +79,7 @@
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
 │  ┌─────────────────────────────────────────────────────────────────────┐   │
-│  │  ADMIN: admin@smartconnect.ai                                       │   │
+│  │  ADMIN: info@digitalizatenerife.es                                       │   │
 │  │  • Full CRUD access to documents                                    │   │
 │  │  • Full CRUD access to app_settings                                 │   │
 │  │  • Read security_logs                                               │   │
@@ -137,10 +137,10 @@
   "exp": 1738000000,
   "iat": 1737996400,
   "role": "authenticated",
-  "email": "admin@smartconnect.ai",     ←── CLAVE: verificar este email
+  "email": "info@digitalizatenerife.es",     ←── CLAVE: verificar este email
   "email_verified": true,
   "user_metadata": {
-    "email": "admin@smartconnect.ai",
+    "email": "info@digitalizatenerife.es",
     "email_verified": true
   },
   "app_metadata": {
@@ -151,8 +151,10 @@
 ```
 
 > ⚠️ **SIMPLE**: Verificamos `email` en el JWT. El email está verificado por Supabase Auth.
-> - admin@smartconnect.ai → Acceso completo
+>
+> - info@digitalizatenerife.es → Acceso completo
 > - Cualquier otro email → Acceso denegado
+
 ```
 
 ---
@@ -160,37 +162,39 @@
 ## Security Layers
 
 ```
+
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                    SECURITY MULTI-LAYER                                     │
+│ SECURITY MULTI-LAYER │
 └─────────────────────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│ LAYER 1: FRONTEND (UI)                                                     │
-│ • Hide admin buttons if not authenticated                                  │
-│ • Show admin menu only for admin@smartconnect.ai                           │
+│ LAYER 1: FRONTEND (UI) │
+│ • Hide admin buttons if not authenticated │
+│ • Show admin menu only for info@digitalizatenerife.es │
 └─────────────────────────────────────────────────────────────────────────────┘
-                                    │
-                                    ▼
+│
+▼
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│ LAYER 2: USE CASE (Business Logic)                                         │
-│ • Validate email === 'admin@smartconnect.ai' in repository                 │
-│ • throw Error('Insufficient permissions')                                  │
+│ LAYER 2: USE CASE (Business Logic) │
+│ • Validate email === 'info@digitalizatenerife.es' in repository │
+│ • throw Error('Insufficient permissions') │
 └─────────────────────────────────────────────────────────────────────────────┘
-                                    │
-                                    ▼
+│
+▼
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│ LAYER 3: RLS (Database)                                                    │
-│ • Supabase RLS verifies email in JWT                                        │
-│ • Even if code bypassed, DB denies non-admin operations                    │
+│ LAYER 3: RLS (Database) │
+│ • Supabase RLS verifies email in JWT │
+│ • Even if code bypassed, DB denies non-admin operations │
 └─────────────────────────────────────────────────────────────────────────────┘
-                                    │
-                                    ▼
+│
+▼
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│ LAYER 4: EDGE FUNCTION (API)                                               │
-│ • Validate JWT on every request                                             │
-│ • Return 401 if invalid                                                     │
+│ LAYER 4: EDGE FUNCTION (API) │
+│ • Validate JWT on every request │
+│ • Return 401 if invalid │
 └─────────────────────────────────────────────────────────────────────────────┘
-```
+
+````
 
 ---
 
@@ -205,7 +209,7 @@ sequenceDiagram
 
     User->>React: Visit /admin
     React->>SupabaseAuth: getSession()
-    
+
     alt No Session
         SupabaseAuth-->>React: null
         React->>User: Show Login Form
@@ -213,14 +217,14 @@ sequenceDiagram
         React->>SupabaseAuth: signInWithPassword()
         SupabaseAuth-->>React: Session + JWT
     end
-    
+
     alt Has Session
         SupabaseAuth-->>React: Session + JWT
     end
-    
+
     React->>Database: Extract role from JWT
     Database-->>React: role = "super_admin"
-    
+
     alt role = super_admin
         React->>User: Show Full Dashboard
     else role = admin
@@ -228,8 +232,6 @@ sequenceDiagram
     else role = anon
         React->>User: Show Unauthorized
     end
-```
+````
 
 ---
-
-

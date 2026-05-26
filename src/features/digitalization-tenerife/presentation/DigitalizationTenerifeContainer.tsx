@@ -13,6 +13,9 @@ import { Helmet } from "react-helmet-async";
 import {
   SeoFaqSchema,
   LocalBusinessSchema,
+  ServiceSchema,
+  WebApplicationSchema,
+  BreadcrumbListSchema,
   BenefitsGrid,
   HowItWorks,
   StatsBar,
@@ -127,7 +130,7 @@ const DigitalizationTenerifeContainer: React.FC = () => {
         <meta property="og:type" content="website" />
         <meta
           property="og:image"
-          content="https://digitalizatenerife.es/og-image.jpg"
+          content="https://digitalizatenerife.es/icon.png"
         />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={t.digitalizationTenerifeSeoTitle} />
@@ -155,6 +158,37 @@ const DigitalizationTenerifeContainer: React.FC = () => {
         }}
         areaServed={["Tenerife"]}
       />
+      <ServiceSchema
+        name="Digitalización para Hostelería en Tenerife"
+        description={t.digitalizationTenerifeSeoDescription}
+        url="https://digitalizatenerife.es/digitalizacion-hosteleria-tenerife"
+        providerName="SmartConnect AI"
+        providerUrl="https://digitalizatenerife.es"
+        providerLogoUrl="https://digitalizatenerife.es/icon.png"
+        areaServed={["Tenerife"]}
+        serviceType="DigitalTransformation"
+      />
+      <WebApplicationSchema
+        name="Panel de Control"
+        description={t.digitalizationTenerifeSeoDescription}
+        url="https://digitalizatenerife.es/digitalizacion-tenerife"
+        offers={{
+          price: "29.90",
+          priceCurrency: "EUR",
+          availability: "https://schema.org/InStock",
+        }}
+        authorName="SmartConnect AI"
+        authorUrl="https://digitalizatenerife.es"
+      />
+      <BreadcrumbListSchema
+        breadcrumbs={[
+          { name: "Inicio", url: "https://digitalizatenerife.es/" },
+          {
+            name: "Digitalización Hostelería Tenerife",
+            url: "https://digitalizatenerife.es/digitalizacion-hosteleria-tenerife",
+          },
+        ]}
+      />
 
       <Navbar scrolled={true} />
       <main>
@@ -165,7 +199,7 @@ const DigitalizationTenerifeContainer: React.FC = () => {
             <>
               <a
                 href="#contacto"
-                className="inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-8 py-3 text-sm font-medium text-white hover:bg-blue-700 transition-all"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] px-8 py-3 text-sm font-bold text-[var(--color-on-accent)] transition-[background-color] duration-150 min-h-[44px]"
               >
                 {t.digitalizationTenerifeHeroCta}
                 <ArrowRight className="w-4 h-4" />
@@ -174,7 +208,7 @@ const DigitalizationTenerifeContainer: React.FC = () => {
                 href="https://wa.me/34600000000?text=Quiero%20digitalizar%20mi%20restaurante%20en%20Tenerife"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 rounded-lg border border-white/20 px-8 py-3 text-sm font-medium text-white hover:bg-white/5 transition-all"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-[var(--color-border)] px-8 py-3 text-sm font-bold text-default hover:bg-[var(--color-surface)] transition-[background-color,border-color] duration-150 min-h-[44px]"
               >
                 <Smartphone className="w-4 h-4" />
                 {t.digitalizationTenerifeWhatsAppText}

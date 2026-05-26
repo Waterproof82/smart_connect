@@ -10,6 +10,11 @@ import React from "react";
 import { Helmet } from "react-helmet-async";
 import { Check, Smartphone, ChevronDown } from "lucide-react";
 import { useLanguage } from "@shared/context/LanguageContext";
+import {
+  ServiceSchema,
+  BreadcrumbListSchema,
+  WebApplicationSchema,
+} from "@shared/presentation/components/SeoSchema";
 
 // Import components from presentation/components/ (Clean Architecture)
 import Navbar from "./components/Navbar";
@@ -18,7 +23,7 @@ import StatsBanner from "./components/StatsBanner";
 import HowItWorks from "./components/HowItWorks";
 import Features from "./components/Features";
 import SocialProof from "./components/SocialProof";
-import FAQ from "./components/FAQ";
+import Faq from "./components/FAQ";
 import CTASection from "./components/CTASection";
 import TrustBadges from "./components/TrustBadges";
 import Footer from "./components/Footer";
@@ -57,12 +62,141 @@ export const TapReviewPage: React.FC<TapReviewPageProps> = ({
         <meta property="og:type" content="website" />
         <meta
           property="og:image"
-          content="https://digitalizatenerife.es/og-image.jpg"
+          content="https://digitalizatenerife.es/icon.png"
         />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={t.tapReviewMetaTitle} />
         <meta name="twitter:description" content={t.tapReviewMetaDesc} />
       </Helmet>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Product",
+            name: "NFC Tap-to-Review - Tarjetas para Reseñas de Google",
+            description:
+              "Tarjetas NFC para obtener reseñas de Google con un solo toque. Sin suscripción.",
+            image: "https://digitalizatenerife.es/icon.png",
+            url: "https://digitalizatenerife.es/tap-review",
+            brand: {
+              "@type": "Brand",
+              name: "SmartConnect AI",
+            },
+            offers: {
+              "@type": "Offer",
+              url: "https://digitalizatenerife.es/tap-review",
+              priceCurrency: "EUR",
+              price: "29.90",
+              availability: "https://schema.org/InStock",
+            },
+            aggregateRating: {
+              "@type": "AggregateRating",
+              ratingValue: "4.8",
+              reviewCount: "850",
+              bestRating: "5",
+            },
+          }),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: [
+              {
+                "@type": "Question",
+                name: "¿Qué es Tap Review?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Tap Review es una solución NFC que permite a tus clientes dejar reseñas en Google e Instagram con solo acercar su móvil a una tarjeta. Sin apps, sin códigos complicados.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "¿Cómo funciona la tarjeta NFC?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Coloca la tarjeta Tapstar en un lugar visible. El cliente acerca su móvil (sin necesidad de app) y es redirigido automáticamente a Google Reviews o Instagram para dejar su opinión.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "¿Se necesita suscripción mensual?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "No. Las tarjetas NFC Tap-to-Review no requieren suscripción mensual. Compra las tarjetas una vez y úsalas sin costes recurrentes.",
+                },
+              },
+            ],
+          }),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "HowTo",
+            name: "Cómo conseguir reseñas con Tap-to-Review",
+            description:
+              "Guía paso a paso para empezar a recibir reseñas en Google con tarjetas NFC.",
+            step: [
+              {
+                "@type": "HowToStep",
+                position: 1,
+                name: "Coloca el dispositivo",
+                text: "Pon el expositor Tapstar con la tarjeta NFC en un lugar visible de tu local, como la barra, la caja o cada mesa.",
+              },
+              {
+                "@type": "HowToStep",
+                position: 2,
+                name: "El cliente acerca su móvil",
+                text: "El cliente acerca su teléfono al chip NFC. En menos de un segundo, se abre la página de reseñas de Google.",
+              },
+              {
+                "@type": "HowToStep",
+                position: 3,
+                name: "Deja la reseña",
+                text: "El cliente escribe su opinión y la publica. Todo el proceso toma menos de 30 segundos.",
+              },
+            ],
+          }),
+        }}
+      />
+      <ServiceSchema
+        name="Tap-to-Review NFC"
+        description="Tarjetas NFC para que los clientes dejen reseñas en Google e Instagram con un solo toque. Sin suscripción mensual."
+        url="https://digitalizatenerife.es/tap-review"
+        providerName="SmartConnect AI"
+        providerUrl="https://digitalizatenerife.es"
+        providerLogoUrl="https://digitalizatenerife.es/icon.png"
+        areaServed={["Tenerife", "Canarias", "España"]}
+        serviceType="NFCReviews"
+      />
+      <WebApplicationSchema
+        name="Panel de Control Tap-to-Review"
+        description="Dashboard web para gestionar campañas NFC, ver estadísticas de reseñas y analizar el rendimiento en tiempo real."
+        url="https://digitalizatenerife.es/tap-review"
+        offers={{
+          price: "29.90",
+          priceCurrency: "EUR",
+          availability: "https://schema.org/InStock",
+        }}
+        authorName="SmartConnect AI"
+        authorUrl="https://digitalizatenerife.es"
+      />
+      <BreadcrumbListSchema
+        breadcrumbs={[
+          { name: "Inicio", url: "https://digitalizatenerife.es/" },
+          {
+            name: "Tap-to-Review",
+            url: "https://digitalizatenerife.es/tap-review",
+          },
+        ]}
+      />
 
       <Navbar />
 
@@ -134,7 +268,7 @@ export const TapReviewPage: React.FC<TapReviewPageProps> = ({
         <HowItWorks />
         <Features />
         <SocialProof />
-        <FAQ />
+        <Faq />
         <CTASection whatsappPhone={whatsappPhone} />
       </div>
 

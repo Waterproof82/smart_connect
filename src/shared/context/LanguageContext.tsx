@@ -22,6 +22,12 @@ interface Translation {
   heroTitle: string;
   heroTitleAccent: string;
   heroTitleEnd: string;
+  heroServiciosTitle: string;
+  heroServiciosTitleAccent: string;
+  heroServiciosTitleEnd: string;
+  heroContactoTitle: string;
+  heroContactoTitleAccent: string;
+  heroContactoTitleEnd: string;
   heroSubtitle: string;
   heroButtonDemo: string;
   heroButtonContact: string;
@@ -29,11 +35,17 @@ interface Translation {
   featuresTitle: string;
   featuresSubtitle: string;
   featuresContent1: string;
+  featuresContent1Title: string;
   featuresContent2: string;
+  featuresContent2Title: string;
   featuresContent3: string;
+  featuresContent3Title: string;
   featuresContent4: string;
+  featuresContent4Title: string;
   featuresContent5: string;
+  featuresContent5Title: string;
   featuresContent6: string;
+  featuresContent6Title: string;
   featuresSoftwareIA: string;
   featuresSoftwareIADesc: string;
   featuresAutomation: string;
@@ -625,6 +637,126 @@ interface Translation {
   n8nAutomationFaq5Answer: string;
   n8nAutomationFaq6Question: string;
   n8nAutomationFaq6Answer: string;
+
+  // Legal pages
+  legalAvisoTitle: string;
+  legalAvisoDescription: string;
+  legalAvisoBackLink: string;
+  legalPrivacidadTitle: string;
+  legalPrivacidadDescription: string;
+  legalPrivacidadBackLink: string;
+  legalPrivacidadUpdated: string;
+  legalCookiesTitle: string;
+  legalCookiesDescription: string;
+  legalCookiesBackLink: string;
+  legalCookiesUpdated: string;
+  // Home FAQ
+  homeFaqTitle: string;
+  homeFaqQ1: string;
+  homeFaqA1: string;
+  homeFaqQ2: string;
+  homeFaqA2: string;
+  homeFaqQ3: string;
+  homeFaqA3: string;
+  homeFaqQ4: string;
+  homeFaqA4: string;
+  homeFaqQ5: string;
+  homeFaqA5: string;
+  homeFaqQ6: string;
+  homeFaqA6: string;
+  // CartaDigital FAQ & HowTo
+  cartaFaqTitle: string;
+  cartaFaqQ1: string;
+  cartaFaqA1: string;
+  cartaFaqQ2: string;
+  cartaFaqA2: string;
+  cartaFaqQ3: string;
+  cartaFaqA3: string;
+  cartaFaqQ4: string;
+  cartaFaqA4: string;
+  cartaFaqQ5: string;
+  cartaFaqA5: string;
+  cartaHowToTitle: string;
+  cartaHowToDesc: string;
+  cartaHowToStep1Name: string;
+  cartaHowToStep1Text: string;
+  cartaHowToStep2Name: string;
+  cartaHowToStep2Text: string;
+  cartaHowToStep3Name: string;
+  cartaHowToStep3Text: string;
+  // CartaDigital Comparison Table
+  cartaComparTitle: string;
+  cartaComparSubtitle: string;
+  cartaComparHeaderCriterio: string;
+  cartaComparHeaderQribar: string;
+  cartaComparHeaderPapel: string;
+  cartaComparHeaderOtras: string;
+  cartaComparRow1Label: string;
+  cartaComparRow1Qribar: string;
+  cartaComparRow1Papel: string;
+  cartaComparRow1Otras: string;
+  cartaComparRow2Label: string;
+  cartaComparRow2Qribar: string;
+  cartaComparRow2Papel: string;
+  cartaComparRow2Otras: string;
+  cartaComparRow3Label: string;
+  cartaComparRow3Qribar: string;
+  cartaComparRow3Papel: string;
+  cartaComparRow3Otras: string;
+  cartaComparRow4Label: string;
+  cartaComparRow4Qribar: string;
+  cartaComparRow4Papel: string;
+  cartaComparRow4Otras: string;
+  cartaComparRow5Label: string;
+  cartaComparRow5Qribar: string;
+  cartaComparRow5Papel: string;
+  cartaComparRow5Otras: string;
+  // Carta Digital — SEO / JSON-LD
+  cartaPageTitle: string;
+  cartaPageDescription: string;
+  cartaDineroGrowthLabel: string;
+  // Carta Digital — Solucion pills
+  cartaSolucionPill1: string;
+  cartaSolucionPill2: string;
+  cartaSolucionPill3: string;
+  cartaSolucionPill4: string;
+  cartaSolucionPill5: string;
+  cartaSolucionPill6: string;
+  cartaSolucionPill7: string;
+  cartaSolucionPill8: string;
+  cartaSolucionPill9: string;
+  // Carta Digital — Telegram section
+  cartaTelegramTitle: string;
+  cartaTelegramSubtitle: string;
+  cartaTelegramFeature1Title: string;
+  cartaTelegramFeature1Desc: string;
+  cartaTelegramFeature2Title: string;
+  cartaTelegramFeature2Desc: string;
+  cartaTelegramFeature3Title: string;
+  cartaTelegramFeature3Desc: string;
+  cartaTelegramFeature4Title: string;
+  cartaTelegramFeature4Desc: string;
+  // Carta Digital — Modos section
+  cartaModosTitle: string;
+  cartaModosSubtitle: string;
+  cartaModoRestauranteTitle: string;
+  cartaModoRestauranteDesc: string;
+  cartaModoRestauranteFeature1: string;
+  cartaModoRestauranteFeature2: string;
+  cartaModoTiendaTitle: string;
+  cartaModoTiendaDesc: string;
+  cartaModoTiendaFeature1: string;
+  cartaModoTiendaFeature2: string;
+  // Carta Digital — Antidesperdicio section
+  cartaAntidesperdicioTitle: string;
+  cartaAntidesperdicioSubtitle: string;
+  cartaAntidesperdicioDesc: string;
+  cartaAntidesperdicioFeature1Title: string;
+  cartaAntidesperdicioFeature1Desc: string;
+  cartaAntidesperdicioFeature2Title: string;
+  cartaAntidesperdicioFeature2Desc: string;
+  cartaAntidesperdicioFeature3Title: string;
+  cartaAntidesperdicioFeature3Desc: string;
 }
 
 const translations: Record<Language, Translation> = {
@@ -641,6 +773,12 @@ const translations: Record<Language, Translation> = {
     heroTitle: "Potencia tu Negocio con",
     heroTitleAccent: "IA",
     heroTitleEnd: "y Automatización",
+    heroServiciosTitle: "Soluciones de",
+    heroServiciosTitleAccent: "IA y Automatización",
+    heroServiciosTitleEnd: "para tu Negocio",
+    heroContactoTitle: "Hablemos de tu",
+    heroContactoTitleAccent: "Proyecto",
+    heroContactoTitleEnd: "",
     heroSubtitle:
       "Tecnología de próxima generación para restaurantes en Tenerife y Canarias. Automatiza pedidos, aumenta ingresos por mesa, reduce tiempos de espera y fideliza clientes con soluciones digitales sin comisiones ni intermediarios.",
     heroButtonDemo: "Ver Demo",
@@ -652,16 +790,22 @@ const translations: Record<Language, Translation> = {
       "Herramientas avanzadas diseñadas para la era digital, desde el hardware hasta el código.",
     featuresContent1:
       "En SmartConnect AI transformamos la experiencia de los restaurantes en Tenerife y Canarias. Con IA, automatización y hardware inteligente, ayudamos a atraer, retener y fidelizar clientes. Nuestras soluciones incluyen menús digitales QRIBAR con pedidos en tiempo real, tarjetas NFC para reseñas instantáneas en Google y automatización con n8n que conecta cada interacción del cliente. ¡El salto digital que tu negocio necesita para crecer!",
+    featuresContent1Title: "QRIBAR: Menú Digital Inteligente",
     featuresContent2:
       "Con QRIBAR, tus clientes en Tenerife y Canarias pueden pedir desde su móvil escaneando un código QR en la mesa. El pedido llega directamente a barra y cocina en tiempo real, reduciendo tiempos de espera y aumentando la rotación de mesas. Sin comisiones ni intermediarios, cada mesa se convierte en un punto de venta digital que opera 24/7, recopilando datos valiosos para campañas de marketing automatizadas y fidelización.",
+    featuresContent2Title: "Tap-to-Review NFC",
     featuresContent3:
       "Nuestras tarjetas NFC Tap-to-Review permiten a tus clientes dejar reseñas en Google con un solo toque. Más reseñas significan mejor posicionamiento en Google Maps y atraerás más clientes nuevos a tu restaurante en Tenerife y Canarias. Tecnología de alto rendimiento, sin suscripciones y configuración inmediata. Estudios demuestran que los negocios con más de 50 reseñas en Google reciben hasta un 40% más de visitas.",
+    featuresContent3Title: "Automatización con n8n",
     featuresContent4:
       "Imagina un flujo de trabajo automatizado donde cada lead se captura, analiza y responde automáticamente. Con nuestras automatizaciones n8n, conectamos tu CRM, email, WhatsApp y redes sociales en un solo ecosistema. Cada interacción con clientes potenciales genera acciones en cadena: análisis de sentimiento con IA, asignación de temperatura del lead y notificaciones en tiempo real a tu equipo comercial. ¡Libera horas de trabajo cada semana!",
+    featuresContent4Title: "IA Conversacional para tu Negocio",
     featuresContent5:
       "QRIBAR no es solo un menú digital: es tu nuevo canal de ventas directo para restaurantes en Tenerife y Canarias. Cada mesa escanea un código QR, explora platos con fotos y vídeos profesionales en 5 idiomas, y envía el pedido directamente a barra y cocina. Los datos de cada cliente se almacenan en tu base de datos para campañas de fidelización automatizadas. El resultado: mesas que rotan más rápido, tickets promedio más altos y clientes que vuelven por la experiencia impecable.",
+    featuresContent5Title: "QRIBAR Sin Comisiones",
     featuresContent6:
       "Las tarjetas NFC Tap-to-Review convierten cada visita en una reseña de Google para tu restaurante en Tenerife y Canarias. Coloca el expositor en tu local, el cliente acerca su móvil, y en 5 segundos tiene abierta la página de reseñas. Más reseñas significan mejor posicionamiento local en Google Maps y atraen más clientes nuevos cada mes. Es un ciclo virtuoso que multiplica tu visibilidad sin inversión publicitaria recurrente. ¡Multiplica tus reseñas por 6 en los primeros 90 días!",
+    featuresContent6Title: "NFC Tap-to-Review",
     featuresSoftwareIA: "Software & IA",
     featuresSoftwareIADesc:
       "Desarrollo de herramientas personalizadas que se integran perfectamente con tus sistemas actuales. Soluciones a medida impulsadas por algoritmos inteligentes.",
@@ -857,7 +1001,7 @@ const translations: Record<Language, Translation> = {
     cartaSolucionSuffix:
       " que trabaja para ti las 24 horas: dentro del local, en Google y en redes sociales.",
     cartaSolucionDesc:
-      "Tus clientes ven los platos con fotos, vídeos y descripciones en 5 idiomas escaneando el QR de la mesa. Los nuevos clientes encuentran tu carta en Google y hacen pedidos take away directamente. Tú recibes el pedido por WhatsApp, acumulas su contacto en tu base de datos y les fidelizas con promociones. Sin intermediarios. Sin comisiones. Sin depender de nadie.",
+      "Tus clientes ven los platos con fotos, vídeos y descripciones en 5 idiomas escaneando el QR de la mesa. Los nuevos clientes encuentran tu carta en Google y hacen pedidos take away directamente. Tú recibes el pedido por Telegram, acumulas su contacto en tu base de datos y les fidelizas con promociones. Sin intermediarios. Sin comisiones. Sin depender de nadie.",
 
     cartaBeneficiosTitle: "7 beneficios que",
     cartaBeneficiosSubtitle: "cambian tu negocio",
@@ -877,9 +1021,9 @@ const translations: Record<Language, Translation> = {
     cartaBeneficio4Desc:
       "Cada pedido online pasa a ser tuyo. Envías promociones cuando quieras.",
     cartaBeneficio4Tag: "Fidelización",
-    cartaBeneficio5Title: "Pedidos por WhatsApp",
+    cartaBeneficio5Title: "Pedidos por Telegram",
     cartaBeneficio5Desc:
-      "Los pedidos llegan en tiempo real por WhatsApp, bien estructurados.",
+      "El cliente pide desde el QR y el pedido llega al grupo de Telegram de tu equipo. Todo el personal lo ve en tiempo real, sin llamadas ni confusiones.",
     cartaBeneficio5Tag: "↓ Errores",
     cartaBeneficio6Title: "Presencia digital",
     cartaBeneficio6Desc:
@@ -896,13 +1040,13 @@ const translations: Record<Language, Translation> = {
     cartaFlujoStep5Desc:
       "Tu carta visible en Google Business Profile. Atrae nuevos clientes con fotos impactantes.",
     cartaFlujoStep1Title: "Escanea el QR",
-    cartaFlujoStep1Desc: "El cliente apunta la cámara al QR de la mesa.",
-    cartaFlujoStep2Title: "Explora",
-    cartaFlujoStep2Desc: "Ve cada plato con imágenes y precio.",
-    cartaFlujoStep3Title: "Fidelización",
-    cartaFlujoStep3Desc: "Recibe oferta a cambio de su email.",
-    cartaFlujoStep4Title: "Pide",
-    cartaFlujoStep4Desc: "Sin dudas, sin malentendidos.",
+    cartaFlujoStep1Desc: "El cliente apunta la cámara al QR de la mesa y abre la carta al instante.",
+    cartaFlujoStep2Title: "Explora y pide",
+    cartaFlujoStep2Desc: "Selecciona platos con fotos y precios. Confirma el pedido desde el móvil.",
+    cartaFlujoStep3Title: "Llega a Telegram",
+    cartaFlujoStep3Desc: "El pedido aparece en el grupo de Telegram de tu equipo en menos de 2 segundos.",
+    cartaFlujoStep4Title: "Confirmación",
+    cartaFlujoStep4Desc: "El equipo responde el tiempo de recogida con un botón. Sin llamadas.",
 
     // --- COMPARATIVA DINERO ---
     cartaDineroTitle: "El valor real",
@@ -1473,6 +1617,137 @@ const translations: Record<Language, Translation> = {
       "¿Hay soporte técnico después de la implementación?",
     n8nAutomationFaq6Answer:
       "Sí, ofrecemos soporte técnico 24/7 para garantizar que tus automatizaciones funcionen sin interrupciones.",
+
+    // Legal pages
+    legalAvisoTitle: "Aviso Legal - SmartConnect AI",
+    legalAvisoDescription:
+      "Aviso legal de SmartConnect AI. Información sobre términos de uso, propiedad intelectual, responsabilidades y condiciones generales del sitio web.",
+    legalAvisoBackLink: "Volver al inicio",
+    legalPrivacidadTitle: "Política de Privacidad - SmartConnect AI",
+    legalPrivacidadDescription:
+      "Política de privacidad de SmartConnect AI. Información sobre recogida, uso y protección de datos personales.",
+    legalPrivacidadBackLink: "Volver al inicio",
+    legalPrivacidadUpdated: "Última actualización: 2026",
+    legalCookiesTitle: "Política de Cookies - SmartConnect AI",
+    legalCookiesDescription:
+      "Política de cookies de SmartConnect AI. Información sobre el uso de cookies y tecnologías similares.",
+    legalCookiesBackLink: "Volver al inicio",
+    legalCookiesUpdated: "Última actualización: 2026",
+
+    // Home FAQ
+    homeFaqTitle: "Preguntas Frecuentes",
+    homeFaqQ1: "¿Qué es SmartConnect AI?",
+    homeFaqA1: "SmartConnect AI es una agencia de transformación digital especializada en hostelería y comercios locales de Canarias. Ofrecemos menús digitales, tarjetas NFC para reseñas, automatización con n8n e IA conversacional.",
+    homeFaqQ2: "¿Cuánto cuesta el menú digital QRIBAR?",
+    homeFaqA2: "QRIBAR no tiene comisiones por pedido. El precio depende del plan y del tamaño del negocio. Contactá con nosotros para un presupuesto personalizado sin compromiso.",
+    homeFaqQ3: "¿Cómo funcionan las tarjetas NFC Tap-to-Review?",
+    homeFaqA3: "El cliente acerca su móvil a la tarjeta NFC y se abre directamente la página de reseñas de Google de tu negocio. Sin apps, sin fricción. Nuestros clientes multiplican sus reseñas por 6 en 90 días.",
+    homeFaqQ4: "¿Sus soluciones sirven para negocios fuera de Canarias?",
+    homeFaqA4: "Sí. Aunque nos especializamos en Tenerife y Canarias, nuestras soluciones digitales funcionan en cualquier negocio de España y Europa.",
+    homeFaqQ5: "¿Necesito conocimientos técnicos para usar vuestras herramientas?",
+    homeFaqA5: "No. Nuestras soluciones están diseñadas para propietarios de negocios sin experiencia técnica. Te damos formación, soporte y configuramos todo por ti.",
+    homeFaqQ6: "¿Cuánto tiempo lleva implementar el sistema?",
+    homeFaqA6: "La mayoría de nuestros sistemas están operativos en menos de 48 horas tras la firma del contrato. El menú digital QRIBAR puede estar listo el mismo día.",
+
+    // CartaDigital FAQ & HowTo
+    cartaFaqTitle: "Preguntas Frecuentes — Carta Digital",
+    cartaFaqQ1: "¿Qué es la Carta Digital?",
+    cartaFaqA1: "La Carta Digital de SmartConnect AI es un menú digital con fotos y vídeos, gestión de pedidos vía Telegram, base de datos de clientes propia y herramientas de reducción de desperdicio alimentario. Sin comisiones por pedido.",
+    cartaFaqQ2: "¿Necesito una app para usar el menú digital?",
+    cartaFaqA2: "No. Los clientes simplemente escanean el QR de la mesa con la cámara del móvil. No se necesita descargar ninguna aplicación.",
+    cartaFaqQ3: "¿Cuántos idiomas soporta la carta?",
+    cartaFaqA3: "La carta digital soporta hasta 5 idiomas de forma simultánea, lo que es clave para la hostelería turística de Canarias.",
+    cartaFaqQ4: "¿Hay comisiones por pedido?",
+    cartaFaqA4: "No. A diferencia de plataformas como Glovo o Uber Eats, la Carta Digital no cobra ninguna comisión por pedido. Pagás una tarifa fija mensual.",
+    cartaFaqQ5: "¿Cuánto tiempo lleva la puesta en marcha?",
+    cartaFaqA5: "La carta digital puede estar operativa el mismo día. Configuramos el menú, generamos los QR y formamos a tu equipo en menos de 24 horas.",
+    cartaHowToTitle: "Cómo funciona la Carta Digital",
+    cartaHowToDesc: "Sistema de pedidos digitales vía Telegram en 3 simples pasos para restaurantes, bares y cafeterías.",
+    cartaHowToStep1Name: "Escanear el QR",
+    cartaHowToStep1Text: "El cliente escanea el código QR de la mesa con la cámara del móvil. En segundos ve la carta completa con fotos y precios actualizados.",
+    cartaHowToStep2Name: "Hacer el pedido",
+    cartaHowToStep2Text: "El cliente selecciona los platos y confirma el pedido desde su móvil. El pedido llega al grupo de Telegram de tu equipo al instante.",
+    cartaHowToStep3Name: "Telegram recibe el pedido",
+    cartaHowToStep3Text: "El pedido aparece en el grupo de Telegram del negocio. El equipo confirma el tiempo de recogida con un solo toque. Tiempo de respuesta: menos de 2 segundos.",
+
+    // CartaDigital Comparison Table
+    cartaComparTitle: "Carta Digital vs. Alternativas",
+    cartaComparSubtitle: "Comparar y decidir con datos reales",
+    cartaComparHeaderCriterio: "Criterio",
+    cartaComparHeaderQribar: "Carta Digital",
+    cartaComparHeaderPapel: "Carta en papel",
+    cartaComparHeaderOtras: "Otras apps",
+    cartaComparRow1Label: "Comisiones",
+    cartaComparRow1Qribar: "0%",
+    cartaComparRow1Papel: "Sin comisiones",
+    cartaComparRow1Otras: "15–30%",
+    cartaComparRow2Label: "Actualización de precios",
+    cartaComparRow2Qribar: "Tiempo real",
+    cartaComparRow2Papel: "Reimpresión",
+    cartaComparRow2Otras: "Manual",
+    cartaComparRow3Label: "Idiomas",
+    cartaComparRow3Qribar: "Hasta 5",
+    cartaComparRow3Papel: "1 (reimpresión)",
+    cartaComparRow3Otras: "1–2",
+    cartaComparRow4Label: "Pedidos digitales",
+    cartaComparRow4Qribar: "Sí, vía Telegram",
+    cartaComparRow4Papel: "No",
+    cartaComparRow4Otras: "Sí (con comisión)",
+    cartaComparRow5Label: "Puesta en marcha",
+    cartaComparRow5Qribar: "Mismo día",
+    cartaComparRow5Papel: "Semanas",
+    cartaComparRow5Otras: "Semanas",
+
+    // Carta Digital — SEO / JSON-LD
+    cartaPageTitle: "Carta Digital con Pedidos por Telegram — Sin Comisiones",
+    cartaPageDescription: "Menú digital con fotos y vídeos, gestión de pedidos vía Telegram, base de datos de clientes y reducción de desperdicio alimentario.",
+    cartaDineroGrowthLabel: "Visibilidad + Clientes recurrentes = Crecimiento real.",
+
+    // Carta Digital — Solucion pills
+    cartaSolucionPill1: "📱 QR",
+    cartaSolucionPill2: "🌍 5 idiomas",
+    cartaSolucionPill3: "🎬 Media",
+    cartaSolucionPill4: "🛒 Take Away",
+    cartaSolucionPill5: "💬 Telegram",
+    cartaSolucionPill6: "📧 Email",
+    cartaSolucionPill7: "📊 Stats",
+    cartaSolucionPill8: "🔍 SEO",
+    cartaSolucionPill9: "⭐ Google",
+
+    // Carta Digital — Telegram section
+    cartaTelegramTitle: "Pedidos por Telegram",
+    cartaTelegramSubtitle: "El cliente pide desde el QR. El restaurante gestiona desde Telegram. Sin apps, sin comisiones.",
+    cartaTelegramFeature1Title: "Pedido online al instante",
+    cartaTelegramFeature1Desc: "El cliente escanea el QR y hace su pedido en segundos desde el móvil.",
+    cartaTelegramFeature2Title: "Grupo de Telegram del equipo",
+    cartaTelegramFeature2Desc: "El pedido llega al grupo compartido. Todo el equipo lo ve en tiempo real.",
+    cartaTelegramFeature3Title: "Respuesta con un botón",
+    cartaTelegramFeature3Desc: "Confirmás el tiempo de recogida con un solo toque. Sin llamadas, sin confusión.",
+    cartaTelegramFeature4Title: "Camarero en mesa desde el móvil",
+    cartaTelegramFeature4Desc: "El camarero gestiona pedidos en sala desde su móvil sin pantallas adicionales.",
+
+    // Carta Digital — Modos section
+    cartaModosTitle: "Dos modos, un sistema",
+    cartaModosSubtitle: "Elegí el modo que se adapta a tu negocio.",
+    cartaModoRestauranteTitle: "Modo Restaurante",
+    cartaModoRestauranteDesc: "Pedidos online y en mesa desde Telegram. Perfecto para bares, restaurantes y cafeterías.",
+    cartaModoRestauranteFeature1: "Pedidos en mesa vía QR + Telegram",
+    cartaModoRestauranteFeature2: "Grupo compartido para todo el equipo",
+    cartaModoTiendaTitle: "Modo Tienda",
+    cartaModoTiendaDesc: "Gestión de pedidos online con cartera de clientes propia. Ideal para tiendas y take away.",
+    cartaModoTiendaFeature1: "Pedidos online con gestión de clientes",
+    cartaModoTiendaFeature2: "Portfolio propio — sin depender de plataformas",
+
+    // Carta Digital — Antidesperdicio section
+    cartaAntidesperdicioTitle: "Reduce el desperdicio alimentario",
+    cartaAntidesperdicioSubtitle: "Convierte el stock próximo a caducar en ingresos",
+    cartaAntidesperdicioDesc: "Publicá tus platos del día o ingredientes próximos a caducar con descuento. Tus clientes los descubren primero — al estilo Too Good To Go, pero integrado en tu carta.",
+    cartaAntidesperdicioFeature1Title: "Descuentos por tiempo limitado",
+    cartaAntidesperdicioFeature1Desc: "Marcá productos con descuento directo en la carta digital. Visibles desde el QR.",
+    cartaAntidesperdicioFeature2Title: "Notificación a clientes frecuentes",
+    cartaAntidesperdicioFeature2Desc: "Los clientes guardados en tu BBDD reciben promos automáticas por Telegram.",
+    cartaAntidesperdicioFeature3Title: "Menos pérdidas, más margen",
+    cartaAntidesperdicioFeature3Desc: "Recuperá el valor de stock que de otro modo se desperdiciaría.",
   },
   en: {
     // Navigation
@@ -1487,6 +1762,12 @@ const translations: Record<Language, Translation> = {
     heroTitle: "Boost your business with",
     heroTitleAccent: "Artificial Intelligence",
     heroTitleEnd: "and automation",
+    heroServiciosTitle: "AI and Automation",
+    heroServiciosTitleAccent: "Solutions",
+    heroServiciosTitleEnd: "for Your Business",
+    heroContactoTitle: "Let's Talk About",
+    heroContactoTitleAccent: "Your Project",
+    heroContactoTitleEnd: "",
     heroSubtitle:
       "Next-generation technology for restaurants in Tenerife and Canary Islands. Automate orders, increase revenue per table, reduce wait times, and retain customers with digital solutions that have no commissions or intermediaries.",
     heroButtonDemo: "View Demo",
@@ -1498,16 +1779,22 @@ const translations: Record<Language, Translation> = {
       "Advanced tools designed for the digital era, from hardware to code.",
     featuresContent1:
       "At SmartConnect AI we combine artificial intelligence, automation, and smart hardware to transform how local businesses attract, retain, and build loyalty with customers. Our platform integrates QRIBAR digital menus with real-time ordering, NFC cards for instant Google reviews, and n8n automation workflows that connect every customer interaction.",
+    featuresContent1Title: "QRIBAR: Smart Digital Menu",
     featuresContent2:
       "With QRIBAR, your customers order from their phone by scanning a QR code at the table. Orders arrive directly to the bar and kitchen in real-time, eliminating wait times and increasing table turnover. No commissions, no intermediaries.",
+    featuresContent2Title: "Tap-to-Review NFC",
     featuresContent3:
       "Our Tap-to-Review NFC cards let any customer leave a Google review with a single tap. More reviews mean better Google Maps positioning and more new customers. High-performance technology, no subscriptions, instant setup.",
+    featuresContent3Title: "n8n Automation",
     featuresContent4:
       "Imagine a workflow where every lead is captured, analyzed, and responded to automatically. With our n8n automations, we connect your CRM, email, WhatsApp, and social media in a single ecosystem. Each prospect interaction triggers chain actions: AI sentiment analysis, lead temperature scoring, and real-time notifications to your sales team.",
+    featuresContent4Title: "Conversational AI for Your Business",
     featuresContent5:
       "QRIBAR is not just a digital menu — it's your new direct sales channel. Every table scans a QR code, explores dishes with professional photos and videos in 5 languages, and sends orders directly to the bar and kitchen. No commissions, no waiting, no intermediaries. Customer data is stored in your database for automated loyalty campaigns.",
+    featuresContent5Title: "QRIBAR No Commissions",
     featuresContent6:
       "NFC Tap-to-Review cards turn every visit into a Google review. Place the display in your venue, customers tap their phone, and in 5 seconds the review page opens. More reviews = better local Google Maps ranking = more new customers. A virtuous cycle that multiplies your visibility without recurring ad spend.",
+    featuresContent6Title: "NFC Tap-to-Review",
     featuresSoftwareIA: "Software & AI",
     featuresSoftwareIADesc:
       "Custom tool development that integrates perfectly with your existing systems. Tailored solutions powered by intelligent algorithms.",
@@ -1702,7 +1989,7 @@ const translations: Record<Language, Translation> = {
     cartaSolucionSuffix:
       " that works for you 24/7: in your venue, on Google, and on social media.",
     cartaSolucionDesc:
-      "Your customers see dishes with photos, videos and descriptions in 5 languages by scanning the table QR. New customers find your menu on Google and order take away directly. You receive orders via WhatsApp, accumulate their contact in your database and fidelize them with promotions. No intermediaries. No commissions. Depending on no one.",
+      "Your customers see dishes with photos, videos and descriptions in 5 languages by scanning the table QR. New customers find your menu on Google and order take away directly. You receive orders via Telegram, accumulate their contact in your database and fidelize them with promotions. No intermediaries. No commissions. Depending on no one.",
 
     cartaBeneficiosTitle: "7 benefits that",
     cartaBeneficiosSubtitle: "change your business",
@@ -1722,9 +2009,9 @@ const translations: Record<Language, Translation> = {
     cartaBeneficio4Desc:
       "Every online order becomes yours. Send promotions whenever you want.",
     cartaBeneficio4Tag: "Fidelization",
-    cartaBeneficio5Title: "Orders via WhatsApp",
+    cartaBeneficio5Title: "Orders via Telegram",
     cartaBeneficio5Desc:
-      "Orders arrive in real-time via WhatsApp, well structured.",
+      "Customers order from the QR and the order arrives in your team's Telegram group. Everyone sees it in real time — no calls, no confusion.",
     cartaBeneficio5Tag: "↓ Errors",
     cartaBeneficio6Title: "Digital presence",
     cartaBeneficio6Desc:
@@ -1740,18 +2027,18 @@ const translations: Record<Language, Translation> = {
     cartaFlujoStep5Title: "Digital Presence",
     cartaFlujoStep5Desc:
       "Your menu visible on Google Business Profile. Attract new customers with stunning photos.",
-    cartaFlujoStep1Title: "Instant Scan",
+    cartaFlujoStep1Title: "Scan the QR",
     cartaFlujoStep1Desc:
-      "Customer points camera at the table QR or finds your menu on Google.",
-    cartaFlujoStep2Title: "Multimedia Explore",
+      "Customer points camera at the table QR and the menu opens instantly.",
+    cartaFlujoStep2Title: "Browse and order",
     cartaFlujoStep2Desc:
-      "See dishes with photos, videos, and descriptions in 5 languages. Easy and fast.",
-    cartaFlujoStep3Title: "In-Store Loyalty",
+      "Select dishes with photos and prices. Confirm the order from their phone.",
+    cartaFlujoStep3Title: "Arrives on Telegram",
     cartaFlujoStep3Desc:
-      "Email popup for promos and instant 5★ reviews. No orders at the table.",
-    cartaFlujoStep4Title: "Take Away Online",
+      "Order appears in your team's Telegram group in under 2 seconds.",
+    cartaFlujoStep4Title: "Confirmation",
     cartaFlujoStep4Desc:
-      'Activates "Cart Mode" from Google or Social Media. Orders for pickup.',
+      "Team responds with pickup time using one button. No phone calls.",
 
     // --- COMPARATIVE MONEY ---
     cartaDineroTitle: "The real value",
@@ -2319,6 +2606,137 @@ const translations: Record<Language, Translation> = {
       "Is there technical support after implementation?",
     n8nAutomationFaq6Answer:
       "Yes, we offer 24/7 technical support to ensure your automations run without interruptions.",
+
+    // Legal pages
+    legalAvisoTitle: "Legal Notice - SmartConnect AI",
+    legalAvisoDescription:
+      "Legal notice of SmartConnect AI. Information about terms of use, intellectual property, liabilities and general conditions of the website.",
+    legalAvisoBackLink: "Back to home",
+    legalPrivacidadTitle: "Privacy Policy - SmartConnect AI",
+    legalPrivacidadDescription:
+      "Privacy policy of SmartConnect AI. Information about collection, use and protection of personal data.",
+    legalPrivacidadBackLink: "Back to home",
+    legalPrivacidadUpdated: "Last updated: 2026",
+    legalCookiesTitle: "Cookies Policy - SmartConnect AI",
+    legalCookiesDescription:
+      "Cookies policy of SmartConnect AI. Information about the use of cookies and similar technologies.",
+    legalCookiesBackLink: "Back to home",
+    legalCookiesUpdated: "Last updated: 2026",
+
+    // Home FAQ
+    homeFaqTitle: "Frequently Asked Questions",
+    homeFaqQ1: "What is SmartConnect AI?",
+    homeFaqA1: "SmartConnect AI is a digital transformation agency specializing in hospitality and local businesses in the Canary Islands. We offer digital menus, NFC review cards, n8n automation, and conversational AI.",
+    homeFaqQ2: "How much does the QRIBAR digital menu cost?",
+    homeFaqA2: "QRIBAR has no per-order commissions. Pricing depends on the plan and business size. Contact us for a free personalized quote.",
+    homeFaqQ3: "How do Tap-to-Review NFC cards work?",
+    homeFaqA3: "The customer taps their phone on the NFC card and your Google review page opens instantly — no app needed. Our clients multiply their reviews 6x in 90 days.",
+    homeFaqQ4: "Do your solutions work for businesses outside the Canary Islands?",
+    homeFaqA4: "Yes. While we specialize in Tenerife and the Canary Islands, our digital solutions work for any business across Spain and Europe.",
+    homeFaqQ5: "Do I need technical knowledge to use your tools?",
+    homeFaqA5: "No. Our solutions are designed for business owners with no technical background. We provide training, support, and handle the full setup.",
+    homeFaqQ6: "How long does implementation take?",
+    homeFaqA6: "Most of our systems are live within 48 hours of signing. The QRIBAR digital menu can be ready the same day.",
+
+    // CartaDigital FAQ & HowTo
+    cartaFaqTitle: "FAQ — Digital Menu",
+    cartaFaqQ1: "What is the Digital Menu?",
+    cartaFaqA1: "SmartConnect AI's Digital Menu is a digital menu with photos and videos, Telegram-based order management, your own customer database, and food waste reduction tools. No per-order commissions.",
+    cartaFaqQ2: "Do customers need an app?",
+    cartaFaqA2: "No. Customers just scan the table QR code with their phone camera. No app download required.",
+    cartaFaqQ3: "How many languages does the menu support?",
+    cartaFaqA3: "The digital menu supports up to 5 languages simultaneously — essential for tourist hospitality in the Canary Islands.",
+    cartaFaqQ4: "Are there per-order commissions?",
+    cartaFaqA4: "No. Unlike platforms such as Glovo or Uber Eats, the Digital Menu charges zero per-order commissions. You pay a fixed monthly fee.",
+    cartaFaqQ5: "How long does setup take?",
+    cartaFaqA5: "The digital menu can go live the same day. We configure your menu, generate QR codes, and train your team in under 24 hours.",
+    cartaHowToTitle: "How the Digital Menu Works",
+    cartaHowToDesc: "Digital ordering system via Telegram in 3 simple steps for restaurants, bars, and cafes.",
+    cartaHowToStep1Name: "Scan the QR code",
+    cartaHowToStep1Text: "The customer scans the table QR code with their phone camera. In seconds they see the full menu with photos and up-to-date prices.",
+    cartaHowToStep2Name: "Place the order",
+    cartaHowToStep2Text: "The customer selects dishes and confirms the order from their phone. The order goes to your team's Telegram group instantly.",
+    cartaHowToStep3Name: "Telegram receives the order",
+    cartaHowToStep3Text: "The order appears in the business Telegram group. The team confirms pickup time with a single tap. Response time: under 2 seconds.",
+
+    // CartaDigital Comparison Table
+    cartaComparTitle: "Carta Digital vs. Alternatives",
+    cartaComparSubtitle: "Compare and decide with real data",
+    cartaComparHeaderCriterio: "Criteria",
+    cartaComparHeaderQribar: "Carta Digital",
+    cartaComparHeaderPapel: "Paper menu",
+    cartaComparHeaderOtras: "Other apps",
+    cartaComparRow1Label: "Commissions",
+    cartaComparRow1Qribar: "0%",
+    cartaComparRow1Papel: "No commissions",
+    cartaComparRow1Otras: "15–30%",
+    cartaComparRow2Label: "Price updates",
+    cartaComparRow2Qribar: "Real time",
+    cartaComparRow2Papel: "Reprint",
+    cartaComparRow2Otras: "Manual",
+    cartaComparRow3Label: "Languages",
+    cartaComparRow3Qribar: "Up to 5",
+    cartaComparRow3Papel: "1 (reprint)",
+    cartaComparRow3Otras: "1–2",
+    cartaComparRow4Label: "Digital orders",
+    cartaComparRow4Qribar: "Yes, via Telegram",
+    cartaComparRow4Papel: "No",
+    cartaComparRow4Otras: "Yes (with commission)",
+    cartaComparRow5Label: "Setup time",
+    cartaComparRow5Qribar: "Same day",
+    cartaComparRow5Papel: "Weeks",
+    cartaComparRow5Otras: "Weeks",
+
+    // Carta Digital — SEO / JSON-LD
+    cartaPageTitle: "Digital Menu with Telegram Orders — No Commissions",
+    cartaPageDescription: "Digital menu with photos and videos, Telegram-based order management, customer database, and food waste reduction.",
+    cartaDineroGrowthLabel: "Visibility + Repeat customers = Real growth.",
+
+    // Carta Digital — Solucion pills
+    cartaSolucionPill1: "📱 QR",
+    cartaSolucionPill2: "🌍 5 languages",
+    cartaSolucionPill3: "🎬 Media",
+    cartaSolucionPill4: "🛒 Take Away",
+    cartaSolucionPill5: "💬 Telegram",
+    cartaSolucionPill6: "📧 Email",
+    cartaSolucionPill7: "📊 Stats",
+    cartaSolucionPill8: "🔍 SEO",
+    cartaSolucionPill9: "⭐ Google",
+
+    // Carta Digital — Telegram section
+    cartaTelegramTitle: "Orders via Telegram",
+    cartaTelegramSubtitle: "Customers order from the QR. The restaurant manages via Telegram. No apps, no commissions.",
+    cartaTelegramFeature1Title: "Instant online orders",
+    cartaTelegramFeature1Desc: "The customer scans the QR and places their order in seconds from their phone.",
+    cartaTelegramFeature2Title: "Team Telegram group",
+    cartaTelegramFeature2Desc: "Orders arrive in the shared group. The whole team sees them in real time.",
+    cartaTelegramFeature3Title: "One-button response",
+    cartaTelegramFeature3Desc: "Confirm the pickup time with a single tap. No calls, no confusion.",
+    cartaTelegramFeature4Title: "Waiter on the floor via mobile",
+    cartaTelegramFeature4Desc: "Staff manage table orders from their phone — no additional screens needed.",
+
+    // Carta Digital — Modos section
+    cartaModosTitle: "Two modes, one system",
+    cartaModosSubtitle: "Choose the mode that fits your business.",
+    cartaModoRestauranteTitle: "Restaurant Mode",
+    cartaModoRestauranteDesc: "Online and table orders via Telegram. Perfect for bars, restaurants, and cafes.",
+    cartaModoRestauranteFeature1: "Table orders via QR + Telegram",
+    cartaModoRestauranteFeature2: "Shared group for the whole team",
+    cartaModoTiendaTitle: "Shop Mode",
+    cartaModoTiendaDesc: "Online order management with your own client portfolio. Ideal for shops and take away.",
+    cartaModoTiendaFeature1: "Online orders with customer management",
+    cartaModoTiendaFeature2: "Own portfolio — no platform dependency",
+
+    // Carta Digital — Antidesperdicio section
+    cartaAntidesperdicioTitle: "Reduce food waste",
+    cartaAntidesperdicioSubtitle: "Turn near-expiry stock into revenue",
+    cartaAntidesperdicioDesc: "List your daily specials or near-expiry items at a discount. Your customers discover them first — Too Good To Go style, but built into your menu.",
+    cartaAntidesperdicioFeature1Title: "Time-limited discounts",
+    cartaAntidesperdicioFeature1Desc: "Mark items at a discount directly in the digital menu. Visible from the QR.",
+    cartaAntidesperdicioFeature2Title: "Notify frequent customers",
+    cartaAntidesperdicioFeature2Desc: "Customers saved in your database receive automatic promos via Telegram.",
+    cartaAntidesperdicioFeature3Title: "Less waste, more margin",
+    cartaAntidesperdicioFeature3Desc: "Recover the value of stock that would otherwise be wasted.",
   },
 };
 

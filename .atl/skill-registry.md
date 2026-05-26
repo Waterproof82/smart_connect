@@ -1,6 +1,6 @@
 # Skill Registry — smart-connect
 
-_Last updated: 2026-05-14_
+_Last updated: 2026-05-17_
 
 ## Global Skills (from Engram)
 
@@ -9,15 +9,18 @@ _Last updated: 2026-05-14_
 | work-unit-commits       | `*.tsx`, `*.ts`, `src/*`           | implement, commit, PR, review                                        | Structure commits as deliverable work units instead of file-type batches, with tests and docs kept beside the code they verify.                                 |
 | chained-pr              | `*.ts`, `*.tsx`                    | PR, review, split                                                    | Split large changes into chained or stacked pull requests that protect reviewer focus and stay within Gentle AI's 400-line cognitive review budget.             |
 | cognitive-doc-design    | `*.md`, `docs/*`                   | docs, documentation, guide                                           | Design documentation that reduces reader cognitive load through progressive disclosure, chunking, signposting, tables, checklists, and recognition over recall. |
+| emil-design-eng         | `*.tsx`, `*.css`, `src/features/*` | animation, transitions, micro-interactions, polish, UI feel, design engineering, easing, spring, gesture, drag, popover, tooltip, button press | Emil Kowalski's design engineering philosophy: animation decision framework, easing curves, spring animations, component polish, performance, accessibility for motion. |
+| taste-skill             | `*.tsx`, `*.css`, `src/features/*` | UI design, frontend, anti-slop, bento, motion, typography, layout, dashboard, components, premium UI, visual density, design variance | High-agency frontend skill: enforces metric-based design rules (DESIGN_VARIANCE: 8, MOTION_INTENSITY: 6, VISUAL_DENSITY: 4), bento grid paradigm, hardware-accelerated animations, anti-AI-slop patterns. |
 | audit                   | `*.tsx`, `src/features/*`          | audit, review, quality                                               | Perform comprehensive audit of interface quality across accessibility, performance, theming, and responsive design.                                             |
 | harden                  | `*.tsx`, `src/shared/utils/*`      | error, i18n, edge-cases                                              | Improve interface resilience through better error handling, i18n support, text overflow handling, and edge case management.                                     |
 | judgment-day            | `*.tsx`, `src/features/*`          | review, adversarial, judge                                           | Parallel adversarial review protocol that launches two independent blind judge sub-agents simultaneously to review the same target.                             |
 | smart-connect-standards | `src/*`, `docs/*`, `*.tsx`, `*.ts` | architecture, design, security, testing, rag, gemini, best-practices | Global standards for SmartConnect ecosystem: Clean Architecture, DI, Jest+RTL testing, OWASP security, RAG chatbot, environment compatibility.                  |
 
 | markdown-negotiation | `*.ts`, `middleware.ts`, `api/*.mjs` | markdown, negotiate, Accept header, LLM, content-type | Content negotiation via `Accept: text/markdown`. Vite plugin for dev, Edge Middleware + Serverless Function for prod. Returns page content as clean Markdown for LLMs. |
-| webmcp-tools | `src/*.ts`, `src/entry-client.tsx` | webmcp, modelContext, provideContext, AI tools | WebMCP tools registered via `navigator.modelContext.provideContext()`. 4 tools: product info, contact, list, page content. |
+| webmcp-tools | `src/*.ts`, `src/entry-client.tsx`, `*.tsx` | webmcp, modelContext, registerTool, AI tools | WebMCP tools registered via `navigator.modelContext.registerTool()` con `@mcp-b/webmcp-polyfill`. Return type `{ content: [{ type: 'text', text }] }`. 4 tools: product info, contact, list, page content. |
 | authorship-signals | `*.tsx`, `src/App.tsx`, `AboutPage.tsx` | author, rel-author, publisher, JSON-LD, authority | Authorship signals: `<link rel="author">`, JSON-LD `author`/`publisher` in `@graph`, `/about` page with Organization schema. |
-| agent-skills | `public/.well-known/agent-skills/*` | agent skills, $schema, sha256, capability              | Agent Skills discovery index at `/.well-known/agent-skills/index.json` with `$schema` and proper sha256 hashes. |
+| agent-skills | `public/.well-known/agent-skills/*` | agent skills, $schema, sha256, capability              | Agent Skills discovery index at `/.well-known/agent-skills/index.json` with `$schema`and proper sha256 hashes. |
+| structured-data |`*.tsx`, `src/shared/presentation/components/SeoSchema.tsx`, `*Container.tsx`| schema, JSON-LD, structured data, rich results, Review, SoftwareApplication, WebApplication, HowTo, CollectionPage, FAQPage | Structured data (JSON-LD) patterns for Google Rich Results. Schemas in`SeoSchema.tsx`: ServiceSchema, LocalBusinessSchema, BreadcrumbListSchema, ReviewSchema, SeoFaqSchema, CollectionPageSchema, HowToSchema, SoftwareApplicationSchema, WebApplicationSchema. |
 
 **Reference**: [SmartConnect Standards Documentation](.atl/smart-connect-standards.md)
 
@@ -52,6 +55,8 @@ _Last updated: 2026-05-14_
 | comment-writer       | `.config/opencode/skills/comment-writer/`       | Write warm, human PR/issue/chat comments                                |
 | critique             | `.claude/skills/critique/`                      | UX design evaluation, actionable feedback                               |
 | delight              | `.claude/skills/delight/`                       | Add moments of joy, personality, unexpected touches                     |
+| emil-design-eng      | `.claude/skills/emil-design-eng/`               | Animation decisions, UI polish, micro-interactions, easing, spring physics, gesture UX   |
+| taste-skill          | `.claude/skills/taste-skill/`                   | Anti-slop UI design, bento grids, motion intensity, typography, visual density, premium UI components |
 | distill              | `.claude/skills/distill/`                       | Strip designs to essence, remove unnecessary complexity                 |
 | extract              | `.claude/skills/extract/`                       | Extract reusable components, design tokens, patterns                    |
 | frontend-design      | `.claude/skills/frontend-design/`               | Production-grade frontend interfaces, high design quality               |
@@ -66,6 +71,7 @@ _Last updated: 2026-05-14_
 | quieter              | `.claude/skills/quieter/`                       | Reduce visual intensity, tone down bold designs                         |
 | skill-creator        | `.config/opencode/skills/skill-creator/`        | Create new AI agent skills following spec                               |
 | teach-impeccable     | `.claude/skills/teach-impeccable/`              | One-time design context setup, persistent guidelines                    |
+| webmcp               | `.config/opencode/skills/webmcp/`               | Register WebMCP tools via navigator.modelContext.registerTool()         |
 | work-unit-commits    | `.config/opencode/skills/work-unit-commits/`    | Structure commits as deliverable work units                             |
 
 ### Project-Level Skills
@@ -127,7 +133,7 @@ Regla obligatoria para el Gentle-Orchestrator: determina cuándo DEBE usar SDD v
 El sitio soporta estas capacidades para crawlers de IA y LLMs:
 
 - **Markdown Negotiation**: Cualquier página acepta `Accept: text/markdown` → devuelve el contenido como Markdown plano. Implementado via `middleware.ts` (Vercel Edge) + `api/negotiate.mjs` (Serverless) + `vite-plugin-md-negotiation.ts` (dev).
-- **WebMCP**: Tools registradas via `navigator.modelContext.provideContext()` en `src/WebMCP.ts`. Tools: `get_product_info`, `get_contact_info`, `list_products`, `get_page_content_markdown`.
+- **WebMCP**: Tools registradas via `navigator.modelContext.registerTool()` en `src/WebMCP.ts` con polyfill `@mcp-b/webmcp-polyfill` (cross-browser). Tools: `get_product_info`, `get_contact_info`, `list_products`, `get_page_content_markdown`. ⚠️ `provideContext()` fue ELIMINADA del spec en Marzo 2026 — usar `registerTool()` individualmente. `execute` debe retornar `{ content: [{ type: 'text', text }] }`.
 - **Agent Skills Index**: `public/.well-known/agent-skills/index.json` con `$schema` y skills documentados.
 - **Authorship Signals**: JSON-LD con `author`/`publisher` Organization en `@graph`, `<link rel="author">` en `<head>`, página `/about` con Organization schema.
 - **Dominio oficial**: TODAS las URLs deben usar `https://digitalizatenerife.es/`. NO usar `smartconnect.ai`.
@@ -153,6 +159,57 @@ El sitio soporta estas capacidades para crawlers de IA y LLMs:
 - Búsqueda: similarity search en Supabase
 - Respuesta: `gemini-2.5-flash` con contexto
 - Cache: TTL 7 días
+
+### Structured Data (JSON-LD) ⚠️
+
+Reglas para schemas de datos estructurados compatibles con Google Rich Results.
+
+#### Schemas disponibles en `src/shared/presentation/components/SeoSchema.tsx`
+
+| Schema                      | `@type`                   | `@id` pattern       | Google Rich Results |
+| --------------------------- | ------------------------- | ------------------- | ------------------- |
+| `LocalBusinessSchema`       | `LocalBusiness`           | _(ninguno)_         | ✅ Local Business   |
+| `ServiceSchema`             | `Service`                 | `{url}#service`     | ❌ No eligible      |
+| `BreadcrumbListSchema`      | `BreadcrumbList`          | _(ninguno)_         | ✅ Breadcrumbs      |
+| `ReviewSchema`              | `Review` + `itemReviewed` | _(ninguno, inline)_ | ✅ Review snippets  |
+| `SeoFaqSchema`              | `FAQPage`                 | _(ninguno)_         | ✅ FAQ              |
+| `CollectionPageSchema`      | `CollectionPage`          | _(ninguno)_         | ✅ Collection       |
+| `HowToSchema`               | `HowTo`                   | _(ninguno)_         | ✅ HowTo            |
+| `SoftwareApplicationSchema` | `SoftwareApplication`     | `{url}#software`    | ✅ Software App     |
+| `WebApplicationSchema`      | `WebApplication`          | `{url}#webapp`      | ✅ Web App          |
+
+#### Reglas para `ReviewSchema` ⚠️
+
+- **`itemReviewed`**: El `@type` del `itemReviewed` DEBE ser uno de los tipos que Google acepta para Review rich results. **`Service` NO es válido.** Tipos válidos: `Product`, `LocalBusiness`, `SoftwareApplication`, `Book`, `Course`, `Event`, `HowTo`, `Movie`, `MusicPlaylist`, `MusicRecording`, `Organization`, `Recipe`.
+- **`SoftwareApplication` requirements**: Cuando `itemReviewed` es `SoftwareApplication`, debe incluir al menos 2 de: `offers`, `aggregateRating`, `applicationCategory`, `operatingSystem`. Incluir las 4 silencia todos los warnings.
+- Usar `Record<string, unknown>` para `itemReviewed` prop type si se necesitan propiedades dinámicas.
+- No usar `@id` en `itemReviewed` de ReviewSchema — Google lo trata como entidad inline y el `@id` no resuelve el error si el `@type` es inválido.
+
+#### Patrón de integración
+
+Cada página con schemas sigue este patrón en su Container:
+
+```tsx
+<ServiceSchema />        // Identifica el servicio (No elegible, pero informativo)
+<SoftwareApplicationSchema />  // O WebApplicationSchema según la página
+<BreadcrumbListSchema />       // Navegación
+<ReviewSchema />               // Reseñas (con itemReviewed correcto)
+<SeoFaqSchema />               // FAQ
+```
+
+Los schemas se renderizan FUERA del `<main>` y `<Helmet>`, como siblings directos del Fragment:
+
+```tsx
+return (
+  <>
+    <Helmet>...</Helmet>
+    <ServiceSchema ... />
+    <BreadcrumbListSchema ... />
+    <Navbar />
+    <main>...</main>
+  </>
+);
+```
 
 ### SSR / Hydration (CRITICAL) ⚠️
 

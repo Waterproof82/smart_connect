@@ -1,5 +1,5 @@
 import React, { Component, ReactNode } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { Navbar } from "@features/landing/presentation/components/Navbar";
 import { Hero } from "@features/landing/presentation/components/Hero";
@@ -7,6 +7,7 @@ import { Features } from "@features/landing/presentation/components/Features";
 import { Contact } from "@features/landing/presentation/components/Contact";
 import { SuccessStats } from "@features/landing/presentation/components/SuccessStats";
 import { ExpertAssistant } from "@features/chatbot/presentation";
+import HomeFaqSection from "@features/landing/presentation/components/HomeFaqSection";
 import { ConsoleLogger } from "@core/domain/usecases/Logger";
 import { useLanguage } from "@shared/context/LanguageContext";
 
@@ -71,8 +72,10 @@ const ErrorBoundaryFallback: React.FC = () => {
 // since they're always rendered on the landing page.
 
 /* Heading structure:
-  H1: Potencia tu Negocio con IA y Automatización
-  H2: Nuestras Soluciones — heroEyebrow label
+  / → H1: Potencia tu Negocio con IA y Automatización
+  /servicios → H1: Soluciones de IA y Automatización para tu Negocio
+  /contacto → H1: Hablemos de tu Proyecto
+  H2: Nuestras Soluciones — heroEyebrow label (home)
     H3: Software & IA
     H3: Automatización (n8n)
     H3: Tarjetas Tap-to-Review
@@ -95,7 +98,7 @@ const ErrorBoundaryFallback: React.FC = () => {
   - Viewport: width=device-width, initial-scale=1.0 ✓
   - Hreflang: skipped (single-language Spanish site) ✓
   - noindex: NOT present ✓
-  - H1 present: ✓
+  - H1 present: ✓ (unique per route)
   - Touch targets: 48px min ✓
   - DOM: lazy-loaded SuccessStats & Chatbot, ~700 estimated nodes ✓
 */
@@ -104,6 +107,21 @@ const App: React.FC = () => {
   const [scrolled, setScrolled] = React.useState(false);
   const sentinelRef = React.useRef<HTMLDivElement>(null);
   const { t } = useLanguage();
+  const location = useLocation();
+  const isServicios = location.pathname === "/servicios";
+  const isContacto = location.pathname === "/contacto";
+
+  const pageTitle = isServicios
+    ? "Servicios de Automatización e IA para Empresas | SmartConnect AI"
+    : isContacto
+      ? "Contacto | SmartConnect AI"
+      : "SmartConnect AI | Automatización e IA para Empresas";
+
+  const pageDescription = isServicios
+    ? "Descubre nuestros servicios: automatización n8n, menús digitales QRIBAR, tarjetas NFC para reseñas y asistente IA. Soluciones para tu negocio."
+    : isContacto
+      ? "Contacta con SmartConnect AI. Solicita información sobre automatización, menús digitales, NFC y soluciones IA para tu negocio en Tenerife."
+      : "SmartConnect AI: automatización con IA, n8n, NFC para Google Reviews y menús digitales. Digitaliza tu negocio.";
 
   React.useEffect(() => {
     const sentinel = sentinelRef.current;
@@ -141,17 +159,29 @@ const App: React.FC = () => {
     "@graph": [
       {
         "@type": "LocalBusiness",
+        "@id": "https://digitalizatenerife.es/#organization",
         name: "SmartConnect AI",
         url: "https://digitalizatenerife.es",
         description:
           "Automatización con IA, n8n, NFC para Google Reviews y menús digitales QRIBAR para negocios en Tenerife y Canarias.",
         areaServed: "Tenerife, Canarias, España",
-        serviceType: [
+        knowsAbout: [
           "Automatización de negocios",
           "Inteligencia Artificial",
-          "Menús digitales",
-          "NFC Google Reviews",
+          "Menús digitales NFC",
+          "Google Reviews",
         ],
+        image: "https://digitalizatenerife.es/icon.png",
+        telephone: "+34922123456",
+        priceRange: "€€",
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: "Calle Las Palmas 123",
+          addressLocality: "Santa Cruz de Tenerife",
+          addressRegion: "Canary Islands",
+          postalCode: "38001",
+          addressCountry: "ES",
+        },
         logo: {
           "@type": "ImageObject",
           url: "https://digitalizatenerife.es/icon.png",
@@ -188,18 +218,125 @@ const App: React.FC = () => {
           },
         },
       },
+      // Services
+      {
+        "@type": "Service",
+        "@id": "https://digitalizatenerife.es/#service-qribar",
+        name: "QRIBAR - Menú Digital",
+        description:
+          "Menú digital con pedidos en tiempo real desde la mesa a barra y cocina. Sin comisiones por pedido.",
+        url: "https://digitalizatenerife.es/carta-digital",
+        provider: { "@id": "https://digitalizatenerife.es/#organization" },
+        areaServed: ["Tenerife", "Gran Canaria", "Lanzarote", "Canarias"],
+        serviceType: "Digital Menu Platform",
+      },
+      {
+        "@type": "Service",
+        "@id": "https://digitalizatenerife.es/#service-nfc",
+        name: "Tap-to-Review NFC",
+        description:
+          "Tarjetas NFC para que los clientes dejen reseñas en Google e Instagram con un solo toque.",
+        url: "https://digitalizatenerife.es/tap-review",
+        provider: { "@id": "https://digitalizatenerife.es/#organization" },
+        areaServed: ["Tenerife", "Canarias", "España"],
+        serviceType: "NFC Review Solution",
+      },
+      {
+        "@type": "Service",
+        "@id": "https://digitalizatenerife.es/#service-n8n",
+        name: "Automatización con n8n",
+        description:
+          "Flujos de trabajo automatizados que conectan CRM, email, WhatsApp y redes sociales para captación y fidelización.",
+        url: "https://digitalizatenerife.es/automatizacion-restaurantes-n8n",
+        provider: { "@id": "https://digitalizatenerife.es/#organization" },
+        areaServed: ["Tenerife", "Canarias"],
+        serviceType: "Workflow Automation",
+      },
+      {
+        "@type": "Service",
+        "@id": "https://digitalizatenerife.es/#service-whatsapp",
+        name: "Automatización WhatsApp",
+        description:
+          "Respuestas automáticas 24/7 para reservas, consultas y pedidos vía WhatsApp Business.",
+        url: "https://digitalizatenerife.es/automatizacion-whatsapp-restaurante",
+        provider: { "@id": "https://digitalizatenerife.es/#organization" },
+        areaServed: ["Tenerife", "Canarias"],
+        serviceType: "WhatsApp Automation",
+      },
+      {
+        "@type": "Service",
+        "@id": "https://digitalizatenerife.es/#service-software",
+        name: "Software Canarias",
+        description:
+          "Soluciones de software a medida para hostelería y comercios locales en Canarias.",
+        url: "https://digitalizatenerife.es/software-restaurantes-canarias",
+        provider: { "@id": "https://digitalizatenerife.es/#organization" },
+        areaServed: ["Tenerife", "Canarias"],
+        serviceType: "Custom Software",
+      },
+      {
+        "@type": "Service",
+        "@id": "https://digitalizatenerife.es/#service-digitalizacion",
+        name: "Digitalización Tenerife",
+        description:
+          "Transformación digital completa para restaurantes y bares en Tenerife: menús QR, NFC, automatización e IA.",
+        url: "https://digitalizatenerife.es/digitalizacion-hosteleria-tenerife",
+        provider: { "@id": "https://digitalizatenerife.es/#organization" },
+        areaServed: ["Tenerife", "Canarias"],
+        serviceType: "Digital Transformation",
+      },
+      // ItemList
+      {
+        "@type": "ItemList",
+        name: "Soluciones SmartConnect AI",
+        description:
+          "Nuestras soluciones tecnológicas para hostelería: menús digitales, NFC, automatización e IA.",
+        url: "https://digitalizatenerife.es/#soluciones",
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "Software e IA",
+            url: "https://digitalizatenerife.es/software-restaurantes-canarias",
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "Automatización n8n",
+            url: "https://digitalizatenerife.es/automatizacion-restaurantes-n8n",
+          },
+          {
+            "@type": "ListItem",
+            position: 3,
+            name: "Tarjetas NFC Tap-to-Review",
+            url: "https://digitalizatenerife.es/tap-review",
+          },
+          {
+            "@type": "ListItem",
+            position: 4,
+            name: "QRIBAR Menú Digital",
+            url: "https://digitalizatenerife.es/carta-digital",
+          },
+          {
+            "@type": "ListItem",
+            position: 5,
+            name: "Automatización WhatsApp",
+            url: "https://digitalizatenerife.es/automatizacion-whatsapp-restaurante",
+          },
+        ],
+      },
     ],
   };
 
   return (
     <ErrorBoundary>
       <Helmet>
-        <title>SmartConnect AI | Automatización e IA para Empresas</title>
-        <meta
-          name="description"
-          content="SmartConnect AI: automatización con IA, n8n, NFC para Google Reviews y menús digitales. Digitaliza tu negocio."
+        <title>{pageTitle}</title>
+        <meta name="description" content={pageDescription} />
+        <link
+          rel="canonical"
+          href={`https://digitalizatenerife.es${location.pathname}`}
         />
-        <link rel="canonical" href="https://digitalizatenerife.es/" />
         <link
           rel="author"
           href="https://digitalizatenerife.es/about"
@@ -208,29 +345,74 @@ const App: React.FC = () => {
         <link
           rel="alternate"
           hrefLang="es"
-          href="https://digitalizatenerife.es/"
+          href={`https://digitalizatenerife.es${location.pathname}`}
         />
         <link
           rel="alternate"
           hrefLang="x-default"
-          href="https://digitalizatenerife.es/"
+          href={`https://digitalizatenerife.es${location.pathname}`}
         />
-        <meta
-          property="og:title"
-          content="SmartConnect AI | Automatización e IA para Empresas"
-        />
-        <meta
-          property="og:description"
-          content="Automatización con IA, n8n, NFC para Google Reviews y menús digitales QRIBAR para negocios en Tenerife y Canarias."
-        />
+        <meta property="og:title" content={pageTitle} />
+        <meta property="og:description" content={pageDescription} />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://digitalizatenerife.es" />
+        <meta
+          property="og:url"
+          content={`https://digitalizatenerife.es${location.pathname}`}
+        />
         <meta
           property="og:image"
           content="https://digitalizatenerife.es/icon.png"
         />
         <meta name="twitter:card" content="summary_large_image" />
-        <script type="application/ld+json">{JSON.stringify(schemaData)}</script>
+        {!isServicios && !isContacto && (
+          <script type="application/ld+json">
+            {JSON.stringify(schemaData)}
+          </script>
+        )}
+        {isServicios && (
+          <script type="application/ld+json">
+            {JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                {
+                  "@type": "ListItem",
+                  position: 1,
+                  name: "Inicio",
+                  item: "https://digitalizatenerife.es/",
+                },
+                {
+                  "@type": "ListItem",
+                  position: 2,
+                  name: "Servicios",
+                  item: "https://digitalizatenerife.es/servicios",
+                },
+              ],
+            })}
+          </script>
+        )}
+        {isContacto && (
+          <script type="application/ld+json">
+            {JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                {
+                  "@type": "ListItem",
+                  position: 1,
+                  name: "Inicio",
+                  item: "https://digitalizatenerife.es/",
+                },
+                {
+                  "@type": "ListItem",
+                  position: 2,
+                  name: "Contacto",
+                  item: "https://digitalizatenerife.es/contacto",
+                },
+              ],
+            })}
+          </script>
+        )}
       </Helmet>
       <div className="min-h-screen bg-base text-default">
         <div
@@ -247,7 +429,11 @@ const App: React.FC = () => {
         <Navbar scrolled={scrolled} />
         <main id="main" aria-label="Contenido principal">
           <section id="inicio" aria-label="Inicio">
-            <Hero />
+            <Hero
+              variant={
+                isServicios ? "servicios" : isContacto ? "contacto" : "home"
+              }
+            />
           </section>
           <section
             id="soluciones"
@@ -262,45 +448,95 @@ const App: React.FC = () => {
             className="py-20 md:py-32 bg-[var(--color-bg-alt)]"
           >
             <div className="container mx-auto px-6">
-              <h2 className="text-4xl md:text-5xl font-bold mb-6 text-center">
-                ¿Por qué SmartConnect AI?
-              </h2>
-              <div className="max-w-4xl mx-auto space-y-6 text-muted leading-relaxed mt-12">
-                <p className="text-base md:text-lg">
-                  SmartConnect AI nació en Tenerife con una misión clara:
-                  democratizar el acceso a la tecnología para los negocios
-                  locales de Canarias. No creemos en soluciones genéricas — cada
-                  bar, restaurante o comercio tiene necesidades únicas, y merece
-                  herramientas diseñadas para su realidad.
+              {/* Left-aligned header */}
+              <div className="max-w-2xl mb-16">
+                <h2 className="text-4xl md:text-5xl font-bold mb-4">
+                  ¿Por qué SmartConnect AI?
+                </h2>
+                <p className="text-muted leading-relaxed text-lg">
+                  Democratizamos el acceso a la tecnología para los negocios
+                  locales de Canarias. No creemos en soluciones genéricas.
                 </p>
-                <p className="text-base md:text-lg">
-                  Nuestra plataforma integra cuatro pilares fundamentales:
-                  automatización inteligente con n8n, menús digitales QRIBAR con
-                  pedidos en tiempo real, tarjetas NFC para reseñas en Google, y
-                  soluciones de IA conversacional. Todo funciona como un
-                  ecosistema unificado, no como piezas sueltas.
-                </p>
-                <p className="text-base md:text-lg">
-                  Mientras otras empresas cobran comisiones por cada pedido o
-                  suscripciones mensuales que se disparan, nosotros apostamos
-                  por un modelo transparente y sin sorpresas. QRIBAR no cobra
-                  comisiones por pedido. Las tarjetas NFC no requieren
-                  suscripción. La automatización con n8n escala contigo sin
-                  costes ocultos.
-                </p>
-                <p className="text-base md:text-lg">
-                  ¿El resultado? Negocios que multiplican sus reseñas en Google,
-                  mesas que rotan más rápido, equipos que dedican menos tiempo a
-                  tareas repetitivas y más a lo que importa: atender bien a sus
-                  clientes. En los últimos 12 meses, hemos ayudado a más de 200
-                  negocios en Tenerife, Gran Canaria y Lanzarote a dar el salto
-                  digital que sus clientes esperaban.
-                </p>
-                <p className="text-base md:text-lg">
+              </div>
+
+              {/* Stats strip */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 py-8 border-y border-[var(--color-border)] mb-16">
+                {(
+                  [
+                    { value: "200+", label: "Negocios en Canarias" },
+                    { value: "0%", label: "Comisiones por pedido" },
+                    { value: "6×", label: "Más reseñas en 90 días" },
+                    { value: "40%", label: "Más visitas con reseñas" },
+                  ] as const
+                ).map((stat) => (
+                  <div key={stat.label}>
+                    <div className="text-3xl md:text-4xl font-bold text-default tabular-nums">
+                      {stat.value}
+                    </div>
+                    <div className="text-sm text-muted mt-1">{stat.label}</div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Asymmetric grid: Misión (1fr) + Pilares (2fr) */}
+              <div className="grid md:grid-cols-[1fr_2fr] gap-12 mb-16">
+                <div>
+                  <p className="text-xs font-bold text-[var(--color-primary)] uppercase tracking-wider mb-4 opacity-70">
+                    Misión y Visión
+                  </p>
+                  <p className="text-muted leading-relaxed text-base mb-4">
+                    Cada bar, restaurante o comercio tiene necesidades únicas y
+                    merece herramientas diseñadas para su realidad.
+                  </p>
+                  <p className="text-muted leading-relaxed text-base">
+                    Nuestra plataforma funciona como un ecosistema unificado,
+                    no como piezas sueltas.
+                  </p>
+                </div>
+
+                <div>
+                  <p className="text-xs font-bold text-[var(--color-primary)] uppercase tracking-wider mb-4 opacity-70">
+                    Pilares Tecnológicos
+                  </p>
+                  <div className="divide-y divide-[var(--color-border)]">
+                    {(
+                      [
+                        {
+                          title: "Automatización con n8n",
+                          desc: "Flujos que conectan CRM, email, WhatsApp y redes sociales.",
+                        },
+                        {
+                          title: "Menús digitales QRIBAR",
+                          desc: "Pedidos en tiempo real desde la mesa a barra y cocina.",
+                        },
+                        {
+                          title: "Tarjetas NFC Tap-to-Review",
+                          desc: "Multiplica las reseñas en Google con un solo toque.",
+                        },
+                        {
+                          title: "IA Conversacional",
+                          desc: "Chatbot experto que responde dudas 24/7 sobre tus servicios.",
+                        },
+                      ] as const
+                    ).map((pilar) => (
+                      <div key={pilar.title} className="py-4">
+                        <div className="font-semibold text-default text-sm mb-0.5">
+                          {pilar.title}
+                        </div>
+                        <div className="text-muted text-sm">{pilar.desc}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Closing statement */}
+              <div className="border-t border-[var(--color-border)] pt-10">
+                <p className="text-base text-muted leading-relaxed max-w-3xl">
                   Digitalizar tu negocio ya no es una opción — es una necesidad.
                   Los clientes buscan restaurantes en Google, leen reseñas antes
                   de visitar un local, y esperan poder pedir desde su móvil. Con
-                  SmartConnect AI, no solo te pones al día — te adelantas a la
+                  SmartConnect AI, no solo te ponés al día — te adelantás a la
                   competencia.
                 </p>
               </div>
@@ -312,6 +548,13 @@ const App: React.FC = () => {
             className="py-20 md:py-32"
           >
             <SuccessStats />
+          </section>
+          <section
+            id="faq"
+            aria-label="Preguntas Frecuentes"
+            className="py-20 md:py-32"
+          >
+            <HomeFaqSection />
           </section>
           <section id="contacto" aria-label="Contacto">
             <Contact />
@@ -388,7 +631,7 @@ const App: React.FC = () => {
                 <ul className="space-y-3 text-sm text-muted">
                   <li>
                     <a
-                      href="https://youtube.com/@TODO"
+                      href="#"
                       rel="noopener noreferrer"
                       aria-label="YouTube"
                       className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors"
@@ -398,7 +641,7 @@ const App: React.FC = () => {
                   </li>
                   <li>
                     <a
-                      href="https://x.com/TODO"
+                      href="#"
                       rel="noopener noreferrer"
                       aria-label="X (Twitter)"
                       className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors"
@@ -408,7 +651,7 @@ const App: React.FC = () => {
                   </li>
                   <li>
                     <a
-                      href="https://linkedin.com/company/TODO"
+                      href="#"
                       rel="noopener noreferrer"
                       aria-label="LinkedIn"
                       className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors"
@@ -418,7 +661,7 @@ const App: React.FC = () => {
                   </li>
                   <li>
                     <a
-                      href="https://instagram.com/TODO"
+                      href="#"
                       rel="noopener noreferrer"
                       aria-label="Instagram"
                       className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors"
@@ -428,7 +671,7 @@ const App: React.FC = () => {
                   </li>
                   <li>
                     <a
-                      href="https://facebook.com/TODO"
+                      href="#"
                       rel="noopener noreferrer"
                       aria-label="Facebook"
                       className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors"
@@ -443,6 +686,14 @@ const App: React.FC = () => {
                   {t.footerLegalTitle}
                 </h3>
                 <ul className="space-y-2 text-sm text-muted">
+                  <li>
+                    <Link
+                      to="/about"
+                      className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors"
+                    >
+                      Sobre Nosotros
+                    </Link>
+                  </li>
                   <li>
                     <Link
                       to="/legal/aviso"

@@ -31,6 +31,7 @@ const AvisoLegalPage: React.FC = () => {
 
   return (
     <LegalPage
+      url="https://digitalizatenerife.es/legal/aviso"
       titleKey="legalAvisoTitle"
       descriptionKey="legalAvisoDescription"
       sections={sections}

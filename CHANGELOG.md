@@ -9,6 +9,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **GSC Indexing Fixes — 301 Redirects**: Added 6 permanent server-side redirects in `vercel.json` for English alias routes and old pages that caused "Redirect" and "Duplicate canonical" GSC issues
+  - `/automation-n8n` → `/automatizacion-restaurantes-n8n`
+  - `/whatsapp-automation` → `/automatizacion-whatsapp-restaurante`
+  - `/software-canarias` → `/software-restaurantes-canarias`
+  - `/digitalization-tenerife` → `/digitalizacion-hosteleria-tenerife`
+  - `/servicios` → `/` (removed duplicate)
+  - `/contacto` → `/#contacto` (removed duplicate)
+- **Missing routes registered**: Added `/about`, `/legal/aviso`, `/legal/privacidad`, `/legal/cookies` to `src/main.tsx` — these existed in SSG but not in React Router, causing NotFound renders for Googlebot
+- **AboutPage meta tags**: Added `<link rel="canonical">`, `hrefLang` (es + x-default), `og:image`, `twitter:card/title/description/image`, and JSON-LD inside `<Helmet>` for proper SSG head injection
+- **LegalPage social meta**: Added `og:title`, `og:description`, `og:image`, `og:url`, `twitter:card/title/description` to all 3 legal pages
+- **LegalPage XSS fix**: Wrapped `dangerouslySetInnerHTML` with `sanitizeHTML` (DOMPurify) in `LegalPage.tsx`
+- **Footer "Sobre Nosotros" link**: Added `/about` to footer legal column in `App.tsx`
+- **Sitemap improvements**: Added `<lastmod>` to all 11 URLs, removed `/servicios` and `/contacto`, updated `/carta-digital` and `/tap-review` priority from `0.9` → `1.0`
+- **og:image fix**: Replaced non-existent `og-image.jpg` with `icon.png` across 6 service pages
+- **Design skills**: Installed `emil-design-eng` and `taste-skill` in `.claude/skills/` and registered in `.atl/skill-registry.md`
+
+### Removed
+
+- **Dead code**: Deleted `LandingContainer.tsx` and `LandingContainer.test.tsx` — never imported in runtime files
+- **Alias routes from main.tsx**: Removed 4 English alias routes from React Router (replaced by Vercel 301 redirects)
+- **`/servicios` and `/contacto` from SSG**: Removed from `entry-server.tsx` and `scripts/prerender.mjs`
+
 - **SSG (Static Site Generation)**: Custom prerendering with `react-dom/server` for landing page
   - `src/entry-server.tsx` — SSR entry with `renderToString`, `StaticRouter`, `HelmetProvider`
   - `src/entry-client.tsx` — Client hydration entry with `hydrateRoot`, `BrowserRouter`, all routes
@@ -22,6 +44,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Social links**: New 4th footer column with YouTube, X, LinkedIn, Instagram, Facebook
 - **Crawlability**: `X-Robots-Tag: index, follow` header + Cache-Control per route in `vercel.json`
 - **Sitemap**: Expanded to 8 routes including /servicios and /contacto with proper priorities
+- **Structured data — FAQPage schema**: Integrated `SeoFaqSchema` into Tap Review FAQ component for rich FAQ results
+  - `src/features/tap-review/presentation/components/FAQ.tsx`
+- **Structured data — CollectionPage schema**: Integrated `CollectionPageSchema` into TestimonialCarousel for review collection rich results
+  - `src/shared/presentation/components/TestimonialCarousel/index.tsx`
+- **Structured data — HowTo schema**: Integrated `HowToSchema` into Tap Review HowItWorks component for process rich results
+  - `src/features/tap-review/presentation/components/HowItWorks.tsx`
+- **Schema components**: Added `HowToSchema`, `CollectionPageSchema`, `SoftwareApplicationSchema`, and `WebApplicationSchema` to shared schema library
+  - `src/shared/presentation/components/SeoSchema.tsx`
+- **Structured data — SoftwareApplication schema**: Integrated `SoftwareApplicationSchema` into landing page @graph
+  - `src/features/landing/presentation/LandingContainer.tsx`
+- **Structured data — WebApplication schema**: Integrated `WebApplicationSchema` into Tap Review, WhatsApp Automation, Digitalización, Software Canarias, and n8n Automation pages
+  - `src/features/tap-review/presentation/TapReviewPage.tsx`
+  - `src/features/whatsapp-automation/presentation/WhatsappAutomationContainer.tsx`
+  - `src/features/digitalization-tenerife/presentation/DigitalizationTenerifeContainer.tsx`
+  - `src/features/software-canarias/presentation/SoftwareCanariasContainer.tsx`
+  - `src/features/automation-n8n/presentation/AutomationN8nContainer.tsx`
+- **Fix — itemReviewed**: Added required `itemReviewed` field to `ReviewSchema` component to fix Google Rich Results validation error
+  - `src/shared/presentation/components/SeoSchema.tsx`
 
 ### Changed
 

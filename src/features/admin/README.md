@@ -5,6 +5,7 @@ Panel de administración para gestionar el sistema RAG de SmartConnect AI.
 ## 🎯 Propósito
 
 Permite a los administradores:
+
 - Ver todos los documentos del sistema RAG
 - Filtrar y buscar documentos
 - Ver estadísticas (por fuente, categoría)
@@ -28,10 +29,12 @@ admin/
 ## 🔐 Seguridad
 
 ### Roles
+
 - **admin:** Solo lectura
 - **super_admin:** Lectura + Eliminación
 
 ### OWASP Compliance
+
 - ✅ A01: Broken Access Control (validación de permisos en servidor)
 - ✅ A03: Injection (sanitización de inputs)
 - ✅ A07: Auth Failures (Supabase Auth + JWT)
@@ -55,7 +58,7 @@ npm test -- admin
 
 ```typescript
 // Obtener container
-import { getAdminContainer } from '@features/admin/presentation';
+import { getAdminContainer } from "@features/admin/presentation";
 
 const container = getAdminContainer();
 
@@ -75,6 +78,6 @@ const documents = await container.getAllDocumentsUseCase.execute();
 2. AdminPanel verifica sesión
 3. Si NO auth → Login
 4. Login → Supabase Auth
-5. Verificar email === 'admin@smartconnect.ai' (único admin)
+5. Verificar email === 'info@digitalizatenerife.es' (único admin)
 6. Si válido → AdminDashboard
 ```

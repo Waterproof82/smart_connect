@@ -14,17 +14,17 @@ Para crear un usuario administrador en Supabase:
 
 ```sql
 -- 1. Crear usuario en Supabase Dashboard (Authentication > Users > Invite User)
--- Email: admin@smartconnect.ai
+-- Email: info@digitalizatenerife.es
 -- Password: (generado automáticamente)
 
 -- 2. Asignar rol de admin en SQL Editor
-UPDATE auth.users 
+UPDATE auth.users
 SET raw_user_meta_data = jsonb_set(
   COALESCE(raw_user_meta_data, '{}'::jsonb),
   '{role}',
   '"super_admin"'
 )
-WHERE email = 'admin@smartconnect.ai';
+WHERE email = 'info@digitalizatenerife.es';
 ```
 
 ---
@@ -81,16 +81,19 @@ src/features/admin/
 ### 3. Gestión de Documentos
 
 #### Visualización
+
 - Lista paginada de documentos (20 por página)
 - Preview de contenido (100 caracteres)
 - Estado de embedding (✓ Sí / ✗ No)
 - Fecha de creación
 
 #### Filtros
+
 - **Por Fuente:** qribar, reviews, general
 - **Búsqueda de Texto:** buscar en contenido
 
 #### Acciones
+
 - **Eliminar:** Solo para `super_admin` (OWASP A01 protection)
 
 ---
@@ -98,11 +101,13 @@ src/features/admin/
 ## Sistema de Roles
 
 ### `admin` (Lectura)
+
 - ✅ Ver documentos
 - ✅ Ver estadísticas
 - ❌ Eliminar documentos
 
 ### `super_admin` (Lectura + Escritura)
+
 - ✅ Ver documentos
 - ✅ Ver estadísticas
 - ✅ Eliminar documentos
@@ -111,9 +116,9 @@ src/features/admin/
 
 ```typescript
 class AdminUser {
-  canPerform(action: 'read' | 'write' | 'delete'): boolean {
-    if (this.role === 'super_admin') return true;
-    return action === 'read'; // admin solo puede leer
+  canPerform(action: "read" | "write" | "delete"): boolean {
+    if (this.role === "super_admin") return true;
+    return action === "read"; // admin solo puede leer
   }
 }
 ```
@@ -133,13 +138,13 @@ async execute(documentId: string, user: AdminUser): Promise<void> {
   if (!user.canPerform('delete')) {
     throw new Error('Insufficient permissions');
   }
-  
+
   // 2. Verificar existencia
   const document = await this.repository.getById(documentId);
   if (!document) {
     throw new Error('Document not found');
   }
-  
+
   // 3. Eliminar
   await this.repository.delete(documentId);
 }
@@ -184,20 +189,20 @@ interface IDocumentRepository {
   // Obtener con filtros y paginación
   getAll(
     filters?: DocumentFilters,
-    pagination?: PaginationOptions
+    pagination?: PaginationOptions,
   ): Promise<PaginatedResult<Document>>;
-  
+
   // Obtener por ID
   getById(id: string): Promise<Document | null>;
-  
+
   // Estadísticas
   countBySource(): Promise<Record<string, number>>;
   countByCategory(): Promise<Record<string, number>>;
-  
+
   // Modificaciones
   delete(id: string): Promise<void>;
   update(id: string, content: string): Promise<Document>;
-  create(document: Omit<Document, 'id'>): Promise<Document>;
+  create(document: Omit<Document, "id">): Promise<Document>;
 }
 ```
 
@@ -235,13 +240,13 @@ npm test
 
 ```typescript
 // DeleteDocumentUseCase.test.ts
-describe('OWASP A01: Broken Access Control', () => {
-  it('should PREVENT regular admin from deleting', async () => {
-    const regularAdmin = AdminUser.create({ role: 'admin' });
-    
-    await expect(
-      deleteUseCase.execute('doc-1', regularAdmin)
-    ).rejects.toThrow('Insufficient permissions');
+describe("OWASP A01: Broken Access Control", () => {
+  it("should PREVENT regular admin from deleting", async () => {
+    const regularAdmin = AdminUser.create({ role: "admin" });
+
+    await expect(deleteUseCase.execute("doc-1", regularAdmin)).rejects.toThrow(
+      "Insufficient permissions",
+    );
   });
 });
 ```
@@ -264,7 +269,7 @@ VITE_SUPABASE_ANON_KEY=eyJhbGciOiJ...
 
 ```sql
 -- En Supabase SQL Editor
-UPDATE auth.users 
+UPDATE auth.users
 SET raw_user_meta_data = '{"role": "super_admin"}'
 WHERE email = 'tu-email@test.com';
 ```
@@ -304,11 +309,13 @@ USING (true);
 ## Roadmap Futuro
 
 ### Fase 2 (Completado ✅)
+
 - [x] **Editar documentos** inline
 - [x] **Re-generar embeddings** tras edición
 - [ ] **Audit log** de cambios
 
 ### Fase 3
+
 - [ ] **Gestión de usuarios admin** (crear, editar roles)
 - [ ] **Exportar/Importar** documentos (JSON/CSV)
 - [ ] **Dashboard de analytics** (consultas más frecuentes)
@@ -327,6 +334,7 @@ USING (true);
 ## Soporte
 
 Para problemas o preguntas:
+
 - 📂 Ver logs en `docs/audit/`
 - 📖 Revisar `ADR-005-admin-panel-rag.md`
 - 🧪 Ejecutar tests: `npm test -- admin`

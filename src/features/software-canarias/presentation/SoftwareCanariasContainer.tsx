@@ -13,6 +13,9 @@ import { Helmet } from "react-helmet-async";
 import {
   SeoFaqSchema,
   LocalBusinessSchema,
+  ServiceSchema,
+  WebApplicationSchema,
+  BreadcrumbListSchema,
   BenefitsGrid,
   HowItWorks,
   StatsBar,
@@ -119,7 +122,7 @@ const SoftwareCanariasContainer: React.FC = () => {
         <meta property="og:type" content="website" />
         <meta
           property="og:image"
-          content="https://digitalizatenerife.es/og-image.jpg"
+          content="https://digitalizatenerife.es/icon.png"
         />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={t.softwareCanariasSeoTitle} />
@@ -142,6 +145,37 @@ const SoftwareCanariasContainer: React.FC = () => {
           addressCountry: "ES",
         }}
         areaServed={["Canarias"]}
+      />
+      <ServiceSchema
+        name="Software para Restaurantes en Canarias"
+        description={t.softwareCanariasSeoDescription}
+        url="https://digitalizatenerife.es/software-restaurantes-canarias"
+        providerName="SmartConnect AI"
+        providerUrl="https://digitalizatenerife.es"
+        providerLogoUrl="https://digitalizatenerife.es/icon.png"
+        areaServed={["Canarias"]}
+        serviceType="HospitalitySoftware"
+      />
+      <WebApplicationSchema
+        name="Panel de Control"
+        description={t.softwareCanariasSeoDescription}
+        url="https://digitalizatenerife.es/software-canarias"
+        offers={{
+          price: "29.90",
+          priceCurrency: "EUR",
+          availability: "https://schema.org/InStock",
+        }}
+        authorName="SmartConnect AI"
+        authorUrl="https://digitalizatenerife.es"
+      />
+      <BreadcrumbListSchema
+        breadcrumbs={[
+          { name: "Inicio", url: "https://digitalizatenerife.es/" },
+          {
+            name: "Software Restaurantes Canarias",
+            url: "https://digitalizatenerife.es/software-restaurantes-canarias",
+          },
+        ]}
       />
 
       <Navbar scrolled={true} />

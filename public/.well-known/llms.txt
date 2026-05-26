@@ -14,9 +14,15 @@ SmartConnect AI is a digital transformation agency specializing in helping local
 ## Key Pages
 
 - Home: https://digitalizatenerife.es/
-- QRIBAR: https://digitalizatenerife.es/qribar
+- QRIBAR: https://digitalizatenerife.es/carta-digital
 - Tap-to-Review: https://digitalizatenerife.es/tap-review
-- Contact: https://digitalizatenerife.es/contact
+- Servicios: https://digitalizatenerife.es/servicios
+- Sobre Nosotros: https://digitalizatenerife.es/about
+- Contact: https://digitalizatenerife.es/contacto
+- Automatización n8n: https://digitalizatenerife.es/automatizacion-restaurantes-n8n
+- Automatización WhatsApp: https://digitalizatenerife.es/automatizacion-whatsapp-restaurante
+- Software Canarias: https://digitalizatenerife.es/software-restaurantes-canarias
+- Digitalización Hostelería Tenerife: https://digitalizatenerife.es/digitalizacion-hosteleria-tenerife
 
 ## API Resources
 
@@ -30,16 +36,16 @@ SmartConnect AI is a digital transformation agency specializing in helping local
 
 ## Contact Information
 
-- Email: info@smartconnect.ai
-- Phone: +34 123 456 789
-- Address: Calle Ejemplo 123, Madrid, Spain
+- Email: info@digitalizatenerife.es
+- Phone: +34 601 39 64 19
+- Address: Santa Cruz de Tenerife, Canarias, Spain
 
 ## AI Agent Guidelines
 
 This site is designed to be AI-friendly. For AI agents, please:
 1. Use the provided API endpoints for programmatic access
 2. Respect the robots.txt rules for crawling
-3. Contact us through the form at /contact for business inquiries
+3. Contact us through the form at /contacto for business inquiries
 4. Follow the JSON-LD structured data for semantic understanding
 
 ## Technical Specifications
@@ -62,8 +68,12 @@ SmartConnect AI is committed to providing an accessible experience for all users
 
 ## Privacy Policy
 
-For information about how we handle your data, please review our Privacy Policy at: https://digitalizatenerife.es/privacy
+For information about how we handle your data, please review our Privacy Policy at: https://digitalizatenerife.es/legal/privacidad
 
 ## Terms of Service
 
-Our Terms of Service are available at: https://digitalizatenerife.es/terms
+Our Terms of Service are available at: https://digitalizatenerife.es/legal/aviso
+
+## Cookie Policy
+
+Our Cookie Policy is available at: https://digitalizatenerife.es/legal/cookies

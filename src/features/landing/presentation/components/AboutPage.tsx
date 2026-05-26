@@ -1,5 +1,5 @@
 import React from "react";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import { useLanguage } from "../../../../shared/context/LanguageContext";
 import { Cpu, Mail, MapPin, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -20,65 +20,69 @@ const AboutPage: React.FC = () => {
           name="description"
           content="SmartConnect AI es una empresa tecnológica con sede en Santa Cruz de Tenerife. Especialistas en IA, automatización y hardware inteligente para negocios locales en Canarias."
         />
-        <meta property="og:title" content="Sobre SmartConnect AI" />
+        <link rel="canonical" href="https://digitalizatenerife.es/about" />
+        <link rel="alternate" hrefLang="es" href="https://digitalizatenerife.es/about" />
+        <link rel="alternate" hrefLang="x-default" href="https://digitalizatenerife.es/about" />
+        <meta property="og:title" content="Sobre SmartConnect AI — Quiénes somos" />
         <meta
           property="og:description"
           content="Conoce al equipo detrás de SmartConnect AI. IA, automatización y hardware inteligente para negocios locales en Tenerife y Canarias."
         />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://digitalizatenerife.es/about" />
-        <link
-          rel="author"
-          href="https://digitalizatenerife.es/about"
-          title="SmartConnect AI"
+        <meta property="og:image" content="https://digitalizatenerife.es/icon.png" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Sobre SmartConnect AI — Quiénes somos" />
+        <meta
+          name="twitter:description"
+          content="Conoce al equipo detrás de SmartConnect AI. IA, automatización y hardware inteligente para negocios locales en Tenerife y Canarias."
         />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "AboutPage",
-              name: "Sobre SmartConnect AI",
+        <meta name="twitter:image" content="https://digitalizatenerife.es/icon.png" />
+        <link rel="author" href="https://digitalizatenerife.es/about" title="SmartConnect AI" />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "AboutPage",
+            name: "Sobre SmartConnect AI",
+            description:
+              "Información sobre SmartConnect AI, empresa tecnológica especializada en IA, automatización y hardware inteligente para negocios locales en Tenerife y Canarias.",
+            mainEntity: {
+              "@type": "Organization",
+              name: "SmartConnect AI",
               description:
-                "Información sobre SmartConnect AI, empresa tecnológica especializada en IA, automatización y hardware inteligente para negocios locales en Tenerife y Canarias.",
-              mainEntity: {
-                "@type": "Organization",
-                name: "SmartConnect AI",
-                description:
-                  "Empresa tecnológica especializada en IA, automatización y hardware inteligente para negocios locales en Tenerife y Canarias.",
-                url: "https://digitalizatenerife.es",
-                logo: {
-                  "@type": "ImageObject",
-                  url: "https://digitalizatenerife.es/icon.png",
-                  width: 512,
-                  height: 512,
-                },
-                email: "info@smartconnect.ai",
-                telephone: "+34922123456",
-                address: {
-                  "@type": "PostalAddress",
-                  streetAddress: "Calle Las Palmas 123",
-                  addressLocality: "Santa Cruz de Tenerife",
-                  addressRegion: "Canary Islands",
-                  postalCode: "38001",
-                  addressCountry: "ES",
-                },
-                foundingDate: "2025",
-                founder: {
-                  "@type": "Person",
-                  name: "SmartConnect AI Team",
-                },
-                sameAs: [
-                  "https://twitter.com/smartconnectai",
-                  "https://linkedin.com/company/smartconnectai",
-                  "https://instagram.com/smartconnectai",
-                  "https://facebook.com/smartconnectai",
-                  "https://youtube.com/@smartconnectai",
-                ],
+                "Empresa tecnológica especializada en IA, automatización y hardware inteligente para negocios locales en Tenerife y Canarias.",
+              url: "https://digitalizatenerife.es",
+              logo: {
+                "@type": "ImageObject",
+                url: "https://digitalizatenerife.es/icon.png",
+                width: 512,
+                height: 512,
               },
-            }),
-          }}
-        />
+              email: "info@digitalizatenerife.es",
+              telephone: "+34922123456",
+              address: {
+                "@type": "PostalAddress",
+                streetAddress: "Calle Las Palmas 123",
+                addressLocality: "Santa Cruz de Tenerife",
+                addressRegion: "Canary Islands",
+                postalCode: "38001",
+                addressCountry: "ES",
+              },
+              foundingDate: "2025",
+              founder: {
+                "@type": "Person",
+                name: "SmartConnect AI Team",
+              },
+              sameAs: [
+                "https://twitter.com/smartconnectai",
+                "https://linkedin.com/company/smartconnectai",
+                "https://instagram.com/smartconnectai",
+                "https://facebook.com/smartconnectai",
+                "https://youtube.com/@smartconnectai",
+              ],
+            },
+          })}
+        </script>
       </Helmet>
 
       <div className="min-h-screen bg-base text-white">
@@ -200,11 +204,11 @@ const AboutPage: React.FC = () => {
                 <h3 className="font-semibold mb-2">Email</h3>
                 <p className="text-white/60 text-sm">
                   <a
-                    href="mailto:info@smartconnect.ai"
+                    href="mailto:info@digitalizatenerife.es"
                     className="text-blue-400 hover:text-blue-300 transition-colors"
                     rel="author"
                   >
-                    info@smartconnect.ai
+                    info@digitalizatenerife.es
                   </a>
                 </p>
               </div>
@@ -240,14 +244,14 @@ const AboutPage: React.FC = () => {
               </Link>
               {" · "}
               <Link
-                to="/servicios"
+                to="/#soluciones"
                 className="text-blue-400/60 hover:text-blue-400 transition-colors"
               >
                 Servicios
               </Link>
               {" · "}
               <Link
-                to="/contacto"
+                to="/#contacto"
                 className="text-blue-400/60 hover:text-blue-400 transition-colors"
               >
                 Contacto

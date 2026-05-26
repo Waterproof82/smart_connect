@@ -505,12 +505,21 @@ npm run build
 
 ```
 dist/
-├── index.html              # Prerendered /
-├── servicios/index.html    # Prerendered /servicios
-├── contacto/index.html     # Prerendered /contacto
-├── assets/                 # JS/CSS bundles
+├── index.html                              # Prerendered /
+├── carta-digital/index.html                # Prerendered /carta-digital
+├── tap-review/index.html                   # Prerendered /tap-review
+├── automatizacion-restaurantes-n8n/        # Prerendered /automatizacion-*
+├── automatizacion-whatsapp-restaurante/
+├── software-restaurantes-canarias/
+├── digitalizacion-hosteleria-tenerife/
+├── about/index.html                        # Prerendered /about
+├── legal/aviso/index.html                  # Prerendered /legal/*
+├── legal/privacidad/index.html
+├── legal/cookies/index.html
+├── _spa.html                               # Fallback para rutas no prerenderizadas
+├── assets/                                 # JS/CSS bundles
 └── server/
-    └── entry-server.js     # SSR build
+    └── entry-server.js                     # SSR build
 ```
 
 ### ⚠️ Known Issues / TODOs
@@ -521,9 +530,305 @@ dist/
 
 ---
 
+---
+
+## 📋 SEO Maintenance Rules (2026-05-16)
+
+Reglas de obligatorio cumplimiento para mantener la calidad SEO del sitio. Toda modificación debe pasar por esta checklist.
+
+### 🔧 Robots.txt
+
+```
+User-agent: Googlebot       ← EXPLÍCITO (no confiar solo en *)
+Allow: /
+
+User-agent: Google-Extended ← AI bots permitidos
+Allow: /
+
+User-agent: *               ← catch-all al FINAL
+Disallow: /admin
+Disallow: /panel
+Disallow: /login
+
+Sitemap: https://digitalizatenerife.es/sitemap.xml
+```
+
+**Reglas:**
+
+- `User-agent: Googlebot` debe estar primero con `Allow: /` explícito
+- `User-agent: *` debe ir al FINAL, solo con `Disallow:` (sin `Allow:` antes de `Disallow:` — confunde parsers)
+- Cada AI bot debe tener su propio bloque `User-agent:` + `Allow: /`
+- No poner directivas `Content-Signal` en robots.txt (son HTTP headers, ver `vercel.json`)
+
+### 🚫 NotFound (404)
+
+`src/features/landing/presentation/components/NotFound.tsx` **SIEMPRE** debe tener:
+
+```tsx
+<Helmet>
+  <title>Página no encontrada - SmartConnect AI</title>
+  <meta name="description" content="La página que buscas no existe..." />
+  <meta name="robots" content="noindex, nofollow" />
+</Helmet>
+```
+
+### 🔄 Sincronización de Rutas (CRÍTICO)
+
+Las rutas públicas deben estar en sync entre **3 archivos**:
+
+| Archivo | Propósito |
+|---|---|
+| `src/main.tsx` | Router SPA cliente (hydration + client-side nav) |
+| `src/entry-server.tsx` | SSR prerender |
+| `scripts/prerender.mjs` | Lista de rutas a prerenderizar |
+
+**Regla:** Toda ruta pública nueva → agregarla en los 3. Si falta en `main.tsx`, los links de footer la muestran como 404. Si falta en `entry-server.tsx` o `prerender.mjs`, Google recibe JS vacío.
+
+**Excepciones (NO van en ninguno de los 3):**
+- Rutas con 301 redirect (`/servicios`, `/contacto`, alias en inglés) → van en `vercel.json` como `redirects`
+- `/admin` y sub-rutas → solo en `main.tsx` (lazy, sin prerender)
+- `*` catch-all → solo en `main.tsx`
+
+### 📍 H1 Único por Ruta
+
+Cada página debe tener EXACTAMENTE UN `<h1>`. No compartir entre rutas.
+
+| Ruta                                   | H1 location                                                       |
+| -------------------------------------- | ----------------------------------------------------------------- |
+| `/`                                    | `Hero.tsx` — `{t.heroTitle} {t.heroTitleAccent} {t.heroTitleEnd}` |
+| `/carta-digital`                       | `CartaDigitalHeroSection.tsx`                                     |
+| `/tap-review`                          | `TapReviewPage.tsx`                                               |
+| `/automatizacion-restaurantes-n8n`     | `PageHero` en `AutomationN8nContainer.tsx`                        |
+| `/automatizacion-whatsapp-restaurante` | `PageHero` en `WhatsappAutomationContainer.tsx`                   |
+| `/software-restaurantes-canarias`      | `PageHero` en `SoftwareCanariasContainer.tsx`                     |
+| `/digitalizacion-hosteleria-tenerife`  | `PageHero` en `DigitalizationTenerifeContainer.tsx`               |
+| `/about`                               | `AboutPage.tsx`                                                   |
+| `/legal/*`                             | `LegalPage.tsx`                                                   |
+| `*` (404)                              | `NotFound.tsx`                                                    |
+
+> **Nota**: `/servicios` y `/contacto` son 301 redirects a `/#contacto` — no tienen H1 propio.
+
+### 🔗 Links Sociales
+
+No dejar URLs con `@TODO` o placeholders. Usar `href="#"` hasta tener la URL real.
+
+**Verificar en:**
+
+- `src/App.tsx` — footer social links
+- `src/features/landing/presentation/components/Contact.tsx` — social icon links
+
+### 🗺️ Sitemap
+
+`public/sitemap.xml` debe incluir:
+
+- ✅ Todas las rutas prerenderizadas
+- ✅ Prioridad: home=1.0, producto=1.0, servicios=0.9, about=0.7, legales=0.3
+- ✅ `<lastmod>` en todas las URLs — Google lo usa para priorizar re-crawl
+- ❌ NO incluir `/admin` o páginas protegidas
+- ❌ NO incluir rutas con 301 redirect (ej. `/servicios`, `/contacto`, alias en inglés)
+
+### ✅ Pre-Deploy Checklist
+
+Antes de cada deploy:
+
+1. `npm run type-check` — 0 errors
+2. `npm run lint` — 0 errors, 0 warnings
+3. `npm run build` — cliente + SSR + prerender exitoso
+4. Verificar `dist/` tenga HTML prerenderizado para todas las rutas públicas
+5. Verificar que `robots.txt` tenga `User-agent: Googlebot` explícito
+6. Verificar sitemap.xml tenga todas las rutas nuevas
+
+---
+
 ## 📝 Notes
 
 - **Helmet Library**: Already installed (`react-helmet`), no additional setup needed
 - **Translation Keys**: Must be added to BOTH language objects to satisfy TypeScript
 - **SDD Profile**: Follows `.opencode/sdd-profile-free.json` with Mistral models for each phase
 - **Engram Memory**: SEO implementation saved to Engram (ID: 1, Topic: `seo/landing-page-i18n`)
+
+---
+
+## 🧩 Structured Data Schema Library & Google Validation (2026-05-17)
+
+### Overview
+
+Expansión de cobertura de datos estructurados con 4 nuevos schemas + fix crítico de validación de Google Rich Results para `ReviewSchema`.
+
+**Date**: 2026-05-17  
+**Audit Log**: `docs/audit/2026-05-16_structured-data-enhancement.md`
+
+---
+
+### New Schemas Added
+
+| Schema                      | `@type`               | `@id`            | Google Rich Results |
+| --------------------------- | --------------------- | ---------------- | ------------------- |
+| `HowToSchema`               | `HowTo`               | _(none)_         | ✅ HowTo            |
+| `CollectionPageSchema`      | `CollectionPage`      | _(none)_         | ✅ Collection       |
+| `SoftwareApplicationSchema` | `SoftwareApplication` | `{url}#software` | ✅ Software App     |
+| `WebApplicationSchema`      | `WebApplication`      | `{url}#webapp`   | ✅ Web App          |
+
+All schemas in `src/shared/presentation/components/SeoSchema.tsx`.
+
+---
+
+### Critical Fix: `ReviewSchema` `itemReviewed`
+
+**Problem**: Google Rich Results Test showed critical error: "El tipo de objeto del campo 'itemReviewed' no es válido".
+
+**Root cause**: The `itemReviewed` field used `@type: "Service"` which is **NOT** a supported type for Google Review rich results.
+
+**Fix flow** (4 iterations):
+
+| Iteration | Change                                                                         | Result                                            |
+| :-------: | ------------------------------------------------------------------------------ | ------------------------------------------------- |
+|     1     | Added `itemReviewed` prop to `ReviewSchema`                                    | ❌ Critical error — `Service` type not supported  |
+|     2     | Added `@id` referencing `#service`                                             | ❌ Same error — `@id` doesn't fix invalid `@type` |
+|     3     | Changed `@type` from `Service` → `SoftwareApplication`                         | ✅ Type accepted, but missing required fields     |
+|     4     | Added `applicationCategory` + `operatingSystem` + `offers` + `aggregateRating` | ✅ All warnings cleared                           |
+
+**Key learnings:**
+
+- `Service` is **not valid** for `itemReviewed` in Google Review snippets
+- Valid types: `Product`, `LocalBusiness`, `SoftwareApplication`, `Book`, `Course`, etc.
+- `SoftwareApplication` requires ≥2 of: `offers`, `aggregateRating`, `applicationCategory`, `operatingSystem`
+- `@id` references do NOT help when the `@type` itself is invalid
+- Best practice: provide all 4 recommended properties to silence warnings
+
+---
+
+### Files Modified
+
+| File                                                                                    | Change                                                  |
+| --------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| `src/shared/presentation/components/SeoSchema.tsx`                                      | Added 4 new schemas + fixed ReviewSchema `itemReviewed` |
+| `src/features/landing/presentation/LandingContainer.tsx`                                | Added `SoftwareApplicationSchema` to `@graph`           |
+| `src/features/tap-review/presentation/TapReviewPage.tsx`                                | Added `WebApplicationSchema`                            |
+| `src/features/whatsapp-automation/presentation/WhatsappAutomationContainer.tsx`         | Added `WebApplicationSchema`                            |
+| `src/features/digitalization-tenerife/presentation/DigitalizationTenerifeContainer.tsx` | Added `WebApplicationSchema` + fixed TS typo            |
+| `src/features/software-canarias/presentation/SoftwareCanariasContainer.tsx`             | Added `WebApplicationSchema`                            |
+| `src/features/automation-n8n/presentation/AutomationN8nContainer.tsx`                   | Added `WebApplicationSchema` (fixed file corruption)    |
+| `src/features/tap-review/presentation/components/FAQ.tsx`                               | Added `SeoFaqSchema` + DOMPurify sanitization           |
+| `src/features/tap-review/presentation/components/HowItWorks.tsx`                        | Added `HowToSchema` + DOMPurify sanitization            |
+| `src/shared/presentation/components/TestimonialCarousel/index.tsx`                      | Added `CollectionPageSchema`                            |
+| `CHANGELOG.md`                                                                          | Updated with all changes                                |
+
+---
+
+### Integration Pattern
+
+```tsx
+// Example: service page with all schemas
+return (
+  <>
+    <Helmet>...</Helmet>
+    <ServiceSchema ... />
+    <WebApplicationSchema ... />
+    <BreadcrumbListSchema ... />
+    {/* Components */}
+  </>
+);
+```
+
+For landing page (`LandingContainer.tsx`), schemas are embedded in the `@graph` array for efficiency.
+
+---
+
+### DOMPurify in Components
+
+When rendering user-facing content from translation keys that goes into JSON-LD:
+
+```tsx
+import DOMPurify from "dompurify";
+
+// Sanitize content for structured data
+DOMPurify.sanitize(t.someKey);
+```
+
+**Note**: `dompurify` is a devDependency but used in component code (imported in FAQ.tsx, HowItWorks.tsx). The `@types/dompurify` is in regular dependencies for type-checking.
+
+---
+
+### Validation
+
+- ✅ `npx tsc --noEmit` — 0 errors
+- ✅ `npx vite build` — exitsoso
+- ✅ Google Rich Results Test — 0 critical errors, 0 warnings (all 4 Review schemas pass)
+- ✅ All 132 Jest tests pass
+
+---
+
+## 🚦 GSC Indexing Fixes & SEO Audit (2026-05-24)
+
+### Overview
+
+Resolución de 4 tipos de problemas reportados en Google Search Console + audit de calidad SEO completo aplicando la skill `audit`.
+
+---
+
+### 🔎 Google Search Console — Problemas Resueltos
+
+| Problema GSC | Causa raíz | Fix |
+|---|---|---|
+| Página con redirección (1) | www → non-www redirect de Vercel (nivel DNS, no code) | — |
+| Duplicada: Google eligió canónica diferente (1) | `/servicios` y `/contacto` renderizaban el mismo contenido que `/` | 301 redirect → `/` y `/#contacto` |
+| Descubierta sin indexar (8) | Alias en inglés servidos como `_spa.html` — Googlebot no ejecuta JS para leer canonicals | 301 redirects en `vercel.json` |
+| Rastreada sin indexar (3) | `/about`, `/legal/*` faltaban en `main.tsx` — footer links mostraban NotFound | Rutas añadidas a `main.tsx` |
+
+#### Redirects 301 añadidos en `vercel.json`
+
+```json
+{ "source": "/automation-n8n",         "destination": "/automatizacion-restaurantes-n8n",    "permanent": true },
+{ "source": "/whatsapp-automation",     "destination": "/automatizacion-whatsapp-restaurante", "permanent": true },
+{ "source": "/software-canarias",       "destination": "/software-restaurantes-canarias",      "permanent": true },
+{ "source": "/digitalization-tenerife", "destination": "/digitalizacion-hosteleria-tenerife",  "permanent": true },
+{ "source": "/servicios",               "destination": "/",                                    "permanent": true },
+{ "source": "/contacto",               "destination": "/#contacto",                            "permanent": true }
+```
+
+> **Aprendizaje clave**: Los alias de rutas en inglés NO deben estar en React Router. Deben ser redirects HTTP en `vercel.json`. Googlebot no ejecuta JavaScript para leer `<link rel="canonical">` en páginas servidas como `_spa.html`.
+
+---
+
+### 🔍 SEO Audit — Fixes Aplicados
+
+#### 🔴 Crítico
+
+**`og:image` inexistente**: 6 páginas referenciaban `og-image.jpg` que no existía en `/public/`. Reemplazado con `icon.png` (sí existe). Páginas afectadas: `TapReviewPage`, `CartaDigitalPremium`, y los 4 containers de servicio.
+
+> **Regla nueva**: Antes de referenciar cualquier asset en `og:image`, verificar que existe en `public/` con `Glob public/*.{jpg,png,webp}`.
+
+#### 🟠 Alto
+
+- **`AboutPage.tsx`**: Añadidos `og:image`, `twitter:card/title/description/image`, `hrefLang` alternates. JSON-LD movido de `dangerouslySetInnerHTML` fuera del `<Helmet>` a `JSON.stringify()` dentro de `<Helmet>` (patrón correcto para SSG).
+- **`LegalPage.tsx`**: Añadidos `og:title/description/type/url/image` y `twitter:card/title/description`. Añadido `sanitizeHTML()` de `@shared/utils/sanitizer` en `dangerouslySetInnerHTML`.
+- **Código muerto eliminado**: `LandingContainer.tsx` + `LandingContainer.test.tsx` — el componente nunca se renderizaba (no estaba en `main.tsx` ni `entry-server.tsx`).
+
+#### 🟡 Medio
+
+- **Sitemap `<lastmod>`**: Añadidas fechas reales a las 11 URLs. Google las usa para priorizar re-crawl.
+- **Prioridades**: `/carta-digital` y `/tap-review` subidas de `0.9` a `1.0` (páginas de máxima conversión).
+
+#### 🟢 Bajo
+
+- **Footer App.tsx**: Añadido enlace "Sobre Nosotros" → `/about` en la columna legal.
+
+---
+
+### 🖼️ Meta Social — Checklist por tipo de página
+
+| Tipo | `og:image` | `twitter:card` | `hrefLang` | canonical |
+|---|---|---|---|---|
+| Landing (`/`) | ✅ icon.png | ✅ summary_large_image | ✅ es + x-default | ✅ |
+| Producto (`/carta-digital`, `/tap-review`) | ✅ icon.png | ✅ | ✅ | ✅ |
+| Servicio (4 containers) | ✅ icon.png | ✅ | ✅ | ✅ |
+| About (`/about`) | ✅ icon.png | ✅ summary_large_image | ✅ es + x-default | ✅ |
+| Legal (`/legal/*`) | ✅ icon.png | ✅ summary | ❌ (no necesario) | ✅ |
+
+---
+
+### 📊 Validation
+
+- ✅ `npx tsc --noEmit` — 0 errors
+- ✅ `npx eslint . --max-warnings 0` — 0 errors, 0 warnings

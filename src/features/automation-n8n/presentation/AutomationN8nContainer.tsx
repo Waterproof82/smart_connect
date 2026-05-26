@@ -12,6 +12,9 @@ import { Helmet } from "react-helmet-async";
 import {
   SeoFaqSchema,
   LocalBusinessSchema,
+  ServiceSchema,
+  WebApplicationSchema,
+  BreadcrumbListSchema,
   BenefitsGrid,
   HowItWorks,
   StatsBar,
@@ -119,7 +122,7 @@ const AutomationN8nContainer: React.FC = () => {
         <meta property="og:type" content="website" />
         <meta
           property="og:image"
-          content="https://digitalizatenerife.es/og-image.jpg"
+          content="https://digitalizatenerife.es/icon.png"
         />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={t.n8nAutomationSeoTitle} />
@@ -146,6 +149,37 @@ const AutomationN8nContainer: React.FC = () => {
           longitude: -16.25462,
         }}
         areaServed={["Tenerife", "Canarias"]}
+      />
+      <ServiceSchema
+        name="Automatización con n8n"
+        description="Flujos de trabajo automatizados que conectan CRM, email, WhatsApp y redes sociales para captación y fidelización de clientes."
+        url="https://digitalizatenerife.es/automatizacion-restaurantes-n8n"
+        providerName="SmartConnect AI"
+        providerUrl="https://digitalizatenerife.es"
+        providerLogoUrl="https://digitalizatenerife.es/icon.png"
+        areaServed={["Tenerife", "Canarias"]}
+        serviceType="WorkflowAutomation"
+      />
+      <BreadcrumbListSchema
+        breadcrumbs={[
+          { name: "Inicio", url: "https://digitalizatenerife.es/" },
+          {
+            name: "Automatización n8n",
+            url: "https://digitalizatenerife.es/automatizacion-restaurantes-n8n",
+          },
+        ]}
+      />
+      <WebApplicationSchema
+        name="Panel de Control Automatización n8n"
+        description="Dashboard web para gestionar automatizaciones, conectar CRMs y analizar flujos de trabajo en tiempo real."
+        url="https://digitalizatenerife.es/automatizacion-restaurantes-n8n"
+        offers={{
+          price: "29.90",
+          priceCurrency: "EUR",
+          availability: "https://schema.org/InStock",
+        }}
+        authorName="SmartConnect AI"
+        authorUrl="https://digitalizatenerife.es"
       />
 
       <Navbar scrolled={true} />

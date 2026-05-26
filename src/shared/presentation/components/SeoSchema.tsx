@@ -12,15 +12,14 @@ interface PageHeroProps {
 
 export const PageHero: React.FC<PageHeroProps> = ({ title, subtitle, cta }) => {
   return (
-    <section className="relative pt-24 pb-16 md:pt-32 md:pb-24 bg-gradient-to-b from-blue-600/20 via-blue-900/10 to-base overflow-hidden">
-      {/* Decorative gradient orbs */}
-      <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-blue-500/10 blur-3xl" />
-      <div className="absolute -bottom-40 -left-40 w-80 h-80 rounded-full bg-purple-500/10 blur-3xl" />
+    <section className="relative pt-24 pb-16 md:pt-32 md:pb-24 bg-[var(--color-bg-alt)] overflow-hidden">
+      <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-[var(--color-primary)]/10 blur-3xl" aria-hidden="true" />
+      <div className="absolute -bottom-40 -left-40 w-80 h-80 rounded-full bg-[var(--color-primary)]/5 blur-3xl" aria-hidden="true" />
       <div className="container mx-auto px-6 text-center relative z-10">
-        <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold text-white mb-4 max-w-4xl mx-auto">
+        <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold text-default mb-4 max-w-4xl mx-auto">
           {title}
         </h1>
-        <p className="text-lg md:text-xl text-white/80 max-w-3xl mx-auto mb-8">
+        <p className="text-lg md:text-xl text-muted max-w-3xl mx-auto mb-8">
           {subtitle}
         </p>
         {cta && (
@@ -151,13 +150,13 @@ export const BenefitsGrid: React.FC<BenefitsGridProps> = ({
   };
 
   return (
-    <section className="py-16 md:py-24 bg-base">
+    <section className="py-16 md:py-24 bg-[var(--color-bg)]">
       <div className="container mx-auto px-6">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-4 text-white">
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-4 text-default">
           {title}
         </h2>
         {subtitle && (
-          <p className="text-lg text-white/70 text-center max-w-2xl mx-auto mb-12">
+          <p className="text-lg text-muted text-center max-w-2xl mx-auto mb-12">
             {subtitle}
           </p>
         )}
@@ -167,15 +166,15 @@ export const BenefitsGrid: React.FC<BenefitsGridProps> = ({
           {benefits.map((benefit, index) => (
             <div
               key={index}
-              className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 hover:border-blue-500/30 transition-all duration-300"
+              className="bg-[var(--color-bg-alt)] rounded-2xl p-6 border border-[var(--color-border)] hover:border-[var(--color-accent-border)] transition-[border-color] duration-150"
             >
-              <div className="w-12 h-12 rounded-lg bg-blue-500/10 flex items-center justify-center mb-4 text-blue-400">
+              <div className="w-12 h-12 rounded-xl bg-[var(--color-accent-subtle)] flex items-center justify-center mb-4 text-[var(--color-primary)]">
                 {benefit.icon}
               </div>
-              <h3 className="text-xl font-semibold text-white mb-2">
+              <h3 className="text-xl font-semibold text-default mb-2">
                 {benefit.title}
               </h3>
-              <p className="text-white/70 leading-relaxed">
+              <p className="text-muted leading-relaxed">
                 {benefit.description}
               </p>
             </div>
@@ -208,33 +207,32 @@ export const HowItWorks: React.FC<HowItWorksProps> = ({
   steps,
 }) => {
   return (
-    <section className="py-16 md:py-24 bg-base/50">
+    <section className="py-16 md:py-24 bg-[var(--color-bg-alt)]">
       <div className="container mx-auto px-6">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-4 text-white">
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-4 text-default">
           {title}
         </h2>
         {subtitle && (
-          <p className="text-lg text-white/70 text-center max-w-2xl mx-auto mb-16">
+          <p className="text-lg text-muted text-center max-w-2xl mx-auto mb-16">
             {subtitle}
           </p>
         )}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
           {steps.map((step, index) => (
             <div key={index} className="text-center relative">
-              {/* Connector line */}
               {index < steps.length - 1 && (
-                <div className="hidden md:block absolute top-8 left-[60%] w-[80%] h-px bg-gradient-to-r from-blue-500/40 to-transparent" />
+                <div className="hidden md:block absolute top-8 left-[60%] w-[80%] h-px bg-gradient-to-r from-[var(--color-primary)]/30 to-transparent" aria-hidden="true" />
               )}
-              <div className="w-16 h-16 rounded-full bg-blue-500/10 border border-blue-500/30 flex items-center justify-center mx-auto mb-4 text-blue-400">
+              <div className="w-16 h-16 rounded-full bg-[var(--color-accent-subtle)] border border-[var(--color-accent-border)] flex items-center justify-center mx-auto mb-4 text-[var(--color-primary)]">
                 {step.icon}
               </div>
-              <div className="w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-bold flex items-center justify-center mx-auto mb-3">
+              <div className="w-8 h-8 rounded-full bg-[var(--color-accent)] text-[var(--color-on-accent)] text-sm font-bold flex items-center justify-center mx-auto mb-3">
                 {step.number}
               </div>
-              <h3 className="text-xl font-semibold text-white mb-2">
+              <h3 className="text-xl font-semibold text-default mb-2">
                 {step.title}
               </h3>
-              <p className="text-white/70 leading-relaxed">
+              <p className="text-muted leading-relaxed">
                 {step.description}
               </p>
             </div>
@@ -262,12 +260,12 @@ export const GeoCoverage: React.FC<GeoCoverageProps> = ({
   serviceArea,
 }) => {
   return (
-    <section className="py-16 md:py-24 bg-base">
+    <section className="py-16 md:py-24 bg-[var(--color-bg)]">
       <div className="container mx-auto px-6">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-4 text-white">
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-4 text-default">
           {title}
         </h2>
-        <p className="text-lg text-white/70 text-center max-w-2xl mx-auto mb-8">
+        <p className="text-lg text-muted text-center max-w-2xl mx-auto mb-8">
           {subtitle}
         </p>
         <div className="max-w-3xl mx-auto text-center">
@@ -275,13 +273,13 @@ export const GeoCoverage: React.FC<GeoCoverageProps> = ({
             {cities.map((city) => (
               <span
                 key={city}
-                className="px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-300 text-sm font-medium"
+                className="px-4 py-2 rounded-full bg-[var(--color-accent-subtle)] border border-[var(--color-accent-border)] text-[var(--color-primary)] text-sm font-medium"
               >
                 {city}
               </span>
             ))}
           </div>
-          <p className="text-white/60 text-sm">{serviceArea}</p>
+          <p className="text-muted text-sm">{serviceArea}</p>
         </div>
       </div>
     </section>
@@ -302,15 +300,15 @@ interface StatsBarProps {
 
 export const StatsBar: React.FC<StatsBarProps> = ({ stats }) => {
   return (
-    <section className="py-12 bg-gradient-to-r from-blue-600/10 to-purple-600/10 border-y border-white/5">
+    <section className="py-12 border-y border-[var(--color-border)] bg-[var(--color-bg-alt)]">
       <div className="container mx-auto px-6">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
           {stats.map((stat, index) => (
             <div key={index} className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-blue-400 mb-1">
+              <div className="text-3xl md:text-4xl font-bold text-[var(--color-primary)] mb-1 tabular-nums">
                 {stat.value}
               </div>
-              <div className="text-sm text-white/60">{stat.label}</div>
+              <div className="text-sm text-muted">{stat.label}</div>
             </div>
           ))}
         </div>
@@ -338,9 +336,9 @@ export const InternalLinks: React.FC<InternalLinksProps> = ({
   links,
 }) => {
   return (
-    <section className="py-16 bg-base/30">
+    <section className="py-16 bg-[var(--color-bg-alt)]">
       <div className="container mx-auto px-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-center mb-8 text-white">
+        <h2 className="text-2xl md:text-3xl font-bold text-center mb-8 text-default">
           {title}
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto">
@@ -348,14 +346,392 @@ export const InternalLinks: React.FC<InternalLinksProps> = ({
             <a
               key={`${link.href}-${link.label}`}
               href={link.href}
-              className="block p-4 rounded-xl bg-white/5 border border-white/10 hover:border-blue-500/30 hover:bg-white/10 transition-all duration-300"
+              className="block p-4 rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)] hover:border-[var(--color-accent-border)] transition-[border-color] duration-150"
             >
-              <h3 className="text-white font-semibold mb-1">{link.label}</h3>
-              <p className="text-white/60 text-sm">{link.description}</p>
+              <h3 className="text-default font-semibold mb-1">{link.label}</h3>
+              <p className="text-muted text-sm">{link.description}</p>
             </a>
           ))}
         </div>
       </div>
     </section>
+  );
+};
+
+// ─── Service Schema ────────────────────────────────────────────
+interface ServiceSchemaProps {
+  name: string;
+  description: string;
+  url: string;
+  providerName: string;
+  providerUrl: string;
+  providerLogoUrl?: string;
+  areaServed?: string[];
+  serviceType?: string;
+}
+
+export const ServiceSchema: React.FC<ServiceSchemaProps> = ({
+  name,
+  description,
+  url,
+  providerName,
+  providerUrl,
+  providerLogoUrl,
+  areaServed,
+  serviceType,
+}) => {
+  const schema: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "@id": `${url}#service`,
+    name,
+    description,
+    url,
+    provider: {
+      "@type": "Organization",
+      name: providerName,
+      url: providerUrl,
+    },
+  };
+  if (providerLogoUrl) {
+    (schema.provider as Record<string, unknown>).logo = {
+      "@type": "ImageObject",
+      url: providerLogoUrl,
+    };
+  }
+  if (areaServed) schema.areaServed = areaServed;
+  if (serviceType) schema.serviceType = serviceType;
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+};
+
+// ─── BreadcrumbList Schema ─────────────────────────────────────
+interface BreadcrumbItem {
+  name: string;
+  url: string;
+}
+
+interface BreadcrumbListSchemaProps {
+  breadcrumbs: BreadcrumbItem[];
+}
+
+export const BreadcrumbListSchema: React.FC<BreadcrumbListSchemaProps> = ({
+  breadcrumbs,
+}) => {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: breadcrumbs.map((crumb, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: crumb.name,
+      item: crumb.url,
+    })),
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+};
+
+// ─── Review Schema ─────────────────────────────────────────────
+interface ReviewSchemaProps {
+  author: string;
+  text: string;
+  rating?: number;
+  datePublished?: string;
+  /** The item being reviewed (required by Schema.org validation).
+   *  Google requires SoftwareApplication to have at least 2 of:
+   *  offers, aggregateRating, applicationCategory, operatingSystem. */
+  itemReviewed?: Record<string, unknown>;
+}
+
+export const ReviewSchema: React.FC<ReviewSchemaProps> = ({
+  author,
+  text,
+  rating = 5,
+  datePublished = new Date().toISOString().split("T")[0],
+  itemReviewed = {
+    "@type": "SoftwareApplication",
+    name: "SmartConnect AI",
+    applicationCategory: "BusinessApplication",
+    operatingSystem: "Web, iOS, Android",
+    offers: {
+      "@type": "Offer",
+      price: "29.90",
+      priceCurrency: "EUR",
+      availability: "https://schema.org/InStock",
+    },
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: "4.9",
+      bestRating: 5,
+      worstRating: 1,
+      ratingCount: 850,
+    },
+  },
+}) => {
+  const schema: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "Review",
+    reviewBody: text,
+    datePublished,
+    itemReviewed,
+    author: {
+      "@type": "Person",
+      name: author,
+    },
+    reviewRating: {
+      "@type": "Rating",
+      ratingValue: rating,
+      bestRating: 5,
+      worstRating: 1,
+    },
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+};
+
+interface CollectionPageItem {
+  name: string;
+  description?: string;
+  image?: string;
+  url?: string;
+}
+
+interface CollectionPageSchemaProps {
+  title: string;
+  description?: string;
+  items: CollectionPageItem[];
+}
+
+export const CollectionPageSchema: React.FC<CollectionPageSchemaProps> = ({
+  title,
+  description,
+  items,
+}) => {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: title,
+    ...(description && {
+      description,
+    }),
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      ...(item.description && {
+        description: item.description,
+      }),
+      ...(item.image && {
+        image: {
+          "@type": "ImageObject",
+          url: item.image,
+        },
+      }),
+      url: item.url,
+    })),
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+};
+
+interface HowToStep {
+  name: string;
+  text: string;
+  image?: string;
+  video?: string;
+  thumbnail?: string;
+}
+
+interface HowToSchemaProps {
+  title: string;
+  description: string;
+  steps: HowToStep[];
+}
+
+export const HowToSchema: React.FC<HowToSchemaProps> = ({
+  title,
+  description,
+  steps,
+}) => {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: title,
+    description,
+    step: steps.map((step, index) => ({
+      "@type": "HowToStep",
+      name: step.name,
+      text: step.text,
+      ...(step.image && {
+        image: {
+          "@type": "ImageObject",
+          url: step.image,
+        },
+      }),
+      ...(step.video && {
+        video: {
+          "@type": "VideoObject",
+          url: step.video,
+          ...(step.thumbnail && {
+            thumbnailUrl: step.thumbnail,
+          }),
+        },
+      }),
+      position: index + 1,
+    })),
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+};
+
+// ─── SoftwareApplication Schema ─────────────────────────────────
+interface SoftwareApplicationSchemaProps {
+  name: string;
+  description: string;
+  url: string;
+  applicationCategory?: string;
+  operatingSystem?: string;
+  offers?: {
+    price: string;
+    priceCurrency: string;
+    availability?: string;
+  };
+  authorName?: string;
+  authorUrl?: string;
+}
+
+export const SoftwareApplicationSchema: React.FC<
+  SoftwareApplicationSchemaProps
+> = ({
+  name,
+  description,
+  url,
+  applicationCategory = "BusinessApplication",
+  operatingSystem = "Web, iOS, Android",
+  offers,
+  authorName,
+  authorUrl,
+}) => {
+  const schema: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "@id": `${url}#software`,
+    name,
+    description,
+    url,
+    applicationCategory,
+    operatingSystem,
+  };
+
+  if (offers) {
+    schema.offers = {
+      "@type": "Offer",
+      price: offers.price,
+      priceCurrency: offers.priceCurrency,
+      ...(offers.availability && { availability: offers.availability }),
+    };
+  }
+
+  if (authorName) {
+    schema.author = {
+      "@type": "Organization",
+      name: authorName,
+      ...(authorUrl && { url: authorUrl }),
+    };
+  }
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+};
+
+// ─── WebApplication Schema (extends SoftwareApplication) ────────
+interface WebApplicationSchemaProps {
+  name: string;
+  description: string;
+  url: string;
+  browserRequirements?: string;
+  applicationCategory?: string;
+  offers?: {
+    price: string;
+    priceCurrency: string;
+    availability?: string;
+  };
+  authorName?: string;
+  authorUrl?: string;
+}
+
+export const WebApplicationSchema: React.FC<WebApplicationSchemaProps> = ({
+  name,
+  description,
+  url,
+  browserRequirements = "Requiere navegador moderno (Chrome, Firefox, Safari, Edge)",
+  applicationCategory = "BusinessApplication",
+  offers,
+  authorName,
+  authorUrl,
+}) => {
+  const schema: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "@id": `${url}#webapp`,
+    name,
+    description,
+    url,
+    applicationCategory,
+    browserRequirements,
+  };
+
+  if (offers) {
+    schema.offers = {
+      "@type": "Offer",
+      price: offers.price,
+      priceCurrency: offers.priceCurrency,
+      ...(offers.availability && { availability: offers.availability }),
+    };
+  }
+
+  if (authorName) {
+    schema.author = {
+      "@type": "Organization",
+      name: authorName,
+      ...(authorUrl && { url: authorUrl }),
+    };
+  }
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
   );
 };
