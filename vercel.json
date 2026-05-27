@@ -28,6 +28,10 @@
       ]
     },
     {
+      "source": "/assets/(.*)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
+    },
+    {
       "source": "/(|about|servicios|carta-digital|tap-review|automatizacion-restaurantes-n8n|automatizacion-whatsapp-restaurante|software-restaurantes-canarias|digitalizacion-hosteleria-tenerife)",
       "headers": [{ "key": "Cache-Control", "value": "public, max-age=3600" }]
     }
