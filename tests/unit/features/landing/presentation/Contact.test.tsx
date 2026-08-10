@@ -32,11 +32,13 @@ jest.mock('@shared/services/settingsService', () => ({
     contactEmail: 'contact@example.com',
     whatsappPhone: '+34600000000',
     physicalAddress: 'Calle de la Innovación, 123',
+    n8nEnabled: false,
+    n8nWebhookUrl: '',
   }),
 }))
 
 jest.mock('@features/landing/presentation/LandingContainer', () => ({
-  getLandingContainer: () => ({
+  createLandingContainer: () => ({
     submitLeadUseCase: {
       execute: jest.fn().mockResolvedValue({ success: true }),
     },

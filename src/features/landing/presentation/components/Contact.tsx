@@ -12,7 +12,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { getAppSettings, AppSettings } from "@shared/services/settingsService";
-import { getLandingContainer } from "../LandingContainer";
+import { createLandingContainer } from "../LandingContainer";
 import { LeadEntity } from "../../domain/entities";
 import { sanitizeInput, isValidEmail } from "@shared/utils/sanitizer";
 import { rateLimiter, RateLimitPresets } from "@shared/utils/rateLimiter";
@@ -142,9 +142,10 @@ export const Contact: React.FC = () => {
 
   const container = useMemo(() => {
     if (isLoadingSettings || !settings) return null;
-    const webhookUrl =
-      settings.n8nWebhookUrl || "https://placeholder-webhook-url.invalid";
-    return getLandingContainer(webhookUrl);
+    return createLandingContainer({
+      n8nEnabled: settings.n8nEnabled,
+      n8nWebhookUrl: settings.n8nWebhookUrl,
+    });
   }, [settings, isLoadingSettings]);
 
   const {
