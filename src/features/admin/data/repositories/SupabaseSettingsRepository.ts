@@ -43,10 +43,13 @@ export class SupabaseSettingsRepository implements ISettingsRepository {
    */
   async updateSettings(updates: SettingsUpdateInput): Promise<Settings> {
     // Construir payload solo con los campos proporcionados
-    const updateData: Record<string, string> = {};
+    const updateData: Record<string, string | boolean> = {};
 
     if (updates.n8nWebhookUrl !== undefined) {
       updateData.n8n_webhook_url = updates.n8nWebhookUrl;
+    }
+    if (updates.n8nEnabled !== undefined) {
+      updateData.n8n_enabled = updates.n8nEnabled;
     }
     if (updates.contactEmail !== undefined) {
       updateData.contact_email = updates.contactEmail;
@@ -84,6 +87,7 @@ export class SupabaseSettingsRepository implements ISettingsRepository {
     return Settings.create({
       id: row.id as string,
       n8nWebhookUrl: (row.n8n_webhook_url as string) || "",
+      n8nEnabled: (row.n8n_enabled as boolean) ?? false,
       contactEmail: (row.contact_email as string) || "",
       whatsappPhone: (row.whatsapp_phone as string) || "",
       physicalAddress: (row.physical_address as string) || "",

@@ -9,6 +9,7 @@
 export interface SettingsProps {
   id: string;
   n8nWebhookUrl: string;
+  n8nEnabled: boolean;
   contactEmail: string;
   whatsappPhone: string;
   physicalAddress: string;
@@ -17,15 +18,24 @@ export interface SettingsProps {
 }
 
 export class Settings {
-  private constructor(
-    public readonly id: string,
-    public readonly n8nWebhookUrl: string,
-    public readonly contactEmail: string,
-    public readonly whatsappPhone: string,
-    public readonly physicalAddress: string,
-    public readonly createdAt: Date,
-    public readonly updatedAt: Date
-  ) {
+  public readonly id: string;
+  public readonly n8nWebhookUrl: string;
+  public readonly n8nEnabled: boolean;
+  public readonly contactEmail: string;
+  public readonly whatsappPhone: string;
+  public readonly physicalAddress: string;
+  public readonly createdAt: Date;
+  public readonly updatedAt: Date;
+
+  private constructor(props: SettingsProps) {
+    this.id = props.id;
+    this.n8nWebhookUrl = props.n8nWebhookUrl;
+    this.n8nEnabled = props.n8nEnabled;
+    this.contactEmail = props.contactEmail;
+    this.whatsappPhone = props.whatsappPhone;
+    this.physicalAddress = props.physicalAddress;
+    this.createdAt = props.createdAt;
+    this.updatedAt = props.updatedAt;
     this.validate();
   }
 
@@ -33,15 +43,7 @@ export class Settings {
    * Factory method para crear Settings
    */
   static create(props: SettingsProps): Settings {
-    return new Settings(
-      props.id,
-      props.n8nWebhookUrl,
-      props.contactEmail,
-      props.whatsappPhone,
-      props.physicalAddress,
-      props.createdAt,
-      props.updatedAt
-    );
+    return new Settings(props);
   }
 
   /**
@@ -49,15 +51,16 @@ export class Settings {
    */
   static createDefault(): Settings {
     const now = new Date();
-    return new Settings(
-      'global',
-      '',
-      '',
-      '',
-      '',
-      now,
-      now
-    );
+    return new Settings({
+      id: 'global',
+      n8nWebhookUrl: '',
+      n8nEnabled: false,
+      contactEmail: '',
+      whatsappPhone: '',
+      physicalAddress: '',
+      createdAt: now,
+      updatedAt: now,
+    });
   }
 
   /**
@@ -99,15 +102,16 @@ export class Settings {
    * Crea una copia con valores actualizados
    */
   withUpdates(updates: Partial<Omit<SettingsProps, 'id' | 'createdAt' | 'updatedAt'>>): Settings {
-    return new Settings(
-      this.id,
-      updates.n8nWebhookUrl ?? this.n8nWebhookUrl,
-      updates.contactEmail ?? this.contactEmail,
-      updates.whatsappPhone ?? this.whatsappPhone,
-      updates.physicalAddress ?? this.physicalAddress,
-      this.createdAt,
-      new Date()
-    );
+    return new Settings({
+      id: this.id,
+      n8nWebhookUrl: updates.n8nWebhookUrl ?? this.n8nWebhookUrl,
+      n8nEnabled: updates.n8nEnabled ?? this.n8nEnabled,
+      contactEmail: updates.contactEmail ?? this.contactEmail,
+      whatsappPhone: updates.whatsappPhone ?? this.whatsappPhone,
+      physicalAddress: updates.physicalAddress ?? this.physicalAddress,
+      createdAt: this.createdAt,
+      updatedAt: new Date(),
+    });
   }
 
   /**
