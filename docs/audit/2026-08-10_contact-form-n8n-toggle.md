@@ -3,7 +3,7 @@
 **Date**: 2026-08-10
 **Author**: SDD Pipeline (sdd-apply agent)
 **Change**: `contact-form-n8n-toggle`
-**Status**: Code-complete, delivered as 4 chained PR slices (uncommitted working tree at end of PR4 — commits left for the user to split)
+**Status**: **Shipped and verified in production.** Delivered as 4 chained work-unit commits on `feature/contact-form-n8n-toggle`, merged to `main` via [PR #45](https://github.com/Waterproof82/smart_connect/pull/45), deployed to `https://digitalizatenerife.es/` by Vercel. Migration applied and verified on the live Supabase project. User confirmed a real Brevo email send to `info@digitalizatenerife.es` worked, and confirmed the contact form works end-to-end in production.
 
 ---
 
@@ -59,14 +59,20 @@ Resolved as chained PRs (`stacked-to-main`), 4 work units, due to a High 400-lin
 
 ---
 
-## Outstanding Manual Items (carried, not part of PR4's code scope)
+## Outstanding Manual Items — Resolved Post-Apply
 
-- Apply migration `supabase/migrations/20260810120000_add_n8n_enabled_to_app_settings.sql` to the live Supabase project, if not already applied (no `apply_migration` MCP tool was available during PR1's apply batch).
-- Confirm the Brevo sender `info@digitalizatenerife.es` is verified in Brevo (the user reported setting `BREVO_API_KEY` already; sender verification was flagged as possibly still pending).
+- ✅ Migration applied via `mcp__supabase__apply_migration` and verified with a direct `information_schema.columns` query against the live project (`n8n_enabled boolean not null default false` confirmed present).
+- ✅ `notify-lead` deployed via `mcp__supabase__deploy_edge_function` (version 1, `ACTIVE`).
+- ✅ `BREVO_API_KEY` secret configured by the user.
+- ✅ Brevo sender `info@digitalizatenerife.es` verified by the user (confirmed via a real manual send before the merge).
+- ✅ 4 commits split by work unit, pushed to `feature/contact-form-n8n-toggle`, opened as PR #45, merged to `main`.
+- ✅ User confirmed the contact form works end-to-end in production after the Vercel deploy.
 
-## Open Risk Carried From PR3 (unchanged by PR4)
+## Risk Carried From PR3 — Accepted by User
 
-The spec's "Runtime Toggle Respects Latest Settings" scenario describes a visitor already on the landing page (same tab, no reload) observing a newly-saved `n8nEnabled` value. `Contact.tsx` fetches settings once on mount and does not poll or refetch. The `LandingContainer` singleton bug that would have made this WORSE (stale container even across reloads) was fixed in PR3, but true same-tab-without-reload propagation was never in scope for any of the 4 units and remains unaddressed. `Contact.tsx` has no executable Jest coverage under the current config, so this cannot be proven or disproven by an automated test in this repo today. Flagged again here for `sdd-verify`.
+The spec's "Runtime Toggle Respects Latest Settings" scenario describes a visitor already on the landing page (same tab, no reload) observing a newly-saved `n8nEnabled` value. `Contact.tsx` fetches settings once on mount and does not poll or refetch. The `LandingContainer` singleton bug that would have made this WORSE (stale container even across reloads, or across separate page loads) was fixed in PR3; true same-tab-without-reload propagation to an already-open tab was never in scope for any of the 4 units.
+
+**User decision (2026-08-10)**: accepted as-is. Toggling `n8nEnabled` is expected to be an infrequent, deliberate admin action; a visitor with the contact page already open picking up the change only after a reload is an acceptable tradeoff. No follow-up work item opened.
 
 ---
 
