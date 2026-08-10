@@ -250,6 +250,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
             }}
           >
             <button
+              type="button"
               className="flex items-center gap-1.5 hover:text-[var(--color-text)] transition-colors min-h-[48px] px-2 outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-lg"
               aria-haspopup="true"
               aria-expanded={isDropdownOpen}
@@ -321,6 +322,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
 
         {/* Hamburger for mobile */}
         <button
+          type="button"
           className="md:hidden flex items-center justify-center w-12 h-12 rounded-xl bg-[var(--color-accent)] text-[var(--color-on-accent)]"
           onClick={() => setIsMobileMenuOpen(true)}
           aria-label="Abrir menú de navegación"
@@ -364,6 +366,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
                 <div className="flex items-center gap-2">
                   <LanguageSelector />
                   <button
+                    type="button"
                     onClick={closeMobileMenu}
                     className="text-default p-2 rounded-lg focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)]"
                     aria-label="Cerrar menu"

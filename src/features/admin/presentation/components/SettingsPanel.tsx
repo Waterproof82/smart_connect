@@ -156,6 +156,7 @@ export const SettingsPanel: React.FC = () => {
           </p>
         </div>
         <button
+          type="button"
           onClick={loadSettings}
           className="p-3 min-w-[44px] min-h-[44px] flex items-center justify-center text-muted hover:text-default hover:bg-[var(--color-surface)] rounded-lg transition-colors"
           aria-label="Recargar configuración"
