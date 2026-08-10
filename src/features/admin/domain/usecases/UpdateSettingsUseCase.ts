@@ -30,6 +30,21 @@ export class UpdateSettingsUseCase {
       throw new Error('Invalid n8n webhook URL format');
     }
 
+    // Transition guard: enabling n8n requires a valid webhook URL,
+    // either in this update or already stored (ADR-7)
+    if (updates.n8nEnabled === true) {
+      if (updates.n8nWebhookUrl !== undefined) {
+        if (!updates.n8nWebhookUrl) {
+          throw new Error('Para activar n8n necesitás una URL de webhook válida');
+        }
+      } else {
+        const currentSettings = await this.settingsRepository.getSettings();
+        if (!currentSettings.n8nWebhookUrl) {
+          throw new Error('Para activar n8n necesitás una URL de webhook válida');
+        }
+      }
+    }
+
     return await this.settingsRepository.updateSettings(updates);
   }
 
