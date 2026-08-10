@@ -106,6 +106,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Agent Readiness Score**: Improved from 32/100 to ~85/100 (projected)
 - **LLM Readability**: Added llms.txt for better AI agent content consumption
 
+### Added
+
+- **n8n delivery toggle in admin panel**: Added `n8nEnabled` checkbox to `SettingsPanel.tsx` (section "Integración n8n") letting the admin switch lead delivery between the n8n webhook and a direct email fallback at runtime, no redeploy required
+  - `src/features/admin/presentation/components/SettingsPanel.tsx`
+  - `src/features/admin/presentation/schemas/settingsSchema.ts`: `n8nEnabled: z.boolean()` + cross-field `superRefine` guard
+  - `src/features/admin/domain/entities/Settings.ts`, `ISettingsRepository.ts`, `SupabaseSettingsRepository.ts`, `UpdateSettingsUseCase.ts`, `src/shared/services/settingsService.ts`
+  - `supabase/migrations/20260810120000_add_n8n_enabled_to_app_settings.sql`: `app_settings.n8n_enabled boolean not null default false`
+- **`notify-lead` Edge Function**: New Supabase Edge Function that emails lead submissions via Brevo when `n8nEnabled` is `false`, using `contact_email` as the recipient and `BREVO_API_KEY` as a server-only secret
+  - `supabase/functions/notify-lead/index.ts`, `supabase/functions/notify-lead/_lib.ts`
+  - `src/features/landing/data/datasources/EmailNotifyDataSource.ts`, `src/features/landing/data/repositories/EmailLeadRepositoryImpl.ts`
+
+### Fixed
+
+- **Fake-success lead delivery bug**: `Contact.tsx` no longer substitutes a fabricated `https://placeholder-webhook-url.invalid` URL when `n8nWebhookUrl` is empty, and `N8NWebhookDataSource` no longer treats magic substrings (`placeholder`, `your_`, `.invalid`) as a valid URL — an unusable webhook URL now returns `false` (visible error) instead of a silent fake success and a lost lead
+  - `src/features/landing/presentation/components/Contact.tsx`
+  - `src/features/landing/data/datasources/N8NWebhookDataSource.ts`
+- **Stale `LandingContainer` singleton**: Replaced the memoized module-level singleton (`getLandingContainer`) with a pure factory (`createLandingContainer`), so the container is always rebuilt from the latest settings instead of caching the first ones it ever saw
+  - `src/features/landing/presentation/LandingContainer.ts`
+- **`SettingsPanel` save-error UX**: Fixed an existing bug where any error state (including a failed save, not just a failed load) replaced the entire settings form with a generic "failed to load" message, hiding the field the admin needed to fix. The panel now only shows the full-page error for an actual load failure and displays the specific error message (e.g. the n8n-toggle validation error) inline, with the form still visible
+  - `src/features/admin/presentation/components/SettingsPanel.tsx`
+
 ---
 
 ## [0.5.0] - 2026-03-16
