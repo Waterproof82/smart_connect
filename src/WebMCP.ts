@@ -40,21 +40,13 @@ const tools: ToolDescriptor[] = [
   {
     name: "get_product_info",
     description:
-      "Get detailed information about SmartConnect products: QRIBAR (digital menu), Tap-to-Review NFC cards, Carta Digital Premium, n8n automation, WhatsApp automation, and software solutions for Canary Islands hospitality businesses.",
+      "Get detailed information about SmartConnect's two solutions: Carta Digital Premium (digital menu, includes a QRIBAR live-demo link) and Tap-to-Review NFC cards, for Canary Islands hospitality businesses.",
     inputSchema: {
       type: "object",
       properties: {
         product: {
           type: "string",
-          enum: [
-            "qribar",
-            "tap-review",
-            "carta-digital",
-            "n8n-automation",
-            "whatsapp-automation",
-            "software-canarias",
-            "digitalization-tenerife",
-          ],
+          enum: ["carta-digital", "tap-review"],
           description: "The product or service to get information about.",
         },
         language: {
@@ -67,33 +59,13 @@ const tools: ToolDescriptor[] = [
     },
     execute: (args: Record<string, unknown>): ToolResult => {
       const productMap: Record<string, { es: string; en: string }> = {
-        qribar: {
-          es: "QRIBAR: Menú digital con pedidos en tiempo real desde la mesa a barra y cocina. Sin comisiones. Los clientes escanean un código QR en la mesa, exploran platos con fotos y vídeos, y envían el pedido directamente.",
-          en: "QRIBAR: Digital menu with real-time orders from table to bar and kitchen. No commissions. Customers scan a QR code at the table, browse dishes with photos and videos, and send orders directly.",
-        },
         "tap-review": {
           es: "Tap-to-Review NFC: Tarjetas NFC para que los clientes dejen reseñas en Google con un solo toque. Pago único, sin suscripciones. Incluye expositor de mesa y soporte 24/7.",
           en: "Tap-to-Review NFC: NFC cards for customers to leave Google reviews with one tap. One-time payment, no subscriptions. Includes table stand and 24/7 support.",
         },
         "carta-digital": {
-          es: "Carta Digital Premium: Menú digital avanzado con fotos, vídeos, 5 idiomas, pedidos por WhatsApp y base de datos propia de clientes. 0% comisiones.",
-          en: "Carta Digital Premium: Advanced digital menu with photos, videos, 5 languages, WhatsApp orders, and your own customer database. 0% commissions.",
-        },
-        "n8n-automation": {
-          es: "Automatización n8n: Flujos de trabajo que conectan CRM, email, WhatsApp y redes sociales. Automatiza captación, análisis de sentimiento y notificaciones.",
-          en: "n8n Automation: Workflows connecting CRM, email, WhatsApp and social media. Automatize lead capture, sentiment analysis, and notifications.",
-        },
-        "whatsapp-automation": {
-          es: "Automatización WhatsApp: Respuestas automáticas 24/7 para reservas, consultas y pedidos. Se integra con tu número existente de WhatsApp Business.",
-          en: "WhatsApp Automation: 24/7 automatic responses for reservations, inquiries, and orders. Integrates with your existing WhatsApp Business number.",
-        },
-        "software-canarias": {
-          es: "Software para Canarias: Soluciones digitales para restaurantes canarios. Desarrollo de software a medida, integración con sistemas existentes y soporte local en Tenerife.",
-          en: "Software for Canary Islands: Digital solutions for Canarian restaurants. Custom software development, integration with existing systems, and local support in Tenerife.",
-        },
-        "digitalization-tenerife": {
-          es: "Digitalización Tenerife: Transformación digital completa para negocios en Tenerife. Desde menús digitales hasta automatización con IA.",
-          en: "Digitalization Tenerife: Complete digital transformation for businesses in Tenerife. From digital menus to AI automation.",
+          es: "Carta Digital Premium: Menú digital avanzado con fotos, vídeos, 5 idiomas, pedidos por WhatsApp y base de datos propia de clientes. 0% comisiones. Incluye un enlace a la demo en vivo de QRIBAR.",
+          en: "Carta Digital Premium: Advanced digital menu with photos, videos, 5 languages, WhatsApp orders, and your own customer database. 0% commissions. Includes a link to the QRIBAR live demo.",
         },
       };
 
@@ -108,17 +80,8 @@ const tools: ToolDescriptor[] = [
       }
 
       const urls: Record<string, string> = {
-        qribar: "https://digitalizatenerife.es/carta-digital",
-        "tap-review": "https://digitalizatenerife.es/tap-review",
-        "carta-digital": "https://digitalizatenerife.es/carta-digital",
-        "n8n-automation":
-          "https://digitalizatenerife.es/automatizacion-restaurantes-n8n",
-        "whatsapp-automation":
-          "https://digitalizatenerife.es/automatizacion-whatsapp-restaurante",
-        "software-canarias":
-          "https://digitalizatenerife.es/software-restaurantes-canarias",
-        "digitalization-tenerife":
-          "https://digitalizatenerife.es/digitalizacion-hosteleria-tenerife",
+        "tap-review": "https://digitalizatenerife.es/#tarjetas-nfc",
+        "carta-digital": "https://digitalizatenerife.es/#carta-digital",
       };
 
       return tk(
@@ -189,13 +152,8 @@ const tools: ToolDescriptor[] = [
           [
             "SmartConnect AI — Products & Services",
             "",
-            "1. QRIBAR — Digital menu with real-time orders (no commissions)",
+            "1. Carta Digital Premium — Premium digital menu with 5 languages (includes a QRIBAR live-demo link)",
             "2. Tap-to-Review NFC — Google review NFC cards",
-            "3. Carta Digital Premium — Premium digital menu with 5 languages",
-            "4. n8n Automation — Workflow automation for hospitality",
-            "5. WhatsApp Automation — 24/7 automated messaging",
-            "6. Software Canarias — Custom software for Canary Islands businesses",
-            "7. Digitalización Tenerife — Complete digital transformation in Tenerife",
             "",
             "Website: https://digitalizatenerife.es",
           ].join("\n"),
@@ -205,13 +163,8 @@ const tools: ToolDescriptor[] = [
         [
           "SmartConnect AI — Productos y Servicios",
           "",
-          "1. QRIBAR — Menú digital con pedidos en tiempo real (sin comisiones)",
+          "1. Carta Digital Premium — Menú digital premium con 5 idiomas (incluye enlace a la demo de QRIBAR)",
           "2. Tap-to-Review NFC — Tarjetas NFC para reseñas en Google",
-          "3. Carta Digital Premium — Menú digital premium con 5 idiomas",
-          "4. Automatización n8n — Automatización de flujos para hostelería",
-          "5. Automatización WhatsApp — Mensajería automatizada 24/7",
-          "6. Software Canarias — Software a medida para empresas canarias",
-          "7. Digitalización Tenerife — Transformación digital completa en Tenerife",
           "",
           "Web: https://digitalizatenerife.es",
         ].join("\n"),
@@ -233,10 +186,6 @@ const tools: ToolDescriptor[] = [
             "/contacto",
             "/carta-digital",
             "/tap-review",
-            "/automatizacion-restaurantes-n8n",
-            "/automatizacion-whatsapp-restaurante",
-            "/software-restaurantes-canarias",
-            "/digitalizacion-hosteleria-tenerife",
             "/about",
             "/legal/aviso",
             "/legal/privacidad",

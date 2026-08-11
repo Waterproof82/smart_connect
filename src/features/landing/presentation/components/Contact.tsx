@@ -18,7 +18,26 @@ import { sanitizeInput, isValidEmail } from "@shared/utils/sanitizer";
 import { rateLimiter, RateLimitPresets } from "@shared/utils/rateLimiter";
 import { contactSchema, ContactFormData } from "../schemas/contactSchema";
 import { useIntersectionObserver } from "@shared/hooks";
-import { useLanguage } from "@shared/context/LanguageContext";
+import { useLanguage, Translation } from "@shared/context/LanguageContext";
+import { SOLUTIONS } from "@shared/config/solutions";
+
+// Label translation key per solution id — the option `value` itself
+// (`serviceValue`) comes straight from SOLUTIONS so it never drifts from
+// the catalog. "Consultoría IA" is an evergreen catch-all option with no
+// dedicated solution page, so it's appended separately.
+const SERVICE_LABEL_KEY: Record<string, keyof Translation> = {
+  "carta-digital": "serviceCartaDigital",
+  "tarjetas-nfc": "serviceNFC",
+};
+
+const SERVICE_OPTIONS: Array<{ value: string; labelKey: keyof Translation }> =
+  [
+    ...SOLUTIONS.map((solution) => ({
+      value: solution.serviceValue,
+      labelKey: SERVICE_LABEL_KEY[solution.id],
+    })),
+    { value: "Consultoría IA", labelKey: "serviceConsultoria" as const },
+  ];
 
 const fieldClasses =
   "w-full border rounded-2xl py-3 sm:py-4 px-4 sm:px-6 outline-none transition-colors text-sm text-default bg-[var(--color-surface)] border-[var(--color-border)] focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--focus-ring)] min-h-[44px]";
@@ -557,21 +576,11 @@ export const Contact: React.FC = () => {
                       <option value="" className="text-muted">
                         {t.contactSelectOption}
                       </option>
-                      <option value="Carta Digital Premium">
-                        {t.serviceCartaDigital}
-                      </option>
-                      <option value="QRIBAR - Menú Digital">
-                        {t.serviceQribar}
-                      </option>
-                      <option value="Automatización n8n">
-                        {t.serviceAutomation}
-                      </option>
-                      <option value="Tarjetas NFC Reseñas">
-                        {t.serviceNFC}
-                      </option>
-                      <option value="Consultoría IA">
-                        {t.serviceConsultoria}
-                      </option>
+                      {SERVICE_OPTIONS.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {t[option.labelKey]}
+                        </option>
+                      ))}
                     </select>
                     <ChevronDown
                       aria-hidden="true"

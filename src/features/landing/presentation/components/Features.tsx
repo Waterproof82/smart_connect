@@ -1,66 +1,42 @@
 import React, { useRef, useState, useEffect } from "react";
-import {
-  Code2,
-  Settings2,
-  Smartphone,
-  Utensils,
-  ArrowUpRight,
-  Sparkles,
-} from "lucide-react";
-import { Link } from "react-router-dom";
+import { Smartphone, Utensils, ArrowUpRight } from "lucide-react";
 import { useIntersectionObserver } from "@shared/hooks";
 import { useLanguage, Translation } from "@shared/context/LanguageContext";
+import { SOLUTIONS } from "@shared/config/solutions";
 
-const solutions = [
+// Features-specific presentation metadata per solution id. Marketing copy
+// here intentionally differs from the compact Navbar dropdown copy, so it
+// stays local instead of living on SolutionConfig.
+const FEATURES_PRESENTATION: Record<
+  string,
   {
-    id: "software-ia",
-    icon: <Code2 className="w-6 h-6 text-[var(--color-icon-blue)]" />,
-    titleKey: "featuresSoftwareIA",
-    descriptionKey: "featuresSoftwareIADesc",
-    serviceValue: "Consultoría IA",
-    hasImage: true,
-    internal: true,
-    route: "/software-restaurantes-canarias",
-  },
-  {
-    id: "automatizacion-n8n",
-    icon: <Settings2 className="w-6 h-6 text-[var(--color-icon-purple)]" />,
-    titleKey: "featuresAutomation",
-    descriptionKey: "featuresAutomationDesc",
-    serviceValue: "Automatización n8n",
-    internal: true,
-    route: "/automatizacion-restaurantes-n8n",
-  },
-  {
-    id: "tarjetas-nfc",
-    icon: <Smartphone className="w-6 h-6 text-[var(--color-icon-emerald)]" />,
-    titleKey: "featuresNFC",
-    descriptionKey: "featuresNFCDesc",
-    serviceValue: "Tarjetas NFC Reseñas",
-    hasImage: true,
-    internal: true,
-    route: "/tap-review",
-  },
-  {
-    id: "qribar",
-    icon: <Utensils className="w-6 h-6 text-[var(--color-icon-amber)]" />,
-    titleKey: "featuresQribar",
-    descriptionKey: "featuresQribarDesc",
-    serviceValue: "QRIBAR",
-    external: true,
-    href: "https://qribar.es",
-  },
-  {
-    id: "carta-digital",
+    icon: React.ReactNode;
+    titleKey: keyof Translation;
+    descriptionKey: keyof Translation;
+    hasImage?: boolean;
+    hasVideo?: boolean;
+  }
+> = {
+  "carta-digital": {
     icon: <Utensils className="w-6 h-6 text-[var(--color-icon-emerald)]" />,
     titleKey: "featuresCartaDigital",
     descriptionKey: "featuresCartaDigitalDesc",
-    serviceValue: "Carta Digital Premium",
-    internal: true,
-    route: "/carta-digital",
     hasVideo: true,
   },
-];
+  "tarjetas-nfc": {
+    icon: <Smartphone className="w-6 h-6 text-[var(--color-icon-emerald)]" />,
+    titleKey: "featuresNFC",
+    descriptionKey: "featuresNFCDesc",
+    hasImage: true,
+  },
+};
+
+const solutions = SOLUTIONS.map((solution) => ({
+  id: solution.id,
+  href: solution.href,
+  serviceValue: solution.serviceValue,
+  ...FEATURES_PRESENTATION[solution.id],
+}));
 
 const getCardBackground = (
   itemHasImage: boolean | undefined,
@@ -84,126 +60,7 @@ const getIconContainerClass = (idx: number): string => {
   return `relative z-10 mb-6 w-14 h-14 bg-[var(--color-surface)] rounded-2xl flex items-center justify-center motion-safe:group-hover:scale-110 transition-transform duration-150 ease-[var(--ease-out)] ${idx === 0 ? "lg:w-16 lg:h-16" : ""}`;
 };
 
-const getLinkText = (item: (typeof solutions)[0], t: Translation): string => {
-  if (item.external) return t.featuresVisit;
-  return t.featuresDetails;
-};
-
-const getLinkHref = (item: (typeof solutions)[0]): string => {
-  if (item.internal && item.route) return item.route;
-  if (item.external && item.href) return item.href;
-  // Include service as hash query param - will be parsed by Contact.tsx
-  return `#contacto?servicio=${encodeURIComponent(item.serviceValue)}`;
-};
-
-const SoftwareIAAbstract = () => (
-  <div className="absolute inset-0 overflow-hidden rounded-3xl pointer-events-none">
-    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300%] h-[300%]">
-      <div className="absolute top-1/4 left-1/4 w-48 h-48 bg-[var(--color-primary)]/20 rounded-full blur-3xl motion-safe:animate-pulse"></div>
-      <div
-        className="absolute top-1/3 right-1/4 w-32 h-32 bg-[var(--color-icon-purple)]/20 rounded-full blur-2xl motion-safe:animate-pulse"
-        style={{ animationDelay: "1s" }}
-      ></div>
-      <div
-        className="absolute bottom-1/3 left-1/3 w-40 h-40 bg-[var(--color-icon-blue)]/15 rounded-full blur-2xl motion-safe:animate-pulse"
-        style={{ animationDelay: "2s" }}
-      ></div>
-    </div>
-    <svg
-      className="absolute inset-0 w-full h-full opacity-30"
-      viewBox="0 0 400 400"
-      preserveAspectRatio="xMidYMid slice"
-    >
-      <defs>
-        <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-          <path
-            d="M 40 0 L 0 0 0 40"
-            fill="none"
-            stroke="var(--color-primary)"
-            strokeWidth="0.5"
-            className="text-[var(--color-primary)]"
-          />
-        </pattern>
-        <linearGradient id="glow" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop
-            offset="0%"
-            stopColor="var(--color-primary)"
-            stopOpacity="0.3"
-          />
-          <stop
-            offset="100%"
-            stopColor="var(--color-icon-purple)"
-            stopOpacity="0.1"
-          />
-        </linearGradient>
-      </defs>
-      <rect
-        width="400"
-        height="400"
-        fill="url(#grid)"
-        className="text-[var(--color-border)]"
-      />
-      <circle
-        cx="200"
-        cy="200"
-        r="120"
-        fill="none"
-        stroke="url(#glow)"
-        strokeWidth="0.5"
-        strokeDasharray="4 8"
-      />
-    </svg>
-    <div className="absolute inset-0 flex items-center justify-center">
-      <div className="relative">
-        <div className="flex items-center gap-1 text-[var(--color-primary)] opacity-40">
-          {BAR_HEIGHTS.map((height) => (
-            <div
-              key={`bar-height-${height}`}
-              className="w-1 bg-current rounded-full motion-safe:animate-pulse"
-              style={{
-                height: `${height}px`,
-                animationDelay: `${BAR_HEIGHTS.indexOf(height) * 0.15}s`,
-              }}
-            />
-          ))}
-        </div>
-        <Sparkles
-          className="absolute -top-4 -right-8 w-6 h-6 text-[var(--color-accent)] opacity-60 animate-spin"
-          style={{ animationDuration: "3s" }}
-        />
-      </div>
-    </div>
-  </div>
-);
-
-const BAR_HEIGHTS = [16, 28, 12, 24, 20];
-
-const LinkWrapper: React.FC<{
-  href: string;
-  external?: boolean;
-  internal?: boolean;
-  route?: string;
-  children: React.ReactNode;
-  className?: string;
-}> = ({ href, external, internal, route, children, className }) => {
-  if (internal && route) {
-    return (
-      <Link to={route} className={className}>
-        {children}
-      </Link>
-    );
-  }
-  return (
-    <a
-      href={href}
-      target={external ? "_blank" : undefined}
-      rel={external ? "noopener noreferrer" : undefined}
-      className={className}
-    >
-      {children}
-    </a>
-  );
-};
+const getLinkText = (t: Translation): string => t.featuresDetails;
 
 const VideoPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(true);
@@ -312,7 +169,6 @@ export const Features: React.FC = () => {
             } ${getCardBackground(item.hasImage, idx)}`}
             style={{ transitionDelay: `${idx * 60}ms` }}
           >
-            {item.hasImage && idx === 0 && <SoftwareIAAbstract />}
             <div className={getIconContainerClass(idx)}>{item.icon}</div>
             <h3 className={getCardHeadingClass(idx)}>
               {t[item.titleKey as keyof typeof t]}
@@ -321,7 +177,7 @@ export const Features: React.FC = () => {
               {t[item.descriptionKey as keyof typeof t]}
             </p>
 
-            {item.hasImage && idx === 2 && (
+            {item.hasImage && (
               <div className="relative z-10 mt-4 rounded-2xl overflow-hidden border border-[var(--color-border)] shadow-lg">
                 <img
                   src="/assets/Tarjeta_NFC_negra_MontesTAP.webp"
@@ -334,7 +190,7 @@ export const Features: React.FC = () => {
               </div>
             )}
 
-            {item.hasVideo && idx === 4 && (
+            {item.hasVideo && (
               <div className="relative z-10 mt-4 rounded-2xl overflow-hidden border border-[var(--color-border)] shadow-lg group/video">
                 <div className="relative bg-[var(--color-bg)] rounded-2xl overflow-hidden">
                   <div className="absolute inset-0 pointer-events-none z-10 border-[8px] md:border-[12px] border-[var(--color-bg-alt)] rounded-2xl"></div>
@@ -345,16 +201,13 @@ export const Features: React.FC = () => {
               </div>
             )}
 
-            <LinkWrapper
-              href={getLinkHref(item)}
-              external={item.external}
-              internal={item.internal}
-              route={item.route}
+            <a
+              href={item.href}
               className="inline-flex items-center gap-2 text-sm font-bold text-[var(--color-primary)] group-hover:text-[var(--color-primary)] transition-[color] duration-150"
             >
-              <span>{getLinkText(item, t)}</span>
+              <span>{getLinkText(t)}</span>
               <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-150 ease-[var(--ease-out)]" />
-            </LinkWrapper>
+            </a>
           </article>
         ))}
       </div>

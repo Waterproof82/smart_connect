@@ -9,10 +9,6 @@ import { ScrollToTop } from "@shared/components/ScrollToTop";
 import App from "./App";
 import CartaDigitalPremium from "./features/landing/presentation/components/CartaDigitalPremium";
 import { TapReviewPage } from "./features/tap-review/presentation/TapReviewPage";
-import AutomationN8nContainer from "./features/automation-n8n/presentation/AutomationN8nContainer";
-import WhatsappAutomationContainer from "./features/whatsapp-automation/presentation/WhatsappAutomationContainer";
-import SoftwareCanariasContainer from "./features/software-canarias/presentation/SoftwareCanariasContainer";
-import DigitalizationTenerifeContainer from "./features/digitalization-tenerife/presentation/DigitalizationTenerifeContainer";
 import AboutPage from "./features/landing/presentation/components/AboutPage";
 import AvisoLegalPage from "./features/legal/presentation/AvisoLegalPage";
 import PrivacidadPage from "./features/legal/presentation/PrivacidadPage";
@@ -36,22 +32,6 @@ export function render(url: string): { html: string; head: string } {
                   element={<CartaDigitalPremium />}
                 />
                 <Route path="/tap-review" element={<TapReviewPage />} />
-                <Route
-                  path="/automatizacion-restaurantes-n8n"
-                  element={<AutomationN8nContainer />}
-                />
-                <Route
-                  path="/automatizacion-whatsapp-restaurante"
-                  element={<WhatsappAutomationContainer />}
-                />
-                <Route
-                  path="/software-restaurantes-canarias"
-                  element={<SoftwareCanariasContainer />}
-                />
-                <Route
-                  path="/digitalizacion-hosteleria-tenerife"
-                  element={<DigitalizationTenerifeContainer />}
-                />
                 <Route path="/about" element={<AboutPage />} />
                 <Route path="/legal/aviso" element={<AvisoLegalPage />} />
                 <Route path="/legal/privacidad" element={<PrivacidadPage />} />

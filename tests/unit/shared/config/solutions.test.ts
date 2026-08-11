@@ -1,8 +1,8 @@
 import { SOLUTIONS } from "@shared/config/solutions";
 
 describe("SOLUTIONS config", () => {
-  it("has exactly 7 entries (pre-trim, WU1 additive stage)", () => {
-    expect(SOLUTIONS).toHaveLength(7);
+  it("has exactly 2 entries: carta-digital and tarjetas-nfc", () => {
+    expect(SOLUTIONS.map((s) => s.id)).toEqual(["carta-digital", "tarjetas-nfc"]);
   });
 
   it("every entry has the base shape used by Navbar/Features/Contact", () => {
@@ -37,11 +37,15 @@ describe("SOLUTIONS config", () => {
     expect(cartaDigital?.jsonLd.sameAs).toContain("https://qribar.es");
   });
 
-  it("output is unchanged for existing consumers (hrefs untouched in WU1)", () => {
+  it("hrefs are in-page anchors, pointing at the merged home sections", () => {
     const cartaDigital = SOLUTIONS.find((s) => s.id === "carta-digital");
     const tarjetasNfc = SOLUTIONS.find((s) => s.id === "tarjetas-nfc");
-    expect(cartaDigital?.href).toBe("/carta-digital");
-    expect(tarjetasNfc?.href).toBe("/tap-review");
+    expect(cartaDigital?.href).toBe("#carta-digital");
+    expect(tarjetasNfc?.href).toBe("#tarjetas-nfc");
+  });
+
+  it("no entry is external anymore (QRIBAR standalone entry removed)", () => {
+    expect(SOLUTIONS.some((s) => s.external)).toBe(false);
   });
 
   it("does not export ROUTE_TO_SOLUTION_ID anymore (dropped once SOLUTIONS is the single source of truth)", () => {

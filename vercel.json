@@ -1,10 +1,14 @@
 {
   "buildCommand": "npm run build",
   "redirects": [
-    { "source": "/automation-n8n", "destination": "/automatizacion-restaurantes-n8n", "permanent": true },
-    { "source": "/whatsapp-automation", "destination": "/automatizacion-whatsapp-restaurante", "permanent": true },
-    { "source": "/software-canarias", "destination": "/software-restaurantes-canarias", "permanent": true },
-    { "source": "/digitalization-tenerife", "destination": "/digitalizacion-hosteleria-tenerife", "permanent": true },
+    { "source": "/automation-n8n", "destination": "/", "permanent": true },
+    { "source": "/whatsapp-automation", "destination": "/", "permanent": true },
+    { "source": "/software-canarias", "destination": "/", "permanent": true },
+    { "source": "/digitalization-tenerife", "destination": "/", "permanent": true },
+    { "source": "/automatizacion-restaurantes-n8n", "destination": "/", "permanent": true },
+    { "source": "/automatizacion-whatsapp-restaurante", "destination": "/", "permanent": true },
+    { "source": "/software-restaurantes-canarias", "destination": "/", "permanent": true },
+    { "source": "/digitalizacion-hosteleria-tenerife", "destination": "/", "permanent": true },
     { "source": "/contacto", "destination": "/#contacto", "permanent": true }
   ],
   "headers": [
@@ -32,7 +36,7 @@
       "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
     },
     {
-      "source": "/(|about|servicios|carta-digital|tap-review|automatizacion-restaurantes-n8n|automatizacion-whatsapp-restaurante|software-restaurantes-canarias|digitalizacion-hosteleria-tenerife)",
+      "source": "/(|about|servicios|carta-digital|tap-review)",
       "headers": [{ "key": "Cache-Control", "value": "public, max-age=3600" }]
     }
   ],
@@ -42,10 +46,6 @@
     { "source": "/servicios", "destination": "/servicios/index.html" },
     { "source": "/carta-digital", "destination": "/carta-digital/index.html" },
     { "source": "/tap-review", "destination": "/tap-review/index.html" },
-    { "source": "/automatizacion-restaurantes-n8n", "destination": "/automatizacion-restaurantes-n8n/index.html" },
-    { "source": "/automatizacion-whatsapp-restaurante", "destination": "/automatizacion-whatsapp-restaurante/index.html" },
-    { "source": "/software-restaurantes-canarias", "destination": "/software-restaurantes-canarias/index.html" },
-    { "source": "/digitalizacion-hosteleria-tenerife", "destination": "/digitalizacion-hosteleria-tenerife/index.html" },
     { "source": "/legal/aviso", "destination": "/legal/aviso/index.html" },
     { "source": "/legal/privacidad", "destination": "/legal/privacidad/index.html" },
     { "source": "/legal/cookies", "destination": "/legal/cookies/index.html" },
