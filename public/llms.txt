@@ -4,16 +4,17 @@
 
 ## Servicios principales
 
-1. **Carta Digital** — Menú digital con fotos, vídeos, 5 idiomas y gestión de pedidos por Telegram. Sin comisiones.
-2. **Tap-to-Review NFC** — Tarjetas NFC para que los clientes dejen reseñas en Google con un solo toque.
-3. **Automatización n8n** — Flujos de trabajo automatizados que conectan CRM, email, WhatsApp y redes sociales.
-4. **Automatización WhatsApp** — Respuestas automáticas 24/7 para reservas, consultas y pedidos.
+1. **Plataforma TPV** — TPV y cobro, comandero móvil, KDS de cocina, gestión de reservas, fichajes y control horario, delivery/takeaway sin comisiones, stock e inventario, multi-IVA/IGIC, roles y permisos (RBAC), food cost avanzado, sistema de alérgenos, compras y Tienda/Carta Digital — 13 módulos integrados.
+2. **Carta Digital** — Menú digital con fotos, vídeos, 5 idiomas y gestión de pedidos por Telegram. Sin comisiones.
+3. **Tap-to-Review NFC** — Tarjetas NFC para que los clientes dejen reseñas en Google con un solo toque.
+4. **Automatización n8n** — Flujos de trabajo automatizados que conectan CRM, email, WhatsApp y redes sociales.
+5. **Automatización WhatsApp** — Respuestas automáticas 24/7 para reservas, consultas y pedidos.
 
 ## Páginas clave
 
 - Inicio: https://digitalizatenerife.es/
 - Carta Digital: https://digitalizatenerife.es/carta-digital
-- Tap-to-Review NFC: https://digitalizatenerife.es/tap-review
+- Tap-to-Review NFC: https://digitalizatenerife.es/tarjetas-nfc
 - Automatización n8n: https://digitalizatenerife.es/automatizacion-restaurantes-n8n
 - Automatización WhatsApp: https://digitalizatenerife.es/automatizacion-whatsapp-restaurante
 - Software restaurantes Canarias: https://digitalizatenerife.es/software-restaurantes-canarias

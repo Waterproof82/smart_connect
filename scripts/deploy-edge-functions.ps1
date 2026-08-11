@@ -1,4 +1,4 @@
-# SmartConnect AI - Edge Functions Deployment
+# Digitaliza Tenerife - Edge Functions Deployment
 param([string]$Function = "all", [switch]$SkipSecrets, [switch]$DryRun)
 
 Write-Host "`n SUPABASE EDGE FUNCTIONS DEPLOYMENT`n" -ForegroundColor Cyan

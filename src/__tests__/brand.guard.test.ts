@@ -5,14 +5,15 @@ import path from "node:path";
  * Brand/purge regression gate.
  *
  * Walks src/, public/, and scripts/ and asserts the codebase never
- * regresses back to the old "SmartConnect" brand name or (once PR2 lands)
- * the "qribar" product name.
+ * regresses back to the old "SmartConnect" brand name or the "qribar"
+ * product name.
  *
  * ALLOWLIST is an explicit list of exact file paths (relative to repo root,
  * forward-slash separated) permitted to contain a match. It MUST stay empty
- * for the "smartconnect" assertion in PR1. PR2 adds entries for the
- * "qribar" assertion (machine-readable/chatbot copy explicitly deferred to
- * PR8); PR8 empties both.
+ * for the "smartconnect" assertion. PR8 emptied the "qribar" allowlist too:
+ * WebMCP.ts, ChatWelcome.tsx, and the scripts/ seed tooling all had their
+ * literal "qribar" copy removed (see PR8 apply-progress), so both
+ * allowlists are now permanently empty regression gates.
  *
  * `admin@smartconnect.ai` is a live Supabase Auth account email and is
  * explicitly excluded from the "smartconnect" match — it is not a brand
@@ -20,20 +21,11 @@ import path from "node:path";
  */
 
 const ROOT = path.resolve(__dirname, "..", "..");
-const SCAN_DIRS = ["src", "public"];
+const SCAN_DIRS = ["src", "public", "scripts"];
 
 const SMARTCONNECT_ALLOWLIST: string[] = [];
 
-// PR2 scope: qribar purged everywhere except machine-readable/chatbot copy,
-// which is explicitly deferred to PR8 (WebMCP.ts, ChatWelcome.tsx). Also
-// covers scripts/populate-knowledge-base.mjs (RAG seed tooling — out of
-// scope per design's open questions, permanently allowlisted), though
-// scripts/ is not currently walked by SCAN_DIRS.
-const QRIBAR_ALLOWLIST: string[] = [
-  "src/WebMCP.ts",
-  "src/features/chatbot/presentation/components/ChatWelcome.tsx",
-  "scripts/populate-knowledge-base.mjs",
-];
+const QRIBAR_ALLOWLIST: string[] = [];
 
 const ADMIN_EMAIL = "admin@smartconnect.ai";
 

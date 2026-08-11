@@ -6,16 +6,17 @@ Digitaliza Tenerife is a digital transformation agency specializing in helping l
 
 ## Main Services
 
-1. **Carta Digital** - Self-managed digital menu with photos, videos, 5 languages, and Telegram order management. No per-order commissions.
-2. **Tap-to-Review NFC Cards** - Customizable NFC cards that help businesses collect Google Reviews with a single tap.
-3. **n8n Automation** - Custom workflow automation connecting CRM, email, WhatsApp, and social media.
-4. **WhatsApp Automation** - 24/7 automated responses for reservations, inquiries, and orders.
+1. **TPV Platform** - Point of sale, mobile ordering, kitchen display (KDS), reservations, staff clock-in, delivery/takeaway with no commissions, stock/inventory, multi-VAT/IGIC compliance, roles and permissions (RBAC), advanced food cost, allergen system, purchasing, and Digital Menu — 13 integrated modules.
+2. **Carta Digital** - Self-managed digital menu with photos, videos, 5 languages, and Telegram order management. No per-order commissions.
+3. **Tap-to-Review NFC Cards** - Customizable NFC cards that help businesses collect Google Reviews with a single tap.
+4. **n8n Automation** - Custom workflow automation connecting CRM, email, WhatsApp, and social media.
+5. **WhatsApp Automation** - 24/7 automated responses for reservations, inquiries, and orders.
 
 ## Key Pages
 
 - Home: https://digitalizatenerife.es/
 - Carta Digital: https://digitalizatenerife.es/carta-digital
-- Tap-to-Review: https://digitalizatenerife.es/tap-review
+- Tap-to-Review: https://digitalizatenerife.es/tarjetas-nfc
 - n8n Automation: https://digitalizatenerife.es/automatizacion-restaurantes-n8n
 - WhatsApp Automation: https://digitalizatenerife.es/automatizacion-whatsapp-restaurante
 - Software Canarias: https://digitalizatenerife.es/software-restaurantes-canarias
