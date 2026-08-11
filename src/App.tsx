@@ -3,7 +3,6 @@ import { Link, useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { Navbar } from "@features/landing/presentation/components/Navbar";
 import { Hero } from "@features/landing/presentation/components/Hero";
-import { Features } from "@features/landing/presentation/components/Features";
 import { Contact } from "@features/landing/presentation/components/Contact";
 import { SuccessStats } from "@features/landing/presentation/components/SuccessStats";
 import { ExpertAssistant } from "@features/chatbot/presentation";
@@ -80,14 +79,15 @@ const ErrorBoundaryFallback: React.FC = () => {
 /* Heading structure:
   / → H1: Aumenta tu facturación, ahorra horas cada semana (outcome-first, PR4)
   /contacto → H1: Hablemos de tu Proyecto
-  H2: Nuestras Soluciones — heroEyebrow label (home)
-    H3: Carta Digital Premium
-    H3: Tarjetas NFC Tap-to-Review
   (PR4: TpvModulesSection renders 13 TPV module sections, each its own H2,
    sorted by TPV_MODULES' frozen `order` — see shared/config/tpvModules.ts.
    "tienda-carta-digital" (order 13, last) mounts the existing
    CartaDigitalSection sub-tree; the other 12 are PR5-7 placeholders.)
-  (PR3: Tarjetas NFC Tap-to-Review un-merged to its own /tarjetas-nfc route — no longer on home)
+  (PR3: NFC review cards un-merged to their own /tarjetas-nfc route — no longer on home)
+  (PR9: Features.tsx's "Nuestras Soluciones" grid retired — it only
+   duplicated the fuller tienda-carta-digital module below and still
+   rendered a real NFC teaser card, which violated the "no NFC content on
+   home" requirement. #soluciones now wraps TpvModulesSection directly.)
   H2: Resultados reales que transforman negocios
     H3: Aumento Promedio
     H3: Satisfacción
@@ -211,13 +211,11 @@ const App: React.FC = () => {
           <section id="inicio" aria-label="Inicio">
             <Hero variant={isContacto ? "contacto" : "home"} />
           </section>
-          <section
-            id="soluciones"
-            aria-label="Nuestras Soluciones"
-            className="py-20 md:py-32"
-          >
-            <Features />
-          </section>
+          {/* Scroll-anchor sentinel (no own landmark/aria-label — each TPV
+              module section below owns its own <section id> + heading) so
+              the footer's #soluciones link and any existing deep links keep
+              resolving after Features.tsx's grid was retired (PR9). */}
+          <div id="soluciones" aria-hidden="true" className="h-0" />
           <TpvModulesSection whatsappPhone={whatsappPhone} />
           <section
             id="por-que"
@@ -285,8 +283,8 @@ const App: React.FC = () => {
                           desc: "Pedidos en tiempo real desde la mesa a barra y cocina.",
                         },
                         {
-                          title: "Tarjetas NFC Tap-to-Review",
-                          desc: "Multiplica las reseñas en Google con un solo toque.",
+                          title: "Plataforma TPV Todo-en-Uno",
+                          desc: "Cobro, comandero, cocina, stock y reservas en un solo sistema.",
                         },
                         {
                           title: "IA Conversacional",

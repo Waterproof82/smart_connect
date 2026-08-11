@@ -15,7 +15,7 @@ export interface SolutionConfig {
   iconColor: string; // Tailwind CSS class for icon color
   internal?: boolean;
   external?: boolean;
-  /** Value used by the Contact form's service <select> and Features.tsx CTA links. */
+  /** Value used by the Contact form's service <select> and the Navbar dropdown. */
   serviceValue: string;
   /** Structured-data metadata consumed by buildHomeSchema() to emit Service JSON-LD nodes. */
   jsonLd: SolutionJsonLd;

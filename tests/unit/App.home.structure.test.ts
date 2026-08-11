@@ -22,9 +22,8 @@ describe("Home page composition (App.tsx + merged sections)", () => {
     expect(h1Matches).toHaveLength(1);
   });
 
-  it("Features.tsx, HomeFaqSection.tsx, Contact.tsx, SuccessStats.tsx, Navbar.tsx declare no <h1>", () => {
+  it("HomeFaqSection.tsx, Contact.tsx, SuccessStats.tsx, Navbar.tsx declare no <h1>", () => {
     const files = [
-      "features/landing/presentation/components/Features.tsx",
       "features/landing/presentation/components/HomeFaqSection.tsx",
       "features/landing/presentation/components/Contact.tsx",
       "features/landing/presentation/components/SuccessStats.tsx",
@@ -64,14 +63,6 @@ describe("Home page composition (App.tsx + merged sections)", () => {
     expect(cartaSource).toMatch(/id: string/);
     expect(cartaSource).toMatch(/<div id=\{id\}/);
     expect(cartaSource).not.toMatch(/id="carta-digital"/);
-  });
-
-  it("Features.tsx derives its grid from the 2-entry SOLUTIONS catalog", () => {
-    const featuresSource = read(
-      "features/landing/presentation/components/Features.tsx",
-    );
-    expect(featuresSource).toMatch(/from ["']@shared\/config\/solutions["']/);
-    expect(featuresSource).not.toMatch(/software-ia/);
   });
 
   it("App.tsx no longer references /servicios routing", () => {
