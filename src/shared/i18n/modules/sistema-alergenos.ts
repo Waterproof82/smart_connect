@@ -11,6 +11,7 @@ export interface SistemaAlergenosCopy {
   sistemaAlergenosBullet4Title: string;
   sistemaAlergenosBullet4Desc: string;
   sistemaAlergenosCtaLabel: string;
+  sistemaAlergenosFigureAlt: string;
 }
 
 export const sistemaAlergenosCopy: {
@@ -36,6 +37,8 @@ export const sistemaAlergenosCopy: {
     sistemaAlergenosBullet4Desc:
       "El cliente consulta la información antes de pedir, sin tener que preguntar en mesa.",
     sistemaAlergenosCtaLabel: "Pide una demo de alérgenos",
+    sistemaAlergenosFigureAlt:
+      "Cliente consultando la carta con atención en la mesa de un restaurante",
   },
   en: {
     sistemaAlergenosEyebrow: "ALLERGEN SYSTEM",
@@ -56,5 +59,7 @@ export const sistemaAlergenosCopy: {
     sistemaAlergenosBullet4Desc:
       "Customers check the information before ordering, no need to ask at the table.",
     sistemaAlergenosCtaLabel: "Request an allergens demo",
+    sistemaAlergenosFigureAlt:
+      "Customer carefully reading the menu at a restaurant table",
   },
 };

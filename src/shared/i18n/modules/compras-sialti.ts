@@ -11,6 +11,7 @@ export interface ComprasSialtiCopy {
   comprasSialtiBullet4Title: string;
   comprasSialtiBullet4Desc: string;
   comprasSialtiCtaLabel: string;
+  comprasSialtiFigureAlt: string;
 }
 
 export const comprasSialtiCopy: {
@@ -36,6 +37,8 @@ export const comprasSialtiCopy: {
     comprasSialtiBullet4Desc:
       "Dedica menos horas a gestionar albaranes y facturas de proveedores.",
     comprasSialtiCtaLabel: "Pide una demo de compras",
+    comprasSialtiFigureAlt:
+      "Proveedor entregando una caja de verduras frescas a un restaurante",
   },
   en: {
     comprasSialtiEyebrow: "PURCHASING & SIALTI",
@@ -55,5 +58,7 @@ export const comprasSialtiCopy: {
     comprasSialtiBullet4Desc:
       "Spend fewer hours handling supplier delivery notes and invoices.",
     comprasSialtiCtaLabel: "Request a purchasing demo",
+    comprasSialtiFigureAlt:
+      "Supplier delivering a crate of fresh vegetables to a restaurant",
   },
 };

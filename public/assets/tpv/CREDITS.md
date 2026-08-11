@@ -21,3 +21,7 @@ in-repo build dependency was added (design.md F3).
 | delivery-takeaway.webp | CgJvsqNpZHE | SpotOn | https://unsplash.com/photos/CgJvsqNpZHE | 2026-08-11 |
 | stock-inventario.webp | 4kjtbC-wMHs | Rodrigo Rodrigues | https://unsplash.com/photos/4kjtbC-wMHs | 2026-08-11 |
 | multi-iva-igic.webp | 0rHxkbcvQAE | FIN | https://unsplash.com/photos/0rHxkbcvQAE | 2026-08-11 |
+| rbac-roles.webp | 0e2eYxBiP6A | Vitaly Gariev | https://unsplash.com/photos/0e2eYxBiP6A | 2026-08-11 |
+| food-cost-avanzado.webp | 54bvLAWhWAM | maks_d | https://unsplash.com/photos/54bvLAWhWAM | 2026-08-11 |
+| sistema-alergenos.webp | 6JxC2GoC7i4 | Rahul Himkar | https://unsplash.com/photos/6JxC2GoC7i4 | 2026-08-11 |
+| compras-sialti.webp | M4mJQPaIjnk | Carl Tronders | https://unsplash.com/photos/M4mJQPaIjnk | 2026-08-11 |

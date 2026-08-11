@@ -3,11 +3,15 @@
  * entry of TPV_MODULES (design.md D1/D4). Framed generally as purchase
  * management with traceability and compliance — no specific regulatory
  * acronym details beyond what's already truthfully established site-wide.
+ * Real self-hosted photo via TpvModuleFigure and a per-module OKLCH accent
+ * (design.md D3/D5/D6 — visual redesign PR4).
  */
 import React from "react";
 import { ClipboardList, History, FileCheck2, Truck } from "lucide-react";
 import { useLanguage } from "@shared/context/LanguageContext";
+import { accentStyle } from "@shared/config/accents";
 import type { TpvModuleSectionProps } from "./TpvModuleSections";
+import TpvModuleFigure from "./TpvModuleFigure";
 
 const BULLET_ICONS = [ClipboardList, History, FileCheck2, Truck];
 
@@ -30,6 +34,7 @@ const ComprasSialtiSection: React.FC<TpvModuleSectionProps> = ({
       id="compras-sialti"
       aria-labelledby="compras-sialti-title"
       className="py-16 md:py-24 bg-[var(--color-bg-alt)]"
+      style={accentStyle("--color-icon-lime")}
     >
       <div className="container mx-auto px-6 max-w-5xl">
         <div className="text-xs font-semibold tracking-wider uppercase text-[var(--color-primary)] mb-3">
@@ -45,32 +50,41 @@ const ComprasSialtiSection: React.FC<TpvModuleSectionProps> = ({
           {t.comprasSialtiDesc}
         </p>
 
-        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10 list-none">
-          {bullets.map((bullet, idx) => {
-            const Icon = BULLET_ICONS[idx];
-            return (
-              <li key={bullet.title} className="flex gap-4">
-                <div className="w-11 h-11 shrink-0 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border)] flex items-center justify-center text-[var(--color-icon-emerald)]">
-                  <Icon className="w-5 h-5" aria-hidden="true" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-sm mb-1 text-default">
-                    {bullet.title}
-                  </h3>
-                  <p className="text-sm text-muted leading-relaxed">
-                    {bullet.desc}
-                  </p>
-                </div>
-              </li>
-            );
-          })}
-        </ul>
+        <div className="grid lg:grid-cols-2 gap-10 items-center">
+          <ul className="grid grid-cols-1 sm:grid-cols-2 gap-6 list-none">
+            {bullets.map((bullet, idx) => {
+              const Icon = BULLET_ICONS[idx];
+              return (
+                <li key={bullet.title} className="flex gap-4">
+                  <div className="w-11 h-11 shrink-0 rounded-xl flex items-center justify-center text-[color:var(--tpv-accent)] tpv-accent-chip">
+                    <Icon className="w-5 h-5" aria-hidden="true" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-sm mb-1 text-default">
+                      {bullet.title}
+                    </h3>
+                    <p className="text-sm text-muted leading-relaxed">
+                      {bullet.desc}
+                    </p>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+
+          <TpvModuleFigure
+            src="/assets/tpv/compras-sialti.webp"
+            alt={t.comprasSialtiFigureAlt}
+            width={900}
+            height={675}
+          />
+        </div>
 
         <a
           href={ctaHref}
           target={whatsappPhone ? "_blank" : undefined}
           rel={whatsappPhone ? "noopener noreferrer" : undefined}
-          className="inline-flex items-center gap-2 text-sm font-bold text-[var(--color-primary)] hover:underline"
+          className="inline-flex items-center gap-2 text-sm font-bold text-[var(--color-primary)] hover:underline mt-10"
         >
           {t.comprasSialtiCtaLabel}
         </a>

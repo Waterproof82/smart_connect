@@ -11,6 +11,7 @@ export interface RbacRolesCopy {
   rbacRolesBullet4Title: string;
   rbacRolesBullet4Desc: string;
   rbacRolesCtaLabel: string;
+  rbacRolesFigureAlt: string;
 }
 
 export const rbacRolesCopy: { es: RbacRolesCopy; en: RbacRolesCopy } = {
@@ -32,6 +33,8 @@ export const rbacRolesCopy: { es: RbacRolesCopy; en: RbacRolesCopy } = {
     rbacRolesBullet4Desc:
       "Da o retira acceso al momento cuando entra o se va alguien del equipo.",
     rbacRolesCtaLabel: "Pide una demo de roles y permisos",
+    rbacRolesFigureAlt:
+      "Empleada de sala con un cuaderno de tareas en un restaurante",
   },
   en: {
     rbacRolesEyebrow: "ROLES & PERMISSIONS",
@@ -51,5 +54,7 @@ export const rbacRolesCopy: { es: RbacRolesCopy; en: RbacRolesCopy } = {
     rbacRolesBullet4Desc:
       "Grant or revoke access instantly when someone joins or leaves the team.",
     rbacRolesCtaLabel: "Request a roles & permissions demo",
+    rbacRolesFigureAlt:
+      "Front-of-house employee holding a task notebook in a restaurant",
   },
 };
