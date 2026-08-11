@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **Landing refocused on two solutions (SDD `landing-two-solutions`)**: The home page (`/`) now presents exactly two solutions — Carta Digital Premium and Tarjetas NFC — as full scrollable sections merged in from the former `/carta-digital` and `/tap-review` pages, instead of linking out to 7 separate solution pages.
+  - `SOLUTIONS` (`src/shared/config/solutions.ts`) is now the single source of truth (2 entries), consumed by the Navbar dropdown, `Features.tsx` grid, `Contact.tsx` service `<select>`, `WebMCP.ts`, and the JSON-LD graph.
+  - Removed the `automation-n8n`, `whatsapp-automation`, `software-canarias`, and `digitalization-tenerife` features and routes entirely; QRIBAR (`qribar.es`) survives only as a secondary CTA link inside the Carta Digital Premium section.
+  - `/carta-digital`, `/tap-review`, `/servicios`, and the 4 retired solution routes now return real HTTP 301 redirects to `/` at the edge (`vercel.json`), with the pre-existing legacy short-URL redirects retargeted straight to `/` to avoid 301→301 chains.
+  - Consolidated all 3 FAQ sources (home, Carta Digital, Tap Review — 14 questions total) into one `HomeFaqSection`, emitting a single `FAQPage` JSON-LD node instead of three.
+  - Canonical URL, `og:url`, hreflang links, and the `WebPage` JSON-LD `@id` are now hardcoded to `https://digitalizatenerife.es/` instead of being derived from `location.pathname` (fixes the pre-existing `/contacto` self-canonical duplicate-content issue).
+  - Pruned 282 orphaned i18n keys (`Translation` interface + `es`/`en`) left behind by the removed pages/components.
+
 ### Added
 
 - **GSC Indexing Fixes — 301 Redirects**: Added 6 permanent server-side redirects in `vercel.json` for English alias routes and old pages that caused "Redirect" and "Duplicate canonical" GSC issues
