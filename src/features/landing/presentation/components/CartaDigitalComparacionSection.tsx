@@ -7,31 +7,31 @@ const CartaDigitalComparacionSection: React.FC = () => {
   const rows = [
     {
       label: t.cartaComparRow1Label,
-      qribar: t.cartaComparRow1Qribar,
+      plataforma: t.cartaComparRow1Plataforma,
       papel: t.cartaComparRow1Papel,
       otras: t.cartaComparRow1Otras,
     },
     {
       label: t.cartaComparRow2Label,
-      qribar: t.cartaComparRow2Qribar,
+      plataforma: t.cartaComparRow2Plataforma,
       papel: t.cartaComparRow2Papel,
       otras: t.cartaComparRow2Otras,
     },
     {
       label: t.cartaComparRow3Label,
-      qribar: t.cartaComparRow3Qribar,
+      plataforma: t.cartaComparRow3Plataforma,
       papel: t.cartaComparRow3Papel,
       otras: t.cartaComparRow3Otras,
     },
     {
       label: t.cartaComparRow4Label,
-      qribar: t.cartaComparRow4Qribar,
+      plataforma: t.cartaComparRow4Plataforma,
       papel: t.cartaComparRow4Papel,
       otras: t.cartaComparRow4Otras,
     },
     {
       label: t.cartaComparRow5Label,
-      qribar: t.cartaComparRow5Qribar,
+      plataforma: t.cartaComparRow5Plataforma,
       papel: t.cartaComparRow5Papel,
       otras: t.cartaComparRow5Otras,
     },
@@ -61,7 +61,7 @@ const CartaDigitalComparacionSection: React.FC = () => {
                     scope="col"
                     className="px-4 py-3 text-left font-bold text-[var(--color-primary)]"
                   >
-                    {t.cartaComparHeaderQribar}
+                    {t.cartaComparHeaderPlataforma}
                   </th>
                   <th
                     scope="col"
@@ -90,7 +90,7 @@ const CartaDigitalComparacionSection: React.FC = () => {
                       {row.label}
                     </th>
                     <td className="px-4 py-3 font-bold text-[var(--color-primary)]">
-                      {row.qribar}
+                      {row.plataforma}
                     </td>
                     <td className="px-4 py-3 text-muted">{row.papel}</td>
                     <td className="px-4 py-3 text-muted">{row.otras}</td>

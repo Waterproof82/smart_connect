@@ -1,6 +1,6 @@
 # Admin Module
 
-Panel de administración para gestionar el sistema RAG de SmartConnect AI.
+Panel de administración para gestionar el sistema RAG de Digitaliza Tenerife.
 
 ## 🎯 Propósito
 

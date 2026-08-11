@@ -22,9 +22,8 @@ describe("Home page composition (App.tsx + merged sections)", () => {
     expect(h1Matches).toHaveLength(1);
   });
 
-  it("Features.tsx, HomeFaqSection.tsx, Contact.tsx, SuccessStats.tsx, Navbar.tsx declare no <h1>", () => {
+  it("HomeFaqSection.tsx, Contact.tsx, SuccessStats.tsx, Navbar.tsx declare no <h1>", () => {
     const files = [
-      "features/landing/presentation/components/Features.tsx",
       "features/landing/presentation/components/HomeFaqSection.tsx",
       "features/landing/presentation/components/Contact.tsx",
       "features/landing/presentation/components/SuccessStats.tsx",
@@ -35,34 +34,35 @@ describe("Home page composition (App.tsx + merged sections)", () => {
     }
   });
 
-  it("mounts CartaDigitalSection and TapReviewSection between #soluciones and #por-que", () => {
+  it("mounts TpvModulesSection (the TPV_MODULES registry seam, PR4) between #soluciones and #por-que", () => {
     const appSource = read("App.tsx");
     const solucionesIdx = appSource.indexOf('id="soluciones"');
-    const cartaIdx = appSource.indexOf("<CartaDigitalSection");
-    const tapReviewIdx = appSource.indexOf("<TapReviewSection");
+    const tpvModulesIdx = appSource.indexOf("<TpvModulesSection");
     const porQueIdx = appSource.indexOf('id="por-que"');
 
     expect(solucionesIdx).toBeGreaterThan(-1);
-    expect(cartaIdx).toBeGreaterThan(solucionesIdx);
-    expect(tapReviewIdx).toBeGreaterThan(cartaIdx);
-    expect(porQueIdx).toBeGreaterThan(tapReviewIdx);
+    expect(tpvModulesIdx).toBeGreaterThan(solucionesIdx);
+    expect(porQueIdx).toBeGreaterThan(tpvModulesIdx);
+    // PR4: CartaDigitalSection is no longer mounted directly by App.tsx —
+    // it's looked up via TPV_MODULE_SECTIONS["tienda-carta-digital"].
+    expect(appSource).not.toMatch(/<CartaDigitalSection/);
   });
 
-  it("the merged sections declare the #carta-digital and #tarjetas-nfc anchors", () => {
+  it("no longer mounts TapReviewSection on home (PR3: un-merged to /tarjetas-nfc)", () => {
+    const appSource = read("App.tsx");
+    expect(appSource).not.toMatch(/<TapReviewSection/);
+    expect(appSource).not.toMatch(
+      /from ["']@features\/tap-review\/presentation\/TapReviewSection["']/,
+    );
+  });
+
+  it("CartaDigitalSection's wrapper id is prop-ised (PR4: mounted as tienda-carta-digital)", () => {
     const cartaSource = read(
       "features/landing/presentation/components/CartaDigitalSection.tsx",
     );
-    const tapSource = read("features/tap-review/presentation/TapReviewSection.tsx");
-    expect(cartaSource).toMatch(/id="carta-digital"/);
-    expect(tapSource).toMatch(/id="tarjetas-nfc"/);
-  });
-
-  it("Features.tsx derives its grid from the 2-entry SOLUTIONS catalog", () => {
-    const featuresSource = read(
-      "features/landing/presentation/components/Features.tsx",
-    );
-    expect(featuresSource).toMatch(/from ["']@shared\/config\/solutions["']/);
-    expect(featuresSource).not.toMatch(/software-ia/);
+    expect(cartaSource).toMatch(/id: string/);
+    expect(cartaSource).toMatch(/<div id=\{id\}/);
+    expect(cartaSource).not.toMatch(/id="carta-digital"/);
   });
 
   it("App.tsx no longer references /servicios routing", () => {

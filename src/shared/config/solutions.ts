@@ -2,7 +2,7 @@ export interface SolutionJsonLd {
   description: string;
   serviceType: string;
   areaServed: string[];
-  /** External profile URLs this solution is also known by (e.g. QRIBAR's own domain). */
+  /** External profile URLs this solution is also known by. */
   sameAs?: string[];
 }
 
@@ -15,7 +15,7 @@ export interface SolutionConfig {
   iconColor: string; // Tailwind CSS class for icon color
   internal?: boolean;
   external?: boolean;
-  /** Value used by the Contact form's service <select> and Features.tsx CTA links. */
+  /** Value used by the Contact form's service <select> and the Navbar dropdown. */
   serviceValue: string;
   /** Structured-data metadata consumed by buildHomeSchema() to emit Service JSON-LD nodes. */
   jsonLd: SolutionJsonLd;
@@ -27,7 +27,11 @@ export const SOLUTIONS: SolutionConfig[] = [
     icon: "Utensils",
     titleKey: "navbarCartaDigital",
     descKey: "navbarCartaDigitalDesc",
-    href: "#carta-digital",
+    // PR4: content moved into the TPV_MODULES registry as the
+    // "tienda-carta-digital" module (last, frozen order) — anchor updated
+    // to match its new section id. This SOLUTIONS entry itself (Navbar
+    // dropdown / Features card / Contact form option) is unchanged.
+    href: "#tienda-carta-digital",
     internal: true,
     iconColor: "text-[var(--color-icon-emerald)]",
     serviceValue: "Carta Digital Premium",
@@ -36,7 +40,6 @@ export const SOLUTIONS: SolutionConfig[] = [
         "Menú digital con pedidos en tiempo real desde la mesa a barra y cocina. Sin comisiones por pedido.",
       serviceType: "Digital Menu Platform",
       areaServed: ["Tenerife", "Gran Canaria", "Lanzarote", "Canarias"],
-      sameAs: ["https://qribar.es"],
     },
   },
   {
@@ -44,7 +47,7 @@ export const SOLUTIONS: SolutionConfig[] = [
     icon: "Smartphone",
     titleKey: "navbarNFC",
     descKey: "navbarNFCDesc",
-    href: "#tarjetas-nfc",
+    href: "/tarjetas-nfc",
     internal: true,
     iconColor: "text-[var(--color-icon-emerald)]",
     serviceValue: "Tarjetas NFC Reseñas",

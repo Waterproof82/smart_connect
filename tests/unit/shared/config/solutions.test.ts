@@ -32,16 +32,20 @@ describe("SOLUTIONS config", () => {
     }
   });
 
-  it("carta-digital jsonLd carries sameAs pointing at qribar.es", () => {
+  it("carta-digital jsonLd no longer carries a qribar.es sameAs reference (purged)", () => {
     const cartaDigital = SOLUTIONS.find((s) => s.id === "carta-digital");
-    expect(cartaDigital?.jsonLd.sameAs).toContain("https://qribar.es");
+    expect(cartaDigital?.jsonLd.sameAs).toBeUndefined();
   });
 
-  it("hrefs are in-page anchors, pointing at the merged home sections", () => {
+  it("carta-digital href is an in-page anchor, pointing at the tienda-carta-digital TPV module section (PR4)", () => {
     const cartaDigital = SOLUTIONS.find((s) => s.id === "carta-digital");
+    expect(cartaDigital?.href).toBe("#tienda-carta-digital");
+  });
+
+  it("tarjetas-nfc href is the standalone route, no longer an in-page anchor (PR3 un-merge)", () => {
     const tarjetasNfc = SOLUTIONS.find((s) => s.id === "tarjetas-nfc");
-    expect(cartaDigital?.href).toBe("#carta-digital");
-    expect(tarjetasNfc?.href).toBe("#tarjetas-nfc");
+    expect(tarjetasNfc?.href).toBe("/tarjetas-nfc");
+    expect(tarjetasNfc?.internal).toBe(true);
   });
 
   it("no entry is external anymore (QRIBAR standalone entry removed)", () => {

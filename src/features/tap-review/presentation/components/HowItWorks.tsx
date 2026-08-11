@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { useLanguage } from "@shared/context/LanguageContext";
 import { useIntersectionObserver } from "@shared/hooks";
 import { Smartphone, Star, Award } from "lucide-react";
-import DOMPurify from "dompurify";
+import { sanitizeInput } from "@shared/utils/sanitizer";
 import { HowToSchema } from "../../../../shared/presentation/components/SeoSchema";
 
 const HowItWorks: React.FC = () => {
@@ -79,9 +79,9 @@ const HowItWorks: React.FC = () => {
                     {step.icon}
                   </div>
                   <h3 className="text-xl font-bold mb-3 text-default">
-                    {DOMPurify.sanitize(step.title)}
+                    {sanitizeInput(step.title)}
                   </h3>
-                  <p className="text-muted">{DOMPurify.sanitize(step.desc)}</p>
+                  <p className="text-muted">{sanitizeInput(step.desc)}</p>
                   <div className="mt-6 w-full h-48 bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 rounded-2xl flex items-center justify-center overflow-hidden p-2">
                     {imageErrors[idx] ? (
                       <div className="text-center p-4">
@@ -95,7 +95,7 @@ const HowItWorks: React.FC = () => {
                     ) : (
                       <img
                         src={step.image}
-                        alt={DOMPurify.sanitize(step.title)}
+                        alt={sanitizeInput(step.title)}
                         className="w-full h-full object-contain drop-shadow-lg"
                         onError={() =>
                           setImageErrors((prev) => ({ ...prev, [idx]: true }))

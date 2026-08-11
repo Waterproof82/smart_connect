@@ -47,7 +47,7 @@ export const AdminDashboard: React.FC = () => {
               </Link>
               <div className="flex flex-col">
                 <h1 className="text-lg md:text-xl font-bold text-default">
-                  SmartConnect
+                  Digitaliza Tenerife
                 </h1>
                 <span className="text-[10px] md:text-xs text-muted font-medium tracking-wide">
                   ADMIN PANEL

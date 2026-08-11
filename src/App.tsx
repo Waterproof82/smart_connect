@@ -3,18 +3,16 @@ import { Link, useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { Navbar } from "@features/landing/presentation/components/Navbar";
 import { Hero } from "@features/landing/presentation/components/Hero";
-import { Features } from "@features/landing/presentation/components/Features";
 import { Contact } from "@features/landing/presentation/components/Contact";
 import { SuccessStats } from "@features/landing/presentation/components/SuccessStats";
 import { ExpertAssistant } from "@features/chatbot/presentation";
 import HomeFaqSection, {
   useHomeFaqGroups,
 } from "@features/landing/presentation/components/HomeFaqSection";
-import CartaDigitalSection from "@features/landing/presentation/components/CartaDigitalSection";
-import { TapReviewSection } from "@features/tap-review/presentation/TapReviewSection";
+import { TpvModulesSection } from "@shared/components/tpv/TpvModulesSection";
 import { ConsoleLogger } from "@core/domain/usecases/Logger";
 import { useLanguage } from "@shared/context/LanguageContext";
-import { SOLUTIONS } from "@shared/config/solutions";
+import { TPV_MODULES } from "@shared/config/tpvModules";
 import { buildHomeSchema } from "@shared/presentation/components/SeoSchema";
 import { useWhatsappPhone } from "@shared/hooks";
 
@@ -79,13 +77,17 @@ const ErrorBoundaryFallback: React.FC = () => {
 // since they're always rendered on the landing page.
 
 /* Heading structure:
-  / → H1: Potencia tu Negocio con IA y Automatización
+  / → H1: Aumenta tu facturación, ahorra horas cada semana (outcome-first, PR4)
   /contacto → H1: Hablemos de tu Proyecto
-  H2: Nuestras Soluciones — heroEyebrow label (home)
-    H3: Carta Digital Premium
-    H3: Tarjetas NFC Tap-to-Review
-  H2: Carta Digital Premium (merged section, own H2 hero + subsections as H3/H4)
-  H2: Tarjetas NFC Tap-to-Review (merged section, own H2 hero + subsections as H3/H4)
+  (PR4: TpvModulesSection renders 13 TPV module sections, each its own H2,
+   sorted by TPV_MODULES' frozen `order` — see shared/config/tpvModules.ts.
+   "tienda-carta-digital" (order 13, last) mounts the existing
+   CartaDigitalSection sub-tree; the other 12 are PR5-7 placeholders.)
+  (PR3: NFC review cards un-merged to their own /tarjetas-nfc route — no longer on home)
+  (PR9: Features.tsx's "Nuestras Soluciones" grid retired — it only
+   duplicated the fuller tienda-carta-digital module below and still
+   rendered a real NFC teaser card, which violated the "no NFC content on
+   home" requirement. #soluciones now wraps TpvModulesSection directly.)
   H2: Resultados reales que transforman negocios
     H3: Aumento Promedio
     H3: Satisfacción
@@ -98,7 +100,7 @@ const ErrorBoundaryFallback: React.FC = () => {
     H3: Síguenos (Social Media)
   (No heading levels skipped — valid H1→H2→H3→H4 hierarchy)
   SEO checklist verification:
-  - Title: "SmartConnect AI: IA y Automatización para Negocios" (50 chars) ✓
+  - Title: "Digitaliza Tenerife: IA y Automatización para Negocios" (50 chars) ✓
   - Meta desc: 111 chars ✓ (100-130 range)
   - Viewport: width=device-width, initial-scale=1.0 ✓
   - Hreflang: skipped (single-language Spanish site) ✓
@@ -119,12 +121,12 @@ const App: React.FC = () => {
   const CANONICAL_URL = "https://digitalizatenerife.es/";
 
   const pageTitle = isContacto
-    ? "Contacto | SmartConnect AI"
-    : "SmartConnect AI | Automatización e IA para Empresas";
+    ? "Contacto | Digitaliza Tenerife"
+    : "Digitaliza Tenerife | Automatización e IA para Empresas";
 
   const pageDescription = isContacto
-    ? "Contacta con SmartConnect AI. Solicita información sobre automatización, menús digitales, NFC y soluciones IA para tu negocio en Tenerife."
-    : "SmartConnect AI: automatización con IA, n8n, NFC para Google Reviews y menús digitales. Digitaliza tu negocio.";
+    ? "Contacta con Digitaliza Tenerife. Solicita información sobre automatización, menús digitales, NFC y soluciones IA para tu negocio en Tenerife."
+    : "Digitaliza Tenerife: automatización con IA, n8n, NFC para Google Reviews y menús digitales. Digitaliza tu negocio.";
 
   React.useEffect(() => {
     const sentinel = sentinelRef.current;
@@ -160,7 +162,10 @@ const App: React.FC = () => {
   const faqEntries = faqGroups.flatMap((group) =>
     group.items.map((item) => ({ question: item.q, answer: item.a })),
   );
-  const schemaData = buildHomeSchema(SOLUTIONS, faqEntries);
+  // PR4: home's structured data reflects the 13 TPV modules, not the
+  // top-level SOLUTIONS catalog — no NFC Service node (NFC lives at its own
+  // /tarjetas-nfc route with its own schema, see TapReviewPage.tsx).
+  const schemaData = buildHomeSchema(TPV_MODULES, faqEntries);
 
   return (
     <ErrorBoundary>
@@ -171,13 +176,13 @@ const App: React.FC = () => {
         <link
           rel="author"
           href="https://digitalizatenerife.es/about"
-          title="SmartConnect AI"
+          title="Digitaliza Tenerife"
         />
         <link rel="alternate" hrefLang="es" href={CANONICAL_URL} />
         <link rel="alternate" hrefLang="x-default" href={CANONICAL_URL} />
         <link rel="alternate" hrefLang="en" href={CANONICAL_URL} />
         <meta property="og:locale" content="es_ES" />
-        <meta property="og:site_name" content="SmartConnect AI" />
+        <meta property="og:site_name" content="Digitaliza Tenerife" />
         <meta property="og:title" content={pageTitle} />
         <meta property="og:description" content={pageDescription} />
         <meta property="og:type" content="website" />
@@ -206,25 +211,22 @@ const App: React.FC = () => {
           <section id="inicio" aria-label="Inicio">
             <Hero variant={isContacto ? "contacto" : "home"} />
           </section>
-          <section
-            id="soluciones"
-            aria-label="Nuestras Soluciones"
-            className="py-20 md:py-32"
-          >
-            <Features />
-          </section>
-          <CartaDigitalSection whatsappPhone={whatsappPhone} />
-          <TapReviewSection whatsappPhone={whatsappPhone} />
+          {/* Scroll-anchor sentinel (no own landmark/aria-label — each TPV
+              module section below owns its own <section id> + heading) so
+              the footer's #soluciones link and any existing deep links keep
+              resolving after Features.tsx's grid was retired (PR9). */}
+          <div id="soluciones" aria-hidden="true" className="h-0" />
+          <TpvModulesSection whatsappPhone={whatsappPhone} />
           <section
             id="por-que"
-            aria-label="Por qué SmartConnect AI"
+            aria-label="Por qué Digitaliza Tenerife"
             className="py-20 md:py-32 bg-[var(--color-bg-alt)]"
           >
             <div className="container mx-auto px-6">
               {/* Left-aligned header */}
               <div className="max-w-2xl mb-16">
                 <h2 className="text-4xl md:text-5xl font-bold mb-4">
-                  ¿Por qué SmartConnect AI?
+                  ¿Por qué Digitaliza Tenerife?
                 </h2>
                 <p className="text-muted leading-relaxed text-lg">
                   Democratizamos el acceso a la tecnología para los negocios
@@ -232,16 +234,14 @@ const App: React.FC = () => {
                 </p>
               </div>
 
-              {/* Stats strip */}
+              {/* Stats strip — i18n-driven (PR4), same truthful values as before */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6 py-8 border-y border-[var(--color-border)] mb-16">
-                {(
-                  [
-                    { value: "200+", label: "Negocios en Canarias" },
-                    { value: "0%", label: "Comisiones por pedido" },
-                    { value: "6×", label: "Más reseñas en 90 días" },
-                    { value: "40%", label: "Más visitas con reseñas" },
-                  ] as const
-                ).map((stat) => (
+                {[
+                  { value: t.statStrip1Value, label: t.statStrip1Label },
+                  { value: t.statStrip2Value, label: t.statStrip2Label },
+                  { value: t.statStrip3Value, label: t.statStrip3Label },
+                  { value: t.statStrip4Value, label: t.statStrip4Label },
+                ].map((stat) => (
                   <div key={stat.label}>
                     <div className="text-3xl md:text-4xl font-bold text-default tabular-nums">
                       {stat.value}
@@ -279,12 +279,12 @@ const App: React.FC = () => {
                           desc: "Flujos que conectan CRM, email, WhatsApp y redes sociales.",
                         },
                         {
-                          title: "Menús digitales QRIBAR",
+                          title: "Carta Digital Premium",
                           desc: "Pedidos en tiempo real desde la mesa a barra y cocina.",
                         },
                         {
-                          title: "Tarjetas NFC Tap-to-Review",
-                          desc: "Multiplica las reseñas en Google con un solo toque.",
+                          title: "Plataforma TPV Todo-en-Uno",
+                          desc: "Cobro, comandero, cocina, stock y reservas en un solo sistema.",
                         },
                         {
                           title: "IA Conversacional",
@@ -309,8 +309,8 @@ const App: React.FC = () => {
                   Digitalizar tu negocio ya no es una opción — es una necesidad.
                   Los clientes buscan restaurantes en Google, leen reseñas antes
                   de visitar un local, y esperan poder pedir desde su móvil. Con
-                  SmartConnect AI, no solo te ponés al día — te adelantás a la
-                  competencia.
+                  Digitaliza Tenerife, no solo te ponés al día — te adelantás
+                  a la competencia.
                 </p>
               </div>
             </div>
@@ -343,8 +343,8 @@ const App: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-12 mb-12">
               <div>
                 <span className="font-bold text-xl text-default">
-                  SmartConnect{" "}
-                  <span className="text-[var(--color-primary)]">AI</span>
+                  Digitaliza{" "}
+                  <span className="text-[var(--color-primary)]">Tenerife</span>
                 </span>
                 <p className="text-muted text-sm mt-3 leading-relaxed">
                   {t.footerTagline}

@@ -40,7 +40,7 @@ const tools: ToolDescriptor[] = [
   {
     name: "get_product_info",
     description:
-      "Get detailed information about SmartConnect's two solutions: Carta Digital Premium (digital menu, includes a QRIBAR live-demo link) and Tap-to-Review NFC cards, for Canary Islands hospitality businesses.",
+      "Get detailed information about the Digitaliza Tenerife hospitality TPV platform (TPV y cobro, comandero móvil, KDS cocina, gestión de reservas, fichajes, delivery/takeaway, stock e inventario, food cost avanzado, sistema de alérgenos, compras, multi-IVA/IGIC, roles y permisos, and Tienda/Carta Digital) plus Tap-to-Review NFC cards, for Canary Islands hospitality businesses.",
     inputSchema: {
       type: "object",
       properties: {
@@ -64,8 +64,8 @@ const tools: ToolDescriptor[] = [
           en: "Tap-to-Review NFC: NFC cards for customers to leave Google reviews with one tap. One-time payment, no subscriptions. Includes table stand and 24/7 support.",
         },
         "carta-digital": {
-          es: "Carta Digital Premium: Menú digital avanzado con fotos, vídeos, 5 idiomas, pedidos por WhatsApp y base de datos propia de clientes. 0% comisiones. Incluye un enlace a la demo en vivo de QRIBAR.",
-          en: "Carta Digital Premium: Advanced digital menu with photos, videos, 5 languages, WhatsApp orders, and your own customer database. 0% commissions. Includes a link to the QRIBAR live demo.",
+          es: "Carta Digital Premium: Menú digital avanzado con fotos, vídeos, 5 idiomas, pedidos por WhatsApp y base de datos propia de clientes. 0% comisiones. Es uno de los módulos del TPV de Digitaliza Tenerife.",
+          en: "Carta Digital Premium: Advanced digital menu with photos, videos, 5 languages, WhatsApp orders, and your own customer database. 0% commissions. One of the modules in the Digitaliza Tenerife TPV.",
         },
       };
 
@@ -92,7 +92,7 @@ const tools: ToolDescriptor[] = [
   {
     name: "get_contact_info",
     description:
-      "Get contact information for SmartConnect AI, including email, WhatsApp, and office location in Santa Cruz de Tenerife.",
+      "Get contact information for Digitaliza Tenerife, including email, WhatsApp, and office location in Santa Cruz de Tenerife.",
     inputSchema: {
       type: "object",
       properties: {
@@ -108,7 +108,7 @@ const tools: ToolDescriptor[] = [
       if (lang === "en") {
         return tk(
           [
-            "SmartConnect AI — Contact Information",
+            "Digitaliza Tenerife — Contact Information",
             "",
             "- Email: info@digitalizatenerife.es",
             "- WhatsApp: available via the contact page",
@@ -120,7 +120,7 @@ const tools: ToolDescriptor[] = [
       }
       return tk(
         [
-          "SmartConnect AI — Información de Contacto",
+          "Digitaliza Tenerife — Información de Contacto",
           "",
           "- Email: info@digitalizatenerife.es",
           "- WhatsApp: disponible a través de la página de contacto",
@@ -134,7 +134,7 @@ const tools: ToolDescriptor[] = [
   {
     name: "list_products",
     description:
-      "List all products and services offered by SmartConnect AI for local businesses in Tenerife and the Canary Islands.",
+      "List all products and services offered by Digitaliza Tenerife for local businesses in Tenerife and the Canary Islands.",
     inputSchema: {
       type: "object",
       properties: {
@@ -150,10 +150,11 @@ const tools: ToolDescriptor[] = [
       if (lang === "en") {
         return tk(
           [
-            "SmartConnect AI — Products & Services",
+            "Digitaliza Tenerife — Products & Services",
             "",
-            "1. Carta Digital Premium — Premium digital menu with 5 languages (includes a QRIBAR live-demo link)",
-            "2. Tap-to-Review NFC — Google review NFC cards",
+            "1. TPV Platform — Point of sale, mobile ordering, kitchen display, reservations, staff clock-in, delivery, stock, food cost, allergens, purchasing, tax compliance, roles/permissions, and digital menu (13 modules)",
+            "2. Carta Digital Premium — Premium digital menu with 5 languages",
+            "3. Tap-to-Review NFC — Google review NFC cards",
             "",
             "Website: https://digitalizatenerife.es",
           ].join("\n"),
@@ -161,10 +162,11 @@ const tools: ToolDescriptor[] = [
       }
       return tk(
         [
-          "SmartConnect AI — Productos y Servicios",
+          "Digitaliza Tenerife — Productos y Servicios",
           "",
-          "1. Carta Digital Premium — Menú digital premium con 5 idiomas (incluye enlace a la demo de QRIBAR)",
-          "2. Tap-to-Review NFC — Tarjetas NFC para reseñas en Google",
+          "1. Plataforma TPV — TPV/cobro, comandero móvil, KDS, reservas, fichajes, delivery, stock, food cost, alérgenos, compras, multi-IVA/IGIC, roles y Carta Digital (13 módulos)",
+          "2. Carta Digital Premium — Menú digital premium con 5 idiomas",
+          "3. Tap-to-Review NFC — Tarjetas NFC para reseñas en Google",
           "",
           "Web: https://digitalizatenerife.es",
         ].join("\n"),
