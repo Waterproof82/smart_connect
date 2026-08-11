@@ -44,14 +44,8 @@ describe("TPV_MODULE_SECTIONS wiring — PR6 modules batch 2", () => {
     expect(source).toMatch(/"delivery-takeaway":\s*DeliveryTakeawaySection/);
   });
 
-  it("the remaining 4 non-PR6 modules stay on createStubModuleSection (scope discipline)", () => {
-    expect(source).toMatch(/"rbac-roles":\s*createStubModuleSection/);
-    expect(source).toMatch(
-      /"food-cost-avanzado":\s*createStubModuleSection/,
-    );
-    expect(source).toMatch(
-      /"sistema-alergenos":\s*createStubModuleSection/,
-    );
-    expect(source).toMatch(/"compras-sialti":\s*createStubModuleSection/);
-  });
+  // rbac-roles, food-cost-avanzado, sistema-alergenos, and compras-sialti
+  // were stubs as of PR6 but shipped real components in PR7 (the final
+  // batch) — see ModulesBatch3.wiring.structure.test.ts for their coverage
+  // and tpvModules.test.ts for the registry-completion gate.
 });

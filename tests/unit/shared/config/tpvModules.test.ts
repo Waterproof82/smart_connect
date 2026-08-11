@@ -1,3 +1,4 @@
+import type React from "react";
 import { TPV_MODULES } from "@shared/config/tpvModules";
 import { TPV_MODULE_SECTIONS } from "@shared/components/tpv/TpvModuleSections";
 
@@ -68,6 +69,15 @@ describe("TPV_MODULES registry", () => {
   it("never emits a qribar.es sameAs reference on any module", () => {
     for (const module of TPV_MODULES) {
       expect(module.jsonLd.sameAs).toBeUndefined();
+    }
+  });
+
+  it("registry-completion gate: no TPV_MODULE_SECTIONS entry is still a stub (PR7 completes all 13)", () => {
+    for (const module of TPV_MODULES) {
+      const Component = TPV_MODULE_SECTIONS[module.id] as React.FC & {
+        displayName?: string;
+      };
+      expect(Component.displayName ?? "").not.toMatch(/^StubModuleSection/);
     }
   });
 });

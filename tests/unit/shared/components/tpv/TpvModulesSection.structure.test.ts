@@ -45,9 +45,9 @@ describe("TpvModulesSection (design.md D1/D2 composition seam)", () => {
     );
   });
 
-  it("stub sections render their own <section id={id}> wrapper (D4)", () => {
+  it("no createStubModuleSection factory remains — all 13 modules ship bespoke components (PR7 registry-completion gate)", () => {
     const source = read("shared/components/tpv/TpvModuleSections.tsx");
-    expect(source).toMatch(/<section\s+id=\{id\}/);
-    expect(source).toMatch(/aria-labelledby=\{`\$\{id\}-title`\}/);
+    expect(source).not.toMatch(/function createStubModuleSection/);
+    expect(source).not.toMatch(/createStubModuleSection\(/);
   });
 });
