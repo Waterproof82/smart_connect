@@ -10,7 +10,6 @@ const templatePath = path.resolve(distDir, "index.html");
 const routes = [
   "/",
   "/servicios",
-  "/carta-digital",
   "/tap-review",
   "/about",
   "/legal/aviso",

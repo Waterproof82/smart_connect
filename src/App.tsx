@@ -8,10 +8,12 @@ import { Contact } from "@features/landing/presentation/components/Contact";
 import { SuccessStats } from "@features/landing/presentation/components/SuccessStats";
 import { ExpertAssistant } from "@features/chatbot/presentation";
 import HomeFaqSection from "@features/landing/presentation/components/HomeFaqSection";
+import CartaDigitalSection from "@features/landing/presentation/components/CartaDigitalSection";
 import { ConsoleLogger } from "@core/domain/usecases/Logger";
 import { useLanguage } from "@shared/context/LanguageContext";
 import { SOLUTIONS } from "@shared/config/solutions";
 import { buildHomeSchema } from "@shared/presentation/components/SeoSchema";
+import { useWhatsappPhone } from "@shared/hooks";
 
 const logger = new ConsoleLogger("[ErrorBoundary]");
 
@@ -110,6 +112,7 @@ const App: React.FC = () => {
   const sentinelRef = React.useRef<HTMLDivElement>(null);
   const { t } = useLanguage();
   const location = useLocation();
+  const whatsappPhone = useWhatsappPhone();
   const isServicios = location.pathname === "/servicios";
   const isContacto = location.pathname === "/contacto";
 
@@ -279,6 +282,7 @@ const App: React.FC = () => {
           >
             <Features />
           </section>
+          <CartaDigitalSection whatsappPhone={whatsappPhone} />
           <section
             id="por-que"
             aria-label="Por qué SmartConnect AI"

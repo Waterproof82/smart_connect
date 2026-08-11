@@ -7,7 +7,6 @@ import { LanguageProvider } from "@shared/context/LanguageContext";
 import { ThemeProvider } from "@shared/context/ThemeContext";
 import { ScrollToTop } from "@shared/components/ScrollToTop";
 import App from "./App";
-import CartaDigitalPremium from "./features/landing/presentation/components/CartaDigitalPremium";
 import { TapReviewPage } from "./features/tap-review/presentation/TapReviewPage";
 import AboutPage from "./features/landing/presentation/components/AboutPage";
 import AvisoLegalPage from "./features/legal/presentation/AvisoLegalPage";
@@ -27,10 +26,6 @@ export function render(url: string): { html: string; head: string } {
               <Routes>
                 <Route path="/" element={<App />} />
                 <Route path="/servicios" element={<App />} />
-                <Route
-                  path="/carta-digital"
-                  element={<CartaDigitalPremium />}
-                />
                 <Route path="/tap-review" element={<TapReviewPage />} />
                 <Route path="/about" element={<AboutPage />} />
                 <Route path="/legal/aviso" element={<AvisoLegalPage />} />
