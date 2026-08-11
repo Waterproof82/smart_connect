@@ -4,12 +4,15 @@
  * renders its home-page section.
  *
  * PR5 status: `tpv-cobro`, `comandero-movil`, `kds-cocina`, and
- * `delivery-takeaway` now ship real bespoke components (this PR). The
- * remaining 8 non-`tienda-carta-digital` entries stay on
- * `createStubModuleSection` until PR6-7 swap them in — each swap is a
- * single map-line change here, no other file needs to be reopened.
- * `tienda-carta-digital` already reuses the existing, fully-built
- * CartaDigitalSection sub-tree (shipped in PR4).
+ * `delivery-takeaway` shipped real bespoke components.
+ * PR6 status: `gestion-reservas`, `fichajes-control-horario`,
+ * `stock-inventario`, and `multi-iva-igic` now also ship real bespoke
+ * components (this PR). The remaining 4 non-`tienda-carta-digital` entries
+ * (`rbac-roles`, `food-cost-avanzado`, `sistema-alergenos`,
+ * `compras-sialti`) stay on `createStubModuleSection` until PR7 swaps them
+ * in — each swap is a single map-line change here, no other file needs to
+ * be reopened. `tienda-carta-digital` already reuses the existing,
+ * fully-built CartaDigitalSection sub-tree (shipped in PR4).
  *
  * Every stub (and every future bespoke component) follows design.md D4:
  * `<section id={module.id} aria-labelledby="{id}-title">` is the sole DOM
@@ -24,6 +27,10 @@ import TpvCobroSection from "./TpvCobroSection";
 import ComanderoMovilSection from "./ComanderoMovilSection";
 import KdsCocinaSection from "./KdsCocinaSection";
 import DeliveryTakeawaySection from "./DeliveryTakeawaySection";
+import GestionReservasSection from "./GestionReservasSection";
+import FichajesControlHorarioSection from "./FichajesControlHorarioSection";
+import StockInventarioSection from "./StockInventarioSection";
+import MultiIvaIgicSection from "./MultiIvaIgicSection";
 
 export interface TpvModuleSectionProps {
   /** Pre-fetched, wa.me-ready phone number. Not every module needs it. */
@@ -81,27 +88,11 @@ export const TPV_MODULE_SECTIONS: Record<
   "tpv-cobro": TpvCobroSection,
   "comandero-movil": ComanderoMovilSection,
   "kds-cocina": KdsCocinaSection,
-  "gestion-reservas": createStubModuleSection(
-    "gestion-reservas",
-    "gestionReservasTitle",
-    "gestionReservasDesc",
-  ),
-  "fichajes-control-horario": createStubModuleSection(
-    "fichajes-control-horario",
-    "fichajesTitle",
-    "fichajesDesc",
-  ),
+  "gestion-reservas": GestionReservasSection,
+  "fichajes-control-horario": FichajesControlHorarioSection,
   "delivery-takeaway": DeliveryTakeawaySection,
-  "stock-inventario": createStubModuleSection(
-    "stock-inventario",
-    "stockInventarioTitle",
-    "stockInventarioDesc",
-  ),
-  "multi-iva-igic": createStubModuleSection(
-    "multi-iva-igic",
-    "multiIvaIgicTitle",
-    "multiIvaIgicDesc",
-  ),
+  "stock-inventario": StockInventarioSection,
+  "multi-iva-igic": MultiIvaIgicSection,
   "rbac-roles": createStubModuleSection(
     "rbac-roles",
     "rbacRolesTitle",

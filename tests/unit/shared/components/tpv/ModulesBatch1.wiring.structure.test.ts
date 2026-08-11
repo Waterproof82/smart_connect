@@ -33,17 +33,10 @@ describe("TPV_MODULE_SECTIONS wiring — PR5 modules batch 1", () => {
     expect(source).toMatch(/"delivery-takeaway":\s*DeliveryTakeawaySection/);
   });
 
-  it("the remaining 8 non-PR5 modules stay on createStubModuleSection (scope discipline)", () => {
-    expect(source).toMatch(
-      /"gestion-reservas":\s*createStubModuleSection/,
-    );
-    expect(source).toMatch(
-      /"fichajes-control-horario":\s*createStubModuleSection/,
-    );
-    expect(source).toMatch(
-      /"stock-inventario":\s*createStubModuleSection/,
-    );
-    expect(source).toMatch(/"multi-iva-igic":\s*createStubModuleSection/);
+  it("the non-PR5/PR6 modules stay on createStubModuleSection (scope discipline)", () => {
+    // gestion-reservas, fichajes-control-horario, stock-inventario, and
+    // multi-iva-igic were stubs as of PR5 but shipped real components in
+    // PR6 — see ModulesBatch2.wiring.structure.test.ts for their coverage.
     expect(source).toMatch(/"rbac-roles":\s*createStubModuleSection/);
     expect(source).toMatch(
       /"food-cost-avanzado":\s*createStubModuleSection/,
