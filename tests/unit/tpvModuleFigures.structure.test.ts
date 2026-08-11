@@ -6,13 +6,19 @@ import { tpvModuleEs, tpvModuleEn } from "@shared/i18n/modules";
 // design.md D6/D8/D9 — TpvModuleFigure eager wrapper + per-module photo
 // pattern. MODULES_WITH_FIGURES grows by one entry per module PR: PR1 shipped
 // "tpv-cobro"; PR2 appends comandero-movil, kds-cocina, gestion-reservas;
-// PR3-4 append the remaining 8 (never "tienda-carta-digital" — that module is
-// accent-only, spec requirement "tienda-carta-digital Accent-Only").
+// PR3 appends fichajes-control-horario, delivery-takeaway, stock-inventario,
+// multi-iva-igic; PR4 appends the remaining 4 (never "tienda-carta-digital"
+// — that module is accent-only, spec requirement
+// "tienda-carta-digital Accent-Only").
 const MODULES_WITH_FIGURES = [
   "tpv-cobro",
   "comandero-movil",
   "kds-cocina",
   "gestion-reservas",
+  "fichajes-control-horario",
+  "delivery-takeaway",
+  "stock-inventario",
+  "multi-iva-igic",
 ];
 
 const SECTION_FILE: Record<string, string> = {
@@ -20,6 +26,10 @@ const SECTION_FILE: Record<string, string> = {
   "comandero-movil": "ComanderoMovilSection.tsx",
   "kds-cocina": "KdsCocinaSection.tsx",
   "gestion-reservas": "GestionReservasSection.tsx",
+  "fichajes-control-horario": "FichajesControlHorarioSection.tsx",
+  "delivery-takeaway": "DeliveryTakeawaySection.tsx",
+  "stock-inventario": "StockInventarioSection.tsx",
+  "multi-iva-igic": "MultiIvaIgicSection.tsx",
 };
 
 // module id -> camelCase i18n prefix used for the FigureAlt key, e.g.
@@ -29,6 +39,10 @@ const I18N_PREFIX: Record<string, string> = {
   "comandero-movil": "comanderoMovil",
   "kds-cocina": "kdsCocina",
   "gestion-reservas": "gestionReservas",
+  "fichajes-control-horario": "fichajes",
+  "delivery-takeaway": "deliveryTakeaway",
+  "stock-inventario": "stockInventario",
+  "multi-iva-igic": "multiIvaIgic",
 };
 
 const SRC = path.resolve(__dirname, "../../src");

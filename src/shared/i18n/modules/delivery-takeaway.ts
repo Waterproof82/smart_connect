@@ -11,6 +11,7 @@ export interface DeliveryTakeawayCopy {
   deliveryTakeawayBullet4Title: string;
   deliveryTakeawayBullet4Desc: string;
   deliveryTakeawayCtaLabel: string;
+  deliveryTakeawayFigureAlt: string;
 }
 
 export const deliveryTakeawayCopy: {
@@ -36,6 +37,8 @@ export const deliveryTakeawayCopy: {
     deliveryTakeawayBullet4Desc:
       "Vendes a domicilio sin ceder margen a plataformas externas.",
     deliveryTakeawayCtaLabel: "Pide una demo de delivery",
+    deliveryTakeawayFigureAlt:
+      "Clienta recogiendo una bolsa de pedido para llevar en el mostrador de un local de hostelería",
   },
   en: {
     deliveryTakeawayEyebrow: "DELIVERY & TAKEAWAY",
@@ -55,5 +58,7 @@ export const deliveryTakeawayCopy: {
     deliveryTakeawayBullet4Desc:
       "Sell delivery without giving up margin to third-party platforms.",
     deliveryTakeawayCtaLabel: "Request a delivery demo",
+    deliveryTakeawayFigureAlt:
+      "Customer picking up a takeaway order bag at the counter of a hospitality venue",
   },
 };

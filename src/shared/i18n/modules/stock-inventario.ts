@@ -11,6 +11,7 @@ export interface StockInventarioCopy {
   stockInventarioBullet4Title: string;
   stockInventarioBullet4Desc: string;
   stockInventarioCtaLabel: string;
+  stockInventarioFigureAlt: string;
 }
 
 export const stockInventarioCopy: {
@@ -35,6 +36,8 @@ export const stockInventarioCopy: {
     stockInventarioBullet4Desc:
       "Consulta existencias de toda la cocina desde un único panel.",
     stockInventarioCtaLabel: "Pide una demo de stock",
+    stockInventarioFigureAlt:
+      "Empleado con una tablet revisando existencias entre estanterías de un almacén",
   },
   en: {
     stockInventarioEyebrow: "STOCK & INVENTORY",
@@ -54,5 +57,7 @@ export const stockInventarioCopy: {
     stockInventarioBullet4Desc:
       "Check stock across your whole kitchen from a single screen.",
     stockInventarioCtaLabel: "Request a stock demo",
+    stockInventarioFigureAlt:
+      "Employee checking stock levels on a tablet between warehouse shelving",
   },
 };

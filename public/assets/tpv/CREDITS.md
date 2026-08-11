@@ -17,3 +17,7 @@ in-repo build dependency was added (design.md F3).
 | comandero-movil.webp | A9kuKeT-YFc | SpotOn | https://unsplash.com/photos/A9kuKeT-YFc | 2026-08-11 |
 | kds-cocina.webp | mx9F9ptC5RA | SpotOn | https://unsplash.com/photos/mx9F9ptC5RA | 2026-08-11 |
 | gestion-reservas.webp | Fiemj1UGeAU | Haberdoedas | https://unsplash.com/photos/Fiemj1UGeAU | 2026-08-11 |
+| fichajes-control-horario.webp | URkqBy5EuPg | Oladimeji Ajegbile | https://unsplash.com/photos/URkqBy5EuPg | 2026-08-11 |
+| delivery-takeaway.webp | CgJvsqNpZHE | SpotOn | https://unsplash.com/photos/CgJvsqNpZHE | 2026-08-11 |
+| stock-inventario.webp | 4kjtbC-wMHs | Rodrigo Rodrigues | https://unsplash.com/photos/4kjtbC-wMHs | 2026-08-11 |
+| multi-iva-igic.webp | 0rHxkbcvQAE | FIN | https://unsplash.com/photos/0rHxkbcvQAE | 2026-08-11 |
