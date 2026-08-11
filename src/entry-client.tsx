@@ -19,8 +19,6 @@ const AdminPanel = lazy(() =>
   })),
 );
 
-const TapReviewPageWithData = lazy(() => import("./TapReviewHydrator"));
-
 const AboutPage = lazy(() =>
   import("@features/landing/presentation/components/AboutPage").then((m) => ({
     default: m.default,
@@ -61,8 +59,8 @@ const rootElement = document.getElementById("root");
 if (!rootElement) throw new Error("Could not find root element to mount to");
 
 // Prerendered pages (/, /servicios, /contacto) have SSR HTML content inside #root
-// → use hydrateRoot. SPA routes (tap-review, admin) serve _spa.html
-// with only a <!--ssr-outlet--> comment → use createRoot to avoid hydration errors.
+// → use hydrateRoot. SPA routes (admin) serve _spa.html with only a
+// <!--ssr-outlet--> comment → use createRoot to avoid hydration errors.
 const hasSSRContent = rootElement.children.length > 0;
 
 const app = (
@@ -79,7 +77,6 @@ const app = (
               <Route path="/servicios" element={<App />} />
               <Route path="/contacto" element={<App />} />
               <Route path="/admin" element={<AdminPanel />} />
-              <Route path="/tap-review" element={<TapReviewPageWithData />} />
               <Route path="/about" element={<AboutPage />} />
               <Route path="/legal/aviso" element={<AvisoLegalPage />} />
               <Route path="/legal/privacidad" element={<PrivacidadPage />} />

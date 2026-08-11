@@ -9,6 +9,7 @@ import { SuccessStats } from "@features/landing/presentation/components/SuccessS
 import { ExpertAssistant } from "@features/chatbot/presentation";
 import HomeFaqSection from "@features/landing/presentation/components/HomeFaqSection";
 import CartaDigitalSection from "@features/landing/presentation/components/CartaDigitalSection";
+import { TapReviewSection } from "@features/tap-review/presentation/TapReviewSection";
 import { ConsoleLogger } from "@core/domain/usecases/Logger";
 import { useLanguage } from "@shared/context/LanguageContext";
 import { SOLUTIONS } from "@shared/config/solutions";
@@ -283,6 +284,7 @@ const App: React.FC = () => {
             <Features />
           </section>
           <CartaDigitalSection whatsappPhone={whatsappPhone} />
+          <TapReviewSection whatsappPhone={whatsappPhone} />
           <section
             id="por-que"
             aria-label="Por qué SmartConnect AI"
