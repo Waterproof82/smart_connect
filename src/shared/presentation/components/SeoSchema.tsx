@@ -23,7 +23,7 @@ export function buildHomeSchema(
   const organization = {
     "@type": "LocalBusiness",
     "@id": `${ORG_URL}/#organization`,
-    name: "SmartConnect AI",
+    name: "Digitaliza Tenerife",
     url: ORG_URL,
     description:
       "Automatización con IA, n8n, NFC para Google Reviews y menús digitales QRIBAR para negocios en Tenerife y Canarias.",
@@ -57,13 +57,13 @@ export function buildHomeSchema(
     "@type": "WebPage",
     "@id": ORG_URL,
     url: ORG_URL,
-    name: "SmartConnect AI | Automatización e IA para Empresas",
+    name: "Digitaliza Tenerife | Automatización e IA para Empresas",
     description:
-      "SmartConnect AI: automatización con IA, n8n, NFC para Google Reviews y menús digitales. Digitaliza tu negocio.",
+      "Digitaliza Tenerife: automatización con IA, n8n, NFC para Google Reviews y menús digitales. Digitaliza tu negocio.",
     inLanguage: "es",
     author: {
       "@type": "Organization",
-      name: "SmartConnect AI",
+      name: "Digitaliza Tenerife",
       url: ORG_URL,
       logo: {
         "@type": "ImageObject",
@@ -74,7 +74,7 @@ export function buildHomeSchema(
     },
     publisher: {
       "@type": "Organization",
-      name: "SmartConnect AI",
+      name: "Digitaliza Tenerife",
       url: ORG_URL,
       logo: {
         "@type": "ImageObject",
@@ -105,7 +105,7 @@ export function buildHomeSchema(
 
   const itemList = {
     "@type": "ItemList",
-    name: "Soluciones SmartConnect AI",
+    name: "Soluciones Digitaliza Tenerife",
     description:
       "Nuestras soluciones tecnológicas para hostelería: menús digitales y tarjetas NFC para reseñas.",
     url: `${ORG_URL}/#soluciones`,
@@ -605,7 +605,7 @@ export const ReviewSchema: React.FC<ReviewSchemaProps> = ({
   datePublished = new Date().toISOString().split("T")[0],
   itemReviewed = {
     "@type": "SoftwareApplication",
-    name: "SmartConnect AI",
+    name: "Digitaliza Tenerife",
     applicationCategory: "BusinessApplication",
     operatingSystem: "Web, iOS, Android",
     offers: {

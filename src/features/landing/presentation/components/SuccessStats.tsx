@@ -83,7 +83,7 @@ export const SuccessStats: React.FC = () => {
     {
       quote: t.successStat4Quote,
       author: t.successStat4Author,
-      service: "SmartConnect AI",
+      service: "Digitaliza Tenerife",
       delay: 300,
     },
   ];

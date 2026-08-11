@@ -348,7 +348,7 @@ interface Translation {
   // Table Orders SEO
   // NFC Reviews Landing Page
   // n8n Automation Landing Page
-  smartConnect: string;
+  brandName: string;
   enterpriseAINode: string;
   aiCore: string;
   processing: string;
@@ -494,7 +494,7 @@ const translations: Record<Language, Translation> = {
     featuresSubtitle:
       "Herramientas avanzadas diseñadas para la era digital, desde el hardware hasta el código.",
     featuresContent1:
-      "En SmartConnect AI transformamos la experiencia de los restaurantes en Tenerife y Canarias. Con IA, automatización y hardware inteligente, ayudamos a atraer, retener y fidelizar clientes. Nuestras soluciones incluyen menús digitales QRIBAR con pedidos en tiempo real, tarjetas NFC para reseñas instantáneas en Google y automatización con n8n que conecta cada interacción del cliente. ¡El salto digital que tu negocio necesita para crecer!",
+      "En Digitaliza Tenerife transformamos la experiencia de los restaurantes en Tenerife y Canarias. Con IA, automatización y hardware inteligente, ayudamos a atraer, retener y fidelizar clientes. Nuestras soluciones incluyen menús digitales QRIBAR con pedidos en tiempo real, tarjetas NFC para reseñas instantáneas en Google y automatización con n8n que conecta cada interacción del cliente. ¡El salto digital que tu negocio necesita para crecer!",
     featuresContent1Title: "QRIBAR: Menú Digital Inteligente",
     featuresContent2:
       "Con QRIBAR, tus clientes en Tenerife y Canarias pueden pedir desde su móvil escaneando un código QR en la mesa. El pedido llega directamente a barra y cocina en tiempo real, reduciendo tiempos de espera y aumentando la rotación de mesas. Sin comisiones ni intermediarios, cada mesa se convierte en un punto de venta digital que opera 24/7, recopilando datos valiosos para campañas de marketing automatizadas y fidelización.",
@@ -538,7 +538,7 @@ const translations: Record<Language, Translation> = {
     successStat3Author: "Bar Bodega Toledo",
     successStat4Label: "Clientes Activos",
     successStat4Quote:
-      "Más de 850 negocios confían en SmartConnect para su transformación digital",
+      "Más de 850 negocios confían en Digitaliza Tenerife para su transformación digital",
     successStat4Author: "Comunidad Hostelera",
 
     // SEO
@@ -610,7 +610,7 @@ const translations: Record<Language, Translation> = {
     footerLegalAviso: "Aviso Legal",
     footerLegalPrivacidad: "Política de Privacidad",
     footerLegalCookies: "Política de Cookies",
-    footerCopyright: "© 2026 SmartConnect AI. Todos los derechos reservados.",
+    footerCopyright: "© 2026 Digitaliza Tenerife. Todos los derechos reservados.",
 
     // Navbar Solutions
     navbarNFC: "Tarjetas NFC",
@@ -899,7 +899,7 @@ const translations: Record<Language, Translation> = {
     // NFC Reviews Landing Page
 
     // n8n Automation Landing Page
-    smartConnect: "SmartConnect",
+    brandName: "Digitaliza Tenerife",
     enterpriseAINode: "Enterprise AI Node",
     aiCore: "AI Core",
     processing: "Procesando...",
@@ -907,25 +907,25 @@ const translations: Record<Language, Translation> = {
     nfcActive: "NFC Activo",
 
     // n8n Automation — Stats
-    legalAvisoTitle: "Aviso Legal - SmartConnect AI",
+    legalAvisoTitle: "Aviso Legal - Digitaliza Tenerife",
     legalAvisoDescription:
-      "Aviso legal de SmartConnect AI. Información sobre términos de uso, propiedad intelectual, responsabilidades y condiciones generales del sitio web.",
+      "Aviso legal de Digitaliza Tenerife. Información sobre términos de uso, propiedad intelectual, responsabilidades y condiciones generales del sitio web.",
     legalAvisoBackLink: "Volver al inicio",
-    legalPrivacidadTitle: "Política de Privacidad - SmartConnect AI",
+    legalPrivacidadTitle: "Política de Privacidad - Digitaliza Tenerife",
     legalPrivacidadDescription:
-      "Política de privacidad de SmartConnect AI. Información sobre recogida, uso y protección de datos personales.",
+      "Política de privacidad de Digitaliza Tenerife. Información sobre recogida, uso y protección de datos personales.",
     legalPrivacidadBackLink: "Volver al inicio",
     legalPrivacidadUpdated: "Última actualización: 2026",
-    legalCookiesTitle: "Política de Cookies - SmartConnect AI",
+    legalCookiesTitle: "Política de Cookies - Digitaliza Tenerife",
     legalCookiesDescription:
-      "Política de cookies de SmartConnect AI. Información sobre el uso de cookies y tecnologías similares.",
+      "Política de cookies de Digitaliza Tenerife. Información sobre el uso de cookies y tecnologías similares.",
     legalCookiesBackLink: "Volver al inicio",
     legalCookiesUpdated: "Última actualización: 2026",
 
     // Home FAQ
     homeFaqTitle: "Preguntas Frecuentes",
-    homeFaqQ1: "¿Qué es SmartConnect AI?",
-    homeFaqA1: "SmartConnect AI es una agencia de transformación digital especializada en hostelería y comercios locales de Canarias. Ofrecemos menús digitales, tarjetas NFC para reseñas, automatización con n8n e IA conversacional.",
+    homeFaqQ1: "¿Qué es Digitaliza Tenerife?",
+    homeFaqA1: "Digitaliza Tenerife es una agencia de transformación digital especializada en hostelería y comercios locales de Canarias. Ofrecemos menús digitales, tarjetas NFC para reseñas, automatización con n8n e IA conversacional.",
     homeFaqQ2: "¿Cuánto cuesta el menú digital QRIBAR?",
     homeFaqA2: "QRIBAR no tiene comisiones por pedido. El precio depende del plan y del tamaño del negocio. Contactá con nosotros para un presupuesto personalizado sin compromiso.",
     homeFaqQ3: "¿Cómo funcionan las tarjetas NFC Tap-to-Review?",
@@ -940,7 +940,7 @@ const translations: Record<Language, Translation> = {
     // CartaDigital FAQ & HowTo
     cartaFaqTitle: "Preguntas Frecuentes — Carta Digital",
     cartaFaqQ1: "¿Qué es la Carta Digital?",
-    cartaFaqA1: "La Carta Digital de SmartConnect AI es un menú digital con fotos y vídeos, gestión de pedidos vía Telegram, base de datos de clientes propia y herramientas de reducción de desperdicio alimentario. Sin comisiones por pedido.",
+    cartaFaqA1: "La Carta Digital de Digitaliza Tenerife es un menú digital con fotos y vídeos, gestión de pedidos vía Telegram, base de datos de clientes propia y herramientas de reducción de desperdicio alimentario. Sin comisiones por pedido.",
     cartaFaqQ2: "¿Necesito una app para usar el menú digital?",
     cartaFaqA2: "No. Los clientes simplemente escanean el QR de la mesa con la cámara del móvil. No se necesita descargar ninguna aplicación.",
     cartaFaqQ3: "¿Cuántos idiomas soporta la carta?",
@@ -1054,7 +1054,7 @@ const translations: Record<Language, Translation> = {
     featuresSubtitle:
       "Advanced tools designed for the digital era, from hardware to code.",
     featuresContent1:
-      "At SmartConnect AI we combine artificial intelligence, automation, and smart hardware to transform how local businesses attract, retain, and build loyalty with customers. Our platform integrates QRIBAR digital menus with real-time ordering, NFC cards for instant Google reviews, and n8n automation workflows that connect every customer interaction.",
+      "At Digitaliza Tenerife we combine artificial intelligence, automation, and smart hardware to transform how local businesses attract, retain, and build loyalty with customers. Our platform integrates QRIBAR digital menus with real-time ordering, NFC cards for instant Google reviews, and n8n automation workflows that connect every customer interaction.",
     featuresContent1Title: "QRIBAR: Smart Digital Menu",
     featuresContent2:
       "With QRIBAR, your customers order from their phone by scanning a QR code at the table. Orders arrive directly to the bar and kitchen in real-time, eliminating wait times and increasing table turnover. No commissions, no intermediaries.",
@@ -1096,7 +1096,7 @@ const translations: Record<Language, Translation> = {
     successStat3Author: "Bar Bodega Toledo",
     successStat4Label: "Active Clients",
     successStat4Quote:
-      "More than 850 businesses trust SmartConnect for their digital transformation",
+      "More than 850 businesses trust Digitaliza Tenerife for their digital transformation",
     successStat4Author: "Hospitality Community",
 
     // SEO
@@ -1168,7 +1168,7 @@ const translations: Record<Language, Translation> = {
     footerLegalAviso: "Legal Notice",
     footerLegalPrivacidad: "Privacy Policy",
     footerLegalCookies: "Cookie Policy",
-    footerCopyright: "© 2026 SmartConnect AI. All rights reserved.",
+    footerCopyright: "© 2026 Digitaliza Tenerife. All rights reserved.",
 
     // Navbar Solutions
     navbarNFC: "NFC Cards",
@@ -1461,7 +1461,7 @@ const translations: Record<Language, Translation> = {
     // NFC Reviews Landing Page
 
     // n8n Automation Landing Page
-    smartConnect: "SmartConnect",
+    brandName: "Digitaliza Tenerife",
     enterpriseAINode: "Enterprise AI Node",
     aiCore: "AI Core",
     processing: "Processing...",
@@ -1469,25 +1469,25 @@ const translations: Record<Language, Translation> = {
     nfcActive: "NFC Active",
 
     // n8n Automation — Stats
-    legalAvisoTitle: "Legal Notice - SmartConnect AI",
+    legalAvisoTitle: "Legal Notice - Digitaliza Tenerife",
     legalAvisoDescription:
-      "Legal notice of SmartConnect AI. Information about terms of use, intellectual property, liabilities and general conditions of the website.",
+      "Legal notice of Digitaliza Tenerife. Information about terms of use, intellectual property, liabilities and general conditions of the website.",
     legalAvisoBackLink: "Back to home",
-    legalPrivacidadTitle: "Privacy Policy - SmartConnect AI",
+    legalPrivacidadTitle: "Privacy Policy - Digitaliza Tenerife",
     legalPrivacidadDescription:
-      "Privacy policy of SmartConnect AI. Information about collection, use and protection of personal data.",
+      "Privacy policy of Digitaliza Tenerife. Information about collection, use and protection of personal data.",
     legalPrivacidadBackLink: "Back to home",
     legalPrivacidadUpdated: "Last updated: 2026",
-    legalCookiesTitle: "Cookies Policy - SmartConnect AI",
+    legalCookiesTitle: "Cookies Policy - Digitaliza Tenerife",
     legalCookiesDescription:
-      "Cookies policy of SmartConnect AI. Information about the use of cookies and similar technologies.",
+      "Cookies policy of Digitaliza Tenerife. Information about the use of cookies and similar technologies.",
     legalCookiesBackLink: "Back to home",
     legalCookiesUpdated: "Last updated: 2026",
 
     // Home FAQ
     homeFaqTitle: "Frequently Asked Questions",
-    homeFaqQ1: "What is SmartConnect AI?",
-    homeFaqA1: "SmartConnect AI is a digital transformation agency specializing in hospitality and local businesses in the Canary Islands. We offer digital menus, NFC review cards, n8n automation, and conversational AI.",
+    homeFaqQ1: "What is Digitaliza Tenerife?",
+    homeFaqA1: "Digitaliza Tenerife is a digital transformation agency specializing in hospitality and local businesses in the Canary Islands. We offer digital menus, NFC review cards, n8n automation, and conversational AI.",
     homeFaqQ2: "How much does the QRIBAR digital menu cost?",
     homeFaqA2: "QRIBAR has no per-order commissions. Pricing depends on the plan and business size. Contact us for a free personalized quote.",
     homeFaqQ3: "How do Tap-to-Review NFC cards work?",
@@ -1502,7 +1502,7 @@ const translations: Record<Language, Translation> = {
     // CartaDigital FAQ & HowTo
     cartaFaqTitle: "FAQ — Digital Menu",
     cartaFaqQ1: "What is the Digital Menu?",
-    cartaFaqA1: "SmartConnect AI's Digital Menu is a digital menu with photos and videos, Telegram-based order management, your own customer database, and food waste reduction tools. No per-order commissions.",
+    cartaFaqA1: "Digitaliza Tenerife's Digital Menu is a digital menu with photos and videos, Telegram-based order management, your own customer database, and food waste reduction tools. No per-order commissions.",
     cartaFaqQ2: "Do customers need an app?",
     cartaFaqA2: "No. Customers just scan the table QR code with their phone camera. No app download required.",
     cartaFaqQ3: "How many languages does the menu support?",

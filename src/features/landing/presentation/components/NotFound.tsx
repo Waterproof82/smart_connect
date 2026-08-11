@@ -5,10 +5,10 @@ import { Link } from "react-router-dom";
 export const NotFound: React.FC = () => (
   <>
     <Helmet>
-      <title>Página no encontrada - SmartConnect AI</title>
+      <title>Página no encontrada - Digitaliza Tenerife</title>
       <meta
         name="description"
-        content="La página que buscas no existe o ha sido movida. Vuelve al inicio de SmartConnect AI."
+        content="La página que buscas no existe o ha sido movida. Vuelve al inicio de Digitaliza Tenerife."
       />
       <meta name="robots" content="noindex, nofollow" />
     </Helmet>

@@ -1,13 +1,13 @@
 {
   "@context": "https://www.w3.org/ns/mcp/v1",
-  "name": "SmartConnect Landing Page",
-  "description": "SmartConnect AI landing page for local business digital transformation. Provides information about QRIBAR, NFC review cards, digital menus, and automation services.",
+  "name": "Digitaliza Tenerife Landing Page",
+  "description": "Digitaliza Tenerife landing page for local business digital transformation. Provides information about QRIBAR, NFC review cards, digital menus, and automation services.",
   "homepage": "https://digitalizatenerife.es",
   "version": "1.0.0",
   "capabilities": [
     {
       "name": "public-information",
-      "description": "Public information about SmartConnect services and products"
+      "description": "Public information about Digitaliza Tenerife services and products"
     }
   ]
 }

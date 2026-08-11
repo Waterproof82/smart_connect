@@ -98,7 +98,7 @@ const ErrorBoundaryFallback: React.FC = () => {
     H3: Síguenos (Social Media)
   (No heading levels skipped — valid H1→H2→H3→H4 hierarchy)
   SEO checklist verification:
-  - Title: "SmartConnect AI: IA y Automatización para Negocios" (50 chars) ✓
+  - Title: "Digitaliza Tenerife: IA y Automatización para Negocios" (50 chars) ✓
   - Meta desc: 111 chars ✓ (100-130 range)
   - Viewport: width=device-width, initial-scale=1.0 ✓
   - Hreflang: skipped (single-language Spanish site) ✓
@@ -119,12 +119,12 @@ const App: React.FC = () => {
   const CANONICAL_URL = "https://digitalizatenerife.es/";
 
   const pageTitle = isContacto
-    ? "Contacto | SmartConnect AI"
-    : "SmartConnect AI | Automatización e IA para Empresas";
+    ? "Contacto | Digitaliza Tenerife"
+    : "Digitaliza Tenerife | Automatización e IA para Empresas";
 
   const pageDescription = isContacto
-    ? "Contacta con SmartConnect AI. Solicita información sobre automatización, menús digitales, NFC y soluciones IA para tu negocio en Tenerife."
-    : "SmartConnect AI: automatización con IA, n8n, NFC para Google Reviews y menús digitales. Digitaliza tu negocio.";
+    ? "Contacta con Digitaliza Tenerife. Solicita información sobre automatización, menús digitales, NFC y soluciones IA para tu negocio en Tenerife."
+    : "Digitaliza Tenerife: automatización con IA, n8n, NFC para Google Reviews y menús digitales. Digitaliza tu negocio.";
 
   React.useEffect(() => {
     const sentinel = sentinelRef.current;
@@ -171,13 +171,13 @@ const App: React.FC = () => {
         <link
           rel="author"
           href="https://digitalizatenerife.es/about"
-          title="SmartConnect AI"
+          title="Digitaliza Tenerife"
         />
         <link rel="alternate" hrefLang="es" href={CANONICAL_URL} />
         <link rel="alternate" hrefLang="x-default" href={CANONICAL_URL} />
         <link rel="alternate" hrefLang="en" href={CANONICAL_URL} />
         <meta property="og:locale" content="es_ES" />
-        <meta property="og:site_name" content="SmartConnect AI" />
+        <meta property="og:site_name" content="Digitaliza Tenerife" />
         <meta property="og:title" content={pageTitle} />
         <meta property="og:description" content={pageDescription} />
         <meta property="og:type" content="website" />
@@ -217,14 +217,14 @@ const App: React.FC = () => {
           <TapReviewSection whatsappPhone={whatsappPhone} />
           <section
             id="por-que"
-            aria-label="Por qué SmartConnect AI"
+            aria-label="Por qué Digitaliza Tenerife"
             className="py-20 md:py-32 bg-[var(--color-bg-alt)]"
           >
             <div className="container mx-auto px-6">
               {/* Left-aligned header */}
               <div className="max-w-2xl mb-16">
                 <h2 className="text-4xl md:text-5xl font-bold mb-4">
-                  ¿Por qué SmartConnect AI?
+                  ¿Por qué Digitaliza Tenerife?
                 </h2>
                 <p className="text-muted leading-relaxed text-lg">
                   Democratizamos el acceso a la tecnología para los negocios
@@ -309,8 +309,8 @@ const App: React.FC = () => {
                   Digitalizar tu negocio ya no es una opción — es una necesidad.
                   Los clientes buscan restaurantes en Google, leen reseñas antes
                   de visitar un local, y esperan poder pedir desde su móvil. Con
-                  SmartConnect AI, no solo te ponés al día — te adelantás a la
-                  competencia.
+                  Digitaliza Tenerife, no solo te ponés al día — te adelantás
+                  a la competencia.
                 </p>
               </div>
             </div>
@@ -343,8 +343,8 @@ const App: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-12 mb-12">
               <div>
                 <span className="font-bold text-xl text-default">
-                  SmartConnect{" "}
-                  <span className="text-[var(--color-primary)]">AI</span>
+                  Digitaliza{" "}
+                  <span className="text-[var(--color-primary)]">Tenerife</span>
                 </span>
                 <p className="text-muted text-sm mt-3 leading-relaxed">
                   {t.footerTagline}

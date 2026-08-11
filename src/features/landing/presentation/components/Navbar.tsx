@@ -203,7 +203,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
             <Cpu className="text-[var(--color-on-accent)] w-6 h-6" />
           </div>
           <span className="font-bold text-xl tracking-tighter text-default">
-            SmartConnect <span className="text-[var(--color-primary)]">AI</span>
+            Digitaliza <span className="text-[var(--color-primary)]">Tenerife</span>
           </span>
         </a>
 
@@ -362,8 +362,8 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
             >
               <div className="flex items-center justify-between">
                 <span className="font-bold text-xl text-default">
-                  SmartConnect{" "}
-                  <span className="text-[var(--color-primary)]">AI</span>
+                  Digitaliza{" "}
+                  <span className="text-[var(--color-primary)]">Tenerife</span>
                 </span>
                 <div className="flex items-center gap-2">
                   <LanguageSelector />

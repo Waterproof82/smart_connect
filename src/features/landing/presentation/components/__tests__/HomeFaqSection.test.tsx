@@ -27,7 +27,7 @@ describe("HomeFaqSection", () => {
 
   it("renders all 6 FAQ questions as visible text", () => {
     renderWithLanguage();
-    expect(screen.getByText(/¿Qué es SmartConnect AI\?/)).toBeInTheDocument();
+    expect(screen.getByText(/¿Qué es Digitaliza Tenerife\?/)).toBeInTheDocument();
     expect(screen.getByText(/¿Cuánto cuesta el menú digital QRIBAR\?/)).toBeInTheDocument();
     expect(screen.getByText(/¿Cómo funcionan las tarjetas NFC Tap-to-Review\?/)).toBeInTheDocument();
     expect(screen.getByText(/¿Sus soluciones sirven para negocios fuera de Canarias\?/)).toBeInTheDocument();
