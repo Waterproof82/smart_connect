@@ -11,6 +11,7 @@ export interface TpvCobroCopy {
   tpvCobroBullet4Title: string;
   tpvCobroBullet4Desc: string;
   tpvCobroCtaLabel: string;
+  tpvCobroFigureAlt: string;
 }
 
 export const tpvCobroCopy: { es: TpvCobroCopy; en: TpvCobroCopy } = {
@@ -32,6 +33,8 @@ export const tpvCobroCopy: { es: TpvCobroCopy; en: TpvCobroCopy } = {
     tpvCobroBullet4Desc:
       "Consulta el histórico de ventas y detecta cualquier incidencia en segundos.",
     tpvCobroCtaLabel: "Pide una demo del TPV",
+    tpvCobroFigureAlt:
+      "Cliente pagando con tarjeta sin contacto en un datáfono sobre la mesa de un restaurante",
   },
   en: {
     tpvCobroEyebrow: "POS & PAYMENTS",
@@ -51,5 +54,7 @@ export const tpvCobroCopy: { es: TpvCobroCopy; en: TpvCobroCopy } = {
     tpvCobroBullet4Desc:
       "Check the sales history and spot any issue within seconds.",
     tpvCobroCtaLabel: "Request a POS demo",
+    tpvCobroFigureAlt:
+      "Customer paying with a contactless card on a card reader at a restaurant table",
   },
 };
