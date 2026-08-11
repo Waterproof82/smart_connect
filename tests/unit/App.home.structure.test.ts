@@ -35,26 +35,30 @@ describe("Home page composition (App.tsx + merged sections)", () => {
     }
   });
 
-  it("mounts CartaDigitalSection and TapReviewSection between #soluciones and #por-que", () => {
+  it("mounts CartaDigitalSection between #soluciones and #por-que", () => {
     const appSource = read("App.tsx");
     const solucionesIdx = appSource.indexOf('id="soluciones"');
     const cartaIdx = appSource.indexOf("<CartaDigitalSection");
-    const tapReviewIdx = appSource.indexOf("<TapReviewSection");
     const porQueIdx = appSource.indexOf('id="por-que"');
 
     expect(solucionesIdx).toBeGreaterThan(-1);
     expect(cartaIdx).toBeGreaterThan(solucionesIdx);
-    expect(tapReviewIdx).toBeGreaterThan(cartaIdx);
-    expect(porQueIdx).toBeGreaterThan(tapReviewIdx);
+    expect(porQueIdx).toBeGreaterThan(cartaIdx);
   });
 
-  it("the merged sections declare the #carta-digital and #tarjetas-nfc anchors", () => {
+  it("no longer mounts TapReviewSection on home (PR3: un-merged to /tarjetas-nfc)", () => {
+    const appSource = read("App.tsx");
+    expect(appSource).not.toMatch(/<TapReviewSection/);
+    expect(appSource).not.toMatch(
+      /from ["']@features\/tap-review\/presentation\/TapReviewSection["']/,
+    );
+  });
+
+  it("the merged Carta Digital section declares the #carta-digital anchor", () => {
     const cartaSource = read(
       "features/landing/presentation/components/CartaDigitalSection.tsx",
     );
-    const tapSource = read("features/tap-review/presentation/TapReviewSection.tsx");
     expect(cartaSource).toMatch(/id="carta-digital"/);
-    expect(tapSource).toMatch(/id="tarjetas-nfc"/);
   });
 
   it("Features.tsx derives its grid from the 2-entry SOLUTIONS catalog", () => {

@@ -10,6 +10,7 @@ const templatePath = path.resolve(distDir, "index.html");
 const routes = [
   "/",
   "/about",
+  "/tarjetas-nfc",
   "/legal/aviso",
   "/legal/privacidad",
   "/legal/cookies",

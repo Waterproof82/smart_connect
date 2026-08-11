@@ -25,6 +25,12 @@ const AboutPage = lazy(() =>
   })),
 );
 
+const TapReviewPage = lazy(() =>
+  import("@features/tap-review/presentation/TapReviewPage").then((m) => ({
+    default: m.default,
+  })),
+);
+
 const AvisoLegalPage = lazy(() =>
   import("@features/legal/presentation/AvisoLegalPage").then((m) => ({
     default: m.default,
@@ -77,6 +83,7 @@ const app = (
               <Route path="/contacto" element={<App />} />
               <Route path="/admin" element={<AdminPanel />} />
               <Route path="/about" element={<AboutPage />} />
+              <Route path="/tarjetas-nfc" element={<TapReviewPage />} />
               <Route path="/legal/aviso" element={<AvisoLegalPage />} />
               <Route path="/legal/privacidad" element={<PrivacidadPage />} />
               <Route path="/legal/cookies" element={<CookiesPage />} />

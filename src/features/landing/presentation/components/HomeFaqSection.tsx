@@ -13,10 +13,12 @@ interface HomeFaqGroup {
 
 /**
  * Returns the audited, deduped FAQ set for the home page: the original
- * general FAQ, plus the Carta Digital Premium FAQ and the Tap-to-Review
- * FAQ that used to live on their own standalone pages. Exported so
- * App.tsx can flatten it into `buildHomeSchema()`'s single FAQPage node
- * without re-declaring the question list.
+ * general FAQ plus the Carta Digital Premium FAQ. Exported so App.tsx can
+ * flatten it into `buildHomeSchema()`'s single FAQPage node without
+ * re-declaring the question list.
+ *
+ * PR3: the Tarjetas NFC FAQ group was un-merged into `useNfcFaqGroup()`
+ * below — it now lives on the standalone `/tarjetas-nfc` page, not home.
  */
 export function useHomeFaqGroups(): HomeFaqGroup[] {
   const { t } = useLanguage();
@@ -43,15 +45,25 @@ export function useHomeFaqGroups(): HomeFaqGroup[] {
         { q: t.cartaFaqQ5, a: t.cartaFaqA5 },
       ],
     },
-    {
-      title: t.tapReviewFAQTitle,
-      items: [
-        { q: t.tapReviewFAQ1Question, a: t.tapReviewFAQ1Answer },
-        { q: t.tapReviewFAQ2Question, a: t.tapReviewFAQ2Answer },
-        { q: t.tapReviewFAQ3Question, a: t.tapReviewFAQ3Answer },
-      ],
-    },
   ];
+}
+
+/**
+ * Tarjetas NFC FAQ group — un-merged from `useHomeFaqGroups()` in PR3.
+ * Consumed by the standalone `/tarjetas-nfc` page (TapReviewPage.tsx),
+ * not by home.
+ */
+export function useNfcFaqGroup(): HomeFaqGroup {
+  const { t } = useLanguage();
+
+  return {
+    title: t.tapReviewFAQTitle,
+    items: [
+      { q: t.tapReviewFAQ1Question, a: t.tapReviewFAQ1Answer },
+      { q: t.tapReviewFAQ2Question, a: t.tapReviewFAQ2Answer },
+      { q: t.tapReviewFAQ3Question, a: t.tapReviewFAQ3Answer },
+    ],
+  };
 }
 
 const HomeFaqSection: React.FC = () => {

@@ -37,11 +37,15 @@ describe("SOLUTIONS config", () => {
     expect(cartaDigital?.jsonLd.sameAs).toBeUndefined();
   });
 
-  it("hrefs are in-page anchors, pointing at the merged home sections", () => {
+  it("carta-digital href is an in-page anchor, pointing at the merged home section", () => {
     const cartaDigital = SOLUTIONS.find((s) => s.id === "carta-digital");
-    const tarjetasNfc = SOLUTIONS.find((s) => s.id === "tarjetas-nfc");
     expect(cartaDigital?.href).toBe("#carta-digital");
-    expect(tarjetasNfc?.href).toBe("#tarjetas-nfc");
+  });
+
+  it("tarjetas-nfc href is the standalone route, no longer an in-page anchor (PR3 un-merge)", () => {
+    const tarjetasNfc = SOLUTIONS.find((s) => s.id === "tarjetas-nfc");
+    expect(tarjetasNfc?.href).toBe("/tarjetas-nfc");
+    expect(tarjetasNfc?.internal).toBe(true);
   });
 
   it("no entry is external anymore (QRIBAR standalone entry removed)", () => {

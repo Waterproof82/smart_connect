@@ -43,7 +43,7 @@ export const SOLUTIONS: SolutionConfig[] = [
     icon: "Smartphone",
     titleKey: "navbarNFC",
     descKey: "navbarNFCDesc",
-    href: "#tarjetas-nfc",
+    href: "/tarjetas-nfc",
     internal: true,
     iconColor: "text-[var(--color-icon-emerald)]",
     serviceValue: "Tarjetas NFC Reseñas",

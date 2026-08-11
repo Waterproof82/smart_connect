@@ -10,7 +10,7 @@
     { "source": "/software-restaurantes-canarias", "destination": "/", "permanent": true },
     { "source": "/digitalizacion-hosteleria-tenerife", "destination": "/", "permanent": true },
     { "source": "/carta-digital", "destination": "/", "permanent": true },
-    { "source": "/tap-review", "destination": "/", "permanent": true },
+    { "source": "/tap-review", "destination": "/tarjetas-nfc", "permanent": true },
     { "source": "/servicios", "destination": "/", "permanent": true },
     { "source": "/contacto", "destination": "/#contacto", "permanent": true }
   ],
@@ -39,13 +39,14 @@
       "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
     },
     {
-      "source": "/(|about)",
+      "source": "/(|about|tarjetas-nfc)",
       "headers": [{ "key": "Cache-Control", "value": "public, max-age=3600" }]
     }
   ],
   "rewrites": [
     { "source": "/", "destination": "/index.html" },
     { "source": "/about", "destination": "/about/index.html" },
+    { "source": "/tarjetas-nfc", "destination": "/tarjetas-nfc/index.html" },
     { "source": "/legal/aviso", "destination": "/legal/aviso/index.html" },
     { "source": "/legal/privacidad", "destination": "/legal/privacidad/index.html" },
     { "source": "/legal/cookies", "destination": "/legal/cookies/index.html" },

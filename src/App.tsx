@@ -11,7 +11,6 @@ import HomeFaqSection, {
   useHomeFaqGroups,
 } from "@features/landing/presentation/components/HomeFaqSection";
 import CartaDigitalSection from "@features/landing/presentation/components/CartaDigitalSection";
-import { TapReviewSection } from "@features/tap-review/presentation/TapReviewSection";
 import { ConsoleLogger } from "@core/domain/usecases/Logger";
 import { useLanguage } from "@shared/context/LanguageContext";
 import { SOLUTIONS } from "@shared/config/solutions";
@@ -85,7 +84,7 @@ const ErrorBoundaryFallback: React.FC = () => {
     H3: Carta Digital Premium
     H3: Tarjetas NFC Tap-to-Review
   H2: Carta Digital Premium (merged section, own H2 hero + subsections as H3/H4)
-  H2: Tarjetas NFC Tap-to-Review (merged section, own H2 hero + subsections as H3/H4)
+  (PR3: Tarjetas NFC Tap-to-Review un-merged to its own /tarjetas-nfc route — no longer on home)
   H2: Resultados reales que transforman negocios
     H3: Aumento Promedio
     H3: Satisfacción
@@ -214,7 +213,6 @@ const App: React.FC = () => {
             <Features />
           </section>
           <CartaDigitalSection whatsappPhone={whatsappPhone} />
-          <TapReviewSection whatsappPhone={whatsappPhone} />
           <section
             id="por-que"
             aria-label="Por qué Digitaliza Tenerife"

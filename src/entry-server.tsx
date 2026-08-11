@@ -8,6 +8,7 @@ import { ThemeProvider } from "@shared/context/ThemeContext";
 import { ScrollToTop } from "@shared/components/ScrollToTop";
 import App from "./App";
 import AboutPage from "./features/landing/presentation/components/AboutPage";
+import TapReviewPage from "./features/tap-review/presentation/TapReviewPage";
 import AvisoLegalPage from "./features/legal/presentation/AvisoLegalPage";
 import PrivacidadPage from "./features/legal/presentation/PrivacidadPage";
 import CookiesPage from "./features/legal/presentation/CookiesPage";
@@ -25,6 +26,7 @@ export function render(url: string): { html: string; head: string } {
               <Routes>
                 <Route path="/" element={<App />} />
                 <Route path="/about" element={<AboutPage />} />
+                <Route path="/tarjetas-nfc" element={<TapReviewPage />} />
                 <Route path="/legal/aviso" element={<AvisoLegalPage />} />
                 <Route path="/legal/privacidad" element={<PrivacidadPage />} />
                 <Route path="/legal/cookies" element={<CookiesPage />} />
