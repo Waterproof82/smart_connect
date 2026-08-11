@@ -1,6 +1,7 @@
 import React, { Component, ReactNode } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import { Workflow, Utensils, Monitor, Bot } from "lucide-react";
 import { Navbar } from "@features/landing/presentation/components/Navbar";
 import { Hero } from "@features/landing/presentation/components/Hero";
 import { Contact } from "@features/landing/presentation/components/Contact";
@@ -15,6 +16,7 @@ import { useLanguage } from "@shared/context/LanguageContext";
 import { TPV_MODULES } from "@shared/config/tpvModules";
 import { buildHomeSchema } from "@shared/presentation/components/SeoSchema";
 import { useWhatsappPhone } from "@shared/hooks";
+import { accentStyle } from "@shared/config/accents";
 
 const logger = new ConsoleLogger("[ErrorBoundary]");
 
@@ -277,28 +279,48 @@ const App: React.FC = () => {
                         {
                           title: "Automatización con n8n",
                           desc: "Flujos que conectan CRM, email, WhatsApp y redes sociales.",
+                          icon: Workflow,
+                          accent: "--color-icon-indigo",
                         },
                         {
                           title: "Carta Digital Premium",
                           desc: "Pedidos en tiempo real desde la mesa a barra y cocina.",
+                          icon: Utensils,
+                          accent: "--color-icon-emerald",
                         },
                         {
                           title: "Plataforma TPV Todo-en-Uno",
                           desc: "Cobro, comandero, cocina, stock y reservas en un solo sistema.",
+                          icon: Monitor,
+                          accent: "--color-icon-coral",
                         },
                         {
                           title: "IA Conversacional",
                           desc: "Chatbot experto que responde dudas 24/7 sobre tus servicios.",
+                          icon: Bot,
+                          accent: "--color-icon-magenta",
                         },
                       ] as const
-                    ).map((pilar) => (
-                      <div key={pilar.title} className="py-4">
-                        <div className="font-semibold text-default text-sm mb-0.5">
-                          {pilar.title}
+                    ).map((pilar) => {
+                      const Icon = pilar.icon;
+                      return (
+                        <div
+                          key={pilar.title}
+                          className="py-4 flex gap-3"
+                          style={accentStyle(pilar.accent)}
+                        >
+                          <div className="w-9 h-9 shrink-0 rounded-lg flex items-center justify-center text-[color:var(--tpv-accent)] tpv-accent-chip">
+                            <Icon className="w-4 h-4" aria-hidden="true" />
+                          </div>
+                          <div>
+                            <div className="font-semibold text-default text-sm mb-0.5">
+                              {pilar.title}
+                            </div>
+                            <div className="text-muted text-sm">{pilar.desc}</div>
+                          </div>
                         </div>
-                        <div className="text-muted text-sm">{pilar.desc}</div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
               </div>
