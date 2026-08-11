@@ -6,6 +6,12 @@
  * section (was previously its own /carta-digital page). No Helmet, no
  * JSON-LD, no Navbar/Footer here: App.tsx owns the single <Helmet> and the
  * JSON-LD graph (via buildHomeSchema) for the whole home page now.
+ *
+ * PR4: mounted as the "tienda-carta-digital" entry of the TPV_MODULES
+ * registry (design.md D1/D2), via
+ * shared/components/tpv/TpvModuleSections.tsx. Its own sub-section tree is
+ * unchanged (wrapper intact) — only the wrapper `id` moved from a hardcoded
+ * literal to a prop.
  */
 
 import React, { useRef, useState } from "react";
@@ -27,11 +33,18 @@ import CartaDigitalModosSection from "./CartaDigitalModosSection";
 import CartaDigitalAntidesperdicioSection from "./CartaDigitalAntidesperdicioSection";
 
 interface CartaDigitalSectionProps {
+  /**
+   * Section wrapper id — prop-ised (PR4) so this component can be mounted
+   * as the "tienda-carta-digital" entry in the TPV_MODULES registry
+   * (design.md D1/D2) without hardcoding the anchor internally.
+   */
+  id: string;
   /** Pre-fetched, wa.me-ready phone number — single fetch lives in App.tsx via useWhatsappPhone(). */
   whatsappPhone: string;
 }
 
 const CartaDigitalSection: React.FC<CartaDigitalSectionProps> = ({
+  id,
   whatsappPhone,
 }) => {
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
@@ -55,7 +68,7 @@ const CartaDigitalSection: React.FC<CartaDigitalSectionProps> = ({
   };
 
   return (
-    <div id="carta-digital" className="bg-[var(--color-bg)] text-default">
+    <div id={id} className="bg-[var(--color-bg)] text-default">
       <CartaDigitalHeroSection onScrollToSection={scrollToSection} />
       <CartaDigitalProblemaSection />
       <CartaDigitalSolucionSection />

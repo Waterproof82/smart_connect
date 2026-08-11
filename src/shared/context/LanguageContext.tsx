@@ -7,10 +7,15 @@ import React, {
   ReactNode,
   useMemo,
 } from "react";
+import {
+  TpvModuleTranslations,
+  tpvModuleEs,
+  tpvModuleEn,
+} from "@shared/i18n/modules";
 
 type Language = "es" | "en";
 
-interface Translation {
+interface Translation extends TpvModuleTranslations {
   // Navigation
   navSolutions: string;
   navSuccess: string;
@@ -29,6 +34,15 @@ interface Translation {
   heroContactoTitleAccent: string;
   heroContactoTitleEnd: string;
   heroSubtitle: string;
+  // Home — "por qué" stat strip (PR4: moved from hardcoded array to i18n)
+  statStrip1Value: string;
+  statStrip1Label: string;
+  statStrip2Value: string;
+  statStrip2Label: string;
+  statStrip3Value: string;
+  statStrip3Label: string;
+  statStrip4Value: string;
+  statStrip4Label: string;
   heroButtonDemo: string;
   heroButtonContact: string;
   // Features
@@ -454,6 +468,8 @@ interface Translation {
 
 const translations: Record<Language, Translation> = {
   es: {
+    ...tpvModuleEs,
+
     // Navigation
     navSolutions: "Soluciones",
     navSuccess: "Éxito",
@@ -461,11 +477,12 @@ const translations: Record<Language, Translation> = {
     navAdmin: "Admin",
     navBack: "Volver",
 
-    // Hero
-    heroEyebrow: "La revolución digital para negocios locales",
-    heroTitle: "Potencia tu Negocio con",
-    heroTitleAccent: "IA",
-    heroTitleEnd: "y Automatización",
+    // Hero — outcome-first: leads with business benefit (facturación /
+    // tiempo ahorrado), platform breadth is supporting copy in the eyebrow.
+    heroEyebrow: "Todo tu negocio en una pantalla",
+    heroTitle: "Aumenta tu facturación,",
+    heroTitleAccent: "ahorra horas",
+    heroTitleEnd: "cada semana",
     heroServiciosTitle: "Soluciones de",
     heroServiciosTitleAccent: "IA y Automatización",
     heroServiciosTitleEnd: "para tu Negocio",
@@ -473,7 +490,15 @@ const translations: Record<Language, Translation> = {
     heroContactoTitleAccent: "Proyecto",
     heroContactoTitleEnd: "",
     heroSubtitle:
-      "Tecnología de próxima generación para restaurantes en Tenerife y Canarias. Automatiza pedidos, aumenta ingresos por mesa, reduce tiempos de espera y fideliza clientes con soluciones digitales sin comisiones ni intermediarios.",
+      "TPV, comandero móvil, cocina, reservas, stock y más en una sola plataforma. Cobra más rápido, reduce tareas manuales y dedica tu tiempo a lo que importa: tu negocio. Sin comisiones ni intermediarios.",
+    statStrip1Value: "200+",
+    statStrip1Label: "Negocios en Canarias",
+    statStrip2Value: "0%",
+    statStrip2Label: "Comisiones por pedido",
+    statStrip3Value: "6×",
+    statStrip3Label: "Más reseñas en 90 días",
+    statStrip4Value: "40%",
+    statStrip4Label: "Más visitas con reseñas",
     heroButtonDemo: "Ver Demo",
     heroButtonContact: "Contactar",
 
@@ -1001,6 +1026,8 @@ const translations: Record<Language, Translation> = {
     cartaAntidesperdicioFeature3Desc: "Recuperá el valor de stock que de otro modo se desperdiciaría.",
   },
   en: {
+    ...tpvModuleEn,
+
     // Navigation
     navSolutions: "Solutions",
     navSuccess: "Success",
@@ -1008,11 +1035,12 @@ const translations: Record<Language, Translation> = {
     navAdmin: "Admin",
     navBack: "Back",
 
-    // Hero
-    heroEyebrow: "Digital revolution for local businesses",
-    heroTitle: "Boost your business with",
-    heroTitleAccent: "Artificial Intelligence",
-    heroTitleEnd: "and automation",
+    // Hero — outcome-first: leads with business benefit (revenue / time
+    // saved), platform breadth is supporting copy in the eyebrow.
+    heroEyebrow: "Your whole business, one screen",
+    heroTitle: "Boost your revenue,",
+    heroTitleAccent: "save hours",
+    heroTitleEnd: "every week",
     heroServiciosTitle: "AI and Automation",
     heroServiciosTitleAccent: "Solutions",
     heroServiciosTitleEnd: "for Your Business",
@@ -1020,7 +1048,15 @@ const translations: Record<Language, Translation> = {
     heroContactoTitleAccent: "Your Project",
     heroContactoTitleEnd: "",
     heroSubtitle:
-      "Next-generation technology for restaurants in Tenerife and Canary Islands. Automate orders, increase revenue per table, reduce wait times, and retain customers with digital solutions that have no commissions or intermediaries.",
+      "POS, mobile ordering, kitchen display, reservations, stock and more in one platform. Get paid faster, cut manual tasks, and spend your time on what matters — your business. No commissions, no middlemen.",
+    statStrip1Value: "200+",
+    statStrip1Label: "Businesses in the Canary Islands",
+    statStrip2Value: "0%",
+    statStrip2Label: "Commissions per order",
+    statStrip3Value: "6×",
+    statStrip3Label: "More reviews in 90 days",
+    statStrip4Value: "40%",
+    statStrip4Label: "More visits with reviews",
     heroButtonDemo: "View Demo",
     heroButtonContact: "Contact Us",
 

@@ -35,15 +35,18 @@ describe("Home page composition (App.tsx + merged sections)", () => {
     }
   });
 
-  it("mounts CartaDigitalSection between #soluciones and #por-que", () => {
+  it("mounts TpvModulesSection (the TPV_MODULES registry seam, PR4) between #soluciones and #por-que", () => {
     const appSource = read("App.tsx");
     const solucionesIdx = appSource.indexOf('id="soluciones"');
-    const cartaIdx = appSource.indexOf("<CartaDigitalSection");
+    const tpvModulesIdx = appSource.indexOf("<TpvModulesSection");
     const porQueIdx = appSource.indexOf('id="por-que"');
 
     expect(solucionesIdx).toBeGreaterThan(-1);
-    expect(cartaIdx).toBeGreaterThan(solucionesIdx);
-    expect(porQueIdx).toBeGreaterThan(cartaIdx);
+    expect(tpvModulesIdx).toBeGreaterThan(solucionesIdx);
+    expect(porQueIdx).toBeGreaterThan(tpvModulesIdx);
+    // PR4: CartaDigitalSection is no longer mounted directly by App.tsx —
+    // it's looked up via TPV_MODULE_SECTIONS["tienda-carta-digital"].
+    expect(appSource).not.toMatch(/<CartaDigitalSection/);
   });
 
   it("no longer mounts TapReviewSection on home (PR3: un-merged to /tarjetas-nfc)", () => {
@@ -54,11 +57,13 @@ describe("Home page composition (App.tsx + merged sections)", () => {
     );
   });
 
-  it("the merged Carta Digital section declares the #carta-digital anchor", () => {
+  it("CartaDigitalSection's wrapper id is prop-ised (PR4: mounted as tienda-carta-digital)", () => {
     const cartaSource = read(
       "features/landing/presentation/components/CartaDigitalSection.tsx",
     );
-    expect(cartaSource).toMatch(/id="carta-digital"/);
+    expect(cartaSource).toMatch(/id: string/);
+    expect(cartaSource).toMatch(/<div id=\{id\}/);
+    expect(cartaSource).not.toMatch(/id="carta-digital"/);
   });
 
   it("Features.tsx derives its grid from the 2-entry SOLUTIONS catalog", () => {

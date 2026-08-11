@@ -10,10 +10,10 @@ import { ExpertAssistant } from "@features/chatbot/presentation";
 import HomeFaqSection, {
   useHomeFaqGroups,
 } from "@features/landing/presentation/components/HomeFaqSection";
-import CartaDigitalSection from "@features/landing/presentation/components/CartaDigitalSection";
+import { TpvModulesSection } from "@shared/components/tpv/TpvModulesSection";
 import { ConsoleLogger } from "@core/domain/usecases/Logger";
 import { useLanguage } from "@shared/context/LanguageContext";
-import { SOLUTIONS } from "@shared/config/solutions";
+import { TPV_MODULES } from "@shared/config/tpvModules";
 import { buildHomeSchema } from "@shared/presentation/components/SeoSchema";
 import { useWhatsappPhone } from "@shared/hooks";
 
@@ -78,12 +78,15 @@ const ErrorBoundaryFallback: React.FC = () => {
 // since they're always rendered on the landing page.
 
 /* Heading structure:
-  / → H1: Potencia tu Negocio con IA y Automatización
+  / → H1: Aumenta tu facturación, ahorra horas cada semana (outcome-first, PR4)
   /contacto → H1: Hablemos de tu Proyecto
   H2: Nuestras Soluciones — heroEyebrow label (home)
     H3: Carta Digital Premium
     H3: Tarjetas NFC Tap-to-Review
-  H2: Carta Digital Premium (merged section, own H2 hero + subsections as H3/H4)
+  (PR4: TpvModulesSection renders 13 TPV module sections, each its own H2,
+   sorted by TPV_MODULES' frozen `order` — see shared/config/tpvModules.ts.
+   "tienda-carta-digital" (order 13, last) mounts the existing
+   CartaDigitalSection sub-tree; the other 12 are PR5-7 placeholders.)
   (PR3: Tarjetas NFC Tap-to-Review un-merged to its own /tarjetas-nfc route — no longer on home)
   H2: Resultados reales que transforman negocios
     H3: Aumento Promedio
@@ -159,7 +162,10 @@ const App: React.FC = () => {
   const faqEntries = faqGroups.flatMap((group) =>
     group.items.map((item) => ({ question: item.q, answer: item.a })),
   );
-  const schemaData = buildHomeSchema(SOLUTIONS, faqEntries);
+  // PR4: home's structured data reflects the 13 TPV modules, not the
+  // top-level SOLUTIONS catalog — no NFC Service node (NFC lives at its own
+  // /tarjetas-nfc route with its own schema, see TapReviewPage.tsx).
+  const schemaData = buildHomeSchema(TPV_MODULES, faqEntries);
 
   return (
     <ErrorBoundary>
@@ -212,7 +218,7 @@ const App: React.FC = () => {
           >
             <Features />
           </section>
-          <CartaDigitalSection whatsappPhone={whatsappPhone} />
+          <TpvModulesSection whatsappPhone={whatsappPhone} />
           <section
             id="por-que"
             aria-label="Por qué Digitaliza Tenerife"
@@ -230,16 +236,14 @@ const App: React.FC = () => {
                 </p>
               </div>
 
-              {/* Stats strip */}
+              {/* Stats strip — i18n-driven (PR4), same truthful values as before */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6 py-8 border-y border-[var(--color-border)] mb-16">
-                {(
-                  [
-                    { value: "200+", label: "Negocios en Canarias" },
-                    { value: "0%", label: "Comisiones por pedido" },
-                    { value: "6×", label: "Más reseñas en 90 días" },
-                    { value: "40%", label: "Más visitas con reseñas" },
-                  ] as const
-                ).map((stat) => (
+                {[
+                  { value: t.statStrip1Value, label: t.statStrip1Label },
+                  { value: t.statStrip2Value, label: t.statStrip2Label },
+                  { value: t.statStrip3Value, label: t.statStrip3Label },
+                  { value: t.statStrip4Value, label: t.statStrip4Label },
+                ].map((stat) => (
                   <div key={stat.label}>
                     <div className="text-3xl md:text-4xl font-bold text-default tabular-nums">
                       {stat.value}
