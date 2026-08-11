@@ -10,8 +10,9 @@ import path from "node:path";
  *
  * ALLOWLIST is an explicit list of exact file paths (relative to repo root,
  * forward-slash separated) permitted to contain a match. It MUST stay empty
- * for the "smartconnect" assertion in PR1. PR2 will add entries for the
- * "qribar" assertion; PR8 empties both.
+ * for the "smartconnect" assertion in PR1. PR2 adds entries for the
+ * "qribar" assertion (machine-readable/chatbot copy explicitly deferred to
+ * PR8); PR8 empties both.
  *
  * `admin@smartconnect.ai` is a live Supabase Auth account email and is
  * explicitly excluded from the "smartconnect" match — it is not a brand
@@ -22,6 +23,17 @@ const ROOT = path.resolve(__dirname, "..", "..");
 const SCAN_DIRS = ["src", "public"];
 
 const SMARTCONNECT_ALLOWLIST: string[] = [];
+
+// PR2 scope: qribar purged everywhere except machine-readable/chatbot copy,
+// which is explicitly deferred to PR8 (WebMCP.ts, ChatWelcome.tsx). Also
+// covers scripts/populate-knowledge-base.mjs (RAG seed tooling — out of
+// scope per design's open questions, permanently allowlisted), though
+// scripts/ is not currently walked by SCAN_DIRS.
+const QRIBAR_ALLOWLIST: string[] = [
+  "src/WebMCP.ts",
+  "src/features/chatbot/presentation/components/ChatWelcome.tsx",
+  "scripts/populate-knowledge-base.mjs",
+];
 
 const ADMIN_EMAIL = "admin@smartconnect.ai";
 
@@ -77,6 +89,27 @@ describe("brand guard", () => {
           "",
         );
         if (/smart[- ]?connect/i.test(sanitized)) {
+          offenders.push({ file: relative, line: index + 1, text: lineText.trim() });
+        }
+      });
+    }
+
+    expect(offenders).toEqual([]);
+  });
+
+  it("has zero case-insensitive 'qribar' matches in src/ and public/ (outside the allowlist)", () => {
+    const files = collectFiles();
+    const offenders: { file: string; line: number; text: string }[] = [];
+
+    for (const file of files) {
+      const relative = toRelative(file);
+      if (relative === "src/__tests__/brand.guard.test.ts") continue;
+      if (QRIBAR_ALLOWLIST.includes(relative)) continue;
+
+      const content = fs.readFileSync(file, "utf-8");
+      const lines = content.split("\n");
+      lines.forEach((lineText, index) => {
+        if (/qribar/i.test(lineText)) {
           offenders.push({ file: relative, line: index + 1, text: lineText.trim() });
         }
       });

@@ -22,14 +22,14 @@ describe("buildHomeSchema", () => {
     expect(itemList.itemListElement).toHaveLength(SOLUTIONS.length);
   });
 
-  it("carries sameAs (qribar.es) on the carta-digital Service node", () => {
+  it("no longer carries a qribar.es sameAs on the carta-digital Service node (purged)", () => {
     const schema = buildHomeSchema(SOLUTIONS);
     const cartaDigitalNode = schema["@graph"].find(
       (node) =>
         (node as { "@id"?: string })["@id"] ===
         "https://digitalizatenerife.es/#service-carta-digital",
     ) as { sameAs?: string[] } | undefined;
-    expect(cartaDigitalNode?.sameAs).toContain("https://qribar.es");
+    expect(cartaDigitalNode?.sameAs).toBeUndefined();
   });
 
   it("includes a LocalBusiness and WebPage node", () => {
@@ -51,7 +51,7 @@ describe("buildHomeSchema", () => {
 
   it("emits exactly one FAQPage node with all provided questions when faqs are passed", () => {
     const schema = buildHomeSchema(SOLUTIONS, [
-      { question: "¿Qué es QRIBAR?", answer: "Un menú digital." },
+      { question: "¿Qué es la Carta Digital?", answer: "Un menú digital." },
       { question: "¿Cuánto cuesta?", answer: "Consulta con nosotros." },
     ]);
     const faqNodes = schema["@graph"].filter(

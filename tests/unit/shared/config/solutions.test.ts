@@ -32,9 +32,9 @@ describe("SOLUTIONS config", () => {
     }
   });
 
-  it("carta-digital jsonLd carries sameAs pointing at qribar.es", () => {
+  it("carta-digital jsonLd no longer carries a qribar.es sameAs reference (purged)", () => {
     const cartaDigital = SOLUTIONS.find((s) => s.id === "carta-digital");
-    expect(cartaDigital?.jsonLd.sameAs).toContain("https://qribar.es");
+    expect(cartaDigital?.jsonLd.sameAs).toBeUndefined();
   });
 
   it("hrefs are in-page anchors, pointing at the merged home sections", () => {

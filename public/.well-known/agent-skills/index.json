@@ -6,7 +6,7 @@
     {
       "name": "product-information",
       "type": "information",
-      "description": "Get detailed information about Digitaliza Tenerife products: QRIBAR, Tap-to-Review NFC, Carta Digital Premium, n8n automation, WhatsApp automation, software for Canarias, and digitalization for Tenerife.",
+      "description": "Get detailed information about Digitaliza Tenerife products: Tap-to-Review NFC, Carta Digital Premium, n8n automation, WhatsApp automation, software for Canarias, and digitalization for Tenerife.",
       "url": "https://digitalizatenerife.es/llms.txt",
       "sha256": "d2ea2b4d3734562636d08933021d6665d02090c9c6b26542e40aee61c244ab93"
     },

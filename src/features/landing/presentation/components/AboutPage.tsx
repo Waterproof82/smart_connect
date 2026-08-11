@@ -131,7 +131,7 @@ const AboutPage: React.FC = () => {
               Tenerife y Canarias pueda competir en la era digital.
             </p>
             <p className="text-lg text-white/70 leading-relaxed mb-6">
-              Desde menús digitales QRIBAR que transforman la experiencia en
+              Desde la Carta Digital que transforma la experiencia en
               mesa, hasta tarjetas NFC que multiplican las reseñas en Google,
               pasando por automatizaciones con n8n que liberan horas de trabajo
               cada semana — cada solución está diseñada para generar resultados

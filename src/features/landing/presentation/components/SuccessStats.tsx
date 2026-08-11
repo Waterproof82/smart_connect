@@ -65,7 +65,7 @@ export const SuccessStats: React.FC = () => {
     {
       quote: t.successStat1Quote,
       author: t.successStat1Author,
-      service: "QRIBAR — Menú Digital",
+      service: "Carta Digital Premium",
       delay: 0,
     },
     {

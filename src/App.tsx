@@ -279,7 +279,7 @@ const App: React.FC = () => {
                           desc: "Flujos que conectan CRM, email, WhatsApp y redes sociales.",
                         },
                         {
-                          title: "Menús digitales QRIBAR",
+                          title: "Carta Digital Premium",
                           desc: "Pedidos en tiempo real desde la mesa a barra y cocina.",
                         },
                         {

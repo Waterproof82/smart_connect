@@ -13,15 +13,6 @@ import {
 import { Translation } from "../context/LanguageContext";
 import React from "react";
 
-// Icon color mapping
-// const iconColorMap: Record<string, string> = {
-//   "software-ia": "text-[var(--color-icon-blue)]",
-//   "automatizacion-n8n": "text-[var(--color-icon-purple)]",
-//   "tarjetas-nfc": "text-[var(--color-icon-emerald)",
-//   "qribar": "text-[var(--color-icon-amber)",
-//   "carta-digital": "text-[var(--color-icon-blue)]", // Added missing entry
-// };
-
 // Icon component mapping
 const iconComponentMap: Record<
   string,

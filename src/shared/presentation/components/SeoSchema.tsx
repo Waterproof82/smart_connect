@@ -26,7 +26,7 @@ export function buildHomeSchema(
     name: "Digitaliza Tenerife",
     url: ORG_URL,
     description:
-      "Automatización con IA, n8n, NFC para Google Reviews y menús digitales QRIBAR para negocios en Tenerife y Canarias.",
+      "Automatización con IA, n8n, NFC para Google Reviews y Carta Digital para negocios en Tenerife y Canarias.",
     areaServed: "Tenerife, Canarias, España",
     knowsAbout: [
       "Automatización de negocios",

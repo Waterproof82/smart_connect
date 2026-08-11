@@ -2,7 +2,7 @@ export interface SolutionJsonLd {
   description: string;
   serviceType: string;
   areaServed: string[];
-  /** External profile URLs this solution is also known by (e.g. QRIBAR's own domain). */
+  /** External profile URLs this solution is also known by. */
   sameAs?: string[];
 }
 
@@ -36,7 +36,6 @@ export const SOLUTIONS: SolutionConfig[] = [
         "Menú digital con pedidos en tiempo real desde la mesa a barra y cocina. Sin comisiones por pedido.",
       serviceType: "Digital Menu Platform",
       areaServed: ["Tenerife", "Gran Canaria", "Lanzarote", "Canarias"],
-      sameAs: ["https://qribar.es"],
     },
   },
   {

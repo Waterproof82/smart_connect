@@ -119,7 +119,6 @@ interface Translation {
   navbarCartaDigitalDesc: string;
   // Service options
   serviceCartaDigital: string;
-  serviceQribar: string;
   serviceAutomation: string;
   serviceNFC: string;
   serviceConsultoria: string;
@@ -329,17 +328,6 @@ interface Translation {
   tapReviewTrust24h: string;
   tapReviewTrustSupport: string;
   tapReviewTrustNoSub: string;
-  // QRIBAR
-  qribarSector: string;
-  qribarTitle: string;
-  qribarSubtitle: string;
-  qribarBenefit1: string;
-  qribarBenefit2: string;
-  qribarBenefit3: string;
-  qribarBenefit4: string;
-  qribarButton: string;
-  qribarError: string;
-  qribarLoading: string;
   // Digital Menu Landing
   // Menu QR Landing
   // Table Orders Landing
@@ -395,27 +383,27 @@ interface Translation {
   cartaComparTitle: string;
   cartaComparSubtitle: string;
   cartaComparHeaderCriterio: string;
-  cartaComparHeaderQribar: string;
+  cartaComparHeaderPlataforma: string;
   cartaComparHeaderPapel: string;
   cartaComparHeaderOtras: string;
   cartaComparRow1Label: string;
-  cartaComparRow1Qribar: string;
+  cartaComparRow1Plataforma: string;
   cartaComparRow1Papel: string;
   cartaComparRow1Otras: string;
   cartaComparRow2Label: string;
-  cartaComparRow2Qribar: string;
+  cartaComparRow2Plataforma: string;
   cartaComparRow2Papel: string;
   cartaComparRow2Otras: string;
   cartaComparRow3Label: string;
-  cartaComparRow3Qribar: string;
+  cartaComparRow3Plataforma: string;
   cartaComparRow3Papel: string;
   cartaComparRow3Otras: string;
   cartaComparRow4Label: string;
-  cartaComparRow4Qribar: string;
+  cartaComparRow4Plataforma: string;
   cartaComparRow4Papel: string;
   cartaComparRow4Otras: string;
   cartaComparRow5Label: string;
-  cartaComparRow5Qribar: string;
+  cartaComparRow5Plataforma: string;
   cartaComparRow5Papel: string;
   cartaComparRow5Otras: string;
   // Carta Digital — SEO / JSON-LD
@@ -494,10 +482,10 @@ const translations: Record<Language, Translation> = {
     featuresSubtitle:
       "Herramientas avanzadas diseñadas para la era digital, desde el hardware hasta el código.",
     featuresContent1:
-      "En Digitaliza Tenerife transformamos la experiencia de los restaurantes en Tenerife y Canarias. Con IA, automatización y hardware inteligente, ayudamos a atraer, retener y fidelizar clientes. Nuestras soluciones incluyen menús digitales QRIBAR con pedidos en tiempo real, tarjetas NFC para reseñas instantáneas en Google y automatización con n8n que conecta cada interacción del cliente. ¡El salto digital que tu negocio necesita para crecer!",
-    featuresContent1Title: "QRIBAR: Menú Digital Inteligente",
+      "En Digitaliza Tenerife transformamos la experiencia de los restaurantes en Tenerife y Canarias. Con IA, automatización y hardware inteligente, ayudamos a atraer, retener y fidelizar clientes. Nuestras soluciones incluyen Carta Digital con pedidos en tiempo real, tarjetas NFC para reseñas instantáneas en Google y automatización con n8n que conecta cada interacción del cliente. ¡El salto digital que tu negocio necesita para crecer!",
+    featuresContent1Title: "Carta Digital: Menú Inteligente",
     featuresContent2:
-      "Con QRIBAR, tus clientes en Tenerife y Canarias pueden pedir desde su móvil escaneando un código QR en la mesa. El pedido llega directamente a barra y cocina en tiempo real, reduciendo tiempos de espera y aumentando la rotación de mesas. Sin comisiones ni intermediarios, cada mesa se convierte en un punto de venta digital que opera 24/7, recopilando datos valiosos para campañas de marketing automatizadas y fidelización.",
+      "Con la Carta Digital, tus clientes en Tenerife y Canarias pueden pedir desde su móvil escaneando un código QR en la mesa. El pedido llega directamente a barra y cocina en tiempo real, reduciendo tiempos de espera y aumentando la rotación de mesas. Sin comisiones ni intermediarios, cada mesa se convierte en un punto de venta digital que opera 24/7, recopilando datos valiosos para campañas de marketing automatizadas y fidelización.",
     featuresContent2Title: "Tap-to-Review NFC",
     featuresContent3:
       "Nuestras tarjetas NFC Tap-to-Review permiten a tus clientes dejar reseñas en Google con un solo toque. Más reseñas significan mejor posicionamiento en Google Maps y atraerás más clientes nuevos a tu restaurante en Tenerife y Canarias. Tecnología de alto rendimiento, sin suscripciones y configuración inmediata. Estudios demuestran que los negocios con más de 50 reseñas en Google reciben hasta un 40% más de visitas.",
@@ -506,8 +494,8 @@ const translations: Record<Language, Translation> = {
       "Imagina un flujo de trabajo automatizado donde cada lead se captura, analiza y responde automáticamente. Con nuestras automatizaciones n8n, conectamos tu CRM, email, WhatsApp y redes sociales en un solo ecosistema. Cada interacción con clientes potenciales genera acciones en cadena: análisis de sentimiento con IA, asignación de temperatura del lead y notificaciones en tiempo real a tu equipo comercial. ¡Libera horas de trabajo cada semana!",
     featuresContent4Title: "IA Conversacional para tu Negocio",
     featuresContent5:
-      "QRIBAR no es solo un menú digital: es tu nuevo canal de ventas directo para restaurantes en Tenerife y Canarias. Cada mesa escanea un código QR, explora platos con fotos y vídeos profesionales en 5 idiomas, y envía el pedido directamente a barra y cocina. Los datos de cada cliente se almacenan en tu base de datos para campañas de fidelización automatizadas. El resultado: mesas que rotan más rápido, tickets promedio más altos y clientes que vuelven por la experiencia impecable.",
-    featuresContent5Title: "QRIBAR Sin Comisiones",
+      "La Carta Digital no es solo un menú digital: es tu nuevo canal de ventas directo para restaurantes en Tenerife y Canarias. Cada mesa escanea un código QR, explora platos con fotos y vídeos profesionales en 5 idiomas, y envía el pedido directamente a barra y cocina. Los datos de cada cliente se almacenan en tu base de datos para campañas de fidelización automatizadas. El resultado: mesas que rotan más rápido, tickets promedio más altos y clientes que vuelven por la experiencia impecable.",
+    featuresContent5Title: "Carta Digital Sin Comisiones",
     featuresContent6:
       "Las tarjetas NFC Tap-to-Review convierten cada visita en una reseña de Google para tu restaurante en Tenerife y Canarias. Coloca el expositor en tu local, el cliente acerca su móvil, y en 5 segundos tiene abierta la página de reseñas. Más reseñas significan mejor posicionamiento local en Google Maps y atraen más clientes nuevos cada mes. Es un ciclo virtuoso que multiplica tu visibilidad sin inversión publicitaria recurrente. ¡Multiplica tus reseñas por 6 en los primeros 90 días!",
     featuresContent6Title: "NFC Tap-to-Review",
@@ -526,7 +514,7 @@ const translations: Record<Language, Translation> = {
       "Empresas que ya confían en nosotros y han transformado su operación.",
     successStat1Label: "Aumento Promedio",
     successStat1Quote:
-      "Desde que implementamos QRIBAR, nuestros ingresos por mesa aumentaron un 45%",
+      "Desde que implementamos la Carta Digital, nuestros ingresos por mesa aumentaron un 45%",
     successStat1Author: "Restaurante L'Escale",
     successStat2Label: "Satisfacción",
     successStat2Quote:
@@ -618,7 +606,6 @@ const translations: Record<Language, Translation> = {
     navbarCartaDigital: "Carta Digital Premium",
     navbarCartaDigitalDesc: "0% comisiones, 5 idiomas",
     serviceCartaDigital: "Carta Digital Premium",
-    serviceQribar: "QRIBAR - Pedido en tiempo real a barra y cocina",
     serviceAutomation: "Automatización n8n",
     serviceNFC: "Tarjetas NFC Reseñas",
     serviceConsultoria: "Consultoría IA",
@@ -871,18 +858,6 @@ const translations: Record<Language, Translation> = {
     tapReviewTrustSupport: "Soporte 24/7",
     tapReviewTrustNoSub: "Sin suscripciones",
 
-    // QRIBAR
-    qribarSector: "SECTOR HOSTELERÍA",
-    qribarTitle: "Digitaliza la experiencia con",
-    qribarSubtitle:
-      "Soluciones específicas para restaurantes de alta gama. Menús digitales elegantes, rápidos y sin contacto que elevan la percepción de tu marca mientras optimizan el servicio.",
-    qribarBenefit1: "Actualización de precios en tiempo real",
-    qribarBenefit2: "Diseño adaptable a tu identidad visual",
-    qribarBenefit3: "Aumenta la rotación de mesas",
-    qribarBenefit4: "Integración con sistemas de pedidos y pagos",
-    qribarButton: "Más información",
-    qribarError: "Error al cargar el menú",
-    qribarLoading: "Cargando menú...",
 
     // Digital Menu Landing
 
@@ -926,8 +901,8 @@ const translations: Record<Language, Translation> = {
     homeFaqTitle: "Preguntas Frecuentes",
     homeFaqQ1: "¿Qué es Digitaliza Tenerife?",
     homeFaqA1: "Digitaliza Tenerife es una agencia de transformación digital especializada en hostelería y comercios locales de Canarias. Ofrecemos menús digitales, tarjetas NFC para reseñas, automatización con n8n e IA conversacional.",
-    homeFaqQ2: "¿Cuánto cuesta el menú digital QRIBAR?",
-    homeFaqA2: "QRIBAR no tiene comisiones por pedido. El precio depende del plan y del tamaño del negocio. Contactá con nosotros para un presupuesto personalizado sin compromiso.",
+    homeFaqQ2: "¿Cuánto cuesta la Carta Digital?",
+    homeFaqA2: "La Carta Digital no tiene comisiones por pedido. El precio depende del plan y del tamaño del negocio. Contactá con nosotros para un presupuesto personalizado sin compromiso.",
     homeFaqQ3: "¿Cómo funcionan las tarjetas NFC Tap-to-Review?",
     homeFaqA3: "El cliente acerca su móvil a la tarjeta NFC y se abre directamente la página de reseñas de Google de tu negocio. Sin apps, sin fricción. Nuestros clientes multiplican sus reseñas por 6 en 90 días.",
     homeFaqQ4: "¿Sus soluciones sirven para negocios fuera de Canarias?",
@@ -935,7 +910,7 @@ const translations: Record<Language, Translation> = {
     homeFaqQ5: "¿Necesito conocimientos técnicos para usar vuestras herramientas?",
     homeFaqA5: "No. Nuestras soluciones están diseñadas para propietarios de negocios sin experiencia técnica. Te damos formación, soporte y configuramos todo por ti.",
     homeFaqQ6: "¿Cuánto tiempo lleva implementar el sistema?",
-    homeFaqA6: "La mayoría de nuestros sistemas están operativos en menos de 48 horas tras la firma del contrato. El menú digital QRIBAR puede estar listo el mismo día.",
+    homeFaqA6: "La mayoría de nuestros sistemas están operativos en menos de 48 horas tras la firma del contrato. La Carta Digital puede estar lista el mismo día.",
 
     // CartaDigital FAQ & HowTo
     cartaFaqTitle: "Preguntas Frecuentes — Carta Digital",
@@ -952,27 +927,27 @@ const translations: Record<Language, Translation> = {
     cartaComparTitle: "Carta Digital vs. Alternativas",
     cartaComparSubtitle: "Comparar y decidir con datos reales",
     cartaComparHeaderCriterio: "Criterio",
-    cartaComparHeaderQribar: "Carta Digital",
+    cartaComparHeaderPlataforma: "Digitaliza Tenerife",
     cartaComparHeaderPapel: "Carta en papel",
     cartaComparHeaderOtras: "Otras apps",
     cartaComparRow1Label: "Comisiones",
-    cartaComparRow1Qribar: "0%",
+    cartaComparRow1Plataforma: "0%",
     cartaComparRow1Papel: "Sin comisiones",
     cartaComparRow1Otras: "15–30%",
     cartaComparRow2Label: "Actualización de precios",
-    cartaComparRow2Qribar: "Tiempo real",
+    cartaComparRow2Plataforma: "Tiempo real",
     cartaComparRow2Papel: "Reimpresión",
     cartaComparRow2Otras: "Manual",
     cartaComparRow3Label: "Idiomas",
-    cartaComparRow3Qribar: "Hasta 5",
+    cartaComparRow3Plataforma: "Hasta 5",
     cartaComparRow3Papel: "1 (reimpresión)",
     cartaComparRow3Otras: "1–2",
     cartaComparRow4Label: "Pedidos digitales",
-    cartaComparRow4Qribar: "Sí, vía Telegram",
+    cartaComparRow4Plataforma: "Sí, vía Telegram",
     cartaComparRow4Papel: "No",
     cartaComparRow4Otras: "Sí (con comisión)",
     cartaComparRow5Label: "Puesta en marcha",
-    cartaComparRow5Qribar: "Mismo día",
+    cartaComparRow5Plataforma: "Mismo día",
     cartaComparRow5Papel: "Semanas",
     cartaComparRow5Otras: "Semanas",
 
@@ -1054,10 +1029,10 @@ const translations: Record<Language, Translation> = {
     featuresSubtitle:
       "Advanced tools designed for the digital era, from hardware to code.",
     featuresContent1:
-      "At Digitaliza Tenerife we combine artificial intelligence, automation, and smart hardware to transform how local businesses attract, retain, and build loyalty with customers. Our platform integrates QRIBAR digital menus with real-time ordering, NFC cards for instant Google reviews, and n8n automation workflows that connect every customer interaction.",
-    featuresContent1Title: "QRIBAR: Smart Digital Menu",
+      "At Digitaliza Tenerife we combine artificial intelligence, automation, and smart hardware to transform how local businesses attract, retain, and build loyalty with customers. Our platform integrates Carta Digital menus with real-time ordering, NFC cards for instant Google reviews, and n8n automation workflows that connect every customer interaction.",
+    featuresContent1Title: "Carta Digital: Smart Digital Menu",
     featuresContent2:
-      "With QRIBAR, your customers order from their phone by scanning a QR code at the table. Orders arrive directly to the bar and kitchen in real-time, eliminating wait times and increasing table turnover. No commissions, no intermediaries.",
+      "With Carta Digital, your customers order from their phone by scanning a QR code at the table. Orders arrive directly to the bar and kitchen in real-time, eliminating wait times and increasing table turnover. No commissions, no intermediaries.",
     featuresContent2Title: "Tap-to-Review NFC",
     featuresContent3:
       "Our Tap-to-Review NFC cards let any customer leave a Google review with a single tap. More reviews mean better Google Maps positioning and more new customers. High-performance technology, no subscriptions, instant setup.",
@@ -1066,8 +1041,8 @@ const translations: Record<Language, Translation> = {
       "Imagine a workflow where every lead is captured, analyzed, and responded to automatically. With our n8n automations, we connect your CRM, email, WhatsApp, and social media in a single ecosystem. Each prospect interaction triggers chain actions: AI sentiment analysis, lead temperature scoring, and real-time notifications to your sales team.",
     featuresContent4Title: "Conversational AI for Your Business",
     featuresContent5:
-      "QRIBAR is not just a digital menu — it's your new direct sales channel. Every table scans a QR code, explores dishes with professional photos and videos in 5 languages, and sends orders directly to the bar and kitchen. No commissions, no waiting, no intermediaries. Customer data is stored in your database for automated loyalty campaigns.",
-    featuresContent5Title: "QRIBAR No Commissions",
+      "Carta Digital is not just a digital menu — it's your new direct sales channel. Every table scans a QR code, explores dishes with professional photos and videos in 5 languages, and sends orders directly to the bar and kitchen. No commissions, no waiting, no intermediaries. Customer data is stored in your database for automated loyalty campaigns.",
+    featuresContent5Title: "Carta Digital No Commissions",
     featuresContent6:
       "NFC Tap-to-Review cards turn every visit into a Google review. Place the display in your venue, customers tap their phone, and in 5 seconds the review page opens. More reviews = better local Google Maps ranking = more new customers. A virtuous cycle that multiplies your visibility without recurring ad spend.",
     featuresContent6Title: "NFC Tap-to-Review",
@@ -1084,7 +1059,7 @@ const translations: Record<Language, Translation> = {
       "Companies that already trust us and have transformed their operation.",
     successStat1Label: "Average Increase",
     successStat1Quote:
-      "Since we implemented QRIBAR, our revenue per table increased by 45%",
+      "Since we implemented Carta Digital, our revenue per table increased by 45%",
     successStat1Author: "Restaurante L'Escale",
     successStat2Label: "Satisfaction",
     successStat2Quote:
@@ -1178,7 +1153,6 @@ const translations: Record<Language, Translation> = {
 
     // Service options
     serviceCartaDigital: "Carta Digital Premium",
-    serviceQribar: "QRIBAR - Real-time order to bar & kitchen",
     serviceAutomation: "Automation n8n",
     serviceNFC: "NFC Review Cards",
     serviceConsultoria: "AI Consulting",
@@ -1433,18 +1407,6 @@ const translations: Record<Language, Translation> = {
     tapReviewTrustSupport: "24/7 Support",
     tapReviewTrustNoSub: "No subscriptions",
 
-    // QRIBAR
-    qribarSector: "HOSPITALITY SECTOR",
-    qribarTitle: "Digitalize the experience with",
-    qribarSubtitle:
-      "Specific solutions for high-end restaurants. Elegant, fast, contactless digital menus that elevate your brand perception while optimizing service.",
-    qribarBenefit1: "Real-time price updates",
-    qribarBenefit2: "Design adapted to your visual identity",
-    qribarBenefit3: "Increases table turnover",
-    qribarBenefit4: "Integration with order and payment systems",
-    qribarButton: "More information",
-    qribarError: "Error loading menu",
-    qribarLoading: "Loading menu...",
 
     // Digital Menu Landing
 
@@ -1488,8 +1450,8 @@ const translations: Record<Language, Translation> = {
     homeFaqTitle: "Frequently Asked Questions",
     homeFaqQ1: "What is Digitaliza Tenerife?",
     homeFaqA1: "Digitaliza Tenerife is a digital transformation agency specializing in hospitality and local businesses in the Canary Islands. We offer digital menus, NFC review cards, n8n automation, and conversational AI.",
-    homeFaqQ2: "How much does the QRIBAR digital menu cost?",
-    homeFaqA2: "QRIBAR has no per-order commissions. Pricing depends on the plan and business size. Contact us for a free personalized quote.",
+    homeFaqQ2: "How much does Carta Digital cost?",
+    homeFaqA2: "Carta Digital has no per-order commissions. Pricing depends on the plan and business size. Contact us for a free personalized quote.",
     homeFaqQ3: "How do Tap-to-Review NFC cards work?",
     homeFaqA3: "The customer taps their phone on the NFC card and your Google review page opens instantly — no app needed. Our clients multiply their reviews 6x in 90 days.",
     homeFaqQ4: "Do your solutions work for businesses outside the Canary Islands?",
@@ -1497,7 +1459,7 @@ const translations: Record<Language, Translation> = {
     homeFaqQ5: "Do I need technical knowledge to use your tools?",
     homeFaqA5: "No. Our solutions are designed for business owners with no technical background. We provide training, support, and handle the full setup.",
     homeFaqQ6: "How long does implementation take?",
-    homeFaqA6: "Most of our systems are live within 48 hours of signing. The QRIBAR digital menu can be ready the same day.",
+    homeFaqA6: "Most of our systems are live within 48 hours of signing. Carta Digital can be ready the same day.",
 
     // CartaDigital FAQ & HowTo
     cartaFaqTitle: "FAQ — Digital Menu",
@@ -1514,27 +1476,27 @@ const translations: Record<Language, Translation> = {
     cartaComparTitle: "Carta Digital vs. Alternatives",
     cartaComparSubtitle: "Compare and decide with real data",
     cartaComparHeaderCriterio: "Criteria",
-    cartaComparHeaderQribar: "Carta Digital",
+    cartaComparHeaderPlataforma: "Digitaliza Tenerife",
     cartaComparHeaderPapel: "Paper menu",
     cartaComparHeaderOtras: "Other apps",
     cartaComparRow1Label: "Commissions",
-    cartaComparRow1Qribar: "0%",
+    cartaComparRow1Plataforma: "0%",
     cartaComparRow1Papel: "No commissions",
     cartaComparRow1Otras: "15–30%",
     cartaComparRow2Label: "Price updates",
-    cartaComparRow2Qribar: "Real time",
+    cartaComparRow2Plataforma: "Real time",
     cartaComparRow2Papel: "Reprint",
     cartaComparRow2Otras: "Manual",
     cartaComparRow3Label: "Languages",
-    cartaComparRow3Qribar: "Up to 5",
+    cartaComparRow3Plataforma: "Up to 5",
     cartaComparRow3Papel: "1 (reprint)",
     cartaComparRow3Otras: "1–2",
     cartaComparRow4Label: "Digital orders",
-    cartaComparRow4Qribar: "Yes, via Telegram",
+    cartaComparRow4Plataforma: "Yes, via Telegram",
     cartaComparRow4Papel: "No",
     cartaComparRow4Otras: "Yes (with commission)",
     cartaComparRow5Label: "Setup time",
-    cartaComparRow5Qribar: "Same day",
+    cartaComparRow5Plataforma: "Same day",
     cartaComparRow5Papel: "Weeks",
     cartaComparRow5Otras: "Weeks",
 
