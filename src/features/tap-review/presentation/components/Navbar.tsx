@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Cpu, ChevronDown, ArrowLeft, Menu, X } from "lucide-react";
 import { useLanguage } from "@shared/context/LanguageContext";
 import LanguageSelector from "@shared/components/LanguageSelector";
-import { SOLUTIONS, ROUTE_TO_SOLUTION_ID } from "@shared/config/solutions";
+import { SOLUTIONS } from "@shared/config/solutions";
 import { mapSolutions } from "@shared/utils/solutionHelpers";
 
 interface NavbarProps {
@@ -29,10 +29,12 @@ const Navbar: React.FC<NavbarProps> = ({ scrolled = false }) => {
     return () => globalThis.removeEventListener("keydown", handleKeyDown);
   }, [isMobileMenuOpen]);
 
+  const currentSolutionId = SOLUTIONS.find(
+    (solution) => solution.href === location.pathname,
+  )?.id;
+
   const solutions = mapSolutions(SOLUTIONS, t, {
-    filterOut: ROUTE_TO_SOLUTION_ID[location.pathname]
-      ? [ROUTE_TO_SOLUTION_ID[location.pathname]]
-      : [],
+    filterOut: currentSolutionId ? [currentSolutionId] : [],
     hrefPrefix: "/",
   });
 
