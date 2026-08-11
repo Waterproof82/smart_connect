@@ -24,7 +24,6 @@ export function render(url: string): { html: string; head: string } {
             <Suspense fallback={null}>
               <Routes>
                 <Route path="/" element={<App />} />
-                <Route path="/servicios" element={<App />} />
                 <Route path="/about" element={<AboutPage />} />
                 <Route path="/legal/aviso" element={<AvisoLegalPage />} />
                 <Route path="/legal/privacidad" element={<PrivacidadPage />} />

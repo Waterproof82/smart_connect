@@ -61,4 +61,34 @@ describe("buildHomeSchema", () => {
     const faqNode = faqNodes[0] as { mainEntity: Array<Record<string, unknown>> };
     expect(faqNode.mainEntity).toHaveLength(2);
   });
+
+  it("emits exactly 2 Service nodes for the final two-solution catalog", () => {
+    const schema = buildHomeSchema(SOLUTIONS);
+    const serviceNodes = schema["@graph"].filter(
+      (node) => (node as { "@type"?: string })["@type"] === "Service",
+    );
+    expect(serviceNodes).toHaveLength(2);
+  });
+
+  it("never emits a BreadcrumbList node (home is the site root)", () => {
+    const schema = buildHomeSchema(SOLUTIONS, [
+      { question: "Q", answer: "A" },
+    ]);
+    const breadcrumbNodes = schema["@graph"].filter(
+      (node) => (node as { "@type"?: string })["@type"] === "BreadcrumbList",
+    );
+    expect(breadcrumbNodes).toHaveLength(0);
+  });
+
+  it("merges all 14 audited home + carta-digital + tap-review FAQ entries into one node", () => {
+    const fourteenFaqs = Array.from({ length: 14 }, (_, i) => ({
+      question: `Q${i + 1}`,
+      answer: `A${i + 1}`,
+    }));
+    const schema = buildHomeSchema(SOLUTIONS, fourteenFaqs);
+    const faqNode = schema["@graph"].find(
+      (node) => (node as { "@type"?: string })["@type"] === "FAQPage",
+    ) as { mainEntity: Array<Record<string, unknown>> };
+    expect(faqNode.mainEntity).toHaveLength(14);
+  });
 });

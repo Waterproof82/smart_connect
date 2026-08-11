@@ -19,7 +19,6 @@ import StatsBanner from "./components/StatsBanner";
 import HowItWorks from "./components/HowItWorks";
 import Features from "./components/Features";
 import SocialProof from "./components/SocialProof";
-import Faq from "./components/FAQ";
 import CTASection from "./components/CTASection";
 import TrustBadges from "./components/TrustBadges";
 
@@ -105,7 +104,6 @@ export const TapReviewSection: React.FC<TapReviewSectionProps> = ({
       <HowItWorks />
       <Features />
       <SocialProof />
-      <Faq />
       <CTASection whatsappPhone={whatsappPhone} />
     </div>
   );

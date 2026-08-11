@@ -182,10 +182,7 @@ const tools: ToolDescriptor[] = [
           type: "string",
           enum: [
             "/",
-            "/servicios",
             "/contacto",
-            "/carta-digital",
-            "/tap-review",
             "/about",
             "/legal/aviso",
             "/legal/privacidad",

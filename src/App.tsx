@@ -7,7 +7,9 @@ import { Features } from "@features/landing/presentation/components/Features";
 import { Contact } from "@features/landing/presentation/components/Contact";
 import { SuccessStats } from "@features/landing/presentation/components/SuccessStats";
 import { ExpertAssistant } from "@features/chatbot/presentation";
-import HomeFaqSection from "@features/landing/presentation/components/HomeFaqSection";
+import HomeFaqSection, {
+  useHomeFaqGroups,
+} from "@features/landing/presentation/components/HomeFaqSection";
 import CartaDigitalSection from "@features/landing/presentation/components/CartaDigitalSection";
 import { TapReviewSection } from "@features/tap-review/presentation/TapReviewSection";
 import { ConsoleLogger } from "@core/domain/usecases/Logger";
@@ -78,14 +80,12 @@ const ErrorBoundaryFallback: React.FC = () => {
 
 /* Heading structure:
   / → H1: Potencia tu Negocio con IA y Automatización
-  /servicios → H1: Soluciones de IA y Automatización para tu Negocio
   /contacto → H1: Hablemos de tu Proyecto
   H2: Nuestras Soluciones — heroEyebrow label (home)
-    H3: Software & IA
-    H3: Automatización (n8n)
-    H3: Tarjetas Tap-to-Review
-    H3: QRIBAR
     H3: Carta Digital Premium
+    H3: Tarjetas NFC Tap-to-Review
+  H2: Carta Digital Premium (merged section, own H2 hero + subsections as H3/H4)
+  H2: Tarjetas NFC Tap-to-Review (merged section, own H2 hero + subsections as H3/H4)
   H2: Resultados reales que transforman negocios
     H3: Aumento Promedio
     H3: Satisfacción
@@ -114,20 +114,17 @@ const App: React.FC = () => {
   const { t } = useLanguage();
   const location = useLocation();
   const whatsappPhone = useWhatsappPhone();
-  const isServicios = location.pathname === "/servicios";
+  const faqGroups = useHomeFaqGroups();
   const isContacto = location.pathname === "/contacto";
+  const CANONICAL_URL = "https://digitalizatenerife.es/";
 
-  const pageTitle = isServicios
-    ? "Servicios de Automatización e IA para Empresas | SmartConnect AI"
-    : isContacto
-      ? "Contacto | SmartConnect AI"
-      : "SmartConnect AI | Automatización e IA para Empresas";
+  const pageTitle = isContacto
+    ? "Contacto | SmartConnect AI"
+    : "SmartConnect AI | Automatización e IA para Empresas";
 
-  const pageDescription = isServicios
-    ? "Descubre nuestros servicios: automatización n8n, menús digitales QRIBAR, tarjetas NFC para reseñas y asistente IA. Soluciones para tu negocio."
-    : isContacto
-      ? "Contacta con SmartConnect AI. Solicita información sobre automatización, menús digitales, NFC y soluciones IA para tu negocio en Tenerife."
-      : "SmartConnect AI: automatización con IA, n8n, NFC para Google Reviews y menús digitales. Digitaliza tu negocio.";
+  const pageDescription = isContacto
+    ? "Contacta con SmartConnect AI. Solicita información sobre automatización, menús digitales, NFC y soluciones IA para tu negocio en Tenerife."
+    : "SmartConnect AI: automatización con IA, n8n, NFC para Google Reviews y menús digitales. Digitaliza tu negocio.";
 
   React.useEffect(() => {
     const sentinel = sentinelRef.current;
@@ -160,100 +157,37 @@ const App: React.FC = () => {
     return () => globalThis.removeEventListener("hashchange", scrollToHash);
   }, []);
 
-  const schemaData = buildHomeSchema(SOLUTIONS);
+  const faqEntries = faqGroups.flatMap((group) =>
+    group.items.map((item) => ({ question: item.q, answer: item.a })),
+  );
+  const schemaData = buildHomeSchema(SOLUTIONS, faqEntries);
 
   return (
     <ErrorBoundary>
       <Helmet>
         <title>{pageTitle}</title>
         <meta name="description" content={pageDescription} />
-        <link
-          rel="canonical"
-          href={`https://digitalizatenerife.es${location.pathname}`}
-        />
+        <link rel="canonical" href={CANONICAL_URL} />
         <link
           rel="author"
           href="https://digitalizatenerife.es/about"
           title="SmartConnect AI"
         />
-        <link
-          rel="alternate"
-          hrefLang="es"
-          href={`https://digitalizatenerife.es${location.pathname}`}
-        />
-        <link
-          rel="alternate"
-          hrefLang="x-default"
-          href={`https://digitalizatenerife.es${location.pathname}`}
-        />
-        <link
-          rel="alternate"
-          hrefLang="en"
-          href={`https://digitalizatenerife.es${location.pathname}`}
-        />
+        <link rel="alternate" hrefLang="es" href={CANONICAL_URL} />
+        <link rel="alternate" hrefLang="x-default" href={CANONICAL_URL} />
+        <link rel="alternate" hrefLang="en" href={CANONICAL_URL} />
         <meta property="og:locale" content="es_ES" />
         <meta property="og:site_name" content="SmartConnect AI" />
         <meta property="og:title" content={pageTitle} />
         <meta property="og:description" content={pageDescription} />
         <meta property="og:type" content="website" />
-        <meta
-          property="og:url"
-          content={`https://digitalizatenerife.es${location.pathname}`}
-        />
+        <meta property="og:url" content={CANONICAL_URL} />
         <meta
           property="og:image"
           content="https://digitalizatenerife.es/icon.png"
         />
         <meta name="twitter:card" content="summary_large_image" />
-        {!isServicios && !isContacto && (
-          <script type="application/ld+json">
-            {JSON.stringify(schemaData)}
-          </script>
-        )}
-        {isServicios && (
-          <script type="application/ld+json">
-            {JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "BreadcrumbList",
-              itemListElement: [
-                {
-                  "@type": "ListItem",
-                  position: 1,
-                  name: "Inicio",
-                  item: "https://digitalizatenerife.es/",
-                },
-                {
-                  "@type": "ListItem",
-                  position: 2,
-                  name: "Servicios",
-                  item: "https://digitalizatenerife.es/servicios",
-                },
-              ],
-            })}
-          </script>
-        )}
-        {isContacto && (
-          <script type="application/ld+json">
-            {JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "BreadcrumbList",
-              itemListElement: [
-                {
-                  "@type": "ListItem",
-                  position: 1,
-                  name: "Inicio",
-                  item: "https://digitalizatenerife.es/",
-                },
-                {
-                  "@type": "ListItem",
-                  position: 2,
-                  name: "Contacto",
-                  item: "https://digitalizatenerife.es/contacto",
-                },
-              ],
-            })}
-          </script>
-        )}
+        <script type="application/ld+json">{JSON.stringify(schemaData)}</script>
       </Helmet>
       <div className="min-h-screen bg-base text-default">
         <div
@@ -270,11 +204,7 @@ const App: React.FC = () => {
         <Navbar scrolled={scrolled} />
         <main id="main" aria-label="Contenido principal">
           <section id="inicio" aria-label="Inicio">
-            <Hero
-              variant={
-                isServicios ? "servicios" : isContacto ? "contacto" : "home"
-              }
-            />
+            <Hero variant={isContacto ? "contacto" : "home"} />
           </section>
           <section
             id="soluciones"
