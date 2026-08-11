@@ -11,6 +11,7 @@ export interface KdsCocinaCopy {
   kdsCocinaBullet4Title: string;
   kdsCocinaBullet4Desc: string;
   kdsCocinaCtaLabel: string;
+  kdsCocinaFigureAlt: string;
 }
 
 export const kdsCocinaCopy: { es: KdsCocinaCopy; en: KdsCocinaCopy } = {
@@ -32,6 +33,8 @@ export const kdsCocinaCopy: { es: KdsCocinaCopy; en: KdsCocinaCopy } = {
     kdsCocinaBullet4Desc:
       "La pantalla avisa en el momento en que entra un pedido nuevo.",
     kdsCocinaCtaLabel: "Pide una demo del KDS",
+    kdsCocinaFigureAlt:
+      "Cocinero consultando los pedidos en una pantalla táctil junto a la línea de cocina",
   },
   en: {
     kdsCocinaEyebrow: "KITCHEN DISPLAY SYSTEM",
@@ -51,5 +54,7 @@ export const kdsCocinaCopy: { es: KdsCocinaCopy; en: KdsCocinaCopy } = {
     kdsCocinaBullet4Desc:
       "The screen flags the moment a new order comes in.",
     kdsCocinaCtaLabel: "Request a KDS demo",
+    kdsCocinaFigureAlt:
+      "Kitchen worker checking orders on a touch screen next to the cooking line",
   },
 };

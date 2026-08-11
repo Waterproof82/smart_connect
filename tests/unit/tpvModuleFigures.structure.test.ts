@@ -4,20 +4,31 @@ import { TPV_MODULES } from "@shared/config/tpvModules";
 import { tpvModuleEs, tpvModuleEn } from "@shared/i18n/modules";
 
 // design.md D6/D8/D9 — TpvModuleFigure eager wrapper + per-module photo
-// pattern. MODULES_WITH_FIGURES grows by one entry per module PR: PR1 ships
-// only "tpv-cobro"; PR2-4 append the remaining 11 (never
-// "tienda-carta-digital" — that module is accent-only, spec requirement
-// "tienda-carta-digital Accent-Only").
-const MODULES_WITH_FIGURES = ["tpv-cobro"];
+// pattern. MODULES_WITH_FIGURES grows by one entry per module PR: PR1 shipped
+// "tpv-cobro"; PR2 appends comandero-movil, kds-cocina, gestion-reservas;
+// PR3-4 append the remaining 8 (never "tienda-carta-digital" — that module is
+// accent-only, spec requirement "tienda-carta-digital Accent-Only").
+const MODULES_WITH_FIGURES = [
+  "tpv-cobro",
+  "comandero-movil",
+  "kds-cocina",
+  "gestion-reservas",
+];
 
 const SECTION_FILE: Record<string, string> = {
   "tpv-cobro": "TpvCobroSection.tsx",
+  "comandero-movil": "ComanderoMovilSection.tsx",
+  "kds-cocina": "KdsCocinaSection.tsx",
+  "gestion-reservas": "GestionReservasSection.tsx",
 };
 
 // module id -> camelCase i18n prefix used for the FigureAlt key, e.g.
 // `tpvCobroFigureAlt`.
 const I18N_PREFIX: Record<string, string> = {
   "tpv-cobro": "tpvCobro",
+  "comandero-movil": "comanderoMovil",
+  "kds-cocina": "kdsCocina",
+  "gestion-reservas": "gestionReservas",
 };
 
 const SRC = path.resolve(__dirname, "../../src");
