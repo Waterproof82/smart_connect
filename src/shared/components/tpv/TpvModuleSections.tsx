@@ -3,12 +3,13 @@
  * (design.md D1). Maps every `TPV_MODULES` id to the React component that
  * renders its home-page section.
  *
- * PR4 status: 12 of the 13 entries are minimal placeholder sections built
- * from `createStubModuleSection` — real bespoke content per module lands in
- * PR5-7 (design.md D4), each swapping in a dedicated component behind a
- * single map-line change here. `tienda-carta-digital` is the one exception:
- * it already reuses the existing, fully-built CartaDigitalSection sub-tree,
- * so it ships complete in this PR.
+ * PR5 status: `tpv-cobro`, `comandero-movil`, `kds-cocina`, and
+ * `delivery-takeaway` now ship real bespoke components (this PR). The
+ * remaining 8 non-`tienda-carta-digital` entries stay on
+ * `createStubModuleSection` until PR6-7 swap them in — each swap is a
+ * single map-line change here, no other file needs to be reopened.
+ * `tienda-carta-digital` already reuses the existing, fully-built
+ * CartaDigitalSection sub-tree (shipped in PR4).
  *
  * Every stub (and every future bespoke component) follows design.md D4:
  * `<section id={module.id} aria-labelledby="{id}-title">` is the sole DOM
@@ -19,6 +20,10 @@
 import React from "react";
 import { useLanguage, Translation } from "@shared/context/LanguageContext";
 import CartaDigitalSection from "@features/landing/presentation/components/CartaDigitalSection";
+import TpvCobroSection from "./TpvCobroSection";
+import ComanderoMovilSection from "./ComanderoMovilSection";
+import KdsCocinaSection from "./KdsCocinaSection";
+import DeliveryTakeawaySection from "./DeliveryTakeawaySection";
 
 export interface TpvModuleSectionProps {
   /** Pre-fetched, wa.me-ready phone number. Not every module needs it. */
@@ -73,21 +78,9 @@ export const TPV_MODULE_SECTIONS: Record<
   string,
   React.FC<TpvModuleSectionProps>
 > = {
-  "tpv-cobro": createStubModuleSection(
-    "tpv-cobro",
-    "tpvCobroTitle",
-    "tpvCobroDesc",
-  ),
-  "comandero-movil": createStubModuleSection(
-    "comandero-movil",
-    "comanderoMovilTitle",
-    "comanderoMovilDesc",
-  ),
-  "kds-cocina": createStubModuleSection(
-    "kds-cocina",
-    "kdsCocinaTitle",
-    "kdsCocinaDesc",
-  ),
+  "tpv-cobro": TpvCobroSection,
+  "comandero-movil": ComanderoMovilSection,
+  "kds-cocina": KdsCocinaSection,
   "gestion-reservas": createStubModuleSection(
     "gestion-reservas",
     "gestionReservasTitle",
@@ -98,11 +91,7 @@ export const TPV_MODULE_SECTIONS: Record<
     "fichajesTitle",
     "fichajesDesc",
   ),
-  "delivery-takeaway": createStubModuleSection(
-    "delivery-takeaway",
-    "deliveryTakeawayTitle",
-    "deliveryTakeawayDesc",
-  ),
+  "delivery-takeaway": DeliveryTakeawaySection,
   "stock-inventario": createStubModuleSection(
     "stock-inventario",
     "stockInventarioTitle",
