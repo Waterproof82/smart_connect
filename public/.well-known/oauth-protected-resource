@@ -60,6 +60,5 @@
       "anonymous_access": true,
       "note": "Public chatbot with optional auth for personalized responses"
     }
-  ],
-  "documentation": "https://digitalizatenerife.es/docs/api"
+  ]
 }
