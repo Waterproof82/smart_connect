@@ -1,4 +1,5 @@
 import { SolutionConfig } from "./solutions";
+import type { AccentClass } from "./accents";
 
 /**
  * TPV platform module registry — the open/closed composition seam
@@ -20,6 +21,15 @@ import { SolutionConfig } from "./solutions";
 export interface TpvModuleConfig extends SolutionConfig {
   /** 1-based rendering/display order. Frozen — see module list above. */
   order: number;
+  /**
+   * Per-module accent, unique across all 13 (enforced by
+   * tests/unit/accentTokens.contrast.test.ts). Narrowed from
+   * SolutionConfig["iconColor"]: string — design.md D2. MUST stay a
+   * literal: `tailwind.config.js` scans this file and generates the
+   * arbitrary-value utility from it. Each bespoke section mirrors the same
+   * token as its `ACCENT` constant (design.md D5).
+   */
+  iconColor: AccentClass;
 }
 
 export const TPV_MODULES: TpvModuleConfig[] = [
@@ -31,7 +41,7 @@ export const TPV_MODULES: TpvModuleConfig[] = [
     descKey: "tpvCobroDesc",
     href: "#tpv-cobro",
     internal: true,
-    iconColor: "text-[var(--color-icon-emerald)]",
+    iconColor: "text-[var(--color-icon-coral)]",
     serviceValue: "TPV y Cobro",
     jsonLd: {
       description:
@@ -48,7 +58,7 @@ export const TPV_MODULES: TpvModuleConfig[] = [
     descKey: "comanderoMovilDesc",
     href: "#comandero-movil",
     internal: true,
-    iconColor: "text-[var(--color-icon-emerald)]",
+    iconColor: "text-[var(--color-icon-jade)]",
     serviceValue: "Comandero Móvil",
     jsonLd: {
       description:
@@ -65,7 +75,7 @@ export const TPV_MODULES: TpvModuleConfig[] = [
     descKey: "kdsCocinaDesc",
     href: "#kds-cocina",
     internal: true,
-    iconColor: "text-[var(--color-icon-emerald)]",
+    iconColor: "text-[var(--color-icon-purple)]",
     serviceValue: "KDS Cocina",
     jsonLd: {
       description:
@@ -82,7 +92,7 @@ export const TPV_MODULES: TpvModuleConfig[] = [
     descKey: "gestionReservasDesc",
     href: "#gestion-reservas",
     internal: true,
-    iconColor: "text-[var(--color-icon-emerald)]",
+    iconColor: "text-[var(--color-icon-amber)]",
     serviceValue: "Gestión de Reservas",
     jsonLd: {
       description:
@@ -99,7 +109,7 @@ export const TPV_MODULES: TpvModuleConfig[] = [
     descKey: "fichajesDesc",
     href: "#fichajes-control-horario",
     internal: true,
-    iconColor: "text-[var(--color-icon-emerald)]",
+    iconColor: "text-[var(--color-icon-blue)]",
     serviceValue: "Fichajes y Control Horario",
     jsonLd: {
       description:
@@ -116,7 +126,7 @@ export const TPV_MODULES: TpvModuleConfig[] = [
     descKey: "deliveryTakeawayDesc",
     href: "#delivery-takeaway",
     internal: true,
-    iconColor: "text-[var(--color-icon-emerald)]",
+    iconColor: "text-[var(--color-icon-rose)]",
     serviceValue: "Delivery y Takeaway",
     jsonLd: {
       description:
@@ -133,7 +143,7 @@ export const TPV_MODULES: TpvModuleConfig[] = [
     descKey: "stockInventarioDesc",
     href: "#stock-inventario",
     internal: true,
-    iconColor: "text-[var(--color-icon-emerald)]",
+    iconColor: "text-[var(--color-icon-green)]",
     serviceValue: "Stock e Inventario",
     jsonLd: {
       description:
@@ -150,7 +160,7 @@ export const TPV_MODULES: TpvModuleConfig[] = [
     descKey: "multiIvaIgicDesc",
     href: "#multi-iva-igic",
     internal: true,
-    iconColor: "text-[var(--color-icon-emerald)]",
+    iconColor: "text-[var(--color-icon-indigo)]",
     serviceValue: "Multi-IVA / IGIC",
     jsonLd: {
       description:
@@ -167,7 +177,7 @@ export const TPV_MODULES: TpvModuleConfig[] = [
     descKey: "rbacRolesDesc",
     href: "#rbac-roles",
     internal: true,
-    iconColor: "text-[var(--color-icon-emerald)]",
+    iconColor: "text-[var(--color-icon-orange)]",
     serviceValue: "Roles y Permisos",
     jsonLd: {
       description:
@@ -184,7 +194,7 @@ export const TPV_MODULES: TpvModuleConfig[] = [
     descKey: "foodCostAvanzadoDesc",
     href: "#food-cost-avanzado",
     internal: true,
-    iconColor: "text-[var(--color-icon-emerald)]",
+    iconColor: "text-[var(--color-icon-cyan)]",
     serviceValue: "Food Cost Avanzado",
     jsonLd: {
       description:
@@ -201,7 +211,7 @@ export const TPV_MODULES: TpvModuleConfig[] = [
     descKey: "sistemaAlergenosDesc",
     href: "#sistema-alergenos",
     internal: true,
-    iconColor: "text-[var(--color-icon-emerald)]",
+    iconColor: "text-[var(--color-icon-magenta)]",
     serviceValue: "Sistema de Alérgenos",
     jsonLd: {
       description:
@@ -218,7 +228,7 @@ export const TPV_MODULES: TpvModuleConfig[] = [
     descKey: "comprasSialtiDesc",
     href: "#compras-sialti",
     internal: true,
-    iconColor: "text-[var(--color-icon-emerald)]",
+    iconColor: "text-[var(--color-icon-lime)]",
     serviceValue: "Compras y SIALTI",
     jsonLd: {
       description:
