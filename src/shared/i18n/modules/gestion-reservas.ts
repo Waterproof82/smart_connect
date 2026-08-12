@@ -11,6 +11,7 @@ export interface GestionReservasCopy {
   gestionReservasBullet4Title: string;
   gestionReservasBullet4Desc: string;
   gestionReservasCtaLabel: string;
+  gestionReservasFigureAlt: string;
 }
 
 export const gestionReservasCopy: {
@@ -36,6 +37,8 @@ export const gestionReservasCopy: {
     gestionReservasBullet4Desc:
       "Cada reserva se gestiona con la misma seriedad que un restaurante de referencia.",
     gestionReservasCtaLabel: "Pide una demo de reservas",
+    gestionReservasFigureAlt:
+      "Cartel de mesa reservada sobre un mantel con copas preparado antes del servicio",
   },
   en: {
     gestionReservasEyebrow: "RESERVATION MANAGEMENT",
@@ -55,5 +58,7 @@ export const gestionReservasCopy: {
     gestionReservasBullet4Desc:
       "Every booking is handled with the same care as a top-tier restaurant.",
     gestionReservasCtaLabel: "Request a reservations demo",
+    gestionReservasFigureAlt:
+      "A reserved-table sign on a set dining table with glasses, ready before service",
   },
 };

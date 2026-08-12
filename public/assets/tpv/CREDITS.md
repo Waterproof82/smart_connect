@@ -14,3 +14,6 @@ in-repo build dependency was added (design.md F3).
 | File | Unsplash photo ID | Photographer | Source URL | Downloaded |
 |---|---|---|---|---|
 | tpv-cobro.webp | ieqmC1QlHG0 | SumUp | https://unsplash.com/photos/ieqmC1QlHG0 | 2026-08-11 |
+| comandero-movil.webp | A9kuKeT-YFc | SpotOn | https://unsplash.com/photos/A9kuKeT-YFc | 2026-08-11 |
+| kds-cocina.webp | mx9F9ptC5RA | SpotOn | https://unsplash.com/photos/mx9F9ptC5RA | 2026-08-11 |
+| gestion-reservas.webp | Fiemj1UGeAU | Haberdoedas | https://unsplash.com/photos/Fiemj1UGeAU | 2026-08-11 |

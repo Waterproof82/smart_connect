@@ -11,6 +11,7 @@ export interface ComanderoMovilCopy {
   comanderoMovilBullet4Title: string;
   comanderoMovilBullet4Desc: string;
   comanderoMovilCtaLabel: string;
+  comanderoMovilFigureAlt: string;
 }
 
 export const comanderoMovilCopy: {
@@ -35,6 +36,8 @@ export const comanderoMovilCopy: {
     comanderoMovilBullet4Desc:
       "Se acabó descifrar letra en un papel: el pedido llega igual que se tomó.",
     comanderoMovilCtaLabel: "Pide una demo del comandero",
+    comanderoMovilFigureAlt:
+      "Camarero mostrando el pedido en un dispositivo móvil a dos clientes sentados a la mesa",
   },
   en: {
     comanderoMovilEyebrow: "MOBILE ORDER TAKING",
@@ -55,5 +58,7 @@ export const comanderoMovilCopy: {
     comanderoMovilBullet4Desc:
       "No more deciphering handwriting — the order arrives exactly as it was taken.",
     comanderoMovilCtaLabel: "Request a mobile ordering demo",
+    comanderoMovilFigureAlt:
+      "Waiter showing the order on a mobile device to two customers seated at the table",
   },
 };
