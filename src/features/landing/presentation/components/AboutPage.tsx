@@ -59,7 +59,7 @@ const AboutPage: React.FC = () => {
                 height: 512,
               },
               email: "info@digitalizatenerife.es",
-              telephone: "+34922123456",
+              telephone: "+34 601 39 64 19",
               address: {
                 "@type": "PostalAddress",
                 streetAddress: "Calle Las Palmas 123",

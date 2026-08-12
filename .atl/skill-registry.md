@@ -227,8 +227,8 @@ Controla cómo React se monta en páginas que NO tienen contenido SSR (servidas 
 
 - **Regla**: `entry-client.tsx` debe DETECTAR si hay contenido SSR real en `#root` antes de decidir entre `hydrateRoot` y `createRoot`.
 - **Detección**: `rootElement.children.length > 0` — las páginas prerenderizadas tienen hijos Element (`<div>`, `<nav>`, etc.), las SPA pages solo tienen un Comment node (`<!--ssr-outlet-->`).
-- **Prerendered → `hydrateRoot`**: páginas `/`, `/servicios`, `/contacto` tienen HTML real → hidratar.
-- **SPA → `createRoot`**: páginas `/carta-digital`, `/tap-review`, `/admin` se sirven con `_spa.html` que solo tiene `<!--ssr-outlet-->` → NO se puede hidratar, usar `createRoot` + `.render()`.
+- **Prerendered (SSG) → `hydrateRoot`**: las 6 rutas de `scripts/site-routes.json` — `/`, `/tarjetas-nfc`, `/about`, `/legal/aviso`, `/legal/privacidad`, `/legal/cookies` — tienen HTML real → hidratar.
+- **SPA → `createRoot`**: `/admin` se sirve con `_spa.html` que solo tiene `<!--ssr-outlet-->` → NO se puede hidratar, usar `createRoot` + `.render()`.
 - **ThemeProvider debe envolver TODAS las rutas** en `entry-client.tsx` y `entry-server.tsx`, NO solo dentro de `App.tsx`. Si solo está en App, las SPA pages no tienen contexto de tema.
 
 ### Theme SSR Safety (CRITICAL) ⚠️
