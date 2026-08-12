@@ -1,0 +1,11 @@
+{
+  "origin": "https://digitalizatenerife.es",
+  "routes": [
+    { "path": "/", "priority": "1.0", "changefreq": "monthly", "lastmod": "2026-08-12" },
+    { "path": "/tarjetas-nfc", "priority": "0.9", "changefreq": "monthly", "lastmod": "2026-08-11" },
+    { "path": "/about", "priority": "0.7", "changefreq": "monthly", "lastmod": "2026-08-12" },
+    { "path": "/legal/aviso", "priority": "0.3", "changefreq": "yearly", "lastmod": "2026-05-18" },
+    { "path": "/legal/privacidad", "priority": "0.3", "changefreq": "yearly", "lastmod": "2026-05-18" },
+    { "path": "/legal/cookies", "priority": "0.3", "changefreq": "yearly", "lastmod": "2026-05-18" }
+  ]
+}

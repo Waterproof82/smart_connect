@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **SEO/GEO P0 fixes (SDD `seo-geo-p0-fixes`)**: Closed 7+ dead/redirected URLs and structural SEO defects surfaced across machine-readable discovery surfaces and the app itself.
+  - `public/llms.txt` and `public/.well-known/llms.txt`: removed 5 dead page links (`/carta-digital`, `/automatizacion-restaurantes-n8n`, `/automatizacion-whatsapp-restaurante`, `/software-restaurantes-canarias`, `/digitalizacion-hosteleria-tenerife`, all 301→`/`); `.well-known/llms.txt` is now a minimal pointer stub to the canonical root `llms.txt` (llmstxt.org defines exactly one location).
+  - `public/.well-known/api-catalog`: removed the dead `service-doc` → `/docs/api` link; `privacy-policy` now points at `/legal/privacidad` instead of `/privacy`.
+  - `public/.well-known/oauth-protected-resource`: removed the dead `documentation` field.
+  - `public/.well-known/agent-skills/index.json`: `contact-request.url` now points at the live `#contacto` anchor instead of the dead `/contacto` route; removed 3 fake (empty-string) `sha256` fields; recomputed `product-information.sha256` against the frozen `llms.txt` content.
+  - `src/App.tsx`: removed 3 invalid `hrefLang` `<link>` tags (all pointed at the same URL — this site has no language-addressable URLs) and the dead `isContacto` branching (`useLocation`, conditional title/description, `Hero variant`); `pageTitle`/`pageDescription` are now module-level constants.
+  - `src/entry-client.tsx`: removed the unreachable `<Route path="/contacto">` (edge `vercel.json` redirect already handles `/contacto` before the SPA router ever sees it).
+  - `src/features/landing/presentation/components/Hero.tsx`: removed the now-unused `variant` prop (`HeroProps`), sole call site simplified to `<Hero />`.
+  - `src/features/landing/presentation/components/AboutPage.tsx`: fixed the JSON-LD `telephone` (NAP) — was `+34922123456`, now `+34 601 39 64 19`, matching `llms.txt` and `SeoSchema.tsx`.
+  - `src/WebMCP.ts`: `get_contact_info` (EN + ES) no longer hands agents the dead `/contacto` URL — now `/#contacto`.
+  - `scripts/prerender.mjs`: the top-level `.catch(console.error)` was a silent-failure bug — a rejected prerender logged an error but the process still exited 0, so a broken build could deploy undetected. Now exits non-zero on failure.
+
+### Added
+
+- **Generated sitemap (SDD `seo-geo-p0-fixes`)**: `dist/sitemap.xml` is now generated at build time from `scripts/site-routes.json` (single source of truth also consumed by `prerender.mjs` and `tests/unit/scripts/routeParity.test.ts`), replacing the hand-maintained `public/sitemap.xml` (which was missing `/tarjetas-nfc` and had no build-time verification). `lastmod` is an explicit, reviewed literal per route — never a fabricated build/git/mtime date — and is omitted entirely when unknown.
+  - `scripts/sitemap.mjs`: `buildSitemapXml`/`writeSitemap`, with 4 build guards (non-empty route table, artifact size + `<loc>` count, well-formed `<loc>`, prerender/sitemap set identity) that fail the build loudly instead of shipping a broken or empty sitemap.
+  - `tests/unit/scripts/routeParity.test.ts` (new): asserts `src/entry-server.tsx`'s `<Route>` set exactly matches `scripts/site-routes.json`, turning route/sitemap drift into a red build going forward.
+
 ### Changed
 
 - **Landing refocused on two solutions (SDD `landing-two-solutions`)**: The home page (`/`) now presents exactly two solutions — Carta Digital Premium and Tarjetas NFC — as full scrollable sections merged in from the former `/carta-digital` and `/tap-review` pages, instead of linking out to 7 separate solution pages.
