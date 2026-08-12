@@ -63,6 +63,7 @@ const ErrorBoundaryFallback: React.FC = () => {
         <h1 className="text-2xl font-bold mb-4">{t.errorBoundaryTitle}</h1>
         <p className="text-muted mb-4">{t.errorBoundaryMessage}</p>
         <button
+          type="button"
           onClick={() => globalThis.location.reload()}
           className="bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-[var(--color-on-accent)] px-6 py-3 rounded-xl font-bold focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] min-h-[44px]"
         >
@@ -423,56 +424,25 @@ const App: React.FC = () => {
                 <h3 className="text-sm font-bold text-muted uppercase tracking-wider mb-4">
                   {t.footerSocialTitle}
                 </h3>
+                {/* Social accounts not live yet — non-interactive placeholders
+                    (S6844: an href="#" is not a valid, navigable address).
+                    Swap each <span> back to an <a href="..."> once the real
+                    account URL exists. */}
                 <ul className="space-y-3 text-sm text-muted">
                   <li>
-                    <a
-                      href="#"
-                      rel="noopener noreferrer"
-                      aria-label="YouTube"
-                      className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors"
-                    >
-                      YouTube
-                    </a>
+                    <span>YouTube</span>
                   </li>
                   <li>
-                    <a
-                      href="#"
-                      rel="noopener noreferrer"
-                      aria-label="X (Twitter)"
-                      className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors"
-                    >
-                      X (Twitter)
-                    </a>
+                    <span>X (Twitter)</span>
                   </li>
                   <li>
-                    <a
-                      href="#"
-                      rel="noopener noreferrer"
-                      aria-label="LinkedIn"
-                      className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors"
-                    >
-                      LinkedIn
-                    </a>
+                    <span>LinkedIn</span>
                   </li>
                   <li>
-                    <a
-                      href="#"
-                      rel="noopener noreferrer"
-                      aria-label="Instagram"
-                      className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors"
-                    >
-                      Instagram
-                    </a>
+                    <span>Instagram</span>
                   </li>
                   <li>
-                    <a
-                      href="#"
-                      rel="noopener noreferrer"
-                      aria-label="Facebook"
-                      className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors"
-                    >
-                      Facebook
-                    </a>
+                    <span>Facebook</span>
                   </li>
                 </ul>
               </div>
