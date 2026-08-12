@@ -76,4 +76,47 @@ describe("Home page composition (App.tsx + merged sections)", () => {
     expect(appSource).toMatch(/CANONICAL_URL\s*=\s*"https:\/\/digitalizatenerife\.es\/"/);
     expect(appSource).not.toMatch(/href=\{`https:\/\/digitalizatenerife\.es\$\{location\.pathname\}`\}/);
   });
+
+  it("Pilares Tecnológicos: 4 distinct lucide icons + 4 distinct accent tokens, zero <img> (PR5: accent-only, no photos)", () => {
+    const appSource = read("App.tsx");
+    const pilaresStart = appSource.indexOf("Pilares Tecnológicos");
+    const pilaresEnd = appSource.indexOf("Closing statement");
+
+    expect(pilaresStart).toBeGreaterThan(-1);
+    expect(pilaresEnd).toBeGreaterThan(pilaresStart);
+
+    const pilaresBlock = appSource.slice(pilaresStart, pilaresEnd);
+
+    // Accent-only per spec (Pilares Tecnológicos Accent-Only requirement):
+    // MUST NOT gain any <img>.
+    expect(pilaresBlock).not.toMatch(/<img[\s>]/);
+
+    // 4 distinct lucide icons, imported eagerly from "lucide-react".
+    const importLine =
+      appSource.match(/import\s*\{[^}]*\}\s*from\s*["']lucide-react["'];?/)?.[0] ?? "";
+    expect(importLine).not.toBe("");
+
+    const icons = ["Workflow", "Utensils", "Monitor", "Bot"];
+    for (const icon of icons) {
+      expect(importLine).toMatch(new RegExp(`\\b${icon}\\b`));
+      expect(pilaresBlock).toMatch(new RegExp(`\\b${icon}\\b`));
+    }
+
+    // 4 distinct accent tokens (D5-consistent: n8n->indigo, Carta Digital->emerald,
+    // TPV->coral, IA->magenta), each rendered via accentStyle() + .tpv-accent-chip.
+    const accents = [
+      "--color-icon-indigo",
+      "--color-icon-emerald",
+      "--color-icon-coral",
+      "--color-icon-magenta",
+    ];
+    for (const accent of accents) {
+      const escaped = accent.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+      expect(pilaresBlock).toMatch(new RegExp(escaped));
+    }
+    expect(new Set(accents).size).toBe(4);
+
+    expect(pilaresBlock).toMatch(/accentStyle\(/);
+    expect(pilaresBlock).toMatch(/tpv-accent-chip/);
+  });
 });

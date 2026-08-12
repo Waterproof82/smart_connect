@@ -19,6 +19,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **TPV module visual redesign (SDD `digitaliza-tenerife-tpv-visual-redesign`)**: All 12 flat TPV module sections (`tpv-cobro`, `comandero-movil`, `kds-cocina`, `gestion-reservas`, `fichajes-control-horario`, `delivery-takeaway`, `stock-inventario`, `multi-iva-igic`, `rbac-roles`, `food-cost-avanzado`, `sistema-alergenos`, `compras-sialti`) now render a real self-hosted Unsplash photo (`public/assets/tpv/{id}.webp`, ≤150KB each) alongside a unique OKLCH accent colour, replacing the previous single hardcoded emerald icon colour shared by all 13 modules.
+  - `src/shared/config/accents.ts` (new): `AccentToken`/`AccentClass` types and `accentStyle()` set a single `--tpv-accent` CSS custom property per section, resolved entirely via `:root`/`.light` CSS (zero JS, no theme-detection branch, SSR-safe).
+  - `src/index.css`: +8 new `--color-icon-*` OKLCH tokens (coral, orange, lime, green, jade, cyan, indigo, magenta) defined in both `:root` and `.light`, plus `.tpv-accent-frame`/`.tpv-accent-chip` component classes.
+  - `src/shared/components/tpv/TpvModuleFigure.tsx` (new): eager, presentational photo component (`loading="lazy"`, `decoding="async"`, intrinsic `width`/`height`, aspect-ratio wrapper) mounted inside 12 of the 13 bespoke module sections.
+  - `TPV_MODULES[].iconColor` (`src/shared/config/tpvModules.ts`) is now per-module-unique across all 13 entries and drives both the section accent and the Navbar/Features consumers.
+  - "Pilares Tecnológicos" (`src/App.tsx`) gained 4 distinct lucide icons (`Workflow`, `Utensils`, `Monitor`, `Bot`) and 4 distinct accent colours (indigo, emerald, coral, magenta) — accent-only, no photos, per design scope.
+  - `tienda-carta-digital` stays accent-only (config token change only); its existing `CartaDigitalDemoSection` product-screenshot tree is untouched.
+  - Shipped as a 5-PR chain (foundation+pilot, then 3+4+4 modules, then Pilares/close-out); each PR's structural tests (`tests/unit/accentTokens.contrast.test.ts`, `tests/unit/tpvModuleFigures.structure.test.ts`) enforce token dark/light parity, ≥3:1 non-text contrast (WCAG 2.1 SC 1.4.11), config↔JSX accent-mirror consistency, and asset provenance (`public/assets/tpv/CREDITS.md`).
 - **GSC Indexing Fixes — 301 Redirects**: Added 6 permanent server-side redirects in `vercel.json` for English alias routes and old pages that caused "Redirect" and "Duplicate canonical" GSC issues
   - `/automation-n8n` → `/automatizacion-restaurantes-n8n`
   - `/whatsapp-automation` → `/automatizacion-whatsapp-restaurante`
