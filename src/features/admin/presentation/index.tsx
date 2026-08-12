@@ -26,7 +26,7 @@ export const AdminPanel: React.FC = () => {
   const noIndexHelmet = (
     <Helmet>
       <meta name="robots" content="noindex, nofollow" />
-      <title>Panel de Administración - SmartConnect AI</title>
+      <title>Panel de Administración - Digitaliza Tenerife</title>
     </Helmet>
   );
 

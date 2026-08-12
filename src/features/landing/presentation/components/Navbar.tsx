@@ -4,7 +4,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import LanguageSelector from "@shared/components/LanguageSelector";
 import { useLanguage } from "@shared/context/LanguageContext";
 
-import { SOLUTIONS, ROUTE_TO_SOLUTION_ID } from "@shared/config/solutions";
+import { SOLUTIONS } from "@shared/config/solutions";
 import { mapSolutions, SolutionItem } from "@shared/utils/solutionHelpers";
 
 interface NavbarProps {
@@ -177,10 +177,12 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
 
   const isHomePage = location.pathname === "/";
 
+  const currentSolutionId = SOLUTIONS.find(
+    (solution) => solution.href === location.pathname,
+  )?.id;
+
   const solutions = mapSolutions(SOLUTIONS, t, {
-    filterOut: ROUTE_TO_SOLUTION_ID[location.pathname]
-      ? [ROUTE_TO_SOLUTION_ID[location.pathname]]
-      : [],
+    filterOut: currentSolutionId ? [currentSolutionId] : [],
   });
 
   return (
@@ -201,7 +203,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
             <Cpu className="text-[var(--color-on-accent)] w-6 h-6" />
           </div>
           <span className="font-bold text-xl tracking-tighter text-default">
-            SmartConnect <span className="text-[var(--color-primary)]">AI</span>
+            Digitaliza <span className="text-[var(--color-primary)]">Tenerife</span>
           </span>
         </a>
 
@@ -250,6 +252,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
             }}
           >
             <button
+              type="button"
               className="flex items-center gap-1.5 hover:text-[var(--color-text)] transition-colors min-h-[48px] px-2 outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-lg"
               aria-haspopup="true"
               aria-expanded={isDropdownOpen}
@@ -321,6 +324,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
 
         {/* Hamburger for mobile */}
         <button
+          type="button"
           className="md:hidden flex items-center justify-center w-12 h-12 rounded-xl bg-[var(--color-accent)] text-[var(--color-on-accent)]"
           onClick={() => setIsMobileMenuOpen(true)}
           aria-label="Abrir menú de navegación"
@@ -358,12 +362,13 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
             >
               <div className="flex items-center justify-between">
                 <span className="font-bold text-xl text-default">
-                  SmartConnect{" "}
-                  <span className="text-[var(--color-primary)]">AI</span>
+                  Digitaliza{" "}
+                  <span className="text-[var(--color-primary)]">Tenerife</span>
                 </span>
                 <div className="flex items-center gap-2">
                   <LanguageSelector />
                   <button
+                    type="button"
                     onClick={closeMobileMenu}
                     className="text-default p-2 rounded-lg focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)]"
                     aria-label="Cerrar menu"

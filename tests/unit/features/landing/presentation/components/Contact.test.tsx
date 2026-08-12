@@ -29,6 +29,8 @@ jest.mock("../../../../../../src/shared/services/settingsService", () => ({
       contactEmail: "contact@example.com",
       whatsappPhone: "+34600000000",
       physicalAddress: "Calle de la Innovación, 123",
+      n8nEnabled: false,
+      n8nWebhookUrl: "",
     }),
   ),
 }));
@@ -36,7 +38,7 @@ jest.mock("../../../../../../src/shared/services/settingsService", () => ({
 jest.mock(
   "../../../../../../src/features/landing/presentation/LandingContainer",
   () => ({
-    getLandingContainer: jest.fn(() => ({
+    createLandingContainer: jest.fn(() => ({
       submitLeadUseCase: {
         execute: jest.fn().mockResolvedValue({ success: true }),
       },

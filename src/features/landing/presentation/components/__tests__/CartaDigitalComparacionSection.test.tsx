@@ -30,9 +30,11 @@ describe("CartaDigitalComparacionSection", () => {
     expect(container.querySelector("tbody")).toBeInTheDocument();
   });
 
-  it("renders column headers for Carta Digital and paper menu", () => {
+  it("renders column headers for Digitaliza Tenerife and paper menu", () => {
     renderWithLanguage();
-    expect(screen.getAllByText("Carta Digital").length).toBeGreaterThanOrEqual(1);
+    expect(
+      screen.getAllByText("Digitaliza Tenerife").length,
+    ).toBeGreaterThanOrEqual(1);
     expect(screen.getByText("Carta en papel")).toBeInTheDocument();
     expect(screen.getByText("Otras apps")).toBeInTheDocument();
   });

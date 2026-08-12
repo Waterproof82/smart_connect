@@ -6,9 +6,9 @@ interface ChatWelcomeProps {
 }
 
 const defaultPrompts = [
-  "¿Qué es QRIBAR?",
+  "¿Qué incluye el TPV?",
   "¿Cómo funcionan las tarjetas NFC?",
-  "Quiero automatizar mi negocio",
+  "Quiero digitalizar mi negocio",
 ];
 
 export const ChatWelcome: React.FC<ChatWelcomeProps> = ({ onPromptClick }) => {
@@ -19,8 +19,8 @@ export const ChatWelcome: React.FC<ChatWelcomeProps> = ({ onPromptClick }) => {
       </div>
       <h4 className="font-bold mb-2">¿Cómo puedo ayudarte?</h4>
       <p className="text-xs text-muted mb-4">
-        Pregúntame sobre QRIBAR, automatización con n8n o cómo mejorar tus
-        reseñas en Google.
+        Pregúntame sobre el TPV, la carta digital, las tarjetas NFC o cómo
+        automatizar tu negocio.
       </p>
       <div className="flex flex-wrap gap-2 justify-center">
         {defaultPrompts.map((prompt) => (
