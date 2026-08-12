@@ -1,0 +1,91 @@
+# Contact Form n8n Toggle + Brevo Email Fallback — SDD Change Audit
+
+**Date**: 2026-08-10
+**Author**: SDD Pipeline (sdd-apply agent)
+**Change**: `contact-form-n8n-toggle`
+**Status**: **Shipped and verified in production.** Delivered as 4 chained work-unit commits on `feature/contact-form-n8n-toggle`, merged to `main` via [PR #45](https://github.com/Waterproof82/smart_connect/pull/45), deployed to `https://digitalizatenerife.es/` by Vercel. Migration applied and verified on the live Supabase project. User confirmed a real Brevo email send to `info@digitalizatenerife.es` worked, and confirmed the contact form works end-to-end in production.
+
+---
+
+## Objective
+
+Add an admin-controlled toggle (`n8nEnabled`) that lets lead submissions from the landing contact form route to either the existing n8n webhook or a new Brevo-backed email fallback, without a page reload or redeploy. Triggered by n8n being intermittently unavailable in production and by the discovery of a silent fake-success bug in the existing webhook path.
+
+---
+
+## Delivery Strategy
+
+Resolved as chained PRs (`stacked-to-main`), 4 work units, due to a High 400-line review-budget forecast for the combined change (~1300-1800 estimated changed lines).
+
+| PR | Unit | Scope | Status |
+|---|---|---|---|
+| PR1 | Settings foundation | Migration, `Settings` entity, `settingsSchema`, `ISettingsRepository`, `SupabaseSettingsRepository`, `UpdateSettingsUseCase`, `settingsService` | Done |
+| PR2 | `notify-lead` Edge Function | `_lib.ts` (pure helpers), `index.ts` (Deno entrypoint), `config.toml` registration | Done (code). Deploy + `BREVO_API_KEY` secret confirmed done by the user separately. |
+| PR3 | Lead-delivery bypass fix + email channel wiring | `N8NWebhookDataSource` bypass removal, `EmailNotifyDataSource`, `EmailLeadRepositoryImpl`, `LandingContainer` singleton removal, `Contact.tsx` wiring | Done |
+| PR4 | SettingsPanel UI + docs + final gates | Toggle UI, ADR, CHANGELOG, this audit entry, doc updates, full-repo verification | Done (this batch) |
+
+---
+
+## PR4 Summary — SettingsPanel UI + Docs + Gates
+
+### Code changes
+
+- `src/features/admin/presentation/components/SettingsPanel.tsx`:
+  - Added a checkbox (`id="settings-n8nEnabled"`, `register("n8nEnabled")`) with a real `<label>` ("Enviar leads a n8n"), placed above the webhook URL field inside the existing "Integración n8n" section, per design section 6.
+  - Added `watch`-driven helper copy that explains both states (ON = n8n webhook, OFF = email via Brevo to the configured contact email).
+  - Wired `n8nEnabled` into `defaultValues` and into `reset()` inside `loadSettings`, so the field round-trips through load/save like every other setting.
+  - **Fixed a pre-existing UX bug found while satisfying the "user must see the ADR-7 error, not a silent crash" requirement**: the component had an early-return `if (error)` block that fully replaced the settings form with a generic "failed to load" message on ANY error — including a failed *save* (e.g. the n8n-toggle validation error thrown by `UpdateSettingsUseCase`). This meant the admin could never see the specific validation message, nor fix the field that caused it, because the whole form vanished. Fixed by gating the full-page error state to `error && !settings` (only real load failures) and by rendering the actual `error` message (not a hardcoded string) in the inline error banner that stays visible alongside the form.
+  - Updated the panel's top subtitle text since it now also documents lead-routing, not just displayed contact data.
+
+### Test coverage note
+
+`SettingsPanel.tsx` is a `.tsx` file. `jest.config.js`'s `testMatch` only matches `.ts`, and `testEnvironment` is `"node"`, not `jsdom` — a pre-existing, previously-documented gap (see design doc section 7, and PR3's apply-progress). No new component test was added for the toggle; this is not a new gap introduced by this PR, it is the same heritage limitation already flagged twice in this change's design and PR3 notes. The toggle's underlying logic (schema validation, use-case transition guard, service defaulting) is already covered by existing `.ts` suites from PR1 (`settingsSchema.test.ts`, `UpdateSettingsUseCase.test.ts`, `settingsService.test.ts`).
+
+### Verification gates (full repo, PR1+PR2+PR3+PR4 combined)
+
+| Gate | Result |
+|---|---|
+| `npx tsc --noEmit` | Clean |
+| `npm test` | 208/208 passing, 23 suites |
+| `npm run lint` (`--max-warnings 0`) | Clean, 0 warnings |
+| `rg -n "placeholder-webhook\|your_\|\.invalid" src/` | 1 hit — a doc-comment in `N8NWebhookDataSource.ts` explaining why `.invalid` is deliberately not string-matched. Zero functional hits. |
+
+### Documentation delivered
+
+- `docs/adr/ADR-006-n8n-toggle-email-fallback.md` — new ADR documenting the toggle decision, the Strategy pattern in the DI container, the singleton removal, the choice of Brevo, and the fake-success fix. Indexed in `docs/adr/README.md`.
+- `CHANGELOG.md` — `[Unreleased]` gained an `Added` entry (n8n toggle, `notify-lead` function) and a `Fixed` entry (fake-success bug, stale singleton, SettingsPanel save-error UX bug).
+- `docs/CONTACT_FORM_WEBHOOK.md` — new section describing the toggle and the email fallback flow.
+- `docs/EDGE_FUNCTIONS_DEPLOYMENT.md` — `notify-lead` added to the documented Edge Functions list, with its `BREVO_API_KEY` secret.
+
+---
+
+## Outstanding Manual Items — Resolved Post-Apply
+
+- ✅ Migration applied via `mcp__supabase__apply_migration` and verified with a direct `information_schema.columns` query against the live project (`n8n_enabled boolean not null default false` confirmed present).
+- ✅ `notify-lead` deployed via `mcp__supabase__deploy_edge_function` (version 1, `ACTIVE`).
+- ✅ `BREVO_API_KEY` secret configured by the user.
+- ✅ Brevo sender `info@digitalizatenerife.es` verified by the user (confirmed via a real manual send before the merge).
+- ✅ 4 commits split by work unit, pushed to `feature/contact-form-n8n-toggle`, opened as PR #45, merged to `main`.
+- ✅ User confirmed the contact form works end-to-end in production after the Vercel deploy.
+
+## Risk Carried From PR3 — Accepted by User
+
+The spec's "Runtime Toggle Respects Latest Settings" scenario describes a visitor already on the landing page (same tab, no reload) observing a newly-saved `n8nEnabled` value. `Contact.tsx` fetches settings once on mount and does not poll or refetch. The `LandingContainer` singleton bug that would have made this WORSE (stale container even across reloads, or across separate page loads) was fixed in PR3; true same-tab-without-reload propagation to an already-open tab was never in scope for any of the 4 units.
+
+**User decision (2026-08-10)**: accepted as-is. Toggling `n8nEnabled` is expected to be an infrequent, deliberate admin action; a visitor with the contact page already open picking up the change only after a reload is an acceptable tradeoff. No follow-up work item opened.
+
+---
+
+## Files Changed — PR4 Only
+
+| File | Action |
+|---|---|
+| `src/features/admin/presentation/components/SettingsPanel.tsx` | Modified |
+| `docs/adr/ADR-006-n8n-toggle-email-fallback.md` | Created |
+| `docs/adr/README.md` | Modified |
+| `CHANGELOG.md` | Modified |
+| `docs/CONTACT_FORM_WEBHOOK.md` | Modified |
+| `docs/EDGE_FUNCTIONS_DEPLOYMENT.md` | Modified |
+| `docs/audit/2026-08-10_contact-form-n8n-toggle.md` | Created (this file) |
+
+Working tree left uncommitted per instructions — the user will split PR1-PR4 into separate commits.

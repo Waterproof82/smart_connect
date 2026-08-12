@@ -1,3 +1,11 @@
+export interface SolutionJsonLd {
+  description: string;
+  serviceType: string;
+  areaServed: string[];
+  /** External profile URLs this solution is also known by. */
+  sameAs?: string[];
+}
+
 export interface SolutionConfig {
   id: string;
   icon: string; // Icon name (e.g., "Code2", "Settings2")
@@ -7,6 +15,10 @@ export interface SolutionConfig {
   iconColor: string; // Tailwind CSS class for icon color
   internal?: boolean;
   external?: boolean;
+  /** Value used by the Contact form's service <select> and the Navbar dropdown. */
+  serviceValue: string;
+  /** Structured-data metadata consumed by buildHomeSchema() to emit Service JSON-LD nodes. */
+  jsonLd: SolutionJsonLd;
 }
 
 export const SOLUTIONS: SolutionConfig[] = [
@@ -15,72 +27,35 @@ export const SOLUTIONS: SolutionConfig[] = [
     icon: "Utensils",
     titleKey: "navbarCartaDigital",
     descKey: "navbarCartaDigitalDesc",
-    href: "/carta-digital",
+    // PR4: content moved into the TPV_MODULES registry as the
+    // "tienda-carta-digital" module (last, frozen order) — anchor updated
+    // to match its new section id. This SOLUTIONS entry itself (Navbar
+    // dropdown / Features card / Contact form option) is unchanged.
+    href: "#tienda-carta-digital",
     internal: true,
     iconColor: "text-[var(--color-icon-emerald)]",
+    serviceValue: "Carta Digital Premium",
+    jsonLd: {
+      description:
+        "Menú digital con pedidos en tiempo real desde la mesa a barra y cocina. Sin comisiones por pedido.",
+      serviceType: "Digital Menu Platform",
+      areaServed: ["Tenerife", "Gran Canaria", "Lanzarote", "Canarias"],
+    },
   },
   {
     id: "tarjetas-nfc",
     icon: "Smartphone",
     titleKey: "navbarNFC",
     descKey: "navbarNFCDesc",
-    href: "/tap-review",
+    href: "/tarjetas-nfc",
     internal: true,
     iconColor: "text-[var(--color-icon-emerald)]",
-  },
-  {
-    id: "qribar",
-    icon: "Utensils",
-    titleKey: "navbarQribar",
-    descKey: "navbarQribarDesc",
-    href: "https://qribar.es",
-    external: true,
-    iconColor: "text-[var(--color-icon-amber)]",
-  },
-  {
-    id: "automation-n8n",
-    icon: "Settings2",
-    titleKey: "navbarAutomationN8n",
-    descKey: "navbarAutomationN8nDesc",
-    href: "/automatizacion-restaurantes-n8n",
-    internal: true,
-    iconColor: "text-[var(--color-icon-purple)]",
-  },
-  {
-    id: "whatsapp-automation",
-    icon: "MessageSquare",
-    titleKey: "navbarWhatsAppAutomation",
-    descKey: "navbarWhatsAppAutomationDesc",
-    href: "/automatizacion-whatsapp-restaurante",
-    internal: true,
-    iconColor: "text-[var(--color-icon-blue)]",
-  },
-  {
-    id: "software-canarias",
-    icon: "MapPin",
-    titleKey: "navbarSoftwareCanarias",
-    descKey: "navbarSoftwareCanariasDesc",
-    href: "/software-restaurantes-canarias",
-    internal: true,
-    iconColor: "text-[var(--color-icon-blue)]",
-  },
-  {
-    id: "digitalization-tenerife",
-    icon: "Cloud",
-    titleKey: "navbarDigitalizationTenerife",
-    descKey: "navbarDigitalizationTenerifeDesc",
-    href: "/digitalizacion-hosteleria-tenerife",
-    internal: true,
-    iconColor: "text-[var(--color-icon-emerald)]",
+    serviceValue: "Tarjetas NFC Reseñas",
+    jsonLd: {
+      description:
+        "Tarjetas NFC para que los clientes dejen reseñas en Google e Instagram con un solo toque.",
+      serviceType: "NFC Review Solution",
+      areaServed: ["Tenerife", "Canarias", "España"],
+    },
   },
 ];
-
-// Map route paths to solution IDs for navbar filtering
-export const ROUTE_TO_SOLUTION_ID: Record<string, string> = {
-  "/carta-digital": "carta-digital",
-  "/tap-review": "tarjetas-nfc",
-  "/automatizacion-restaurantes-n8n": "automation-n8n",
-  "/automatizacion-whatsapp-restaurante": "whatsapp-automation",
-  "/software-restaurantes-canarias": "software-canarias",
-  "/digitalizacion-hosteleria-tenerife": "digitalization-tenerife",
-};

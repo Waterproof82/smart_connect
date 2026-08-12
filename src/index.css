@@ -33,6 +33,14 @@
     --color-icon-emerald: oklch(65% 0.18 160);
     --color-icon-amber: oklch(70% 0.18 60);
     --color-icon-rose: oklch(65% 0.18 350);
+    --color-icon-coral: oklch(65% 0.18 13);
+    --color-icon-orange: oklch(65% 0.18 37);
+    --color-icon-lime: oklch(65% 0.18 85);
+    --color-icon-green: oklch(65% 0.18 110);
+    --color-icon-jade: oklch(65% 0.18 135);
+    --color-icon-cyan: oklch(65% 0.18 195);
+    --color-icon-indigo: oklch(65% 0.18 255);
+    --color-icon-magenta: oklch(65% 0.18 315);
     --color-whatsapp: oklch(65% 0.18 150);
     --color-whatsapp-hover: oklch(55% 0.18 150);
     --focus-ring: oklch(70% 0.15 250);
@@ -75,6 +83,14 @@
     --color-icon-emerald: oklch(55% 0.18 160);
     --color-icon-amber: oklch(60% 0.18 60);
     --color-icon-rose: oklch(55% 0.18 350);
+    --color-icon-coral: oklch(55% 0.18 13);
+    --color-icon-orange: oklch(55% 0.18 37);
+    --color-icon-lime: oklch(55% 0.18 85);
+    --color-icon-green: oklch(55% 0.18 110);
+    --color-icon-jade: oklch(55% 0.18 135);
+    --color-icon-cyan: oklch(55% 0.18 195);
+    --color-icon-indigo: oklch(55% 0.18 255);
+    --color-icon-magenta: oklch(55% 0.18 315);
     --color-whatsapp: oklch(65% 0.18 150);
     --color-whatsapp-hover: oklch(55% 0.18 150);
     --focus-ring: oklch(60% 0.15 250);
@@ -114,6 +130,22 @@
 }
 
 @layer components {
+  .tpv-accent-frame {
+    border: 1px solid
+      color-mix(in oklch, var(--tpv-accent, var(--color-primary)) 35%, transparent);
+    box-shadow: 0 18px 40px -28px
+      color-mix(in oklch, var(--tpv-accent, var(--color-primary)) 60%, transparent);
+  }
+
+  .tpv-accent-chip {
+    background-color: color-mix(
+      in oklch,
+      var(--tpv-accent, var(--color-primary)) 12%,
+      var(--color-surface)
+    );
+    border: 1px solid
+      color-mix(in oklch, var(--tpv-accent, var(--color-primary)) 30%, var(--color-border));
+  }
 }
 
 @layer utilities {

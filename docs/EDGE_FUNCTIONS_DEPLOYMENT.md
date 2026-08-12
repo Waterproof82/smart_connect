@@ -5,6 +5,8 @@
 ### Archivos Creados
 - ✅ `supabase/functions/gemini-embedding/index.ts` - Function para generar embeddings
 - ✅ `supabase/functions/gemini-generate/index.ts` - Function para generar respuestas
+- ✅ `supabase/functions/chat-with-rag/index.ts` - Function del chatbot RAG
+- ✅ `supabase/functions/notify-lead/index.ts` - Function de fallback por email (Brevo) para leads del formulario de contacto, usada cuando `n8nEnabled = false` (ver `docs/CONTACT_FORM_WEBHOOK.md`)
 - ✅ `scripts/deploy-edge-functions.ps1` - Script de despliegue automatizado
 - ✅ `ExpertAssistantWithRAG.tsx` - Componente actualizado para usar Edge Functions
 
@@ -240,6 +242,23 @@ return new Response(JSON.stringify(data), {
   }
 });
 ```
+
+---
+
+## 📧 Edge Function: `notify-lead`
+
+**Propósito**: fallback de entrega de leads por email cuando el toggle `n8nEnabled` (`app_settings`) está desactivado. Ver `docs/CONTACT_FORM_WEBHOOK.md` y `docs/adr/ADR-006-n8n-toggle-email-fallback.md` para el detalle de arquitectura y contrato de request/response.
+
+**Config**: `verify_jwt = false` (visitantes anónimos, igual que `chat-with-rag`), `entrypoint = ./functions/notify-lead/index.ts`.
+
+**Secret requerido**:
+```powershell
+supabase secrets set BREVO_API_KEY="<tu-api-key-de-brevo>"
+```
+
+Sin este secret configurado, cada envío por el canal de email falla con `500 Server configuration error`. El remitente configurado en el código (`info@digitalizatenerife.es`) debe estar verificado en Brevo antes del primer envío en producción, o cada intento devolverá `502 Notification provider error`.
+
+**Destinatario**: se resuelve server-side leyendo `app_settings.contact_email` con la `anon` key (no requiere `service_role`) — el cliente nunca decide a dónde llega el email.
 
 ---
 

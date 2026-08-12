@@ -43,17 +43,21 @@ export const SettingsPanel: React.FC = () => {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { isSubmitting, errors },
   } = useForm<SettingsFormData>({
     resolver: zodResolver(settingsSchema),
     defaultValues: {
       n8nWebhookUrl: "",
+      n8nEnabled: false,
       contactEmail: "",
       whatsappPhone: "",
       physicalAddress: "",
     },
     mode: "onBlur",
   });
+
+  const n8nEnabled = watch("n8nEnabled");
 
   const loadSettings = useCallback(async () => {
     try {
@@ -63,6 +67,7 @@ export const SettingsPanel: React.FC = () => {
       setSettings(result);
       reset({
         n8nWebhookUrl: result.n8nWebhookUrl,
+        n8nEnabled: result.n8nEnabled,
         contactEmail: result.contactEmail,
         whatsappPhone: result.whatsappPhone,
         physicalAddress: result.physicalAddress,
@@ -122,7 +127,7 @@ export const SettingsPanel: React.FC = () => {
     );
   }
 
-  if (error) {
+  if (error && !settings) {
     return (
       <div
         className="bg-[var(--color-bg-alt)] border border-[var(--color-error-border)] rounded-lg p-6"
@@ -147,10 +152,11 @@ export const SettingsPanel: React.FC = () => {
         <div>
           <h2 className="text-xl font-bold text-default">Configuración</h2>
           <p className="text-muted text-sm mt-1">
-            Datos de contacto mostrados en la landing page
+            Datos de contacto y ruta de envío de leads de la landing page
           </p>
         </div>
         <button
+          type="button"
           onClick={loadSettings}
           className="p-3 min-w-[44px] min-h-[44px] flex items-center justify-center text-muted hover:text-default hover:bg-[var(--color-surface)] rounded-lg transition-colors"
           aria-label="Recargar configuración"
@@ -183,7 +189,7 @@ export const SettingsPanel: React.FC = () => {
         >
           <AlertCircle className="w-5 h-5 text-[var(--color-error-text)]" />
           <span className="text-[var(--color-error-text)] text-sm">
-            Error al guardar. Intenta de nuevo.
+            {error}
           </span>
         </div>
       )}
@@ -281,6 +287,34 @@ export const SettingsPanel: React.FC = () => {
             <h3 className="text-lg font-semibold text-default mb-4">
               Integración n8n
             </h3>
+
+            {/* n8n Enabled Toggle */}
+            <div className="mb-4">
+              <div className="flex items-center gap-2">
+                <input
+                  id="settings-n8nEnabled"
+                  type="checkbox"
+                  className="w-4 h-4 min-w-[20px] min-h-[20px] rounded border border-[var(--color-border)] text-[var(--color-accent)] focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)]"
+                  {...register("n8nEnabled")}
+                />
+                <label
+                  htmlFor="settings-n8nEnabled"
+                  className="text-sm font-medium text-default"
+                >
+                  Enviar leads a n8n
+                </label>
+              </div>
+              {errors.n8nEnabled && (
+                <p className="text-xs text-[var(--color-error-text)] mt-1">
+                  {errors.n8nEnabled.message}
+                </p>
+              )}
+              <p className="text-xs text-muted mt-1">
+                {n8nEnabled
+                  ? "Activado: los leads se envían al webhook de n8n. Si la URL falla o está vacía, el visitante verá un error en el formulario."
+                  : "Desactivado: cada lead del formulario llega por email a tu Email de Contacto. Es la opción segura si n8n no está funcionando."}
+              </p>
+            </div>
 
             {/* n8n Webhook URL */}
             <div className="mb-4">

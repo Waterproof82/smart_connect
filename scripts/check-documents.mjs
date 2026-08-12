@@ -72,7 +72,7 @@ async function checkDocuments() {
     console.log('\n💡 Recommendation:');
     console.log('   1. Run: scripts/update-document-sources.sql in Supabase SQL Editor');
     console.log('   2. Or manually update documents with proper source values');
-    console.log('   3. Valid sources: "qribar", "reviews", "general"');
+    console.log('   3. Valid sources: "carta-digital", "reviews", "general"');
   } else {
     console.log('\n✅ All documents have valid source values');
   }

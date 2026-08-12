@@ -13,3 +13,8 @@ import_map = "./functions/gemini-generate/deno.json"
 enabled = true
 verify_jwt = false
 entrypoint = "./functions/chat-with-rag/index.ts"
+
+[functions.notify-lead]
+enabled = true
+verify_jwt = false
+entrypoint = "./functions/notify-lead/index.ts"

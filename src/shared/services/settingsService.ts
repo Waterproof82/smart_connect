@@ -9,6 +9,7 @@ import { supabase } from "@shared/supabaseClient";
 
 export interface AppSettings {
   n8nWebhookUrl: string;
+  n8nEnabled: boolean;
   contactEmail: string;
   whatsappPhone: string;
   physicalAddress: string;
@@ -36,6 +37,7 @@ export async function getAppSettings(): Promise<AppSettings> {
 
     return {
       n8nWebhookUrl: data.n8n_webhook_url || "",
+      n8nEnabled: data.n8n_enabled ?? false,
       contactEmail: data.contact_email || "",
       whatsappPhone: data.whatsapp_phone || "",
       physicalAddress: data.physical_address || "",
@@ -52,6 +54,7 @@ export async function getAppSettings(): Promise<AppSettings> {
 function getDefaultSettings(): AppSettings {
   return {
     n8nWebhookUrl: "",
+    n8nEnabled: false,
     contactEmail: "",
     whatsappPhone: "",
     physicalAddress: "",

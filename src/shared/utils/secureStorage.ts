@@ -20,7 +20,7 @@ import CryptoJS from 'crypto-js';
  * In production, this should be an environment variable
  */
 const ENCRYPTION_KEY = import.meta.env.VITE_STORAGE_ENCRYPTION_KEY;
-const SALT = 'smartconnect-ai-salt-v1'; // Fixed salt for PBKDF2
+const SALT = 'digitaliza-tenerife-salt-v1'; // Fixed salt for PBKDF2
 
 /**
  * Derives a stronger key using PBKDF2

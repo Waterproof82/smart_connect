@@ -32,6 +32,17 @@ Webhook n8n (https://tu-n8n.com/webhook/contact)
 
 ---
 
+## 🔀 Toggle n8n / Email (`n8nEnabled`)
+
+Desde `contact-form-n8n-toggle` (ADR-006), el destino de un lead ya no depende solo de que la URL de webhook esté configurada — el admin puede activar/desactivar n8n en tiempo de ejecución desde **Configuración → Integración n8n** (`SettingsPanel.tsx`), sin build ni redeploy.
+
+- **`n8nEnabled = true`**: el lead se envía por `POST` al webhook de n8n descrito en este documento (flujo completo). Si `n8nWebhookUrl` está vacía o es inválida, la app NO inventa una URL de reemplazo — el envío falla honestamente y el visitante ve un error.
+- **`n8nEnabled = false`** (default en despliegues nuevos): el lead se envía por email a través de la Edge Function `notify-lead` (Brevo), directo a `settings.contactEmail`. No pasa por n8n ni por Google Sheets/Telegram — es el camino de resiliencia mientras n8n está caído. Ver `docs/EDGE_FUNCTIONS_DEPLOYMENT.md` para el detalle de esa función.
+
+La selección de canal ocurre en el composition root (`LandingContainer.ts`, `createLandingContainer()`), no dentro de `Contact.tsx` ni del dominio — ver ADR-006 para el detalle arquitectónico completo.
+
+---
+
 ## 📋 Pasos de Implementación
 
 ### 1. Configurar Webhook en n8n

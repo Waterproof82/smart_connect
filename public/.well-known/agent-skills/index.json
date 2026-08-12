@@ -1,12 +1,12 @@
 {
   "$schema": "https://agentskills.io/schema/index.json",
-  "name": "SmartConnect Agent Skills",
-  "description": "Available agent interaction capabilities for SmartConnect landing page. Provides structured tools for AI agents to discover products, get contact info, and interact with SmartConnect AI services for local business digitalization in Tenerife and Canary Islands.",
+  "name": "Digitaliza Tenerife Agent Skills",
+  "description": "Available agent interaction capabilities for Digitaliza Tenerife landing page. Provides structured tools for AI agents to discover products, get contact info, and interact with Digitaliza Tenerife services for local business digitalization in Tenerife and Canary Islands.",
   "skills": [
     {
       "name": "product-information",
       "type": "information",
-      "description": "Get detailed information about SmartConnect products: QRIBAR, Tap-to-Review NFC, Carta Digital Premium, n8n automation, WhatsApp automation, software for Canarias, and digitalization for Tenerife.",
+      "description": "Get detailed information about Digitaliza Tenerife products: Tap-to-Review NFC, Carta Digital Premium, n8n automation, WhatsApp automation, software for Canarias, and digitalization for Tenerife.",
       "url": "https://digitalizatenerife.es/llms.txt",
       "sha256": "d2ea2b4d3734562636d08933021d6665d02090c9c6b26542e40aee61c244ab93"
     },

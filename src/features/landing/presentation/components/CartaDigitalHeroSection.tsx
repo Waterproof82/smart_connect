@@ -35,7 +35,7 @@ const CartaDigitalHeroSection: React.FC<CartaDigitalHeroSectionProps> = ({
             📍 {t.cartaHeroTenerife}
           </div>
 
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black leading-[1.1] mb-4 md:mb-6 font-display">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black leading-[1.1] mb-4 md:mb-6 font-display">
             {t.cartaHeroTitle1}
             <br />
             <span className="text-[var(--color-primary)] italic">
@@ -43,7 +43,7 @@ const CartaDigitalHeroSection: React.FC<CartaDigitalHeroSectionProps> = ({
             </span>
             <br />
             {t.cartaHeroTitle2}
-          </h1>
+          </h2>
 
           <p className="text-base md:text-lg lg:text-xl text-muted max-w-xl mx-auto mb-8 md:mb-12 leading-relaxed">
             {t.cartaHeroSubtitle}

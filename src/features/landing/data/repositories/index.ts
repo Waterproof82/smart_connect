@@ -4,3 +4,4 @@
  */
 
 export { LeadRepositoryImpl } from './LeadRepositoryImpl';
+export { EmailLeadRepositoryImpl } from './EmailLeadRepositoryImpl';

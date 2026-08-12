@@ -9,14 +9,8 @@ const templatePath = path.resolve(distDir, "index.html");
 // Routes to prerender (public product pages only — NOT dashboard/admin)
 const routes = [
   "/",
-  "/servicios",
-  "/carta-digital",
-  "/tap-review",
-  "/automatizacion-restaurantes-n8n",
-  "/automatizacion-whatsapp-restaurante",
-  "/software-restaurantes-canarias",
-  "/digitalizacion-hosteleria-tenerife",
   "/about",
+  "/tarjetas-nfc",
   "/legal/aviso",
   "/legal/privacidad",
   "/legal/cookies",

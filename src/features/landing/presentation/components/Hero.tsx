@@ -111,7 +111,7 @@ export const Hero: React.FC<HeroProps> = ({ variant = "home" }) => {
               </div>
               <div>
                 <div className="text-3xl font-extrabold mb-1 text-default">
-                  {t.smartConnect}
+                  {t.brandName}
                 </div>
                 <div className="text-muted text-xs font-bold tracking-[0.2em] uppercase">
                   {t.enterpriseAINode}

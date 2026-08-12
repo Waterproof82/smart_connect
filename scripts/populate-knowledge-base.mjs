@@ -20,10 +20,10 @@ if (!supabaseUrl || !supabaseServiceKey || !geminiApiKey) {
 
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-// Knowledge base documents about SmartConnect AI products
+// Knowledge base documents about Digitaliza Tenerife products
 const documents = [
   {
-    content: `QRiBar es el producto estrella de SmartConnect AI. Es un sistema de carta digital para restaurantes que permite a los clientes:
+    content: `Tienda / Carta Digital es uno de los módulos del TPV de Digitaliza Tenerife. Es un sistema de carta digital para restaurantes que permite a los clientes:
 - Ver el menú completo escaneando un código QR en la mesa
 - Realizar pedidos directamente desde su móvil sin necesidad de app
 - Pagar online de forma segura
@@ -37,10 +37,10 @@ Beneficios para el restaurante:
 - Compatible con cualquier smartphone
 
 Precio: Desde 29€/mes con setup incluido`,
-    source: 'qribar'
+    source: 'carta-digital'
   },
   {
-    content: `Las Tarjetas NFC de Reseñas de SmartConnect AI son una herramienta de reputación online inspirada en Tapstar. Permiten:
+    content: `Las Tarjetas NFC de Reseñas de Digitaliza Tenerife son una herramienta de reputación online. Permiten:
 - Capturar reseñas de Google Reviews con un simple tap
 - Redirigir a Instagram para nuevos seguidores
 - Diseño personalizado con logo del negocio
@@ -58,7 +58,7 @@ Precio: 45€ por tarjeta + configuración inicial gratuita`,
     source: 'reviews'
   },
   {
-    content: `SmartConnect AI ofrece Automatizaciones de Marketing usando n8n en servidor propio. Servicios incluidos:
+    content: `Digitaliza Tenerife ofrece Automatizaciones de Marketing usando n8n en servidor propio. Servicios incluidos:
 - Captación de leads desde landing pages
 - Análisis de temperatura del lead con IA (Gemini)
 - Notificaciones automáticas por Telegram
@@ -79,7 +79,7 @@ Precio: Desde 99€/mes según complejidad de workflows`,
     source: 'general'
   },
   {
-    content: `SmartConnect AI sigue el modelo de Agencia-Escuela:
+    content: `Digitaliza Tenerife sigue el modelo de Agencia-Escuela:
 - No somos solo una agencia de desarrollo
 - Construimos productos reales para negocios locales
 - Cada proyecto es una oportunidad de aprendizaje
@@ -96,7 +96,7 @@ Filosofía: Transformar negocios tradicionales en negocios digitales potenciados
     source: 'general'
   },
   {
-    content: `Información de contacto de SmartConnect AI:
+    content: `Información de contacto de Digitaliza Tenerife:
 - Email: jmaristia@gmail.com
 - Ubicación: Servicios 100% remotos, atendemos toda España
 - Horario: L-V 9:00-18:00 (zona horaria CET)
