@@ -11,6 +11,7 @@ export interface FoodCostAvanzadoCopy {
   foodCostAvanzadoBullet4Title: string;
   foodCostAvanzadoBullet4Desc: string;
   foodCostAvanzadoCtaLabel: string;
+  foodCostAvanzadoFigureAlt: string;
 }
 
 export const foodCostAvanzadoCopy: {
@@ -35,6 +36,8 @@ export const foodCostAvanzadoCopy: {
     foodCostAvanzadoBullet4Desc:
       "Decide precios y cambios de carta con datos reales, no a ojo.",
     foodCostAvanzadoCtaLabel: "Pide una demo de food cost",
+    foodCostAvanzadoFigureAlt:
+      "Calculadora y material de oficina sobre una mesa de trabajo",
   },
   en: {
     foodCostAvanzadoEyebrow: "ADVANCED FOOD COST",
@@ -54,5 +57,7 @@ export const foodCostAvanzadoCopy: {
     foodCostAvanzadoBullet4Desc:
       "Set prices and menu changes based on real data, not guesswork.",
     foodCostAvanzadoCtaLabel: "Request a food cost demo",
+    foodCostAvanzadoFigureAlt:
+      "Calculator and office supplies laid out on a work desk",
   },
 };
