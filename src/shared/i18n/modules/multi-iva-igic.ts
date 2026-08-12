@@ -11,6 +11,7 @@ export interface MultiIvaIgicCopy {
   multiIvaIgicBullet4Title: string;
   multiIvaIgicBullet4Desc: string;
   multiIvaIgicCtaLabel: string;
+  multiIvaIgicFigureAlt: string;
 }
 
 export const multiIvaIgicCopy: {
@@ -36,6 +37,8 @@ export const multiIvaIgicCopy: {
     multiIvaIgicBullet4Desc:
       "Reduce los fallos manuales que pueden derivar en sanciones.",
     multiIvaIgicCtaLabel: "Pide una demo fiscal",
+    multiIvaIgicFigureAlt:
+      "Calculadora sobre una mesa junto a tickets y facturas de un negocio de hostelería",
   },
   en: {
     multiIvaIgicEyebrow: "MULTI-TAX (VAT/IGIC)",
@@ -55,5 +58,7 @@ export const multiIvaIgicCopy: {
     multiIvaIgicBullet4Desc:
       "Cut down on manual mistakes that can lead to penalties.",
     multiIvaIgicCtaLabel: "Request a tax-compliance demo",
+    multiIvaIgicFigureAlt:
+      "Calculator on a desk next to receipts and invoices from a hospitality business",
   },
 };

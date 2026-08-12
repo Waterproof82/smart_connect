@@ -11,6 +11,7 @@ export interface FichajesCopy {
   fichajesBullet4Title: string;
   fichajesBullet4Desc: string;
   fichajesCtaLabel: string;
+  fichajesFigureAlt: string;
 }
 
 export const fichajesCopy: { es: FichajesCopy; en: FichajesCopy } = {
@@ -32,6 +33,8 @@ export const fichajesCopy: { es: FichajesCopy; en: FichajesCopy } = {
     fichajesBullet4Desc:
       "Consulta horas trabajadas por empleado y detecta desviaciones a tiempo.",
     fichajesCtaLabel: "Pide una demo de fichajes",
+    fichajesFigureAlt:
+      "Empleado levantando las manos junto a un reloj de pared para fichar su entrada",
   },
   en: {
     fichajesEyebrow: "TIME & ATTENDANCE",
@@ -51,5 +54,7 @@ export const fichajesCopy: { es: FichajesCopy; en: FichajesCopy } = {
     fichajesBullet4Desc:
       "Check hours worked per employee and catch deviations early.",
     fichajesCtaLabel: "Request a time-tracking demo",
+    fichajesFigureAlt:
+      "Employee raising their hands beside a wall clock to clock in for their shift",
   },
 };
