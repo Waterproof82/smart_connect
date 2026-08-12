@@ -11,6 +11,7 @@ import { Settings } from '../entities/Settings';
 
 export interface SettingsUpdateInput {
   n8nWebhookUrl?: string;
+  n8nEnabled?: boolean;
   contactEmail?: string;
   whatsappPhone?: string;
   physicalAddress?: string;

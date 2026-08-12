@@ -35,7 +35,7 @@ const getSessionIdentifier = (): string => {
   const key = "sc_chat_session_id";
   let sessionId = sessionStorage.getItem(key);
   if (!sessionId) {
-    sessionId = `s_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
+    sessionId = `s_${Date.now().toString(36)}_${globalThis.crypto.randomUUID().slice(0, 8)}`;
     sessionStorage.setItem(key, sessionId);
   }
   return sessionId;

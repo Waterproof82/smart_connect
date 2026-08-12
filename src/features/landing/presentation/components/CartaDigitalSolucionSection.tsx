@@ -40,7 +40,7 @@ const CartaDigitalSolucionSection: React.FC = () => {
             <div className="absolute -right-10 -bottom-10 w-48 h-48 md:w-64 md:h-64 rotate-12 opacity-[0.08] pointer-events-none group-hover:opacity-[0.12] transition-opacity">
               <img
                 src="/assets/Tarjeta_NFC_negra_MontesTAP.webp"
-                alt="NFC SmartConnect Background"
+                alt="NFC Digitaliza Tenerife Background"
                 width="256"
                 height="256"
                 loading="lazy"

@@ -1,4 +1,148 @@
 import React from "react";
+import { SolutionConfig } from "@shared/config/solutions";
+
+const ORG_URL = "https://digitalizatenerife.es";
+
+// ─── Home page JSON-LD graph builder ────────────────────────────
+export interface HomeSchemaFaq {
+  question: string;
+  answer: string;
+}
+
+/**
+ * Builds the full JSON-LD `@graph` for the home page from the active
+ * `SOLUTIONS` catalog (single source of truth) plus an optional set of
+ * FAQ entries. Pure function — no React, no side effects — so it can be
+ * unit tested directly and rendered once inside App.tsx's single
+ * `<Helmet>` block.
+ */
+export function buildHomeSchema(
+  solutions: SolutionConfig[],
+  faqs: HomeSchemaFaq[] = [],
+): { "@context": string; "@graph": Record<string, unknown>[] } {
+  const organization = {
+    "@type": "LocalBusiness",
+    "@id": `${ORG_URL}/#organization`,
+    name: "Digitaliza Tenerife",
+    url: ORG_URL,
+    description:
+      "Automatización con IA, n8n, NFC para Google Reviews y Carta Digital para negocios en Tenerife y Canarias.",
+    areaServed: "Tenerife, Canarias, España",
+    knowsAbout: [
+      "Automatización de negocios",
+      "Inteligencia Artificial",
+      "Menús digitales NFC",
+      "Google Reviews",
+    ],
+    image: `${ORG_URL}/icon.png`,
+    telephone: "+34 601 39 64 19",
+    priceRange: "€€",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "Calle Las Palmas 123",
+      addressLocality: "Santa Cruz de Tenerife",
+      addressRegion: "Canary Islands",
+      postalCode: "38001",
+      addressCountry: "ES",
+    },
+    logo: {
+      "@type": "ImageObject",
+      url: `${ORG_URL}/icon.png`,
+      width: 512,
+      height: 512,
+    },
+  };
+
+  const webPage = {
+    "@type": "WebPage",
+    "@id": ORG_URL,
+    url: ORG_URL,
+    name: "Digitaliza Tenerife | Automatización e IA para Empresas",
+    description:
+      "Digitaliza Tenerife: automatización con IA, n8n, NFC para Google Reviews y menús digitales. Digitaliza tu negocio.",
+    inLanguage: "es",
+    author: {
+      "@type": "Organization",
+      name: "Digitaliza Tenerife",
+      url: ORG_URL,
+      logo: {
+        "@type": "ImageObject",
+        url: `${ORG_URL}/icon.png`,
+        width: 512,
+        height: 512,
+      },
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Digitaliza Tenerife",
+      url: ORG_URL,
+      logo: {
+        "@type": "ImageObject",
+        url: `${ORG_URL}/icon.png`,
+      },
+    },
+  };
+
+  const serviceUrl = (solution: SolutionConfig): string =>
+    solution.href.startsWith("#") ? `${ORG_URL}/${solution.href}` : solution.href.startsWith("http") ? solution.href : `${ORG_URL}${solution.href}`;
+
+  const serviceNodes = solutions.map((solution) => {
+    const node: Record<string, unknown> = {
+      "@type": "Service",
+      "@id": `${ORG_URL}/#service-${solution.id}`,
+      name: solution.serviceValue,
+      description: solution.jsonLd.description,
+      url: serviceUrl(solution),
+      provider: { "@id": `${ORG_URL}/#organization` },
+      areaServed: solution.jsonLd.areaServed,
+      serviceType: solution.jsonLd.serviceType,
+    };
+    if (solution.jsonLd.sameAs) {
+      node.sameAs = solution.jsonLd.sameAs;
+    }
+    return node;
+  });
+
+  const itemList = {
+    "@type": "ItemList",
+    name: "Soluciones Digitaliza Tenerife",
+    description:
+      "Nuestras soluciones tecnológicas para hostelería: menús digitales y tarjetas NFC para reseñas.",
+    url: `${ORG_URL}/#soluciones`,
+    itemListElement: solutions.map((solution, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: solution.serviceValue,
+      url: serviceUrl(solution),
+    })),
+  };
+
+  const graph: Record<string, unknown>[] = [
+    organization,
+    webPage,
+    ...serviceNodes,
+    itemList,
+  ];
+
+  if (faqs.length > 0) {
+    graph.push({
+      "@type": "FAQPage",
+      mainEntity: faqs.map((faq) => ({
+        "@type": "Question",
+        name: faq.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: faq.answer,
+        },
+      })),
+    });
+  }
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": graph,
+  };
+}
 
 /**
  * Simple gradient page header for SEO landing pages.
@@ -461,7 +605,7 @@ export const ReviewSchema: React.FC<ReviewSchemaProps> = ({
   datePublished = new Date().toISOString().split("T")[0],
   itemReviewed = {
     "@type": "SoftwareApplication",
-    name: "SmartConnect AI",
+    name: "Digitaliza Tenerife",
     applicationCategory: "BusinessApplication",
     operatingSystem: "Web, iOS, Android",
     offers: {

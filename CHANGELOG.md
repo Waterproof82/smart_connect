@@ -7,8 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **Landing refocused on two solutions (SDD `landing-two-solutions`)**: The home page (`/`) now presents exactly two solutions — Carta Digital Premium and Tarjetas NFC — as full scrollable sections merged in from the former `/carta-digital` and `/tap-review` pages, instead of linking out to 7 separate solution pages.
+  - `SOLUTIONS` (`src/shared/config/solutions.ts`) is now the single source of truth (2 entries), consumed by the Navbar dropdown, `Features.tsx` grid, `Contact.tsx` service `<select>`, `WebMCP.ts`, and the JSON-LD graph.
+  - Removed the `automation-n8n`, `whatsapp-automation`, `software-canarias`, and `digitalization-tenerife` features and routes entirely; QRIBAR (`qribar.es`) survives only as a secondary CTA link inside the Carta Digital Premium section.
+  - `/carta-digital`, `/tap-review`, `/servicios`, and the 4 retired solution routes now return real HTTP 301 redirects to `/` at the edge (`vercel.json`), with the pre-existing legacy short-URL redirects retargeted straight to `/` to avoid 301→301 chains.
+  - Consolidated all 3 FAQ sources (home, Carta Digital, Tap Review — 14 questions total) into one `HomeFaqSection`, emitting a single `FAQPage` JSON-LD node instead of three.
+  - Canonical URL, `og:url`, hreflang links, and the `WebPage` JSON-LD `@id` are now hardcoded to `https://digitalizatenerife.es/` instead of being derived from `location.pathname` (fixes the pre-existing `/contacto` self-canonical duplicate-content issue).
+  - Pruned 282 orphaned i18n keys (`Translation` interface + `es`/`en`) left behind by the removed pages/components.
+
 ### Added
 
+- **TPV module visual redesign (SDD `digitaliza-tenerife-tpv-visual-redesign`)**: All 12 flat TPV module sections (`tpv-cobro`, `comandero-movil`, `kds-cocina`, `gestion-reservas`, `fichajes-control-horario`, `delivery-takeaway`, `stock-inventario`, `multi-iva-igic`, `rbac-roles`, `food-cost-avanzado`, `sistema-alergenos`, `compras-sialti`) now render a real self-hosted Unsplash photo (`public/assets/tpv/{id}.webp`, ≤150KB each) alongside a unique OKLCH accent colour, replacing the previous single hardcoded emerald icon colour shared by all 13 modules.
+  - `src/shared/config/accents.ts` (new): `AccentToken`/`AccentClass` types and `accentStyle()` set a single `--tpv-accent` CSS custom property per section, resolved entirely via `:root`/`.light` CSS (zero JS, no theme-detection branch, SSR-safe).
+  - `src/index.css`: +8 new `--color-icon-*` OKLCH tokens (coral, orange, lime, green, jade, cyan, indigo, magenta) defined in both `:root` and `.light`, plus `.tpv-accent-frame`/`.tpv-accent-chip` component classes.
+  - `src/shared/components/tpv/TpvModuleFigure.tsx` (new): eager, presentational photo component (`loading="lazy"`, `decoding="async"`, intrinsic `width`/`height`, aspect-ratio wrapper) mounted inside 12 of the 13 bespoke module sections.
+  - `TPV_MODULES[].iconColor` (`src/shared/config/tpvModules.ts`) is now per-module-unique across all 13 entries and drives both the section accent and the Navbar/Features consumers.
+  - "Pilares Tecnológicos" (`src/App.tsx`) gained 4 distinct lucide icons (`Workflow`, `Utensils`, `Monitor`, `Bot`) and 4 distinct accent colours (indigo, emerald, coral, magenta) — accent-only, no photos, per design scope.
+  - `tienda-carta-digital` stays accent-only (config token change only); its existing `CartaDigitalDemoSection` product-screenshot tree is untouched.
+  - Shipped as a 5-PR chain (foundation+pilot, then 3+4+4 modules, then Pilares/close-out); each PR's structural tests (`tests/unit/accentTokens.contrast.test.ts`, `tests/unit/tpvModuleFigures.structure.test.ts`) enforce token dark/light parity, ≥3:1 non-text contrast (WCAG 2.1 SC 1.4.11), config↔JSX accent-mirror consistency, and asset provenance (`public/assets/tpv/CREDITS.md`).
 - **GSC Indexing Fixes — 301 Redirects**: Added 6 permanent server-side redirects in `vercel.json` for English alias routes and old pages that caused "Redirect" and "Duplicate canonical" GSC issues
   - `/automation-n8n` → `/automatizacion-restaurantes-n8n`
   - `/whatsapp-automation` → `/automatizacion-whatsapp-restaurante`
@@ -105,6 +123,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Agent Readiness Score**: Improved from 32/100 to ~85/100 (projected)
 - **LLM Readability**: Added llms.txt for better AI agent content consumption
+
+### Added
+
+- **n8n delivery toggle in admin panel**: Added `n8nEnabled` checkbox to `SettingsPanel.tsx` (section "Integración n8n") letting the admin switch lead delivery between the n8n webhook and a direct email fallback at runtime, no redeploy required
+  - `src/features/admin/presentation/components/SettingsPanel.tsx`
+  - `src/features/admin/presentation/schemas/settingsSchema.ts`: `n8nEnabled: z.boolean()` + cross-field `superRefine` guard
+  - `src/features/admin/domain/entities/Settings.ts`, `ISettingsRepository.ts`, `SupabaseSettingsRepository.ts`, `UpdateSettingsUseCase.ts`, `src/shared/services/settingsService.ts`
+  - `supabase/migrations/20260810120000_add_n8n_enabled_to_app_settings.sql`: `app_settings.n8n_enabled boolean not null default false`
+- **`notify-lead` Edge Function**: New Supabase Edge Function that emails lead submissions via Brevo when `n8nEnabled` is `false`, using `contact_email` as the recipient and `BREVO_API_KEY` as a server-only secret
+  - `supabase/functions/notify-lead/index.ts`, `supabase/functions/notify-lead/_lib.ts`
+  - `src/features/landing/data/datasources/EmailNotifyDataSource.ts`, `src/features/landing/data/repositories/EmailLeadRepositoryImpl.ts`
+
+### Fixed
+
+- **Fake-success lead delivery bug**: `Contact.tsx` no longer substitutes a fabricated `https://placeholder-webhook-url.invalid` URL when `n8nWebhookUrl` is empty, and `N8NWebhookDataSource` no longer treats magic substrings (`placeholder`, `your_`, `.invalid`) as a valid URL — an unusable webhook URL now returns `false` (visible error) instead of a silent fake success and a lost lead
+  - `src/features/landing/presentation/components/Contact.tsx`
+  - `src/features/landing/data/datasources/N8NWebhookDataSource.ts`
+- **Stale `LandingContainer` singleton**: Replaced the memoized module-level singleton (`getLandingContainer`) with a pure factory (`createLandingContainer`), so the container is always rebuilt from the latest settings instead of caching the first ones it ever saw
+  - `src/features/landing/presentation/LandingContainer.ts`
+- **`SettingsPanel` save-error UX**: Fixed an existing bug where any error state (including a failed save, not just a failed load) replaced the entire settings form with a generic "failed to load" message, hiding the field the admin needed to fix. The panel now only shows the full-page error for an actual load failure and displays the specific error message (e.g. the n8n-toggle validation error) inline, with the form still visible
+  - `src/features/admin/presentation/components/SettingsPanel.tsx`
 
 ---
 
