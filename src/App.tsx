@@ -1,5 +1,5 @@
 import React, { Component, ReactNode } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { Workflow, Utensils, Monitor, Bot } from "lucide-react";
 import { Navbar } from "@features/landing/presentation/components/Navbar";
@@ -81,7 +81,6 @@ const ErrorBoundaryFallback: React.FC = () => {
 
 /* Heading structure:
   / → H1: Aumenta tu facturación, ahorra horas cada semana (outcome-first, PR4)
-  /contacto → H1: Hablemos de tu Proyecto
   (PR4: TpvModulesSection renders 13 TPV module sections, each its own H2,
    sorted by TPV_MODULES' frozen `order` — see shared/config/tpvModules.ts.
    "tienda-carta-digital" (order 13, last) mounts the existing
@@ -106,30 +105,28 @@ const ErrorBoundaryFallback: React.FC = () => {
   - Title: "Digitaliza Tenerife: IA y Automatización para Negocios" (50 chars) ✓
   - Meta desc: 111 chars ✓ (100-130 range)
   - Viewport: width=device-width, initial-scale=1.0 ✓
-  - Hreflang: skipped (single-language Spanish site) ✓
+  - Hreflang: intentionally absent. Language is client state
+    (LanguageContext useState + localStorage), never in the URL, so every
+    language would resolve to this same canonical — an invalid alternate set
+    that Google ignores. Do NOT re-add hreflang until URLs are language-
+    addressable; that is change `i18n-url-routing`. ✓
   - noindex: NOT present ✓
   - H1 present: ✓ (unique per route)
   - Touch targets: 48px min ✓
   - DOM: lazy-loaded SuccessStats & Chatbot, ~700 estimated nodes ✓
 */
 
+const CANONICAL_URL = "https://digitalizatenerife.es/";
+const PAGE_TITLE = "Digitaliza Tenerife | Automatización e IA para Empresas";
+const PAGE_DESCRIPTION =
+  "Digitaliza Tenerife: automatización con IA, n8n, NFC para Google Reviews y menús digitales. Digitaliza tu negocio.";
+
 const App: React.FC = () => {
   const [scrolled, setScrolled] = React.useState(false);
   const sentinelRef = React.useRef<HTMLDivElement>(null);
   const { t } = useLanguage();
-  const location = useLocation();
   const whatsappPhone = useWhatsappPhone();
   const faqGroups = useHomeFaqGroups();
-  const isContacto = location.pathname === "/contacto";
-  const CANONICAL_URL = "https://digitalizatenerife.es/";
-
-  const pageTitle = isContacto
-    ? "Contacto | Digitaliza Tenerife"
-    : "Digitaliza Tenerife | Automatización e IA para Empresas";
-
-  const pageDescription = isContacto
-    ? "Contacta con Digitaliza Tenerife. Solicita información sobre automatización, menús digitales, NFC y soluciones IA para tu negocio en Tenerife."
-    : "Digitaliza Tenerife: automatización con IA, n8n, NFC para Google Reviews y menús digitales. Digitaliza tu negocio.";
 
   React.useEffect(() => {
     const sentinel = sentinelRef.current;
@@ -173,21 +170,18 @@ const App: React.FC = () => {
   return (
     <ErrorBoundary>
       <Helmet>
-        <title>{pageTitle}</title>
-        <meta name="description" content={pageDescription} />
+        <title>{PAGE_TITLE}</title>
+        <meta name="description" content={PAGE_DESCRIPTION} />
         <link rel="canonical" href={CANONICAL_URL} />
         <link
           rel="author"
           href="https://digitalizatenerife.es/about"
           title="Digitaliza Tenerife"
         />
-        <link rel="alternate" hrefLang="es" href={CANONICAL_URL} />
-        <link rel="alternate" hrefLang="x-default" href={CANONICAL_URL} />
-        <link rel="alternate" hrefLang="en" href={CANONICAL_URL} />
         <meta property="og:locale" content="es_ES" />
         <meta property="og:site_name" content="Digitaliza Tenerife" />
-        <meta property="og:title" content={pageTitle} />
-        <meta property="og:description" content={pageDescription} />
+        <meta property="og:title" content={PAGE_TITLE} />
+        <meta property="og:description" content={PAGE_DESCRIPTION} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={CANONICAL_URL} />
         <meta
@@ -212,7 +206,7 @@ const App: React.FC = () => {
         <Navbar scrolled={scrolled} />
         <main id="main" aria-label="Contenido principal">
           <section id="inicio" aria-label="Inicio">
-            <Hero variant={isContacto ? "contacto" : "home"} />
+            <Hero />
           </section>
           {/* Scroll-anchor sentinel (no own landmark/aria-label — each TPV
               module section below owns its own <section id> + heading) so

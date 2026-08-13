@@ -64,9 +64,9 @@ const LoadingFallback = () => (
 const rootElement = document.getElementById("root");
 if (!rootElement) throw new Error("Could not find root element to mount to");
 
-// Prerendered pages (/, /contacto) have SSR HTML content inside #root
-// → use hydrateRoot. SPA routes (admin) serve _spa.html with only a
-// <!--ssr-outlet--> comment → use createRoot to avoid hydration errors.
+// Prerendered pages (/, /about, /tarjetas-nfc, /legal/*) ship SSR HTML inside
+// #root → hydrateRoot. SPA routes (/admin) serve _spa.html, which contains only
+// the <!--ssr-outlet--> comment → createRoot, to avoid hydration errors.
 const hasSSRContent = rootElement.children.length > 0;
 
 const app = (
@@ -78,7 +78,6 @@ const app = (
           <Suspense fallback={<LoadingFallback />}>
             <Routes>
               <Route path="/" element={<App />} />
-              <Route path="/contacto" element={<App />} />
               <Route path="/admin" element={<AdminPanel />} />
               <Route path="/about" element={<AboutPage />} />
               <Route path="/tarjetas-nfc" element={<TapReviewPage />} />

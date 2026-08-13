@@ -34,11 +34,16 @@ describe("/tarjetas-nfc route registration (D5 — four points)", () => {
     );
   });
 
-  it("3) scripts/prerender.mjs: includes /tarjetas-nfc in the prerendered routes[] array", () => {
-    const source = read(path.join(ROOT, "scripts", "prerender.mjs"));
-    const routesBlockMatch = source.match(/const routes = \[([\s\S]*?)\];/);
-    expect(routesBlockMatch).not.toBeNull();
-    expect(routesBlockMatch![1]).toMatch(/["']\/tarjetas-nfc["']/);
+  it("3) scripts/site-routes.json: includes /tarjetas-nfc in the prerendered route table", () => {
+    // seo-geo-p0-fixes PR#2 (design.md §1.2): prerender.mjs no longer hardcodes
+    // a `const routes = [...]` literal — it reads scripts/site-routes.json,
+    // the single source of truth also consumed by sitemap generation and
+    // routeParity.test.ts. This assertion now targets that file instead.
+    const siteRoutes = JSON.parse(
+      read(path.join(ROOT, "scripts", "site-routes.json")),
+    );
+    const paths = siteRoutes.routes.map((r: { path: string }) => r.path);
+    expect(paths).toContain("/tarjetas-nfc");
   });
 
   it("4) vercel.json: has a rewrite for /tarjetas-nfc → /tarjetas-nfc/index.html", () => {

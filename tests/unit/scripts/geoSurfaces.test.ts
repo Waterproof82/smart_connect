@@ -4,24 +4,20 @@ import crypto from "node:crypto";
 
 // See design.md §4.7 for the full rationale (seo-geo-p0-fixes, PR#1).
 //
-// PR#1 note: LIVE_ROUTES below is a literal placeholder allowlist. PR#2
-// swaps it for a read of scripts/site-routes.json once that file exists
-// (design.md §6, revert-independence ADR) — that is the only line expected
-// to change across the two PRs.
+// PR#2 (design.md §6, revert-independence ADR): LIVE_ROUTES is now read from
+// scripts/site-routes.json — the single source of truth also consumed by
+// prerender.mjs and routeParity.test.ts — instead of PR#1's literal
+// placeholder array. This is the one line the ADR expected to change across
+// the two PRs; every other assertion in this file is untouched.
 
 const ROOT = path.resolve(__dirname, "../../../");
 
 const read = (relPath: string) =>
   fs.readFileSync(path.join(ROOT, relPath), "utf-8");
 
-const LIVE_ROUTES = [
-  "/",
-  "/tarjetas-nfc",
-  "/about",
-  "/legal/aviso",
-  "/legal/privacidad",
-  "/legal/cookies",
-];
+const LIVE_ROUTES: string[] = JSON.parse(
+  read("scripts/site-routes.json"),
+).routes.map((r: { path: string }) => r.path);
 
 // Files scanned for dead/redirected URLs (design.md §4.7 guard #2).
 const SURFACE_FILES = [
