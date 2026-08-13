@@ -71,9 +71,7 @@ const hasSSRContent = rootElement.children.length > 0;
 
 const app = (
   <HelmetProvider>
-    <BrowserRouter
-      future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
-    >
+    <BrowserRouter>
       <ThemeProvider>
         <LanguageProvider>
           <ScrollToTop />
