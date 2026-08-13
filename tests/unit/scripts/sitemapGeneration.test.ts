@@ -81,7 +81,7 @@ describe("scripts/sitemap.mjs — buildSitemapXml (design.md §1.4)", () => {
     expect(xml).toContain("<lastmod>2026-01-01</lastmod>");
     expect(xml).toContain("<changefreq>monthly</changefreq>");
     expect(xml).toContain("<priority>1.0</priority>");
-    expect((xml.match(/<url>/g) ?? []).length).toBe(1);
+    expect(xml.match(/<url>/g) ?? []).toHaveLength(1);
   });
 
   it("omits <lastmod> when a route has no lastmod (never fabricates a date)", () => {
@@ -130,7 +130,7 @@ describe("scripts/sitemap.mjs — writeSitemap guards (design.md §1.5 G1-G4)", 
       ]);
     `);
     const written = fs.readFileSync(path.join(tmpDir, "sitemap.xml"), "utf-8");
-    expect((written.match(/<loc>/g) ?? []).length).toBe(2);
+    expect(written.match(/<loc>/g) ?? []).toHaveLength(2);
     expect(Buffer.byteLength(written, "utf-8")).toBeGreaterThan(200);
     fs.rmSync(tmpDir, { recursive: true, force: true });
   });
@@ -151,8 +151,9 @@ describe("scripts/sitemap.mjs — writeSitemap guards (design.md §1.5 G1-G4)", 
 describe("scripts/prerender.mjs (design.md §1.5 D4 — silent-failure fix)", () => {
   it("the top-level catch handler exits the process non-zero, not just logs", () => {
     const source = readScript("prerender.mjs");
+    // Top-level await + try/catch (preferred over a .catch() promise chain — SonarQube S7785).
     expect(source).toMatch(
-      /prerender\(\)\.catch\(\s*\(?\s*(err|e|error)\s*\)?\s*=>\s*\{[^}]*process\.exit\(1\)/s,
+      /try\s*\{\s*await\s+prerender\(\)[\s\S]*?\}\s*catch\s*\(\s*(err|e|error)\s*\)\s*\{[^}]*process\.exit\(1\)/,
     );
     // Guard against a regression back to the old console.error-only form.
     expect(source).not.toMatch(/prerender\(\)\.catch\(console\.error\)/);

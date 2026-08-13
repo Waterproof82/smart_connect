@@ -43,6 +43,7 @@ export const Hero: React.FC = () => {
 
           <div className="reveal-3 flex flex-wrap gap-5">
             <button
+              type="button"
               onClick={() =>
                 document
                   .querySelector("#contacto")
@@ -54,6 +55,7 @@ export const Hero: React.FC = () => {
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-150 ease-[var(--ease-out)]" />
             </button>
             <button
+              type="button"
               onClick={() =>
                 document
                   .querySelector("#soluciones")
