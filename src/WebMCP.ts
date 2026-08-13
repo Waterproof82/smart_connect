@@ -69,7 +69,8 @@ const tools: ToolDescriptor[] = [
         },
       };
 
-      const product = String(args.product || "").toLowerCase();
+      const product =
+        typeof args.product === "string" ? args.product.toLowerCase() : "";
       const lang = args.language === "en" ? "en" : "es";
       const info = productMap[product];
 
@@ -196,7 +197,7 @@ const tools: ToolDescriptor[] = [
       required: ["path"],
     },
     execute: async (args: Record<string, unknown>): Promise<ToolResult> => {
-      const pagePath = String(args.path || "/");
+      const pagePath = typeof args.path === "string" ? args.path : "/";
       try {
         const response = await fetch(
           `https://digitalizatenerife.es${pagePath}`,

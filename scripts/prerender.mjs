@@ -83,7 +83,9 @@ async function prerender() {
   console.log(`🗺️  Sitemap written: ${sitemapPath}`);
 }
 
-prerender().catch((err) => {
+try {
+  await prerender();
+} catch (err) {
   console.error(err);
   process.exit(1);
-});
+}
