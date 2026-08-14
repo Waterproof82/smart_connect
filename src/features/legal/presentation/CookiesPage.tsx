@@ -19,6 +19,10 @@ const CookiesPage: React.FC = () => {
       titleKey: "legalCookiesSection4Title",
       contentKey: "legalCookiesSection4Content",
     },
+    {
+      titleKey: "legalCookiesSection5Title",
+      contentKey: "legalCookiesSection5Content",
+    },
   ];
 
   return (

@@ -5,7 +5,9 @@ import { Routes, Route } from "react-router-dom";
 import { Suspense } from "react";
 import { LanguageProvider } from "@shared/context/LanguageContext";
 import { ThemeProvider } from "@shared/context/ThemeContext";
+import { ConsentProvider } from "@shared/context/ConsentContext";
 import { ScrollToTop } from "@shared/components/ScrollToTop";
+import { CookieConsent } from "@shared/components/CookieConsent";
 import App from "./App";
 import AboutPage from "./features/landing/presentation/components/AboutPage";
 import TapReviewPage from "./features/tap-review/presentation/TapReviewPage";
@@ -21,17 +23,20 @@ export function render(url: string): { html: string; head: string } {
       <StaticRouter location={url}>
         <ThemeProvider>
           <LanguageProvider>
-            <ScrollToTop />
-            <Suspense fallback={null}>
-              <Routes>
-                <Route path="/" element={<App />} />
-                <Route path="/about" element={<AboutPage />} />
-                <Route path="/tarjetas-nfc" element={<TapReviewPage />} />
-                <Route path="/legal/aviso" element={<AvisoLegalPage />} />
-                <Route path="/legal/privacidad" element={<PrivacidadPage />} />
-                <Route path="/legal/cookies" element={<CookiesPage />} />
-              </Routes>
-            </Suspense>
+            <ConsentProvider>
+              <ScrollToTop />
+              <CookieConsent />
+              <Suspense fallback={null}>
+                <Routes>
+                  <Route path="/" element={<App />} />
+                  <Route path="/about" element={<AboutPage />} />
+                  <Route path="/tarjetas-nfc" element={<TapReviewPage />} />
+                  <Route path="/legal/aviso" element={<AvisoLegalPage />} />
+                  <Route path="/legal/privacidad" element={<PrivacidadPage />} />
+                  <Route path="/legal/cookies" element={<CookiesPage />} />
+                </Routes>
+              </Suspense>
+            </ConsentProvider>
           </LanguageProvider>
         </ThemeProvider>
       </StaticRouter>
