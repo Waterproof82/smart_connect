@@ -376,6 +376,15 @@ interface Translation extends TpvModuleTranslations {
   legalCookiesSection3Content: string;
   legalCookiesSection4Title: string;
   legalCookiesSection4Content: string;
+  legalCookiesSection5Title: string;
+  legalCookiesSection5Content: string;
+  // Cookie consent banner
+  cookieBannerTitle: string;
+  cookieBannerBody: string;
+  cookieBannerAccept: string;
+  cookieBannerReject: string;
+  cookieBannerPolicy: string;
+  cookieReopenerLabel: string;
   // Home FAQ
   homeFaqTitle: string;
   homeFaqQ1: string;
@@ -941,6 +950,18 @@ const translations: Record<Language, Translation> = {
     legalCookiesSection4Title: "Cómo gestionar o bloquear las cookies",
     legalCookiesSection4Content:
       "<p>Puedes aceptar, rechazar o retirar tu consentimiento a las cookies de análisis en cualquier momento desde el banner de cookies de este sitio.</p><p>Además, puedes configurar tu navegador para bloquear o eliminar cookies:</p><ul><li><strong>Google Chrome:</strong> Configuración → Privacidad y seguridad → Cookies y otros datos de sitios.</li><li><strong>Mozilla Firefox:</strong> Opciones → Privacidad y seguridad → Cookies y datos del sitio.</li><li><strong>Safari:</strong> Preferencias → Privacidad → Gestionar datos de sitios web.</li><li><strong>Microsoft Edge:</strong> Configuración → Privacidad, búsqueda y servicios → Cookies y datos almacenados.</li></ul><p>Ten en cuenta que bloquear las cookies necesarias puede afectar al correcto funcionamiento del sitio.</p>",
+    legalCookiesSection5Title: "Cómo retirar tu consentimiento",
+    legalCookiesSection5Content:
+      "<p>Puedes cambiar tu decisión sobre las cookies de análisis en cualquier momento haciendo clic en el botón de preferencias de cookies, visible en la esquina inferior izquierda de cualquier página del sitio.</p><p>Al retirar tu consentimiento, dejaremos de usar cookies de análisis en tus próximas visitas y se eliminará el permiso guardado.</p>",
+
+    // Cookie consent banner
+    cookieBannerTitle: "Usamos cookies",
+    cookieBannerBody:
+      "Usamos cookies necesarias para el funcionamiento del sitio y, solo con tu consentimiento, cookies de análisis para entender cómo lo usas. Puedes aceptar o rechazar las cookies de análisis; tu elección no afecta a la navegación.",
+    cookieBannerAccept: "Aceptar",
+    cookieBannerReject: "Rechazar",
+    cookieBannerPolicy: "Más información",
+    cookieReopenerLabel: "Preferencias de cookies",
 
     // Home FAQ
     homeFaqTitle: "Preguntas Frecuentes",
@@ -1513,6 +1534,18 @@ const translations: Record<Language, Translation> = {
     legalCookiesSection4Title: "How to manage or block cookies",
     legalCookiesSection4Content:
       "<p>You can accept, reject, or withdraw your consent to analytics cookies at any time from this site's cookie banner.</p><p>You can also configure your browser to block or delete cookies:</p><ul><li><strong>Google Chrome:</strong> Settings → Privacy and security → Cookies and other site data.</li><li><strong>Mozilla Firefox:</strong> Options → Privacy & Security → Cookies and Site Data.</li><li><strong>Safari:</strong> Preferences → Privacy → Manage Website Data.</li><li><strong>Microsoft Edge:</strong> Settings → Privacy, search, and services → Cookies and site permissions.</li></ul><p>Note that blocking necessary cookies may affect the site's proper functioning.</p>",
+    legalCookiesSection5Title: "How to withdraw your consent",
+    legalCookiesSection5Content:
+      "<p>You can change your decision about analytics cookies at any time by clicking the cookie preferences button, visible in the bottom-left corner of any page on the site.</p><p>Withdrawing your consent stops analytics cookies from being used on your next visits and clears the saved permission.</p>",
+
+    // Cookie consent banner
+    cookieBannerTitle: "We use cookies",
+    cookieBannerBody:
+      "We use necessary cookies for the site to function and, only with your consent, analytics cookies to understand how it's used. You can accept or reject analytics cookies; your choice does not affect browsing.",
+    cookieBannerAccept: "Accept",
+    cookieBannerReject: "Reject",
+    cookieBannerPolicy: "Learn more",
+    cookieReopenerLabel: "Cookie preferences",
 
     // Home FAQ
     homeFaqTitle: "Frequently Asked Questions",
