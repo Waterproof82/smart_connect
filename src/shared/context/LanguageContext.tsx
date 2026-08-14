@@ -368,6 +368,14 @@ interface Translation extends TpvModuleTranslations {
   legalCookiesDescription: string;
   legalCookiesBackLink: string;
   legalCookiesUpdated: string;
+  legalCookiesSection1Title: string;
+  legalCookiesSection1Content: string;
+  legalCookiesSection2Title: string;
+  legalCookiesSection2Content: string;
+  legalCookiesSection3Title: string;
+  legalCookiesSection3Content: string;
+  legalCookiesSection4Title: string;
+  legalCookiesSection4Content: string;
   // Home FAQ
   homeFaqTitle: string;
   homeFaqQ1: string;
@@ -921,6 +929,18 @@ const translations: Record<Language, Translation> = {
       "Política de cookies de Digitaliza Tenerife. Información sobre el uso de cookies y tecnologías similares.",
     legalCookiesBackLink: "Volver al inicio",
     legalCookiesUpdated: "Última actualización: 2026",
+    legalCookiesSection1Title: "¿Qué son las cookies?",
+    legalCookiesSection1Content:
+      "<p>Una cookie es un pequeño archivo de texto que un sitio web guarda en tu navegador cuando lo visitas. Sirve para recordar información sobre tu visita, como tu idioma preferido u otras preferencias, y puede usarse también para analizar cómo se utiliza el sitio.</p><p>En digitalizatenerife.es utilizamos únicamente dos categorías de cookies: <strong>necesarias</strong> (imprescindibles para el funcionamiento del sitio) y <strong>de análisis</strong> (para entender cómo se usa la web). No utilizamos cookies de publicidad ni de marketing.</p>",
+    legalCookiesSection2Title: "Cookies que utilizamos",
+    legalCookiesSection2Content:
+      "<p><strong>Cookies necesarias</strong> (no requieren consentimiento, art. 22.2 LSSI-CE):</p><ul><li><strong>Preferencia de idioma</strong> — guarda si navegas en español o inglés. Duración: hasta que la cambies o borres el almacenamiento del navegador.</li><li><strong>Tema visual (claro/oscuro)</strong> — recuerda tu preferencia de modo claro u oscuro. Duración: persistente en tu navegador.</li><li><strong>Consentimiento de cookies</strong> — guarda tu decisión sobre las cookies de análisis para no volver a preguntarte. Duración: 24 meses.</li></ul><p><strong>Cookies de análisis</strong> (requieren tu consentimiento previo) — Google Analytics 4:</p><ul><li><strong>_ga</strong> — identifica de forma anónima a los usuarios y distingue sesiones. Duración: 2 años. Proveedor: Google Ireland Limited.</li><li><strong>_ga_F9KQ7X8TSQ</strong> — mantiene el estado de la sesión para esta propiedad de Google Analytics 4. Duración: 2 años. Proveedor: Google Ireland Limited.</li></ul><p>Estas cookies de análisis solo se activan si aceptas expresamente su uso en el banner de cookies. Puedes retirar tu consentimiento en cualquier momento.</p>",
+    legalCookiesSection3Title: "Transferencias internacionales de datos",
+    legalCookiesSection3Content:
+      "<p>Google Analytics 4 es un servicio prestado por Google Ireland Limited, cuya matriz, Google LLC, tiene sede en Estados Unidos. Esto implica que los datos recogidos por las cookies de análisis pueden transferirse fuera del Espacio Económico Europeo.</p><p>Google basa estas transferencias en las Cláusulas Contractuales Tipo (SCC) aprobadas por la Comisión Europea, que garantizan un nivel de protección equivalente al exigido por el RGPD. Puedes consultar más información en la <a href='https://business.safety.google/adsservices/' target='_blank' rel='noopener noreferrer'>política de tratamiento de datos de Google</a>.</p>",
+    legalCookiesSection4Title: "Cómo gestionar o bloquear las cookies",
+    legalCookiesSection4Content:
+      "<p>Puedes aceptar, rechazar o retirar tu consentimiento a las cookies de análisis en cualquier momento desde el banner de cookies de este sitio.</p><p>Además, puedes configurar tu navegador para bloquear o eliminar cookies:</p><ul><li><strong>Google Chrome:</strong> Configuración → Privacidad y seguridad → Cookies y otros datos de sitios.</li><li><strong>Mozilla Firefox:</strong> Opciones → Privacidad y seguridad → Cookies y datos del sitio.</li><li><strong>Safari:</strong> Preferencias → Privacidad → Gestionar datos de sitios web.</li><li><strong>Microsoft Edge:</strong> Configuración → Privacidad, búsqueda y servicios → Cookies y datos almacenados.</li></ul><p>Ten en cuenta que bloquear las cookies necesarias puede afectar al correcto funcionamiento del sitio.</p>",
 
     // Home FAQ
     homeFaqTitle: "Preguntas Frecuentes",
@@ -1481,6 +1501,18 @@ const translations: Record<Language, Translation> = {
       "Cookies policy of Digitaliza Tenerife. Information about the use of cookies and similar technologies.",
     legalCookiesBackLink: "Back to home",
     legalCookiesUpdated: "Last updated: 2026",
+    legalCookiesSection1Title: "What are cookies?",
+    legalCookiesSection1Content:
+      "<p>A cookie is a small text file that a website stores in your browser when you visit it. It is used to remember information about your visit, such as your preferred language or other preferences, and can also be used to analyze how the site is used.</p><p>At digitalizatenerife.es we only use two categories of cookies: <strong>necessary</strong> (essential for the site to function) and <strong>analytics</strong> (to understand how the site is used). We do not use advertising or marketing cookies.</p>",
+    legalCookiesSection2Title: "Cookies we use",
+    legalCookiesSection2Content:
+      "<p><strong>Necessary cookies</strong> (do not require consent, art. 22.2 LSSI-CE):</p><ul><li><strong>Language preference</strong> — stores whether you browse in Spanish or English. Duration: until you change it or clear your browser storage.</li><li><strong>Visual theme (light/dark)</strong> — remembers your light or dark mode preference. Duration: persistent in your browser.</li><li><strong>Cookie consent</strong> — stores your decision about analytics cookies so we don't ask again. Duration: 24 months.</li></ul><p><strong>Analytics cookies</strong> (require your prior consent) — Google Analytics 4:</p><ul><li><strong>_ga</strong> — anonymously identifies users and distinguishes sessions. Duration: 2 years. Provider: Google Ireland Limited.</li><li><strong>_ga_F9KQ7X8TSQ</strong> — maintains session state for this Google Analytics 4 property. Duration: 2 years. Provider: Google Ireland Limited.</li></ul><p>These analytics cookies are only activated if you expressly accept their use in the cookie banner. You can withdraw your consent at any time.</p>",
+    legalCookiesSection3Title: "International data transfers",
+    legalCookiesSection3Content:
+      "<p>Google Analytics 4 is a service provided by Google Ireland Limited, whose parent company, Google LLC, is headquartered in the United States. This means that data collected by analytics cookies may be transferred outside the European Economic Area.</p><p>Google bases these transfers on the Standard Contractual Clauses (SCCs) approved by the European Commission, which guarantee a level of protection equivalent to that required by the GDPR. You can find more information in <a href='https://business.safety.google/adsservices/' target='_blank' rel='noopener noreferrer'>Google's data processing terms</a>.</p>",
+    legalCookiesSection4Title: "How to manage or block cookies",
+    legalCookiesSection4Content:
+      "<p>You can accept, reject, or withdraw your consent to analytics cookies at any time from this site's cookie banner.</p><p>You can also configure your browser to block or delete cookies:</p><ul><li><strong>Google Chrome:</strong> Settings → Privacy and security → Cookies and other site data.</li><li><strong>Mozilla Firefox:</strong> Options → Privacy & Security → Cookies and Site Data.</li><li><strong>Safari:</strong> Preferences → Privacy → Manage Website Data.</li><li><strong>Microsoft Edge:</strong> Settings → Privacy, search, and services → Cookies and site permissions.</li></ul><p>Note that blocking necessary cookies may affect the site's proper functioning.</p>",
 
     // Home FAQ
     homeFaqTitle: "Frequently Asked Questions",
