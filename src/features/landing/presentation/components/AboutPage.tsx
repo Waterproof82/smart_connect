@@ -60,9 +60,12 @@ const AboutPage: React.FC = () => {
               },
               email: "info@digitalizatenerife.es",
               telephone: "+34 601 39 64 19",
+              // Kept in sync manually with app_settings.physical_address
+              // (Supabase) — see SeoSchema.tsx buildHomeSchema for the same
+              // address, must match Contact.tsx and Google Business Profile.
               address: {
                 "@type": "PostalAddress",
-                streetAddress: "Calle Las Palmas 123",
+                streetAddress: "c/ Ernesto Castro, 57, Puerta 501",
                 addressLocality: "Santa Cruz de Tenerife",
                 addressRegion: "Canary Islands",
                 postalCode: "38001",

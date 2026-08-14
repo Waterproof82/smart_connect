@@ -37,9 +37,12 @@ export function buildHomeSchema(
     image: `${ORG_URL}/icon.png`,
     telephone: "+34 601 39 64 19",
     priceRange: "€€",
+    // Kept in sync manually with app_settings.physical_address (Supabase) —
+    // must match what Contact.tsx renders and what Google Business Profile
+    // has on file, or Google can't confidently resolve this as one entity.
     address: {
       "@type": "PostalAddress",
-      streetAddress: "Calle Las Palmas 123",
+      streetAddress: "c/ Ernesto Castro, 57, Puerta 501",
       addressLocality: "Santa Cruz de Tenerife",
       addressRegion: "Canary Islands",
       postalCode: "38001",
@@ -593,8 +596,12 @@ interface ReviewSchemaProps {
   rating?: number;
   datePublished?: string;
   /** The item being reviewed (required by Schema.org validation).
-   *  Google requires SoftwareApplication to have at least 2 of:
-   *  offers, aggregateRating, applicationCategory, operatingSystem. */
+   *  Do NOT default this to a fabricated `aggregateRating`/`offers` — those
+   *  numbers must come from a real, verifiable source (e.g. Google Business
+   *  Profile) or Google can treat the markup as spam. Until real aggregate
+   *  data exists, `SoftwareApplication` alone (name + applicationCategory +
+   *  operatingSystem) is valid schema.org, it just won't be eligible for the
+   *  star-rating rich snippet — which is correct until the rating is real. */
   itemReviewed?: Record<string, unknown>;
 }
 
@@ -608,19 +615,6 @@ export const ReviewSchema: React.FC<ReviewSchemaProps> = ({
     name: "Digitaliza Tenerife",
     applicationCategory: "BusinessApplication",
     operatingSystem: "Web, iOS, Android",
-    offers: {
-      "@type": "Offer",
-      price: "29.90",
-      priceCurrency: "EUR",
-      availability: "https://schema.org/InStock",
-    },
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: "4.9",
-      bestRating: 5,
-      worstRating: 1,
-      ratingCount: 850,
-    },
   },
 }) => {
   const schema: Record<string, unknown> = {

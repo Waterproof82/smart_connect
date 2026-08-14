@@ -17,6 +17,11 @@ import { TapReviewSection } from "./TapReviewSection";
 const ORG_URL = "https://digitalizatenerife.es";
 const PAGE_URL = `${ORG_URL}/tarjetas-nfc`;
 const PAGE_TITLE = "Tarjetas NFC Tap-to-Review | Digitaliza Tenerife";
+// Deliberately distinct from PAGE_TITLE: the <title> carries the brand
+// suffix for the SERP snippet, the H1 should read as a natural sentence
+// for users and crawlers instead of repeating the title verbatim.
+const PAGE_H1 =
+  "Tarjetas NFC Tap-to-Review para multiplicar tus reseñas de Google";
 const PAGE_DESCRIPTION =
   "Tarjetas NFC para que los clientes dejen reseñas en Google e Instagram con un solo toque. Multiplica tus reseñas sin apps ni fricción.";
 
@@ -98,7 +103,7 @@ const TapReviewPage: React.FC = () => {
 
         <main id="main" aria-label="Contenido principal">
           <section className="pt-20">
-            <h1 className="sr-only">{PAGE_TITLE}</h1>
+            <h1 className="sr-only">{PAGE_H1}</h1>
             <TapReviewSection whatsappPhone={whatsappPhone} />
           </section>
 

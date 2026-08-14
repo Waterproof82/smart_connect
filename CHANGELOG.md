@@ -7,8 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Google Analytics 4**: installed the `gtag.js` tag (`G-F9KQ7X8TSQ`) as the first element inside `<head>` in `index.html`, per Google's official installation instructions. The property existed but was never receiving data — no analytics tag was present anywhere in the codebase.
+
 ### Fixed
 
+- **SEO/GEO/AEO audit fixes (2026-08-14)**: verified an external SEO/GEO/AEO/Search Console audit's findings against the actual source before making any change (see `docs/audit/2026-08-14_seo-geo-aeo-p0-fixes.md`).
+  - `src/shared/presentation/components/SeoSchema.tsx`: removed a fabricated `aggregateRating` (4.9★ / 850 reviews) and fake `offers.price` (29.90 €) that `ReviewSchema` defaulted onto every real customer testimonial's JSON-LD — unverifiable numbers that risk a Google structured-data spam action. Also fixed the hardcoded `LocalBusiness` address (`"Calle Las Palmas 123"` → the real address) which didn't match what `Contact.tsx` renders.
+  - `src/features/landing/presentation/components/AboutPage.tsx`: same address fix for its own hand-rolled `LocalBusiness` JSON-LD.
+  - `src/features/landing/presentation/components/Contact.tsx`: the address fallback (shown only if the Supabase read fails) was `"Madrid, España"`, unrelated to the business's actual location; now `"Santa Cruz de Tenerife, España"`.
+  - `src/features/tap-review/presentation/TapReviewPage.tsx`: the `sr-only` `<h1>` on `/tarjetas-nfc` duplicated the `<title>` verbatim; now a distinct, natural-language heading.
 - **SEO/GEO P0 fixes (SDD `seo-geo-p0-fixes`)**: Closed 7+ dead/redirected URLs and structural SEO defects surfaced across machine-readable discovery surfaces and the app itself.
   - `public/llms.txt` and `public/.well-known/llms.txt`: removed 5 dead page links (`/carta-digital`, `/automatizacion-restaurantes-n8n`, `/automatizacion-whatsapp-restaurante`, `/software-restaurantes-canarias`, `/digitalizacion-hosteleria-tenerife`, all 301→`/`); `.well-known/llms.txt` is now a minimal pointer stub to the canonical root `llms.txt` (llmstxt.org defines exactly one location).
   - `public/.well-known/api-catalog`: removed the dead `service-doc` → `/docs/api` link; `privacy-policy` now points at `/legal/privacidad` instead of `/privacy`.

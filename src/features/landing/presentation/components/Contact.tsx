@@ -371,10 +371,10 @@ export const Contact: React.FC = () => {
                 id: "location",
                 icon: <MapPin className="w-6 h-6" />,
                 title: t.contactLocationTitle,
-                value: settings?.physicalAddress || "Madrid, España",
+                value: settings?.physicalAddress || "Santa Cruz de Tenerife, España",
                 desc: "Hub Tecnológico de Innovación",
                 color: "text-[var(--color-icon-purple)]",
-                href: `https://maps.google.com/?q=${encodeURIComponent(settings?.physicalAddress || "Madrid, España")}`,
+                href: `https://maps.google.com/?q=${encodeURIComponent(settings?.physicalAddress || "Santa Cruz de Tenerife, España")}`,
                 external: true,
               },
             ].map((item, idx) => {
