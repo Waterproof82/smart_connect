@@ -14,6 +14,10 @@ import path from "node:path";
 const ROOT = path.resolve(__dirname, "../../");
 const INDEX_HTML_PATH = path.join(ROOT, "index.html");
 const VERCEL_JSON_PATH = path.join(ROOT, "vercel.json");
+const ANALYTICS_SCOPE_PATH = path.join(
+  ROOT,
+  "src/shared/utils/analyticsScope.ts",
+);
 
 describe("index.html — Consent Mode v2 (RGPD art.6 / LSSI-CE art.22.2)", () => {
   const readSource = () => fs.readFileSync(INDEX_HTML_PATH, "utf-8");
@@ -93,5 +97,28 @@ describe("index.html — Consent Mode v2 (RGPD art.6 / LSSI-CE art.22.2)", () =>
     for (const prefix of gatedRewritePrefixes) {
       expect(guardedPrefixes).toContain(prefix);
     }
+  });
+
+  it("mirrors the exact regex from the pure, independently-testable isPublicAnalyticsPath() guard", () => {
+    // index.html can't import a TS module (it's plain HTML evaluated before
+    // React/Vite touch anything), so the path-guard regex is necessarily
+    // duplicated here. This test is what makes that duplication safe: if
+    // either copy drifts from the other, it fails loudly instead of silently
+    // reintroducing the un-anchored-prefix bug analyticsScope.test.ts guards
+    // against (see src/shared/utils/analyticsScope.ts for the real logic and
+    // its behavioral tests).
+    const htmlSource = readSource();
+    const htmlRegexMatch = htmlSource.match(
+      /window\.__scAnalyticsScope = !(\/\^\\\/\([a-z|]+\)\(\\\/\|\$\)\/)\.test/,
+    );
+    expect(htmlRegexMatch).not.toBeNull();
+
+    const utilSource = fs.readFileSync(ANALYTICS_SCOPE_PATH, "utf-8");
+    const utilRegexMatch = utilSource.match(
+      /EXCLUDED_PATH_PREFIXES = (\/\^\\\/\([a-z|]+\)\(\\\/\|\$\)\/);/,
+    );
+    expect(utilRegexMatch).not.toBeNull();
+
+    expect(htmlRegexMatch![1]).toBe(utilRegexMatch![1]);
   });
 });
