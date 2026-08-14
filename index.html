@@ -22,8 +22,45 @@
       function gtag() {
         dataLayer.push(arguments);
       }
+
+      // RGPD art.6 / LSSI-CE art.22.2 — nothing measured until explicit opt-in.
+      gtag("consent", "default", {
+        ad_storage: "denied",
+        ad_user_data: "denied",
+        ad_personalization: "denied",
+        analytics_storage: "denied",
+        functionality_storage: "granted",
+        security_storage: "granted",
+      });
+
+      // Restore a prior grant BEFORE config, so returning consented users
+      // aren't measured as denied. Runs synchronously — no forced tag
+      // delay is needed (design.md A3).
+      // Keep in sync with src/shared/utils/consentStorage.ts
+      // (CONSENT_KEY/VERSION/MAX_AGE_MS).
+      try {
+        var c = JSON.parse(localStorage.getItem("sc_consent_v1") || "null");
+        if (
+          c &&
+          c.version === 1 &&
+          c.categories &&
+          c.categories.analytics === true &&
+          Date.now() - c.timestamp < 63072000000
+        ) {
+          gtag("consent", "update", { analytics_storage: "granted" });
+        }
+      } catch (e) {
+        // Storage blocked (e.g. Safari private mode) — stay denied.
+      }
+
       gtag("js", new Date());
-      gtag("config", "G-F9KQ7X8TSQ");
+
+      // Analytics is scoped to public marketing routes only (design.md A2).
+      // Single source of truth for React — see CookieConsent.tsx.
+      window.__scAnalyticsScope = !/^\/(admin|panel|login)(\/|$)/.test(
+        location.pathname,
+      );
+      if (window.__scAnalyticsScope) gtag("config", "G-F9KQ7X8TSQ");
     </script>
 
     <meta charset="UTF-8" />
