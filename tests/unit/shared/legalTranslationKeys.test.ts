@@ -1,0 +1,118 @@
+import fs from "node:fs";
+import path from "node:path";
+
+/**
+ * Regression guard for the "raw translation key rendered as text" bug class.
+ *
+ * LegalPage.tsx's `tr()` helper silently falls back to the raw key string
+ * when a translation is missing:
+ *   const tr = (key: string): string =>
+ *     (t as unknown as Record<string, string>)[key] || key;
+ * A missing key produces NO type error, NO lint warning, and NO test
+ * failure anywhere else — real visitors on /legal/cookies just see literal
+ * strings like "legalCookiesSection1Title" instead of policy text.
+ *
+ * This test parses which title/content keys CookiesPage.tsx actually
+ * references, then asserts each one resolves to a real, non-empty string in
+ * BOTH the `es` and `en` blocks of LanguageContext.tsx's `translations`
+ * object — so this exact bug class can't silently regress again.
+ */
+
+const SRC = path.resolve(__dirname, "../../../src");
+const COOKIES_PAGE_PATH = path.join(
+  SRC,
+  "features/legal/presentation/CookiesPage.tsx",
+);
+const LANGUAGE_CONTEXT_PATH = path.join(
+  SRC,
+  "shared/context/LanguageContext.tsx",
+);
+
+const KEY_PROP_RE =
+  /(?:titleKey|contentKey|descriptionKey|backLinkKey|updatedKey)(?:=|:)\s*"([^"]+)"/g;
+
+function extractReferencedKeys(source: string): string[] {
+  const keys: string[] = [];
+  let match: RegExpExecArray | null;
+  KEY_PROP_RE.lastIndex = 0;
+  while ((match = KEY_PROP_RE.exec(source)) !== null) {
+    keys.push(match[1]);
+  }
+  return [...new Set(keys)];
+}
+
+function extractLocaleBlock(
+  languageContextSource: string,
+  locale: "es" | "en",
+): string {
+  const blockPatterns: Record<"es" | "en", RegExp> = {
+    es: /\n {2}es: \{([\s\S]*?)\n {2}en: \{/,
+    en: /\n {2}en: \{([\s\S]*?)\n\};\n/,
+  };
+  const match = languageContextSource.match(blockPatterns[locale]);
+  if (!match) {
+    throw new Error(`Could not locate the "${locale}" translations block`);
+  }
+  return match[1];
+}
+
+function resolveKey(block: string, key: string): string | undefined {
+  const match = block.match(new RegExp(`\\b${key}:\\s*"([^"]*)"`));
+  return match ? match[1] : undefined;
+}
+
+describe("Cookie policy translation keys (PR1 regression guard)", () => {
+  const cookiesPageSource = fs.readFileSync(COOKIES_PAGE_PATH, "utf-8");
+  const languageContextSource = fs.readFileSync(
+    LANGUAGE_CONTEXT_PATH,
+    "utf-8",
+  );
+  const referencedKeys = extractReferencedKeys(cookiesPageSource);
+  const esBlock = extractLocaleBlock(languageContextSource, "es");
+  const enBlock = extractLocaleBlock(languageContextSource, "en");
+
+  it("CookiesPage.tsx references the 4 section title/content key pairs", () => {
+    expect(referencedKeys).toEqual(
+      expect.arrayContaining([
+        "legalCookiesSection1Title",
+        "legalCookiesSection1Content",
+        "legalCookiesSection2Title",
+        "legalCookiesSection2Content",
+        "legalCookiesSection3Title",
+        "legalCookiesSection3Content",
+        "legalCookiesSection4Title",
+        "legalCookiesSection4Content",
+      ]),
+    );
+  });
+
+  it.each(referencedKeys)(
+    "%s resolves to a non-empty string in the es locale",
+    (key) => {
+      const value = resolveKey(esBlock, key);
+      expect(value).toBeDefined();
+      expect(value!.trim().length).toBeGreaterThan(0);
+    },
+  );
+
+  it.each(referencedKeys)(
+    "%s resolves to a non-empty string in the en locale",
+    (key) => {
+      const value = resolveKey(enBlock, key);
+      expect(value).toBeDefined();
+      expect(value!.trim().length).toBeGreaterThan(0);
+    },
+  );
+
+  it("resolveKey reports a missing key as undefined (proves the lookup can actually fail)", () => {
+    const value = resolveKey(esBlock, "thisKeyDefinitelyDoesNotExistAnywhere");
+    expect(value).toBeUndefined();
+  });
+
+  it("resolveKey reports an empty-string value as failing the non-empty check", () => {
+    const syntheticBlock = '\n    fakeEmptyKey: "",\n';
+    const value = resolveKey(syntheticBlock, "fakeEmptyKey");
+    expect(value).toBe("");
+    expect(value!.trim().length).toBe(0);
+  });
+});
