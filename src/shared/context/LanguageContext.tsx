@@ -378,6 +378,19 @@ interface Translation extends TpvModuleTranslations {
   legalCookiesSection4Content: string;
   legalCookiesSection5Title: string;
   legalCookiesSection5Content: string;
+  // --- /legal/privacidad — section bodies (RGPD art. 13) ---
+  legalPrivacidadSection1Title: string;
+  legalPrivacidadSection1Content: string;
+  legalPrivacidadSection2Title: string;
+  legalPrivacidadSection2Content: string;
+  legalPrivacidadSection3Title: string;
+  legalPrivacidadSection3Content: string;
+  legalPrivacidadSection4Title: string;
+  legalPrivacidadSection4Content: string;
+  legalPrivacidadSection5Title: string;
+  legalPrivacidadSection5Content: string;
+  legalPrivacidadSection6Title: string;
+  legalPrivacidadSection6Content: string;
   // Cookie consent banner
   cookieBannerTitle: string;
   cookieBannerBody: string;
@@ -953,6 +966,26 @@ const translations: Record<Language, Translation> = {
     legalCookiesSection5Title: "Cómo retirar tu consentimiento",
     legalCookiesSection5Content:
       "<p>Puedes cambiar tu decisión sobre las cookies de análisis en cualquier momento haciendo clic en el botón de preferencias de cookies, visible en la esquina inferior izquierda de cualquier página del sitio.</p><p>Al retirar tu consentimiento, dejaremos de usar cookies de análisis en tus próximas visitas y se eliminará el permiso guardado.</p>",
+
+    // --- /legal/privacidad — section bodies (RGPD art. 13) ---
+    legalPrivacidadSection1Title: "Responsable del tratamiento",
+    legalPrivacidadSection1Content:
+      "<p>El responsable del tratamiento de los datos personales recogidos a través de este sitio web es un profesional autónomo que opera bajo el nombre comercial 'Digitaliza Tenerife', con NIF 02670352Y y domicilio en c/ Ernesto Castro, 57, Puerta 501, 38001, Santa Cruz de Tenerife, España.</p><p>Puedes contactar con el responsable del tratamiento en el correo electrónico info@digitalizatenerife.es o en el teléfono +34 601 39 64 19. No se ha designado un Delegado de Protección de Datos (DPO) al no ser exigible en este caso conforme al art. 37 del RGPD; cualquier solicitud relacionada con tus datos personales puede dirigirse al correo electrónico anterior.</p>",
+    legalPrivacidadSection2Title: "Datos que recogemos y su finalidad",
+    legalPrivacidadSection2Content:
+      "<p>A través del formulario de contacto de este sitio recogemos los siguientes datos: nombre, empresa, correo electrónico, servicio de interés y mensaje. No solicitamos ni recogemos tu número de teléfono en este formulario. Estos datos se usan exclusivamente para responder a tu consulta y, en su caso, gestionar la relación comercial derivada de ella.</p><p>El chatbot de este sitio envía el historial de la conversación de la sesión actual a nuestro proveedor de inteligencia artificial para generar respuestas contextuales. Ese historial no se almacena de forma permanente en nuestros servidores: existe únicamente en tu navegador durante la sesión y se pierde al recargar la página.</p><p>Por motivos de seguridad, registramos determinados eventos técnicos (por ejemplo, intentos de acceso no autorizados) en un registro interno de seguridad, que puede incluir tu identificador de usuario cuando existe una sesión iniciada, el tipo de evento, una breve descripción y la fecha. Este registro no almacena tu dirección IP.</p>",
+    legalPrivacidadSection3Title: "Base jurídica del tratamiento",
+    legalPrivacidadSection3Content:
+      "<p>Tratamos tus datos personales sobre las siguientes bases jurídicas: el envío del formulario de contacto y el uso del chatbot se basan en tu <strong>consentimiento</strong> (art. 6.1.a RGPD), que prestas al enviar el formulario o al iniciar una conversación con el chatbot.</p><p>El registro de eventos de seguridad se basa en nuestro <strong>interés legítimo</strong> (art. 6.1.f RGPD) en proteger este sitio web frente a accesos no autorizados y otros incidentes de seguridad.</p>",
+    legalPrivacidadSection4Title: "Destinatarios y encargados del tratamiento",
+    legalPrivacidadSection4Content:
+      "<p>Según la configuración activa en cada momento, los datos del formulario de contacto siguen uno de estos dos circuitos: si el envío por n8n está activado, se procesan mediante nuestro flujo de automatización n8n, que emplea la API de Gemini (Google) para un análisis de sentimiento, registra el contacto en una hoja de cálculo de Google Sheets y genera una notificación por Telegram o correo electrónico; si el envío por n8n está desactivado, los datos se envían mediante una función propia de nuestra infraestructura al proveedor de email transaccional Brevo, que entrega la notificación por correo.</p><p>En ambos casos, el sitio web se aloja en la infraestructura de Supabase (base de datos y funciones), y el chatbot utiliza la API de Gemini (Google) para generar respuestas. No cedemos tus datos a terceros con fines distintos a los aquí descritos.</p>",
+    legalPrivacidadSection5Title: "Transferencias internacionales de datos",
+    legalPrivacidadSection5Content:
+      "<p>Cuando usas el chatbot de este sitio, tu consulta se envía a la API de Gemini, servicio prestado por Google Ireland Limited cuya matriz, Google LLC, tiene su sede en Estados Unidos. Al igual que ocurre con Google Analytics 4, descrito en nuestra política de cookies, esta transferencia se ampara en las Cláusulas Contractuales Tipo (SCC) aprobadas por la Comisión Europea.</p><p>Cuando el envío de leads por email está activo, tus datos de contacto se transfieren a Brevo, proveedor de email transaccional con sede en la Unión Europea, sujeto igualmente a garantías adecuadas conforme al RGPD.</p><p>Nuestro proveedor de alojamiento e infraestructura, Supabase, puede procesar datos en servidores dentro o fuera del Espacio Económico Europeo según la región configurada para este proyecto; puedes consultar las garantías de Supabase en su propia política de privacidad.</p>",
+    legalPrivacidadSection6Title: "Conservación de datos y tus derechos",
+    legalPrivacidadSection6Content:
+      "<p>No mantenemos una base de datos de leads o contactos: los mensajes del formulario se entregan directamente por el circuito activo (n8n o email) descrito en el apartado anterior y no quedan almacenados en nuestros sistemas más allá de ese envío.</p><p>El registro de eventos de seguridad y la caché de embeddings del chatbot se conservan mientras resulten necesarios para su finalidad; actualmente no existe un proceso automático que borre estos datos transcurrido un plazo fijo, por lo que preferimos no indicar un periodo de conservación concreto en tanto no lo implementemos.</p><p>En cualquier momento puedes ejercer tus derechos de acceso, rectificación, supresión, oposición, limitación del tratamiento y portabilidad (arts. 15 a 22 RGPD) escribiendo a info@digitalizatenerife.es. Si consideras que no hemos atendido tu solicitud correctamente, puedes presentar una reclamación ante la Agencia Española de Protección de Datos (AEPD), www.aepd.es.</p>",
 
     // Cookie consent banner
     cookieBannerTitle: "Usamos cookies",
@@ -1537,6 +1570,26 @@ const translations: Record<Language, Translation> = {
     legalCookiesSection5Title: "How to withdraw your consent",
     legalCookiesSection5Content:
       "<p>You can change your decision about analytics cookies at any time by clicking the cookie preferences button, visible in the bottom-left corner of any page on the site.</p><p>Withdrawing your consent stops analytics cookies from being used on your next visits and clears the saved permission.</p>",
+
+    // --- /legal/privacidad — section bodies (RGPD art. 13) ---
+    legalPrivacidadSection1Title: "Data controller",
+    legalPrivacidadSection1Content:
+      "<p>The data controller for the personal data collected through this website is a sole trader (autónomo) operating under the trade name 'Digitaliza Tenerife', with tax ID (NIF) 02670352Y and registered address at c/ Ernesto Castro, 57, Puerta 501, 38001, Santa Cruz de Tenerife, Spain.</p><p>You can contact the data controller at info@digitalizatenerife.es or by phone at +34 601 39 64 19. No Data Protection Officer (DPO) has been appointed, as this is not required in this case under GDPR art. 37; any request regarding your personal data can be sent to the email above.</p>",
+    legalPrivacidadSection2Title: "Data we collect and why",
+    legalPrivacidadSection2Content:
+      "<p>Through this site's contact form we collect the following data: name, company, email address, service of interest and message. We do not request or collect your phone number in this form. This data is used solely to respond to your inquiry and, where applicable, to manage the resulting business relationship.</p><p>This site's chatbot sends the conversation history of the current session to our AI provider to generate contextual responses. This history is not stored permanently on our servers: it only exists in your browser during the session and is lost when the page is reloaded.</p><p>For security purposes, we log certain technical events (for example, unauthorized access attempts) in an internal security log, which may include your user identifier when a session is active, the event type, a brief description and the date. This log does not store your IP address.</p>",
+    legalPrivacidadSection3Title: "Legal basis for processing",
+    legalPrivacidadSection3Content:
+      "<p>We process your personal data on the following legal bases: submitting the contact form and using the chatbot are based on your <strong>consent</strong> (GDPR art. 6.1.a), given when you submit the form or start a chatbot conversation.</p><p>Logging security events is based on our <strong>legitimate interest</strong> (GDPR art. 6.1.f) in protecting this website against unauthorized access and other security incidents.</p>",
+    legalPrivacidadSection4Title: "Recipients and data processors",
+    legalPrivacidadSection4Content:
+      "<p>Depending on the configuration active at any given time, contact form data follows one of two paths: if n8n delivery is enabled, it is processed through our n8n automation flow, which uses the Gemini API (Google) for sentiment analysis, logs the contact in a Google Sheets spreadsheet and generates a Telegram or email notification; if n8n delivery is disabled, the data is sent through our own infrastructure function to the transactional email provider Brevo, which delivers the notification by email.</p><p>In both cases, the website is hosted on Supabase infrastructure (database and functions), and the chatbot uses the Gemini API (Google) to generate responses. We do not share your data with third parties for purposes other than those described here.</p>",
+    legalPrivacidadSection5Title: "International data transfers",
+    legalPrivacidadSection5Content:
+      "<p>When you use this site's chatbot, your query is sent to the Gemini API, a service provided by Google Ireland Limited whose parent company, Google LLC, is headquartered in the United States. As with Google Analytics 4, described in our cookies policy, this transfer relies on the Standard Contractual Clauses (SCCs) approved by the European Commission.</p><p>When email lead delivery is active, your contact data is transferred to Brevo, a transactional email provider headquartered in the European Union, which is also subject to appropriate safeguards under the GDPR.</p><p>Our hosting and infrastructure provider, Supabase, may process data on servers within or outside the European Economic Area depending on this project's configured region; you can review Supabase's own safeguards in its privacy policy.</p>",
+    legalPrivacidadSection6Title: "Data retention and your rights",
+    legalPrivacidadSection6Content:
+      "<p>We do not maintain a leads or contacts database: contact form messages are delivered directly through the active channel (n8n or email) described in the previous section and are not stored in our systems beyond that delivery.</p><p>The security event log and the chatbot's embedding cache are retained for as long as necessary for their purpose; there is currently no automated process that deletes this data after a fixed period, so we prefer not to state a specific retention period until one is implemented.</p><p>You can exercise your rights of access, rectification, erasure, objection, restriction of processing and portability (GDPR arts. 15 to 22) at any time by writing to info@digitalizatenerife.es. If you believe your request has not been properly addressed, you can file a complaint with the Spanish Data Protection Agency (AEPD), www.aepd.es.</p>",
 
     // Cookie consent banner
     cookieBannerTitle: "We use cookies",
