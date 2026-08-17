@@ -19,18 +19,24 @@ const HowItWorks: React.FC = () => {
       title: t.tapReviewHowStep1Title,
       desc: t.tapReviewHowStep1Desc,
       image: "/assets/nfc/put_exibitor.webp",
+      width: 3200,
+      height: 3200,
     },
     {
       icon: <Star className="w-8 h-8" />,
       title: t.tapReviewHowStep2Title,
       desc: t.tapReviewHowStep2Desc,
       image: "/assets/nfc/place_device.jpg",
+      width: 868,
+      height: 1000,
     },
     {
       icon: <Award className="w-8 h-8" />,
       title: t.tapReviewHowStep3Title,
       desc: t.tapReviewHowStep3Desc,
       image: "/assets/nfc/review.webp",
+      width: 609,
+      height: 406,
     },
   ];
 
@@ -96,6 +102,10 @@ const HowItWorks: React.FC = () => {
                       <img
                         src={step.image}
                         alt={sanitizeInput(step.title)}
+                        width={step.width}
+                        height={step.height}
+                        loading="lazy"
+                        decoding="async"
                         className="w-full h-full object-contain drop-shadow-lg"
                         onError={() =>
                           setImageErrors((prev) => ({ ...prev, [idx]: true }))

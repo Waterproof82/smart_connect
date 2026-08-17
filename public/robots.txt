@@ -32,6 +32,7 @@ User-agent: Bytespider
 Allow: /
 
 User-agent: *
+Content-Signal: search=yes, ai-train=no, use=reference
 Disallow: /admin
 Disallow: /panel
 Disallow: /login
