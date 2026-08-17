@@ -20,16 +20,22 @@ const CartaDigitalDemoSection: React.FC<CartaDigitalDemoSectionProps> = ({
   const screens = [
     {
       image: "/assets/carta-digital-cliente.png",
+      width: 1157,
+      height: 906,
       label: t.cartaDemoScreen1Label,
       title: t.cartaDemoScreen1Title,
     },
     {
       image: "/assets/carta-digital-dashboard.png",
+      width: 1895,
+      height: 551,
       label: t.cartaDemoScreen2Label,
       title: t.cartaDemoScreen2Title,
     },
     {
       image: "/assets/carta-digital-pedidos.png",
+      width: 1702,
+      height: 887,
       label: t.cartaDemoScreen3Label,
       title: t.cartaDemoScreen3Title,
     },
@@ -105,6 +111,10 @@ const CartaDigitalDemoSection: React.FC<CartaDigitalDemoSectionProps> = ({
                   <img
                     src={screen.image}
                     alt=""
+                    width={screen.width}
+                    height={screen.height}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-contain hover:scale-[1.02] transition-transform pointer-events-none"
                   />
                 </button>
