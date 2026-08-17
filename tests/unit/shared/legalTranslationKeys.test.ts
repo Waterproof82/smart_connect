@@ -9,19 +9,24 @@ import path from "node:path";
  *   const tr = (key: string): string =>
  *     (t as unknown as Record<string, string>)[key] || key;
  * A missing key produces NO type error, NO lint warning, and NO test
- * failure anywhere else — real visitors on /legal/cookies just see literal
+ * failure anywhere else — real visitors on a legal page just see literal
  * strings like "legalCookiesSection1Title" instead of policy text.
  *
- * This test parses which title/content keys CookiesPage.tsx actually
- * references, then asserts each one resolves to a real, non-empty string in
- * BOTH the `es` and `en` blocks of LanguageContext.tsx's `translations`
- * object — so this exact bug class can't silently regress again.
+ * This test parses which title/content keys each legal page component
+ * actually references, then asserts each one resolves to a real, non-empty
+ * string in BOTH the `es` and `en` blocks of LanguageContext.tsx's
+ * `translations` object — so this exact bug class can't silently regress
+ * again.
  */
 
 const SRC = path.resolve(__dirname, "../../../src");
 const COOKIES_PAGE_PATH = path.join(
   SRC,
   "features/legal/presentation/CookiesPage.tsx",
+);
+const AVISO_PAGE_PATH = path.join(
+  SRC,
+  "features/legal/presentation/AvisoLegalPage.tsx",
 );
 const LANGUAGE_CONTEXT_PATH = path.join(
   SRC,
@@ -114,5 +119,94 @@ describe("Cookie policy translation keys (PR1 regression guard)", () => {
     const value = resolveKey(syntheticBlock, "fakeEmptyKey");
     expect(value).toBe("");
     expect(value!.trim().length).toBe(0);
+  });
+});
+
+describe("Aviso legal translation keys (PR-B regression guard)", () => {
+  const avisoPageSource = fs.readFileSync(AVISO_PAGE_PATH, "utf-8");
+  const languageContextSource = fs.readFileSync(
+    LANGUAGE_CONTEXT_PATH,
+    "utf-8",
+  );
+  const referencedKeys = extractReferencedKeys(avisoPageSource);
+  const esBlock = extractLocaleBlock(languageContextSource, "es");
+  const enBlock = extractLocaleBlock(languageContextSource, "en");
+
+  const expectedKeys = [
+    "legalAvisoTitle",
+    "legalAvisoDescription",
+    "legalAvisoBackLink",
+    "legalAvisoSection1Title",
+    "legalAvisoSection1Content",
+    "legalAvisoSection2Title",
+    "legalAvisoSection2Content",
+    "legalAvisoSection3Title",
+    "legalAvisoSection3Content",
+    "legalAvisoSection4Title",
+    "legalAvisoSection4Content",
+    "legalAvisoSection5Title",
+    "legalAvisoSection5Content",
+    "legalAvisoSection6Title",
+    "legalAvisoSection6Content",
+  ];
+
+  it("AvisoLegalPage.tsx references exactly the expected shell + 6 section title/content key pairs", () => {
+    expect([...referencedKeys].sort()).toEqual([...expectedKeys].sort());
+  });
+
+  it.each(expectedKeys)(
+    "%s resolves to a non-empty string in the es locale",
+    (key) => {
+      const value = resolveKey(esBlock, key);
+      expect(value).toBeDefined();
+      expect(value!.trim().length).toBeGreaterThan(0);
+    },
+  );
+
+  it.each(expectedKeys)(
+    "%s resolves to a non-empty string in the en locale",
+    (key) => {
+      const value = resolveKey(enBlock, key);
+      expect(value).toBeDefined();
+      expect(value!.trim().length).toBeGreaterThan(0);
+    },
+  );
+
+  it.each(expectedKeys)("%s resolves to a value different from its own key name", (key) => {
+    const esValue = resolveKey(esBlock, key);
+    const enValue = resolveKey(enBlock, key);
+    expect(esValue).not.toBe(key);
+    expect(enValue).not.toBe(key);
+  });
+
+  const sectionContentKeys = expectedKeys.filter((key) =>
+    key.endsWith("Content"),
+  );
+
+  it.each(sectionContentKeys)(
+    "%s is a <p>...</p> HTML fragment in the es locale",
+    (key) => {
+      const value = resolveKey(esBlock, key)!;
+      expect(value.trim().startsWith("<p>")).toBe(true);
+      expect(value.trim().endsWith("</p>")).toBe(true);
+    },
+  );
+
+  it.each(sectionContentKeys)(
+    "%s is a <p>...</p> HTML fragment in the en locale",
+    (key) => {
+      const value = resolveKey(enBlock, key)!;
+      expect(value.trim().startsWith("<p>")).toBe(true);
+      expect(value.trim().endsWith("</p>")).toBe(true);
+    },
+  );
+
+  it("legalAvisoSection1Content states the identity of the site owner consistently in both locales", () => {
+    const esValue = resolveKey(esBlock, "legalAvisoSection1Content")!;
+    const enValue = resolveKey(enBlock, "legalAvisoSection1Content")!;
+    for (const fragment of ["Digitaliza Tenerife", "02670352Y", "info@digitalizatenerife.es"]) {
+      expect(esValue).toContain(fragment);
+      expect(enValue).toContain(fragment);
+    }
   });
 });
