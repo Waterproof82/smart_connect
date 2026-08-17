@@ -255,7 +255,7 @@ describe("legal translation key harness self-tests", () => {
     const syntheticBlock = '\n    fakeEmptyKey: "",\n';
     const value = resolveKey(syntheticBlock, "fakeEmptyKey");
     expect(value).toBe("");
-    expect(value!.trim().length).toBe(0);
+    expect(value!.trim()).toHaveLength(0);
   });
 });
 
