@@ -32,6 +32,10 @@ const LANGUAGE_CONTEXT_PATH = path.join(
   SRC,
   "shared/context/LanguageContext.tsx",
 );
+const SEO_SCHEMA_PATH = path.join(
+  SRC,
+  "shared/presentation/components/SeoSchema.tsx",
+);
 
 const KEY_PROP_RE =
   /(?:titleKey|contentKey|descriptionKey|backLinkKey|updatedKey)(?:=|:)\s*"([^"]+)"/g;
@@ -64,6 +68,23 @@ function extractLocaleBlock(
 function resolveKey(block: string, key: string): string | undefined {
   const match = block.match(new RegExp(`\\b${key}:\\s*"([^"]*)"`));
   return match ? match[1] : undefined;
+}
+
+/**
+ * Canonical NAP (name/address/phone) from SeoSchema.tsx — the single source
+ * of truth for the business's postal address. Mirrors the same helper added
+ * on `feat/legal-privacidad-content` so both branches guard identity content
+ * against the same live source instead of a hardcoded copy that can drift.
+ */
+function seoAddressParts(): string[] {
+  const source = fs.readFileSync(SEO_SCHEMA_PATH, "utf-8");
+  const streetMatch = source.match(/streetAddress:\s*"([^"]+)"/);
+  const postalMatch = source.match(/postalCode:\s*"([^"]+)"/);
+  const localityMatch = source.match(/addressLocality:\s*"([^"]+)"/);
+  if (!streetMatch || !postalMatch || !localityMatch) {
+    throw new Error("Could not locate PostalAddress fields in SeoSchema.tsx");
+  }
+  return [streetMatch[1], postalMatch[1], localityMatch[1]];
 }
 
 describe("Cookie policy translation keys (PR1 regression guard)", () => {
@@ -207,6 +228,16 @@ describe("Aviso legal translation keys (PR-B regression guard)", () => {
     for (const fragment of ["Digitaliza Tenerife", "02670352Y", "info@digitalizatenerife.es"]) {
       expect(esValue).toContain(fragment);
       expect(enValue).toContain(fragment);
+    }
+  });
+
+  it("legalAvisoSection1Content stays consistent with the canonical NAP in SeoSchema.tsx (both locales)", () => {
+    const parts = seoAddressParts();
+    const esValue = resolveKey(esBlock, "legalAvisoSection1Content")!;
+    const enValue = resolveKey(enBlock, "legalAvisoSection1Content")!;
+    for (const part of parts) {
+      expect(esValue.includes(part)).toBe(true);
+      expect(enValue.includes(part)).toBe(true);
     }
   });
 });
