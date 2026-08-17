@@ -360,6 +360,19 @@ interface Translation extends TpvModuleTranslations {
   legalAvisoTitle: string;
   legalAvisoDescription: string;
   legalAvisoBackLink: string;
+  // --- /legal/aviso — section bodies (LSSI-CE art. 10) ---
+  legalAvisoSection1Title: string;
+  legalAvisoSection1Content: string;
+  legalAvisoSection2Title: string;
+  legalAvisoSection2Content: string;
+  legalAvisoSection3Title: string;
+  legalAvisoSection3Content: string;
+  legalAvisoSection4Title: string;
+  legalAvisoSection4Content: string;
+  legalAvisoSection5Title: string;
+  legalAvisoSection5Content: string;
+  legalAvisoSection6Title: string;
+  legalAvisoSection6Content: string;
   legalPrivacidadTitle: string;
   legalPrivacidadDescription: string;
   legalPrivacidadBackLink: string;
@@ -941,6 +954,25 @@ const translations: Record<Language, Translation> = {
     legalAvisoDescription:
       "Aviso legal de Digitaliza Tenerife. Información sobre términos de uso, propiedad intelectual, responsabilidades y condiciones generales del sitio web.",
     legalAvisoBackLink: "Volver al inicio",
+    // --- /legal/aviso — section bodies (LSSI-CE art. 10) ---
+    legalAvisoSection1Title: "Identificación del titular",
+    legalAvisoSection1Content:
+      "<p>En cumplimiento del artículo 10 de la Ley 34/2002, de 11 de julio, de Servicios de la Sociedad de la Información y de Comercio Electrónico (LSSI-CE), se informa de los siguientes datos: el titular de este sitio web opera bajo el nombre comercial <strong>Digitaliza Tenerife</strong>, como persona física dada de alta como trabajador autónomo, con NIF 02670352Y.</p><p>Domicilio: c/ Ernesto Castro, 57, Puerta 501, 38001, Santa Cruz de Tenerife, Canarias, España.</p><p>Correo electrónico: info@digitalizatenerife.es. Teléfono: +34 601 39 64 19.</p><p>Actividad: desarrollo de software, automatización con inteligencia artificial y servicios de consultoría tecnológica para negocios de hostelería y comercio local.</p>",
+    legalAvisoSection2Title: "Objeto y condiciones de uso del sitio web",
+    legalAvisoSection2Content:
+      "<p>El presente aviso legal regula el acceso y uso de este sitio web, cuyo objeto es informar sobre los productos y servicios de Digitaliza Tenerife —entre ellos la Carta Digital, tarjetas NFC para reseñas y automatización con inteligencia artificial— y facilitar el contacto con potenciales clientes.</p><p>El acceso a este sitio web es gratuito y no exige la contratación de ningún servicio. El uso del sitio implica la aceptación de las condiciones recogidas en este aviso legal. El usuario se compromete a hacer un uso adecuado de los contenidos y servicios ofrecidos, y a no emplearlos para actividades ilícitas, lesivas de derechos de terceros o contrarias a la buena fe y al orden público.</p>",
+    legalAvisoSection3Title: "Propiedad intelectual e industrial",
+    legalAvisoSection3Content:
+      "<p>Los contenidos de este sitio web —textos, imágenes, código fuente, diseño, logotipos y marcas, entre otros elementos— son propiedad de Digitaliza Tenerife o de terceros que han autorizado su uso, y están protegidos por la normativa de propiedad intelectual e industrial vigente.</p><p>Las denominaciones <strong>Digitaliza Tenerife</strong> y <strong>Carta Digital</strong> se utilizan como marcas comerciales del titular de este sitio web. Queda prohibida la reproducción, distribución, comunicación pública o transformación de estos contenidos sin autorización expresa del titular, salvo en los casos permitidos por la ley.</p>",
+    legalAvisoSection4Title: "Responsabilidad y exclusión de garantías",
+    legalAvisoSection4Content:
+      "<p>Este sitio web incluye un asistente conversacional (chatbot) basado en inteligencia artificial generativa. Las respuestas que ofrece se generan automáticamente a partir de un modelo de lenguaje y tienen carácter meramente informativo y orientativo: no constituyen asesoramiento profesional, no representan un compromiso contractual ni una oferta vinculante por parte de Digitaliza Tenerife, y pueden contener imprecisiones.</p><p>Digitaliza Tenerife no garantiza la disponibilidad, continuidad ni infalibilidad del sitio web ni de sus contenidos, y no se hace responsable de los daños que pudieran derivarse de la falta de disponibilidad o de errores en los contenidos, sin perjuicio de las medidas razonables adoptadas para evitarlos.</p>",
+    legalAvisoSection5Title: "Enlaces externos",
+    legalAvisoSection5Content:
+      "<p>Este sitio web puede incluir enlaces a páginas de terceros. Digitaliza Tenerife no controla ni asume responsabilidad alguna sobre el contenido, la disponibilidad o las políticas de privacidad de dichos sitios externos, cuyo acceso queda bajo la exclusiva responsabilidad del usuario.</p>",
+    legalAvisoSection6Title: "Legislación aplicable y jurisdicción",
+    legalAvisoSection6Content:
+      "<p>Este aviso legal se rige por la legislación española. Para la resolución de cualquier controversia derivada del acceso o uso de este sitio web, las partes se someten a los juzgados y tribunales de Santa Cruz de Tenerife, salvo que la normativa aplicable en materia de consumidores y usuarios disponga otro fuero.</p>",
     legalPrivacidadTitle: "Política de Privacidad - Digitaliza Tenerife",
     legalPrivacidadDescription:
       "Política de privacidad de Digitaliza Tenerife. Información sobre recogida, uso y protección de datos personales.",
@@ -1545,6 +1577,25 @@ const translations: Record<Language, Translation> = {
     legalAvisoDescription:
       "Legal notice of Digitaliza Tenerife. Information about terms of use, intellectual property, liabilities and general conditions of the website.",
     legalAvisoBackLink: "Back to home",
+    // --- /legal/aviso — section bodies (LSSI-CE art. 10) ---
+    legalAvisoSection1Title: "Identification of the site owner",
+    legalAvisoSection1Content:
+      "<p>In compliance with article 10 of Spanish Law 34/2002, of 11 July, on Information Society Services and Electronic Commerce (LSSI-CE), the following information is provided: the owner of this website operates under the trade name <strong>Digitaliza Tenerife</strong>, as a self-employed individual (autónomo) registered under Tax ID (NIF) 02670352Y.</p><p>Address: c/ Ernesto Castro, 57, Puerta 501, 38001, Santa Cruz de Tenerife, Canary Islands, Spain.</p><p>Email: info@digitalizatenerife.es. Phone: +34 601 39 64 19.</p><p>Activity: software development, AI-powered automation and technology consulting services for hospitality businesses and local commerce.</p>",
+    legalAvisoSection2Title: "Purpose and terms of use of the website",
+    legalAvisoSection2Content:
+      "<p>This legal notice governs access to and use of this website, whose purpose is to provide information about Digitaliza Tenerife's products and services — including the Carta Digital menu, NFC review cards and AI-powered automation — and to facilitate contact with potential clients.</p><p>Access to this website is free of charge and does not require contracting any service. Using the site implies acceptance of the terms set out in this legal notice. Users agree to make appropriate use of the content and services offered, and not to use them for unlawful purposes, to infringe third-party rights, or in a manner contrary to good faith and public order.</p>",
+    legalAvisoSection3Title: "Intellectual and industrial property",
+    legalAvisoSection3Content:
+      "<p>The content of this website — texts, images, source code, design, logos and trademarks, among other elements — is the property of Digitaliza Tenerife or of third parties who have authorized its use, and is protected under applicable intellectual and industrial property law.</p><p>The names <strong>Digitaliza Tenerife</strong> and <strong>Carta Digital</strong> are used as trademarks of the owner of this website. Reproduction, distribution, public communication or transformation of this content without the owner's express authorization is prohibited, except where permitted by law.</p>",
+    legalAvisoSection4Title: "Liability and disclaimer",
+    legalAvisoSection4Content:
+      "<p>This website includes a conversational assistant (chatbot) based on generative artificial intelligence. The responses it provides are generated automatically from a language model and are purely informational and orientative in nature: they do not constitute professional advice, do not represent a contractual commitment or a binding offer from Digitaliza Tenerife, and may contain inaccuracies.</p><p>Digitaliza Tenerife does not guarantee the availability, continuity or infallibility of the website or its content, and is not liable for damages arising from unavailability or errors in the content, without prejudice to the reasonable measures taken to prevent them.</p>",
+    legalAvisoSection5Title: "External links",
+    legalAvisoSection5Content:
+      "<p>This website may include links to third-party pages. Digitaliza Tenerife does not control and assumes no responsibility for the content, availability or privacy policies of such external sites, access to which is at the user's sole responsibility.</p>",
+    legalAvisoSection6Title: "Applicable law and jurisdiction",
+    legalAvisoSection6Content:
+      "<p>This legal notice is governed by Spanish law. For the resolution of any dispute arising from access to or use of this website, the parties submit to the courts of Santa Cruz de Tenerife, unless applicable consumer protection regulations establish a different forum.</p>",
     legalPrivacidadTitle: "Privacy Policy - Digitaliza Tenerife",
     legalPrivacidadDescription:
       "Privacy policy of Digitaliza Tenerife. Information about collection, use and protection of personal data.",

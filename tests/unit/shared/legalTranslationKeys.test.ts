@@ -128,7 +128,6 @@ const LEGAL_PAGES: LegalPageCase[] = [
       ...sectionKeys("legalCookies", 5),
     ],
   },
-  // ── PR-A appends ──────────────────────────────────────────────
   {
     name: "PrivacidadPage",
     file: "features/legal/presentation/PrivacidadPage.tsx",
@@ -141,11 +140,17 @@ const LEGAL_PAGES: LegalPageCase[] = [
     ],
     identityContentKeys: ["legalPrivacidadSection1Content"],
   },
-  // NOTE: AvisoLegalPage is intentionally NOT listed yet — its section keys
-  // (legalAvisoSection1..6) do not exist in LanguageContext.tsx on this
-  // branch. It is added by PR-B (legal-content-gaps), which either appends
-  // an entry here (if this harness has already merged) or authors this same
-  // harness shape with only its own entry present.
+  {
+    name: "AvisoLegalPage",
+    file: "features/legal/presentation/AvisoLegalPage.tsx",
+    expectedKeys: [
+      "legalAvisoTitle",
+      "legalAvisoDescription",
+      "legalAvisoBackLink",
+      ...sectionKeys("legalAviso", 6),
+    ],
+    identityContentKeys: ["legalAvisoSection1Content"],
+  },
 ];
 
 describe.each(LEGAL_PAGES)("$name legal translation keys", (page) => {
@@ -251,5 +256,23 @@ describe("legal translation key harness self-tests", () => {
     const value = resolveKey(syntheticBlock, "fakeEmptyKey");
     expect(value).toBe("");
     expect(value!.trim().length).toBe(0);
+  });
+});
+
+describe("AvisoLegalPage identity content — extra checks", () => {
+  const languageContextSource = fs.readFileSync(
+    LANGUAGE_CONTEXT_PATH,
+    "utf-8",
+  );
+  const esBlock = extractLocaleBlock(languageContextSource, "es");
+  const enBlock = extractLocaleBlock(languageContextSource, "en");
+
+  it("legalAvisoSection1Content states the identity of the site owner consistently in both locales", () => {
+    const esValue = resolveKey(esBlock, "legalAvisoSection1Content")!;
+    const enValue = resolveKey(enBlock, "legalAvisoSection1Content")!;
+    for (const fragment of ["Digitaliza Tenerife", "02670352Y", "info@digitalizatenerife.es"]) {
+      expect(esValue).toContain(fragment);
+      expect(enValue).toContain(fragment);
+    }
   });
 });
