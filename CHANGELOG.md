@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **`/legal/privacidad` rendered raw translation keys instead of content (SDD `legal-content-gaps`)**: `PrivacidadPage.tsx` referenced 12 section title/content keys (`legalPrivacidadSection1..6Title/Content`) that were never defined in `LanguageContext.tsx`, so real visitors saw literal key names instead of the RGPD art. 13 information notice. Added all 12 keys in both `es` and `en` (data controller identity, data collected/purpose, legal basis, recipients/processors, international transfers, retention and rights) to `src/shared/context/LanguageContext.tsx`, and extended `tests/unit/shared/legalTranslationKeys.test.ts` with a `describe.each` regression harness (key-set equality, non-empty resolution, content-shape and sanitizer-allowlist checks, NAP-consistency check against `SeoSchema.tsx`) so this bug class can't silently regress. See `docs/audit/2026-08-17_legal-content-gaps-privacidad-fixup.md`.
+
 ### Added
 
 - **Google Analytics 4**: installed the `gtag.js` tag (`G-F9KQ7X8TSQ`) as the first element inside `<head>` in `index.html`, per Google's official installation instructions. The property existed but was never receiving data — no analytics tag was present anywhere in the codebase.
