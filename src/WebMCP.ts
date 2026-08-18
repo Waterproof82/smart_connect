@@ -40,21 +40,13 @@ const tools: ToolDescriptor[] = [
   {
     name: "get_product_info",
     description:
-      "Get detailed information about SmartConnect products: QRIBAR (digital menu), Tap-to-Review NFC cards, Carta Digital Premium, n8n automation, WhatsApp automation, and software solutions for Canary Islands hospitality businesses.",
+      "Get detailed information about the Digitaliza Tenerife hospitality TPV platform (TPV y cobro, comandero móvil, KDS cocina, gestión de reservas, fichajes, delivery/takeaway, stock e inventario, food cost avanzado, sistema de alérgenos, compras, multi-IVA/IGIC, roles y permisos, and Tienda/Carta Digital) plus Tap-to-Review NFC cards, for Canary Islands hospitality businesses.",
     inputSchema: {
       type: "object",
       properties: {
         product: {
           type: "string",
-          enum: [
-            "qribar",
-            "tap-review",
-            "carta-digital",
-            "n8n-automation",
-            "whatsapp-automation",
-            "software-canarias",
-            "digitalization-tenerife",
-          ],
+          enum: ["carta-digital", "tap-review"],
           description: "The product or service to get information about.",
         },
         language: {
@@ -67,37 +59,18 @@ const tools: ToolDescriptor[] = [
     },
     execute: (args: Record<string, unknown>): ToolResult => {
       const productMap: Record<string, { es: string; en: string }> = {
-        qribar: {
-          es: "QRIBAR: Menú digital con pedidos en tiempo real desde la mesa a barra y cocina. Sin comisiones. Los clientes escanean un código QR en la mesa, exploran platos con fotos y vídeos, y envían el pedido directamente.",
-          en: "QRIBAR: Digital menu with real-time orders from table to bar and kitchen. No commissions. Customers scan a QR code at the table, browse dishes with photos and videos, and send orders directly.",
-        },
         "tap-review": {
           es: "Tap-to-Review NFC: Tarjetas NFC para que los clientes dejen reseñas en Google con un solo toque. Pago único, sin suscripciones. Incluye expositor de mesa y soporte 24/7.",
           en: "Tap-to-Review NFC: NFC cards for customers to leave Google reviews with one tap. One-time payment, no subscriptions. Includes table stand and 24/7 support.",
         },
         "carta-digital": {
-          es: "Carta Digital Premium: Menú digital avanzado con fotos, vídeos, 5 idiomas, pedidos por WhatsApp y base de datos propia de clientes. 0% comisiones.",
-          en: "Carta Digital Premium: Advanced digital menu with photos, videos, 5 languages, WhatsApp orders, and your own customer database. 0% commissions.",
-        },
-        "n8n-automation": {
-          es: "Automatización n8n: Flujos de trabajo que conectan CRM, email, WhatsApp y redes sociales. Automatiza captación, análisis de sentimiento y notificaciones.",
-          en: "n8n Automation: Workflows connecting CRM, email, WhatsApp and social media. Automatize lead capture, sentiment analysis, and notifications.",
-        },
-        "whatsapp-automation": {
-          es: "Automatización WhatsApp: Respuestas automáticas 24/7 para reservas, consultas y pedidos. Se integra con tu número existente de WhatsApp Business.",
-          en: "WhatsApp Automation: 24/7 automatic responses for reservations, inquiries, and orders. Integrates with your existing WhatsApp Business number.",
-        },
-        "software-canarias": {
-          es: "Software para Canarias: Soluciones digitales para restaurantes canarios. Desarrollo de software a medida, integración con sistemas existentes y soporte local en Tenerife.",
-          en: "Software for Canary Islands: Digital solutions for Canarian restaurants. Custom software development, integration with existing systems, and local support in Tenerife.",
-        },
-        "digitalization-tenerife": {
-          es: "Digitalización Tenerife: Transformación digital completa para negocios en Tenerife. Desde menús digitales hasta automatización con IA.",
-          en: "Digitalization Tenerife: Complete digital transformation for businesses in Tenerife. From digital menus to AI automation.",
+          es: "Carta Digital Premium: Menú digital avanzado con fotos, vídeos, 5 idiomas, pedidos por WhatsApp y base de datos propia de clientes. 0% comisiones. Es uno de los módulos del TPV de Digitaliza Tenerife.",
+          en: "Carta Digital Premium: Advanced digital menu with photos, videos, 5 languages, WhatsApp orders, and your own customer database. 0% commissions. One of the modules in the Digitaliza Tenerife TPV.",
         },
       };
 
-      const product = String(args.product || "").toLowerCase();
+      const product =
+        typeof args.product === "string" ? args.product.toLowerCase() : "";
       const lang = args.language === "en" ? "en" : "es";
       const info = productMap[product];
 
@@ -108,17 +81,8 @@ const tools: ToolDescriptor[] = [
       }
 
       const urls: Record<string, string> = {
-        qribar: "https://digitalizatenerife.es/carta-digital",
-        "tap-review": "https://digitalizatenerife.es/tap-review",
-        "carta-digital": "https://digitalizatenerife.es/carta-digital",
-        "n8n-automation":
-          "https://digitalizatenerife.es/automatizacion-restaurantes-n8n",
-        "whatsapp-automation":
-          "https://digitalizatenerife.es/automatizacion-whatsapp-restaurante",
-        "software-canarias":
-          "https://digitalizatenerife.es/software-restaurantes-canarias",
-        "digitalization-tenerife":
-          "https://digitalizatenerife.es/digitalizacion-hosteleria-tenerife",
+        "tap-review": "https://digitalizatenerife.es/#tarjetas-nfc",
+        "carta-digital": "https://digitalizatenerife.es/#carta-digital",
       };
 
       return tk(
@@ -129,7 +93,7 @@ const tools: ToolDescriptor[] = [
   {
     name: "get_contact_info",
     description:
-      "Get contact information for SmartConnect AI, including email, WhatsApp, and office location in Santa Cruz de Tenerife.",
+      "Get contact information for Digitaliza Tenerife, including email, WhatsApp, and office location in Santa Cruz de Tenerife.",
     inputSchema: {
       type: "object",
       properties: {
@@ -145,25 +109,25 @@ const tools: ToolDescriptor[] = [
       if (lang === "en") {
         return tk(
           [
-            "SmartConnect AI — Contact Information",
+            "Digitaliza Tenerife — Contact Information",
             "",
             "- Email: info@digitalizatenerife.es",
             "- WhatsApp: available via the contact page",
             "- Office: Santa Cruz de Tenerife, Canary Islands, Spain",
             "- Website: https://digitalizatenerife.es",
-            "- Contact page: https://digitalizatenerife.es/contacto",
+            "- Contact page: https://digitalizatenerife.es/#contacto",
           ].join("\n"),
         );
       }
       return tk(
         [
-          "SmartConnect AI — Información de Contacto",
+          "Digitaliza Tenerife — Información de Contacto",
           "",
           "- Email: info@digitalizatenerife.es",
           "- WhatsApp: disponible a través de la página de contacto",
           "- Oficina: Santa Cruz de Tenerife, Islas Canarias, España",
           "- Web: https://digitalizatenerife.es",
-          "- Página de contacto: https://digitalizatenerife.es/contacto",
+          "- Página de contacto: https://digitalizatenerife.es/#contacto",
         ].join("\n"),
       );
     },
@@ -171,7 +135,7 @@ const tools: ToolDescriptor[] = [
   {
     name: "list_products",
     description:
-      "List all products and services offered by SmartConnect AI for local businesses in Tenerife and the Canary Islands.",
+      "List all products and services offered by Digitaliza Tenerife for local businesses in Tenerife and the Canary Islands.",
     inputSchema: {
       type: "object",
       properties: {
@@ -187,15 +151,11 @@ const tools: ToolDescriptor[] = [
       if (lang === "en") {
         return tk(
           [
-            "SmartConnect AI — Products & Services",
+            "Digitaliza Tenerife — Products & Services",
             "",
-            "1. QRIBAR — Digital menu with real-time orders (no commissions)",
-            "2. Tap-to-Review NFC — Google review NFC cards",
-            "3. Carta Digital Premium — Premium digital menu with 5 languages",
-            "4. n8n Automation — Workflow automation for hospitality",
-            "5. WhatsApp Automation — 24/7 automated messaging",
-            "6. Software Canarias — Custom software for Canary Islands businesses",
-            "7. Digitalización Tenerife — Complete digital transformation in Tenerife",
+            "1. TPV Platform — Point of sale, mobile ordering, kitchen display, reservations, staff clock-in, delivery, stock, food cost, allergens, purchasing, tax compliance, roles/permissions, and digital menu (13 modules)",
+            "2. Carta Digital Premium — Premium digital menu with 5 languages",
+            "3. Tap-to-Review NFC — Google review NFC cards",
             "",
             "Website: https://digitalizatenerife.es",
           ].join("\n"),
@@ -203,15 +163,11 @@ const tools: ToolDescriptor[] = [
       }
       return tk(
         [
-          "SmartConnect AI — Productos y Servicios",
+          "Digitaliza Tenerife — Productos y Servicios",
           "",
-          "1. QRIBAR — Menú digital con pedidos en tiempo real (sin comisiones)",
-          "2. Tap-to-Review NFC — Tarjetas NFC para reseñas en Google",
-          "3. Carta Digital Premium — Menú digital premium con 5 idiomas",
-          "4. Automatización n8n — Automatización de flujos para hostelería",
-          "5. Automatización WhatsApp — Mensajería automatizada 24/7",
-          "6. Software Canarias — Software a medida para empresas canarias",
-          "7. Digitalización Tenerife — Transformación digital completa en Tenerife",
+          "1. Plataforma TPV — TPV/cobro, comandero móvil, KDS, reservas, fichajes, delivery, stock, food cost, alérgenos, compras, multi-IVA/IGIC, roles y Carta Digital (13 módulos)",
+          "2. Carta Digital Premium — Menú digital premium con 5 idiomas",
+          "3. Tap-to-Review NFC — Tarjetas NFC para reseñas en Google",
           "",
           "Web: https://digitalizatenerife.es",
         ].join("\n"),
@@ -229,14 +185,7 @@ const tools: ToolDescriptor[] = [
           type: "string",
           enum: [
             "/",
-            "/servicios",
             "/contacto",
-            "/carta-digital",
-            "/tap-review",
-            "/automatizacion-restaurantes-n8n",
-            "/automatizacion-whatsapp-restaurante",
-            "/software-restaurantes-canarias",
-            "/digitalizacion-hosteleria-tenerife",
             "/about",
             "/legal/aviso",
             "/legal/privacidad",
@@ -248,7 +197,7 @@ const tools: ToolDescriptor[] = [
       required: ["path"],
     },
     execute: async (args: Record<string, unknown>): Promise<ToolResult> => {
-      const pagePath = String(args.path || "/");
+      const pagePath = typeof args.path === "string" ? args.path : "/";
       try {
         const response = await fetch(
           `https://digitalizatenerife.es${pagePath}`,

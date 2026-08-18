@@ -15,40 +15,40 @@ const AboutPage: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>Sobre SmartConnect AI — Quiénes somos</title>
+        <title>Sobre Digitaliza Tenerife — Quiénes somos</title>
         <meta
           name="description"
-          content="SmartConnect AI es una empresa tecnológica con sede en Santa Cruz de Tenerife. Especialistas en IA, automatización y hardware inteligente para negocios locales en Canarias."
+          content="Digitaliza Tenerife es una empresa tecnológica con sede en Santa Cruz de Tenerife. Especialistas en IA, automatización y hardware inteligente para negocios locales en Canarias."
         />
         <link rel="canonical" href="https://digitalizatenerife.es/about" />
         <link rel="alternate" hrefLang="es" href="https://digitalizatenerife.es/about" />
         <link rel="alternate" hrefLang="x-default" href="https://digitalizatenerife.es/about" />
-        <meta property="og:title" content="Sobre SmartConnect AI — Quiénes somos" />
+        <meta property="og:title" content="Sobre Digitaliza Tenerife — Quiénes somos" />
         <meta
           property="og:description"
-          content="Conoce al equipo detrás de SmartConnect AI. IA, automatización y hardware inteligente para negocios locales en Tenerife y Canarias."
+          content="Conoce al equipo detrás de Digitaliza Tenerife. IA, automatización y hardware inteligente para negocios locales en Tenerife y Canarias."
         />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://digitalizatenerife.es/about" />
         <meta property="og:image" content="https://digitalizatenerife.es/icon.png" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Sobre SmartConnect AI — Quiénes somos" />
+        <meta name="twitter:title" content="Sobre Digitaliza Tenerife — Quiénes somos" />
         <meta
           name="twitter:description"
-          content="Conoce al equipo detrás de SmartConnect AI. IA, automatización y hardware inteligente para negocios locales en Tenerife y Canarias."
+          content="Conoce al equipo detrás de Digitaliza Tenerife. IA, automatización y hardware inteligente para negocios locales en Tenerife y Canarias."
         />
         <meta name="twitter:image" content="https://digitalizatenerife.es/icon.png" />
-        <link rel="author" href="https://digitalizatenerife.es/about" title="SmartConnect AI" />
+        <link rel="author" href="https://digitalizatenerife.es/about" title="Digitaliza Tenerife" />
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
             "@type": "AboutPage",
-            name: "Sobre SmartConnect AI",
+            name: "Sobre Digitaliza Tenerife",
             description:
-              "Información sobre SmartConnect AI, empresa tecnológica especializada en IA, automatización y hardware inteligente para negocios locales en Tenerife y Canarias.",
+              "Información sobre Digitaliza Tenerife, empresa tecnológica especializada en IA, automatización y hardware inteligente para negocios locales en Tenerife y Canarias.",
             mainEntity: {
               "@type": "Organization",
-              name: "SmartConnect AI",
+              name: "Digitaliza Tenerife",
               description:
                 "Empresa tecnológica especializada en IA, automatización y hardware inteligente para negocios locales en Tenerife y Canarias.",
               url: "https://digitalizatenerife.es",
@@ -59,10 +59,13 @@ const AboutPage: React.FC = () => {
                 height: 512,
               },
               email: "info@digitalizatenerife.es",
-              telephone: "+34922123456",
+              telephone: "+34 601 39 64 19",
+              // Kept in sync manually with app_settings.physical_address
+              // (Supabase) — see SeoSchema.tsx buildHomeSchema for the same
+              // address, must match Contact.tsx and Google Business Profile.
               address: {
                 "@type": "PostalAddress",
-                streetAddress: "Calle Las Palmas 123",
+                streetAddress: "c/ Ernesto Castro, 57, Puerta 501",
                 addressLocality: "Santa Cruz de Tenerife",
                 addressRegion: "Canary Islands",
                 postalCode: "38001",
@@ -71,14 +74,14 @@ const AboutPage: React.FC = () => {
               foundingDate: "2025",
               founder: {
                 "@type": "Person",
-                name: "SmartConnect AI Team",
+                name: "Digitaliza Tenerife Team",
               },
               sameAs: [
-                "https://twitter.com/smartconnectai",
-                "https://linkedin.com/company/smartconnectai",
-                "https://instagram.com/smartconnectai",
-                "https://facebook.com/smartconnectai",
-                "https://youtube.com/@smartconnectai",
+                "https://twitter.com/digitalizatenerife",
+                "https://linkedin.com/company/digitalizatenerife",
+                "https://instagram.com/digitalizatenerife",
+                "https://facebook.com/digitalizatenerife",
+                "https://youtube.com/@digitalizatenerife",
               ],
             },
           })}
@@ -95,7 +98,7 @@ const AboutPage: React.FC = () => {
             >
               <Cpu className="w-5 h-5" />
               <span className="font-bold">
-                SmartConnect <span className="text-blue-400">AI</span>
+                Digitaliza <span className="text-blue-400">Tenerife</span>
               </span>
             </Link>
           </div>
@@ -107,7 +110,7 @@ const AboutPage: React.FC = () => {
             <h1 className="text-4xl md:text-6xl font-extrabold mb-6">
               Sobre{" "}
               <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                SmartConnect AI
+                Digitaliza Tenerife
               </span>
             </h1>
             <p className="text-xl text-white/70 max-w-3xl mx-auto leading-relaxed">
@@ -124,14 +127,14 @@ const AboutPage: React.FC = () => {
               Nuestra misión
             </h2>
             <p className="text-lg text-white/70 leading-relaxed mb-6">
-              En SmartConnect AI creemos que la tecnología debe estar al
+              En Digitaliza Tenerife creemos que la tecnología debe estar al
               servicio de los negocios locales. Nuestra misión es democratizar
               el acceso a herramientas de IA, automatización y hardware
               inteligente para que cualquier restaurante, bar o comercio en
               Tenerife y Canarias pueda competir en la era digital.
             </p>
             <p className="text-lg text-white/70 leading-relaxed mb-6">
-              Desde menús digitales QRIBAR que transforman la experiencia en
+              Desde la Carta Digital que transforma la experiencia en
               mesa, hasta tarjetas NFC que multiplican las reseñas en Google,
               pasando por automatizaciones con n8n que liberan horas de trabajo
               cada semana — cada solución está diseñada para generar resultados

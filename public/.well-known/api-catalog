@@ -19,17 +19,12 @@
           "type": "application/json"
         },
         {
-          "rel": "service-doc",
-          "href": "https://digitalizatenerife.es/docs/api",
-          "type": "text/html"
-        },
-        {
           "rel": "oauth2-authorization-server",
           "href": "https://tysjedvujvsmrzzrmesr.supabase.co"
         },
         {
           "rel": "privacy-policy",
-          "href": "https://digitalizatenerife.es/privacy",
+          "href": "https://digitalizatenerife.es/legal/privacidad",
           "type": "text/html"
         }
       ]

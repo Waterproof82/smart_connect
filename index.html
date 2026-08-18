@@ -12,6 +12,57 @@
 -->
 <html lang="es" class="bg-sc-dark min-h-full">
   <head>
+    <!-- Google tag (gtag.js) — GA4 property for digitalizatenerife.es -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-F9KQ7X8TSQ"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+
+      // RGPD art.6 / LSSI-CE art.22.2 — nothing measured until explicit opt-in.
+      gtag("consent", "default", {
+        ad_storage: "denied",
+        ad_user_data: "denied",
+        ad_personalization: "denied",
+        analytics_storage: "denied",
+        functionality_storage: "granted",
+        security_storage: "granted",
+      });
+
+      // Restore a prior grant BEFORE config, so returning consented users
+      // aren't measured as denied. Runs synchronously — no forced tag
+      // delay is needed (design.md A3).
+      // Keep in sync with src/shared/utils/consentStorage.ts
+      // (CONSENT_KEY/VERSION/MAX_AGE_MS).
+      try {
+        var c = JSON.parse(localStorage.getItem("sc_consent_v1") || "null");
+        if (
+          c &&
+          c.version === 1 &&
+          c.categories &&
+          c.categories.analytics === true &&
+          Date.now() - c.timestamp < 63072000000
+        ) {
+          gtag("consent", "update", { analytics_storage: "granted" });
+        }
+      } catch (e) {
+        // Storage blocked (e.g. Safari private mode) — stay denied.
+      }
+
+      gtag("js", new Date());
+
+      // Analytics is scoped to public marketing routes only (design.md A2).
+      // Single source of truth for React — see CookieConsent.tsx.
+      window.__scAnalyticsScope = !/^\/(admin|panel|login)(\/|$)/.test(
+        location.pathname,
+      );
+      if (window.__scAnalyticsScope) gtag("config", "G-F9KQ7X8TSQ");
+    </script>
+
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
@@ -45,6 +96,7 @@
     <link rel="preconnect" href="https://tysjedvujvsmrzzrmesr.supabase.co" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://www.googletagmanager.com" />
     <link
       rel="preload"
       as="style"

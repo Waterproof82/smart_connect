@@ -452,6 +452,57 @@ console.log("Delete blocked:", !!deleteError); // Should be true
 
 ---
 
-**Status:** ✅ Production Ready  
-**Next Action:** Run integration tests to verify RLS policies  
+---
+
+## 11. Data API Grants (Breaking Change — 2026-10-30)
+
+**Ref:** https://github.com/orgs/supabase/discussions/45329
+
+### What Changed
+
+Supabase is removing automatic table exposure to the Data API (PostgREST/GraphQL).
+Before: creating a table auto-granted SELECT/INSERT/UPDATE/DELETE to `anon`, `authenticated`, and `service_role`.
+After: tables require explicit `GRANT` statements or they are invisible to `supabase-js` and PostgREST.
+
+**Timeline:**
+- May 30, 2026 — default for all new projects
+- October 30, 2026 — enforced on all existing projects
+
+### What We Did
+
+Migration `20260527_explicit_grants_and_revoke_defaults` was applied:
+
+1. **Hardened `security_logs`** — removed `UPDATE` and `DELETE` from `authenticated` (only INSERT + SELECT allowed, RLS restricts further)
+2. **Revoked default privileges** — `ALTER DEFAULT PRIVILEGES IN SCHEMA public REVOKE ALL ON TABLES FROM anon/authenticated` — new tables will NOT auto-expose
+
+### Current Grant Matrix
+
+| Table | `anon` | `authenticated` | `service_role` |
+|---|---|---|---|
+| `documents` | SELECT | SELECT, INSERT, UPDATE, DELETE | Full |
+| `app_settings` | SELECT | SELECT, INSERT, UPDATE, DELETE | Full |
+| `security_logs` | **none** | SELECT, INSERT only | Full |
+
+RLS policies further restrict what authenticated users can actually do.
+
+### Rule for Future Migrations
+
+**Every migration that creates a new table MUST include explicit GRANTs.** If missing, the table will not be accessible via `supabase-js` or PostgREST after Oct 30, 2026.
+
+Template to copy into every new table migration:
+
+```sql
+-- Replace `your_table` and adjust roles/operations to your security model
+GRANT SELECT ON public.your_table TO anon;                                    -- only if public read needed
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.your_table TO authenticated;   -- RLS will restrict further
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.your_table TO service_role;    -- Edge Functions
+```
+
+- [x] Opt-in to new behavior applied (default privileges revoked)
+- [x] Deployment Checklist — add GRANT block to every new table migration
+
+---
+
+**Status:** ✅ Production Ready
+**Next Action:** Run integration tests to verify RLS policies
 **Owner:** DevOps Team + Security Lead

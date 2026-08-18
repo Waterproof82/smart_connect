@@ -7,8 +7,66 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **SEO/GEO/AEO audit fixes (2026-08-17)**: verified an external Search Console + GEO/AEO audit's findings against the live site and source before changing anything (see `docs/audit/2026-08-17_seo-geo-aeo-audit-verification.md`). Several P0 items the audit flagged were already fixed by prior work (`/servicios` and `/tap-review` already 301-redirect in production, `/about` was already linked from the footer, `public/llms.txt` had no dead links) — those were left untouched. What was genuinely still live and fixed here:
+  - `src/features/landing/presentation/components/CartaDigitalDemoSection.tsx`: the 3 Carta Digital Premium screenshots (`carta-digital-cliente.png`, `carta-digital-dashboard.png`, `carta-digital-pedidos.png` — 248–540 KB each, ~1 MB combined) had no `loading="lazy"`, `decoding="async"`, or explicit `width`/`height`, so the browser fetched all of them eagerly on page load despite sitting well below the fold. Added all four attributes, matching the pattern already used in `TpvModuleFigure.tsx`.
+  - `src/features/tap-review/presentation/components/HowItWorks.tsx`: same missing lazy-loading/dimension fix for its 3 step images (`put_exibitor.webp`, `place_device.jpg`, `review.webp`).
+  - `robots.txt` served in production was a Cloudflare "Managed robots.txt" block that `Disallow`ed GPTBot, ClaudeBot, Google-Extended, Amazonbot, CCBot, Bytespider, Applebot-Extended and meta-externalagent, fully overriding `public/robots.txt` (which was already clean) at the edge. Not code-fixable — walked the user through Cloudflare's dashboard (domain → Robots.txt availability → disabled "Managed robots.txt") during this session. Verified live via `curl https://digitalizatenerife.es/robots.txt`: now serves the repo's own file, `Allow: /` for every AI/search crawler, `Disallow` only on `/admin` `/panel` `/login`.
+  - `public/robots.txt`: disabling Cloudflare's managed toggle also dropped its `Content-Signal: search=yes,ai-train=no,use=reference` line (flagged by Cloudflare's own "Agent Readiness" check as "No Content Signals found"). Re-added the same declaration directly in the repo's `User-agent: *` block instead of re-enabling the Cloudflare toggle, which would have reintroduced the crawler block above.
+
+- **`/legal/privacidad` rendered raw translation keys instead of content (SDD `legal-content-gaps`)**: `PrivacidadPage.tsx` referenced 12 section title/content keys (`legalPrivacidadSection1..6Title/Content`) that were never defined in `LanguageContext.tsx`, so real visitors saw literal key names instead of the RGPD art. 13 information notice. Added all 12 keys in both `es` and `en` (data controller identity, data collected/purpose, legal basis, recipients/processors, international transfers, retention and rights) to `src/shared/context/LanguageContext.tsx`, and extended `tests/unit/shared/legalTranslationKeys.test.ts` with a `describe.each` regression harness (key-set equality, non-empty resolution, content-shape and sanitizer-allowlist checks, NAP-consistency check against `SeoSchema.tsx`) so this bug class can't silently regress. See `docs/audit/2026-08-17_legal-content-gaps-privacidad-fixup.md`.
+
 ### Added
 
+- **Google Analytics 4**: installed the `gtag.js` tag (`G-F9KQ7X8TSQ`) as the first element inside `<head>` in `index.html`, per Google's official installation instructions. The property existed but was never receiving data — no analytics tag was present anywhere in the codebase.
+
+### Fixed
+
+- **`/legal/aviso` rendered raw translation keys instead of content (SDD `legal-content-gaps`)**: `AvisoLegalPage.tsx` referenced 12 section title/content keys (`legalAvisoSection1..6Title/Content`) that were never defined in `LanguageContext.tsx`, so real visitors saw literal key names instead of the LSSI-CE art. 10 provider-identification notice. Added all 12 keys in both `es` and `en` (owner identification, terms of use, intellectual property, liability/disclaimer for the AI chatbot's non-contractual output, external links, applicable law/jurisdiction) to `src/shared/context/LanguageContext.tsx`, and extended `tests/unit/shared/legalTranslationKeys.test.ts`'s Aviso regression block with a NAP-consistency check against `SeoSchema.tsx` so the address can't silently drift. See `docs/audit/2026-08-17_legal-content-gaps-aviso-fixup.md`.
+- **SEO/GEO/AEO audit fixes (2026-08-14)**: verified an external SEO/GEO/AEO/Search Console audit's findings against the actual source before making any change (see `docs/audit/2026-08-14_seo-geo-aeo-p0-fixes.md`).
+  - `src/shared/presentation/components/SeoSchema.tsx`: removed a fabricated `aggregateRating` (4.9★ / 850 reviews) and fake `offers.price` (29.90 €) that `ReviewSchema` defaulted onto every real customer testimonial's JSON-LD — unverifiable numbers that risk a Google structured-data spam action. Also fixed the hardcoded `LocalBusiness` address (`"Calle Las Palmas 123"` → the real address) which didn't match what `Contact.tsx` renders.
+  - `src/features/landing/presentation/components/AboutPage.tsx`: same address fix for its own hand-rolled `LocalBusiness` JSON-LD.
+  - `src/features/landing/presentation/components/Contact.tsx`: the address fallback (shown only if the Supabase read fails) was `"Madrid, España"`, unrelated to the business's actual location; now `"Santa Cruz de Tenerife, España"`.
+  - `src/features/tap-review/presentation/TapReviewPage.tsx`: the `sr-only` `<h1>` on `/tarjetas-nfc` duplicated the `<title>` verbatim; now a distinct, natural-language heading.
+- **SEO/GEO P0 fixes (SDD `seo-geo-p0-fixes`)**: Closed 7+ dead/redirected URLs and structural SEO defects surfaced across machine-readable discovery surfaces and the app itself.
+  - `public/llms.txt` and `public/.well-known/llms.txt`: removed 5 dead page links (`/carta-digital`, `/automatizacion-restaurantes-n8n`, `/automatizacion-whatsapp-restaurante`, `/software-restaurantes-canarias`, `/digitalizacion-hosteleria-tenerife`, all 301→`/`); `.well-known/llms.txt` is now a minimal pointer stub to the canonical root `llms.txt` (llmstxt.org defines exactly one location).
+  - `public/.well-known/api-catalog`: removed the dead `service-doc` → `/docs/api` link; `privacy-policy` now points at `/legal/privacidad` instead of `/privacy`.
+  - `public/.well-known/oauth-protected-resource`: removed the dead `documentation` field.
+  - `public/.well-known/agent-skills/index.json`: `contact-request.url` now points at the live `#contacto` anchor instead of the dead `/contacto` route; removed 3 fake (empty-string) `sha256` fields; recomputed `product-information.sha256` against the frozen `llms.txt` content.
+  - `src/App.tsx`: removed 3 invalid `hrefLang` `<link>` tags (all pointed at the same URL — this site has no language-addressable URLs) and the dead `isContacto` branching (`useLocation`, conditional title/description, `Hero variant`); `pageTitle`/`pageDescription` are now module-level constants.
+  - `src/entry-client.tsx`: removed the unreachable `<Route path="/contacto">` (edge `vercel.json` redirect already handles `/contacto` before the SPA router ever sees it).
+  - `src/features/landing/presentation/components/Hero.tsx`: removed the now-unused `variant` prop (`HeroProps`), sole call site simplified to `<Hero />`.
+  - `src/features/landing/presentation/components/AboutPage.tsx`: fixed the JSON-LD `telephone` (NAP) — was `+34922123456`, now `+34 601 39 64 19`, matching `llms.txt` and `SeoSchema.tsx`.
+  - `src/WebMCP.ts`: `get_contact_info` (EN + ES) no longer hands agents the dead `/contacto` URL — now `/#contacto`.
+  - `scripts/prerender.mjs`: the top-level `.catch(console.error)` was a silent-failure bug — a rejected prerender logged an error but the process still exited 0, so a broken build could deploy undetected. Now exits non-zero on failure.
+
+### Added
+
+- **Generated sitemap (SDD `seo-geo-p0-fixes`)**: `dist/sitemap.xml` is now generated at build time from `scripts/site-routes.json` (single source of truth also consumed by `prerender.mjs` and `tests/unit/scripts/routeParity.test.ts`), replacing the hand-maintained `public/sitemap.xml` (which was missing `/tarjetas-nfc` and had no build-time verification). `lastmod` is an explicit, reviewed literal per route — never a fabricated build/git/mtime date — and is omitted entirely when unknown.
+  - `scripts/sitemap.mjs`: `buildSitemapXml`/`writeSitemap`, with 4 build guards (non-empty route table, artifact size + `<loc>` count, well-formed `<loc>`, prerender/sitemap set identity) that fail the build loudly instead of shipping a broken or empty sitemap.
+  - `tests/unit/scripts/routeParity.test.ts` (new): asserts `src/entry-server.tsx`'s `<Route>` set exactly matches `scripts/site-routes.json`, turning route/sitemap drift into a red build going forward.
+
+### Changed
+
+- **Landing refocused on two solutions (SDD `landing-two-solutions`)**: The home page (`/`) now presents exactly two solutions — Carta Digital Premium and Tarjetas NFC — as full scrollable sections merged in from the former `/carta-digital` and `/tap-review` pages, instead of linking out to 7 separate solution pages.
+  - `SOLUTIONS` (`src/shared/config/solutions.ts`) is now the single source of truth (2 entries), consumed by the Navbar dropdown, `Features.tsx` grid, `Contact.tsx` service `<select>`, `WebMCP.ts`, and the JSON-LD graph.
+  - Removed the `automation-n8n`, `whatsapp-automation`, `software-canarias`, and `digitalization-tenerife` features and routes entirely; QRIBAR (`qribar.es`) survives only as a secondary CTA link inside the Carta Digital Premium section.
+  - `/carta-digital`, `/tap-review`, `/servicios`, and the 4 retired solution routes now return real HTTP 301 redirects to `/` at the edge (`vercel.json`), with the pre-existing legacy short-URL redirects retargeted straight to `/` to avoid 301→301 chains.
+  - Consolidated all 3 FAQ sources (home, Carta Digital, Tap Review — 14 questions total) into one `HomeFaqSection`, emitting a single `FAQPage` JSON-LD node instead of three.
+  - Canonical URL, `og:url`, hreflang links, and the `WebPage` JSON-LD `@id` are now hardcoded to `https://digitalizatenerife.es/` instead of being derived from `location.pathname` (fixes the pre-existing `/contacto` self-canonical duplicate-content issue).
+  - Pruned 282 orphaned i18n keys (`Translation` interface + `es`/`en`) left behind by the removed pages/components.
+
+### Added
+
+- **TPV module visual redesign (SDD `digitaliza-tenerife-tpv-visual-redesign`)**: All 12 flat TPV module sections (`tpv-cobro`, `comandero-movil`, `kds-cocina`, `gestion-reservas`, `fichajes-control-horario`, `delivery-takeaway`, `stock-inventario`, `multi-iva-igic`, `rbac-roles`, `food-cost-avanzado`, `sistema-alergenos`, `compras-sialti`) now render a real self-hosted Unsplash photo (`public/assets/tpv/{id}.webp`, ≤150KB each) alongside a unique OKLCH accent colour, replacing the previous single hardcoded emerald icon colour shared by all 13 modules.
+  - `src/shared/config/accents.ts` (new): `AccentToken`/`AccentClass` types and `accentStyle()` set a single `--tpv-accent` CSS custom property per section, resolved entirely via `:root`/`.light` CSS (zero JS, no theme-detection branch, SSR-safe).
+  - `src/index.css`: +8 new `--color-icon-*` OKLCH tokens (coral, orange, lime, green, jade, cyan, indigo, magenta) defined in both `:root` and `.light`, plus `.tpv-accent-frame`/`.tpv-accent-chip` component classes.
+  - `src/shared/components/tpv/TpvModuleFigure.tsx` (new): eager, presentational photo component (`loading="lazy"`, `decoding="async"`, intrinsic `width`/`height`, aspect-ratio wrapper) mounted inside 12 of the 13 bespoke module sections.
+  - `TPV_MODULES[].iconColor` (`src/shared/config/tpvModules.ts`) is now per-module-unique across all 13 entries and drives both the section accent and the Navbar/Features consumers.
+  - "Pilares Tecnológicos" (`src/App.tsx`) gained 4 distinct lucide icons (`Workflow`, `Utensils`, `Monitor`, `Bot`) and 4 distinct accent colours (indigo, emerald, coral, magenta) — accent-only, no photos, per design scope.
+  - `tienda-carta-digital` stays accent-only (config token change only); its existing `CartaDigitalDemoSection` product-screenshot tree is untouched.
+  - Shipped as a 5-PR chain (foundation+pilot, then 3+4+4 modules, then Pilares/close-out); each PR's structural tests (`tests/unit/accentTokens.contrast.test.ts`, `tests/unit/tpvModuleFigures.structure.test.ts`) enforce token dark/light parity, ≥3:1 non-text contrast (WCAG 2.1 SC 1.4.11), config↔JSX accent-mirror consistency, and asset provenance (`public/assets/tpv/CREDITS.md`).
 - **GSC Indexing Fixes — 301 Redirects**: Added 6 permanent server-side redirects in `vercel.json` for English alias routes and old pages that caused "Redirect" and "Duplicate canonical" GSC issues
   - `/automation-n8n` → `/automatizacion-restaurantes-n8n`
   - `/whatsapp-automation` → `/automatizacion-whatsapp-restaurante`
@@ -105,6 +163,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Agent Readiness Score**: Improved from 32/100 to ~85/100 (projected)
 - **LLM Readability**: Added llms.txt for better AI agent content consumption
+
+### Added
+
+- **n8n delivery toggle in admin panel**: Added `n8nEnabled` checkbox to `SettingsPanel.tsx` (section "Integración n8n") letting the admin switch lead delivery between the n8n webhook and a direct email fallback at runtime, no redeploy required
+  - `src/features/admin/presentation/components/SettingsPanel.tsx`
+  - `src/features/admin/presentation/schemas/settingsSchema.ts`: `n8nEnabled: z.boolean()` + cross-field `superRefine` guard
+  - `src/features/admin/domain/entities/Settings.ts`, `ISettingsRepository.ts`, `SupabaseSettingsRepository.ts`, `UpdateSettingsUseCase.ts`, `src/shared/services/settingsService.ts`
+  - `supabase/migrations/20260810120000_add_n8n_enabled_to_app_settings.sql`: `app_settings.n8n_enabled boolean not null default false`
+- **`notify-lead` Edge Function**: New Supabase Edge Function that emails lead submissions via Brevo when `n8nEnabled` is `false`, using `contact_email` as the recipient and `BREVO_API_KEY` as a server-only secret
+  - `supabase/functions/notify-lead/index.ts`, `supabase/functions/notify-lead/_lib.ts`
+  - `src/features/landing/data/datasources/EmailNotifyDataSource.ts`, `src/features/landing/data/repositories/EmailLeadRepositoryImpl.ts`
+
+### Fixed
+
+- **Fake-success lead delivery bug**: `Contact.tsx` no longer substitutes a fabricated `https://placeholder-webhook-url.invalid` URL when `n8nWebhookUrl` is empty, and `N8NWebhookDataSource` no longer treats magic substrings (`placeholder`, `your_`, `.invalid`) as a valid URL — an unusable webhook URL now returns `false` (visible error) instead of a silent fake success and a lost lead
+  - `src/features/landing/presentation/components/Contact.tsx`
+  - `src/features/landing/data/datasources/N8NWebhookDataSource.ts`
+- **Stale `LandingContainer` singleton**: Replaced the memoized module-level singleton (`getLandingContainer`) with a pure factory (`createLandingContainer`), so the container is always rebuilt from the latest settings instead of caching the first ones it ever saw
+  - `src/features/landing/presentation/LandingContainer.ts`
+- **`SettingsPanel` save-error UX**: Fixed an existing bug where any error state (including a failed save, not just a failed load) replaced the entire settings form with a generic "failed to load" message, hiding the field the admin needed to fix. The panel now only shows the full-page error for an actual load failure and displays the specific error message (e.g. the n8n-toggle validation error) inline, with the form still visible
+  - `src/features/admin/presentation/components/SettingsPanel.tsx`
 
 ---
 

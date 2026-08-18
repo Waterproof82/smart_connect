@@ -7,7 +7,10 @@ on:
       - 'docs/**'
       - '*.md'
   pull_request:
-    branches: [ "main" ]
+    # Also validates chained/stacked PRs whose base is an intermediate
+    # feature branch (not main yet) — otherwise CI silently skips them
+    # until they're retargeted, which defeats the point of chaining.
+    branches: [ "main", "feat/**", "fix/**" ]
     paths-ignore:
       - 'docs/**'
       - '*.md'
@@ -22,10 +25,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       
       # 1. SETUP DE ENTORNO
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: '24'
           cache: 'npm'
@@ -53,6 +56,9 @@ jobs:
       
       - name: Type check
         run: npm run type-check
+
+      - name: Run tests
+        run: npm test
 
       # 5. ANÁLISIS DE SEGURIDAD (GATE)
       - name: Snyk Security Gate (PR)
@@ -98,6 +104,7 @@ jobs:
           echo "📊 WORKFLOW SUMMARY"
           echo "================================"
           echo "🧪 Lint & Type Check: ${{ needs.validate_and_build.result }}"
+          echo "✅ Tests (Jest):      ${{ needs.validate_and_build.result }}"
           echo "🛡️ Security (Snyk):   ${{ needs.validate_and_build.result }}"
           echo "🏗️ Build:             ${{ needs.validate_and_build.result }}"
           echo "================================"

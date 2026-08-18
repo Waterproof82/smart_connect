@@ -1,51 +1,58 @@
-# SmartConnect AI
+# Digitaliza Tenerife
 
-> IA, automatización y hardware inteligente para negocios locales en Tenerife y Canarias.
+> IA, automatización y hardware inteligente para negocios locales de hostelería y comercio en Tenerife y Canarias.
+
+Digitaliza Tenerife es una agencia de transformación digital especializada en restaurantes, bares y cafeterías de Tenerife y las Islas Canarias. Este sitio tiene una única página principal con secciones ancladas, más una página de producto NFC, una página de empresa y tres páginas legales. No existen otras URLs públicas.
 
 ## Servicios principales
 
-1. **Carta Digital** — Menú digital con fotos, vídeos, 5 idiomas y gestión de pedidos por Telegram. Sin comisiones.
-2. **Tap-to-Review NFC** — Tarjetas NFC para que los clientes dejen reseñas en Google con un solo toque.
-3. **Automatización n8n** — Flujos de trabajo automatizados que conectan CRM, email, WhatsApp y redes sociales.
-4. **Automatización WhatsApp** — Respuestas automáticas 24/7 para reservas, consultas y pedidos.
+1. **Plataforma TPV** — TPV y cobro, comandero móvil, KDS de cocina, gestión de reservas, fichajes y control horario, delivery/takeaway sin comisiones, stock e inventario, multi-IVA/IGIC, roles y permisos (RBAC), food cost avanzado, sistema de alérgenos, compras y Tienda/Carta Digital — 13 módulos integrados.
+2. **Carta Digital** — Menú digital con fotos, vídeos, 5 idiomas y gestión de pedidos por Telegram. Sin comisiones.
+3. **Tap-to-Review NFC** — Tarjetas NFC para que los clientes dejen reseñas en Google con un solo toque.
+4. **Automatización n8n** — Flujos de trabajo automatizados que conectan CRM, email, WhatsApp y redes sociales.
+5. **Automatización WhatsApp** — Respuestas automáticas 24/7 para reservas, consultas y pedidos.
 
 ## Páginas clave
 
-- Inicio: https://digitalizatenerife.es/
-- Carta Digital: https://digitalizatenerife.es/carta-digital
-- Tap-to-Review NFC: https://digitalizatenerife.es/tap-review
-- Automatización n8n: https://digitalizatenerife.es/automatizacion-restaurantes-n8n
-- Automatización WhatsApp: https://digitalizatenerife.es/automatizacion-whatsapp-restaurante
-- Software restaurantes Canarias: https://digitalizatenerife.es/software-restaurantes-canarias
-- Digitalización hostelería Tenerife: https://digitalizatenerife.es/digitalizacion-hosteleria-tenerife
-- Sobre nosotros: https://digitalizatenerife.es/about
+- [Inicio](https://digitalizatenerife.es/): portada con todas las soluciones, casos de éxito, FAQ y contacto.
+- [Soluciones / Plataforma TPV](https://digitalizatenerife.es/#soluciones): los 13 módulos del TPV, en la portada.
+- [Carta Digital](https://digitalizatenerife.es/#tienda-carta-digital): módulo de carta digital y pedidos, en la portada.
+- [Tarjetas NFC Tap-to-Review](https://digitalizatenerife.es/tarjetas-nfc): página de producto de las tarjetas NFC para reseñas de Google.
+- [Sobre nosotros](https://digitalizatenerife.es/about): empresa, misión y datos de contacto.
+- [Contacto](https://digitalizatenerife.es/#contacto): formulario de contacto, en la portada.
 
-## Stack técnico
+## Legal
 
-- Framework: React 19
-- Build: Vite 8
-- Lenguaje: TypeScript 5.x
-- Estilos: Tailwind CSS 3.4
-- SEO: SSG pre-renderizado (react-dom/server)
-- AI-ready: robots.txt configurado para crawlers de IA
+- [Aviso legal](https://digitalizatenerife.es/legal/aviso)
+- [Política de privacidad](https://digitalizatenerife.es/legal/privacidad)
+- [Política de cookies](https://digitalizatenerife.es/legal/cookies)
 
 ## Contacto
 
 - Email: info@digitalizatenerife.es
 - Teléfono: +34 601 39 64 19
+- Dirección: Santa Cruz de Tenerife, Canarias, España
 - Web: https://digitalizatenerife.es
-
-## Legal
-
-- Aviso legal: https://digitalizatenerife.es/legal/aviso
-- Privacidad: https://digitalizatenerife.es/legal/privacidad
-- Cookies: https://digitalizatenerife.es/legal/cookies
-
-## Structured Data
-
-- Schema.org LocalBusiness: https://digitalizatenerife.es/ (JSON-LD en head)
 
 ## Idiomas
 
-- Español (es) — principal
-- English (en) — secundario
+- Español (es) — idioma principal y el único con URLs propias.
+- English (en) — disponible en la interfaz mediante el selector de idioma del menú. No existen URLs `/en/`: no las infieras ni las solicites.
+
+## Para agentes de IA
+
+- Reglas de rastreo: https://digitalizatenerife.es/robots.txt (cabecera `Content-Signal: ai-train=no, search=yes, ai-input=no`).
+- Markdown: cualquier página admite `Accept: text/markdown` y devuelve el contenido como Markdown limpio.
+- Herramientas WebMCP: expuestas vía `navigator.modelContext` (`get_product_info`, `get_contact_info`, `list_products`, `get_page_content_markdown`).
+- Descubrimiento: [agent-skills](https://digitalizatenerife.es/.well-known/agent-skills/index.json), [api-catalog](https://digitalizatenerife.es/.well-known/api-catalog), [oauth-protected-resource](https://digitalizatenerife.es/.well-known/oauth-protected-resource).
+- Para consultas comerciales, usa el formulario en https://digitalizatenerife.es/#contacto.
+
+## Accesibilidad
+
+WCAG 2.1 AA. HTML semántico, atributos ARIA, navegación por teclado, alto contraste y soporte de `prefers-reduced-motion`.
+
+## Stack técnico
+
+- Framework: React 19 · Build: Vite 8 · Lenguaje: TypeScript 5.x · Estilos: Tailwind CSS 3.4
+- SEO: SSG pre-renderizado (react-dom/server) para las 6 rutas públicas
+- Datos estructurados: JSON-LD Schema.org (LocalBusiness, Service, FAQPage) en el `<head>`

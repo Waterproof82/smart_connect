@@ -20,16 +20,22 @@ const CartaDigitalDemoSection: React.FC<CartaDigitalDemoSectionProps> = ({
   const screens = [
     {
       image: "/assets/carta-digital-cliente.png",
+      width: 1157,
+      height: 906,
       label: t.cartaDemoScreen1Label,
       title: t.cartaDemoScreen1Title,
     },
     {
       image: "/assets/carta-digital-dashboard.png",
+      width: 1895,
+      height: 551,
       label: t.cartaDemoScreen2Label,
       title: t.cartaDemoScreen2Title,
     },
     {
       image: "/assets/carta-digital-pedidos.png",
+      width: 1702,
+      height: 887,
       label: t.cartaDemoScreen3Label,
       title: t.cartaDemoScreen3Title,
     },
@@ -61,6 +67,7 @@ const CartaDigitalDemoSection: React.FC<CartaDigitalDemoSectionProps> = ({
             />
             <div className="absolute bottom-4 left-4 z-20 flex items-center gap-2">
               <button
+                type="button"
                 onClick={onToggleVideo}
                 className="w-10 h-10 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center hover:bg-black/80 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
                 aria-label={isVideoPlaying ? "Pausar video" : "Reanudar video"}
@@ -81,9 +88,9 @@ const CartaDigitalDemoSection: React.FC<CartaDigitalDemoSectionProps> = ({
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 max-w-5xl mx-auto">
-          {screens.map((screen, idx) => (
+          {screens.map((screen) => (
             <div
-              key={idx}
+              key={screen.image}
               className="bg-[var(--color-surface)] rounded-2xl overflow-hidden border border-[var(--color-border)] hover:-translate-y-1 transition-all cursor-pointer"
             >
               <div className="px-3 py-2 bg-[var(--color-bg-alt)] flex items-center gap-1.5 border-b border-[var(--color-border)]">
@@ -105,6 +112,10 @@ const CartaDigitalDemoSection: React.FC<CartaDigitalDemoSectionProps> = ({
                   <img
                     src={screen.image}
                     alt=""
+                    width={screen.width}
+                    height={screen.height}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-contain hover:scale-[1.02] transition-transform pointer-events-none"
                   />
                 </button>

@@ -1,26 +1,19 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { writeSitemap } from "./sitemap.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const distDir = path.resolve(__dirname, "../dist");
 const templatePath = path.resolve(distDir, "index.html");
+const siteRoutesPath = path.resolve(__dirname, "site-routes.json");
 
-// Routes to prerender (public product pages only — NOT dashboard/admin)
-const routes = [
-  "/",
-  "/servicios",
-  "/carta-digital",
-  "/tap-review",
-  "/automatizacion-restaurantes-n8n",
-  "/automatizacion-whatsapp-restaurante",
-  "/software-restaurantes-canarias",
-  "/digitalizacion-hosteleria-tenerife",
-  "/about",
-  "/legal/aviso",
-  "/legal/privacidad",
-  "/legal/cookies",
-];
+// Single source of truth for the prerendered/sitemap route set — see
+// scripts/site-routes.json and design.md §1.2 (seo-geo-p0-fixes, PR#2).
+const { origin, routes: routeTable } = JSON.parse(
+  fs.readFileSync(siteRoutesPath, "utf-8"),
+);
+const routes = routeTable.map((route) => route.path);
 
 async function prerender() {
   if (!fs.existsSync(templatePath)) {
@@ -52,6 +45,7 @@ async function prerender() {
     process.exit(1);
   }
 
+  const renderedRoutes = [];
   for (const route of routes) {
     const { html: appHtml, head } = render(route);
 
@@ -67,9 +61,31 @@ async function prerender() {
     fs.mkdirSync(routeDir, { recursive: true });
     fs.writeFileSync(path.resolve(routeDir, "index.html"), result);
     console.log(`✅ Prerendered: ${route} → ${routeDir}/index.html`);
+    renderedRoutes.push(route);
   }
 
   console.log("\n🎉 SSG complete! Routes prerendered:", routes.join(", "));
+
+  // G4 — prerender/sitemap set identity. Trivially true today (both read
+  // routeTable), but this assertion keeps it true if either side is later
+  // filtered independently. See design.md §1.5.
+  const sitemapPaths = routeTable.map((route) => route.path);
+  const setsMatch =
+    renderedRoutes.length === sitemapPaths.length &&
+    renderedRoutes.every((r) => sitemapPaths.includes(r));
+  if (!setsMatch) {
+    throw new Error(
+      `sitemap: rendered route set does not match site-routes.json. Rendered: ${renderedRoutes.join(", ")}. Table: ${sitemapPaths.join(", ")}.`,
+    );
+  }
+
+  const sitemapPath = writeSitemap(distDir, origin, routeTable);
+  console.log(`🗺️  Sitemap written: ${sitemapPath}`);
 }
 
-prerender().catch(console.error);
+try {
+  await prerender();
+} catch (err) {
+  console.error(err);
+  process.exit(1);
+}

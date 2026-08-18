@@ -12,13 +12,32 @@ import {
   Loader2,
 } from "lucide-react";
 import { getAppSettings, AppSettings } from "@shared/services/settingsService";
-import { getLandingContainer } from "../LandingContainer";
+import { createLandingContainer } from "../LandingContainer";
 import { LeadEntity } from "../../domain/entities";
 import { sanitizeInput, isValidEmail } from "@shared/utils/sanitizer";
 import { rateLimiter, RateLimitPresets } from "@shared/utils/rateLimiter";
 import { contactSchema, ContactFormData } from "../schemas/contactSchema";
 import { useIntersectionObserver } from "@shared/hooks";
-import { useLanguage } from "@shared/context/LanguageContext";
+import { useLanguage, Translation } from "@shared/context/LanguageContext";
+import { SOLUTIONS } from "@shared/config/solutions";
+
+// Label translation key per solution id — the option `value` itself
+// (`serviceValue`) comes straight from SOLUTIONS so it never drifts from
+// the catalog. "Consultoría IA" is an evergreen catch-all option with no
+// dedicated solution page, so it's appended separately.
+const SERVICE_LABEL_KEY: Record<string, keyof Translation> = {
+  "carta-digital": "serviceCartaDigital",
+  "tarjetas-nfc": "serviceNFC",
+};
+
+const SERVICE_OPTIONS: Array<{ value: string; labelKey: keyof Translation }> =
+  [
+    ...SOLUTIONS.map((solution) => ({
+      value: solution.serviceValue,
+      labelKey: SERVICE_LABEL_KEY[solution.id],
+    })),
+    { value: "Consultoría IA", labelKey: "serviceConsultoria" as const },
+  ];
 
 const fieldClasses =
   "w-full border rounded-2xl py-3 sm:py-4 px-4 sm:px-6 outline-none transition-colors text-sm text-default bg-[var(--color-surface)] border-[var(--color-border)] focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--focus-ring)] min-h-[44px]";
@@ -142,9 +161,10 @@ export const Contact: React.FC = () => {
 
   const container = useMemo(() => {
     if (isLoadingSettings || !settings) return null;
-    const webhookUrl =
-      settings.n8nWebhookUrl || "https://placeholder-webhook-url.invalid";
-    return getLandingContainer(webhookUrl);
+    return createLandingContainer({
+      n8nEnabled: settings.n8nEnabled,
+      n8nWebhookUrl: settings.n8nWebhookUrl,
+    });
   }, [settings, isLoadingSettings]);
 
   const {
@@ -351,10 +371,10 @@ export const Contact: React.FC = () => {
                 id: "location",
                 icon: <MapPin className="w-6 h-6" />,
                 title: t.contactLocationTitle,
-                value: settings?.physicalAddress || "Madrid, España",
+                value: settings?.physicalAddress || "Santa Cruz de Tenerife, España",
                 desc: "Hub Tecnológico de Innovación",
                 color: "text-[var(--color-icon-purple)]",
-                href: `https://maps.google.com/?q=${encodeURIComponent(settings?.physicalAddress || "Madrid, España")}`,
+                href: `https://maps.google.com/?q=${encodeURIComponent(settings?.physicalAddress || "Santa Cruz de Tenerife, España")}`,
                 external: true,
               },
             ].map((item, idx) => {
@@ -556,21 +576,11 @@ export const Contact: React.FC = () => {
                       <option value="" className="text-muted">
                         {t.contactSelectOption}
                       </option>
-                      <option value="Carta Digital Premium">
-                        {t.serviceCartaDigital}
-                      </option>
-                      <option value="QRIBAR - Menú Digital">
-                        {t.serviceQribar}
-                      </option>
-                      <option value="Automatización n8n">
-                        {t.serviceAutomation}
-                      </option>
-                      <option value="Tarjetas NFC Reseñas">
-                        {t.serviceNFC}
-                      </option>
-                      <option value="Consultoría IA">
-                        {t.serviceConsultoria}
-                      </option>
+                      {SERVICE_OPTIONS.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {t[option.labelKey]}
+                        </option>
+                      ))}
                     </select>
                     <ChevronDown
                       aria-hidden="true"

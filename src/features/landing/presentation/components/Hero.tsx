@@ -8,31 +8,12 @@ import {
 } from "lucide-react";
 import { useLanguage } from "@shared/context/LanguageContext";
 
-interface HeroProps {
-  variant?: "home" | "servicios" | "contacto";
-}
-
-export const Hero: React.FC<HeroProps> = ({ variant = "home" }) => {
+export const Hero: React.FC = () => {
   const { t } = useLanguage();
 
-  const heroTitle =
-    variant === "servicios"
-      ? t.heroServiciosTitle
-      : variant === "contacto"
-        ? t.heroContactoTitle
-        : t.heroTitle;
-  const heroTitleAccent =
-    variant === "servicios"
-      ? t.heroServiciosTitleAccent
-      : variant === "contacto"
-        ? t.heroContactoTitleAccent
-        : t.heroTitleAccent;
-  const heroTitleEnd =
-    variant === "servicios"
-      ? t.heroServiciosTitleEnd
-      : variant === "contacto"
-        ? t.heroContactoTitleEnd
-        : t.heroTitleEnd;
+  const heroTitle = t.heroTitle;
+  const heroTitleAccent = t.heroTitleAccent;
+  const heroTitleEnd = t.heroTitleEnd;
 
   return (
     <div className="relative pt-32 pb-20 overflow-hidden min-h-[100dvh] flex items-center">
@@ -62,6 +43,7 @@ export const Hero: React.FC<HeroProps> = ({ variant = "home" }) => {
 
           <div className="reveal-3 flex flex-wrap gap-5">
             <button
+              type="button"
               onClick={() =>
                 document
                   .querySelector("#contacto")
@@ -73,6 +55,7 @@ export const Hero: React.FC<HeroProps> = ({ variant = "home" }) => {
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-150 ease-[var(--ease-out)]" />
             </button>
             <button
+              type="button"
               onClick={() =>
                 document
                   .querySelector("#soluciones")
@@ -111,7 +94,7 @@ export const Hero: React.FC<HeroProps> = ({ variant = "home" }) => {
               </div>
               <div>
                 <div className="text-3xl font-extrabold mb-1 text-default">
-                  {t.smartConnect}
+                  {t.brandName}
                 </div>
                 <div className="text-muted text-xs font-bold tracking-[0.2em] uppercase">
                   {t.enterpriseAINode}

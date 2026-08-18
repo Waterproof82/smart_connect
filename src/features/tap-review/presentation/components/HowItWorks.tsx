@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { useLanguage } from "@shared/context/LanguageContext";
 import { useIntersectionObserver } from "@shared/hooks";
 import { Smartphone, Star, Award } from "lucide-react";
-import DOMPurify from "dompurify";
+import { sanitizeInput } from "@shared/utils/sanitizer";
 import { HowToSchema } from "../../../../shared/presentation/components/SeoSchema";
 
 const HowItWorks: React.FC = () => {
@@ -19,18 +19,24 @@ const HowItWorks: React.FC = () => {
       title: t.tapReviewHowStep1Title,
       desc: t.tapReviewHowStep1Desc,
       image: "/assets/nfc/put_exibitor.webp",
+      width: 3200,
+      height: 3200,
     },
     {
       icon: <Star className="w-8 h-8" />,
       title: t.tapReviewHowStep2Title,
       desc: t.tapReviewHowStep2Desc,
       image: "/assets/nfc/place_device.jpg",
+      width: 868,
+      height: 1000,
     },
     {
       icon: <Award className="w-8 h-8" />,
       title: t.tapReviewHowStep3Title,
       desc: t.tapReviewHowStep3Desc,
       image: "/assets/nfc/review.webp",
+      width: 609,
+      height: 406,
     },
   ];
 
@@ -63,7 +69,7 @@ const HowItWorks: React.FC = () => {
           <div className="grid md:grid-cols-3 gap-8">
             {steps.map((step, idx) => (
               <div
-                key={idx}
+                key={step.image}
                 className={`relative p-8 bg-[var(--color-bg-alt)] rounded-3xl transition-all duration-700 ${
                   isVisible
                     ? "opacity-100 translate-y-0"
@@ -79,9 +85,9 @@ const HowItWorks: React.FC = () => {
                     {step.icon}
                   </div>
                   <h3 className="text-xl font-bold mb-3 text-default">
-                    {DOMPurify.sanitize(step.title)}
+                    {sanitizeInput(step.title)}
                   </h3>
-                  <p className="text-muted">{DOMPurify.sanitize(step.desc)}</p>
+                  <p className="text-muted">{sanitizeInput(step.desc)}</p>
                   <div className="mt-6 w-full h-48 bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 rounded-2xl flex items-center justify-center overflow-hidden p-2">
                     {imageErrors[idx] ? (
                       <div className="text-center p-4">
@@ -95,7 +101,11 @@ const HowItWorks: React.FC = () => {
                     ) : (
                       <img
                         src={step.image}
-                        alt={DOMPurify.sanitize(step.title)}
+                        alt={sanitizeInput(step.title)}
+                        width={step.width}
+                        height={step.height}
+                        loading="lazy"
+                        decoding="async"
                         className="w-full h-full object-contain drop-shadow-lg"
                         onError={() =>
                           setImageErrors((prev) => ({ ...prev, [idx]: true }))
