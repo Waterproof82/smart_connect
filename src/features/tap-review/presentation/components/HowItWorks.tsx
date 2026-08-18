@@ -69,7 +69,7 @@ const HowItWorks: React.FC = () => {
           <div className="grid md:grid-cols-3 gap-8">
             {steps.map((step, idx) => (
               <div
-                key={idx}
+                key={step.image}
                 className={`relative p-8 bg-[var(--color-bg-alt)] rounded-3xl transition-all duration-700 ${
                   isVisible
                     ? "opacity-100 translate-y-0"
