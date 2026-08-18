@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **Landing hero visual redesign — illustrative concept**: replaced the glassmorphism/glow-blob hero visual (`Hero.tsx`) with a flat, thick-outline illustration of a bar counter (QR tent card, order phone, NFC tap card, chatbot bubble) on a ticket-paper dot-field backdrop, using only existing brand tokens (`--color-accent`, `--color-icon-amber`, etc.) and the existing `.animate-float-fancy` motion utility — no new dependencies or design tokens. Left column copy/CTAs unchanged. Concept was mocked up and approved as an Artifact before implementation. Removed the now-unused `nfcActive`/`brandName`/`enterpriseAINode`/`aiCore`/`processing`/`uplinkStable` translation key usage from `Hero.tsx` (keys remain defined in `LanguageContext.tsx`, no longer referenced here). Extracted the dot-field backdrop into a reusable, SSR-safe `DotField` primitive (`src/shared/presentation/components/DotField/`, TDD'd) that `Hero.tsx` now consumes with byte-for-byte visual parity — first slice of SDD change `landing-illustrative-redesign`.
+
 ### Fixed
 
 - **SEO/GEO/AEO audit fixes (2026-08-17)**: verified an external Search Console + GEO/AEO audit's findings against the live site and source before changing anything (see `docs/audit/2026-08-17_seo-geo-aeo-audit-verification.md`). Several P0 items the audit flagged were already fixed by prior work (`/servicios` and `/tap-review` already 301-redirect in production, `/about` was already linked from the footer, `public/llms.txt` had no dead links) — those were left untouched. What was genuinely still live and fixed here:
