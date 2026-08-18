@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **`AboutPage.tsx` — fixed sitewide-theme-audit finding: page was entirely off the design-token system**: was hardcoded to `bg-base text-white` (forced-dark, no light-mode support) with `blue-400`/`blue-500`/`purple-400`/`white/NN` literals throughout, and hand-rolled its own logo-only `<nav>` instead of reusing the shared `Navbar` (the same reuse pattern already proven on `/tarjetas-nfc` and `/legal/*`). Swapped every literal for the existing token set (`text-default`/`text-muted`/`bg-base-alt`/`border-subtle`, `var(--color-primary)`, `var(--color-icon-blue)`/`var(--color-icon-purple)` for the headline gradient, `var(--color-accent-subtle)`/`var(--color-accent-border)` for the contact icon circles — same idiom as `Hero.tsx`'s eyebrow badge), replaced the duplicated `<nav>` with `<Navbar scrolled={true} />`, and fixed an unrelated dead-class bug (`text-white-60` → `text-muted`, missing the `/` so the class silently did nothing). `AboutPage`/`Organization` JSON-LD untouched. Single-file, mechanical change — see `docs/audit/2026-08-18_about-page-theme-fix.md`.
+
 ### Fixed
 
 - **SEO/GEO/AEO audit fixes (2026-08-17)**: verified an external Search Console + GEO/AEO audit's findings against the live site and source before changing anything (see `docs/audit/2026-08-17_seo-geo-aeo-audit-verification.md`). Several P0 items the audit flagged were already fixed by prior work (`/servicios` and `/tap-review` already 301-redirect in production, `/about` was already linked from the footer, `public/llms.txt` had no dead links) — those were left untouched. What was genuinely still live and fixed here:
