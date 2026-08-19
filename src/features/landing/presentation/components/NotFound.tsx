@@ -17,7 +17,7 @@ export const NotFound: React.FC = () => (
       <p className="text-muted text-lg mb-8">Página no encontrada</p>
       <Link
         to="/"
-        className="bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-[var(--color-on-accent)] px-8 py-3 rounded-xl font-bold transition-colors"
+        className="btn-primary"
       >
         Volver al inicio
       </Link>

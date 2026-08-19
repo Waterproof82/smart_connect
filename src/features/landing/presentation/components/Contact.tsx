@@ -203,13 +203,6 @@ export const Contact: React.FC = () => {
       return `${fieldClasses} ${validClasses}`;
     return fieldClasses;
   };
-  const getSubmitButtonClass = () => {
-    if (canSubmit) {
-      return "bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-[var(--color-on-accent)] shadow-lg shadow-[var(--color-accent)]/25 hover:shadow-xl hover:shadow-[var(--color-accent)]/30 hover:-translate-y-0.5 active:translate-y-0 active:shadow-md";
-    }
-    return "bg-[var(--color-overlay-medium)] text-muted cursor-not-allowed";
-  };
-
   const renderSubmitButtonContent = () => {
     if (isLoadingSettings)
       return (
@@ -661,7 +654,7 @@ export const Contact: React.FC = () => {
                 <button
                   type="submit"
                   disabled={!canSubmit}
-                  className={`w-full py-4 sm:py-5 px-6 rounded-2xl font-bold flex items-center justify-center gap-3 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] min-h-[44px] ${getSubmitButtonClass()}`}
+                  className="btn-primary w-full"
                 >
                   {renderSubmitButtonContent()}
                 </button>
