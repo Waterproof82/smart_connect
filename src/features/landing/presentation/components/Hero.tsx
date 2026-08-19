@@ -1,12 +1,7 @@
 import React from "react";
-import {
-  ArrowRight,
-  Play,
-  CheckCircle2,
-  Sparkles,
-  Volume2,
-} from "lucide-react";
+import { ArrowRight, Play } from "lucide-react";
 import { useLanguage } from "@shared/context/LanguageContext";
+import { DotField } from "@shared/presentation/components/DotField";
 
 export const Hero: React.FC = () => {
   const { t } = useLanguage();
@@ -17,11 +12,6 @@ export const Hero: React.FC = () => {
 
   return (
     <div className="relative pt-32 pb-20 overflow-hidden min-h-[100dvh] flex items-center">
-      <div
-        className="absolute top-1/4 right-0 w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-[var(--color-accent)]/10 blur-[150px] rounded-full -mr-48 animate-drift"
-        aria-hidden="true"
-      ></div>
-
       <div className="container mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center relative z-10">
         <div className="max-w-2xl">
           <div className="reveal-1 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--color-accent-subtle)] border border-[var(--color-accent-border)] text-[var(--color-primary)] text-xs font-bold mb-8 tracking-wider uppercase">
@@ -75,83 +65,135 @@ export const Hero: React.FC = () => {
           className="relative hidden lg:flex justify-center lg:justify-end reveal-1"
           aria-hidden="true"
         >
-          <div className="relative w-full max-w-md aspect-[3/4] bg-[var(--color-surface)] rounded-[3rem] p-10 border border-white/5 glow-blue shimmer animate-float-fancy shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
-            <div className="flex justify-between items-start mb-16">
-              <div className="w-12 h-12 bg-[var(--color-accent-subtle)] rounded-2xl flex items-center justify-center text-[var(--color-primary)]">
-                <Volume2 className="w-6 h-6" />
-              </div>
-              <div className="flex items-center gap-2 bg-[var(--color-success-bg)] border border-[var(--color-success-border)] px-4 py-1.5 rounded-full text-xs text-[var(--color-success-text)] font-extrabold tracking-widest uppercase">
-                <CheckCircle2 className="w-3.5 h-3.5" />
-                {t.nfcActive}
-              </div>
-            </div>
+          <div className="relative w-full max-w-md">
+            {/* Ticket-paper dot field, replaces the old blurred glow */}
+            <DotField className="absolute -inset-[8%] rounded-full" />
 
-            <div className="flex flex-col items-center text-center space-y-8">
-              <div className="relative">
-                <div className="relative w-20 h-20 bg-[var(--color-accent)] rounded-[1.5rem] flex items-center justify-center shadow-lg transform -rotate-6">
-                  <Sparkles className="text-[var(--color-on-accent)] w-10 h-10" />
-                </div>
-              </div>
-              <div>
-                <div className="text-3xl font-extrabold mb-1 text-default">
-                  {t.brandName}
-                </div>
-                <div className="text-muted text-xs font-bold tracking-[0.2em] uppercase">
-                  {t.enterpriseAINode}
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-20 space-y-5">
-              <div className="h-1.5 w-full bg-[var(--color-overlay-subtle)] rounded-full overflow-hidden">
-                <div className="h-full w-2/3 bg-[var(--color-accent)] rounded-full"></div>
-              </div>
-              <div className="flex justify-between text-xs text-muted tracking-widest uppercase font-medium">
-                <span className="flex items-center gap-1.5">
-                  <div className="w-1 h-1 bg-[var(--color-primary)] rounded-full"></div>
-                  ID: 8493-XJ
-                </span>
-                <span className="text-[var(--color-primary)]">
-                  Protocol v2.5
-                </span>
-              </div>
-            </div>
-
-            {/* Floating AI Core processing badge */}
-            <div
-              className="absolute -left-16 top-1/3 bg-[var(--color-accent)] border border-white/10 backdrop-blur-xl px-5 py-3 rounded-2xl flex items-center gap-3 shadow-[0_20px_50px_rgba(37,99,235,0.4),inset_0_1px_0_rgba(255,255,255,0.12)] animate-float-fancy"
-              style={{ animationDelay: "-2s" }}
+            {/* Illustrated bar counter: QR tent card, order phone, NFC tap, chatbot */}
+            <svg
+              viewBox="0 0 420 460"
+              className="relative w-full h-auto"
+              aria-hidden="true"
             >
-              <div className="w-7 h-7 bg-[var(--color-overlay-strong)] rounded-lg flex items-center justify-center shrink-0">
-                <Sparkles className="w-3.5 h-3.5 text-[var(--color-on-accent)]" />
-              </div>
-              <div className="flex flex-col">
-                <span className="text-[10px] font-black text-[var(--color-on-accent-muted)] uppercase tracking-tighter leading-none">
-                  {t.aiCore}
-                </span>
-                <span className="text-xs font-bold text-[var(--color-on-accent)] leading-tight mt-0.5">
-                  {t.processing}
-                </span>
-              </div>
-            </div>
+              <rect
+                x="10"
+                y="300"
+                width="400"
+                height="150"
+                rx="18"
+                fill="var(--color-surface)"
+                stroke="var(--color-border)"
+                strokeWidth="1.5"
+              />
+              <rect
+                x="10"
+                y="300"
+                width="400"
+                height="14"
+                rx="7"
+                fill="var(--color-accent)"
+              />
 
-            {/* Floating Uplink Stable indicator */}
-            <div
-              className="absolute -right-12 bottom-1/4 bg-[var(--color-surface)] border border-white/5 backdrop-blur-md p-3.5 rounded-2xl flex flex-col gap-1.5 shadow-[0_4px_20px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.06)] animate-float-fancy"
-              style={{ animationDelay: "-4s" }}
-            >
-              <div className="flex gap-1">
-                {[1, 2, 3].map((i) => (
-                  <div
-                    key={i}
-                    className="w-5 h-1 bg-[var(--color-primary)]/40 rounded-full"
+              {/* QR tent card */}
+              <g transform="rotate(-4 96 300)">
+                <g className="animate-float-fancy">
+                  <path
+                    d="M50 300 L96 210 L142 300 Z"
+                    fill="var(--color-bg)"
+                    stroke="var(--color-text)"
+                    strokeWidth="3"
+                    strokeLinejoin="round"
                   />
-                ))}
-              </div>
-              <span className="text-[9px] text-muted font-medium leading-none">
-                {t.uplinkStable}
-              </span>
-            </div>
+                  <g transform="translate(74,234)">
+                    <rect
+                      width="44"
+                      height="44"
+                      rx="4"
+                      fill="var(--color-bg)"
+                      stroke="var(--color-text)"
+                      strokeWidth="2.5"
+                    />
+                    <rect x="6" y="6" width="10" height="10" fill="var(--color-text)" />
+                    <rect x="28" y="6" width="10" height="10" fill="var(--color-text)" />
+                    <rect x="6" y="28" width="10" height="10" fill="var(--color-text)" />
+                    <rect x="20" y="20" width="6" height="6" fill="var(--color-text)" />
+                    <rect x="30" y="30" width="6" height="6" fill="var(--color-text)" />
+                  </g>
+                </g>
+              </g>
+
+              {/* Phone with order list */}
+              <g transform="rotate(2 230 300)">
+                <g className="animate-float-fancy" style={{ animationDelay: "-1.2s" }}>
+                  <rect
+                    x="182"
+                    y="150"
+                    width="96"
+                    height="170"
+                    rx="16"
+                    fill="var(--color-bg)"
+                    stroke="var(--color-text)"
+                    strokeWidth="3"
+                  />
+                  <rect x="192" y="168" width="76" height="8" rx="4" fill="var(--color-accent)" />
+                  <rect x="192" y="186" width="56" height="6" rx="3" fill="var(--color-border)" />
+                  <rect x="192" y="202" width="76" height="1.5" fill="var(--color-border)" />
+                  <rect x="192" y="212" width="50" height="6" rx="3" fill="var(--color-text-muted)" />
+                  <rect x="252" y="212" width="16" height="6" rx="3" fill="var(--color-icon-amber)" />
+                  <rect x="192" y="226" width="60" height="6" rx="3" fill="var(--color-text-muted)" />
+                  <rect x="252" y="226" width="16" height="6" rx="3" fill="var(--color-icon-amber)" />
+                  <rect x="192" y="240" width="46" height="6" rx="3" fill="var(--color-text-muted)" />
+                  <rect x="252" y="240" width="16" height="6" rx="3" fill="var(--color-icon-amber)" />
+                  <rect x="192" y="262" width="76" height="26" rx="8" fill="var(--color-accent)" />
+                  <rect x="212" y="272" width="36" height="6" rx="3" fill="var(--color-on-accent)" />
+                </g>
+              </g>
+
+              {/* NFC tap card */}
+              <g transform="rotate(6 336 300)">
+                <g className="animate-float-fancy" style={{ animationDelay: "-3s" }}>
+                  <rect
+                    x="300"
+                    y="252"
+                    width="72"
+                    height="46"
+                    rx="8"
+                    fill="var(--color-icon-amber)"
+                    transform="rotate(-8 336 275)"
+                  />
+                  <g transform="rotate(-8 336 275)">
+                    <path
+                      d="M312 264 a10 10 0 0 1 14 14"
+                      fill="none"
+                      stroke="var(--color-on-accent)"
+                      strokeWidth="2.4"
+                      strokeLinecap="round"
+                    />
+                    <path
+                      d="M316 268 a5 5 0 0 1 7 7"
+                      fill="none"
+                      stroke="var(--color-on-accent)"
+                      strokeWidth="2.4"
+                      strokeLinecap="round"
+                    />
+                    <circle cx="322" cy="279" r="2" fill="var(--color-on-accent)" />
+                  </g>
+                </g>
+              </g>
+
+              {/* Chatbot bubble */}
+              <g transform="rotate(-3 96 150)">
+                <g className="animate-float-fancy" style={{ animationDelay: "-2.1s" }}>
+                  <path
+                    d="M40 130 h96 a12 12 0 0 1 12 12 v40 a12 12 0 0 1 -12 12 h-58 l-20 18 4-18 h-22 a12 12 0 0 1 -12 -12 v-40 a12 12 0 0 1 12 -12 Z"
+                    fill="var(--color-accent)"
+                  />
+                  <circle cx="68" cy="164" r="4" fill="var(--color-on-accent)" />
+                  <circle cx="84" cy="164" r="4" fill="var(--color-on-accent)" />
+                  <circle cx="100" cy="164" r="4" fill="var(--color-on-accent)" />
+                </g>
+              </g>
+            </svg>
           </div>
         </div>
       </div>
