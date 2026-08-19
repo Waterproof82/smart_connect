@@ -51,14 +51,16 @@ const CartaDigitalHeroSection: React.FC<CartaDigitalHeroSectionProps> = ({
 
           <div className="flex flex-wrap gap-3 md:gap-4 justify-center mb-10 md:mb-16">
             <button
+              type="button"
               onClick={() => onScrollToSection("demo")}
-              className="px-6 md:px-8 py-3 md:py-4 rounded-xl bg-[var(--color-primary)] text-[var(--color-bg)] font-semibold text-sm tracking-wider uppercase hover:opacity-90 transition-all cursor-pointer border-none min-h-[44px]"
+              className="btn-primary text-sm tracking-wider uppercase"
             >
               {t.cartaHeroButtonDemo}
             </button>
             <button
+              type="button"
               onClick={() => onScrollToSection("dinero")}
-              className="px-6 md:px-8 py-3 md:py-4 rounded-xl bg-transparent text-default font-medium text-sm cursor-pointer border border-[var(--color-border)] hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] transition-all min-h-[44px]"
+              className="btn-secondary text-sm"
             >
               {t.cartaHeroButtonCalc}
             </button>

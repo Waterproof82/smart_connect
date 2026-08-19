@@ -64,13 +64,13 @@ export const TapReviewSection: React.FC<TapReviewSectionProps> = ({
                 }
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 bg-[var(--color-accent)] text-[var(--color-on-accent)] font-bold px-8 py-4 rounded-xl hover:bg-[var(--color-accent-hover)] transition-colors min-h-[48px]"
+                className="btn-primary"
               >
                 {t.tapReviewHeroBtnContact}
               </a>
               <a
                 href="#product"
-                className="inline-flex items-center justify-center gap-2 bg-[var(--color-surface)] text-default font-bold px-8 py-4 rounded-xl border border-[var(--color-border)] hover:bg-[var(--color-bg-alt)] transition-colors min-h-[48px]"
+                className="btn-secondary"
               >
                 {t.tapReviewHeroBtnProduct}
                 <ChevronDown className="w-4 h-4" />
