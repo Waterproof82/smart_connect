@@ -19,21 +19,21 @@ const CartaDigitalDemoSection: React.FC<CartaDigitalDemoSectionProps> = ({
 
   const screens = [
     {
-      image: "/assets/carta-digital-cliente.png",
+      image: "/assets/carta-digital-cliente.webp",
       width: 1157,
       height: 906,
       label: t.cartaDemoScreen1Label,
       title: t.cartaDemoScreen1Title,
     },
     {
-      image: "/assets/carta-digital-dashboard.png",
+      image: "/assets/carta-digital-dashboard.webp",
       width: 1895,
       height: 551,
       label: t.cartaDemoScreen2Label,
       title: t.cartaDemoScreen2Title,
     },
     {
-      image: "/assets/carta-digital-pedidos.png",
+      image: "/assets/carta-digital-pedidos.webp",
       width: 1702,
       height: 887,
       label: t.cartaDemoScreen3Label,

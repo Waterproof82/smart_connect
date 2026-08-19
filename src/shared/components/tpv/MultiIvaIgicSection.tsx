@@ -75,8 +75,8 @@ const MultiIvaIgicSection: React.FC<TpvModuleSectionProps> = ({
           <TpvModuleFigure
             src="/assets/tpv/multi-iva-igic.webp"
             alt={t.multiIvaIgicFigureAlt}
-            width={1400}
-            height={1050}
+            width={936}
+            height={702}
           />
         </div>
 

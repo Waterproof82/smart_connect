@@ -73,8 +73,8 @@ const StockInventarioSection: React.FC<TpvModuleSectionProps> = ({
           <TpvModuleFigure
             src="/assets/tpv/stock-inventario.webp"
             alt={t.stockInventarioFigureAlt}
-            width={1400}
-            height={1050}
+            width={936}
+            height={702}
           />
         </div>
 

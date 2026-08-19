@@ -74,8 +74,8 @@ const ComanderoMovilSection: React.FC<TpvModuleSectionProps> = ({
           <TpvModuleFigure
             src="/assets/tpv/comandero-movil.webp"
             alt={t.comanderoMovilFigureAlt}
-            width={1400}
-            height={1050}
+            width={936}
+            height={702}
           />
         </div>
 

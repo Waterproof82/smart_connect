@@ -72,8 +72,8 @@ const RbacRolesSection: React.FC<TpvModuleSectionProps> = ({
           <TpvModuleFigure
             src="/assets/tpv/rbac-roles.webp"
             alt={t.rbacRolesFigureAlt}
-            width={1400}
-            height={1050}
+            width={936}
+            height={702}
           />
         </div>
 
