@@ -1,50 +1,54 @@
 /**
- * Supabase Client - Real implementation
+ * Supabase Client — Async Chokepoint (U3: deferred load)
  *
  * Uses VITE_ prefixed env vars (safe to expose in the browser).
  * Edge Functions are called via supabase.functions.invoke().
  *
- * NOTE: The client is created lazily (first property access) to avoid crashing
- * during SSR prerender in CI/build environments where .env vars aren't available.
- * During prerender, `getAppSettings()` runs inside a useEffect — never at module
- * level — so the client is never actually accessed in SSR.
+ * This module deliberately has NO static, top-level import of
+ * `@supabase/supabase-js` — only a type-only import (erased at compile
+ * time, zero runtime edge). The SDK is fetched exclusively via the
+ * dynamic `import()` inside `loadClient()`, which only ever runs once a
+ * consumer actually calls `getSupabase()` (e.g. on first chat-widget
+ * open). This keeps `vendor-supabase` out of the landing page's initial
+ * entry/modulepreload graph.
+ *
+ * All 5 landing-reachable consumers (settingsService, NoOpSecurityLogger,
+ * EmailNotifyDataSource, the chatbot container, ExpertAssistantWithRAG)
+ * MUST use `getSupabase()`. Do NOT add a static `import { createClient }`
+ * here, and do NOT re-export a synchronous client from this file — that
+ * would pull `@supabase/supabase-js` back into the landing entry chunk.
+ * The `/admin`-only synchronous Proxy client lives in a SEPARATE module,
+ * `@shared/supabaseClientSync`, precisely to avoid that (admin is already
+ * its own `React.lazy()` chunk, so its static import stays isolated
+ * there — see that file's module doc for the full rationale).
  */
 
-import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@supabase/supabase-js";
+import { memoizeAsync } from "@shared/utils/memoizeAsync";
 
-let _client: SupabaseClient | null = null;
+async function loadClient(): Promise<SupabaseClient> {
+  const { createClient } = await import("@supabase/supabase-js");
 
-function getClient(): SupabaseClient {
-  if (!_client) {
-    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-    const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+  const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-    if (!supabaseUrl || !supabaseAnonKey) {
-      throw new Error(
-        "Missing Supabase credentials. Ensure VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are set in your .env file.",
-      );
-    }
-
-    _client = createClient(supabaseUrl, supabaseAnonKey);
+  if (!supabaseUrl || !supabaseAnonKey) {
+    throw new Error(
+      "Missing Supabase credentials. Ensure VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are set in your .env file.",
+    );
   }
-  return _client;
+
+  return createClient(supabaseUrl, supabaseAnonKey);
 }
 
 /**
- * Proxy-based lazy supabase client.
- * Defers createClient() until the first property access (e.g. supabase.from()).
- * All callers keep using `supabase.from(...)` as before — no refactoring needed.
+ * Returns a memoized Supabase client, resolving the dynamic import of
+ * `@supabase/supabase-js` on first call. A rejected import (offline, a
+ * stale chunk after deploy) is NOT cached — the next call retries the
+ * import from scratch instead of permanently bricking every consumer.
+ * See `@shared/utils/memoizeAsync` for the underlying, fully-tested
+ * memoize/retry mechanics.
  */
-export const supabase = new Proxy<SupabaseClient>({} as SupabaseClient, {
-  get(_, prop) {
-    const client = getClient();
-    if (prop === "then") return undefined; // not a promise
-    const value = (client as unknown as Record<string, unknown>)[
-      prop as string
-    ];
-    if (typeof value === "function") return value.bind(client);
-    return value;
-  },
-});
+export const getSupabase = memoizeAsync(loadClient);
 
 export type { SupabaseClient } from "@supabase/supabase-js";

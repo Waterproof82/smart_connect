@@ -6,7 +6,7 @@
  * Implementación del repositorio de settings usando Supabase.
  */
 
-import { supabase } from "@shared/supabaseClient";
+import { supabase } from "@shared/supabaseClientSync";
 import {
   ISettingsRepository,
   SettingsUpdateInput,

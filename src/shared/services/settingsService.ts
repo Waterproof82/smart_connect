@@ -5,7 +5,7 @@
  * Used by Landing page to display dynamic contact information.
  */
 
-import { supabase } from "@shared/supabaseClient";
+import { getSupabase } from "@shared/supabaseClient";
 
 export interface AppSettings {
   n8nWebhookUrl: string;
@@ -20,6 +20,7 @@ export interface AppSettings {
  */
 export async function getAppSettings(): Promise<AppSettings> {
   try {
+    const supabase = await getSupabase();
     const { data, error } = await supabase
       .from("app_settings")
       .select("*")
