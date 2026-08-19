@@ -52,12 +52,16 @@ const ProductGallery: React.FC = () => {
               <img
                 src={product.fallback}
                 alt={product.alt}
+                width="640"
+                height="640"
                 className="w-3/4 h-3/4 object-contain drop-shadow-2xl"
               />
             ) : (
               <img
                 src={product.image}
                 alt={product.alt}
+                width="640"
+                height="640"
                 className="w-3/4 h-3/4 object-contain drop-shadow-2xl"
                 onError={() =>
                   setImageErrors((prev) => ({ ...prev, [idx]: true }))
@@ -82,6 +86,8 @@ const ProductGallery: React.FC = () => {
             <img
               src={imageErrors[idx] ? product.fallback : product.image}
               alt={product.alt}
+              width="640"
+              height="640"
               className="w-full h-full object-cover"
               onError={() =>
                 setImageErrors((prev) => ({ ...prev, [idx]: true }))

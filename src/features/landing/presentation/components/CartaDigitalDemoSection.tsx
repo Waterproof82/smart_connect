@@ -6,7 +6,7 @@ interface CartaDigitalDemoSectionProps {
   videoRef: RefObject<HTMLVideoElement>;
   isVideoPlaying: boolean;
   onToggleVideo: () => void;
-  onOpenLightbox: (image: string) => void;
+  onOpenLightbox: (image: string, width: number, height: number) => void;
 }
 
 const CartaDigitalDemoSection: React.FC<CartaDigitalDemoSectionProps> = ({
@@ -119,7 +119,9 @@ const CartaDigitalDemoSection: React.FC<CartaDigitalDemoSectionProps> = ({
                   type="button"
                   aria-label="Ampliar imagen"
                   className="absolute inset-0 w-full h-full cursor-pointer"
-                  onClick={() => onOpenLightbox(screen.image)}
+                  onClick={() =>
+                    onOpenLightbox(screen.image, screen.width, screen.height)
+                  }
                 >
                   <img
                     src={screen.image}
