@@ -236,6 +236,54 @@ describe("scripts/critical-css.mjs — deferStylesheetLink", () => {
   });
 });
 
+describe("scripts/prerender.mjs — critical CSS wiring (PR 2 of 2, design.md §Data Flow)", () => {
+  const readPrerenderSource = () =>
+    fs.readFileSync(path.join(SCRIPTS_DIR, "prerender.mjs"), "utf-8");
+
+  it("imports critical-css.mjs's exports", () => {
+    const source = readPrerenderSource();
+    expect(source).toMatch(
+      /from\s+["']\.\/critical-css\.mjs["']/,
+    );
+    expect(source).toMatch(/buildProbeDocument/);
+    expect(source).toMatch(/extractCriticalCss/);
+    expect(source).toMatch(/collectThemeTokenCss/);
+    expect(source).toMatch(/deferStylesheetLink/);
+    expect(source).toMatch(/assertBodyUnchanged/);
+  });
+
+  it("supports a CRITICAL_CSS=0 kill-switch that guards the head pass", () => {
+    const source = readPrerenderSource();
+    expect(source).toMatch(/process\.env\.CRITICAL_CSS/);
+  });
+
+  it("writes _spa.html BEFORE the per-route loop and never re-touches it afterwards", () => {
+    const source = readPrerenderSource();
+    const spaWriteIndex = source.indexOf("_spa.html");
+    const loopIndex = source.indexOf("for (const route of routes)");
+    expect(spaWriteIndex).toBeGreaterThan(-1);
+    expect(loopIndex).toBeGreaterThan(-1);
+    expect(spaWriteIndex).toBeLessThan(loopIndex);
+    // No reference to _spa.html anywhere at/after the per-route loop — the
+    // critical-CSS head pass (inside the loop) must never touch it.
+    expect(source.indexOf("_spa.html", loopIndex)).toBe(-1);
+  });
+
+  it("the outlet + helmet replacement still precedes the critical-CSS head pass", () => {
+    const source = readPrerenderSource();
+    const outletIndex = source.indexOf("<!--ssr-outlet-->", source.indexOf("for (const route of routes)"));
+    const criticalCallIndex = source.indexOf("extractCriticalCss(");
+    expect(outletIndex).toBeGreaterThan(-1);
+    expect(criticalCallIndex).toBeGreaterThan(-1);
+    expect(outletIndex).toBeLessThan(criticalCallIndex);
+  });
+
+  it("calls assertBodyUnchanged as a build-time self-check inside the head pass", () => {
+    const source = readPrerenderSource();
+    expect(source).toMatch(/assertBodyUnchanged\(/);
+  });
+});
+
 describe("scripts/critical-css.mjs — assertBodyUnchanged", () => {
   const BASE_HTML = `<!doctype html><html><head><title>x</title></head><body class="bg-sc-dark"><div id="root"><!--$--><main>Hello</main><!--/$--></div><script defer type="module" src="/src/entry-client.tsx"></script></body></html>`;
 
