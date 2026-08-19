@@ -59,6 +59,7 @@
     "@vitejs/plugin-react": "^6.0.5",
     "autoprefixer": "^10.5.4",
     "babel-jest": "^30.4.1",
+    "beasties": "^0.4.3",
     "cross-env": "^10.1.0",
     "cross-fetch": "^4.1.0",
     "dompurify": "^3.4.13",
