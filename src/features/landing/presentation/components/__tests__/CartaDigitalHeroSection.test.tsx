@@ -15,6 +15,12 @@ describe("CartaDigitalHeroSection", () => {
     expect(() => renderWithLanguage()).not.toThrow();
   });
 
+  it("renders a lucide MapPin icon instead of the 📍 emoji prefix", () => {
+    const { container } = renderWithLanguage();
+    expect(container.textContent).not.toMatch(/📍/);
+    expect(container.querySelector("svg")).not.toBeNull();
+  });
+
   it("renders the primary CTA (demo) button with btn-primary and type=button", () => {
     renderWithLanguage();
     const button = screen.getByRole("button", { name: /Ver cómo funciona/i });

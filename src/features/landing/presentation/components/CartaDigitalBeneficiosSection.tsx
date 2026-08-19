@@ -1,4 +1,13 @@
 import React from "react";
+import {
+  UtensilsCrossed,
+  Languages,
+  Coins,
+  UserCheck,
+  MessageCircle,
+  Globe,
+  Settings,
+} from "lucide-react";
 import { useLanguage } from "@shared/context/LanguageContext";
 
 const CartaDigitalBeneficiosSection: React.FC = () => {
@@ -7,49 +16,49 @@ const CartaDigitalBeneficiosSection: React.FC = () => {
   const beneficios = [
     {
       num: "01",
-      icon: "🍽️",
+      icon: <UtensilsCrossed className="w-full h-full" aria-hidden="true" />,
       title: t.cartaBeneficio1Title,
       desc: t.cartaBeneficio1Desc,
       tag: t.cartaBeneficio1Tag,
     },
     {
       num: "02",
-      icon: "🌍",
+      icon: <Languages className="w-full h-full" aria-hidden="true" />,
       title: t.cartaBeneficio2Title,
       desc: t.cartaBeneficio2Desc,
       tag: t.cartaBeneficio2Tag,
     },
     {
       num: "03",
-      icon: "💰",
+      icon: <Coins className="w-full h-full" aria-hidden="true" />,
       title: t.cartaBeneficio3Title,
       desc: t.cartaBeneficio3Desc,
       tag: t.cartaBeneficio3Tag,
     },
     {
       num: "04",
-      icon: "👤",
+      icon: <UserCheck className="w-full h-full" aria-hidden="true" />,
       title: t.cartaBeneficio4Title,
       desc: t.cartaBeneficio4Desc,
       tag: t.cartaBeneficio4Tag,
     },
     {
       num: "05",
-      icon: "💬",
+      icon: <MessageCircle className="w-full h-full" aria-hidden="true" />,
       title: t.cartaBeneficio5Title,
       desc: t.cartaBeneficio5Desc,
       tag: t.cartaBeneficio5Tag,
     },
     {
       num: "06",
-      icon: "🌐",
+      icon: <Globe className="w-full h-full" aria-hidden="true" />,
       title: t.cartaBeneficio6Title,
       desc: t.cartaBeneficio6Desc,
       tag: t.cartaBeneficio6Tag,
     },
     {
       num: "07",
-      icon: "⚙️",
+      icon: <Settings className="w-full h-full" aria-hidden="true" />,
       title: t.cartaBeneficio7Title,
       desc: t.cartaBeneficio7Desc,
       tag: t.cartaBeneficio7Tag,
@@ -75,7 +84,11 @@ const CartaDigitalBeneficiosSection: React.FC = () => {
 
           <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 list-none">
             {beneficios.map((item) => (
-              <li key={item.num} className={item.fullWidth ? "md:col-span-2" : ""}>
+              <li
+                key={item.num}
+                data-testid="beneficio-item"
+                className={item.fullWidth ? "md:col-span-2" : ""}
+              >
               <div
                 className={`bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-5 md:p-6 flex gap-4 md:gap-5 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200`}
               >
@@ -84,7 +97,7 @@ const CartaDigitalBeneficiosSection: React.FC = () => {
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start gap-3 md:gap-4">
-                    <div className="text-2xl md:text-3xl flex-shrink-0 mt-1">
+                    <div className="w-6 h-6 md:w-7 md:h-7 flex-shrink-0 mt-1 text-[var(--color-primary)]">
                       {item.icon}
                     </div>
                     <div className="flex-1 min-w-0">
