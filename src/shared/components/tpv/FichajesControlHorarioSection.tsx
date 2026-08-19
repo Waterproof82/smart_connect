@@ -73,8 +73,8 @@ const FichajesControlHorarioSection: React.FC<TpvModuleSectionProps> = ({
           <TpvModuleFigure
             src="/assets/tpv/fichajes-control-horario.webp"
             alt={t.fichajesFigureAlt}
-            width={1400}
-            height={1050}
+            width={936}
+            height={702}
           />
         </div>
 

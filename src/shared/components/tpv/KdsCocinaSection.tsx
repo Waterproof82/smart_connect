@@ -72,8 +72,8 @@ const KdsCocinaSection: React.FC<TpvModuleSectionProps> = ({
           <TpvModuleFigure
             src="/assets/tpv/kds-cocina.webp"
             alt={t.kdsCocinaFigureAlt}
-            width={1400}
-            height={1050}
+            width={936}
+            height={702}
           />
         </div>
 

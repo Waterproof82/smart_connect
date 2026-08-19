@@ -87,8 +87,8 @@ const SistemaAlergenosSection: React.FC<TpvModuleSectionProps> = ({
           <TpvModuleFigure
             src="/assets/tpv/sistema-alergenos.webp"
             alt={t.sistemaAlergenosFigureAlt}
-            width={1400}
-            height={1050}
+            width={936}
+            height={702}
           />
         </div>
 

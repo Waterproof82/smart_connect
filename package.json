@@ -15,7 +15,8 @@
     "test": "jest --config=jest.config.js",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "test:vitest": "vitest"
+    "test:vitest": "vitest",
+    "optimize:images": "node scripts/optimize-images.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",
@@ -74,6 +75,7 @@
     "jsdom": "^29.1.1",
     "postcss": "^8.5.26",
     "prettier": "^3.9.6",
+    "sharp": "^0.35.3",
     "tailwindcss": "^4.3.0",
     "ts-jest": "^29.4.12",
     "typescript": "^5.2.2",
