@@ -1,4 +1,5 @@
 import React from "react";
+import { Timer, Megaphone, TrendingUp } from "lucide-react";
 import { useLanguage } from "@shared/context/LanguageContext";
 
 const CartaDigitalAntidesperdicioSection: React.FC = () => {
@@ -6,17 +7,17 @@ const CartaDigitalAntidesperdicioSection: React.FC = () => {
 
   const features = [
     {
-      icon: "⏱️",
+      icon: <Timer className="w-6 h-6" aria-hidden="true" />,
       title: t.cartaAntidesperdicioFeature1Title,
       desc: t.cartaAntidesperdicioFeature1Desc,
     },
     {
-      icon: "📣",
+      icon: <Megaphone className="w-6 h-6" aria-hidden="true" />,
       title: t.cartaAntidesperdicioFeature2Title,
       desc: t.cartaAntidesperdicioFeature2Desc,
     },
     {
-      icon: "📈",
+      icon: <TrendingUp className="w-6 h-6" aria-hidden="true" />,
       title: t.cartaAntidesperdicioFeature3Title,
       desc: t.cartaAntidesperdicioFeature3Desc,
     },
@@ -45,7 +46,9 @@ const CartaDigitalAntidesperdicioSection: React.FC = () => {
                 data-testid="antidesperdicio-feature"
                 className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-5 md:p-6 flex gap-4 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200"
               >
-                <div className="text-2xl flex-shrink-0 mt-1">{feature.icon}</div>
+                <div className="flex-shrink-0 mt-1 text-[var(--color-primary)]">
+                  {feature.icon}
+                </div>
                 <div>
                   <div className="font-bold text-base md:text-lg mb-1">
                     {feature.title}

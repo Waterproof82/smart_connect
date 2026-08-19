@@ -161,9 +161,10 @@ const CartaDigitalDineroSection: React.FC = () => {
             <span className="text-sm md:text-base font-semibold text-[var(--color-success-text)]">
               {t.cartaDineroGrowthLabel}
             </span>
-            <span className="text-2xl font-black text-[var(--color-success-text)] font-display">
-              📈
-            </span>
+            <TrendingUp
+              className="w-6 h-6 text-[var(--color-success-text)]"
+              aria-hidden="true"
+            />
           </div>
         </div>
       </div>

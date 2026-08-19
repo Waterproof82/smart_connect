@@ -1,4 +1,5 @@
 import React from "react";
+import { MapPin } from "lucide-react";
 import { useLanguage } from "@shared/context/LanguageContext";
 
 interface CartaDigitalHeroSectionProps {
@@ -31,8 +32,9 @@ const CartaDigitalHeroSection: React.FC<CartaDigitalHeroSectionProps> = ({
           <div className="inline-block text-xs font-semibold tracking-[0.25em] text-[var(--color-primary)] uppercase border border-[var(--color-accent-border)] px-4 py-2 rounded-full mb-6 md:mb-8">
             {t.cartaHeroEyebrow}
           </div>
-          <div className="text-sm md:text-base text-muted font-medium mb-4">
-            📍 {t.cartaHeroTenerife}
+          <div className="flex items-center justify-center gap-1.5 text-sm md:text-base text-muted font-medium mb-4">
+            <MapPin className="w-4 h-4 shrink-0" aria-hidden="true" />
+            {t.cartaHeroTenerife}
           </div>
 
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black leading-[1.1] mb-4 md:mb-6 font-display">

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **Replaced emoji-as-icon with real `lucide-react` icons across the Carta Digital page (sitewide-theme-audit follow-up)**: 6 files (`CartaDigitalAntidesperdicioSection`, `CartaDigitalBeneficiosSection`, `CartaDigitalDineroSection`, `CartaDigitalHeroSection`, `CartaDigitalModosSection`, `CartaDigitalTelegramSection`) used raw emoji characters (⏱️📣📈🍽️🌍💰👤💬🌐⚙️📍🛒📱👥✅) as feature icons — inconsistent with every other section on the site, which uses `lucide-react`. Mapped each emoji to a semantically equivalent icon (e.g. ⏱️→`Timer`, 💰→`Coins`, 📍→`MapPin`, full mapping in the audit log) and applied a single `text-[var(--color-primary)]` accent, matching the existing icon-badge idiom used by `Hero.tsx` and `AboutPage.tsx`. The ★ rating string in `SuccessStats.tsx` and the ✓ checkmark bullets in `CartaDigitalModosSection.tsx` were left untouched — those are decorative glyphs, not icon-concept replacements. See `docs/audit/2026-08-19_carta-digital-icon-system.md`.
+
 ### Fixed
 
 - **SEO/GEO/AEO audit fixes (2026-08-17)**: verified an external Search Console + GEO/AEO audit's findings against the live site and source before changing anything (see `docs/audit/2026-08-17_seo-geo-aeo-audit-verification.md`). Several P0 items the audit flagged were already fixed by prior work (`/servicios` and `/tap-review` already 301-redirect in production, `/about` was already linked from the footer, `public/llms.txt` had no dead links) — those were left untouched. What was genuinely still live and fixed here:
