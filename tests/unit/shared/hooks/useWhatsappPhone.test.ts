@@ -1,7 +1,7 @@
 jest.mock("@shared/supabaseClient", () => ({
-  supabase: {
+  getSupabase: jest.fn().mockResolvedValue({
     from: jest.fn(),
-  },
+  }),
 }));
 
 import { sanitizeWhatsappPhone } from "@shared/hooks/useWhatsappPhone";

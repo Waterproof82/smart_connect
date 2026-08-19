@@ -22,7 +22,7 @@ function createChain(result: { data: Record<string, unknown> | null; error: { co
 
 const mockFrom = jest.fn();
 
-jest.mock('@shared/supabaseClient', () => ({
+jest.mock('@shared/supabaseClientSync', () => ({
   supabase: {
     from: (...args: unknown[]) => mockFrom(...args),
   },

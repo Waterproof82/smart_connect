@@ -6,7 +6,7 @@
  * Implementación del repositorio de documentos usando Supabase.
  */
 
-import { supabase } from "@shared/supabaseClient";
+import { supabase } from "@shared/supabaseClientSync";
 import { ENV } from "@shared/config/env.config";
 import {
   IDocumentRepository,
