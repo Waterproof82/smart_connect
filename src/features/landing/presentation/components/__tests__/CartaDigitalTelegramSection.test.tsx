@@ -42,4 +42,17 @@ describe("CartaDigitalTelegramSection", () => {
     expect(screen.getByText(/Respuesta con un botón/i)).toBeInTheDocument();
     expect(screen.getByText(/Camarero en mesa desde el móvil/i)).toBeInTheDocument();
   });
+
+  it("renders a lucide svg icon (not an emoji) inside each feature item", () => {
+    const { container } = renderWithLanguage();
+    const items = container.querySelectorAll("[data-testid='telegram-feature']");
+    items.forEach((item) => {
+      expect(item.querySelector("svg")).not.toBeNull();
+    });
+  });
+
+  it("no longer contains the legacy emoji icons", () => {
+    const { container } = renderWithLanguage();
+    expect(container.textContent).not.toMatch(/📱|👥|✅|🍽️/);
+  });
 });

@@ -38,10 +38,11 @@ export const ChatInput: React.FC<ChatInputProps> = ({
         disabled={disabled}
       />
       <button
+        type="button"
         onClick={onSend}
         disabled={disabled || !value.trim()}
         aria-label="Enviar mensaje"
-        className="w-11 h-11 bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] disabled:opacity-50 disabled:cursor-not-allowed rounded-xl flex items-center justify-center transition-colors shrink-0"
+        className="w-11 h-11 bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg)] disabled:opacity-50 disabled:cursor-not-allowed rounded-xl flex items-center justify-center transition-colors shrink-0"
       >
         <Send className="w-4 h-4 text-[var(--color-on-accent)]" />
       </button>

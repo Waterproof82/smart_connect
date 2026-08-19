@@ -20,6 +20,7 @@ import { contactSchema, ContactFormData } from "../schemas/contactSchema";
 import { useIntersectionObserver } from "@shared/hooks";
 import { useLanguage, Translation } from "@shared/context/LanguageContext";
 import { SOLUTIONS } from "@shared/config/solutions";
+import { DotField } from "@shared/presentation/components/DotField";
 
 // Label translation key per solution id — the option `value` itself
 // (`serviceValue`) comes straight from SOLUTIONS so it never drifts from
@@ -203,13 +204,6 @@ export const Contact: React.FC = () => {
       return `${fieldClasses} ${validClasses}`;
     return fieldClasses;
   };
-  const getSubmitButtonClass = () => {
-    if (canSubmit) {
-      return "bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-[var(--color-on-accent)] shadow-lg shadow-[var(--color-accent)]/25 hover:shadow-xl hover:shadow-[var(--color-accent)]/30 hover:-translate-y-0.5 active:translate-y-0 active:shadow-md";
-    }
-    return "bg-[var(--color-overlay-medium)] text-muted cursor-not-allowed";
-  };
-
   const renderSubmitButtonContent = () => {
     if (isLoadingSettings)
       return (
@@ -314,7 +308,10 @@ export const Contact: React.FC = () => {
 
   return (
     <div className="relative py-24 overflow-hidden" ref={sectionRef}>
-      <div className="absolute top-1/2 left-0 w-[200px] h-[200px] bg-[var(--color-accent)]/10 rounded-full -translate-y-1/2 -ml-16"></div>
+      <DotField
+        className="absolute top-1/2 left-0 w-[240px] h-[240px] -translate-y-1/2 -ml-16"
+        mask="radial-gradient(circle at 50% 50%, black 45%, transparent 75%)"
+      />
 
       <div className="container mx-auto px-6 relative z-10">
         <div
@@ -661,7 +658,7 @@ export const Contact: React.FC = () => {
                 <button
                   type="submit"
                   disabled={!canSubmit}
-                  className={`w-full py-4 sm:py-5 px-6 rounded-2xl font-bold flex items-center justify-center gap-3 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] min-h-[44px] ${getSubmitButtonClass()}`}
+                  className="btn-primary w-full"
                 >
                   {renderSubmitButtonContent()}
                 </button>

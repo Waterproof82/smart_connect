@@ -41,4 +41,19 @@ describe("CartaDigitalAntidesperdicioSection", () => {
     expect(screen.getByText(/Notificación a clientes frecuentes/i)).toBeInTheDocument();
     expect(screen.getByText(/Menos pérdidas, más margen/i)).toBeInTheDocument();
   });
+
+  it("renders a lucide svg icon (not an emoji) inside each feature item", () => {
+    const { container } = renderWithLanguage();
+    const items = container.querySelectorAll(
+      "[data-testid='antidesperdicio-feature']",
+    );
+    items.forEach((item) => {
+      expect(item.querySelector("svg")).not.toBeNull();
+    });
+  });
+
+  it("no longer contains the legacy emoji icons", () => {
+    const { container } = renderWithLanguage();
+    expect(container.textContent).not.toMatch(/⏱️|📣|📈/);
+  });
 });

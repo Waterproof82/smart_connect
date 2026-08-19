@@ -41,4 +41,17 @@ describe("CartaDigitalModosSection", () => {
     expect(screen.getByText(/Pedidos en mesa vía QR \+ Telegram/i)).toBeInTheDocument();
     expect(screen.getByText(/Pedidos online con gestión de clientes/i)).toBeInTheDocument();
   });
+
+  it("renders a lucide svg icon (not an emoji) inside each mode card", () => {
+    const { container } = renderWithLanguage();
+    const cards = container.querySelectorAll("[data-testid='modo-card']");
+    cards.forEach((card) => {
+      expect(card.querySelector("svg")).not.toBeNull();
+    });
+  });
+
+  it("no longer contains the legacy emoji icons", () => {
+    const { container } = renderWithLanguage();
+    expect(container.textContent).not.toMatch(/🍽️|🛒/);
+  });
 });

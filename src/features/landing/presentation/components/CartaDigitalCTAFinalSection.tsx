@@ -21,7 +21,7 @@ const CartaDigitalCTAFinalSection: React.FC<
       className="py-16 md:py-24"
       style={{
         background:
-          "radial-gradient(ellipse at 50% 50%, rgba(201,168,76,0.12) 0%, transparent 70%), var(--color-bg)",
+          "radial-gradient(ellipse at 50% 50%, color-mix(in oklch, var(--color-primary) 10%, transparent) 0%, transparent 70%), var(--color-bg)",
       }}
     >
       <div className="container mx-auto px-4 md:px-6">
@@ -41,7 +41,7 @@ const CartaDigitalCTAFinalSection: React.FC<
               href={waLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="px-6 md:px-10 py-3 md:py-4 rounded-xl bg-[var(--color-primary)] text-[var(--color-bg)] font-bold text-sm tracking-wider uppercase hover:opacity-90 transition-all cursor-pointer border-none min-h-[48px] inline-flex items-center justify-center gap-2 no-underline"
+              className="btn-primary text-sm tracking-wider uppercase"
             >
               <MessageSquare size={18} />
               {t.cartaCTABtnDemo}
@@ -50,7 +50,7 @@ const CartaDigitalCTAFinalSection: React.FC<
               href={waLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="px-6 md:px-10 py-3 md:py-4 rounded-xl bg-transparent text-default font-medium text-sm cursor-pointer border border-[var(--color-border)] hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] transition-all min-h-[48px] flex items-center gap-2 no-underline"
+              className="btn-secondary text-sm"
             >
               <MessageSquare size={18} />
               {t.cartaCTABtnContact}

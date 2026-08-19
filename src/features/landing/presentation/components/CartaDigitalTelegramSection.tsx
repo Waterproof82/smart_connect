@@ -1,4 +1,10 @@
 import React from "react";
+import {
+  Smartphone,
+  Users,
+  CheckCircle2,
+  UtensilsCrossed,
+} from "lucide-react";
 import { useLanguage } from "@shared/context/LanguageContext";
 
 const CartaDigitalTelegramSection: React.FC = () => {
@@ -6,22 +12,22 @@ const CartaDigitalTelegramSection: React.FC = () => {
 
   const features = [
     {
-      icon: "📱",
+      icon: <Smartphone className="w-full h-full" aria-hidden="true" />,
       title: t.cartaTelegramFeature1Title,
       desc: t.cartaTelegramFeature1Desc,
     },
     {
-      icon: "👥",
+      icon: <Users className="w-full h-full" aria-hidden="true" />,
       title: t.cartaTelegramFeature2Title,
       desc: t.cartaTelegramFeature2Desc,
     },
     {
-      icon: "✅",
+      icon: <CheckCircle2 className="w-full h-full" aria-hidden="true" />,
       title: t.cartaTelegramFeature3Title,
       desc: t.cartaTelegramFeature3Desc,
     },
     {
-      icon: "🍽️",
+      icon: <UtensilsCrossed className="w-full h-full" aria-hidden="true" />,
       title: t.cartaTelegramFeature4Title,
       desc: t.cartaTelegramFeature4Desc,
     },
@@ -47,7 +53,7 @@ const CartaDigitalTelegramSection: React.FC = () => {
                 data-testid="telegram-feature"
                 className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-5 md:p-6 flex gap-4 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200"
               >
-                <div className="text-2xl md:text-3xl flex-shrink-0 mt-1">
+                <div className="w-6 h-6 md:w-7 md:h-7 flex-shrink-0 mt-1 text-[var(--color-primary)]">
                   {feature.icon}
                 </div>
                 <div>

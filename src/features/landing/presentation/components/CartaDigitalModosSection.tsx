@@ -1,4 +1,5 @@
 import React from "react";
+import { UtensilsCrossed, ShoppingCart } from "lucide-react";
 import { useLanguage } from "@shared/context/LanguageContext";
 
 const CartaDigitalModosSection: React.FC = () => {
@@ -22,7 +23,9 @@ const CartaDigitalModosSection: React.FC = () => {
               data-testid="modo-card"
               className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-6 md:p-8"
             >
-              <div className="text-3xl mb-4">🍽️</div>
+              <div className="w-7 h-7 mb-4 text-[var(--color-primary)]">
+                <UtensilsCrossed className="w-full h-full" aria-hidden="true" />
+              </div>
               <h3 className="font-black text-xl md:text-2xl font-display mb-3">
                 {t.cartaModoRestauranteTitle}
               </h3>
@@ -45,7 +48,9 @@ const CartaDigitalModosSection: React.FC = () => {
               data-testid="modo-card"
               className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-6 md:p-8"
             >
-              <div className="text-3xl mb-4">🛒</div>
+              <div className="w-7 h-7 mb-4 text-[var(--color-primary)]">
+                <ShoppingCart className="w-full h-full" aria-hidden="true" />
+              </div>
               <h3 className="font-black text-xl md:text-2xl font-display mb-3">
                 {t.cartaModoTiendaTitle}
               </h3>
