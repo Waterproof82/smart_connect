@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import { useLanguage } from "@shared/context/LanguageContext";
 import { useIntersectionObserver } from "@shared/hooks";
 import { QrCode, Zap, Star, Shield } from "lucide-react";
+import { accentStyle, type AccentToken } from "@shared/config/accents";
 
 const Features: React.FC = () => {
   const { t } = useLanguage();
@@ -10,39 +11,37 @@ const Features: React.FC = () => {
     rootMargin: "0px 0px -50px 0px",
   });
 
-  const features = [
+  const features: {
+    icon: React.ReactNode;
+    title: string;
+    desc: string;
+    accent: AccentToken;
+  }[] = [
     {
       icon: <QrCode className="w-6 h-6" />,
       title: t.tapReviewFeatNFC,
       desc: t.tapReviewFeatNFCDesc,
-      color: "blue",
+      accent: "--color-icon-blue",
     },
     {
       icon: <Zap className="w-6 h-6" />,
       title: t.tapReviewFeatSpeed,
       desc: t.tapReviewFeatSpeedDesc,
-      color: "amber",
+      accent: "--color-icon-amber",
     },
     {
       icon: <Star className="w-6 h-6" />,
       title: t.tapReviewFeatGoogle,
       desc: t.tapReviewFeatGoogleDesc,
-      color: "green",
+      accent: "--color-icon-green",
     },
     {
       icon: <Shield className="w-6 h-6" />,
       title: t.tapReviewFeatNoSub,
       desc: t.tapReviewFeatNoSubDesc,
-      color: "purple",
+      accent: "--color-icon-purple",
     },
   ];
-
-  const colorClasses = {
-    blue: "bg-blue-500/10 text-blue-500",
-    amber: "bg-amber-500/10 text-amber-500",
-    green: "bg-green-500/10 text-green-500",
-    purple: "bg-purple-500/10 text-purple-500",
-  };
 
   return (
     <div ref={sectionRef} className="py-20 bg-[var(--color-bg-alt)]">
@@ -70,7 +69,8 @@ const Features: React.FC = () => {
               style={{ transitionDelay: `${idx * 100}ms` }}
             >
               <div
-                className={`w-14 h-14 rounded-xl flex items-center justify-center mb-4 ${colorClasses[feature.color as keyof typeof colorClasses]}`}
+                className="w-14 h-14 rounded-xl flex items-center justify-center mb-4 tpv-accent-chip text-[color:var(--tpv-accent)]"
+                style={accentStyle(feature.accent)}
               >
                 {feature.icon}
               </div>
