@@ -71,6 +71,7 @@ const ProductGallery: React.FC = () => {
         {products.map((product, idx) => (
           <button
             key={idx}
+            type="button"
             onClick={() => setActiveIndex(idx)}
             className={`w-16 h-16 rounded-xl overflow-hidden border-2 transition-all ${
               activeIndex === idx
