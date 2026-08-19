@@ -21,7 +21,7 @@ const CartaDigitalCTAFinalSection: React.FC<
       className="py-16 md:py-24"
       style={{
         background:
-          "radial-gradient(ellipse at 50% 50%, rgba(201,168,76,0.12) 0%, transparent 70%), var(--color-bg)",
+          "radial-gradient(ellipse at 50% 50%, color-mix(in oklch, var(--color-primary) 10%, transparent) 0%, transparent 70%), var(--color-bg)",
       }}
     >
       <div className="container mx-auto px-4 md:px-6">
