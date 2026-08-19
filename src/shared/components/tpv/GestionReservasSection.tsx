@@ -74,8 +74,8 @@ const GestionReservasSection: React.FC<TpvModuleSectionProps> = ({
           <TpvModuleFigure
             src="/assets/tpv/gestion-reservas.webp"
             alt={t.gestionReservasFigureAlt}
-            width={1400}
-            height={1050}
+            width={936}
+            height={702}
           />
         </div>
 

@@ -16,7 +16,6 @@ import {
 } from "../domain/entities";
 import { sanitizeInput } from "@shared/utils/sanitizer";
 import { rateLimiter, RateLimitPresets } from "@shared/utils/rateLimiter";
-import { supabase } from "@shared/supabaseClient";
 import { getAppSettings } from "@shared/services/settingsService";
 
 // Extracted UI components (SRP)
@@ -24,12 +23,6 @@ import ChatMessages from "./components/ChatMessages";
 import ChatInput from "./components/ChatInput";
 import ChatWelcome from "./components/ChatWelcome";
 import ChatToggleButton from "./components/ChatToggleButton";
-
-let _container: ReturnType<typeof createChatbotContainer> | null = null;
-const getContainer = () => {
-  _container ??= createChatbotContainer(supabase);
-  return _container;
-};
 
 const getSessionIdentifier = (): string => {
   const key = "sc_chat_session_id";
@@ -49,6 +42,14 @@ export const ExpertAssistant: React.FC = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const toggleBtnRef = useRef<HTMLButtonElement>(null);
   const modalRef = useRef<HTMLDialogElement>(null);
+  // U3: the chatbot data layer (which dynamically imports Supabase) is
+  // resolved lazily on first widget OPEN, not on module load or render —
+  // see design.md's "trigger = first open of the chat widget" decision.
+  // A rejected promise is NOT cached (reset to null in the catch below),
+  // otherwise a transient failure would permanently brick the widget.
+  const containerPromiseRef = useRef<ReturnType<
+    typeof createChatbotContainer
+  > | null>(null);
 
   useEffect(() => {
     const fetchWhatsApp = async () => {
@@ -110,7 +111,13 @@ export const ExpertAssistant: React.FC = () => {
   ) => {
     setIsLoading(true);
     try {
-      const response = await getContainer().generateResponseUseCase.execute({
+      // Belt-and-braces: normally already populated by the widget's open
+      // transition (see <ChatToggleButton onToggle=... /> below), but a
+      // message can theoretically be sent before that promise exists
+      // (e.g. programmatic focus/paste flows) — populate it here too.
+      containerPromiseRef.current ??= createChatbotContainer();
+      const container = await containerPromiseRef.current;
+      const response = await container.generateResponseUseCase.execute({
         userQuery: message,
         conversationHistory: currentMessages,
         useRAG: true,
@@ -122,6 +129,10 @@ export const ExpertAssistant: React.FC = () => {
       });
       setChatSession((prev) => prev.addMessage(assistantEntity));
     } catch {
+      // Retry-safe: do NOT leave a rejected promise cached, or every
+      // future message would fail forever on a single transient failure
+      // (offline, a stale chunk after deploy).
+      containerPromiseRef.current = null;
       const errorEntity = new MessageEntity({
         role: "assistant",
         content:
@@ -245,7 +256,17 @@ export const ExpertAssistant: React.FC = () => {
         isOpen={isOpen}
         whatsappPhone={whatsappPhone}
         buttonRef={toggleBtnRef}
-        onToggle={() => setIsOpen(!isOpen)}
+        onToggle={() => {
+          const opening = !isOpen;
+          // Prime the chatbot data layer on the OPEN transition (not on
+          // first send): the user spends a few seconds on the welcome
+          // screen, so the ~53 KiB dynamically-imported chunk downloads
+          // in the background and the first answer feels instant.
+          if (opening && !containerPromiseRef.current) {
+            containerPromiseRef.current = createChatbotContainer();
+          }
+          setIsOpen(opening);
+        }}
       />
     </div>
   );

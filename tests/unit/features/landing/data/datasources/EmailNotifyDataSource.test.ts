@@ -18,10 +18,13 @@ jest.mock('@core/domain/usecases', () => ({
   })),
 }));
 
-// The datasource's default constructor param imports the lazy `supabase` Proxy
-// (import.meta.env). Mock it so this suite (which always injects an explicit
-// client) never touches the real module.
-jest.mock('@shared/supabaseClient', () => ({ supabase: {} }));
+// The datasource resolves an un-injected client via the async getSupabase()
+// chokepoint (import.meta.env + dynamic import under the hood). Mock it so
+// this suite never touches the real module.
+const mockGetSupabase = jest.fn();
+jest.mock('@shared/supabaseClient', () => ({
+  getSupabase: (...args: unknown[]) => mockGetSupabase(...args),
+}));
 
 import type { SupabaseClient } from '@supabase/supabase-js';
 import {
@@ -45,6 +48,10 @@ function buildClient(invokeImpl: jest.Mock): SupabaseClient {
 }
 
 describe('EmailNotifyDataSource', () => {
+  beforeEach(() => {
+    mockGetSupabase.mockReset();
+  });
+
   it('invokes the notify-lead function with the exact payload as the body', async () => {
     const invoke = jest.fn().mockResolvedValue({ data: { ok: true }, error: null });
     const ds = new EmailNotifyDataSource(buildClient(invoke));
@@ -89,5 +96,35 @@ describe('EmailNotifyDataSource', () => {
     const result = await ds.sendLead(buildPayload());
 
     expect(result).toBe(false);
+  });
+
+  it('resolves the client via getSupabase() when constructed without an explicit client', async () => {
+    const invoke = jest.fn().mockResolvedValue({ data: { ok: true }, error: null });
+    mockGetSupabase.mockResolvedValue(buildClient(invoke));
+    const ds = new EmailNotifyDataSource();
+
+    const result = await ds.sendLead(buildPayload());
+
+    expect(mockGetSupabase).toHaveBeenCalledTimes(1);
+    expect(invoke).toHaveBeenCalledWith('notify-lead', { body: buildPayload() });
+    expect(result).toBe(true);
+  });
+
+  it('returns false (not a throw) when getSupabase() rejects', async () => {
+    mockGetSupabase.mockRejectedValue(new Error('chunk fetch failed'));
+    const ds = new EmailNotifyDataSource();
+
+    const result = await ds.sendLead(buildPayload());
+
+    expect(result).toBe(false);
+  });
+
+  it('does NOT call getSupabase() when an explicit client is injected', async () => {
+    const invoke = jest.fn().mockResolvedValue({ data: { ok: true }, error: null });
+    const ds = new EmailNotifyDataSource(buildClient(invoke));
+
+    await ds.sendLead(buildPayload());
+
+    expect(mockGetSupabase).not.toHaveBeenCalled();
   });
 });

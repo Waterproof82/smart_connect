@@ -9,7 +9,7 @@
  * El email en JWT está verificado por Supabase Auth y no puede ser modificado por el usuario.
  */
 
-import { supabase } from "@shared/supabaseClient";
+import { supabase } from "@shared/supabaseClientSync";
 import {
   IAuthRepository,
   LoginCredentials,

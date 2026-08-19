@@ -7,7 +7,7 @@
  */
 
 import { SupabaseClient } from '@supabase/supabase-js';
-import { supabase } from '@shared/supabaseClient';
+import { getSupabase } from '@shared/supabaseClient';
 import { ConsoleLogger } from '@core/domain/usecases';
 
 const logger = new ConsoleLogger('[EmailNotify]');
@@ -29,14 +29,18 @@ export interface LeadNotificationPayload {
 }
 
 export class EmailNotifyDataSource {
-  constructor(private readonly client: SupabaseClient = supabase) {}
+  constructor(private readonly client?: SupabaseClient) {}
 
   /**
    * Sends lead data via the `notify-lead` Edge Function (Brevo).
+   *
+   * Resolves the client via the async `getSupabase()` chokepoint (U3) when
+   * no explicit client was injected — never a static import.
    */
   async sendLead(payload: LeadNotificationPayload): Promise<boolean> {
     try {
-      const { data, error } = await this.client.functions.invoke('notify-lead', {
+      const client = this.client ?? (await getSupabase());
+      const { data, error } = await client.functions.invoke('notify-lead', {
         body: payload,
       });
 

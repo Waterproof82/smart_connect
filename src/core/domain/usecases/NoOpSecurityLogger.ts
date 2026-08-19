@@ -9,17 +9,26 @@
 import { SecurityLogger } from "./SecurityLogger";
 import type { ISecurityLogPersistence } from "./SecurityLogger";
 import { ENV } from "@shared/config/env.config";
-import { supabase } from "../../../shared/supabaseClient";
+import { getSupabase } from "../../../shared/supabaseClient";
 
 /**
  * Creates a Supabase-backed persistence adapter for security logs.
  * This adapter lives in the factory (infrastructure boundary),
  * keeping the SecurityLogger domain class free of Supabase imports.
+ *
+ * Resolves the client via the async `getSupabase()` chokepoint (U3) —
+ * a rejection (offline, stale chunk after deploy) is caught here and
+ * surfaced as a graceful `{ error }` result, matching the existing
+ * try/catch contract, never an unhandled rejection.
+ *
+ * Exported (not just used internally by `createSecurityLogger`) so it can
+ * be unit-tested directly — see `tests/unit/core/NoOpSecurityLogger.test.ts`.
  */
-function createSupabasePersistence(): ISecurityLogPersistence {
+export function createSupabasePersistence(): ISecurityLogPersistence {
   return {
     async insert(log: Record<string, unknown>) {
       try {
+        const supabase = await getSupabase();
         const result = await supabase.from("security_logs").insert(log);
         const { error } = result as { error: unknown };
 
