@@ -42,7 +42,7 @@ const CTASection: React.FC<CTASectionProps> = ({ whatsappPhone = "" }) => {
                 }
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 bg-white text-[var(--color-accent)] font-bold px-8 py-4 rounded-xl hover:bg-white/90 transition-colors min-h-[48px]"
+                className="btn-primary-inverse"
               >
                 {t.tapReviewCTABtnPrimary}
               </a>

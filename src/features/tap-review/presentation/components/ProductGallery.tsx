@@ -40,7 +40,7 @@ const ProductGallery: React.FC = () => {
 
   return (
     <div className="space-y-4">
-      <div className="relative aspect-square bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 rounded-3xl overflow-hidden">
+      <div className="relative aspect-square bg-gradient-to-br from-[var(--color-bg-alt)] to-[var(--color-surface)] rounded-3xl overflow-hidden">
         {products.map((product, idx) => (
           <div
             key={idx}
@@ -71,6 +71,7 @@ const ProductGallery: React.FC = () => {
         {products.map((product, idx) => (
           <button
             key={idx}
+            type="button"
             onClick={() => setActiveIndex(idx)}
             className={`w-16 h-16 rounded-xl overflow-hidden border-2 transition-all ${
               activeIndex === idx

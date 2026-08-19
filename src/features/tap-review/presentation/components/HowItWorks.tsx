@@ -88,7 +88,7 @@ const HowItWorks: React.FC = () => {
                     {sanitizeInput(step.title)}
                   </h3>
                   <p className="text-muted">{sanitizeInput(step.desc)}</p>
-                  <div className="mt-6 w-full h-48 bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 rounded-2xl flex items-center justify-center overflow-hidden p-2">
+                  <div className="mt-6 w-full h-48 bg-gradient-to-br from-[var(--color-bg-alt)] to-[var(--color-surface)] rounded-2xl flex items-center justify-center overflow-hidden p-2">
                     {imageErrors[idx] ? (
                       <div className="text-center p-4">
                         <div className="w-16 h-16 mx-auto mb-2 text-[var(--color-accent)]">
