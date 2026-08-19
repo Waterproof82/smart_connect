@@ -5,7 +5,7 @@ import { useLanguage } from "@shared/context/LanguageContext";
 import { ReviewSchema } from "@shared/presentation/components/SeoSchema";
 
 const StarRating: React.FC = () => (
-  <div className="flex gap-0.5 mb-4" aria-label="5 estrellas">
+  <div className="flex gap-0.5 mb-4" role="img" aria-label="5 estrellas">
     {[1, 2, 3, 4, 5].map((i) => (
       <Star
         key={i}

@@ -41,8 +41,8 @@
     --color-icon-cyan: oklch(65% 0.18 195);
     --color-icon-indigo: oklch(65% 0.18 255);
     --color-icon-magenta: oklch(65% 0.18 315);
-    --color-whatsapp: oklch(65% 0.18 150);
-    --color-whatsapp-hover: oklch(55% 0.18 150);
+    --color-whatsapp: oklch(48% 0.18 150);
+    --color-whatsapp-hover: oklch(40% 0.18 150);
     --focus-ring: oklch(70% 0.15 250);
     --chart-bar: oklch(60% 0.18 230);
     --chart-tick: oklch(45% 0.02 250);
@@ -91,8 +91,8 @@
     --color-icon-cyan: oklch(55% 0.18 195);
     --color-icon-indigo: oklch(55% 0.18 255);
     --color-icon-magenta: oklch(55% 0.18 315);
-    --color-whatsapp: oklch(65% 0.18 150);
-    --color-whatsapp-hover: oklch(55% 0.18 150);
+    --color-whatsapp: oklch(48% 0.18 150);
+    --color-whatsapp-hover: oklch(40% 0.18 150);
     --focus-ring: oklch(60% 0.15 250);
     --chart-bar: oklch(55% 0.18 230);
     --chart-tick: oklch(45% 0.025 250);

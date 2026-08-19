@@ -3,11 +3,15 @@ import { X } from "lucide-react";
 
 interface CartaDigitalLightboxProps {
   image: string | null;
+  width?: number;
+  height?: number;
   onClose: () => void;
 }
 
 const CartaDigitalLightbox: React.FC<CartaDigitalLightboxProps> = ({
   image,
+  width,
+  height,
   onClose,
 }) => {
   if (!image) return null;
@@ -30,6 +34,8 @@ const CartaDigitalLightbox: React.FC<CartaDigitalLightboxProps> = ({
       <img
         src={image}
         alt="Imagen ampliada"
+        width={width}
+        height={height}
         className="relative max-w-5xl w-full max-h-[90vh] object-contain rounded-2xl shadow-2xl animate-in zoom-in-95 duration-300"
       />
     </div>
