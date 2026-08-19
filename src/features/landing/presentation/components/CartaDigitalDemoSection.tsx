@@ -15,7 +15,7 @@ const CartaDigitalDemoSection: React.FC<CartaDigitalDemoSectionProps> = ({
   onToggleVideo,
   onOpenLightbox,
 }) => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   const screens = [
     {
@@ -64,7 +64,19 @@ const CartaDigitalDemoSection: React.FC<CartaDigitalDemoSectionProps> = ({
               muted
               playsInline
               className="w-full aspect-video object-cover"
-            />
+            >
+              <track
+                kind="captions"
+                src={
+                  language === "en"
+                    ? "/assets/video-captions-en.vtt"
+                    : "/assets/video-captions-es.vtt"
+                }
+                srcLang={language}
+                label={language === "en" ? "English" : "Español"}
+                default
+              />
+            </video>
             <div className="absolute bottom-4 left-4 z-20 flex items-center gap-2">
               <button
                 type="button"
