@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **Replaced hardcoded Tailwind palette colors with design tokens in tap-review (sitewide-theme-audit follow-up)**: `Features.tsx`'s 4 feature-icon badges used literal `bg-blue-500/10 text-blue-500` / `amber` / `green` / `purple` classes instead of the existing `--color-icon-*` token set; swapped to the `accentStyle()`/`.tpv-accent-chip` idiom already used by `FichajesControlHorarioSection.tsx` (`--color-icon-blue/amber/green/purple`). `HowItWorks.tsx` and `ProductGallery.tsx` both used a hardcoded `from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900` gradient for their image-placeholder backdrops — relies on Tailwind's `dark:` variant (a separate mechanism from this project's `:root`/`.light` token system) instead of theme-aware tokens; swapped to `from-[var(--color-bg-alt)] to-[var(--color-surface)]`, which self-adapts via the same CSS custom properties everything else on the site uses.
+
 ### Fixed
 
 - **SEO/GEO/AEO audit fixes (2026-08-17)**: verified an external Search Console + GEO/AEO audit's findings against the live site and source before changing anything (see `docs/audit/2026-08-17_seo-geo-aeo-audit-verification.md`). Several P0 items the audit flagged were already fixed by prior work (`/servicios` and `/tap-review` already 301-redirect in production, `/about` was already linked from the footer, `public/llms.txt` had no dead links) — those were left untouched. What was genuinely still live and fixed here:
