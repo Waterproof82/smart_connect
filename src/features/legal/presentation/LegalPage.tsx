@@ -2,7 +2,7 @@ import React from "react";
 import { Helmet } from "react-helmet-async";
 import { useLanguage } from "@shared/context/LanguageContext";
 import { Navbar } from "@features/landing/presentation/components/Navbar";
-import { Contact } from "@features/landing/presentation/components/Contact";
+import Contact from "@features/landing/presentation/components/Contact";
 import { sanitizeHTML } from "@shared/utils/sanitizer";
 
 interface LegalPageProps {
@@ -39,7 +39,10 @@ const LegalPage: React.FC<LegalPageProps> = ({
         <meta property="og:description" content={tr(descriptionKey)} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={url} />
-        <meta property="og:image" content="https://digitalizatenerife.es/icon.png" />
+        <meta
+          property="og:image"
+          content="https://digitalizatenerife.es/icon.png"
+        />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:title" content={tr(titleKey)} />
         <meta name="twitter:description" content={tr(descriptionKey)} />
@@ -59,7 +62,9 @@ const LegalPage: React.FC<LegalPageProps> = ({
             </h2>
             <div
               className="text-default"
-              dangerouslySetInnerHTML={{ __html: sanitizeHTML(tr(section.contentKey), "legal-content") }}
+              dangerouslySetInnerHTML={{
+                __html: sanitizeHTML(tr(section.contentKey), "legal-content"),
+              }}
             />
           </div>
         ))}

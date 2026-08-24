@@ -12,12 +12,12 @@ import {
   Loader2,
 } from "lucide-react";
 import { getAppSettings, AppSettings } from "@shared/services/settingsService";
+import { useWhatsappPhone, useIntersectionObserver } from "@shared/hooks";
 import { createLandingContainer } from "../LandingContainer";
 import { LeadEntity } from "../../domain/entities";
 import { sanitizeInput, isValidEmail } from "@shared/utils/sanitizer";
 import { rateLimiter, RateLimitPresets } from "@shared/utils/rateLimiter";
 import { contactSchema, ContactFormData } from "../schemas/contactSchema";
-import { useIntersectionObserver } from "@shared/hooks";
 import { useLanguage, Translation } from "@shared/context/LanguageContext";
 import { SOLUTIONS } from "@shared/config/solutions";
 import { DotField } from "@shared/presentation/components/DotField";
@@ -31,14 +31,13 @@ const SERVICE_LABEL_KEY: Record<string, keyof Translation> = {
   "tarjetas-nfc": "serviceNFC",
 };
 
-const SERVICE_OPTIONS: Array<{ value: string; labelKey: keyof Translation }> =
-  [
-    ...SOLUTIONS.map((solution) => ({
-      value: solution.serviceValue,
-      labelKey: SERVICE_LABEL_KEY[solution.id],
-    })),
-    { value: "Consultoría IA", labelKey: "serviceConsultoria" as const },
-  ];
+const SERVICE_OPTIONS: Array<{ value: string; labelKey: keyof Translation }> = [
+  ...SOLUTIONS.map((solution) => ({
+    value: solution.serviceValue,
+    labelKey: SERVICE_LABEL_KEY[solution.id],
+  })),
+  { value: "Consultoría IA", labelKey: "serviceConsultoria" as const },
+];
 
 const fieldClasses =
   "w-full border rounded-2xl py-3 sm:py-4 px-4 sm:px-6 outline-none transition-colors text-sm text-default bg-[var(--color-surface)] border-[var(--color-border)] focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--focus-ring)] min-h-[44px]";
@@ -126,7 +125,7 @@ const socialLinks = [
   },
 ];
 
-export const Contact: React.FC = () => {
+const Contact: React.FC = () => {
   const { t } = useLanguage();
   const [settings, setSettings] = useState<AppSettings | null>(null);
   const [settingsError, setSettingsError] = useState(false);
@@ -137,6 +136,7 @@ export const Contact: React.FC = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const isVisible = useIntersectionObserver(sectionRef);
   const successTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const whatsappPhone = useWhatsappPhone();
 
   useEffect(() => {
     return () => {
@@ -286,7 +286,7 @@ export const Contact: React.FC = () => {
 
   useEffect(() => {
     const updateServiceFromHash = () => {
-      // Parse hash query params (e.g., #contacto?servicio=Consultor%C3%ADa%20IA)
+      // Parse hash query params (e.g., #contacto?servicio=X → #contacto)
       const hash = globalThis.location.hash;
       if (!hash.includes("?")) return;
 
@@ -356,11 +356,11 @@ export const Contact: React.FC = () => {
                 id: "whatsapp",
                 icon: <MessageSquare className="w-6 h-6" />,
                 title: t.contactWhatsappTitle,
-                value: settings?.whatsappPhone || t.contactEmailLoading,
+                value: whatsappPhone || t.contactEmailLoading,
                 desc: t.contactWhatsappDesc,
                 color: "text-[var(--color-icon-emerald)]",
-                href: settings?.whatsappPhone
-                  ? `https://wa.me/${settings.whatsappPhone.replaceAll(/[^\d+]/g, "")}`
+                href: whatsappPhone
+                  ? `https://wa.me/${whatsappPhone.replaceAll(/[^\d+]/g, "")}`
                   : undefined,
                 external: true,
               },
@@ -368,7 +368,8 @@ export const Contact: React.FC = () => {
                 id: "location",
                 icon: <MapPin className="w-6 h-6" />,
                 title: t.contactLocationTitle,
-                value: settings?.physicalAddress || "Santa Cruz de Tenerife, España",
+                value:
+                  settings?.physicalAddress || "Santa Cruz de Tenerife, España",
                 desc: "Hub Tecnológico de Innovación",
                 color: "text-[var(--color-icon-purple)]",
                 href: `https://maps.google.com/?q=${encodeURIComponent(settings?.physicalAddress || "Santa Cruz de Tenerife, España")}`,
@@ -528,6 +529,7 @@ export const Contact: React.FC = () => {
                       " placeholder:text-[var(--color-text-muted)]"
                     }
                     aria-required="true"
+                    aria-invalid={touchedFields.email && !!errors.email}
                     aria-describedby={
                       errors.email ? "contact-email-error" : undefined
                     }
@@ -691,3 +693,5 @@ export const Contact: React.FC = () => {
     </div>
   );
 };
+
+export default Contact;

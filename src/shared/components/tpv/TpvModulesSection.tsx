@@ -17,7 +17,7 @@ interface TpvModulesSectionProps {
   whatsappPhone?: string;
 }
 
-export const TpvModulesSection: React.FC<TpvModulesSectionProps> = ({
+const TpvModulesSection: React.FC<TpvModulesSectionProps> = ({
   whatsappPhone,
 }) => {
   const sortedModules = [...TPV_MODULES].sort((a, b) => a.order - b.order);
@@ -32,3 +32,5 @@ export const TpvModulesSection: React.FC<TpvModulesSectionProps> = ({
     </>
   );
 };
+
+export default TpvModulesSection;
