@@ -131,6 +131,11 @@ const CartaDigitalDemoSection: React.FC<CartaDigitalDemoSectionProps> = ({
                     loading="lazy"
                     decoding="async"
                     className="w-full h-full object-contain hover:scale-[1.02] transition-transform pointer-events-none"
+                    srcSet={`/assets/${screen.image.split("/").pop()?.replace(".webp", "")}-320w.webp 320w,
+                             /assets/${screen.image.split("/").pop()?.replace(".webp", "")}-640w.webp 640w,
+                             /assets/${screen.image.split("/").pop()?.replace(".webp", "")}-1280w.webp 1280w,
+                             ${screen.image} ${screen.width}w`}
+                    sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 33vw"
                   />
                 </button>
               </div>

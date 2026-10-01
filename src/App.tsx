@@ -4,19 +4,24 @@ import { Helmet } from "react-helmet-async";
 import { Workflow, Utensils, Monitor, Bot } from "lucide-react";
 import { Navbar } from "@features/landing/presentation/components/Navbar";
 import { Hero } from "@features/landing/presentation/components/Hero";
-import { Contact } from "@features/landing/presentation/components/Contact";
 import { SuccessStats } from "@features/landing/presentation/components/SuccessStats";
 import { ExpertAssistant } from "@features/chatbot/presentation";
-import HomeFaqSection, {
-  useHomeFaqGroups,
-} from "@features/landing/presentation/components/HomeFaqSection";
-import { TpvModulesSection } from "@shared/components/tpv/TpvModulesSection";
+import { useHomeFaqGroups } from "@features/landing/presentation/components/HomeFaqSection";
 import { ConsoleLogger } from "@core/domain/usecases/Logger";
 import { useLanguage } from "@shared/context/LanguageContext";
 import { TPV_MODULES } from "@shared/config/tpvModules";
 import { buildHomeSchema } from "@shared/presentation/components/SeoSchema";
-import { useWhatsappPhone } from "@shared/hooks";
 import { accentStyle } from "@shared/config/accents";
+
+const LazyTpvModulesSection = React.lazy(
+  () => import("@shared/components/tpv/TpvModulesSection"),
+);
+const LazyHomeFaqSection = React.lazy(
+  () => import("@features/landing/presentation/components/HomeFaqSection"),
+);
+const LazyContact = React.lazy(
+  () => import("@features/landing/presentation/components/Contact"),
+);
 
 const logger = new ConsoleLogger("[ErrorBoundary]");
 
@@ -125,7 +130,7 @@ const App: React.FC = () => {
   const [scrolled, setScrolled] = React.useState(false);
   const sentinelRef = React.useRef<HTMLDivElement>(null);
   const { t } = useLanguage();
-  const whatsappPhone = useWhatsappPhone();
+
   const faqGroups = useHomeFaqGroups();
 
   React.useEffect(() => {
@@ -213,7 +218,9 @@ const App: React.FC = () => {
               the footer's #soluciones link and any existing deep links keep
               resolving after Features.tsx's grid was retired (PR9). */}
           <div id="soluciones" aria-hidden="true" className="h-0" />
-          <TpvModulesSection whatsappPhone={whatsappPhone} />
+          <React.Suspense fallback={<div style={{ height: "1200px" }} />}>
+            <LazyTpvModulesSection />
+          </React.Suspense>
           <section
             id="por-que"
             aria-label="Por qué Digitaliza Tenerife"
@@ -259,8 +266,8 @@ const App: React.FC = () => {
                     merece herramientas diseñadas para su realidad.
                   </p>
                   <p className="text-muted leading-relaxed text-base">
-                    Nuestra plataforma funciona como un ecosistema unificado,
-                    no como piezas sueltas.
+                    Nuestra plataforma funciona como un ecosistema unificado, no
+                    como piezas sueltas.
                   </p>
                 </div>
 
@@ -311,7 +318,9 @@ const App: React.FC = () => {
                             <div className="font-semibold text-default text-sm mb-0.5">
                               {pilar.title}
                             </div>
-                            <div className="text-muted text-sm">{pilar.desc}</div>
+                            <div className="text-muted text-sm">
+                              {pilar.desc}
+                            </div>
                           </div>
                         </div>
                       );
@@ -326,8 +335,8 @@ const App: React.FC = () => {
                   Digitalizar tu negocio ya no es una opción — es una necesidad.
                   Los clientes buscan restaurantes en Google, leen reseñas antes
                   de visitar un local, y esperan poder pedir desde su móvil. Con
-                  Digitaliza Tenerife, no solo te ponés al día — te adelantás
-                  a la competencia.
+                  Digitaliza Tenerife, no solo te ponés al día — te adelantás a
+                  la competencia.
                 </p>
               </div>
             </div>
@@ -344,10 +353,14 @@ const App: React.FC = () => {
             aria-label="Preguntas Frecuentes"
             className="py-20 md:py-32"
           >
-            <HomeFaqSection />
+            <React.Suspense fallback={<div style={{ height: "300px" }} />}>
+              <LazyHomeFaqSection />
+            </React.Suspense>
           </section>
           <section id="contacto" aria-label="Contacto">
-            <Contact />
+            <React.Suspense fallback={<div style={{ height: "600px" }} />}>
+              <LazyContact />
+            </React.Suspense>
           </section>
         </main>
 

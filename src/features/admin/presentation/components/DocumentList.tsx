@@ -127,11 +127,11 @@ export const DocumentList: React.FC<DocumentListProps> = ({
   // --- Effects ---
   /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
-    loadDocuments();
+    void loadDocuments();
   }, []);
 
   useEffect(() => {
-    loadAvailableSources();
+    void loadAvailableSources();
   }, []);
   /* eslint-enable react-hooks/exhaustive-deps */
 
@@ -150,7 +150,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
   const handleSearch = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     setCurrentPage(1);
-    loadDocuments();
+    void loadDocuments();
   };
 
   const handleDeleteRequest = (id: string, e?: React.MouseEvent) => {
