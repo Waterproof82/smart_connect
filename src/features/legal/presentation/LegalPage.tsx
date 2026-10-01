@@ -36,6 +36,8 @@ const LegalPage: React.FC<LegalPageProps> = ({
         <title>{tr(titleKey)}</title>
         <meta name="description" content={tr(descriptionKey)} />
         <link rel="canonical" href={url} />
+        <meta property="og:locale" content="es_ES" />
+        <meta property="og:site_name" content="Digitaliza Tenerife" />
         <meta property="og:title" content={tr(titleKey)} />
         <meta property="og:description" content={tr(descriptionKey)} />
         <meta property="og:type" content="website" />

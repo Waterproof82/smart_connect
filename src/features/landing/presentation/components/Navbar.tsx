@@ -62,7 +62,7 @@ const DropdownMenuItem: React.FC<{
     }
   }, [focusedDropdownIndex, idx]);
 
-  const itemClasses = `flex items-center gap-4 p-3 rounded-2xl transition-[background-color] duration-100 group/item ${active ? "bg-[var(--color-accent-subtle)]" : "hover:bg-[var(--color-bg-alt)]"} ${focusedDropdownIndex === idx ? "bg-[var(--color-bg-alt)]" : ""}`;
+  const itemClasses = `flex items-center gap-4 p-3 rounded-xl transition-[background-color] duration-100 group/item ${active ? "bg-[var(--color-accent-subtle)]" : "hover:bg-[var(--color-bg-alt)]"} ${focusedDropdownIndex === idx ? "bg-[var(--color-bg-alt)]" : ""}`;
 
   const itemContent = (
     <>
@@ -273,7 +273,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
               }`}
               style={{ transitionTimingFunction: "var(--ease-out)" }}
             >
-              <div className="w-[280px] bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[2rem] p-4 shadow-lg">
+              <div className="w-[280px] bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl p-4 shadow-lg">
                 <div className="grid gap-2">
                   {solutions.map((item, idx) => (
                     <DropdownMenuItem

@@ -7,6 +7,7 @@
 import React from "react";
 import { Clock, UserCheck, BarChart3, FileCheck2 } from "lucide-react";
 import { useLanguage } from "@shared/context/LanguageContext";
+import { buildWhatsappLink } from "@shared/utils/whatsappLink";
 import { accentStyle } from "@shared/config/accents";
 import type { TpvModuleSectionProps } from "./TpvModuleSections";
 import TpvModuleFigure from "./TpvModuleFigure";
@@ -25,7 +26,10 @@ const FichajesControlHorarioSection: React.FC<TpvModuleSectionProps> = ({
     { title: t.fichajesBullet4Title, desc: t.fichajesBullet4Desc },
   ];
 
-  const ctaHref = whatsappPhone ? `https://wa.me/${whatsappPhone}` : "/#contacto?servicio=TPV%20para%20restaurantes";
+  const cta = buildWhatsappLink(whatsappPhone ?? "", {
+    message: t.waMsgTpv,
+    servicio: "TPV para restaurantes",
+  });
 
   return (
     <section
@@ -35,7 +39,7 @@ const FichajesControlHorarioSection: React.FC<TpvModuleSectionProps> = ({
       style={accentStyle("--color-icon-blue")}
     >
       <div className="ds-container">
-        <div className="text-xs font-semibold tracking-wider uppercase text-[var(--color-primary)] mb-3">
+        <div className="ds-kicker mb-3">
           {t.fichajesEyebrow}
         </div>
         <h2
@@ -79,9 +83,9 @@ const FichajesControlHorarioSection: React.FC<TpvModuleSectionProps> = ({
         </div>
 
         <a
-          href={ctaHref}
-          target={whatsappPhone ? "_blank" : undefined}
-          rel={whatsappPhone ? "noopener noreferrer" : undefined}
+          href={cta.href}
+          target={cta.external ? "_blank" : undefined}
+          rel={cta.external ? "noopener noreferrer" : undefined}
           className="inline-flex items-center gap-2 text-sm font-bold text-[var(--color-primary)] hover:underline mt-10"
         >
           {t.fichajesCtaLabel}

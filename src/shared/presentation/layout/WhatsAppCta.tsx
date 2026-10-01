@@ -2,6 +2,7 @@ import React from "react";
 import { MessageCircle } from "lucide-react";
 import { useLanguage } from "@shared/context/LanguageContext";
 import { useWhatsappPhone } from "@shared/hooks";
+import { buildWhatsappLink } from "@shared/utils/whatsappLink";
 
 export interface WhatsAppCtaProps {
   /** Visible label. Defaults to `t.waCtaLabel`. */
@@ -18,10 +19,8 @@ export interface WhatsAppCtaProps {
 /**
  * The single primary action of the site (design.md § CTA voice).
  *
- * Renders `https://wa.me/<phone>?text=…` once the phone is known; the SSR
- * HTML and any failure fall back to the absolute `/#contacto` form link.
- * Clicks are tracked by the delegated listener in analyticsEvents.ts
- * (matches `wa.me`), so no onClick handler is attached here.
+ * URL rules live in buildWhatsappLink (wa.me + pre-filled text, or the
+ * absolute `/#contacto` fallback in SSR / without a configured phone).
  */
 export const WhatsAppCta: React.FC<WhatsAppCtaProps> = ({
   label,
@@ -33,15 +32,10 @@ export const WhatsAppCta: React.FC<WhatsAppCtaProps> = ({
 }) => {
   const { t } = useLanguage();
   const phone = useWhatsappPhone();
-  const text = message ?? t.waMsgDefault;
-
-  const fallback = servicio
-    ? `/#contacto?servicio=${encodeURIComponent(servicio)}`
-    : "/#contacto";
-  const href = phone
-    ? `https://wa.me/${phone}?text=${encodeURIComponent(text)}`
-    : fallback;
-  const external = Boolean(phone);
+  const { href, external } = buildWhatsappLink(phone, {
+    message: message ?? t.waMsgDefault,
+    servicio,
+  });
 
   const classes = [
     "btn-wa",

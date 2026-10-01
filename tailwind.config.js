@@ -69,9 +69,9 @@ export default {
       },
       fontFamily: {
         // Two-family system (design.md): Space Grotesk display + DM Sans body.
-        sans: ['DM Sans', 'system-ui', 'sans-serif'],
-        display: ['Space Grotesk', 'system-ui', 'sans-serif'],
-        body: ['DM Sans', 'system-ui', 'sans-serif'],
+        sans: ['DM Sans', 'DM Sans Fallback', 'system-ui', 'sans-serif'],
+        display: ['Space Grotesk', 'Space Grotesk Fallback', 'system-ui', 'sans-serif'],
+        body: ['DM Sans', 'DM Sans Fallback', 'system-ui', 'sans-serif'],
       },
       fontSize: {
         'fluid-sm': 'clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem)',

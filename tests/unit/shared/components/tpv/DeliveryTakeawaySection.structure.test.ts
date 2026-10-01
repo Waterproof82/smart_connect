@@ -39,9 +39,9 @@ describe("DeliveryTakeawaySection (design.md D4 bespoke module template)", () =>
     expect(source).toMatch(/t\.deliveryTakeawayBullet4Title/);
   });
 
-  it("renders a CTA (wa.me or #contacto), not hardcoded label text", () => {
+  it("renders a CTA via the shared buildWhatsappLink (wa.me or /#contacto), not hardcoded label text", () => {
     const source = readSource();
-    expect(source).toMatch(/wa\.me|#contacto/);
+    expect(source).toMatch(/buildWhatsappLink\(/);
     expect(source).toMatch(/t\.deliveryTakeawayCtaLabel/);
   });
 

@@ -29,8 +29,19 @@
 - Playwright at 320/375/414/768/1280 px on 7 routes — no horizontal overflow, one h1, no two-line CTA buttons.
 - SEO Specialist final review — all guardrails pass; its two follow-ups fixed in this change.
 
-## Follow-ups (not done)
+## Follow-up pass — pending items resolved (2026-10-01T22:30:00Z)
 
-- Metric-matched `@font-face` fallbacks (`size-adjust`) for DM Sans / Space Grotesk to further reduce font-swap CLS (needs measured metrics).
-- `hreflang` is inconsistent between pages (About and NFC declare it, home does not) — needs a decision.
-- Carta Digital keeps an sr-only h1 with the visible hero as h2; promoting it is an SEO copy decision.
+User asked to fix everything left pending. Actions:
+
+1. `buildWhatsappLink()` (`src/shared/utils/whatsappLink.ts`, TDD: tests/unit/shared/utils/whatsappLink.test.ts) is now the only WhatsApp URL builder: WhatsAppCta, 12 TPV module sections, Contact card, Carta Digital Glovo / closing / hero CTAs. Phone sanitised to digits (wa.me rejects `+`).
+2. Carta Digital: closing + Glovo + hero CTAs moved to the shared WhatsApp button; hero rebuilt on the PageHero grammar; sr-only h1 replaced by the same keyword h1 shown on screen, slogan demoted to display `<p>`. Typo "Habar" fixed.
+3. One `.ds-kicker` style replaces ~25 uppercase tracked eyebrows; card radii unified to `--radius-card` (rounded-xl).
+4. Hreflang removed from About and NFC (site-wide rule: absent until language-addressable URLs; guarded by a new test). `og:locale`/`og:site_name` added to About, NFC, legal (new test). Home WebPage JSON-LD `@id`/`url` aligned with the canonical. Stale index.html SEO comment corrected.
+5. Metric-matched `@font-face` fallbacks for DM Sans and Space Grotesk (values from @capsizecss/metrics).
+6. Pre-existing failing tests fixed: HomeFaqSection (stale: FAQPage JSON-LD moved to App in e1f1461; duplicate "Preguntas frecuentes" heading match), TestimonialCarousel (quote rendered in typographic quotes); `documents-rls` integration guard now requires URL + anon + service key (it crashed when only the service key was set). HomeFaqSection now uses FaqList.
+
+Validation: lint 0/0, tsc pass, Vitest 103/103, Jest 1082 passed / 14 skipped / 0 failed, build + prerender OK, Playwright 7 routes × 5 widths clean, SEO Specialist re-review.
+
+## Follow-ups
+
+- None open from this redesign. The chatbot widget's WhatsApp button (`ChatToggleButton`) now also uses `buildWhatsappLink` and hides below 768 px, where the sticky bar owns WhatsApp; a guard test forbids hand-built `wa.me` links anywhere in `src`. Admin panel untouched (out of scope).

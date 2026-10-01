@@ -21,7 +21,7 @@ const CartaDigitalModosSection: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div
               data-testid="modo-card"
-              className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-6 md:p-8"
+              className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl p-6 md:p-8"
             >
               <div className="w-7 h-7 mb-4 text-[var(--color-primary)]">
                 <UtensilsCrossed className="w-full h-full" aria-hidden="true" />
@@ -46,7 +46,7 @@ const CartaDigitalModosSection: React.FC = () => {
 
             <div
               data-testid="modo-card"
-              className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-6 md:p-8"
+              className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl p-6 md:p-8"
             >
               <div className="w-7 h-7 mb-4 text-[var(--color-primary)]">
                 <ShoppingCart className="w-full h-full" aria-hidden="true" />

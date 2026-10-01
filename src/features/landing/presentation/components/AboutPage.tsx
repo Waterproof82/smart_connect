@@ -19,16 +19,8 @@ const AboutPage: React.FC = () => {
           content="Digitaliza Tenerife es una empresa tecnológica con sede en Santa Cruz de Tenerife. Especialistas en IA, automatización y hardware inteligente para negocios locales en Canarias."
         />
         <link rel="canonical" href="https://digitalizatenerife.es/about" />
-        <link
-          rel="alternate"
-          hrefLang="es"
-          href="https://digitalizatenerife.es/about"
-        />
-        <link
-          rel="alternate"
-          hrefLang="x-default"
-          href="https://digitalizatenerife.es/about"
-        />
+        <meta property="og:locale" content="es_ES" />
+        <meta property="og:site_name" content="Digitaliza Tenerife" />
         <meta
           property="og:title"
           content="Sobre Digitaliza Tenerife — Quiénes somos"

@@ -61,21 +61,21 @@ const HowItWorks: React.FC = () => {
             {steps.map((step, idx) => (
               <div
                 key={step.image}
-                className="relative p-8 bg-[var(--color-bg-alt)] rounded-3xl"
+                className="relative p-8 bg-[var(--color-bg-alt)] rounded-xl"
                 style={{ transitionDelay: `${idx * 150}ms` }}
               >
                 <div className="absolute -top-4 -left-4 w-12 h-12 bg-[var(--color-accent)] rounded-full flex items-center justify-center text-[var(--color-on-accent)] font-bold text-xl">
                   {idx + 1}
                 </div>
                 <div className="flex flex-col items-center text-center">
-                  <div className="w-20 h-20 bg-[var(--color-surface)] rounded-2xl flex items-center justify-center mb-6 text-[var(--color-accent)]">
+                  <div className="w-20 h-20 bg-[var(--color-surface)] rounded-xl flex items-center justify-center mb-6 text-[var(--color-accent)]">
                     {step.icon}
                   </div>
                   <h3 className="ds-h3 mb-3 text-default">
                     {sanitizeInput(step.title)}
                   </h3>
                   <p className="text-muted">{sanitizeInput(step.desc)}</p>
-                  <div className="mt-6 w-full h-48 bg-gradient-to-br from-[var(--color-bg-alt)] to-[var(--color-surface)] rounded-2xl flex items-center justify-center overflow-hidden p-2">
+                  <div className="mt-6 w-full h-48 bg-gradient-to-br from-[var(--color-bg-alt)] to-[var(--color-surface)] rounded-xl flex items-center justify-center overflow-hidden p-2">
                     {imageErrors[idx] ? (
                       <div className="text-center p-4">
                         <div className="w-16 h-16 mx-auto mb-2 text-[var(--color-accent)]">

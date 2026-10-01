@@ -57,7 +57,7 @@ const CartaDigitalDineroSection: React.FC = () => {
     <section id="dinero" className="ds-section bg-[var(--color-bg-alt)]">
       <div className="ds-container">
         <div className="max-w-4xl mx-auto text-center mb-12 md:mb-16">
-          <div className="text-xs font-semibold tracking-[0.3em] text-[var(--color-primary)] uppercase mb-3 md:mb-4">
+          <div className="ds-kicker mb-3 md:mb-4">
             {t.cartaDineroTitle}
           </div>
           <h2 className="ds-h2 mb-4 md:mb-6">
@@ -69,7 +69,7 @@ const CartaDigitalDineroSection: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 max-w-4xl mx-auto mb-12 md:mb-16">
-          <div className="relative group w-full bg-[var(--color-surface)] rounded-3xl p-6 md:p-8 border border-[var(--color-error-border)] flex flex-col">
+          <div className="relative group w-full bg-[var(--color-surface)] rounded-xl p-6 md:p-8 border border-[var(--color-error-border)] flex flex-col">
             <div className="absolute -right-6 -bottom-6 text-[120px] text-[var(--color-error-text)] opacity-[0.05] group-hover:opacity-[0.08] transition-opacity pointer-events-none">
               <TrendingDown size={120} strokeWidth={1} />
             </div>
@@ -112,7 +112,7 @@ const CartaDigitalDineroSection: React.FC = () => {
             </div>
           </div>
 
-          <div className="relative group w-full bg-[var(--color-surface)] rounded-3xl p-6 md:p-8 border border-[var(--color-success-border)] flex flex-col">
+          <div className="relative group w-full bg-[var(--color-surface)] rounded-xl p-6 md:p-8 border border-[var(--color-success-border)] flex flex-col">
             <div className="absolute -right-6 -bottom-6 text-[120px] text-[var(--color-success-text)] opacity-[0.05] group-hover:opacity-[0.08] transition-opacity pointer-events-none">
               <TrendingUp size={120} strokeWidth={1} />
             </div>

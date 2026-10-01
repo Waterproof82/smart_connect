@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Unified design system across every public page** (`design.md`, `tokens.css`): one hero layout, one section rhythm, one heading scale (Space Grotesk + DM Sans) and shared building blocks (`PageShell`, `PageHero`, `Section`, `FaqList`, `ClosingCta`) used by home, Carta Digital, Tarjetas NFC, Chatbots IA, TPV, About, legal pages and the 404.
 - **WhatsApp as the single primary action**: a shared green WhatsApp button (`WhatsAppCta`) in the nav, every hero, every closing block and the footer, with a pre-filled message per service; on mobile a sticky WhatsApp bar stays one tap away without covering the chatbot or the cookie button. Without a configured number the button falls back to the contact form.
 - The home hero now states who we work with: restaurants, bars, shops and businesses in Tenerife and the Canary Islands.
+- Every WhatsApp link on the site (TPV modules, Carta Digital, contact card) now opens a pre-filled message for the right service.
+- Metric-matched fallback fonts, so text no longer jumps when the web fonts finish loading.
 
 ### Changed
 
@@ -19,6 +21,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Content no longer fades in on scroll and the home headline is no longer animated, so pages appear complete immediately.
 - Nav links to `#contacto`, `#exito` and the logo now work from every page, not only from the home page.
 - The home FAQ and contact form are now included in the pre-rendered HTML (they were only loaded after JavaScript).
+- `/carta-digital` shows its main heading on screen ("Carta digital para restaurantes: pedidos sin pagar comisión a Glovo") instead of keeping it hidden; the page hero now follows the same layout as the other product pages.
+- Small labels above headings use one consistent style across all pages.
+
+### Fixed
+
+- Typo on the Carta Digital closing button ("Habar con asesor" → "Hablar con asesor").
+- `/carta-digital` had two identical "¿Cómo se ve?" headings; the steps section is now "¿Cómo funciona?", and the English demo heading reads "What does it look like?".
+- On mobile the chatbot's WhatsApp button no longer duplicates the sticky WhatsApp bar.
+- Two previously failing tests (home FAQ, testimonials) were out of date and now check the current behaviour; the Supabase RLS integration test is skipped unless Supabase is fully configured instead of crashing.
+- WhatsApp links could include a `+`, which wa.me rejects; numbers are now digits only.
+- Search metadata consistency: About, Tarjetas NFC and legal pages now declare the site name and locale for social previews, the home page's structured data URL matches its canonical URL, and stray `hreflang` tags were removed from two pages.
 
 ### Removed
 

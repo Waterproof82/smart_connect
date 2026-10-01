@@ -19,7 +19,7 @@ const CartaDigitalTeaser: React.FC<CartaDigitalTeaserProps> = ({ id }) => {
       className="ds-section bg-[var(--color-bg)] text-default"
     >
       <div className="ds-container max-w-3xl text-center">
-        <div className="text-xs font-semibold tracking-[0.3em] text-[var(--color-primary)] uppercase mb-3 md:mb-4">
+        <div className="ds-kicker mb-3 md:mb-4">
           {t.cartaTeaserEyebrow}
         </div>
         <h2 className="ds-h2 mb-4 md:mb-6">

@@ -54,7 +54,7 @@ const Features: React.FC = () => {
           {features.map((feature, idx) => (
             <div
               key={idx}
-              className="p-6 bg-[var(--color-surface)] rounded-2xl border border-[var(--color-border)]"
+              className="p-6 bg-[var(--color-surface)] rounded-xl border border-[var(--color-border)]"
               style={{ transitionDelay: `${idx * 100}ms` }}
             >
               <div

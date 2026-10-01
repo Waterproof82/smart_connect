@@ -44,12 +44,10 @@ const CartaDigitalComoFuncionaSection: React.FC = () => {
       <div className="ds-container">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12 md:mb-16">
-            <div className="text-xs font-semibold tracking-[0.3em] text-[var(--color-primary)] uppercase mb-3 md:mb-4">
+            <div className="ds-kicker mb-3 md:mb-4">
               {t.cartaFlujoTitle}
             </div>
-            <h2 className="ds-h2">
-              {t.cartaFlujoSubtitle}
-            </h2>
+            <h2 className="ds-h2">{t.cartaComoFuncionaTitle}</h2>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6 relative">
@@ -60,7 +58,7 @@ const CartaDigitalComoFuncionaSection: React.FC = () => {
             {steps.map((step) => (
               <div
                 key={step.title}
-                className="text-center relative z-10 p-3 md:p-4 rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)] hover:border-[var(--color-primary)] transition-all hover:-translate-y-1"
+                className="text-center relative z-10 p-3 md:p-4 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border)] hover:border-[var(--color-primary)] transition-all hover:-translate-y-1"
               >
                 <div className="w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 rounded-full bg-[var(--color-bg-alt)] border-2 border-[var(--color-primary)] flex items-center justify-center text-xl md:text-2xl lg:text-3xl mx-auto mb-3 md:mb-4">
                   {step.icon}

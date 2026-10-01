@@ -14,6 +14,7 @@ export interface DesignSystemCopy {
   waMsgTpv: string;
   heroAudience: string;
   footerStatement: string;
+  cartaComoFuncionaTitle: string;
 }
 
 export const designSystemCopy: {
@@ -34,6 +35,8 @@ export const designSystemCopy: {
       "Para restaurantes, bares, tiendas y empresas de Tenerife y Canarias.",
     footerStatement:
       "Tecnología práctica para hostelería, comercio y empresas de Tenerife.",
+    // Distinct from the demo section's "¿Cómo se ve?" (no duplicate h2).
+    cartaComoFuncionaTitle: "¿Cómo funciona?",
   },
   en: {
     waCtaLabel: "Message us on WhatsApp",
@@ -49,5 +52,6 @@ export const designSystemCopy: {
       "For restaurants, bars, shops and businesses in Tenerife and the Canary Islands.",
     footerStatement:
       "Practical technology for hospitality, retail and businesses in Tenerife.",
+    cartaComoFuncionaTitle: "How does it work?",
   },
 };

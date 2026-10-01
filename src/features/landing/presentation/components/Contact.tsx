@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { getAppSettings, AppSettings } from "@shared/services/settingsService";
 import { useWhatsappPhone } from "@shared/hooks";
+import { buildWhatsappLink } from "@shared/utils/whatsappLink";
 import { createLandingContainer } from "../LandingContainer";
 import { LeadEntity } from "../../domain/entities";
 import { sanitizeInput, isValidEmail } from "@shared/utils/sanitizer";
@@ -43,7 +44,7 @@ const SERVICE_OPTIONS: Array<{ value: string; labelKey: keyof Translation }> = [
 ];
 
 const fieldClasses =
-  "w-full border rounded-2xl py-3 sm:py-4 px-4 sm:px-6 outline-none transition-colors text-sm text-default bg-[var(--color-surface)] border-[var(--color-border)] focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--focus-ring)] min-h-[44px]";
+  "w-full border rounded-[var(--radius-input)] py-3 sm:py-4 px-4 sm:px-6 outline-none transition-colors text-sm text-default bg-[var(--color-surface)] border-[var(--color-border)] focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--focus-ring)] min-h-[44px]";
 
 const errorClasses =
   "bg-[var(--color-error-bg)] border-[var(--color-error-border)] focus:border-[var(--color-error-text)]";
@@ -306,6 +307,10 @@ const Contact: React.FC = () => {
 
   const { ref: nameRegRef, ...nameRegProps } = register("name");
 
+  const whatsappLink = whatsappPhone
+    ? buildWhatsappLink(whatsappPhone, { message: t.waMsgDefault })
+    : null;
+
   return (
     <div className="relative ds-section overflow-hidden">
       <DotField
@@ -346,10 +351,9 @@ const Contact: React.FC = () => {
                 value: whatsappPhone,
                 desc: t.contactWhatsappDesc,
                 color: "text-[var(--color-icon-emerald)]",
-                href: whatsappPhone
-                  ? `https://wa.me/${whatsappPhone.replaceAll(/[^\d+]/g, "")}`
-                  : undefined,
-                external: true,
+                // external only when buildWhatsappLink produced a wa.me URL
+                href: whatsappLink?.href,
+                external: whatsappLink?.external ?? false,
               },
               {
                 id: "location",
@@ -370,7 +374,7 @@ const Contact: React.FC = () => {
                   return "bg-[var(--color-bg-alt)] border-2 border-dashed border-[var(--color-border)]";
                 return "bg-[var(--color-surface)] border border-[var(--color-border)]";
               };
-              const cardClasses = `p-6 rounded-2xl flex gap-4 group hover:border-[var(--color-border)] transition-colors block ${getCardBackground()}`;
+              const cardClasses = `p-6 rounded-[var(--radius-card)] flex gap-4 group hover:border-[var(--color-border)] transition-colors block ${getCardBackground()}`;
               const content = (
                 <>
                   <div
@@ -412,7 +416,7 @@ const Contact: React.FC = () => {
           <div
             className="lg:col-span-7"
           >
-            <div className="bg-[var(--color-bg-alt)] p-8 md:p-10 rounded-3xl border border-[var(--color-border)] shadow-xl">
+            <div className="bg-[var(--color-bg-alt)] p-6 md:p-10 rounded-[var(--radius-card)] border border-[var(--color-border)]">
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
                 <div className="grid md:grid-cols-2 gap-5">
                   <div>
@@ -623,7 +627,7 @@ const Contact: React.FC = () => {
                 </div>
 
                 {submitStatus === "success" && (
-                  <output className="flex items-center gap-3 bg-[var(--color-success-bg)] border border-[var(--color-success-border)] rounded-2xl py-4 px-6">
+                  <output className="flex items-center gap-3 bg-[var(--color-success-bg)] border border-[var(--color-success-border)] rounded-[var(--radius-card)] py-4 px-6">
                     <CheckCircle2 className="w-5 h-5 text-[var(--color-success-text)]" />
                     <p className="text-sm text-[var(--color-success-text)]">
                       {t.contactSuccess}
@@ -635,7 +639,7 @@ const Contact: React.FC = () => {
                   <div
                     id="contact-error-message"
                     role="alert"
-                    className="flex items-center gap-3 bg-[var(--color-error-bg)] border border-[var(--color-error-border)] rounded-2xl py-4 px-6"
+                    className="flex items-center gap-3 bg-[var(--color-error-bg)] border border-[var(--color-error-border)] rounded-[var(--radius-card)] py-4 px-6"
                   >
                     <AlertCircle className="w-5 h-5 text-[var(--color-error-text)] shrink-0" />
                     <p className="text-sm text-[var(--color-error-text)]">

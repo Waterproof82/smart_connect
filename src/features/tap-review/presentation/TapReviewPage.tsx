@@ -42,8 +42,8 @@ const TapReviewPage: React.FC = () => {
         <title>{PAGE_TITLE}</title>
         <meta name="description" content={PAGE_DESCRIPTION} />
         <link rel="canonical" href={PAGE_URL} />
-        <link rel="alternate" hrefLang="es" href={PAGE_URL} />
-        <link rel="alternate" hrefLang="x-default" href={PAGE_URL} />
+        <meta property="og:locale" content="es_ES" />
+        <meta property="og:site_name" content="Digitaliza Tenerife" />
         <meta property="og:title" content={PAGE_TITLE} />
         <meta property="og:description" content={PAGE_DESCRIPTION} />
         <meta property="og:type" content="website" />

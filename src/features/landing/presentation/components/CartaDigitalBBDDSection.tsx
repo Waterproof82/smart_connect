@@ -15,7 +15,7 @@ const CartaDigitalBBDDSection: React.FC = () => {
     >
       <div className="ds-container">
         <div className="max-w-3xl mx-auto text-center mb-12 md:mb-16">
-          <div className="text-xs font-semibold tracking-[0.3em] text-[var(--color-primary)] uppercase mb-3 md:mb-4">
+          <div className="ds-kicker mb-3 md:mb-4">
             {t.cartaBBDDTitle}
           </div>
           <h2 className="ds-h2 mb-4 md:mb-6">
@@ -40,7 +40,7 @@ const CartaDigitalBBDDSection: React.FC = () => {
 
           <div className="text-2xl text-[var(--color-primary)] mb-4">↓</div>
 
-          <div className="bg-[var(--color-surface)] border border-[var(--color-accent-border)] rounded-2xl p-6 md:p-8 w-full relative">
+          <div className="bg-[var(--color-surface)] border border-[var(--color-accent-border)] rounded-xl p-6 md:p-8 w-full relative">
             <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[var(--color-primary)] text-[var(--color-bg)] text-xs font-bold tracking-widest px-4 py-1 rounded-full">
               {t.cartaBBDDLabelTuBBDD}
             </div>

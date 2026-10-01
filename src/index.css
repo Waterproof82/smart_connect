@@ -303,6 +303,21 @@
     letter-spacing: -0.01em;
   }
 
+  /* Small label above a heading. Sentence case, no tracking — the
+   * uppercase spaced-out eyebrow is a templated tell (design.md). */
+  .ds-kicker {
+    display: block;
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--color-primary);
+  }
+  .ds-kicker--success {
+    color: var(--color-success-text);
+  }
+
   .ds-lede {
     font-size: var(--text-lede);
     line-height: 1.6;

@@ -11,10 +11,10 @@ const renderWithLanguage = () => {
 };
 
 describe("HomeFaqSection", () => {
-  it("renders the FAQ section with a title heading", () => {
+  it("renders the FAQ section with a single h2 title", () => {
     renderWithLanguage();
     expect(
-      screen.getByRole("heading", { name: /Preguntas Frecuentes/i }),
+      screen.getByRole("heading", { level: 2, name: /Preguntas Frecuentes/i }),
     ).toBeInTheDocument();
   });
 
@@ -35,10 +35,17 @@ describe("HomeFaqSection", () => {
     expect(screen.getByText(/¿Cuánto tiempo lleva implementar el sistema\?/)).toBeInTheDocument();
   });
 
-  it("renders FAQ schema script tag in the document", () => {
+  // The home FAQPage JSON-LD is emitted once by App.tsx (buildHomeSchema,
+  // fed by useHomeFaqGroups) — the section must not emit a duplicate.
+  it("does not emit its own JSON-LD (App.tsx owns the FAQPage schema)", () => {
     const { container } = renderWithLanguage();
     const scripts = container.querySelectorAll('script[type="application/ld+json"]');
-    expect(scripts.length).toBeGreaterThanOrEqual(1);
+    expect(scripts).toHaveLength(0);
+  });
+
+  it("keeps every answer in the DOM (visible FAQ == FAQPage JSON-LD)", () => {
+    renderWithLanguage();
+    expect(screen.getAllByRole("group").every((d) => d.querySelector("p"))).toBe(true);
   });
 
   it("renders inside a section element with an aria-label", () => {

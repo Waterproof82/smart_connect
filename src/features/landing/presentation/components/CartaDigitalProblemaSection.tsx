@@ -55,7 +55,7 @@ const CartaDigitalProblemaSection: React.FC = () => {
     <section id="problema" className="ds-section bg-[var(--color-bg-alt)]">
       <div className="ds-container">
         <div className="max-w-6xl mx-auto">
-          <div className="text-xs font-semibold tracking-[0.3em] text-[var(--color-primary)] uppercase mb-3 md:mb-4">
+          <div className="ds-kicker mb-3 md:mb-4">
             {t.cartaProblemaTitle}
           </div>
           <h2 className="ds-h2 mb-4 md:mb-6">

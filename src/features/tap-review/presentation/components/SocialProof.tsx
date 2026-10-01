@@ -53,7 +53,7 @@ const SocialProof: React.FC = () => {
             {testimonials.map((testimonial, idx) => (
               <div
                 key={idx}
-                className="p-8 bg-[var(--color-bg-alt)] rounded-3xl"
+                className="p-8 bg-[var(--color-bg-alt)] rounded-xl"
                 style={{ transitionDelay: `${idx * 150}ms` }}
               >
                 <div className="flex gap-1 mb-4">

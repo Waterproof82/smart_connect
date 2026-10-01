@@ -7,7 +7,7 @@ const StatsBanner: React.FC = () => {
 
   return (
     <div className="ds-container my-12">
-      <div className="bg-gradient-to-r from-[var(--color-bg-alt)] to-[var(--color-surface)] border border-[var(--color-border)] rounded-3xl p-8">
+      <div className="bg-gradient-to-r from-[var(--color-bg-alt)] to-[var(--color-surface)] border border-[var(--color-border)] rounded-xl p-8">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-1">

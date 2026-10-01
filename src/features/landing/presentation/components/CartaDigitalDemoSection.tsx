@@ -45,7 +45,7 @@ const CartaDigitalDemoSection: React.FC<CartaDigitalDemoSectionProps> = ({
     <section id="demo" className="ds-section bg-[var(--color-bg-alt)]">
       <div className="ds-container">
         <div className="text-center mb-12 md:mb-16">
-          <div className="text-xs font-semibold tracking-[0.3em] text-[var(--color-primary)] uppercase mb-3 md:mb-4">
+          <div className="ds-kicker mb-3 md:mb-4">
             {t.cartaDemoTitle}
           </div>
           <h2 className="ds-h2">
@@ -54,8 +54,8 @@ const CartaDigitalDemoSection: React.FC<CartaDigitalDemoSectionProps> = ({
         </div>
 
         <div className="max-w-4xl mx-auto mb-10 md:mb-14">
-          <div className="relative bg-black rounded-3xl overflow-hidden shadow-2xl">
-            <div className="absolute inset-0 pointer-events-none z-10 border-[10px] md:border-[16px] border-[var(--color-bg-alt)] rounded-3xl"></div>
+          <div className="relative bg-black rounded-xl overflow-hidden shadow-2xl">
+            <div className="absolute inset-0 pointer-events-none z-10 border-[10px] md:border-[16px] border-[var(--color-bg-alt)] rounded-xl"></div>
             <video
               ref={videoRef}
               src="/assets/video.mp4"
@@ -103,7 +103,7 @@ const CartaDigitalDemoSection: React.FC<CartaDigitalDemoSectionProps> = ({
           {screens.map((screen) => (
             <div
               key={screen.image}
-              className="bg-[var(--color-surface)] rounded-2xl overflow-hidden border border-[var(--color-border)] hover:-translate-y-1 transition-all cursor-pointer"
+              className="bg-[var(--color-surface)] rounded-xl overflow-hidden border border-[var(--color-border)] hover:-translate-y-1 transition-all cursor-pointer"
             >
               <div className="px-3 py-2 bg-[var(--color-bg-alt)] flex items-center gap-1.5 border-b border-[var(--color-border)]">
                 <div className="w-2.5 h-2.5 rounded-full bg-[#FF5F56]"></div>

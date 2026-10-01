@@ -13,8 +13,9 @@
  */
 :root {
   /* Typography */
-  --font-display: "Space Grotesk", system-ui, sans-serif;
-  --font-body: "DM Sans", system-ui, sans-serif;
+  --font-display: "Space Grotesk", "Space Grotesk Fallback", system-ui,
+    sans-serif;
+  --font-body: "DM Sans", "DM Sans Fallback", system-ui, sans-serif;
 
   --text-xs: 0.75rem;
   --text-sm: 0.875rem;
@@ -68,4 +69,29 @@
   :root {
     --wa-bar-h: 0px;
   }
+}
+
+/*
+ * Metric-matched local fallbacks: while the Google Fonts load
+ * (display=swap) text renders in Arial scaled to the web font's average
+ * glyph width and vertical metrics, so the swap causes ~no layout shift.
+ * Values computed from @capsizecss/metrics (next/font method):
+ * size-adjust = xWidthAvg ratio vs Arial; overrides = metric / (UPM · size-adjust).
+ */
+@font-face {
+  font-family: "DM Sans Fallback";
+  src: local("Arial"), local("ArialMT"), local("Liberation Sans");
+  size-adjust: 104.53%;
+  ascent-override: 94.9%;
+  descent-override: 29.66%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Space Grotesk Fallback";
+  src: local("Arial"), local("ArialMT"), local("Liberation Sans");
+  size-adjust: 109.69%;
+  ascent-override: 89.71%;
+  descent-override: 26.62%;
+  line-gap-override: 0%;
 }

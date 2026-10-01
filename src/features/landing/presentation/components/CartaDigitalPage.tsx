@@ -11,7 +11,6 @@ import {
 } from "@shared/presentation/components/SeoSchema";
 import { useCartaFaqGroup } from "@features/landing/presentation/components/HomeFaqSection";
 import { useLanguage } from "@shared/context/LanguageContext";
-import { useWhatsappPhone } from "@shared/hooks";
 import { SOLUTIONS } from "@shared/config/solutions";
 
 const ORG_URL = "https://digitalizatenerife.es";
@@ -26,7 +25,6 @@ const PAGE_DESCRIPTION =
  */
 const CartaDigitalPage: React.FC = () => {
   const { t } = useLanguage();
-  const whatsappPhone = useWhatsappPhone();
   const cartaFaqGroup = useCartaFaqGroup();
   const solutionMeta = SOLUTIONS.find((s) => s.id === "carta-digital");
 
@@ -85,8 +83,7 @@ const CartaDigitalPage: React.FC = () => {
       />
 
       <PageShell waMessage={t.waMsgCarta} servicio="Carta Digital">
-        <h1 className="sr-only">{t.cartaPageH1}</h1>
-        <CartaDigitalSection id="carta-digital" whatsappPhone={whatsappPhone} />
+        <CartaDigitalSection id="carta-digital" />
 
         <Section id="faq" width="prose" title={cartaFaqGroup.title}>
           <FaqList items={cartaFaqGroup.items} />

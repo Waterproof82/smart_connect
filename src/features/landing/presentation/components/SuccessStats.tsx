@@ -33,7 +33,7 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
   prominent,
 }) => (
   <div
-    className={`bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded-[2rem] flex flex-col ${
+    className={`bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded-xl flex flex-col ${
       isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
     } ${prominent ? "p-8 md:p-10" : "p-7"}`}
     style={{ transitionDelay: `${delay}ms` }}

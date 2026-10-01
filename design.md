@@ -56,10 +56,15 @@ The WhatsApp green is reserved for the primary action.
 - **Display:** Space Grotesk 700 (h1/h2), 600 (h3) — `var(--font-display)`.
 - **Body:** DM Sans 400/500/600 — `var(--font-body)`.
 - Two families only. Instrument Sans was removed.
+- Metric-matched local fallbacks (`DM Sans Fallback`, `Space Grotesk
+  Fallback`: Arial + `size-adjust`/ascent/descent overrides, values from
+  `@capsizecss/metrics`) keep the font swap free of layout shift.
 - Display tracking `-0.025em`, leading `1.05`. All headings roman — never italic.
 - Scale (`tokens.css`): `--text-display`, `--text-display-s`, `--text-h2`,
   `--text-h3`, `--text-lede`. Classes: `.ds-h1`, `.ds-h1--s`, `.ds-h2`,
-  `.ds-h3`, `.ds-lede`.
+  `.ds-h3`, `.ds-lede`, `.ds-kicker`.
+- `.ds-kicker` is the only label-above-a-heading style: sentence case,
+  primary colour, no uppercase tracking.
 
 ## Spacing & layout
 
@@ -90,6 +95,10 @@ split.
   icon, verb-first label ("Escríbenos por WhatsApp", "Contactar", "Pedir una
   demo"). Links to `https://wa.me/<phone>?text=<pre-filled per service>`;
   SSR / no-phone fallback is the absolute `/#contacto?servicio=…`.
+  Every WhatsApp URL on the site is built by
+  `buildWhatsappLink()` (`src/shared/utils/whatsappLink.ts`) — never
+  hand-build `wa.me` links. Secondary in-section links (TPV modules) use it
+  too, styled as typographic links.
 - **Secondary:** `.btn-ghost` — pill, hairline border, transparent.
 - **Mobile:** `MobileWhatsAppBar` (C4 sticky bottom bar) below 768 px; space
   reserved via `--wa-bar-h` so chatbot and cookie reopener sit above it.
@@ -122,7 +131,11 @@ split.
 - The wordmark, nav and footer (via `PageShell`).
 - The WhatsApp primary CTA and its placement (hero + closing + mobile bar).
 - Display + body fonts, heading classes, section rhythm, container widths.
-- Exactly one `<h1>` per route; SEO meta / JSON-LD blocks untouched.
+- Exactly one visible `<h1>` per route (exception: `/tarjetas-nfc` keeps its
+  frozen sr-only h1, SEO_PROTOCOL P-13). On `/carta-digital` the keyword h1
+  sits above the display slogan, which is a `<p>`, not a heading.
+- `og:locale` + `og:site_name` on every page; no `hreflang` anywhere until
+  URLs are language-addressable.
 
 ## What pages MAY differ on
 

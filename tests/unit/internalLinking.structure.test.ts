@@ -46,3 +46,20 @@ describe("internal linking", () => {
     }
   });
 });
+
+// Hreflang: intentionally absent site-wide until URLs are language-addressable
+// (App.tsx SEO checklist, change `i18n-url-routing`). One page declaring it
+// while the rest do not is the inconsistency this guards against.
+describe("hreflang consistency", () => {
+  it.each(ALL_PAGES)("%s declares no hrefLang alternate", (file) => {
+    expect(read(file)).not.toMatch(/hrefLang/);
+  });
+});
+
+describe("Open Graph consistency", () => {
+  it.each(ALL_PAGES)("%s declares og:locale es_ES and og:site_name", (file) => {
+    const source = read(file);
+    expect(source).toMatch(/property="og:locale" content="es_ES"/);
+    expect(source).toMatch(/property="og:site_name" content="Digitaliza Tenerife"/);
+  });
+});

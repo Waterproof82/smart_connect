@@ -6,6 +6,7 @@
 import React from "react";
 import { ShieldCheck, Lock, History, UserPlus } from "lucide-react";
 import { useLanguage } from "@shared/context/LanguageContext";
+import { buildWhatsappLink } from "@shared/utils/whatsappLink";
 import { accentStyle } from "@shared/config/accents";
 import type { TpvModuleSectionProps } from "./TpvModuleSections";
 import TpvModuleFigure from "./TpvModuleFigure";
@@ -24,7 +25,10 @@ const RbacRolesSection: React.FC<TpvModuleSectionProps> = ({
     { title: t.rbacRolesBullet4Title, desc: t.rbacRolesBullet4Desc },
   ];
 
-  const ctaHref = whatsappPhone ? `https://wa.me/${whatsappPhone}` : "/#contacto?servicio=TPV%20para%20restaurantes";
+  const cta = buildWhatsappLink(whatsappPhone ?? "", {
+    message: t.waMsgTpv,
+    servicio: "TPV para restaurantes",
+  });
 
   return (
     <section
@@ -34,7 +38,7 @@ const RbacRolesSection: React.FC<TpvModuleSectionProps> = ({
       style={accentStyle("--color-icon-orange")}
     >
       <div className="ds-container">
-        <div className="text-xs font-semibold tracking-wider uppercase text-[var(--color-primary)] mb-3">
+        <div className="ds-kicker mb-3">
           {t.rbacRolesEyebrow}
         </div>
         <h2
@@ -78,9 +82,9 @@ const RbacRolesSection: React.FC<TpvModuleSectionProps> = ({
         </div>
 
         <a
-          href={ctaHref}
-          target={whatsappPhone ? "_blank" : undefined}
-          rel={whatsappPhone ? "noopener noreferrer" : undefined}
+          href={cta.href}
+          target={cta.external ? "_blank" : undefined}
+          rel={cta.external ? "noopener noreferrer" : undefined}
           className="inline-flex items-center gap-2 text-sm font-bold text-[var(--color-primary)] hover:underline mt-10"
         >
           {t.rbacRolesCtaLabel}

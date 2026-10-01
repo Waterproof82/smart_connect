@@ -1,4 +1,5 @@
 import React from "react";
+import { FaqList } from "@shared/presentation/layout";
 import { useLanguage } from "@shared/context/LanguageContext";
 
 export interface HomeFaqEntry {
@@ -83,36 +84,19 @@ const HomeFaqSection: React.FC = () => {
   return (
     <section
       aria-label={t.homeFaqTitle}
-      className="max-w-3xl mx-auto px-4 md:px-6"
+      className="ds-container ds-container--prose"
     >
-      <h2 className="ds-h2 mb-10 md:mb-14 text-center">
-        {t.homeFaqTitle}
-      </h2>
-      {groups.map((group) => (
-        <div key={group.title} className="mb-10 md:mb-14 last:mb-0">
-          <h3 className="ds-h3 text-muted uppercase tracking-wider mb-4">
-            {group.title}
-          </h3>
-          <div className="space-y-3">
-            {group.items.map((faq) => (
-              <details
-                key={faq.q}
-                className="group border border-[var(--color-border)] rounded-lg bg-[var(--color-surface)] overflow-hidden"
-              >
-                <summary className="flex items-center justify-between px-5 py-4 cursor-pointer font-semibold text-base select-none hover:bg-[var(--color-accent-subtle)] transition-colors duration-150">
-                  {faq.q}
-                  <span className="ml-4 shrink-0 text-[var(--color-primary)] group-open:rotate-45 transition-transform duration-200">
-                    +
-                  </span>
-                </summary>
-                <p className="px-5 pb-4 pt-2 text-sm text-muted leading-relaxed">
-                  {faq.a}
-                </p>
-              </details>
-            ))}
+      <div className="ds-section-head">
+        <h2 className="ds-h2">{t.homeFaqTitle}</h2>
+      </div>
+      <div className="grid gap-[var(--space-xl)]">
+        {groups.map((group) => (
+          <div key={group.title}>
+            <h3 className="ds-h3 text-muted mb-2">{group.title}</h3>
+            <FaqList items={group.items} />
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </section>
   );
 };

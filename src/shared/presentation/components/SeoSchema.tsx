@@ -58,8 +58,9 @@ export function buildHomeSchema(
 
   const webPage = {
     "@type": "WebPage",
-    "@id": ORG_URL,
-    url: ORG_URL,
+    // Matches the home canonical (https://digitalizatenerife.es/).
+    "@id": `${ORG_URL}/#webpage`,
+    url: `${ORG_URL}/`,
     name: "Digitaliza Tenerife | Carta digital, NFC e IA para negocios",
     description:
       "Carta digital sin comisiones, tarjetas NFC para reseñas de Google, chatbots con IA y TPV para restaurantes y negocios de Tenerife y Canarias.",
