@@ -19,10 +19,6 @@
           "type": "application/json"
         },
         {
-          "rel": "oauth2-authorization-server",
-          "href": "https://tysjedvujvsmrzzrmesr.supabase.co"
-        },
-        {
           "rel": "privacy-policy",
           "href": "https://digitalizatenerife.es/legal/privacidad",
           "type": "text/html"

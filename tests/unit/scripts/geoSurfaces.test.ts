@@ -24,7 +24,6 @@ const SURFACE_FILES = [
   "public/llms.txt",
   "public/.well-known/llms.txt",
   "public/.well-known/api-catalog",
-  "public/.well-known/oauth-protected-resource",
   "public/.well-known/agent-skills/index.json",
   "public/robots.txt",
 ];
@@ -86,21 +85,16 @@ describe("geoSurfaces guard (design.md §4.7) — no dead URLs, honest hashes, v
     expect(contactRequest.url).toBe("https://digitalizatenerife.es/#contacto");
   });
 
-  it("both .well-known JSON surfaces parse cleanly", () => {
+  it("the api-catalog JSON surface parses cleanly", () => {
     expect(() =>
       JSON.parse(read("public/.well-known/api-catalog")),
     ).not.toThrow();
-    expect(() =>
-      JSON.parse(read("public/.well-known/oauth-protected-resource")),
-    ).not.toThrow();
   });
 
-  it("api-catalog and oauth-protected-resource have no reference to /docs/api or /privacy", () => {
+  it("api-catalog has no reference to /docs/api or /privacy", () => {
     const apiCatalog = read("public/.well-known/api-catalog");
-    const oauthResource = read("public/.well-known/oauth-protected-resource");
 
     expect(apiCatalog).not.toMatch(/\/docs\/api/);
-    expect(oauthResource).not.toMatch(/\/docs\/api/);
     expect(apiCatalog).not.toMatch(
       /https:\/\/digitalizatenerife\.es\/privacy(?!\w)/,
     );
