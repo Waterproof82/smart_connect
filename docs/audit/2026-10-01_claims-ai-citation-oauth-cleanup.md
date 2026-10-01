@@ -27,3 +27,10 @@
 - **Reproduction (production, curl):** `apikey` only → 200; `apikey` + `Authorization: Bearer <publishable key>` → 200; `apikey` + `Authorization: Bearer <expired/invalid JWT>` → **500**.
 - **Root cause (pre-existing bug, exposed by the change):** `authenticateRequest` built the Supabase client with the caller's `Authorization` header; when `auth.getUser()` rejected the token it fell back to "anonymous" but kept using that same client, so every `match_documents` RPC was rejected by PostgREST ("Vector search failed" → 500). Browsers holding a stored, now-invalid session hit this.
 - **Fix (in repo, NOT yet deployed):** on an invalid token, return a header-less client. Needs `chat-with-rag` redeploy to `tysjedvujvsmrzzrmesr` (the Supabase connector had disconnected). Interim workaround for an affected browser: clear site data / `sb-*-auth-token` in localStorage.
+
+## Follow-up: chatbot still 500 from the browser (same day)
+
+- After PR #95 was merged and `chat-with-rag` redeployed with the invalid-session fix (v46; tested with curl: no session, public key as Bearer, invalid JWT → all 200), the browser chatbot still returned 500, also in a private window.
+- Supabase function logs (`function_logs`) show `[RAG] Error: Embedding generation failed` for the browser requests; the later `gemini-generate` 401 is the expected fallback now that anonymous sign-ins are off. Nine different curl queries all returned 200 at the same time, so the failure depends on something in the browser request. The function did not log Gemini's reason.
+- **Deployed v47:** logs Gemini's HTTP status, the query length and the error message (never the API key or the user's text) when the embedding call fails. Repo updated to match.
+- `gemini-embedding` has no logs because only the admin panel calls it; the chatbot embeds inside `chat-with-rag`.
