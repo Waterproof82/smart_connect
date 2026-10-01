@@ -20,3 +20,10 @@
 - **Known limitation:** a 24-request burst did **not** trigger HTTP 429. The limiter is in-memory per isolate (same pattern as `gemini-generate`), so requests spread across isolates are not counted together. It reduces nothing against a determined caller. A robust limit needs shared state (e.g. a Postgres counter via RPC) or a quota cap on the Gemini API key — not applied.
 - **Removed:** `api-catalog` and `http-message-signatures-directory` (and references). Left in place: `Link: </.well-known/mcp/server-card.json>; rel="api-catalog"` in `vercel.json` (mislabelled rel, harmless; decide separately).
 - **Not done:** deleting the `test-log` function (the MCP has no delete tool; remove from the Supabase dashboard or CLI).
+
+## Incident: chatbot HTTP 500 after disabling anonymous sign-ins (same day)
+
+- **Symptom:** after the owner disabled anonymous sign-ins and sign-ups in Supabase Auth, the browser chatbot got HTTP 500 from `chat-with-rag`.
+- **Reproduction (production, curl):** `apikey` only → 200; `apikey` + `Authorization: Bearer <publishable key>` → 200; `apikey` + `Authorization: Bearer <expired/invalid JWT>` → **500**.
+- **Root cause (pre-existing bug, exposed by the change):** `authenticateRequest` built the Supabase client with the caller's `Authorization` header; when `auth.getUser()` rejected the token it fell back to "anonymous" but kept using that same client, so every `match_documents` RPC was rejected by PostgREST ("Vector search failed" → 500). Browsers holding a stored, now-invalid session hit this.
+- **Fix (in repo, NOT yet deployed):** on an invalid token, return a header-less client. Needs `chat-with-rag` redeploy to `tysjedvujvsmrzzrmesr` (the Supabase connector had disconnected). Interim workaround for an affected browser: clear site data / `sb-*-auth-token` in localStorage.

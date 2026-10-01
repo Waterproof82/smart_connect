@@ -228,7 +228,14 @@ async function authenticateRequest(req) {
   if (!authHeader) return { supabase, user: { id: 'anonymous', role: 'anonymous' } }
 
   const { data: { user }, error } = await supabase.auth.getUser()
-  if (!user || error) return { supabase, user: { id: 'anonymous', role: 'anonymous' } }
+  if (!user || error) {
+    // Stale/invalid session (e.g. an expired token still stored in the browser, or
+    // the public API key sent as Bearer): do NOT reuse the client that carries the
+    // bad Authorization header — PostgREST would reject every RPC with a 401 and the
+    // chatbot would answer 500. Fall back to a header-less (anonymous) client.
+    const anonSupabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_ANON_KEY')!)
+    return { supabase: anonSupabase, user: { id: 'anonymous', role: 'anonymous' } }
+  }
 
   const role = user.role === 'anon' ? 'anonymous' : user.role
   return { supabase, user: { ...user, role } }
