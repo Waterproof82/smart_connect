@@ -22,8 +22,8 @@ export default defineConfig(({ mode }) => ({
     headers: {
       "Cross-Origin-Embedder-Policy": "require-corp",
       "Cross-Origin-Opener-Policy": "same-origin",
-      Link: '</.well-known/api-catalog>; rel="api-catalog", </llms.txt>; rel="ai-readable"',
-      "Content-Signal": "ai-train=no, search=yes, ai-input=no",
+      Link: '</llms.txt>; rel="ai-readable"',
+      "Content-Signal": "ai-train=no, search=yes, ai-input=yes",
     },
   },
 
