@@ -55,3 +55,10 @@
 - Added `scripts/generate-og-images.mjs` (sharp, SVG template, brand gradient) and 5 committed PNGs in `public/og/` (~55 KB each).
 - Wired `og:image` (+ width/height/alt) and `twitter:image` / `summary_large_image` on home, about, legal and the 4 product pages.
 - Added `tests/unit/ogImages.structure.test.ts`.
+
+## 2026-10-01 — Block 5: GA4 conversion events
+
+- Added `shared/utils/analyticsEvents.ts` (`classifyContactHref`, `trackEvent`, `registerContactClickTracking`) with TDD tests (`tests/unit/shared/utils/analyticsEvents.test.ts`, written first, red then green).
+- Registered the delegated click listener in `entry-client.tsx`; `generate_lead` on successful contact form submit; `chatbot_demo_open` on the AI page demo button.
+- Browser check: clicking a `wa.me` link pushes `["event","contact_whatsapp",{"page_path":"/carta-digital"}]` to `dataLayer`.
+- Pending (GA4 admin, manual): mark `generate_lead` and `contact_whatsapp` as key events.

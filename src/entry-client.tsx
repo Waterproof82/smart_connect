@@ -8,11 +8,15 @@ import { ConsentProvider } from "@shared/context/ConsentContext";
 import { ScrollToTop } from "@shared/components/ScrollToTop";
 import { CookieConsent } from "@shared/components/CookieConsent";
 import { registerWebMCPTools } from "./WebMCP";
+import { registerContactClickTracking } from "@shared/utils/analyticsEvents";
 import "./index.css";
 import App from "./App";
 
 // Register WebMCP tools for AI agent discovery
 registerWebMCPTools();
+
+// GA4: WhatsApp / phone / email link clicks as conversion events
+registerContactClickTracking();
 
 // Lazy-loaded routes — not prerendered, remain SPA after hydration
 const AdminPanel = lazy(() =>

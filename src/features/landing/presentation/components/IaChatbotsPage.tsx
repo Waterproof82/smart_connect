@@ -24,6 +24,7 @@ import {
 } from "@shared/presentation/components/SeoSchema";
 import { useLanguage } from "@shared/context/LanguageContext";
 import { useWhatsappPhone } from "@shared/hooks";
+import { trackEvent } from "@shared/utils/analyticsEvents";
 
 const ORG_URL = "https://digitalizatenerife.es";
 const PAGE_URL = `${ORG_URL}/ia-chatbots-tenerife`;
@@ -227,9 +228,12 @@ const IaChatbotsPage: React.FC = () => {
               <p className="text-muted leading-relaxed mb-8">{t.iaDemoDesc}</p>
               <button
                 type="button"
-                onClick={() =>
-                  globalThis.dispatchEvent(new Event(OPEN_ASSISTANT_EVENT))
-                }
+                onClick={() => {
+                  trackEvent("chatbot_demo_open", {
+                    page_path: "/ia-chatbots-tenerife",
+                  });
+                  globalThis.dispatchEvent(new Event(OPEN_ASSISTANT_EVENT));
+                }}
                 className="inline-flex items-center justify-center gap-2 min-h-[48px] px-8 py-3 rounded-xl font-bold border-2 border-[var(--color-primary)] text-[var(--color-primary)] hover:bg-[var(--color-accent-subtle)] focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] transition-colors"
               >
                 <MessageSquare className="w-5 h-5" aria-hidden="true" />
