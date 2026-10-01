@@ -216,10 +216,10 @@ describe("Module figure pattern per section (design.md D6/D9)", () => {
 
       it("non-text contract: eyebrow and CTA keep --color-primary, not the accent", () => {
         const source = readSource(sectionPath);
-        const occurrences =
-          source.match(/text-\[var\(--color-primary\)\]/g) ?? [];
-        // eyebrow div + CTA anchor, at minimum.
-        expect(occurrences.length).toBeGreaterThanOrEqual(2);
+        // Eyebrow uses the shared .ds-kicker (colour: --color-primary, see
+        // src/index.css) and the CTA anchor keeps text-[var(--color-primary)].
+        expect(source).toMatch(/className="ds-kicker[ "]/);
+        expect(source).toMatch(/text-\[var\(--color-primary\)\]/);
       });
 
       it("the FigureAlt i18n key exists, is non-empty, <=125 chars, and differs between es/en", () => {

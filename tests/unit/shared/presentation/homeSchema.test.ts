@@ -33,6 +33,13 @@ describe("buildHomeSchema", () => {
     expect(cartaDigitalNode?.sameAs).toBeUndefined();
   });
 
+  it("WebPage @id/url match the home canonical (trailing slash)", () => {
+    const schema = buildHomeSchema(SOLUTIONS, []) as { "@graph": Array<Record<string, unknown>> };
+    const webPage = schema["@graph"].find((node) => node["@type"] === "WebPage");
+    expect(webPage?.["@id"]).toBe("https://digitalizatenerife.es/#webpage");
+    expect(webPage?.url).toBe("https://digitalizatenerife.es/");
+  });
+
   it("includes a LocalBusiness and WebPage node", () => {
     const schema = buildHomeSchema(SOLUTIONS);
     const types = schema["@graph"].map(

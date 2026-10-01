@@ -1,23 +1,19 @@
 import React, { Component, ReactNode } from "react";
 import { Helmet } from "react-helmet-async";
-import { SiteFooter } from "@shared/components/SiteFooter";
-import { Navbar } from "@features/landing/presentation/components/Navbar";
+import { PageShell } from "@features/landing/presentation/components/PageShell";
+import { Section } from "@shared/presentation/layout";
 import { Hero } from "@features/landing/presentation/components/Hero";
 import { SuccessStats } from "@features/landing/presentation/components/SuccessStats";
 import { ExpertAssistant } from "@features/chatbot/presentation";
-import { useHomeFaqGroups } from "@features/landing/presentation/components/HomeFaqSection";
+import HomeFaqSection, {
+  useHomeFaqGroups,
+} from "@features/landing/presentation/components/HomeFaqSection";
+import Contact from "@features/landing/presentation/components/Contact";
 import { ConsoleLogger } from "@core/domain/usecases/Logger";
 import { useLanguage } from "@shared/context/LanguageContext";
 import { SOLUTIONS } from "@shared/config/solutions";
 import { buildHomeSchema } from "@shared/presentation/components/SeoSchema";
 import HomeSolutionsSection from "@features/landing/presentation/components/HomeSolutionsSection";
-
-const LazyHomeFaqSection = React.lazy(
-  () => import("@features/landing/presentation/components/HomeFaqSection"),
-);
-const LazyContact = React.lazy(
-  () => import("@features/landing/presentation/components/Contact"),
-);
 
 const logger = new ConsoleLogger("[ErrorBoundary]");
 
@@ -75,8 +71,10 @@ const ErrorBoundaryFallback: React.FC = () => {
   );
 };
 
-// Note: SuccessStats and ExpertAssistant are eagerly imported (not lazy)
-// because renderToString does not support Suspense boundaries.
+// Note: every home section is eagerly imported (not lazy) because
+// renderToString does not support Suspense boundaries — a lazy FAQ left the
+// prerendered HTML without the FAQ that the FAQPage JSON-LD describes, and
+// both modules are statically imported elsewhere, so lazy split nothing.
 // Code-splitting these landing-page components provides negligible benefit
 // since they're always rendered on the landing page.
 
@@ -102,22 +100,9 @@ const PAGE_DESCRIPTION =
   "Carta digital sin comisiones, tarjetas NFC para reseñas de Google, chatbots con IA y TPV para restaurantes y negocios de Tenerife y Canarias.";
 
 const App: React.FC = () => {
-  const [scrolled, setScrolled] = React.useState(false);
-  const sentinelRef = React.useRef<HTMLDivElement>(null);
   const { t } = useLanguage();
 
   const faqGroups = useHomeFaqGroups();
-
-  React.useEffect(() => {
-    const sentinel = sentinelRef.current;
-    if (!sentinel) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => setScrolled(!entry.isIntersecting),
-      { threshold: 1 },
-    );
-    observer.observe(sentinel);
-    return () => observer.disconnect();
-  }, []);
 
   React.useEffect(() => {
     const scrollToHash = () => {
@@ -179,89 +164,50 @@ const App: React.FC = () => {
         />
         <script type="application/ld+json">{JSON.stringify(schemaData)}</script>
       </Helmet>
-      <div className="min-h-screen bg-base text-default">
-        <div
-          ref={sentinelRef}
-          className="absolute top-[50px] h-px w-px"
-          aria-hidden="true"
-        />
-        <a
-          href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:bg-[var(--color-accent)] focus:text-[var(--color-on-accent)] focus:px-4 focus:py-2 focus:rounded-lg focus:text-sm focus:font-bold"
+      <PageShell extras={<ExpertAssistant />}>
+        <section id="inicio" aria-label="Inicio">
+          <Hero />
+        </section>
+        {/* #soluciones anchor kept for the footer link and deep links. */}
+        <div id="soluciones" aria-hidden="true" className="h-0" />
+        <HomeSolutionsSection />
+        <Section
+          id="por-que"
+          tone="alt"
+          title="¿Por qué Digitaliza Tenerife?"
+          intro="Democratizamos el acceso a la tecnología para los negocios locales de Canarias. No creemos en soluciones genéricas."
         >
-          {t.skipLink}
-        </a>
-        <Navbar scrolled={scrolled} />
-        <main id="main" aria-label="Contenido principal">
-          <section id="inicio" aria-label="Inicio">
-            <Hero />
-          </section>
-          {/* #soluciones anchor kept for the footer link and deep links. */}
-          <div id="soluciones" aria-hidden="true" className="h-0" />
-          <HomeSolutionsSection />
-          <section
-            id="por-que"
-            aria-label="Por qué Digitaliza Tenerife"
-            className="py-16 md:py-24 bg-[var(--color-bg-alt)]"
-          >
-            <div className="container mx-auto px-6">
-              {/* Left-aligned header */}
-              <div className="max-w-2xl mb-12">
-                <h2 className="text-4xl md:text-5xl font-bold mb-4">
-                  ¿Por qué Digitaliza Tenerife?
-                </h2>
-                <p className="text-muted leading-relaxed text-lg">
-                  Democratizamos el acceso a la tecnología para los negocios
-                  locales de Canarias. No creemos en soluciones genéricas.
-                </p>
+          {/* Stats strip — i18n-driven (PR4), same truthful values as before */}
+          <dl className="grid grid-cols-2 md:grid-cols-4 gap-[var(--space-md)] m-0 border-t border-[var(--color-border)] pt-[var(--space-lg)]">
+            {[
+              { value: t.statStrip1Value, label: t.statStrip1Label },
+              { value: t.statStrip2Value, label: t.statStrip2Label },
+              { value: t.statStrip3Value, label: t.statStrip3Label },
+              { value: t.statStrip4Value, label: t.statStrip4Label },
+            ].map((stat) => (
+              <div key={stat.label} className="flex flex-col-reverse gap-1">
+                <dt className="text-sm text-muted">{stat.label}</dt>
+                <dd className="m-0 font-display text-3xl md:text-4xl font-bold text-default tabular-nums">
+                  {stat.value}
+                </dd>
               </div>
-
-              {/* Stats strip — i18n-driven (PR4), same truthful values as before */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 py-8 border-y border-[var(--color-border)]">
-                {[
-                  { value: t.statStrip1Value, label: t.statStrip1Label },
-                  { value: t.statStrip2Value, label: t.statStrip2Label },
-                  { value: t.statStrip3Value, label: t.statStrip3Label },
-                  { value: t.statStrip4Value, label: t.statStrip4Label },
-                ].map((stat) => (
-                  <div key={stat.label}>
-                    <div className="text-3xl md:text-4xl font-bold text-default tabular-nums">
-                      {stat.value}
-                    </div>
-                    <div className="text-sm text-muted mt-1">{stat.label}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-          <section
-            id="exito"
-            aria-label="Casos de Éxito"
-            className="py-20 md:py-32"
-          >
-            <SuccessStats />
-          </section>
-          <section
-            id="faq"
-            aria-label="Preguntas Frecuentes"
-            className="py-20 md:py-32"
-          >
-            <React.Suspense fallback={<div style={{ height: "300px" }} />}>
-              <LazyHomeFaqSection />
-            </React.Suspense>
-          </section>
-          <section id="contacto" aria-label="Contacto">
-            <React.Suspense fallback={<div style={{ height: "600px" }} />}>
-              <LazyContact />
-            </React.Suspense>
-          </section>
-        </main>
-
-        {/* AI Chatbot Assistant */}
-        <ExpertAssistant />
-
-        <SiteFooter />
-      </div>
+            ))}
+          </dl>
+        </Section>
+        <section id="exito" aria-label="Casos de Éxito" className="ds-section">
+          <SuccessStats />
+        </section>
+        <section
+          id="faq"
+          aria-label="Preguntas Frecuentes"
+          className="ds-section ds-section--alt"
+        >
+          <HomeFaqSection />
+        </section>
+        <section id="contacto" aria-label="Contacto">
+          <Contact />
+        </section>
+      </PageShell>
     </ErrorBoundary>
   );
 };

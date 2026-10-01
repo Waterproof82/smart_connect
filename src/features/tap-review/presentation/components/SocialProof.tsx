@@ -1,15 +1,10 @@
-import React, { useRef } from "react";
+import React from "react";
 import { useLanguage } from "@shared/context/LanguageContext";
-import { useIntersectionObserver } from "@shared/hooks";
 import { ReviewSchema } from "@shared/presentation/components/SeoSchema";
 import { Star } from "lucide-react";
 
 const SocialProof: React.FC = () => {
   const { t } = useLanguage();
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const isVisible = useIntersectionObserver(sectionRef, {
-    rootMargin: "0px 0px -50px 0px",
-  });
 
   const testimonials = [
     {
@@ -43,16 +38,12 @@ const SocialProof: React.FC = () => {
         author={testimonials[2].author}
         text={testimonials[2].quote}
       />
-      <div ref={sectionRef} className="py-20">
-        <div className="container mx-auto px-6">
+      <div className="py-20">
+        <div className="ds-container">
           <div
-            className={`text-center max-w-3xl mx-auto mb-16 transition-all duration-1000 ${
-              isVisible
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-10"
-            }`}
+            className="text-center max-w-3xl mx-auto mb-16"
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            <h2 className="ds-h2 mb-4">
               {t.tapReviewSocialTitle}
             </h2>
             <p className="text-muted">{t.tapReviewSocialSubtitle}</p>
@@ -62,11 +53,7 @@ const SocialProof: React.FC = () => {
             {testimonials.map((testimonial, idx) => (
               <div
                 key={idx}
-                className={`p-8 bg-[var(--color-bg-alt)] rounded-3xl transition-all duration-700 ${
-                  isVisible
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-10"
-                }`}
+                className="p-8 bg-[var(--color-bg-alt)] rounded-xl"
                 style={{ transitionDelay: `${idx * 150}ms` }}
               >
                 <div className="flex gap-1 mb-4">

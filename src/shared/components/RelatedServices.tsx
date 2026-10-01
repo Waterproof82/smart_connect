@@ -21,11 +21,11 @@ export const RelatedServices: React.FC<RelatedServicesProps> = ({
   const others = SOLUTIONS.filter((s) => s.id !== currentId);
 
   return (
-    <section aria-labelledby="related-title" className="py-16 md:py-20">
-      <div className="container mx-auto px-4 md:px-6 max-w-5xl">
+    <section aria-labelledby="related-title" className="ds-section">
+      <div className="ds-container">
         <h2
           id="related-title"
-          className="text-2xl md:text-3xl font-bold font-display mb-8"
+          className="ds-h2 mb-8"
         >
           {t.relatedTitle}
         </h2>

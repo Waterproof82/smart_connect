@@ -31,8 +31,13 @@ const SUPABASE_ANON_KEY =
   process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY || "";
 const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
 
-// Skip tests if SERVICE_ROLE_KEY is not configured
-const describeIfConfigured = SUPABASE_SERVICE_KEY ? describe : describe.skip;
+// Skip unless Supabase is fully configured: the suite needs the project URL,
+// the anon key (RLS as a visitor) and the service-role key (fixtures). With
+// only the service key set, createClient("") threw "supabaseUrl is required".
+const describeIfConfigured =
+  SUPABASE_URL && SUPABASE_ANON_KEY && SUPABASE_SERVICE_KEY
+    ? describe
+    : describe.skip;
 
 describeIfConfigured("Documents Table - RLS Policies", () => {
   let anonClient: SupabaseClient;

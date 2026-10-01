@@ -33,7 +33,7 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
   prominent,
 }) => (
   <div
-    className={`bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded-[2rem] flex flex-col transition-[opacity,transform] duration-500 ease-[var(--ease-out)] ${
+    className={`bg-[var(--color-bg-alt)] border border-[var(--color-border)] rounded-xl flex flex-col ${
       isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
     } ${prominent ? "p-8 md:p-10" : "p-7"}`}
     style={{ transitionDelay: `${delay}ms` }}
@@ -102,17 +102,15 @@ export const SuccessStats: React.FC = () => {
       <ReviewSchema author={testimonials[2].author} text={testimonials[2].quote} />
       <ReviewSchema author={testimonials[3].author} text={testimonials[3].quote} />
 
-      <div className="container mx-auto px-6" ref={sectionRef}>
+      <div className="ds-container" ref={sectionRef}>
         {/* Left-aligned header */}
         <div
-          className={`max-w-2xl mb-14 transition-[opacity,transform] duration-500 ease-[var(--ease-out)] ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
+          className="max-w-2xl mb-14"
         >
-          <p className="text-xs font-bold tracking-[0.3em] text-[var(--color-primary)] uppercase mb-3">
+          <p className="text-sm font-semibold text-[var(--color-primary)] mb-3">
             {t.successTitle}
           </p>
-          <h2 className="text-4xl md:text-5xl font-black leading-tight mb-4">
+          <h2 className="ds-h2 mb-4">
             {t.successSubtitle}
           </h2>
           <p className="text-base text-muted leading-relaxed">
@@ -122,10 +120,7 @@ export const SuccessStats: React.FC = () => {
 
         {/* Stats strip */}
         <div
-          className={`grid grid-cols-2 md:grid-cols-4 gap-6 border-y border-[var(--color-border)] py-8 mb-12 transition-[opacity,transform] duration-500 ease-[var(--ease-out)] ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
-          style={{ transitionDelay: "100ms" }}
+          className="grid grid-cols-2 md:grid-cols-4 gap-6 border-y border-[var(--color-border)] py-8 mb-12"
         >
           {keyStats.map((stat) => (
             <div key={stat.label}>

@@ -1,68 +1,43 @@
 import React from "react";
-import { ArrowRight, Play } from "lucide-react";
+import { ArrowDown } from "lucide-react";
 import { useLanguage } from "@shared/context/LanguageContext";
 import { DotField } from "@shared/presentation/components/DotField";
+import { WhatsAppCta } from "@shared/presentation/layout";
 
+/**
+ * Home hero (design.md § Marquee Hero). The h1 is the LCP element: it is
+ * never animated. Both CTAs are real links so crawlers can follow them.
+ */
 export const Hero: React.FC = () => {
   const { t } = useLanguage();
 
-  const heroTitle = t.heroTitle;
-  const heroTitleAccent = t.heroTitleAccent;
-  const heroTitleEnd = t.heroTitleEnd;
-
   return (
-    <div className="relative pt-32 pb-20 overflow-hidden min-h-[100dvh] flex items-center">
-      <div className="container mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center relative z-10">
-        <div className="max-w-2xl">
-          <div className="reveal-1 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--color-accent-subtle)] border border-[var(--color-accent-border)] text-[var(--color-primary)] text-xs font-bold mb-8 tracking-wider uppercase">
-            <div className="w-2 h-2 rounded-full bg-[var(--color-primary)] animate-pulse"></div>
-            {t.heroEyebrow}
-          </div>
-
-          <h1 className="reveal-2 text-3xl sm:text-4xl md:text-6xl lg:text-8xl font-extrabold leading-[1.1] mb-8 tracking-tight">
-            {heroTitle}{" "}
+    <div className="ds-hero relative overflow-hidden lg:min-h-[88dvh] flex items-center">
+      <div className="ds-container grid lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] gap-[var(--space-2xl)] items-center relative z-10 w-full">
+        <div className="grid gap-[var(--space-lg)] min-w-0">
+          <h1 className="ds-h1">
+            {t.heroTitle}{" "}
             <span className="text-[var(--color-primary)]">
-              {heroTitleAccent}
+              {t.heroTitleAccent}
             </span>{" "}
-            {heroTitleEnd}
+            {t.heroTitleEnd}
           </h1>
 
-          <p className="reveal-3 text-xl text-muted mb-12 leading-relaxed max-w-xl">
-            {t.heroSubtitle}
-          </p>
+          <p className="ds-lede">{t.heroSubtitle}</p>
 
-          <div className="reveal-3 flex flex-wrap gap-5">
-            <button
-              type="button"
-              onClick={() =>
-                document
-                  .querySelector("#contacto")
-                  ?.scrollIntoView({ behavior: "smooth" })
-              }
-              className="btn-primary group"
-            >
-              {t.heroButtonContact}
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-150 ease-[var(--ease-out)]" />
-            </button>
-            <button
-              type="button"
-              onClick={() =>
-                document
-                  .querySelector("#soluciones")
-                  ?.scrollIntoView({ behavior: "smooth" })
-              }
-              className="btn-secondary group"
-            >
+          <div className="ds-actions">
+            <WhatsAppCta label={t.heroButtonContact} />
+            <a href="/#soluciones" className="btn-ghost">
               {t.heroButtonDemo}
-              <div className="w-8 h-8 bg-[var(--color-overlay-medium)] rounded-full flex items-center justify-center group-hover:bg-[var(--color-overlay-strong)] transition-[background-color] duration-150">
-                <Play className="w-3 h-3 fill-[var(--color-text)] ml-0.5" />
-              </div>
-            </button>
+              <ArrowDown className="w-4 h-4" aria-hidden="true" />
+            </a>
           </div>
+
+          <p className="text-sm text-muted m-0">{t.heroAudience}</p>
         </div>
 
         <div
-          className="relative hidden lg:flex justify-center lg:justify-end reveal-1"
+          className="relative hidden lg:flex justify-center lg:justify-end"
           aria-hidden="true"
         >
           <div className="relative w-full max-w-md">
@@ -96,7 +71,7 @@ export const Hero: React.FC = () => {
 
               {/* QR tent card */}
               <g transform="rotate(-4 96 300)">
-                <g className="animate-float-fancy">
+                <g>
                   <path
                     d="M50 300 L96 210 L142 300 Z"
                     fill="var(--color-bg)"
@@ -124,7 +99,7 @@ export const Hero: React.FC = () => {
 
               {/* Phone with order list */}
               <g transform="rotate(2 230 300)">
-                <g className="animate-float-fancy" style={{ animationDelay: "-1.2s" }}>
+                <g>
                   <rect
                     x="182"
                     y="150"
@@ -151,7 +126,7 @@ export const Hero: React.FC = () => {
 
               {/* NFC tap card */}
               <g transform="rotate(6 336 300)">
-                <g className="animate-float-fancy" style={{ animationDelay: "-3s" }}>
+                <g>
                   <rect
                     x="300"
                     y="252"
@@ -183,7 +158,7 @@ export const Hero: React.FC = () => {
 
               {/* Chatbot bubble */}
               <g transform="rotate(-3 96 150)">
-                <g className="animate-float-fancy" style={{ animationDelay: "-2.1s" }}>
+                <g>
                   <path
                     d="M40 130 h96 a12 12 0 0 1 12 12 v40 a12 12 0 0 1 -12 12 h-58 l-20 18 4-18 h-22 a12 12 0 0 1 -12 -12 v-40 a12 12 0 0 1 12 -12 Z"
                     fill="var(--color-accent)"

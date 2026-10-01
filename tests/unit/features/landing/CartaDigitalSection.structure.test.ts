@@ -36,8 +36,8 @@ describe("CartaDigitalSection (merged into home)", () => {
     expect(source).not.toMatch(/application\/ld\+json/);
   });
 
-  it("accepts whatsappPhone as a prop instead of fetching it itself", () => {
-    expect(source).toMatch(/whatsappPhone/);
+  it("does not fetch settings itself; WhatsApp CTAs come from the shared WhatsAppCta", () => {
     expect(source).not.toMatch(/getAppSettings/);
+    expect(source).not.toMatch(/wa\.me/);
   });
 });

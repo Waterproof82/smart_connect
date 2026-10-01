@@ -1,17 +1,12 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { useLanguage } from "@shared/context/LanguageContext";
-import { useIntersectionObserver } from "@shared/hooks";
 import { Smartphone, Star, Award } from "lucide-react";
 import { sanitizeInput } from "@shared/utils/sanitizer";
 import { HowToSchema } from "../../../../shared/presentation/components/SeoSchema";
 
 const HowItWorks: React.FC = () => {
   const { t } = useLanguage();
-  const sectionRef = useRef<HTMLDivElement>(null);
   const [imageErrors, setImageErrors] = useState<Record<number, boolean>>({});
-  const isVisible = useIntersectionObserver(sectionRef, {
-    rootMargin: "0px 0px -50px 0px",
-  });
 
   const steps = [
     {
@@ -51,16 +46,12 @@ const HowItWorks: React.FC = () => {
           image: step.image,
         }))}
       />
-      <section ref={sectionRef} className="py-20">
-        <div className="container mx-auto px-6">
+      <section className="ds-section">
+        <div className="ds-container">
           <div
-            className={`text-center max-w-3xl mx-auto mb-16 transition-all duration-1000 ${
-              isVisible
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-10"
-            }`}
+            className="text-center max-w-3xl mx-auto mb-16"
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            <h2 className="ds-h2 mb-4">
               {t.tapReviewHowTitle}
             </h2>
             <p className="text-muted">{t.tapReviewHowSubtitle}</p>
@@ -70,25 +61,21 @@ const HowItWorks: React.FC = () => {
             {steps.map((step, idx) => (
               <div
                 key={step.image}
-                className={`relative p-8 bg-[var(--color-bg-alt)] rounded-3xl transition-all duration-700 ${
-                  isVisible
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-10"
-                }`}
+                className="relative p-8 bg-[var(--color-bg-alt)] rounded-xl"
                 style={{ transitionDelay: `${idx * 150}ms` }}
               >
                 <div className="absolute -top-4 -left-4 w-12 h-12 bg-[var(--color-accent)] rounded-full flex items-center justify-center text-[var(--color-on-accent)] font-bold text-xl">
                   {idx + 1}
                 </div>
                 <div className="flex flex-col items-center text-center">
-                  <div className="w-20 h-20 bg-[var(--color-surface)] rounded-2xl flex items-center justify-center mb-6 text-[var(--color-accent)]">
+                  <div className="w-20 h-20 bg-[var(--color-surface)] rounded-xl flex items-center justify-center mb-6 text-[var(--color-accent)]">
                     {step.icon}
                   </div>
-                  <h3 className="text-xl font-bold mb-3 text-default">
+                  <h3 className="ds-h3 mb-3 text-default">
                     {sanitizeInput(step.title)}
                   </h3>
                   <p className="text-muted">{sanitizeInput(step.desc)}</p>
-                  <div className="mt-6 w-full h-48 bg-gradient-to-br from-[var(--color-bg-alt)] to-[var(--color-surface)] rounded-2xl flex items-center justify-center overflow-hidden p-2">
+                  <div className="mt-6 w-full h-48 bg-gradient-to-br from-[var(--color-bg-alt)] to-[var(--color-surface)] rounded-xl flex items-center justify-center overflow-hidden p-2">
                     {imageErrors[idx] ? (
                       <div className="text-center p-4">
                         <div className="w-16 h-16 mx-auto mb-2 text-[var(--color-accent)]">

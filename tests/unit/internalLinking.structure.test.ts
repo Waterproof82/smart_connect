@@ -26,10 +26,16 @@ describe("internal linking", () => {
     expect(read(file)).toMatch(new RegExp(`<RelatedServices currentId="${id}" />`));
   });
 
-  it.each(ALL_PAGES)("%s renders the shared SiteFooter", (file) => {
+  it.each(ALL_PAGES)("%s renders the shared PageShell (site-wide footer)", (file) => {
     const source = read(file);
-    expect(source).toMatch(/<SiteFooter \/>/);
+    expect(source).toMatch(/<PageShell[\s>]/);
     expect(source).not.toMatch(/<footer[\s>]/);
+  });
+
+  it("PageShell renders the shared SiteFooter on every page", () => {
+    const shell = read("features/landing/presentation/components/PageShell.tsx");
+    expect(shell).toMatch(/<SiteFooter \/>/);
+    expect(shell).not.toMatch(/<footer[\s>]/);
   });
 
   it("SiteFooter links every SOLUTIONS page, /about and the three legal pages", () => {
@@ -38,5 +44,22 @@ describe("internal linking", () => {
     for (const href of ["/about", "/legal/aviso", "/legal/privacidad", "/legal/cookies"]) {
       expect(footer).toMatch(new RegExp(`to="${href}"`));
     }
+  });
+});
+
+// Hreflang: intentionally absent site-wide until URLs are language-addressable
+// (App.tsx SEO checklist, change `i18n-url-routing`). One page declaring it
+// while the rest do not is the inconsistency this guards against.
+describe("hreflang consistency", () => {
+  it.each(ALL_PAGES)("%s declares no hrefLang alternate", (file) => {
+    expect(read(file)).not.toMatch(/hrefLang/);
+  });
+});
+
+describe("Open Graph consistency", () => {
+  it.each(ALL_PAGES)("%s declares og:locale es_ES and og:site_name", (file) => {
+    const source = read(file);
+    expect(source).toMatch(/property="og:locale" content="es_ES"/);
+    expect(source).toMatch(/property="og:site_name" content="Digitaliza Tenerife"/);
   });
 });

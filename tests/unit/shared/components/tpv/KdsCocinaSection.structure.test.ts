@@ -39,9 +39,9 @@ describe("KdsCocinaSection (design.md D4 bespoke module template)", () => {
     expect(source).toMatch(/t\.kdsCocinaBullet4Title/);
   });
 
-  it("renders a CTA (wa.me or #contacto), not hardcoded label text", () => {
+  it("renders a CTA via the shared buildWhatsappLink (wa.me or /#contacto), not hardcoded label text", () => {
     const source = readSource();
-    expect(source).toMatch(/wa\.me|#contacto/);
+    expect(source).toMatch(/buildWhatsappLink\(/);
     expect(source).toMatch(/t\.kdsCocinaCtaLabel/);
   });
 

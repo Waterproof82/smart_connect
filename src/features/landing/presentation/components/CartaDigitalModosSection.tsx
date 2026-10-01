@@ -6,11 +6,11 @@ const CartaDigitalModosSection: React.FC = () => {
   const { t } = useLanguage();
 
   return (
-    <section className="py-16 md:py-24 bg-[var(--color-bg-alt)]">
-      <div className="container mx-auto px-4 md:px-6">
+    <section className="ds-section bg-[var(--color-bg-alt)]">
+      <div className="ds-container">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-10 md:mb-14">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-[1.15] font-display">
+            <h2 className="ds-h2">
               {t.cartaModosTitle}
             </h2>
             <p className="text-base text-muted mt-4">
@@ -21,7 +21,7 @@ const CartaDigitalModosSection: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div
               data-testid="modo-card"
-              className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-6 md:p-8"
+              className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl p-6 md:p-8"
             >
               <div className="w-7 h-7 mb-4 text-[var(--color-primary)]">
                 <UtensilsCrossed className="w-full h-full" aria-hidden="true" />
@@ -46,7 +46,7 @@ const CartaDigitalModosSection: React.FC = () => {
 
             <div
               data-testid="modo-card"
-              className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-6 md:p-8"
+              className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl p-6 md:p-8"
             >
               <div className="w-7 h-7 mb-4 text-[var(--color-primary)]">
                 <ShoppingCart className="w-full h-full" aria-hidden="true" />

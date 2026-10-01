@@ -36,7 +36,7 @@ const CartaDigitalLightbox: React.FC<CartaDigitalLightboxProps> = ({
         alt="Imagen ampliada"
         width={width}
         height={height}
-        className="relative max-w-5xl w-full max-h-[90vh] object-contain rounded-2xl shadow-2xl animate-in zoom-in-95 duration-300"
+        className="relative max-w-5xl w-full max-h-[90vh] object-contain rounded-xl shadow-2xl animate-in zoom-in-95 duration-300"
       />
     </div>
   );

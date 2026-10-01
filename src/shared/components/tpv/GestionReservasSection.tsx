@@ -8,6 +8,7 @@
 import React from "react";
 import { CalendarCheck, Users, Bell, Star } from "lucide-react";
 import { useLanguage } from "@shared/context/LanguageContext";
+import { buildWhatsappLink } from "@shared/utils/whatsappLink";
 import { accentStyle } from "@shared/config/accents";
 import type { TpvModuleSectionProps } from "./TpvModuleSections";
 import TpvModuleFigure from "./TpvModuleFigure";
@@ -26,22 +27,25 @@ const GestionReservasSection: React.FC<TpvModuleSectionProps> = ({
     { title: t.gestionReservasBullet4Title, desc: t.gestionReservasBullet4Desc },
   ];
 
-  const ctaHref = whatsappPhone ? `https://wa.me/${whatsappPhone}` : "#contacto";
+  const cta = buildWhatsappLink(whatsappPhone ?? "", {
+    message: t.waMsgTpv,
+    servicio: "TPV para restaurantes",
+  });
 
   return (
     <section
       id="gestion-reservas"
       aria-labelledby="gestion-reservas-title"
-      className="py-16 md:py-24 bg-[var(--color-bg-alt)]"
+      className="ds-section bg-[var(--color-bg-alt)]"
       style={accentStyle("--color-icon-amber")}
     >
-      <div className="container mx-auto px-6 max-w-5xl">
-        <div className="text-xs font-semibold tracking-wider uppercase text-[var(--color-primary)] mb-3">
+      <div className="ds-container">
+        <div className="ds-kicker mb-3">
           {t.gestionReservasEyebrow}
         </div>
         <h2
           id="gestion-reservas-title"
-          className="text-3xl md:text-4xl font-bold mb-4 text-default max-w-2xl"
+          className="ds-h2 mb-4 text-default max-w-2xl"
         >
           {t.gestionReservasTitle}
         </h2>
@@ -80,9 +84,9 @@ const GestionReservasSection: React.FC<TpvModuleSectionProps> = ({
         </div>
 
         <a
-          href={ctaHref}
-          target={whatsappPhone ? "_blank" : undefined}
-          rel={whatsappPhone ? "noopener noreferrer" : undefined}
+          href={cta.href}
+          target={cta.external ? "_blank" : undefined}
+          rel={cta.external ? "noopener noreferrer" : undefined}
           className="inline-flex items-center gap-2 text-sm font-bold text-[var(--color-primary)] hover:underline mt-10"
         >
           {t.gestionReservasCtaLabel}

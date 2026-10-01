@@ -3,23 +3,32 @@ import { Link } from "react-router-dom";
 import { useLanguage } from "@shared/context/LanguageContext";
 import { SOLUTIONS } from "@shared/config/solutions";
 import type { Translation } from "@shared/context/LanguageContext";
+import { WhatsAppCta } from "@shared/presentation/layout";
 
 const linkClass =
   "hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors";
 
 /**
- * Site-wide footer: links every product/service page, company pages and
- * legal pages from every route (internal-linking map, docs/SEO_PROTOCOL.md §3).
+ * Site-wide footer (design.md § Footer — Ft5 Statement): a closing line +
+ * the WhatsApp action, then the internal-linking map that links every
+ * product/service, company and legal page from every route
+ * (docs/SEO_PROTOCOL.md §3 — keep these links).
  */
 export const SiteFooter: React.FC = () => {
   const { t } = useLanguage();
 
   return (
-    <footer className="bg-[var(--color-bg-alt)] border-t border-[var(--color-border)] pt-16 pb-8">
-      <div className="container mx-auto px-6">
+    <footer className="bg-[var(--color-bg-alt)] border-t border-[var(--color-border)] pt-[var(--space-3xl)] pb-[var(--space-lg)]">
+      <div className="ds-container">
+        <div className="grid gap-[var(--space-lg)] pb-[var(--space-2xl)] mb-[var(--space-xl)] border-b border-[var(--color-border)] md:grid-cols-[minmax(0,1fr)_auto] md:items-end">
+          <p className="font-display font-bold text-[length:var(--text-display-s)] leading-[1.05] tracking-[-0.02em] text-default m-0 max-w-[22ch] [overflow-wrap:anywhere] [text-wrap:balance]">
+            {t.footerStatement}
+          </p>
+          <WhatsAppCta />
+        </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 mb-12">
           <div>
-            <Link to="/" className="font-bold text-xl text-default">
+            <Link to="/" className="font-display font-bold text-xl text-default">
               Digitaliza{" "}
               <span className="text-[var(--color-primary)]">Tenerife</span>
             </Link>
@@ -81,7 +90,7 @@ export const SiteFooter: React.FC = () => {
             </ul>
           </nav>
         </div>
-        <div className="border-t border-[var(--color-border)] pt-8 text-center text-muted text-sm">
+        <div className="border-t border-[var(--color-border)] pt-[var(--space-md)] text-muted text-sm">
           <p>{t.footerCopyright}</p>
         </div>
       </div>

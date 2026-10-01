@@ -11,6 +11,7 @@ export default defineConfig(({ mode }) => ({
     setupFiles: "src/setupTests.ts",
     include: [
       "src/shared/presentation/components/**/*.test.tsx",
+      "src/shared/presentation/layout/**/*.test.tsx",
       "src/features/**/*.test.tsx",
     ],
   },

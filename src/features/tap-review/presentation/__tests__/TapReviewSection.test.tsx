@@ -33,16 +33,23 @@ describe("TapReviewSection", () => {
   // "Contactar ahora" also appears on CTASection's own CTA further down the
   // page, rendered as a child of TapReviewSection — the hero's is first in
   // DOM order.
-  it("renders the primary CTA link with btn-primary", () => {
+  it("renders the primary CTA as the shared WhatsApp button", () => {
     renderWithLanguage();
     const [link] = screen.getAllByRole("link", { name: /Contactar ahora/i });
-    expect(link).toHaveClass("btn-primary");
+    expect(link).toHaveClass("btn-wa");
+    // SSR / no-phone fallback must be the absolute form anchor.
+    expect(link.getAttribute("href")).toMatch(/^\/#contacto\?servicio=/);
   });
 
-  it("renders the secondary CTA link with btn-secondary", () => {
+  it("renders the secondary CTA link with btn-ghost", () => {
     renderWithLanguage();
     const link = screen.getByRole("link", { name: /Ver producto/i });
-    expect(link).toHaveClass("btn-secondary");
+    expect(link).toHaveClass("btn-ghost");
+  });
+
+  it("keeps the visible hero heading as h2 (the page owns the only h1)", () => {
+    renderWithLanguage();
+    expect(screen.queryByRole("heading", { level: 1 })).toBeNull();
   });
 
   it("does not carry stale conflicting utility classes on either CTA", () => {

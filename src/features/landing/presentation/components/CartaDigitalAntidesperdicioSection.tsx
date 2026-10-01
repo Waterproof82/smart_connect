@@ -24,11 +24,11 @@ const CartaDigitalAntidesperdicioSection: React.FC = () => {
   ];
 
   return (
-    <section className="py-16 md:py-24 bg-[var(--color-bg)]">
-      <div className="container mx-auto px-4 md:px-6">
+    <section className="ds-section bg-[var(--color-bg)]">
+      <div className="ds-container">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-10 md:mb-14">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-[1.15] font-display">
+            <h2 className="ds-h2">
               {t.cartaAntidesperdicioTitle}
             </h2>
             <p className="text-base font-semibold text-[var(--color-primary)] mt-3">

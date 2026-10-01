@@ -3,6 +3,7 @@ import { Cpu, ChevronDown, ArrowLeft, Shield, X, Menu } from "lucide-react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import LanguageSelector from "@shared/components/LanguageSelector";
 import { useLanguage } from "@shared/context/LanguageContext";
+import { WhatsAppCta } from "@shared/presentation/layout";
 
 import { SOLUTIONS } from "@shared/config/solutions";
 import { mapSolutions, SolutionItem } from "@shared/utils/solutionHelpers";
@@ -61,7 +62,7 @@ const DropdownMenuItem: React.FC<{
     }
   }, [focusedDropdownIndex, idx]);
 
-  const itemClasses = `flex items-center gap-4 p-3 rounded-2xl transition-[background-color] duration-100 group/item ${active ? "bg-[var(--color-accent-subtle)]" : "hover:bg-[var(--color-bg-alt)]"} ${focusedDropdownIndex === idx ? "bg-[var(--color-bg-alt)]" : ""}`;
+  const itemClasses = `flex items-center gap-4 p-3 rounded-xl transition-[background-color] duration-100 group/item ${active ? "bg-[var(--color-accent-subtle)]" : "hover:bg-[var(--color-bg-alt)]"} ${focusedDropdownIndex === idx ? "bg-[var(--color-bg-alt)]" : ""}`;
 
   const itemContent = (
     <>
@@ -192,23 +193,23 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
         scrolled ? "py-2 md:py-3" : "py-3 md:py-6"
       }`}
     >
-      <div className="container mx-auto px-6 flex items-center justify-between">
+      <div className="ds-container flex items-center justify-between gap-4">
         {/* Logo */}
         <a
-          href="#inicio"
+          href="/#inicio"
           className="flex items-center gap-2 group min-h-[48px]"
           onClick={(e) => handleNavClick(e, "#inicio")}
         >
           <div className="w-10 h-10 bg-[var(--color-accent)] rounded-xl flex items-center justify-center shadow-lg motion-safe:group-hover:scale-110 transition-transform duration-150" style={{ transitionTimingFunction: "var(--ease-out)" }}>
             <Cpu className="text-[var(--color-on-accent)] w-6 h-6" />
           </div>
-          <span className="font-bold text-xl tracking-tighter text-default">
+          <span className="font-display font-bold text-xl tracking-tight text-default whitespace-nowrap">
             Digitaliza <span className="text-[var(--color-primary)]">Tenerife</span>
           </span>
         </a>
 
         {/* Navigation - Desktop */}
-        <div className="hidden md:flex items-center gap-10 text-sm font-semibold text-muted">
+        <div className="hidden md:flex items-center gap-6 lg:gap-8 text-sm font-semibold text-muted">
           {!isHomePage && (
             <Link
               to="/"
@@ -272,7 +273,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
               }`}
               style={{ transitionTimingFunction: "var(--ease-out)" }}
             >
-              <div className="w-[280px] bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[2rem] p-4 shadow-lg">
+              <div className="w-[280px] bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl p-4 shadow-lg">
                 <div className="grid gap-2">
                   {solutions.map((item, idx) => (
                     <DropdownMenuItem
@@ -297,14 +298,14 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
           </div>
 
           <a
-            href="#exito"
+            href="/#exito"
             className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline focus-visible:outline-none transition-colors min-h-[48px] flex items-center"
             onClick={(e) => handleNavClick(e, "#exito")}
           >
             {t.navSuccess}
           </a>
           <a
-            href="#contacto"
+            href="/#contacto"
             className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline focus-visible:outline-none transition-colors min-h-[48px] flex items-center"
             onClick={(e) => handleNavClick(e, "#contacto")}
           >
@@ -320,12 +321,13 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
               <span>{t.navAdmin}</span>
             </Link>
           )}
+          <WhatsAppCta size="sm" label={t.waCtaShort} />
         </div>
 
         {/* Hamburger for mobile */}
         <button
           type="button"
-          className="md:hidden flex items-center justify-center w-12 h-12 rounded-xl bg-[var(--color-accent)] text-[var(--color-on-accent)]"
+          className="md:hidden flex items-center justify-center w-12 h-12 rounded-full border border-[var(--color-border)] text-default focus-visible:outline-2 focus-visible:outline-[var(--focus-ring)]"
           onClick={() => setIsMobileMenuOpen(true)}
           aria-label="Abrir menú de navegación"
         >
@@ -361,7 +363,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
               }}
             >
               <div className="flex items-center justify-between">
-                <span className="font-bold text-xl text-default">
+                <span className="font-display font-bold text-xl text-default">
                   Digitaliza{" "}
                   <span className="text-[var(--color-primary)]">Tenerife</span>
                 </span>
@@ -434,14 +436,14 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
                 })}
                 <hr className="border-[var(--color-border)] my-2" />
                 <a
-                  href="#exito"
+                  href="/#exito"
                   className="text-muted p-3 min-h-[48px] flex items-center hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-xl transition-colors"
                   onClick={(e) => handleNavClick(e, "#exito")}
                 >
                   {t.navSuccess}
                 </a>
                 <a
-                  href="#contacto"
+                  href="/#contacto"
                   className="text-muted p-3 min-h-[48px] flex items-center hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-xl transition-colors"
                   onClick={(e) => handleNavClick(e, "#contacto")}
                 >
@@ -458,6 +460,9 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
                   </Link>
                 )}
               </nav>
+              <div className="mt-auto pt-4 border-t border-[var(--color-border)]">
+                <WhatsAppCta block />
+              </div>
             </div>
           </dialog>
         )}

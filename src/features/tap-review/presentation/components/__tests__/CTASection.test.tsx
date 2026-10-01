@@ -30,18 +30,23 @@ describe("CTASection (tap-review)", () => {
     expect(() => renderWithLanguage()).not.toThrow();
   });
 
-  it("renders the CTA link with btn-primary-inverse, not btn-primary", () => {
+  it("renders the shared WhatsApp CTA (btn-wa) with the absolute form fallback", () => {
     renderWithLanguage();
     const link = screen.getByRole("link", { name: /Contactar ahora/i });
-    expect(link).toHaveClass("btn-primary-inverse");
-    expect(link).not.toHaveClass("btn-primary");
+    expect(link).toHaveClass("btn-wa");
+    expect(link).not.toHaveClass("btn-primary-inverse");
+    expect(link).toHaveAttribute(
+      "href",
+      "/#contacto?servicio=Tarjetas%20NFC",
+    );
+    expect(link).not.toHaveAttribute("target");
   });
 
   it("does not carry stale conflicting utility classes", () => {
     renderWithLanguage();
     const link = screen.getByRole("link", { name: /Contactar ahora/i });
     expect(link.className).not.toMatch(
-      /rounded-xl|bg-white|min-h-\[48px\]/,
+      /rounded-xl|bg-white|min-h-\[48px\]|bg-gradient/,
     );
   });
 });

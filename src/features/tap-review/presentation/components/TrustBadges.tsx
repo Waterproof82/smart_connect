@@ -7,7 +7,7 @@ const TrustBadges: React.FC = () => {
 
   return (
     <div className="border-t border-b border-[var(--color-border)] py-8 bg-[var(--color-surface)] mt-12">
-      <div className="container mx-auto px-6">
+      <div className="ds-container">
         <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16">
           <div className="flex items-center gap-2 text-muted">
             <Shield className="w-5 h-5" />

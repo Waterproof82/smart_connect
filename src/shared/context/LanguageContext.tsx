@@ -830,7 +830,7 @@ const translations: Record<Language, Translation> = {
     cartaCTATitle: "El siguiente paso",
     cartaCTASubtitle: "Empieza a trabajar para ti.",
     cartaCTABtnDemo: "Demo gratuita",
-    cartaCTABtnContact: "Habar con asesor",
+    cartaCTABtnContact: "Hablar con asesor",
     cartaCTANoContract: "✓ Sin permanencia",
     cartaCTASignup48h: "✓ Alta 48h",
     cartaCTASupport: "✓ Soporte",
@@ -1390,7 +1390,7 @@ const translations: Record<Language, Translation> = {
     cartaBeneficio7Tag: "Self-manageable",
 
     cartaFlujoTitle: "The flow",
-    cartaFlujoSubtitle: "How does it work?",
+    cartaFlujoSubtitle: "What does it look like?",
     cartaFlujoStep5Title: "Digital Presence",
     cartaFlujoStep5Desc:
       "Your menu visible on Google Business Profile. Attract new customers with stunning photos.",
