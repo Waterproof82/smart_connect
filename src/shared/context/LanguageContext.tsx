@@ -69,6 +69,7 @@ interface Translation extends TpvModuleTranslations {
   successTitle: string;
   successSubtitle: string;
   successDesc: string;
+  successStat1Value: string;
   successStat1Label: string;
   successStat1Quote: string;
   successStat1Author: string;
@@ -534,13 +535,13 @@ const translations: Record<Language, Translation> = {
     heroContactoTitleEnd: "",
     heroSubtitle:
       "TPV, comandero móvil, cocina, reservas, stock y más en una sola plataforma. Cobra más rápido, reduce tareas manuales y dedica tu tiempo a lo que importa: tu negocio. Sin comisiones ni intermediarios.",
-    statStrip1Value: "200+",
-    statStrip1Label: "Negocios en Canarias",
+    statStrip1Value: "Decenas",
+    statStrip1Label: "de negocios en Canarias",
     statStrip2Value: "0%",
     statStrip2Label: "Comisiones por pedido",
-    statStrip3Value: "6×",
+    statStrip3Value: "Hasta 6×",
     statStrip3Label: "Más reseñas en 90 días",
-    statStrip4Value: "40%",
+    statStrip4Value: "Hasta 40%",
     statStrip4Label: "Más visitas con reseñas",
     heroButtonDemo: "Ver Demo",
     heroButtonContact: "Contactar",
@@ -556,7 +557,7 @@ const translations: Record<Language, Translation> = {
       "Con la Carta Digital, tus clientes en Tenerife y Canarias pueden pedir desde su móvil escaneando un código QR en la mesa. El pedido llega directamente a barra y cocina en tiempo real, reduciendo tiempos de espera y aumentando la rotación de mesas. Sin comisiones ni intermediarios, cada mesa se convierte en un punto de venta digital que opera 24/7, recopilando datos valiosos para campañas de marketing automatizadas y fidelización.",
     featuresContent2Title: "Tap-to-Review NFC",
     featuresContent3:
-      "Nuestras tarjetas NFC Tap-to-Review permiten a tus clientes dejar reseñas en Google con un solo toque. Más reseñas significan mejor posicionamiento en Google Maps y atraerás más clientes nuevos a tu restaurante en Tenerife y Canarias. Tecnología de alto rendimiento, sin suscripciones y configuración inmediata. Estudios demuestran que los negocios con más de 50 reseñas en Google reciben hasta un 40% más de visitas.",
+      "Nuestras tarjetas NFC Tap-to-Review permiten a tus clientes dejar reseñas en Google con un solo toque. Más reseñas significan mejor posicionamiento en Google Maps y atraerás más clientes nuevos a tu restaurante en Tenerife y Canarias. Tecnología de alto rendimiento, sin suscripciones y configuración inmediata. Según diversos estudios del sector, los negocios con muchas reseñas en Google pueden recibir hasta un 40% más de visitas.",
     featuresContent3Title: "Automatización con n8n",
     featuresContent4:
       "Imagina un flujo de trabajo automatizado donde cada lead se captura, analiza y responde automáticamente. Con nuestras automatizaciones n8n, conectamos tu CRM, email, WhatsApp y redes sociales en un solo ecosistema. Cada interacción con clientes potenciales genera acciones en cadena: análisis de sentimiento con IA, asignación de temperatura del lead y notificaciones en tiempo real a tu equipo comercial. ¡Libera horas de trabajo cada semana!",
@@ -565,7 +566,7 @@ const translations: Record<Language, Translation> = {
       "La Carta Digital no es solo un menú digital: es tu nuevo canal de ventas directo para restaurantes en Tenerife y Canarias. Cada mesa escanea un código QR, explora platos con fotos y vídeos profesionales en 5 idiomas, y envía el pedido directamente a barra y cocina. Los datos de cada cliente se almacenan en tu base de datos para campañas de fidelización automatizadas. El resultado: mesas que rotan más rápido, tickets promedio más altos y clientes que vuelven por la experiencia impecable.",
     featuresContent5Title: "Carta Digital Sin Comisiones",
     featuresContent6:
-      "Las tarjetas NFC Tap-to-Review convierten cada visita en una reseña de Google para tu restaurante en Tenerife y Canarias. Coloca el expositor en tu local, el cliente acerca su móvil, y en 5 segundos tiene abierta la página de reseñas. Más reseñas significan mejor posicionamiento local en Google Maps y atraen más clientes nuevos cada mes. Es un ciclo virtuoso que multiplica tu visibilidad sin inversión publicitaria recurrente. ¡Multiplica tus reseñas por 6 en los primeros 90 días!",
+      "Las tarjetas NFC Tap-to-Review convierten cada visita en una reseña de Google para tu restaurante en Tenerife y Canarias. Coloca el expositor en tu local, el cliente acerca su móvil, y en 5 segundos tiene abierta la página de reseñas. Más reseñas significan mejor posicionamiento local en Google Maps y atraen más clientes nuevos cada mes. Es un ciclo virtuoso que multiplica tu visibilidad sin inversión publicitaria recurrente. Algunos de nuestros clientes han llegado a multiplicar sus reseñas por 6 en los primeros 90 días.",
     featuresContent6Title: "NFC Tap-to-Review",
     featuresNFC: "Tarjetas Tap-to-Review",
     featuresNFCDesc:
@@ -580,7 +581,8 @@ const translations: Record<Language, Translation> = {
     successSubtitle: "Resultados reales que transforman negocios",
     successDesc:
       "Empresas que ya confían en nosotros y han transformado su operación.",
-    successStat1Label: "Aumento Promedio",
+    successStat1Value: "Hasta 45%",
+    successStat1Label: "Aumento de ingresos por mesa",
     successStat1Quote:
       "Desde que implementamos la Carta Digital, nuestros ingresos por mesa aumentaron un 45%",
     successStat1Author: "Restaurante L'Escale",
@@ -594,7 +596,7 @@ const translations: Record<Language, Translation> = {
     successStat3Author: "Bar Bodega Toledo",
     successStat4Label: "Clientes Activos",
     successStat4Quote:
-      "Más de 850 negocios confían en Digitaliza Tenerife para su transformación digital",
+      "Decenas de negocios de hostelería confían en Digitaliza Tenerife para su transformación digital",
     successStat4Author: "Comunidad Hostelera",
 
     // SEO
@@ -1035,7 +1037,7 @@ const translations: Record<Language, Translation> = {
     homeFaqQ2: "¿Cuánto cuesta la Carta Digital?",
     homeFaqA2: "La Carta Digital no tiene comisiones por pedido. El precio depende del plan y del tamaño del negocio. Contactá con nosotros para un presupuesto personalizado sin compromiso.",
     homeFaqQ3: "¿Cómo funcionan las tarjetas NFC Tap-to-Review?",
-    homeFaqA3: "El cliente acerca su móvil a la tarjeta NFC y se abre directamente la página de reseñas de Google de tu negocio. Sin apps, sin fricción. Nuestros clientes multiplican sus reseñas por 6 en 90 días.",
+    homeFaqA3: "El cliente acerca su móvil a la tarjeta NFC y se abre directamente la página de reseñas de Google de tu negocio. Sin apps, sin fricción. Algunos de nuestros clientes han llegado a multiplicar sus reseñas por 6 en 90 días.",
     homeFaqQ4: "¿Sus soluciones sirven para negocios fuera de Canarias?",
     homeFaqA4: "Sí. Aunque nos especializamos en Tenerife y Canarias, nuestras soluciones digitales funcionan en cualquier negocio de España y Europa.",
     homeFaqQ5: "¿Necesito conocimientos técnicos para usar vuestras herramientas?",
@@ -1155,13 +1157,13 @@ const translations: Record<Language, Translation> = {
     heroContactoTitleEnd: "",
     heroSubtitle:
       "POS, mobile ordering, kitchen display, reservations, stock and more in one platform. Get paid faster, cut manual tasks, and spend your time on what matters — your business. No commissions, no middlemen.",
-    statStrip1Value: "200+",
-    statStrip1Label: "Businesses in the Canary Islands",
+    statStrip1Value: "Dozens",
+    statStrip1Label: "of businesses in the Canary Islands",
     statStrip2Value: "0%",
     statStrip2Label: "Commissions per order",
-    statStrip3Value: "6×",
+    statStrip3Value: "Up to 6×",
     statStrip3Label: "More reviews in 90 days",
-    statStrip4Value: "40%",
+    statStrip4Value: "Up to 40%",
     statStrip4Label: "More visits with reviews",
     heroButtonDemo: "View Demo",
     heroButtonContact: "Contact Us",
@@ -1199,7 +1201,8 @@ const translations: Record<Language, Translation> = {
     successSubtitle: "Real results that transform businesses",
     successDesc:
       "Companies that already trust us and have transformed their operation.",
-    successStat1Label: "Average Increase",
+    successStat1Value: "Up to 45%",
+    successStat1Label: "Revenue increase per table",
     successStat1Quote:
       "Since we implemented Carta Digital, our revenue per table increased by 45%",
     successStat1Author: "Restaurante L'Escale",
@@ -1213,7 +1216,7 @@ const translations: Record<Language, Translation> = {
     successStat3Author: "Bar Bodega Toledo",
     successStat4Label: "Active Clients",
     successStat4Quote:
-      "More than 850 businesses trust Digitaliza Tenerife for their digital transformation",
+      "Dozens of hospitality businesses trust Digitaliza Tenerife for their digital transformation",
     successStat4Author: "Hospitality Community",
 
     // SEO
@@ -1658,7 +1661,7 @@ const translations: Record<Language, Translation> = {
     homeFaqQ2: "How much does Carta Digital cost?",
     homeFaqA2: "Carta Digital has no per-order commissions. Pricing depends on the plan and business size. Contact us for a free personalized quote.",
     homeFaqQ3: "How do Tap-to-Review NFC cards work?",
-    homeFaqA3: "The customer taps their phone on the NFC card and your Google review page opens instantly — no app needed. Our clients multiply their reviews 6x in 90 days.",
+    homeFaqA3: "The customer taps their phone on the NFC card and your Google review page opens instantly — no app needed. Some of our clients have multiplied their reviews up to 6x in 90 days.",
     homeFaqQ4: "Do your solutions work for businesses outside the Canary Islands?",
     homeFaqA4: "Yes. While we specialize in Tenerife and the Canary Islands, our digital solutions work for any business across Spain and Europe.",
     homeFaqQ5: "Do I need technical knowledge to use your tools?",

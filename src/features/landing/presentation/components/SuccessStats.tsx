@@ -89,9 +89,9 @@ export const SuccessStats: React.FC = () => {
   ];
 
   const keyStats = [
-    { value: "45%", label: t.successStat1Label },
-    { value: "6×", label: t.successStat3Label },
-    { value: "850+", label: t.successStat4Label },
+    { value: t.successStat1Value, label: t.successStat1Label },
+    { value: t.statStrip3Value, label: t.successStat3Label },
+    { value: t.statStrip1Value, label: t.successStat4Label },
     { value: "★★★★★", label: t.successStat2Label },
   ];
 
