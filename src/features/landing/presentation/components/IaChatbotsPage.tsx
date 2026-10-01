@@ -88,11 +88,23 @@ const IaChatbotsPage: React.FC = () => {
         <meta property="og:description" content={PAGE_DESCRIPTION} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={PAGE_URL} />
-        <meta property="og:image" content={`${ORG_URL}/icon.png`} />
+        <meta
+          property="og:image"
+          content="https://digitalizatenerife.es/og/ia-chatbots.png"
+        />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta
+          property="og:image:alt"
+          content="Chatbots de IA y automatización en Tenerife"
+        />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={PAGE_TITLE} />
         <meta name="twitter:description" content={PAGE_DESCRIPTION} />
-        <meta name="twitter:image" content={`${ORG_URL}/icon.png`} />
+        <meta
+          name="twitter:image"
+          content="https://digitalizatenerife.es/og/ia-chatbots.png"
+        />
       </Helmet>
 
       <ServiceSchema

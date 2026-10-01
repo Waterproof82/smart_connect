@@ -49,3 +49,9 @@
 - Fixed untranslated Spanish footer strings and the duplicated copyright symbol.
 - Added `tests/unit/internalLinking.structure.test.ts`.
 - Validation: lint, `tsc`, build and unit tests pass (only pre-existing `documents-rls` fails). Browser check: no React errors on load for the 4 product pages, about and legal; demo button opens the assistant.
+
+## 2026-10-01 — Block 3: Open Graph images
+
+- Added `scripts/generate-og-images.mjs` (sharp, SVG template, brand gradient) and 5 committed PNGs in `public/og/` (~55 KB each).
+- Wired `og:image` (+ width/height/alt) and `twitter:image` / `summary_large_image` on home, about, legal and the 4 product pages.
+- Added `tests/unit/ogImages.structure.test.ts`.

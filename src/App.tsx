@@ -164,9 +164,19 @@ const App: React.FC = () => {
         <meta property="og:url" content={CANONICAL_URL} />
         <meta
           property="og:image"
-          content="https://digitalizatenerife.es/icon.png"
+          content="https://digitalizatenerife.es/og/home.png"
+        />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta
+          property="og:image:alt"
+          content="Digitaliza Tenerife: carta digital, NFC e IA para negocios locales"
         />
         <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:image"
+          content="https://digitalizatenerife.es/og/home.png"
+        />
         <script type="application/ld+json">{JSON.stringify(schemaData)}</script>
       </Helmet>
       <div className="min-h-screen bg-base text-default">
