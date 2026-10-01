@@ -1,5 +1,6 @@
 {
   "buildCommand": "npm run build",
+  "trailingSlash": false,
   "redirects": [
     { "source": "/automation-n8n", "destination": "/ia-chatbots-tenerife", "permanent": true },
     { "source": "/whatsapp-automation", "destination": "/ia-chatbots-tenerife", "permanent": true },
@@ -23,7 +24,6 @@
         },
         { "key": "X-Content-Type-Options", "value": "nosniff" },
         { "key": "X-Frame-Options", "value": "DENY" },
-        { "key": "X-Robots-Tag", "value": "index, follow" },
         { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
         { "key": "Strict-Transport-Security", "value": "max-age=31536000; includeSubDomains" },
         {
@@ -32,6 +32,14 @@
         },
         { "key": "Content-Signal", "value": "ai-train=no, search=yes, ai-input=yes" }
       ]
+    },
+    {
+      "source": "/((?!admin|panel|login|_spa).*)",
+      "headers": [{ "key": "X-Robots-Tag", "value": "index, follow" }]
+    },
+    {
+      "source": "/(admin|panel|login|_spa)(.*)",
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
     },
     {
       "source": "/assets/(.*)",
@@ -54,7 +62,6 @@
     { "source": "/legal/cookies", "destination": "/legal/cookies/index.html" },
     { "source": "/admin/:path*", "destination": "/_spa.html" },
     { "source": "/panel/:path*", "destination": "/_spa.html" },
-    { "source": "/login/:path*", "destination": "/_spa.html" },
-    { "source": "/:path*", "destination": "/_spa.html" }
+    { "source": "/login/:path*", "destination": "/_spa.html" }
   ]
 }

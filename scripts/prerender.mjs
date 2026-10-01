@@ -184,6 +184,16 @@ async function prerender() {
 
   console.log("\n🎉 SSG complete! Routes prerendered:", routes.join(", "));
 
+  // Real 404: Vercel serves dist/404.html with HTTP 404 for any path that no
+  // rewrite matches (vercel.json has no catch-all rewrite). Not part of the
+  // sitemap/route table; NotFound carries <meta name="robots" noindex>.
+  const notFound = render("/404", { notFound: true });
+  const notFoundHtml = template
+    .replace("<!--ssr-outlet-->", notFound.html)
+    .replace("</head>", `${notFound.head}\n</head>`);
+  fs.writeFileSync(path.resolve(distDir, "404.html"), notFoundHtml);
+  console.log("🚫 404 page saved: dist/404.html");
+
   // G4 — prerender/sitemap set identity. Trivially true today (both read
   // routeTable), but this assertion keeps it true if either side is later
   // filtered independently. See design.md §1.5.

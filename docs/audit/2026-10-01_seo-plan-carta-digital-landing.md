@@ -32,3 +32,11 @@
 - Retargeted 5 legacy 301s to the matching pages; fixed `WebMCP.ts` product URLs.
 - Replaced the obsolete "home is NFC-free" structure tests with `App.homeHub.structure.test.ts`; updated home, schema, solutions, sitemap and route-parity tests.
 - Validation: lint and `tsc` clean; build prerenders 9 routes; unit tests pass (only the `documents-rls` Supabase integration suite fails, pre-existing). Desktop and mobile screenshots checked. React error #419 (lazy Suspense boundaries in SSR) appears in the browser console both before and after this change.
+
+## 2026-10-01 — Block 1: technical indexing fixes
+
+- `vercel.json`: removed the `/:path*` -> `/_spa.html` catch-all (soft 404), added `trailingSlash: false`, split `X-Robots-Tag` so `/admin`, `/panel`, `/login` and `_spa` get `noindex, nofollow`.
+- `entry-server.tsx`: `render(url, { notFound })` renders `NotFound`; `prerender.mjs` writes `dist/404.html` (served by Vercel with HTTP 404).
+- Added `tests/unit/scripts/vercelNotFound.test.ts` (no catch-all, explicit rewrite per prerendered route, noindex header, 404.html generation).
+- Validation: lint, `tsc`, build and unit tests pass (only the pre-existing `documents-rls` Supabase suite fails). Local static server check: unknown URL -> 404 with H1 "404" and robots noindex, no hydration errors; `/tpv-restaurantes` -> 200.
+- Pending manual steps (Search Console, after deploy): resubmit sitemap, request indexing of the 4 new pages, re-validate "Page with redirect" and "Crawled - currently not indexed".

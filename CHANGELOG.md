@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **Unknown URLs now return a real HTTP 404** (soft-404 fix for Search Console's "crawled, currently not indexed"): removed the catch-all rewrite to `_spa.html`, which answered every unknown path with 200 and a JavaScript-only `noindex`. The build now prerenders `dist/404.html` (with `noindex` in the HTML), which Vercel serves with status 404. Every page keeps an explicit rewrite (new test guards this). Trailing-slash URLs now redirect to the canonical form (`trailingSlash: false`).
+
+### Security
+
+- `/admin`, `/panel` and `/login` now send `X-Robots-Tag: noindex, nofollow`; previously the site-wide `index, follow` header applied to them too (and `robots.txt` lets Googlebot crawl them).
+
 ### Added
 
 - **Standalone `/carta-digital` page** (prerendered, in the sitemap, with its own title, canonical, Service/Breadcrumb/FAQ JSON-LD): the digital menu now lives on its own URL instead of inside the home page. It opens with a new "no commission" section: Glovo takes 30% of every order, with the digital menu you pay no commission.
