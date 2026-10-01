@@ -34,6 +34,12 @@ const getSessionIdentifier = (): string => {
   return sessionId;
 };
 
+/**
+ * Window event that opens the assistant from elsewhere on the page (e.g. the
+ * "Pruébalo ahora" button on /ia-chatbots-tenerife).
+ */
+export const OPEN_ASSISTANT_EVENT = "sc:open-assistant";
+
 export const ExpertAssistant: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState("");
@@ -59,6 +65,12 @@ export const ExpertAssistant: React.FC = () => {
       }
     };
     fetchWhatsApp();
+  }, []);
+
+  useEffect(() => {
+    const open = () => setIsOpen(true);
+    globalThis.addEventListener(OPEN_ASSISTANT_EVENT, open);
+    return () => globalThis.removeEventListener(OPEN_ASSISTANT_EVENT, open);
   }, []);
 
   const [chatSession, setChatSession] = useState(() => new ChatSessionEntity());

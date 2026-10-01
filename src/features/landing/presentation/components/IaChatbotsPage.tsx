@@ -1,6 +1,21 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
-import { MessageSquare, Smartphone, Clock, UserPlus, Workflow } from "lucide-react";
+import { SiteFooter } from "@shared/components/SiteFooter";
+import { RelatedServices } from "@shared/components/RelatedServices";
+import {
+  MessageSquare,
+  Smartphone,
+  Clock,
+  UserPlus,
+  Workflow,
+  Utensils,
+  CalendarCheck,
+  Store,
+} from "lucide-react";
+import {
+  ExpertAssistant,
+  OPEN_ASSISTANT_EVENT,
+} from "@features/chatbot/presentation";
 import { Navbar } from "@features/landing/presentation/components/Navbar";
 import {
   SeoFaqSchema,
@@ -12,7 +27,8 @@ import { useWhatsappPhone } from "@shared/hooks";
 
 const ORG_URL = "https://digitalizatenerife.es";
 const PAGE_URL = `${ORG_URL}/ia-chatbots-tenerife`;
-const PAGE_TITLE = "Chatbots IA y Automatización en Tenerife | Digitaliza Tenerife";
+const PAGE_TITLE =
+  "Chatbots IA y Automatización en Tenerife | Digitaliza Tenerife";
 const PAGE_DESCRIPTION =
   "Chatbots de IA para web y WhatsApp y automatización de procesos para empresas en Tenerife. Atiende a tus clientes 24/7.";
 
@@ -43,6 +59,18 @@ const IaChatbotsPage: React.FC = () => {
     { question: t.iaFaqQ1, answer: t.iaFaqA1 },
     { question: t.iaFaqQ2, answer: t.iaFaqA2 },
     { question: t.iaFaqQ3, answer: t.iaFaqA3 },
+    { question: t.iaFaqQ4, answer: t.iaFaqA4 },
+    { question: t.iaFaqQ5, answer: t.iaFaqA5 },
+  ];
+  const cases = [
+    { icon: Utensils, title: t.iaCase1Title, desc: t.iaCase1Desc },
+    { icon: CalendarCheck, title: t.iaCase2Title, desc: t.iaCase2Desc },
+    { icon: Store, title: t.iaCase3Title, desc: t.iaCase3Desc },
+  ];
+  const steps = [
+    { title: t.iaStep1Title, desc: t.iaStep1Desc },
+    { title: t.iaStep2Title, desc: t.iaStep2Desc },
+    { title: t.iaStep3Title, desc: t.iaStep3Desc },
   ];
   const ctaHref = whatsappPhone
     ? `https://wa.me/${whatsappPhone}`
@@ -148,8 +176,81 @@ const IaChatbotsPage: React.FC = () => {
           </section>
 
           <section
+            aria-labelledby="ia-cases-title"
+            className="py-16 md:py-24 bg-[var(--color-bg-alt)]"
+          >
+            <div className="container mx-auto px-4 md:px-6 max-w-5xl">
+              <h2
+                id="ia-cases-title"
+                className="text-2xl md:text-3xl font-black font-display mb-8"
+              >
+                {t.iaCasesTitle}
+              </h2>
+              <ul className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 list-none">
+                {cases.map(({ icon: Icon, title, desc }) => (
+                  <li
+                    key={title}
+                    className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-6"
+                  >
+                    <Icon
+                      className="w-7 h-7 text-[var(--color-primary)] mb-4"
+                      aria-hidden="true"
+                    />
+                    <h3 className="font-bold text-lg mb-2">{title}</h3>
+                    <p className="text-sm text-muted leading-relaxed">{desc}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
+
+          <section aria-labelledby="ia-demo-title" className="py-16 md:py-24">
+            <div className="container mx-auto px-4 md:px-6 max-w-3xl text-center">
+              <h2
+                id="ia-demo-title"
+                className="text-2xl md:text-3xl font-black font-display mb-4"
+              >
+                {t.iaDemoTitle}
+              </h2>
+              <p className="text-muted leading-relaxed mb-8">{t.iaDemoDesc}</p>
+              <button
+                type="button"
+                onClick={() =>
+                  globalThis.dispatchEvent(new Event(OPEN_ASSISTANT_EVENT))
+                }
+                className="inline-flex items-center justify-center gap-2 min-h-[48px] px-8 py-3 rounded-xl font-bold border-2 border-[var(--color-primary)] text-[var(--color-primary)] hover:bg-[var(--color-accent-subtle)] focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] transition-colors"
+              >
+                <MessageSquare className="w-5 h-5" aria-hidden="true" />
+                {t.iaDemoButton}
+              </button>
+            </div>
+          </section>
+
+          <section
+            aria-labelledby="ia-steps-title"
+            className="py-16 md:py-24 bg-[var(--color-bg-alt)]"
+          >
+            <div className="container mx-auto px-4 md:px-6 max-w-5xl">
+              <h2
+                id="ia-steps-title"
+                className="text-2xl md:text-3xl font-black font-display mb-8"
+              >
+                {t.iaStepsTitle}
+              </h2>
+              <ol className="grid grid-cols-1 md:grid-cols-3 gap-6 list-none">
+                {steps.map(({ title, desc }) => (
+                  <li key={title}>
+                    <h3 className="font-bold text-lg mb-2">{title}</h3>
+                    <p className="text-sm text-muted leading-relaxed">{desc}</p>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </section>
+
+          <section
             aria-label={t.iaFaqTitle}
-            className="max-w-3xl mx-auto px-4 md:px-6 pb-16 md:pb-24"
+            className="max-w-3xl mx-auto px-4 md:px-6 py-16 md:py-24"
           >
             <h2 className="text-2xl sm:text-3xl font-black font-display mb-8 text-center">
               {t.iaFaqTitle}
@@ -185,13 +286,11 @@ const IaChatbotsPage: React.FC = () => {
               {t.iaCtaButton}
             </a>
           </section>
+          <RelatedServices currentId="ia-chatbots" />
         </main>
 
-        <footer className="bg-[var(--color-bg-alt)] border-t border-[var(--color-border)] py-8">
-          <div className="container mx-auto px-6 text-center text-muted text-sm">
-            <p>&copy; {t.footerCopyright}</p>
-          </div>
-        </footer>
+        <ExpertAssistant />
+        <SiteFooter />
       </div>
     </>
   );

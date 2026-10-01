@@ -40,3 +40,12 @@
 - Added `tests/unit/scripts/vercelNotFound.test.ts` (no catch-all, explicit rewrite per prerendered route, noindex header, 404.html generation).
 - Validation: lint, `tsc`, build and unit tests pass (only the pre-existing `documents-rls` Supabase suite fails). Local static server check: unknown URL -> 404 with H1 "404" and robots noindex, no hydration errors; `/tpv-restaurantes` -> 200.
 - Pending manual steps (Search Console, after deploy): resubmit sitemap, request indexing of the 4 new pages, re-validate "Page with redirect" and "Crawled - currently not indexed".
+
+## 2026-10-01 — Block 2: internal linking, shared footer, IA page, JSON-LD @id
+
+- Added `shared/components/SiteFooter.tsx` (used by home, about, legal and the 4 product pages) and `shared/components/RelatedServices.tsx` (product pages).
+- Expanded `IaChatbotsPage` (cases, steps, demo, 2 FAQs); `ExpertAssistant` now opens on the `sc:open-assistant` window event.
+- `ServiceSchema` provider carries `@id` of the home organization entity.
+- Fixed untranslated Spanish footer strings and the duplicated copyright symbol.
+- Added `tests/unit/internalLinking.structure.test.ts`.
+- Validation: lint, `tsc`, build and unit tests pass (only pre-existing `documents-rls` fails). Browser check: no React errors on load for the 4 product pages, about and legal; demo button opens the assistant.

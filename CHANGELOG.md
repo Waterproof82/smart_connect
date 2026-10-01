@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Internal linking between product pages**: a new "Otros servicios para tu negocio" block (`RelatedServices`) on `/carta-digital`, `/tarjetas-nfc`, `/ia-chatbots-tenerife` and `/tpv-restaurantes` links the other three pages, and a shared `SiteFooter` on every page links all product, company and legal pages (subpages previously had only a copyright line).
+- **`/ia-chatbots-tenerife` expanded**: use cases for hospitality and local retail, a "Cómo trabajamos" 3-step section, a live demo button that opens the site's own AI assistant, the "robot de atención al público" synonym, and two more FAQs (no technical knowledge needed; not part of the public "Canarias Digitaliza" programme).
+
+### Changed
+
+- Every page's `Service` JSON-LD now references the home `LocalBusiness` entity by `@id` (`https://digitalizatenerife.es/#organization`).
+
+### Fixed
+
+- Spanish footer strings that were in English ("Contact", "Navigation", "Follow Us", footer tagline) and the duplicated "© ©" in the copyright line.
+
 ### Fixed
 
 - **Unknown URLs now return a real HTTP 404** (soft-404 fix for Search Console's "crawled, currently not indexed"): removed the catch-all rewrite to `_spa.html`, which answered every unknown path with 200 and a JavaScript-only `noindex`. The build now prerenders `dist/404.html` (with `noindex` in the HTML), which Vercel serves with status 404. Every page keeps an explicit rewrite (new test guards this). Trailing-slash URLs now redirect to the canonical form (`trailingSlash: false`).

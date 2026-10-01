@@ -1,5 +1,7 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
+import { SiteFooter } from "@shared/components/SiteFooter";
+import { RelatedServices } from "@shared/components/RelatedServices";
 import { Navbar } from "@features/landing/presentation/components/Navbar";
 import TpvModulesSection from "@shared/components/tpv/TpvModulesSection";
 import {
@@ -117,13 +119,10 @@ const TpvRestaurantesPage: React.FC = () => {
               {t.tpvCtaButton}
             </a>
           </section>
+          <RelatedServices currentId="tpv-restaurantes" />
         </main>
 
-        <footer className="bg-[var(--color-bg-alt)] border-t border-[var(--color-border)] py-8">
-          <div className="container mx-auto px-6 text-center text-muted text-sm">
-            <p>&copy; {t.footerCopyright}</p>
-          </div>
-        </footer>
+        <SiteFooter />
       </div>
     </>
   );

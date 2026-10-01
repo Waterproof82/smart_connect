@@ -4,6 +4,7 @@ import { useLanguage } from "@shared/context/LanguageContext";
 import { Navbar } from "@features/landing/presentation/components/Navbar";
 import Contact from "@features/landing/presentation/components/Contact";
 import { sanitizeHTML } from "@shared/utils/sanitizer";
+import { SiteFooter } from "@shared/components/SiteFooter";
 
 interface LegalPageProps {
   url: string;
@@ -75,6 +76,7 @@ const LegalPage: React.FC<LegalPageProps> = ({
         </div>
       </div>
       <Contact />
+      <SiteFooter />
     </div>
   );
 };

@@ -1,5 +1,7 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
+import { SiteFooter } from "@shared/components/SiteFooter";
+import { RelatedServices } from "@shared/components/RelatedServices";
 import { Navbar } from "@features/landing/presentation/components/Navbar";
 import CartaDigitalSection from "@features/landing/presentation/components/CartaDigitalSection";
 import {
@@ -93,7 +95,10 @@ const CartaDigitalPage: React.FC = () => {
 
         <main id="main" aria-label="Contenido principal">
           <h1 className="sr-only">{t.cartaPageH1}</h1>
-          <CartaDigitalSection id="carta-digital" whatsappPhone={whatsappPhone} />
+          <CartaDigitalSection
+            id="carta-digital"
+            whatsappPhone={whatsappPhone}
+          />
 
           <section
             aria-label={cartaFaqGroup.title}
@@ -121,13 +126,10 @@ const CartaDigitalPage: React.FC = () => {
               ))}
             </div>
           </section>
+          <RelatedServices currentId="carta-digital" />
         </main>
 
-        <footer className="bg-[var(--color-bg-alt)] border-t border-[var(--color-border)] py-8">
-          <div className="container mx-auto px-6 text-center text-muted text-sm">
-            <p>&copy; {t.footerCopyright}</p>
-          </div>
-        </footer>
+        <SiteFooter />
       </div>
     </>
   );

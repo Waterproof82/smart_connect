@@ -62,6 +62,31 @@ export interface PageCopy {
   tpvIntro: string;
   tpvCtaTitle: string;
   tpvCtaButton: string;
+  relatedTitle: string;
+  footerServicesTitle: string;
+  footerCompanyTitle: string;
+  footerAbout: string;
+  iaCasesTitle: string;
+  iaCase1Title: string;
+  iaCase1Desc: string;
+  iaCase2Title: string;
+  iaCase2Desc: string;
+  iaCase3Title: string;
+  iaCase3Desc: string;
+  iaStepsTitle: string;
+  iaStep1Title: string;
+  iaStep1Desc: string;
+  iaStep2Title: string;
+  iaStep2Desc: string;
+  iaStep3Title: string;
+  iaStep3Desc: string;
+  iaDemoTitle: string;
+  iaDemoDesc: string;
+  iaDemoButton: string;
+  iaFaqQ4: string;
+  iaFaqA4: string;
+  iaFaqQ5: string;
+  iaFaqA5: string;
 }
 
 export const pageCopy: { es: PageCopy; en: PageCopy } = {
@@ -88,7 +113,7 @@ export const pageCopy: { es: PageCopy; en: PageCopy } = {
     iaTeaserCta: "Ver chatbots de IA",
     iaH1: "Chatbots de IA y automatización para empresas en Tenerife",
     iaIntro:
-      "Un asistente de IA que responde a tus clientes a cualquier hora y flujos automáticos que se encargan de las tareas repetitivas, para que tú te centres en tu negocio.",
+      "Un asistente de IA (lo que muchos llaman robot de atención al público) que responde a tus clientes a cualquier hora, y flujos automáticos que se encargan de las tareas repetitivas para que tú te centres en tu negocio.",
     iaCard1Title: "Chatbot para tu web",
     iaCard1Desc:
       "Responde dudas sobre tus servicios, precios y horarios con información de tu propio negocio.",
@@ -140,6 +165,40 @@ export const pageCopy: { es: PageCopy; en: PageCopy } = {
       "Cobro, comandero móvil, pantalla de cocina, reservas, fichajes, stock, alérgenos y carta digital: todo tu restaurante en un solo sistema.",
     tpvCtaTitle: "¿Quieres ver el TPV funcionando en tu local?",
     tpvCtaButton: "Pedir una demo",
+    relatedTitle: "Otros servicios para tu negocio",
+    footerServicesTitle: "Servicios",
+    footerCompanyTitle: "Empresa",
+    footerAbout: "Sobre nosotros",
+    iaCasesTitle: "Casos para hostelería y comercio local",
+    iaCase1Title: "Restaurantes y bares",
+    iaCase1Desc:
+      "Responde dudas sobre la carta, alérgenos, horarios y cómo llegar sin que nadie tenga que coger el teléfono en plena hora punta.",
+    iaCase2Title: "Reservas por WhatsApp",
+    iaCase2Desc:
+      "Recoge las peticiones de reserva por WhatsApp y avisa a tu equipo con todos los datos para confirmarlas.",
+    iaCase3Title: "Comercio y servicios",
+    iaCase3Desc:
+      "Atiende preguntas sobre productos, precios y disponibilidad, y convierte cada consulta en un contacto.",
+    iaStepsTitle: "Cómo trabajamos",
+    iaStep1Title: "1. Analizamos tu negocio",
+    iaStep1Desc:
+      "Vemos qué preguntas recibes y qué tareas repites cada día.",
+    iaStep2Title: "2. Configuramos el asistente",
+    iaStep2Desc:
+      "Lo entrenamos con la información de tu negocio y lo conectamos a tu web, WhatsApp y herramientas.",
+    iaStep3Title: "3. Lo mejoramos contigo",
+    iaStep3Desc:
+      "Revisamos las conversaciones y ajustamos las respuestas para que cada vez sean mejores.",
+    iaDemoTitle: "Pruébalo ahora",
+    iaDemoDesc:
+      "Esta web ya tiene un asistente de IA como el que podemos crear para tu negocio. Hazle una pregunta.",
+    iaDemoButton: "Abrir el asistente",
+    iaFaqQ4: "¿Necesito conocimientos técnicos?",
+    iaFaqA4:
+      "No. Nosotros configuramos el asistente y las automatizaciones; tú solo nos cuentas cómo funciona tu negocio.",
+    iaFaqQ5: "¿Tenéis relación con el programa Canarias Digitaliza?",
+    iaFaqA5:
+      "No. Digitaliza Tenerife es una agencia privada de Tenerife y no forma parte de ningún programa público.",
   },
   en: {
     glovoEyebrow: "No commissions",
@@ -164,7 +223,7 @@ export const pageCopy: { es: PageCopy; en: PageCopy } = {
     iaTeaserCta: "See AI chatbots",
     iaH1: "AI chatbots and automation for businesses in Tenerife",
     iaIntro:
-      "An AI assistant that answers your customers at any hour, and automated workflows that handle repetitive tasks so you can focus on your business.",
+      "An AI assistant (what many call a customer-service bot) that answers your customers at any hour, and automated workflows that handle repetitive tasks so you can focus on your business.",
     iaCard1Title: "Website chatbot",
     iaCard1Desc:
       "Answers questions about your services, prices and opening hours using your own business information.",
@@ -215,5 +274,38 @@ export const pageCopy: { es: PageCopy; en: PageCopy } = {
       "Payments, mobile ordering, kitchen display, bookings, time tracking, stock, allergens and digital menu: your whole restaurant in one system.",
     tpvCtaTitle: "Want to see the POS running in your venue?",
     tpvCtaButton: "Request a demo",
+    relatedTitle: "More services for your business",
+    footerServicesTitle: "Services",
+    footerCompanyTitle: "Company",
+    footerAbout: "About us",
+    iaCasesTitle: "Use cases for hospitality and local retail",
+    iaCase1Title: "Restaurants and bars",
+    iaCase1Desc:
+      "Answers questions about the menu, allergens, opening hours and directions, so nobody has to pick up the phone during the rush.",
+    iaCase2Title: "WhatsApp bookings",
+    iaCase2Desc:
+      "Collects booking requests on WhatsApp and notifies your team with all the details to confirm them.",
+    iaCase3Title: "Retail and services",
+    iaCase3Desc:
+      "Answers questions about products, prices and availability, and turns every enquiry into a contact.",
+    iaStepsTitle: "How we work",
+    iaStep1Title: "1. We study your business",
+    iaStep1Desc: "We look at the questions you get and the tasks you repeat every day.",
+    iaStep2Title: "2. We set up the assistant",
+    iaStep2Desc:
+      "We train it on your business information and connect it to your website, WhatsApp and tools.",
+    iaStep3Title: "3. We improve it with you",
+    iaStep3Desc:
+      "We review conversations and fine-tune the answers so they keep getting better.",
+    iaDemoTitle: "Try it now",
+    iaDemoDesc:
+      "This website already has an AI assistant like the one we can build for your business. Ask it a question.",
+    iaDemoButton: "Open the assistant",
+    iaFaqQ4: "Do I need technical knowledge?",
+    iaFaqA4:
+      "No. We set up the assistant and the automations; you just tell us how your business works.",
+    iaFaqQ5: "Are you part of the Canarias Digitaliza programme?",
+    iaFaqA5:
+      "No. Digitaliza Tenerife is a private agency based in Tenerife and is not part of any public programme.",
   },
 };
