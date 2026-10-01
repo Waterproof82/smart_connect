@@ -534,8 +534,11 @@ export const ServiceSchema: React.FC<ServiceSchemaProps> = ({
     name,
     description,
     url,
+    // @id ties every page's Service to the single LocalBusiness entity
+    // declared on home (buildHomeSchema → `${ORG_URL}/#organization`).
     provider: {
       "@type": "Organization",
+      "@id": `${providerUrl.replace(/\/$/, "")}/#organization`,
       name: providerName,
       url: providerUrl,
     },

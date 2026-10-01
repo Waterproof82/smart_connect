@@ -40,3 +40,25 @@
 - Added `tests/unit/scripts/vercelNotFound.test.ts` (no catch-all, explicit rewrite per prerendered route, noindex header, 404.html generation).
 - Validation: lint, `tsc`, build and unit tests pass (only the pre-existing `documents-rls` Supabase suite fails). Local static server check: unknown URL -> 404 with H1 "404" and robots noindex, no hydration errors; `/tpv-restaurantes` -> 200.
 - Pending manual steps (Search Console, after deploy): resubmit sitemap, request indexing of the 4 new pages, re-validate "Page with redirect" and "Crawled - currently not indexed".
+
+## 2026-10-01 — Block 2: internal linking, shared footer, IA page, JSON-LD @id
+
+- Added `shared/components/SiteFooter.tsx` (used by home, about, legal and the 4 product pages) and `shared/components/RelatedServices.tsx` (product pages).
+- Expanded `IaChatbotsPage` (cases, steps, demo, 2 FAQs); `ExpertAssistant` now opens on the `sc:open-assistant` window event.
+- `ServiceSchema` provider carries `@id` of the home organization entity.
+- Fixed untranslated Spanish footer strings and the duplicated copyright symbol.
+- Added `tests/unit/internalLinking.structure.test.ts`.
+- Validation: lint, `tsc`, build and unit tests pass (only pre-existing `documents-rls` fails). Browser check: no React errors on load for the 4 product pages, about and legal; demo button opens the assistant.
+
+## 2026-10-01 — Block 3: Open Graph images
+
+- Added `scripts/generate-og-images.mjs` (sharp, SVG template, brand gradient) and 5 committed PNGs in `public/og/` (~55 KB each).
+- Wired `og:image` (+ width/height/alt) and `twitter:image` / `summary_large_image` on home, about, legal and the 4 product pages.
+- Added `tests/unit/ogImages.structure.test.ts`.
+
+## 2026-10-01 — Block 5: GA4 conversion events
+
+- Added `shared/utils/analyticsEvents.ts` (`classifyContactHref`, `trackEvent`, `registerContactClickTracking`) with TDD tests (`tests/unit/shared/utils/analyticsEvents.test.ts`, written first, red then green).
+- Registered the delegated click listener in `entry-client.tsx`; `generate_lead` on successful contact form submit; `chatbot_demo_open` on the AI page demo button.
+- Browser check: clicking a `wa.me` link pushes `["event","contact_whatsapp",{"page_path":"/carta-digital"}]` to `dataLayer`.
+- Pending (GA4 admin, manual): mark `generate_lead` and `contact_whatsapp` as key events.

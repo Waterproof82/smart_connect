@@ -20,6 +20,7 @@ import { rateLimiter, RateLimitPresets } from "@shared/utils/rateLimiter";
 import { contactSchema, ContactFormData } from "../schemas/contactSchema";
 import { useLanguage, Translation } from "@shared/context/LanguageContext";
 import { SOLUTIONS } from "@shared/config/solutions";
+import { trackEvent } from "@shared/utils/analyticsEvents";
 import { DotField } from "@shared/presentation/components/DotField";
 
 // Label translation key per solution id — the option `value` itself
@@ -266,6 +267,10 @@ const Contact: React.FC = () => {
 
       if (result.success) {
         setSubmitStatus("success");
+        trackEvent("generate_lead", {
+          form_id: "contact",
+          service: sanitizedData.service,
+        });
         successTimeoutRef.current = globalThis.setTimeout(() => {
           reset();
           setSubmitStatus("idle");

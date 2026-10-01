@@ -1,8 +1,7 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
-import { useLanguage } from "../../../../shared/context/LanguageContext";
+import { SiteFooter } from "@shared/components/SiteFooter";
 import { Mail, MapPin, Phone } from "lucide-react";
-import { Link } from "react-router-dom";
 import { Navbar } from "./Navbar";
 
 /**
@@ -11,8 +10,6 @@ import { Navbar } from "./Navbar";
  * for AI crawlers and human visitors alike.
  */
 const AboutPage: React.FC = () => {
-  const { t } = useLanguage();
-
   return (
     <>
       <Helmet>
@@ -22,24 +19,54 @@ const AboutPage: React.FC = () => {
           content="Digitaliza Tenerife es una empresa tecnológica con sede en Santa Cruz de Tenerife. Especialistas en IA, automatización y hardware inteligente para negocios locales en Canarias."
         />
         <link rel="canonical" href="https://digitalizatenerife.es/about" />
-        <link rel="alternate" hrefLang="es" href="https://digitalizatenerife.es/about" />
-        <link rel="alternate" hrefLang="x-default" href="https://digitalizatenerife.es/about" />
-        <meta property="og:title" content="Sobre Digitaliza Tenerife — Quiénes somos" />
+        <link
+          rel="alternate"
+          hrefLang="es"
+          href="https://digitalizatenerife.es/about"
+        />
+        <link
+          rel="alternate"
+          hrefLang="x-default"
+          href="https://digitalizatenerife.es/about"
+        />
+        <meta
+          property="og:title"
+          content="Sobre Digitaliza Tenerife — Quiénes somos"
+        />
         <meta
           property="og:description"
           content="Conoce al equipo detrás de Digitaliza Tenerife. IA, automatización y hardware inteligente para negocios locales en Tenerife y Canarias."
         />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://digitalizatenerife.es/about" />
-        <meta property="og:image" content="https://digitalizatenerife.es/icon.png" />
+        <meta
+          property="og:image"
+          content="https://digitalizatenerife.es/og/home.png"
+        />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta
+          property="og:image:alt"
+          content="Digitaliza Tenerife: carta digital, NFC e IA para negocios locales"
+        />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Sobre Digitaliza Tenerife — Quiénes somos" />
+        <meta
+          name="twitter:title"
+          content="Sobre Digitaliza Tenerife — Quiénes somos"
+        />
         <meta
           name="twitter:description"
           content="Conoce al equipo detrás de Digitaliza Tenerife. IA, automatización y hardware inteligente para negocios locales en Tenerife y Canarias."
         />
-        <meta name="twitter:image" content="https://digitalizatenerife.es/icon.png" />
-        <link rel="author" href="https://digitalizatenerife.es/about" title="Digitaliza Tenerife" />
+        <meta
+          name="twitter:image"
+          content="https://digitalizatenerife.es/og/home.png"
+        />
+        <link
+          rel="author"
+          href="https://digitalizatenerife.es/about"
+          title="Digitaliza Tenerife"
+        />
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
@@ -122,10 +149,10 @@ const AboutPage: React.FC = () => {
               Tenerife y Canarias pueda competir en la era digital.
             </p>
             <p className="text-lg text-muted leading-relaxed mb-6">
-              Desde la Carta Digital que transforma la experiencia en
-              mesa, hasta tarjetas NFC que multiplican las reseñas en Google,
-              pasando por automatizaciones con n8n que liberan horas de trabajo
-              cada semana — cada solución está diseñada para generar resultados
+              Desde la Carta Digital que transforma la experiencia en mesa,
+              hasta tarjetas NFC que multiplican las reseñas en Google, pasando
+              por automatizaciones con n8n que liberan horas de trabajo cada
+              semana — cada solución está diseñada para generar resultados
               medibles desde el primer día.
             </p>
             <p className="text-lg text-muted leading-relaxed">
@@ -222,34 +249,7 @@ const AboutPage: React.FC = () => {
           </div>
         </section>
 
-        {/* Footer */}
-        <footer className="bg-[var(--color-bg-alt)] border-t border-[var(--color-border)] py-8">
-          <div className="container mx-auto px-6 text-center text-muted text-sm">
-            <p>{t.footerCopyright}</p>
-            <p className="mt-2">
-              <Link
-                to="/"
-                className="hover:text-[var(--color-primary)] transition-colors"
-              >
-                Inicio
-              </Link>
-              {" · "}
-              <Link
-                to="/#soluciones"
-                className="hover:text-[var(--color-primary)] transition-colors"
-              >
-                Servicios
-              </Link>
-              {" · "}
-              <Link
-                to="/#contacto"
-                className="hover:text-[var(--color-primary)] transition-colors"
-              >
-                Contacto
-              </Link>
-            </p>
-          </div>
-        </footer>
+        <SiteFooter />
       </div>
     </>
   );

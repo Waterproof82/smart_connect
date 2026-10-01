@@ -1,15 +1,14 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
+import { SiteFooter } from "@shared/components/SiteFooter";
+import { RelatedServices } from "@shared/components/RelatedServices";
 import { Navbar } from "@features/landing/presentation/components/Navbar";
 import {
   ServiceSchema,
   SeoFaqSchema,
   BreadcrumbListSchema,
 } from "@shared/presentation/components/SeoSchema";
-import {
-  useNfcFaqGroup,
-} from "@features/landing/presentation/components/HomeFaqSection";
-import { useLanguage } from "@shared/context/LanguageContext";
+import { useNfcFaqGroup } from "@features/landing/presentation/components/HomeFaqSection";
 import { useWhatsappPhone } from "@shared/hooks";
 import { SOLUTIONS } from "@shared/config/solutions";
 import { TapReviewSection } from "./TapReviewSection";
@@ -32,7 +31,6 @@ const PAGE_DESCRIPTION =
  * body + its own NFC FAQ group.
  */
 const TapReviewPage: React.FC = () => {
-  const { t } = useLanguage();
   const [scrolled, setScrolled] = React.useState(false);
   const sentinelRef = React.useRef<HTMLDivElement>(null);
   const whatsappPhone = useWhatsappPhone();
@@ -63,11 +61,23 @@ const TapReviewPage: React.FC = () => {
         <meta property="og:description" content={PAGE_DESCRIPTION} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={PAGE_URL} />
-        <meta property="og:image" content={`${ORG_URL}/icon.png`} />
+        <meta
+          property="og:image"
+          content="https://digitalizatenerife.es/og/tarjetas-nfc.png"
+        />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta
+          property="og:image:alt"
+          content="Tarjetas NFC para multiplicar tus reseñas en Google"
+        />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={PAGE_TITLE} />
         <meta name="twitter:description" content={PAGE_DESCRIPTION} />
-        <meta name="twitter:image" content={`${ORG_URL}/icon.png`} />
+        <meta
+          name="twitter:image"
+          content="https://digitalizatenerife.es/og/tarjetas-nfc.png"
+        />
       </Helmet>
 
       <ServiceSchema
@@ -133,13 +143,10 @@ const TapReviewPage: React.FC = () => {
               ))}
             </div>
           </section>
+          <RelatedServices currentId="tarjetas-nfc" />
         </main>
 
-        <footer className="bg-[var(--color-bg-alt)] border-t border-[var(--color-border)] py-8">
-          <div className="container mx-auto px-6 text-center text-muted text-sm">
-            <p>&copy; {t.footerCopyright}</p>
-          </div>
-        </footer>
+        <SiteFooter />
       </div>
     </>
   );

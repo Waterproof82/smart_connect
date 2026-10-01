@@ -11,6 +11,6 @@
  * - Dependency injection container
  */
 
-export { ExpertAssistant } from './ExpertAssistantWithRAG';
+export { ExpertAssistant, OPEN_ASSISTANT_EVENT } from './ExpertAssistantWithRAG';
 export { getChatbotContainer } from './ChatbotContainer';
 

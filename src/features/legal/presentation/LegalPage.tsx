@@ -4,6 +4,7 @@ import { useLanguage } from "@shared/context/LanguageContext";
 import { Navbar } from "@features/landing/presentation/components/Navbar";
 import Contact from "@features/landing/presentation/components/Contact";
 import { sanitizeHTML } from "@shared/utils/sanitizer";
+import { SiteFooter } from "@shared/components/SiteFooter";
 
 interface LegalPageProps {
   url: string;
@@ -41,9 +42,19 @@ const LegalPage: React.FC<LegalPageProps> = ({
         <meta property="og:url" content={url} />
         <meta
           property="og:image"
-          content="https://digitalizatenerife.es/icon.png"
+          content="https://digitalizatenerife.es/og/home.png"
         />
-        <meta name="twitter:card" content="summary" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta
+          property="og:image:alt"
+          content="Digitaliza Tenerife: carta digital, NFC e IA para negocios locales"
+        />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:image"
+          content="https://digitalizatenerife.es/og/home.png"
+        />
         <meta name="twitter:title" content={tr(titleKey)} />
         <meta name="twitter:description" content={tr(descriptionKey)} />
       </Helmet>
@@ -75,6 +86,7 @@ const LegalPage: React.FC<LegalPageProps> = ({
         </div>
       </div>
       <Contact />
+      <SiteFooter />
     </div>
   );
 };

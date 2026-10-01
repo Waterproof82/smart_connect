@@ -1,6 +1,6 @@
 import React, { Component, ReactNode } from "react";
-import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import { SiteFooter } from "@shared/components/SiteFooter";
 import { Navbar } from "@features/landing/presentation/components/Navbar";
 import { Hero } from "@features/landing/presentation/components/Hero";
 import { SuccessStats } from "@features/landing/presentation/components/SuccessStats";
@@ -96,7 +96,8 @@ const ErrorBoundaryFallback: React.FC = () => {
 */
 
 const CANONICAL_URL = "https://digitalizatenerife.es/";
-const PAGE_TITLE = "Digitaliza Tenerife | Carta digital, NFC e IA para negocios";
+const PAGE_TITLE =
+  "Digitaliza Tenerife | Carta digital, NFC e IA para negocios";
 const PAGE_DESCRIPTION =
   "Carta digital sin comisiones, tarjetas NFC para reseñas de Google, chatbots con IA y TPV para restaurantes y negocios de Tenerife y Canarias.";
 
@@ -163,9 +164,19 @@ const App: React.FC = () => {
         <meta property="og:url" content={CANONICAL_URL} />
         <meta
           property="og:image"
-          content="https://digitalizatenerife.es/icon.png"
+          content="https://digitalizatenerife.es/og/home.png"
+        />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta
+          property="og:image:alt"
+          content="Digitaliza Tenerife: carta digital, NFC e IA para negocios locales"
         />
         <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:image"
+          content="https://digitalizatenerife.es/og/home.png"
+        />
         <script type="application/ld+json">{JSON.stringify(schemaData)}</script>
       </Helmet>
       <div className="min-h-screen bg-base text-default">
@@ -221,7 +232,6 @@ const App: React.FC = () => {
                   </div>
                 ))}
               </div>
-
             </div>
           </section>
           <section
@@ -250,137 +260,7 @@ const App: React.FC = () => {
         {/* AI Chatbot Assistant */}
         <ExpertAssistant />
 
-        {/* Footer */}
-        <footer className="bg-[var(--color-bg-alt)] border-t border-[var(--color-border)] pt-16 pb-8">
-          <div className="container mx-auto px-6">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-12 mb-12">
-              <div>
-                <span className="font-bold text-xl text-default">
-                  Digitaliza{" "}
-                  <span className="text-[var(--color-primary)]">Tenerife</span>
-                </span>
-                <p className="text-muted text-sm mt-3 leading-relaxed">
-                  {t.footerTagline}
-                </p>
-              </div>
-              <nav aria-label="Navegación del footer">
-                <h3 className="text-sm font-bold text-muted uppercase tracking-wider mb-4">
-                  {t.footerNavTitle}
-                </h3>
-                <ul className="space-y-2 text-sm text-muted">
-                  <li>
-                    <a
-                      href="#inicio"
-                      className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors"
-                    >
-                      {t.footerNavInicio}
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#soluciones"
-                      className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors"
-                    >
-                      {t.footerNavSoluciones}
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#exito"
-                      className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors"
-                    >
-                      {t.footerNavExito}
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#por-que"
-                      className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors"
-                    >
-                      Por Qué Nosotros
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#contacto"
-                      className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors"
-                    >
-                      {t.footerNavContacto}
-                    </a>
-                  </li>
-                </ul>
-              </nav>
-              <div>
-                <h3 className="text-sm font-bold text-muted uppercase tracking-wider mb-4">
-                  {t.footerSocialTitle}
-                </h3>
-                {/* Social accounts not live yet — non-interactive placeholders
-                    (S6844: an href="#" is not a valid, navigable address).
-                    Swap each <span> back to an <a href="..."> once the real
-                    account URL exists. */}
-                <ul className="space-y-3 text-sm text-muted">
-                  <li>
-                    <span>YouTube</span>
-                  </li>
-                  <li>
-                    <span>X (Twitter)</span>
-                  </li>
-                  <li>
-                    <span>LinkedIn</span>
-                  </li>
-                  <li>
-                    <span>Instagram</span>
-                  </li>
-                  <li>
-                    <span>Facebook</span>
-                  </li>
-                </ul>
-              </div>
-              <div>
-                <h3 className="text-sm font-bold text-muted uppercase tracking-wider mb-4">
-                  {t.footerLegalTitle}
-                </h3>
-                <ul className="space-y-2 text-sm text-muted">
-                  <li>
-                    <Link
-                      to="/about"
-                      className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors"
-                    >
-                      Sobre Nosotros
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/legal/aviso"
-                      className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors"
-                    >
-                      {t.footerLegalAviso}
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/legal/privacidad"
-                      className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors"
-                    >
-                      {t.footerLegalPrivacidad}
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/legal/cookies"
-                      className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline transition-colors"
-                    >
-                      {t.footerLegalCookies}
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div className="border-t border-[var(--color-border)] pt-8 text-center text-muted text-sm">
-              <p>&copy; {t.footerCopyright}</p>
-            </div>
-          </div>
-        </footer>
+        <SiteFooter />
       </div>
     </ErrorBoundary>
   );
