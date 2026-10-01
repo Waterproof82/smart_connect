@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **CI failure on `main` after merging `develop`**: two structure tests (`App.home.structure`, `App.homeNfcFree.structure`) searched `App.tsx` for the literal `<TpvModulesSection`, but the lazy-loading change renders `<LazyTpvModulesSection`. The tests now look for the lazy component; app behavior is unchanged.
 - **Floating promises in admin `DocumentList`** (SonarQube `typescript:S9383`): the fire-and-forget calls to `loadDocuments`/`loadAvailableSources` in the mount effects and the search handler are now marked with `void`. Both functions already handle their own errors, so behavior is unchanged.
 - **Chatbot answered HTTP 500 for browsers holding an invalid/stale Supabase session**: `chat-with-rag` kept using the Supabase client carrying the rejected `Authorization` header, so every RPC failed. It now falls back to a header-less client (deployed). It also logs Gemini's status/message when the embedding call fails (never the API key or the user's text), which exposed that the chatbot outage was a depleted Gemini prepayment balance (HTTP 402), not a code defect.
 
