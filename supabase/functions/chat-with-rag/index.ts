@@ -282,7 +282,11 @@ async function getQueryEmbedding(query: string, cache: EmbeddingCache, geminiKey
       { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-goog-api-key': geminiKey }, body: JSON.stringify({ content: { parts: [{ text: query }] } }) }
     )
     const embData = await embResponse.json()
-    if (!embResponse.ok || !Array.isArray(embData.embedding?.values) || embData.embedding.values.length === 0) throw new Error('Embedding generation failed')
+    if (!embResponse.ok || !Array.isArray(embData.embedding?.values) || embData.embedding.values.length === 0) {
+      // Log Gemini's status/message (never the API key or the user's text) so failures are diagnosable.
+      console.error('[RAG] Embedding failed: status', embResponse.status, 'queryLength', query.length, 'error', JSON.stringify(embData?.error ?? null).slice(0, 300))
+      throw new Error('Embedding generation failed')
+    }
     queryEmbedding = embData.embedding.values.slice(0, 768)
     await cache.set(cacheKey, queryEmbedding)
     cacheHit = false
