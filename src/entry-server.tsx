@@ -11,11 +11,24 @@ import { CookieConsent } from "@shared/components/CookieConsent";
 import App from "./App";
 import AboutPage from "./features/landing/presentation/components/AboutPage";
 import TapReviewPage from "./features/tap-review/presentation/TapReviewPage";
+import CartaDigitalPage from "./features/landing/presentation/components/CartaDigitalPage";
+import IaChatbotsPage from "./features/landing/presentation/components/IaChatbotsPage";
+import TpvRestaurantesPage from "./features/landing/presentation/components/TpvRestaurantesPage";
 import AvisoLegalPage from "./features/legal/presentation/AvisoLegalPage";
 import PrivacidadPage from "./features/legal/presentation/PrivacidadPage";
 import CookiesPage from "./features/legal/presentation/CookiesPage";
+import { NotFound } from "./features/landing/presentation/components/NotFound";
 
-export function render(url: string): { html: string; head: string } {
+/**
+ * Renders a prerendered route. With `notFound: true` it renders the 404
+ * page instead of the route table — prerender.mjs writes that output to
+ * dist/404.html, which Vercel serves with a real HTTP 404 status for any
+ * path no rewrite matches.
+ */
+export function render(
+  url: string,
+  options: { notFound?: boolean } = {},
+): { html: string; head: string } {
   const helmetContext = {} as { helmet?: HelmetServerState };
 
   const html = renderToString(
@@ -27,14 +40,33 @@ export function render(url: string): { html: string; head: string } {
               <ScrollToTop />
               <CookieConsent />
               <Suspense fallback={null}>
-                <Routes>
-                  <Route path="/" element={<App />} />
-                  <Route path="/about" element={<AboutPage />} />
-                  <Route path="/tarjetas-nfc" element={<TapReviewPage />} />
-                  <Route path="/legal/aviso" element={<AvisoLegalPage />} />
-                  <Route path="/legal/privacidad" element={<PrivacidadPage />} />
-                  <Route path="/legal/cookies" element={<CookiesPage />} />
-                </Routes>
+                {options.notFound ? (
+                  <NotFound />
+                ) : (
+                  <Routes>
+                    <Route path="/" element={<App />} />
+                    <Route path="/about" element={<AboutPage />} />
+                    <Route path="/tarjetas-nfc" element={<TapReviewPage />} />
+                    <Route
+                      path="/carta-digital"
+                      element={<CartaDigitalPage />}
+                    />
+                    <Route
+                      path="/ia-chatbots-tenerife"
+                      element={<IaChatbotsPage />}
+                    />
+                    <Route
+                      path="/tpv-restaurantes"
+                      element={<TpvRestaurantesPage />}
+                    />
+                    <Route path="/legal/aviso" element={<AvisoLegalPage />} />
+                    <Route
+                      path="/legal/privacidad"
+                      element={<PrivacidadPage />}
+                    />
+                    <Route path="/legal/cookies" element={<CookiesPage />} />
+                  </Routes>
+                )}
               </Suspense>
             </ConsentProvider>
           </LanguageProvider>

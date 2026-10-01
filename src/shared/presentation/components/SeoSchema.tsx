@@ -60,9 +60,9 @@ export function buildHomeSchema(
     "@type": "WebPage",
     "@id": ORG_URL,
     url: ORG_URL,
-    name: "Digitaliza Tenerife | Automatización e IA para Empresas",
+    name: "Digitaliza Tenerife | Carta digital, NFC e IA para negocios",
     description:
-      "Digitaliza Tenerife: automatización con IA, n8n, NFC para Google Reviews y menús digitales. Digitaliza tu negocio.",
+      "Carta digital sin comisiones, tarjetas NFC para reseñas de Google, chatbots con IA y TPV para restaurantes y negocios de Tenerife y Canarias.",
     inLanguage: "es",
     author: {
       "@type": "Organization",
@@ -110,7 +110,7 @@ export function buildHomeSchema(
     "@type": "ItemList",
     name: "Soluciones Digitaliza Tenerife",
     description:
-      "Nuestras soluciones tecnológicas para hostelería: menús digitales y tarjetas NFC para reseñas.",
+      "Soluciones para hostelería y negocios locales: carta digital, tarjetas NFC, chatbots con IA y TPV para restaurantes.",
     url: `${ORG_URL}/#soluciones`,
     itemListElement: solutions.map((solution, index) => ({
       "@type": "ListItem",

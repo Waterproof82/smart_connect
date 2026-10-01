@@ -29,6 +29,8 @@ import { DotField } from "@shared/presentation/components/DotField";
 const SERVICE_LABEL_KEY: Record<string, keyof Translation> = {
   "carta-digital": "serviceCartaDigital",
   "tarjetas-nfc": "serviceNFC",
+  "ia-chatbots": "serviceIaChatbots",
+  "tpv-restaurantes": "serviceTpv",
 };
 
 const SERVICE_OPTIONS: Array<{ value: string; labelKey: keyof Translation }> = [

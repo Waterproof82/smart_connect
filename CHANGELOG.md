@@ -9,6 +9,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Unknown URLs now return a real HTTP 404** (soft-404 fix for Search Console's "crawled, currently not indexed"): removed the catch-all rewrite to `_spa.html`, which answered every unknown path with 200 and a JavaScript-only `noindex`. The build now prerenders `dist/404.html` (with `noindex` in the HTML), which Vercel serves with status 404. Every page keeps an explicit rewrite (new test guards this). Trailing-slash URLs now redirect to the canonical form (`trailingSlash: false`).
+
+### Security
+
+- `/admin`, `/panel` and `/login` now send `X-Robots-Tag: noindex, nofollow`; previously the site-wide `index, follow` header applied to them too (and `robots.txt` lets Googlebot crawl them).
+
+### Added
+
+- **Standalone `/carta-digital` page** (prerendered, in the sitemap, with its own title, canonical, Service/Breadcrumb/FAQ JSON-LD): the digital menu now lives on its own URL instead of inside the home page. It opens with a new "no commission" section: Glovo takes 30% of every order, with the digital menu you pay no commission.
+- **Standalone `/tpv-restaurantes` page** (prerendered): the 13 TPV module sections moved off the home page onto their own URL, with Service and Breadcrumb JSON-LD.
+- **Standalone `/ia-chatbots-tenerife` page**: AI chatbots (web and WhatsApp) and process automation, targeting the largest unserved search cluster found in Search Console.
+- `docs/PLAN_SEO_CARTA_DIGITAL_LANDING.md` (plan from the Search Console reports) and `docs/SEO_PROTOCOL.md` (per-page SEO spec, pre-merge checklist and internal-linking map).
+
+### Changed
+
+- **Simplified home page**: home is now a hub. Two large flagship cards (Carta Digital, with the "Save the 30% margin Glovo takes" message, and Tarjetas NFC) and two secondary service cards (AI chatbots, restaurant POS), each linking to its own page. Removed the 13 TPV sections and the long "Pilares Tecnológicos" block (the stats strip stays). New home title and description; the home JSON-LD lists one Service per product page.
+- Navbar dropdown and contact form now include AI chatbots and restaurant POS (`SOLUTIONS` grows from 2 to 4 entries). The Carta Digital FAQ moved from home to `/carta-digital`, so its FAQPage markup appears on one URL only.
+- Legacy URLs now redirect in one hop to the matching page: `/automation-n8n`, `/whatsapp-automation`, `/automatizacion-restaurantes-n8n` and `/automatizacion-whatsapp-restaurante` → `/ia-chatbots-tenerife`; `/software-restaurantes-canarias` → `/tpv-restaurantes`.
+- `WebMCP.ts` product URLs point to `/carta-digital` and `/tarjetas-nfc` instead of old in-page anchors; `llms.txt` (and its hash) lists the new pages.
+- The home page now shows a short Carta Digital teaser ("Save the 30% margin Glovo takes from every order") linking to `/carta-digital`, instead of rendering the full menu content, to avoid duplicate content between `/` and `/carta-digital`.
+- `vercel.json`: removed the 301 from `/carta-digital` to `/`; added rewrites and cache headers for both new routes. `llms.txt` (and its `sha256` in `agent-skills/index.json`) lists the new pages. The carta-digital entry in `SOLUTIONS` now points to `/carta-digital`.
+
+### Fixed
+
 - **CI failure on `main` after merging `develop`**: two structure tests (`App.home.structure`, `App.homeNfcFree.structure`) searched `App.tsx` for the literal `<TpvModulesSection`, but the lazy-loading change renders `<LazyTpvModulesSection`. The tests now look for the lazy component; app behavior is unchanged.
 - **Floating promises in admin `DocumentList`** (SonarQube `typescript:S9383`): the fire-and-forget calls to `loadDocuments`/`loadAvailableSources` in the mount effects and the search handler are now marked with `void`. Both functions already handle their own errors, so behavior is unchanged.
 - **Chatbot answered HTTP 500 for browsers holding an invalid/stale Supabase session**: `chat-with-rag` kept using the Supabase client carrying the rejected `Authorization` header, so every RPC failed. It now falls back to a header-less client (deployed). It also logs Gemini's status/message when the embedding call fails (never the API key or the user's text), which exposed that the chatbot outage was a depleted Gemini prepayment balance (HTTP 402), not a code defect.

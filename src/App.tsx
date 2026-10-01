@@ -1,7 +1,6 @@
 import React, { Component, ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { Workflow, Utensils, Monitor, Bot } from "lucide-react";
 import { Navbar } from "@features/landing/presentation/components/Navbar";
 import { Hero } from "@features/landing/presentation/components/Hero";
 import { SuccessStats } from "@features/landing/presentation/components/SuccessStats";
@@ -9,13 +8,10 @@ import { ExpertAssistant } from "@features/chatbot/presentation";
 import { useHomeFaqGroups } from "@features/landing/presentation/components/HomeFaqSection";
 import { ConsoleLogger } from "@core/domain/usecases/Logger";
 import { useLanguage } from "@shared/context/LanguageContext";
-import { TPV_MODULES } from "@shared/config/tpvModules";
+import { SOLUTIONS } from "@shared/config/solutions";
 import { buildHomeSchema } from "@shared/presentation/components/SeoSchema";
-import { accentStyle } from "@shared/config/accents";
+import HomeSolutionsSection from "@features/landing/presentation/components/HomeSolutionsSection";
 
-const LazyTpvModulesSection = React.lazy(
-  () => import("@shared/components/tpv/TpvModulesSection"),
-);
 const LazyHomeFaqSection = React.lazy(
   () => import("@features/landing/presentation/components/HomeFaqSection"),
 );
@@ -85,46 +81,24 @@ const ErrorBoundaryFallback: React.FC = () => {
 // since they're always rendered on the landing page.
 
 /* Heading structure:
-  / → H1: Aumenta tu facturación, ahorra horas cada semana (outcome-first, PR4)
-  (PR4: TpvModulesSection renders 13 TPV module sections, each its own H2,
-   sorted by TPV_MODULES' frozen `order` — see shared/config/tpvModules.ts.
-   "tienda-carta-digital" (order 13, last) mounts the existing
-   CartaDigitalSection sub-tree; the other 12 are PR5-7 placeholders.)
-  (PR3: NFC review cards un-merged to their own /tarjetas-nfc route — no longer on home)
-  (PR9: Features.tsx's "Nuestras Soluciones" grid retired — it only
-   duplicated the fuller tienda-carta-digital module below and still
-   rendered a real NFC teaser card, which violated the "no NFC content on
-   home" requirement. #soluciones now wraps TpvModulesSection directly.)
-  H2: Resultados reales que transforman negocios
-    H3: Aumento Promedio
-    H3: Satisfacción
-    H3: Reseñas Ganadas
-    H3: Clientes Activos
-  H2: Impulsa tu Negocio Hoy
-    H3: [Email]
-    H3: [WhatsApp]
-    H3: [Location]
-    H3: Síguenos (Social Media)
-  (No heading levels skipped — valid H1→H2→H3→H4 hierarchy)
-  SEO checklist verification:
-  - Title: "Digitaliza Tenerife: IA y Automatización para Negocios" (50 chars) ✓
-  - Meta desc: 111 chars ✓ (100-130 range)
-  - Viewport: width=device-width, initial-scale=1.0 ✓
-  - Hreflang: intentionally absent. Language is client state
-    (LanguageContext useState + localStorage), never in the URL, so every
-    language would resolve to this same canonical — an invalid alternate set
-    that Google ignores. Do NOT re-add hreflang until URLs are language-
-    addressable; that is change `i18n-url-routing`. ✓
-  - noindex: NOT present ✓
-  - H1 present: ✓ (unique per route)
-  - Touch targets: 48px min ✓
-  - DOM: lazy-loaded SuccessStats & Chatbot, ~700 estimated nodes ✓
+  / → H1 (Hero.tsx)
+  H2: Dos herramientas para vender más (HomeSolutionsSection)
+    H3: Carta digital → /carta-digital · H3: Tarjetas NFC → /tarjetas-nfc
+  H2: Más servicios para tu negocio
+    H3: Chatbots IA → /ia-chatbots-tenerife · H3: TPV → /tpv-restaurantes
+  H2: ¿Por qué Digitaliza Tenerife? (stat strip only)
+  H2: Resultados reales (SuccessStats) · H2: FAQ · H2: Contacto
+  Home is a hub: product content lives on each product's own URL (no
+  duplicated content, no TPV module sections here — see /tpv-restaurantes).
+  Hreflang: intentionally absent. Language is client state, not in the URL;
+  do NOT re-add hreflang until URLs are language-addressable (change
+  `i18n-url-routing`).
 */
 
 const CANONICAL_URL = "https://digitalizatenerife.es/";
-const PAGE_TITLE = "Digitaliza Tenerife | Automatización e IA para Empresas";
+const PAGE_TITLE = "Digitaliza Tenerife | Carta digital, NFC e IA para negocios";
 const PAGE_DESCRIPTION =
-  "Digitaliza Tenerife: automatización con IA, n8n, NFC para Google Reviews y menús digitales. Digitaliza tu negocio.";
+  "Carta digital sin comisiones, tarjetas NFC para reseñas de Google, chatbots con IA y TPV para restaurantes y negocios de Tenerife y Canarias.";
 
 const App: React.FC = () => {
   const [scrolled, setScrolled] = React.useState(false);
@@ -167,10 +141,8 @@ const App: React.FC = () => {
   const faqEntries = faqGroups.flatMap((group) =>
     group.items.map((item) => ({ question: item.q, answer: item.a })),
   );
-  // PR4: home's structured data reflects the 13 TPV modules, not the
-  // top-level SOLUTIONS catalog — no NFC Service node (NFC lives at its own
-  // /tarjetas-nfc route with its own schema, see TapReviewPage.tsx).
-  const schemaData = buildHomeSchema(TPV_MODULES, faqEntries);
+  // Home is the hub: one Service node per product/service page.
+  const schemaData = buildHomeSchema(SOLUTIONS, faqEntries);
 
   return (
     <ErrorBoundary>
@@ -213,22 +185,17 @@ const App: React.FC = () => {
           <section id="inicio" aria-label="Inicio">
             <Hero />
           </section>
-          {/* Scroll-anchor sentinel (no own landmark/aria-label — each TPV
-              module section below owns its own <section id> + heading) so
-              the footer's #soluciones link and any existing deep links keep
-              resolving after Features.tsx's grid was retired (PR9). */}
+          {/* #soluciones anchor kept for the footer link and deep links. */}
           <div id="soluciones" aria-hidden="true" className="h-0" />
-          <React.Suspense fallback={<div style={{ height: "1200px" }} />}>
-            <LazyTpvModulesSection />
-          </React.Suspense>
+          <HomeSolutionsSection />
           <section
             id="por-que"
             aria-label="Por qué Digitaliza Tenerife"
-            className="py-20 md:py-32 bg-[var(--color-bg-alt)]"
+            className="py-16 md:py-24 bg-[var(--color-bg-alt)]"
           >
             <div className="container mx-auto px-6">
               {/* Left-aligned header */}
-              <div className="max-w-2xl mb-16">
+              <div className="max-w-2xl mb-12">
                 <h2 className="text-4xl md:text-5xl font-bold mb-4">
                   ¿Por qué Digitaliza Tenerife?
                 </h2>
@@ -239,7 +206,7 @@ const App: React.FC = () => {
               </div>
 
               {/* Stats strip — i18n-driven (PR4), same truthful values as before */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 py-8 border-y border-[var(--color-border)] mb-16">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 py-8 border-y border-[var(--color-border)]">
                 {[
                   { value: t.statStrip1Value, label: t.statStrip1Label },
                   { value: t.statStrip2Value, label: t.statStrip2Label },
@@ -255,90 +222,6 @@ const App: React.FC = () => {
                 ))}
               </div>
 
-              {/* Asymmetric grid: Misión (1fr) + Pilares (2fr) */}
-              <div className="grid md:grid-cols-[1fr_2fr] gap-12 mb-16">
-                <div>
-                  <p className="text-xs font-bold text-[var(--color-primary)] uppercase tracking-wider mb-4 opacity-70">
-                    Misión y Visión
-                  </p>
-                  <p className="text-muted leading-relaxed text-base mb-4">
-                    Cada bar, restaurante o comercio tiene necesidades únicas y
-                    merece herramientas diseñadas para su realidad.
-                  </p>
-                  <p className="text-muted leading-relaxed text-base">
-                    Nuestra plataforma funciona como un ecosistema unificado, no
-                    como piezas sueltas.
-                  </p>
-                </div>
-
-                <div>
-                  <p className="text-xs font-bold text-[var(--color-primary)] uppercase tracking-wider mb-4 opacity-70">
-                    Pilares Tecnológicos
-                  </p>
-                  <div className="divide-y divide-[var(--color-border)]">
-                    {(
-                      [
-                        {
-                          title: "Automatización con n8n",
-                          desc: "Flujos que conectan CRM, email, WhatsApp y redes sociales.",
-                          icon: Workflow,
-                          accent: "--color-icon-indigo",
-                        },
-                        {
-                          title: "Carta Digital Premium",
-                          desc: "Pedidos en tiempo real desde la mesa a barra y cocina.",
-                          icon: Utensils,
-                          accent: "--color-icon-emerald",
-                        },
-                        {
-                          title: "Plataforma TPV Todo-en-Uno",
-                          desc: "Cobro, comandero, cocina, stock y reservas en un solo sistema.",
-                          icon: Monitor,
-                          accent: "--color-icon-coral",
-                        },
-                        {
-                          title: "IA Conversacional",
-                          desc: "Chatbot experto que responde dudas 24/7 sobre tus servicios.",
-                          icon: Bot,
-                          accent: "--color-icon-magenta",
-                        },
-                      ] as const
-                    ).map((pilar) => {
-                      const Icon = pilar.icon;
-                      return (
-                        <div
-                          key={pilar.title}
-                          className="py-4 flex gap-3"
-                          style={accentStyle(pilar.accent)}
-                        >
-                          <div className="w-9 h-9 shrink-0 rounded-lg flex items-center justify-center text-[color:var(--tpv-accent)] tpv-accent-chip">
-                            <Icon className="w-4 h-4" aria-hidden="true" />
-                          </div>
-                          <div>
-                            <div className="font-semibold text-default text-sm mb-0.5">
-                              {pilar.title}
-                            </div>
-                            <div className="text-muted text-sm">
-                              {pilar.desc}
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              </div>
-
-              {/* Closing statement */}
-              <div className="border-t border-[var(--color-border)] pt-10">
-                <p className="text-base text-muted leading-relaxed max-w-3xl">
-                  Digitalizar tu negocio ya no es una opción — es una necesidad.
-                  Los clientes buscan restaurantes en Google, leen reseñas antes
-                  de visitar un local, y esperan poder pedir desde su móvil. Con
-                  Digitaliza Tenerife, no solo te ponés al día — te adelantás a
-                  la competencia.
-                </p>
-              </div>
             </div>
           </section>
           <section

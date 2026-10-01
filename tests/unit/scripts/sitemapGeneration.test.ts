@@ -42,7 +42,7 @@ describe("scripts/site-routes.json (design.md §1.2 — single source of truth)"
     expect(() => JSON.parse(raw)).not.toThrow();
   });
 
-  it("has origin https://digitalizatenerife.es and exactly the 6 prerendered routes", () => {
+  it("has origin https://digitalizatenerife.es and exactly the 9 prerendered routes", () => {
     const data = JSON.parse(
       fs.readFileSync(path.join(SCRIPTS_DIR, "site-routes.json"), "utf-8"),
     );
@@ -51,6 +51,9 @@ describe("scripts/site-routes.json (design.md §1.2 — single source of truth)"
     expect(paths).toEqual([
       "/",
       "/tarjetas-nfc",
+      "/carta-digital",
+      "/ia-chatbots-tenerife",
+      "/tpv-restaurantes",
       "/about",
       "/legal/aviso",
       "/legal/privacidad",

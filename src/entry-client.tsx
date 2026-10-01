@@ -33,6 +33,24 @@ const TapReviewPage = lazy(() =>
   })),
 );
 
+const CartaDigitalPage = lazy(() =>
+  import("@features/landing/presentation/components/CartaDigitalPage").then(
+    (m) => ({ default: m.default }),
+  ),
+);
+
+const IaChatbotsPage = lazy(() =>
+  import("@features/landing/presentation/components/IaChatbotsPage").then(
+    (m) => ({ default: m.default }),
+  ),
+);
+
+const TpvRestaurantesPage = lazy(() =>
+  import("@features/landing/presentation/components/TpvRestaurantesPage").then(
+    (m) => ({ default: m.default }),
+  ),
+);
+
 const AvisoLegalPage = lazy(() =>
   import("@features/legal/presentation/AvisoLegalPage").then((m) => ({
     default: m.default,
@@ -66,7 +84,7 @@ const LoadingFallback = () => (
 const rootElement = document.getElementById("root");
 if (!rootElement) throw new Error("Could not find root element to mount to");
 
-// Prerendered pages (/, /about, /tarjetas-nfc, /legal/*) ship SSR HTML inside
+// Prerendered pages (/, /about, /tarjetas-nfc, /carta-digital, /ia-chatbots-tenerife, /tpv-restaurantes, /legal/*) ship SSR HTML inside
 // #root → hydrateRoot. SPA routes (/admin) serve _spa.html, which contains only
 // the <!--ssr-outlet--> comment → createRoot, to avoid hydration errors.
 const hasSSRContent = rootElement.children.length > 0;
@@ -85,6 +103,15 @@ const app = (
                 <Route path="/admin" element={<AdminPanel />} />
                 <Route path="/about" element={<AboutPage />} />
                 <Route path="/tarjetas-nfc" element={<TapReviewPage />} />
+                <Route path="/carta-digital" element={<CartaDigitalPage />} />
+                <Route
+                  path="/ia-chatbots-tenerife"
+                  element={<IaChatbotsPage />}
+                />
+                <Route
+                  path="/tpv-restaurantes"
+                  element={<TpvRestaurantesPage />}
+                />
                 <Route path="/legal/aviso" element={<AvisoLegalPage />} />
                 <Route path="/legal/privacidad" element={<PrivacidadPage />} />
                 <Route path="/legal/cookies" element={<CookiesPage />} />

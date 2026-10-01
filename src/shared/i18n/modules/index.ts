@@ -36,6 +36,7 @@ import {
   TiendaCartaDigitalCopy,
   tiendaCartaDigitalCopy,
 } from "./tienda-carta-digital";
+import { PageCopy, pageCopy } from "./page-copy";
 
 export interface TpvModuleTranslations
   extends TpvCobroCopy,
@@ -50,7 +51,8 @@ export interface TpvModuleTranslations
     FoodCostAvanzadoCopy,
     SistemaAlergenosCopy,
     ComprasSialtiCopy,
-    TiendaCartaDigitalCopy {}
+    TiendaCartaDigitalCopy,
+    PageCopy {}
 
 export const tpvModuleEs: TpvModuleTranslations = {
   ...tpvCobroCopy.es,
@@ -66,6 +68,7 @@ export const tpvModuleEs: TpvModuleTranslations = {
   ...sistemaAlergenosCopy.es,
   ...comprasSialtiCopy.es,
   ...tiendaCartaDigitalCopy.es,
+  ...pageCopy.es,
 };
 
 export const tpvModuleEn: TpvModuleTranslations = {
@@ -82,4 +85,5 @@ export const tpvModuleEn: TpvModuleTranslations = {
   ...sistemaAlergenosCopy.en,
   ...comprasSialtiCopy.en,
   ...tiendaCartaDigitalCopy.en,
+  ...pageCopy.en,
 };

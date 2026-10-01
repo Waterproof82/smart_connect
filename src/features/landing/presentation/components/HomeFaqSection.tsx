@@ -35,17 +35,27 @@ export function useHomeFaqGroups(): HomeFaqGroup[] {
         { q: t.homeFaqQ6, a: t.homeFaqA6 },
       ],
     },
-    {
-      title: t.cartaFaqTitle,
-      items: [
-        { q: t.cartaFaqQ1, a: t.cartaFaqA1 },
-        { q: t.cartaFaqQ2, a: t.cartaFaqA2 },
-        { q: t.cartaFaqQ3, a: t.cartaFaqA3 },
-        { q: t.cartaFaqQ4, a: t.cartaFaqA4 },
-        { q: t.cartaFaqQ5, a: t.cartaFaqA5 },
-      ],
-    },
   ];
+}
+
+/**
+ * Carta Digital FAQ group — consumed by the standalone /carta-digital page
+ * (CartaDigitalPage.tsx), not by home, so the same Q&A is never marked up
+ * as FAQPage on two URLs.
+ */
+export function useCartaFaqGroup(): HomeFaqGroup {
+  const { t } = useLanguage();
+
+  return {
+    title: t.cartaFaqTitle,
+    items: [
+      { q: t.cartaFaqQ1, a: t.cartaFaqA1 },
+      { q: t.cartaFaqQ2, a: t.cartaFaqA2 },
+      { q: t.cartaFaqQ3, a: t.cartaFaqA3 },
+      { q: t.cartaFaqQ4, a: t.cartaFaqA4 },
+      { q: t.cartaFaqQ5, a: t.cartaFaqA5 },
+    ],
+  };
 }
 
 /**

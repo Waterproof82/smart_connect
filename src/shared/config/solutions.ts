@@ -31,7 +31,7 @@ export const SOLUTIONS: SolutionConfig[] = [
     // "tienda-carta-digital" module (last, frozen order) — anchor updated
     // to match its new section id. This SOLUTIONS entry itself (Navbar
     // dropdown / Features card / Contact form option) is unchanged.
-    href: "#tienda-carta-digital",
+    href: "/carta-digital",
     internal: true,
     iconColor: "text-[var(--color-icon-emerald)]",
     serviceValue: "Carta Digital Premium",
@@ -55,6 +55,38 @@ export const SOLUTIONS: SolutionConfig[] = [
       description:
         "Tarjetas NFC para que los clientes dejen reseñas en Google e Instagram con un solo toque.",
       serviceType: "NFC Review Solution",
+      areaServed: ["Tenerife", "Canarias", "España"],
+    },
+  },
+  {
+    id: "ia-chatbots",
+    icon: "MessageSquare",
+    titleKey: "navbarIaChatbots",
+    descKey: "navbarIaChatbotsDesc",
+    href: "/ia-chatbots-tenerife",
+    internal: true,
+    iconColor: "text-[var(--color-icon-magenta)]",
+    serviceValue: "Chatbots IA y automatización",
+    jsonLd: {
+      description:
+        "Chatbots de IA para web y WhatsApp y automatización de procesos para empresas en Tenerife.",
+      serviceType: "AI Chatbot and Automation",
+      areaServed: ["Tenerife", "Canarias"],
+    },
+  },
+  {
+    id: "tpv-restaurantes",
+    icon: "ShoppingCart",
+    titleKey: "navbarTpv",
+    descKey: "navbarTpvDesc",
+    href: "/tpv-restaurantes",
+    internal: true,
+    iconColor: "text-[var(--color-icon-coral)]",
+    serviceValue: "TPV para restaurantes",
+    jsonLd: {
+      description:
+        "TPV para restaurantes con 13 módulos: cobro, comandero, cocina, reservas, stock, alérgenos y carta digital.",
+      serviceType: "Restaurant POS Platform",
       areaServed: ["Tenerife", "Canarias", "España"],
     },
   },
