@@ -1,10 +1,13 @@
 // Polyfill fetch for Node.js (required by supabase-js Edge Functions)
 import "cross-fetch/polyfill";
 // ========================================
-// E2E TEST: Full RAG Chatbot Flow
+// E2E TEST: Public RAG Chatbot Flow
 // ========================================
-import { describe, it, expect, beforeAll } from "@jest/globals";
-import { createClient } from "@supabase/supabase-js";
+// The chatbot talks to a single public Edge Function, `chat-with-rag`, which
+// embeds the question, searches the knowledge base and generates the answer
+// server-side. Visitors have no Supabase session (anonymous sign-ins are
+// disabled), so the browser sends only the public API key.
+import { describe, it, expect } from "@jest/globals";
 import * as dotenv from "dotenv";
 
 dotenv.config({ path: ".env.local" });
@@ -18,214 +21,64 @@ const SUPABASE_ANON_KEY =
 const describeIfConfigured =
   SUPABASE_URL && SUPABASE_ANON_KEY ? describe : describe.skip;
 
-describeIfConfigured("RAG Chatbot E2E Flow", () => {
-  let supabase: ReturnType<typeof createClient>;
-  let jwt: string;
-  let authSuccessful = false;
+// A structurally valid but expired JWT, like the stale session a browser may
+// still hold after sign-in settings change.
+const STALE_JWT =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ4Iiwicm9sZSI6ImF1dGhlbnRpY2F0ZWQiLCJleHAiOjE3MDAwMDAwMDB9.abc";
 
-  beforeAll(async () => {
-    supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    try {
-      // Try anonymous auth - skip tests if it fails
-      const { data: anonData, error: anonError } =
-        await supabase.auth.signInAnonymously();
-      if (anonError || !anonData?.session?.access_token) {
-        console.warn(
-          "⚠️ Anonymous auth not available - E2E tests will be skipped",
-        );
-        return;
-      }
-      jwt = anonData.session.access_token;
-      authSuccessful = true;
-    } catch (error) {
-      console.warn("⚠️ Auth setup failed - E2E tests will be skipped:", error);
-    }
+async function askChatbot(
+  query: string,
+  extraHeaders: Record<string, string> = {},
+) {
+  const res = await fetch(`${SUPABASE_URL}/functions/v1/chat-with-rag`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      apikey: SUPABASE_ANON_KEY,
+      Origin: "https://digitalizatenerife.es",
+      ...extraHeaders,
+    },
+    body: JSON.stringify({
+      query,
+      conversationHistory: [],
+      topK: 5,
+      threshold: 0.4,
+      source: null,
+    }),
   });
+  const body = (await res.json()) as {
+    response?: string;
+    metadata?: { documentsFound?: number };
+    error?: string;
+  };
+  return { status: res.status, body };
+}
 
-  it("should complete full RAG workflow: query -> embedding -> search -> generate", async () => {
-    if (!authSuccessful) {
-      console.warn("⚠️ Skipping test - auth not available");
-      return;
-    }
-    const userQuery = "¿Cuánto cuesta QRIBAR?";
+describeIfConfigured("RAG Chatbot E2E Flow (public, no session)", () => {
+  it("answers a question using only the public API key", async () => {
+    const { status, body } = await askChatbot("¿Qué es la carta digital?");
 
-    // Step 1: Generate embedding for query
-    const {
-      data: embData,
-      error: embError,
-      status,
-    } = await supabase.functions.invoke("gemini-embedding", {
-      body: { text: userQuery },
-      headers: { Authorization: `Bearer ${jwt}` },
-    });
-
-    if (embError || !embData?.embedding?.values) {
-      if (embError?.context?.status === 401) {
-        console.warn("⚠️ Edge Function requires valid JWT - skipping E2E test");
-        return;
-      }
-      console.error("❌ Edge Function embedding error:", {
-        embError,
-        embData,
-        status,
-      });
-      return expect(embError).toBeNull();
-    }
-    expect(embData.embedding).toHaveLength(768);
-
-    // Step 2: Search similar documents
-    const { data: docs, error: searchError } = await supabase.rpc(
-      "match_documents",
-      {
-        query_embedding: embData.embedding,
-        match_threshold: 0.3,
-        match_count: 3,
-      },
-    );
-
-    if (searchError || !docs) {
-      console.error("❌ match_documents error:", { searchError, docs });
-      return expect(searchError).toBeNull();
-    }
-    expect(Array.isArray(docs)).toBe(true);
-
-    // Step 3: Build context
-    const context =
-      docs.length > 0 ? docs.map((doc: any) => doc.content).join("\n\n") : "";
-
-    // Step 4: Generate response with context
-    const systemPrompt = `Eres el Asistente Experto de SmartConnect AI.
-
-TUS SERVICIOS PRINCIPALES:
-1. QRIBAR: Menús digitales interactivos para restaurantes y bares
-2. Automatización n8n: Flujos de trabajo inteligentes para empresas
-3. Tarjetas Tap-to-Review NFC: Sistema para aumentar reseñas en Google Maps
-
-${context ? `INFORMACIÓN DE LA BASE DE CONOCIMIENTO:\n${context}\n\n` : ""}
-
-INSTRUCCIONES:
-- Responde SIEMPRE en español
-- Sé profesional, conciso y entusiasta
-- Si la información está en la base de conocimiento, úsala
-- Si no sabes algo, reconócelo y ofrece contactar al equipo
-- Mantén respuestas bajo 150 palabras`;
-
-    const {
-      data: genData,
-      error: genError,
-      status: genStatus,
-    } = await supabase.functions.invoke("gemini-generate", {
-      body: {
-        contents: [
-          {
-            role: "user",
-            parts: [
-              { text: `${systemPrompt}\n\nPregunta del usuario: ${userQuery}` },
-            ],
-          },
-        ],
-        generationConfig: {
-          temperature: 0.7,
-          maxOutputTokens: 500,
-        },
-      },
-      headers: { Authorization: `Bearer ${jwt}` },
-    });
-
-    if (genError || !genData?.candidates) {
-      console.error("❌ gemini-generate error:", {
-        genError,
-        genData,
-        genStatus,
-      });
-      return expect(genError).toBeNull();
-    }
-    expect(genData.candidates).toBeDefined();
-    expect(genData.candidates[0].content.parts[0].text).toBeTruthy();
-
-    const response = genData.candidates[0].content.parts[0].text;
-
-    // Verify response is in Spanish and logged
-    expect(response).toBeTruthy();
-    console.log(`Docs Found: ${docs.length}`);
-    console.log(`Response: ${response}`);
+    expect(status).toBe(200);
+    expect(typeof body.response).toBe("string");
+    expect(body.response?.length).toBeGreaterThan(0);
+    expect(body.metadata?.documentsFound).toBeGreaterThan(0);
   }, 30000);
 
-  it("should handle generic generation without RAG context", async () => {
-    if (!authSuccessful) {
-      console.warn("⚠️ Skipping test - auth not available");
-      return;
-    }
-
-    const userQuery = "Random unrelated question about something not in KB";
-
-    // Generate embedding (required for match_documents RPC signature)
-    const {
-      data: embData,
-      error: embError,
-      status,
-    } = await supabase.functions.invoke("gemini-embedding", {
-      body: { text: userQuery },
-      headers: { Authorization: `Bearer ${jwt}` },
+  it("still answers when the browser sends the public key as Bearer token", async () => {
+    const { status, body } = await askChatbot("¿Cómo funcionan las tarjetas NFC?", {
+      Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
     });
 
-    if (embError || !embData?.embedding?.values) {
-      if (embError?.context?.status === 401) {
-        return;
-      }
-      console.error("❌ Edge Function embedding error:", {
-        embError,
-        embData,
-        status,
-      });
-      return expect(embError).toBeNull();
-    }
+    expect(status).toBe(200);
+    expect(body.response).toBeTruthy();
+  }, 30000);
 
-    // Call match_documents (expecting few/no matches, or just ensuring it doesn't crash)
-    const { data: docs, error: searchError } = await supabase.rpc(
-      "match_documents",
-      {
-        query_embedding: embData.embedding,
-        match_threshold: 0.3,
-        match_count: 3,
-      },
-    );
-
-    if (searchError || !docs) {
-      console.error("❌ match_documents error:", { searchError, docs });
-      return expect(searchError).toBeNull();
-    }
-
-    // Generate simple response
-    const {
-      data: genData,
-      error: genError,
-      status: genStatus,
-    } = await supabase.functions.invoke("gemini-generate", {
-      body: {
-        contents: [
-          {
-            role: "user",
-            parts: [{ text: `Eres un asistente. Responde: ${userQuery}` }],
-          },
-        ],
-        generationConfig: {
-          temperature: 0.7,
-          maxOutputTokens: 200,
-        },
-      },
-      headers: { Authorization: `Bearer ${jwt}` },
+  it("still answers when the browser holds a stale/invalid session token", async () => {
+    const { status, body } = await askChatbot("¿Qué servicios ofrecéis?", {
+      Authorization: `Bearer ${STALE_JWT}`,
     });
 
-    if (genError || !genData?.candidates) {
-      console.error("❌ gemini-generate error:", {
-        genError,
-        genData,
-        genStatus,
-      });
-      return expect(genError).toBeNull();
-    }
-    expect(genData.candidates[0].content.parts[0].text).toBeTruthy();
+    expect(status).toBe(200);
+    expect(body.response).toBeTruthy();
   }, 30000);
 });

@@ -34,3 +34,10 @@
 - Supabase function logs (`function_logs`) show `[RAG] Error: Embedding generation failed` for the browser requests; the later `gemini-generate` 401 is the expected fallback now that anonymous sign-ins are off. Nine different curl queries all returned 200 at the same time, so the failure depends on something in the browser request. The function did not log Gemini's reason.
 - **Deployed v47:** logs Gemini's HTTP status, the query length and the error message (never the API key or the user's text) when the embedding call fails. Repo updated to match.
 - `gemini-embedding` has no logs because only the admin panel calls it; the chatbot embeds inside `chat-with-rag`.
+
+## Closing notes (same day)
+
+- **Root cause of the browser outage:** Gemini returned HTTP 402 `RESOURCE_EXHAUSTED` ("prepayment credits are depleted"), visible in the v47 logs. Not a code defect; the owner will handle the prepay balance (AI Studio project flagged "Se requiere prepago": `gen-lang-client-0555675538`). The chatbot was not re-tested afterwards at the owner's request.
+- **E2E test:** `tests/e2e/chatbotFlow.test.ts` rewritten (see CHANGELOG). Skipped in CI/sandbox when `VITE_SUPABASE_URL`/`VITE_SUPABASE_ANON_KEY` are absent.
+- **`test-log` Edge Function: NOT deleted.** It is an unused stub (returns "OK", no references in the repo). The Supabase MCP exposes no delete action and the sandbox access token gets HTTP 403 on the project. Delete it from the dashboard (Edge Functions → test-log) or with `supabase functions delete test-log --project-ref tysjedvujvsmrzzrmesr`.
+- **Still open:** `gemini-embedding` does not check that the caller is an administrator (lower risk now that anonymous sign-ins and sign-ups are off); Google Cloud quota cap on the Gemini key.
