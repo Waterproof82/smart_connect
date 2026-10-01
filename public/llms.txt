@@ -2,7 +2,7 @@
 
 > IA, automatización y hardware inteligente para negocios locales de hostelería y comercio en Tenerife y Canarias.
 
-Digitaliza Tenerife es una agencia de transformación digital especializada en restaurantes, bares y cafeterías de Tenerife y las Islas Canarias. Este sitio tiene una única página principal con secciones ancladas, más una página de producto NFC, una página de empresa y tres páginas legales. No existen otras URLs públicas.
+Digitaliza Tenerife es una agencia de transformación digital especializada en restaurantes, bares y cafeterías de Tenerife y las Islas Canarias. Este sitio tiene una página principal, páginas de producto (carta digital, tarjetas NFC y chatbots de IA), una página de empresa y tres páginas legales. No existen otras URLs públicas.
 
 ## Servicios principales
 
@@ -17,6 +17,8 @@ Digitaliza Tenerife es una agencia de transformación digital especializada en r
 - [Inicio](https://digitalizatenerife.es/): portada con todas las soluciones, casos de éxito, FAQ y contacto.
 - [Soluciones / Plataforma TPV](https://digitalizatenerife.es/#soluciones): los 13 módulos del TPV, en la portada.
 - [Carta Digital](https://digitalizatenerife.es/#tienda-carta-digital): módulo de carta digital y pedidos, en la portada.
+- [Carta digital para restaurantes](https://digitalizatenerife.es/carta-digital): carta digital con pedidos en mesa y para recoger, sin pagar comisión a Glovo.
+- [Chatbots IA y automatización](https://digitalizatenerife.es/ia-chatbots-tenerife): chatbots de IA para web y WhatsApp y automatización de procesos en Tenerife.
 - [Tarjetas NFC Tap-to-Review](https://digitalizatenerife.es/tarjetas-nfc): página de producto de las tarjetas NFC para reseñas de Google.
 - [Sobre nosotros](https://digitalizatenerife.es/about): empresa, misión y datos de contacto.
 - [Contacto](https://digitalizatenerife.es/#contacto): formulario de contacto, en la portada.

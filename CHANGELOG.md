@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Standalone `/carta-digital` page** (prerendered, in the sitemap, with its own title, canonical, Service/Breadcrumb/FAQ JSON-LD): the digital menu now lives on its own URL instead of inside the home page. It opens with a new "no commission" section: Glovo takes 30% of every order, with the digital menu you pay no commission.
+- **Standalone `/ia-chatbots-tenerife` page**: AI chatbots (web and WhatsApp) and process automation, targeting the largest unserved search cluster found in Search Console.
+- `docs/PLAN_SEO_CARTA_DIGITAL_LANDING.md` (plan from the Search Console reports) and `docs/SEO_PROTOCOL.md` (per-page SEO spec, pre-merge checklist and internal-linking map).
+
+### Changed
+
+- The home page now shows a short Carta Digital teaser ("Save the 30% margin Glovo takes from every order") linking to `/carta-digital`, instead of rendering the full menu content, to avoid duplicate content between `/` and `/carta-digital`.
+- `vercel.json`: removed the 301 from `/carta-digital` to `/`; added rewrites and cache headers for both new routes. `llms.txt` (and its `sha256` in `agent-skills/index.json`) lists the new pages. The carta-digital entry in `SOLUTIONS` now points to `/carta-digital`.
+
 ### Fixed
 
 - **CI failure on `main` after merging `develop`**: two structure tests (`App.home.structure`, `App.homeNfcFree.structure`) searched `App.tsx` for the literal `<TpvModulesSection`, but the lazy-loading change renders `<LazyTpvModulesSection`. The tests now look for the lazy component; app behavior is unchanged.

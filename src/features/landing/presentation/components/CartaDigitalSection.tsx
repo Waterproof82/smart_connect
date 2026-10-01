@@ -2,10 +2,10 @@
  * CartaDigitalSection Component
  * @module features/landing/presentation/components
  *
- * Digital menu solution — merged into the home page as a full scrollable
- * section (was previously its own /carta-digital page). No Helmet, no
- * JSON-LD, no Navbar/Footer here: App.tsx owns the single <Helmet> and the
- * JSON-LD graph (via buildHomeSchema) for the whole home page now.
+ * Digital menu solution body — mounted by the standalone /carta-digital page
+ * (CartaDigitalPage.tsx), which owns the <Helmet>, JSON-LD, Navbar and
+ * footer. No Helmet/JSON-LD/Navbar/Footer here. The home page only shows a
+ * short teaser linking to /carta-digital (avoids duplicate content).
  *
  * PR4: mounted as the "tienda-carta-digital" entry of the TPV_MODULES
  * registry (design.md D1/D2), via
@@ -18,6 +18,7 @@ import React, { useRef, useState } from "react";
 
 // Import components from same directory (Clean Architecture)
 import CartaDigitalHeroSection from "./CartaDigitalHeroSection";
+import CartaDigitalGlovoSection from "./CartaDigitalGlovoSection";
 import CartaDigitalProblemaSection from "./CartaDigitalProblemaSection";
 import CartaDigitalSolucionSection from "./CartaDigitalSolucionSection";
 import CartaDigitalBeneficiosSection from "./CartaDigitalBeneficiosSection";
@@ -70,6 +71,7 @@ const CartaDigitalSection: React.FC<CartaDigitalSectionProps> = ({
   return (
     <div id={id} className="bg-[var(--color-bg)] text-default">
       <CartaDigitalHeroSection onScrollToSection={scrollToSection} />
+      <CartaDigitalGlovoSection whatsappPhone={whatsappPhone} />
       <CartaDigitalProblemaSection />
       <CartaDigitalSolucionSection />
       <CartaDigitalBeneficiosSection />

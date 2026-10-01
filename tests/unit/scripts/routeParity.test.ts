@@ -24,12 +24,12 @@ function readSiteRoutePaths(): string[] {
 }
 
 describe("route parity — entry-server.tsx <-> scripts/site-routes.json (design.md §1.7)", () => {
-  it("entry-server.tsx declares exactly 6 <Route> paths (extraction sanity check)", () => {
+  it("entry-server.tsx declares exactly 8 <Route> paths (extraction sanity check)", () => {
     // R4: assert length before comparing sets, so a broken regex extraction
     // (e.g. entry-server.tsx switching to a route map) fails loudly instead
     // of silently matching zero routes and passing a vacuous set-equality.
     const serverPaths = extractServerRoutePaths();
-    expect(serverPaths).toHaveLength(6);
+    expect(serverPaths).toHaveLength(8);
   });
 
   it("the set of SSR routes exactly equals the set of routes in site-routes.json", () => {

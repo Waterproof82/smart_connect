@@ -11,8 +11,8 @@
  * `sistema-alergenos`, and `compras-sialti` now also ship real bespoke
  * components. ALL 13 `TPV_MODULES` entries now have real components — zero
  * `createStubModuleSection` usages remain (registry-completion gate, see
- * `tpvModules.test.ts`). `tienda-carta-digital` reuses the existing,
- * fully-built CartaDigitalSection sub-tree (shipped in PR4).
+ * `tpvModules.test.ts`). `tienda-carta-digital` renders
+ * a CartaDigitalTeaser (full content lives on /carta-digital).
  *
  * Every bespoke component follows design.md D4: `<section id={module.id}
  * aria-labelledby="{id}-title">` is the sole DOM anchor for that module —
@@ -21,7 +21,7 @@
  * (`{ whatsappPhone?: string }` only).
  */
 import React from "react";
-import CartaDigitalSection from "@features/landing/presentation/components/CartaDigitalSection";
+import CartaDigitalTeaser from "@features/landing/presentation/components/CartaDigitalTeaser";
 import TpvCobroSection from "./TpvCobroSection";
 import ComanderoMovilSection from "./ComanderoMovilSection";
 import KdsCocinaSection from "./KdsCocinaSection";
@@ -40,13 +40,8 @@ export interface TpvModuleSectionProps {
   whatsappPhone?: string;
 }
 
-const TiendaCartaDigitalModuleSection: React.FC<TpvModuleSectionProps> = ({
-  whatsappPhone,
-}) => (
-  <CartaDigitalSection
-    id="tienda-carta-digital"
-    whatsappPhone={whatsappPhone ?? ""}
-  />
+const TiendaCartaDigitalModuleSection: React.FC<TpvModuleSectionProps> = () => (
+  <CartaDigitalTeaser id="tienda-carta-digital" />
 );
 
 export const TPV_MODULE_SECTIONS: Record<

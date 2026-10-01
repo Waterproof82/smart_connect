@@ -19,7 +19,7 @@ describe("TpvModulesSection (design.md D1/D2 composition seam)", () => {
     expect(source).not.toMatch(/<CartaDigitalSection/);
   });
 
-  it("TPV_MODULE_SECTIONS has all 13 module keys, tienda-carta-digital wired to the real CartaDigitalSection", () => {
+  it("TPV_MODULE_SECTIONS has all 13 module keys, tienda-carta-digital wired to the CartaDigitalTeaser", () => {
     const source = read("shared/components/tpv/TpvModuleSections.tsx");
     const expectedIds = [
       "tpv-cobro",
@@ -39,7 +39,7 @@ describe("TpvModulesSection (design.md D1/D2 composition seam)", () => {
     for (const id of expectedIds) {
       expect(source).toMatch(new RegExp(`"${id}":`));
     }
-    expect(source).toMatch(/import CartaDigitalSection from/);
+    expect(source).toMatch(/import CartaDigitalTeaser from/);
     expect(source).toMatch(
       /"tienda-carta-digital":\s*TiendaCartaDigitalModuleSection/,
     );

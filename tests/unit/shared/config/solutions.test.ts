@@ -37,9 +37,9 @@ describe("SOLUTIONS config", () => {
     expect(cartaDigital?.jsonLd.sameAs).toBeUndefined();
   });
 
-  it("carta-digital href is an in-page anchor, pointing at the tienda-carta-digital TPV module section (PR4)", () => {
+  it("carta-digital href is the standalone /carta-digital route", () => {
     const cartaDigital = SOLUTIONS.find((s) => s.id === "carta-digital");
-    expect(cartaDigital?.href).toBe("#tienda-carta-digital");
+    expect(cartaDigital?.href).toBe("/carta-digital");
   });
 
   it("tarjetas-nfc href is the standalone route, no longer an in-page anchor (PR3 un-merge)", () => {

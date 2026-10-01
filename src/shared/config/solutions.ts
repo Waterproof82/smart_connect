@@ -31,7 +31,7 @@ export const SOLUTIONS: SolutionConfig[] = [
     // "tienda-carta-digital" module (last, frozen order) — anchor updated
     // to match its new section id. This SOLUTIONS entry itself (Navbar
     // dropdown / Features card / Contact form option) is unchanged.
-    href: "#tienda-carta-digital",
+    href: "/carta-digital",
     internal: true,
     iconColor: "text-[var(--color-icon-emerald)]",
     serviceValue: "Carta Digital Premium",

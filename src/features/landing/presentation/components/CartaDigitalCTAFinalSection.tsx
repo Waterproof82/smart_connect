@@ -13,7 +13,7 @@ const CartaDigitalCTAFinalSection: React.FC<
 
   const waLink = whatsappPhone
     ? `https://wa.me/${whatsappPhone}`
-    : "#contacto?servicio=Carta%20Digital%20Premium";
+    : "/#contacto?servicio=Carta%20Digital%20Premium";
 
   return (
     <section
