@@ -26,22 +26,22 @@ const GestionReservasSection: React.FC<TpvModuleSectionProps> = ({
     { title: t.gestionReservasBullet4Title, desc: t.gestionReservasBullet4Desc },
   ];
 
-  const ctaHref = whatsappPhone ? `https://wa.me/${whatsappPhone}` : "#contacto";
+  const ctaHref = whatsappPhone ? `https://wa.me/${whatsappPhone}` : "/#contacto?servicio=TPV%20para%20restaurantes";
 
   return (
     <section
       id="gestion-reservas"
       aria-labelledby="gestion-reservas-title"
-      className="py-16 md:py-24 bg-[var(--color-bg-alt)]"
+      className="ds-section bg-[var(--color-bg-alt)]"
       style={accentStyle("--color-icon-amber")}
     >
-      <div className="container mx-auto px-6 max-w-5xl">
+      <div className="ds-container">
         <div className="text-xs font-semibold tracking-wider uppercase text-[var(--color-primary)] mb-3">
           {t.gestionReservasEyebrow}
         </div>
         <h2
           id="gestion-reservas-title"
-          className="text-3xl md:text-4xl font-bold mb-4 text-default max-w-2xl"
+          className="ds-h2 mb-4 text-default max-w-2xl"
         >
           {t.gestionReservasTitle}
         </h2>

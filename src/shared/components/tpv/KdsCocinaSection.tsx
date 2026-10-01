@@ -24,22 +24,22 @@ const KdsCocinaSection: React.FC<TpvModuleSectionProps> = ({
     { title: t.kdsCocinaBullet4Title, desc: t.kdsCocinaBullet4Desc },
   ];
 
-  const ctaHref = whatsappPhone ? `https://wa.me/${whatsappPhone}` : "#contacto";
+  const ctaHref = whatsappPhone ? `https://wa.me/${whatsappPhone}` : "/#contacto?servicio=TPV%20para%20restaurantes";
 
   return (
     <section
       id="kds-cocina"
       aria-labelledby="kds-cocina-title"
-      className="py-16 md:py-24 bg-[var(--color-bg)]"
+      className="ds-section bg-[var(--color-bg)]"
       style={accentStyle("--color-icon-purple")}
     >
-      <div className="container mx-auto px-6 max-w-5xl">
+      <div className="ds-container">
         <div className="text-xs font-semibold tracking-wider uppercase text-[var(--color-primary)] mb-3">
           {t.kdsCocinaEyebrow}
         </div>
         <h2
           id="kds-cocina-title"
-          className="text-3xl md:text-4xl font-bold mb-4 text-default max-w-2xl"
+          className="ds-h2 mb-4 text-default max-w-2xl"
         >
           {t.kdsCocinaTitle}
         </h2>

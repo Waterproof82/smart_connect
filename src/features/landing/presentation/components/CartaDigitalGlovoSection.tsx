@@ -16,14 +16,14 @@ const CartaDigitalGlovoSection: React.FC<CartaDigitalGlovoSectionProps> = ({
   return (
     <section
       id="sin-comisiones"
-      className="py-16 md:py-24 bg-[var(--color-bg-alt)]"
+      className="ds-section bg-[var(--color-bg-alt)]"
     >
-      <div className="container mx-auto px-4 md:px-6">
+      <div className="ds-container">
         <div className="max-w-4xl mx-auto text-center">
           <div className="text-xs font-semibold tracking-[0.3em] text-[var(--color-primary)] uppercase mb-3 md:mb-4">
             {t.glovoEyebrow}
           </div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black leading-[1.15] mb-4 md:mb-6 font-display">
+          <h2 className="ds-h2 mb-4 md:mb-6">
             {t.glovoTitle}
           </h2>
           <p className="text-base md:text-lg text-muted leading-relaxed max-w-2xl mx-auto mb-10 md:mb-12">

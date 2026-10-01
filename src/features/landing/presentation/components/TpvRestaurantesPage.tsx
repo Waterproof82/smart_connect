@@ -1,8 +1,12 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
-import { SiteFooter } from "@shared/components/SiteFooter";
 import { RelatedServices } from "@shared/components/RelatedServices";
-import { Navbar } from "@features/landing/presentation/components/Navbar";
+import { PageShell } from "@features/landing/presentation/components/PageShell";
+import {
+  PageHero,
+  WhatsAppCta,
+  ClosingCta,
+} from "@shared/presentation/layout";
 import TpvModulesSection from "@shared/components/tpv/TpvModulesSection";
 import {
   ServiceSchema,
@@ -25,24 +29,9 @@ const PAGE_DESCRIPTION =
  */
 const TpvRestaurantesPage: React.FC = () => {
   const { t } = useLanguage();
-  const [scrolled, setScrolled] = React.useState(false);
-  const sentinelRef = React.useRef<HTMLDivElement>(null);
   const whatsappPhone = useWhatsappPhone();
   const solutionMeta = SOLUTIONS.find((s) => s.id === "tpv-restaurantes");
-  const ctaHref = whatsappPhone
-    ? `https://wa.me/${whatsappPhone}`
-    : "/#contacto?servicio=TPV%20para%20restaurantes";
-
-  React.useEffect(() => {
-    const sentinel = sentinelRef.current;
-    if (!sentinel) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => setScrolled(!entry.isIntersecting),
-      { threshold: 1 },
-    );
-    observer.observe(sentinel);
-    return () => observer.disconnect();
-  }, []);
+  const servicio = "TPV para restaurantes";
 
   return (
     <>
@@ -92,50 +81,30 @@ const TpvRestaurantesPage: React.FC = () => {
         ]}
       />
 
-      <div className="min-h-screen bg-base text-default">
-        <div
-          ref={sentinelRef}
-          className="absolute top-[50px] h-px w-px"
-          aria-hidden="true"
+      <PageShell waMessage={t.waMsgTpv} servicio={servicio}>
+        <PageHero
+          title={t.tpvH1}
+          lede={t.tpvIntro}
+          actions={
+            <WhatsAppCta
+              label={t.tpvCtaButton}
+              message={t.waMsgTpv}
+              servicio={servicio}
+            />
+          }
         />
-        <Navbar scrolled={scrolled} />
 
-        <main id="main" aria-label="Contenido principal">
-          <section className="pt-32 pb-12 md:pt-40 md:pb-16">
-            <div className="container mx-auto px-4 md:px-6 max-w-4xl">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-black leading-[1.15] font-display mb-6">
-                {t.tpvH1}
-              </h1>
-              <p className="text-lg text-muted leading-relaxed max-w-2xl mb-10">
-                {t.tpvIntro}
-              </p>
-              <a
-                href={ctaHref}
-                className="inline-flex items-center justify-center min-h-[48px] px-8 py-3 rounded-xl font-bold bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-[var(--color-on-accent)] focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] transition-colors"
-              >
-                {t.tpvCtaButton}
-              </a>
-            </div>
-          </section>
+        <TpvModulesSection whatsappPhone={whatsappPhone} />
 
-          <TpvModulesSection whatsappPhone={whatsappPhone} />
-
-          <section className="py-16 bg-[var(--color-bg-alt)] text-center">
-            <h2 className="text-2xl md:text-3xl font-black font-display mb-6 px-4">
-              {t.tpvCtaTitle}
-            </h2>
-            <a
-              href={ctaHref}
-              className="inline-flex items-center justify-center min-h-[48px] px-8 py-3 rounded-xl font-bold bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-[var(--color-on-accent)] focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] transition-colors"
-            >
-              {t.tpvCtaButton}
-            </a>
-          </section>
-          <RelatedServices currentId="tpv-restaurantes" />
-        </main>
-
-        <SiteFooter />
-      </div>
+        <ClosingCta
+          id="tpv-cta"
+          title={t.tpvCtaTitle}
+          label={t.tpvCtaButton}
+          message={t.waMsgTpv}
+          servicio={servicio}
+        />
+        <RelatedServices currentId="tpv-restaurantes" />
+      </PageShell>
     </>
   );
 };

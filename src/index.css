@@ -1,3 +1,4 @@
+@import "../tokens.css";
 @import "tailwindcss";
 @config "../tailwind.config.js";
 
@@ -43,13 +44,12 @@
     --color-icon-magenta: oklch(65% 0.18 315);
     --color-whatsapp: oklch(48% 0.18 150);
     --color-whatsapp-hover: oklch(40% 0.18 150);
+    --color-on-whatsapp: oklch(99% 0.005 150);
     --focus-ring: oklch(70% 0.15 250);
     --chart-bar: oklch(60% 0.18 230);
     --chart-tick: oklch(45% 0.02 250);
     --chart-tooltip: oklch(20% 0.015 250);
     --touch-target-min: 48px;
-    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
-    --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
   }
 
   .light {
@@ -93,19 +93,23 @@
     --color-icon-magenta: oklch(55% 0.18 315);
     --color-whatsapp: oklch(48% 0.18 150);
     --color-whatsapp-hover: oklch(40% 0.18 150);
+    --color-on-whatsapp: oklch(99% 0.005 150);
     --focus-ring: oklch(60% 0.15 250);
     --chart-bar: oklch(55% 0.18 230);
     --chart-tick: oklch(45% 0.025 250);
     --chart-tooltip: oklch(98% 0.005 250);
     --touch-target-min: 48px;
-    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
-    --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  }
+
+  html,
+  body {
+    overflow-x: clip;
   }
 
   body {
     margin: 0;
     padding: 0;
-    font-family: "Instrument Sans", "DM Sans", system-ui, sans-serif;
+    font-family: var(--font-body);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-size: 16px;
@@ -157,14 +161,15 @@
     gap: 0.75rem;
     padding: 1rem 1.5rem;
     border: 1px solid transparent;
-    border-radius: 1rem;
-    font-weight: 700;
+    border-radius: var(--radius-pill);
+    font-weight: 600;
     line-height: 1.2;
+    white-space: nowrap;
     min-height: var(--touch-target-min);
     cursor: pointer;
     text-decoration: none;
     transition-property: transform, background-color, border-color, box-shadow;
-    transition-duration: 150ms;
+    transition-duration: var(--dur-short);
     transition-timing-function: var(--ease-out);
   }
 
@@ -172,15 +177,13 @@
     .btn-primary,
     .btn-secondary,
     .btn-primary-inverse {
-      padding: 1.25rem 2.5rem;
+      padding: 1rem 2rem;
     }
   }
 
   .btn-primary {
     background-color: var(--color-accent);
     color: var(--color-on-accent);
-    box-shadow: 0 20px 25px -5px
-      color-mix(in oklch, var(--color-accent) 25%, transparent);
   }
   .btn-primary:hover:not(:disabled) {
     background-color: var(--color-accent-hover);
@@ -232,6 +235,224 @@
       transform: scale(0.97);
     }
   }
+
+  /* ------------------------------------------------------------------
+   * Design system (design.md) — shared page grammar for every public
+   * route. Pages compose these through src/shared/presentation/layout.
+   * ------------------------------------------------------------------ */
+  .ds-container {
+    width: 100%;
+    max-width: calc(var(--container-wide) + 2 * var(--page-gutter));
+    margin-inline: auto;
+    padding-inline: var(--page-gutter);
+  }
+  .ds-container--prose {
+    max-width: calc(var(--container-prose) + 2 * var(--page-gutter));
+  }
+
+  .ds-section {
+    padding-block: var(--section-y);
+  }
+  .ds-section--alt {
+    background-color: var(--color-bg-alt);
+    border-block: var(--rule-hair) solid var(--color-border);
+  }
+
+  .ds-section-head {
+    display: grid;
+    gap: var(--space-sm);
+    max-width: var(--container-prose);
+    margin-bottom: var(--space-xl);
+  }
+  .ds-section-head--center {
+    margin-inline: auto;
+    text-align: center;
+    justify-items: center;
+  }
+
+  .ds-h1,
+  .ds-h2,
+  .ds-h3 {
+    font-family: var(--font-display);
+    font-style: normal;
+    color: var(--color-text);
+    margin: 0;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    text-wrap: balance;
+  }
+  .ds-h1 {
+    font-size: var(--text-display);
+    font-weight: 700;
+    line-height: var(--leading-display);
+    letter-spacing: var(--tracking-display);
+  }
+  .ds-h1--s {
+    font-size: var(--text-display-s);
+  }
+  .ds-h2 {
+    font-size: var(--text-h2);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+  .ds-h3 {
+    font-size: var(--text-h3);
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+  }
+
+  .ds-lede {
+    font-size: var(--text-lede);
+    line-height: 1.6;
+    color: var(--color-text-muted);
+    max-width: var(--measure);
+    margin: 0;
+  }
+
+  .ds-prose {
+    max-width: var(--measure);
+    line-height: var(--leading-body);
+  }
+
+  .ds-card {
+    background-color: var(--color-surface);
+    border: var(--rule-hair) solid var(--color-border);
+    border-radius: var(--radius-card);
+    padding: var(--space-md);
+  }
+
+  /* Page hero: title left, lede + CTA right (stacks on mobile). */
+  .ds-hero {
+    padding-top: calc(var(--nav-h) + var(--space-2xl));
+    padding-bottom: var(--space-2xl);
+    border-bottom: var(--rule-hair) solid var(--color-border);
+  }
+  .ds-hero__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-lg);
+  }
+  .ds-hero__aside {
+    display: grid;
+    gap: var(--space-md);
+    align-content: end;
+  }
+  @media (min-width: 1024px) {
+    .ds-hero {
+      padding-top: calc(var(--nav-h) + var(--space-3xl));
+      padding-bottom: var(--space-3xl);
+    }
+    .ds-hero__grid {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      gap: var(--space-2xl);
+      align-items: end;
+    }
+  }
+
+  .ds-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-xs);
+  }
+
+  /* --- WhatsApp CTA: the single primary action on every page --- */
+  .btn-wa,
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2xs);
+    min-height: var(--touch-target-min);
+    padding: 0.875rem 1.5rem;
+    border: var(--rule-hair) solid transparent;
+    border-radius: var(--radius-pill);
+    font-family: var(--font-body);
+    font-size: var(--text-md);
+    font-weight: 600;
+    line-height: 1.2;
+    white-space: nowrap;
+    text-decoration: none;
+    cursor: pointer;
+    transition-property: background-color, border-color, color, transform;
+    transition-duration: var(--dur-short);
+    transition-timing-function: var(--ease-out);
+  }
+  .btn-wa {
+    background-color: var(--color-whatsapp);
+    color: var(--color-on-whatsapp);
+  }
+  .btn-wa:hover {
+    background-color: var(--color-whatsapp-hover);
+  }
+  .btn-wa--sm {
+    min-height: 2.75rem;
+    padding: 0.625rem 1.125rem;
+    font-size: var(--text-sm);
+  }
+  .btn-wa--block {
+    width: 100%;
+  }
+  .btn-ghost {
+    background-color: transparent;
+    border-color: var(--color-border);
+    color: var(--color-text);
+  }
+  .btn-ghost:hover {
+    background-color: var(--color-overlay-subtle);
+    border-color: var(--color-text-muted);
+  }
+  .btn-wa:focus-visible,
+  .btn-ghost:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 3px;
+  }
+  .btn-wa[aria-disabled="true"],
+  .btn-ghost[aria-disabled="true"] {
+    opacity: 0.55;
+    pointer-events: none;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .btn-wa:active,
+    .btn-ghost:active {
+      transform: translateY(1px);
+    }
+  }
+
+  /* Mobile-only sticky WhatsApp bar (C4). Space is reserved by
+   * .ds-wa-bar-spacer so it never covers the footer. */
+  .ds-wa-bar {
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 90;
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    min-height: var(--wa-bar-h);
+    padding: var(--space-xs) var(--page-gutter);
+    padding-bottom: calc(var(--space-xs) + env(safe-area-inset-bottom, 0px));
+    background-color: var(--color-bg);
+    border-top: var(--rule-hair) solid var(--color-border);
+  }
+  .ds-wa-bar__line {
+    flex: 1 1 auto;
+    min-width: 0;
+    font-size: var(--text-sm);
+    line-height: 1.3;
+    color: var(--color-text-muted);
+  }
+  .ds-wa-bar-spacer {
+    height: var(--wa-bar-h);
+  }
+  @media (min-width: 768px) {
+    .ds-wa-bar,
+    .ds-wa-bar-spacer {
+      display: none;
+    }
+  }
 }
 
 @layer utilities {
@@ -256,7 +477,7 @@
   }
 
   .text-display {
-    font-family: "Space Grotesk", "Instrument Sans", system-ui, sans-serif;
+    font-family: var(--font-display);
     font-size: clamp(2.5rem, 2rem + 2vw, 4rem);
     font-weight: 700;
     line-height: 1.05;
@@ -264,7 +485,7 @@
   }
 
   .text-heading {
-    font-family: "Space Grotesk", "Instrument Sans", system-ui, sans-serif;
+    font-family: var(--font-display);
     font-size: clamp(1.5rem, 1.2rem + 1.5vw, 2.5rem);
     font-weight: 600;
     line-height: 1.15;
@@ -272,14 +493,14 @@
   }
 
   .text-body {
-    font-family: "DM Sans", "Instrument Sans", system-ui, sans-serif;
+    font-family: var(--font-body);
     font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
     font-weight: 400;
     line-height: 1.6;
   }
 
   .text-caption {
-    font-family: "DM Sans", "Instrument Sans", system-ui, sans-serif;
+    font-family: var(--font-body);
     font-size: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
     font-weight: 500;
     letter-spacing: 0.02em;

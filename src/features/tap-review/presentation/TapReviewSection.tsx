@@ -10,8 +10,9 @@
  */
 
 import React from "react";
-import { Check, Smartphone, ChevronDown } from "lucide-react";
+import { Check, ChevronDown } from "lucide-react";
 import { useLanguage } from "@shared/context/LanguageContext";
+import { WhatsAppCta } from "@shared/presentation/layout";
 
 // Import components from presentation/components/ (Clean Architecture)
 import ProductGallery from "./components/ProductGallery";
@@ -22,89 +23,69 @@ import SocialProof from "./components/SocialProof";
 import CTASection from "./components/CTASection";
 import TrustBadges from "./components/TrustBadges";
 
-interface TapReviewSectionProps {
-  /** Pre-fetched, wa.me-ready phone number — single fetch lives in App.tsx via useWhatsappPhone(). */
-  whatsappPhone?: string;
-}
-
-export const TapReviewSection: React.FC<TapReviewSectionProps> = ({
-  whatsappPhone = "",
-}) => {
+/**
+ * WhatsApp CTAs resolve the phone through the shared, cached
+ * useWhatsappPhone() inside <WhatsAppCta/> — no prop drilling needed.
+ */
+export const TapReviewSection: React.FC = () => {
   const { t } = useLanguage();
 
   return (
-    <div
-      id="tarjetas-nfc"
-      className="bg-[var(--color-bg)] pt-20 md:pt-32 pb-16"
-    >
-      <div className="container mx-auto px-6">
-        <div className="grid lg:grid-cols-2 gap-16 items-start">
-          <div>
-            <div className="inline-flex items-center gap-2 bg-[var(--color-accent)]/10 text-[var(--color-accent)] px-4 py-2 rounded-full text-sm font-bold mb-6">
-              <Smartphone className="w-4 h-4" />
-              {t.tapReviewEyebrow}
-            </div>
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
-              {t.tapReviewHeroTitle}
-              <span className="text-[var(--color-accent)]">
-                {" "}
+    <div id="tarjetas-nfc">
+      {/* Same hero grammar as PageHero; heading stays h2 because the page
+          owns a frozen sr-only h1 (SEO_PROTOCOL P-13). */}
+      <header className="ds-hero">
+        <div className="ds-container grid grid-cols-1 lg:grid-cols-2 gap-[var(--space-2xl)] items-start">
+          <div className="grid gap-[var(--space-md)] min-w-0">
+            <h2 className="ds-h1 ds-h1--s">
+              {t.tapReviewHeroTitle}{" "}
+              <span className="text-[var(--color-primary)]">
                 {t.tapReviewHeroAccent}
               </span>
             </h2>
-            <p className="text-lg text-muted mb-8 leading-relaxed">
-              {t.tapReviewHeroSubtitle}
-            </p>
+            <p className="ds-lede">{t.tapReviewHeroSubtitle}</p>
 
-            <div className="flex flex-col sm:flex-row gap-4 mb-8">
-              <a
-                href={
-                  whatsappPhone
-                    ? `https://wa.me/${whatsappPhone}`
-                    : "#contacto?servicio=Tap%20Review%20NFC"
-                }
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-primary"
-              >
-                {t.tapReviewHeroBtnContact}
-              </a>
-              <a
-                href="#product"
-                className="btn-secondary"
-              >
+            <div className="ds-actions">
+              <WhatsAppCta
+                label={t.tapReviewHeroBtnContact}
+                message={t.waMsgNfc}
+                servicio="Tarjetas NFC"
+              />
+              <a href="#product" className="btn-ghost">
                 {t.tapReviewHeroBtnProduct}
-                <ChevronDown className="w-4 h-4" />
+                <ChevronDown className="w-4 h-4" aria-hidden="true" />
               </a>
             </div>
 
-            <div className="flex flex-wrap gap-4 text-sm">
-              <div className="flex items-center gap-2 bg-[var(--color-bg-alt)] px-4 py-2 rounded-lg">
-                <Check className="w-4 h-4 text-green-500" />
-                <span className="text-muted">{t.tapReviewHeroFeature1}</span>
-              </div>
-              <div className="flex items-center gap-2 bg-[var(--color-bg-alt)] px-4 py-2 rounded-lg">
-                <Check className="w-4 h-4 text-green-500" />
-                <span className="text-muted">{t.tapReviewHeroFeature2}</span>
-              </div>
-              <div className="flex items-center gap-2 bg-[var(--color-bg-alt)] px-4 py-2 rounded-lg">
-                <Check className="w-4 h-4 text-green-500" />
-                <span className="text-muted">{t.tapReviewHeroFeature3}</span>
-              </div>
-            </div>
+            <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted list-none p-0 m-0">
+              {[
+                t.tapReviewHeroFeature1,
+                t.tapReviewHeroFeature2,
+                t.tapReviewHeroFeature3,
+              ].map((feature) => (
+                <li key={feature} className="flex items-center gap-2">
+                  <Check
+                    className="w-4 h-4 text-[var(--color-success-text)]"
+                    aria-hidden="true"
+                  />
+                  {feature}
+                </li>
+              ))}
+            </ul>
           </div>
 
-          <div id="product">
+          <div id="product" className="min-w-0">
             <ProductGallery />
           </div>
         </div>
-      </div>
+      </header>
 
       <TrustBadges />
       <StatsBanner />
       <HowItWorks />
       <Features />
       <SocialProof />
-      <CTASection whatsappPhone={whatsappPhone} />
+      <CTASection />
     </div>
   );
 };

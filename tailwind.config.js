@@ -68,9 +68,10 @@ export default {
         'whatsapp-hover': 'var(--color-whatsapp-hover, oklch(55% 0.18 150))',
       },
       fontFamily: {
-        sans: ['Instrument Sans', 'Plus Jakarta Sans', 'system-ui', 'sans-serif'],
-        display: ['Space Grotesk', 'Instrument Sans', 'system-ui', 'sans-serif'],
-        body: ['DM Sans', 'Instrument Sans', 'system-ui', 'sans-serif'],
+        // Two-family system (design.md): Space Grotesk display + DM Sans body.
+        sans: ['DM Sans', 'system-ui', 'sans-serif'],
+        display: ['Space Grotesk', 'system-ui', 'sans-serif'],
+        body: ['DM Sans', 'system-ui', 'sans-serif'],
       },
       fontSize: {
         'fluid-sm': 'clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem)',

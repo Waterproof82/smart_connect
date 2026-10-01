@@ -1,70 +1,47 @@
-import React, { useRef } from "react";
-import { useLanguage } from "@shared/context/LanguageContext";
-import { useIntersectionObserver } from "@shared/hooks";
+import React from "react";
 import { Check } from "lucide-react";
+import { useLanguage } from "@shared/context/LanguageContext";
+import { WhatsAppCta } from "@shared/presentation/layout";
 
-interface CTASectionProps {
-  whatsappPhone?: string;
-}
-
-const CTASection: React.FC<CTASectionProps> = ({ whatsappPhone = "" }) => {
+/**
+ * Closing CTA of /tarjetas-nfc — same grammar as the shared ClosingCta
+ * (one sentence, one WhatsApp action) plus the three reassurance points.
+ */
+const CTASection: React.FC = () => {
   const { t } = useLanguage();
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const isVisible = useIntersectionObserver(sectionRef, {
-    rootMargin: "0px 0px -50px 0px",
-  });
 
   return (
-    <div ref={sectionRef} className="py-20">
-      <div className="container mx-auto px-6">
-        <div
-          className={`relative bg-gradient-to-br from-[var(--color-accent)] to-[var(--color-primary)] rounded-3xl p-12 md:p-16 text-center transition-all duration-1000 overflow-hidden ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-          }`}
-        >
-          <div className="absolute inset-0 opacity-10">
-            <div className="absolute top-0 left-0 w-40 h-40 bg-white rounded-full -translate-x-1/2 -translate-y-1/2"></div>
-            <div className="absolute bottom-0 right-0 w-60 h-60 bg-white rounded-full translate-x-1/3 translate-y-1/3"></div>
-          </div>
-          <div className="relative z-10">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              {t.tapReviewCTATitle}
-            </h2>
-            <p className="text-white/80 text-lg mb-8 max-w-2xl mx-auto">
-              {t.tapReviewCTASubtitle}
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a
-                href={
-                  whatsappPhone
-                    ? `https://wa.me/${whatsappPhone}`
-                    : "#contacto?servicio=Tap%20Review%20NFC"
-                }
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-primary-inverse"
-              >
-                {t.tapReviewCTABtnPrimary}
-              </a>
-            </div>
-            <div className="flex flex-wrap justify-center gap-6 mt-8 text-white/80 text-sm">
-              <span className="flex items-center gap-2">
-                <Check className="w-4 h-4" />
-                {t.tapReviewCTAFeature1}
-              </span>
-              <span className="flex items-center gap-2">
-                <Check className="w-4 h-4" />
-                {t.tapReviewCTAFeature2}
-              </span>
-              <span className="flex items-center gap-2">
-                <Check className="w-4 h-4" />
-                {t.tapReviewCTAFeature3}
-              </span>
-            </div>
-          </div>
-        </div>
+    <section
+      aria-labelledby="nfc-cta-title"
+      className="ds-section ds-section--alt"
+    >
+      <div className="ds-container ds-container--prose text-center grid justify-items-center gap-[var(--space-md)]">
+        <h2 id="nfc-cta-title" className="ds-h2">
+          {t.tapReviewCTATitle}
+        </h2>
+        <p className="ds-lede">{t.tapReviewCTASubtitle}</p>
+        <WhatsAppCta
+          label={t.tapReviewCTABtnPrimary}
+          message={t.waMsgNfc}
+          servicio="Tarjetas NFC"
+        />
+        <ul className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-muted list-none p-0 m-0">
+          {[
+            t.tapReviewCTAFeature1,
+            t.tapReviewCTAFeature2,
+            t.tapReviewCTAFeature3,
+          ].map((feature) => (
+            <li key={feature} className="flex items-center gap-2">
+              <Check
+                className="w-4 h-4 text-[var(--color-success-text)]"
+                aria-hidden="true"
+              />
+              {feature}
+            </li>
+          ))}
+        </ul>
       </div>
-    </div>
+    </section>
   );
 };
 

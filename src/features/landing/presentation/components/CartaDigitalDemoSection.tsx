@@ -42,13 +42,13 @@ const CartaDigitalDemoSection: React.FC<CartaDigitalDemoSectionProps> = ({
   ];
 
   return (
-    <section id="demo" className="py-16 md:py-24 bg-[var(--color-bg-alt)]">
-      <div className="container mx-auto px-4 md:px-6">
+    <section id="demo" className="ds-section bg-[var(--color-bg-alt)]">
+      <div className="ds-container">
         <div className="text-center mb-12 md:mb-16">
           <div className="text-xs font-semibold tracking-[0.3em] text-[var(--color-primary)] uppercase mb-3 md:mb-4">
             {t.cartaDemoTitle}
           </div>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-[1.15] font-display">
+          <h2 className="ds-h2">
             {t.cartaFlujoSubtitle}
           </h2>
         </div>

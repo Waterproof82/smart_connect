@@ -84,7 +84,7 @@ describe("CartaDigitalHeroSection", () => {
     expect(band).toBeInTheDocument();
 
     const motifs = container.querySelectorAll(
-      '[data-testid="carta-hero-band"] g.animate-float-fancy',
+      '[data-testid="carta-hero-band"] g[data-motif]',
     );
     expect(motifs.length).toBe(4);
   });

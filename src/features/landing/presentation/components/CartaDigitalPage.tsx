@@ -1,8 +1,8 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
-import { SiteFooter } from "@shared/components/SiteFooter";
 import { RelatedServices } from "@shared/components/RelatedServices";
-import { Navbar } from "@features/landing/presentation/components/Navbar";
+import { PageShell } from "@features/landing/presentation/components/PageShell";
+import { Section, FaqList } from "@shared/presentation/layout";
 import CartaDigitalSection from "@features/landing/presentation/components/CartaDigitalSection";
 import {
   ServiceSchema,
@@ -26,22 +26,9 @@ const PAGE_DESCRIPTION =
  */
 const CartaDigitalPage: React.FC = () => {
   const { t } = useLanguage();
-  const [scrolled, setScrolled] = React.useState(false);
-  const sentinelRef = React.useRef<HTMLDivElement>(null);
   const whatsappPhone = useWhatsappPhone();
   const cartaFaqGroup = useCartaFaqGroup();
   const solutionMeta = SOLUTIONS.find((s) => s.id === "carta-digital");
-
-  React.useEffect(() => {
-    const sentinel = sentinelRef.current;
-    if (!sentinel) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => setScrolled(!entry.isIntersecting),
-      { threshold: 1 },
-    );
-    observer.observe(sentinel);
-    return () => observer.disconnect();
-  }, []);
 
   return (
     <>
@@ -97,52 +84,15 @@ const CartaDigitalPage: React.FC = () => {
         }))}
       />
 
-      <div className="min-h-screen bg-base text-default">
-        <div
-          ref={sentinelRef}
-          className="absolute top-[50px] h-px w-px"
-          aria-hidden="true"
-        />
-        <Navbar scrolled={scrolled} />
+      <PageShell waMessage={t.waMsgCarta} servicio="Carta Digital">
+        <h1 className="sr-only">{t.cartaPageH1}</h1>
+        <CartaDigitalSection id="carta-digital" whatsappPhone={whatsappPhone} />
 
-        <main id="main" aria-label="Contenido principal">
-          <h1 className="sr-only">{t.cartaPageH1}</h1>
-          <CartaDigitalSection
-            id="carta-digital"
-            whatsappPhone={whatsappPhone}
-          />
-
-          <section
-            aria-label={cartaFaqGroup.title}
-            className="max-w-3xl mx-auto px-4 md:px-6 py-16 md:py-24"
-          >
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black leading-[1.15] font-display mb-10 md:mb-14 text-center">
-              {cartaFaqGroup.title}
-            </h2>
-            <div className="space-y-3">
-              {cartaFaqGroup.items.map((faq) => (
-                <details
-                  key={faq.q}
-                  className="group border border-[var(--color-border)] rounded-lg bg-[var(--color-surface)] overflow-hidden"
-                >
-                  <summary className="flex items-center justify-between px-5 py-4 cursor-pointer font-semibold text-base select-none hover:bg-[var(--color-accent-subtle)] transition-colors duration-150">
-                    {faq.q}
-                    <span className="ml-4 shrink-0 text-[var(--color-primary)] group-open:rotate-45 transition-transform duration-200">
-                      +
-                    </span>
-                  </summary>
-                  <p className="px-5 pb-4 pt-2 text-sm text-muted leading-relaxed">
-                    {faq.a}
-                  </p>
-                </details>
-              ))}
-            </div>
-          </section>
-          <RelatedServices currentId="carta-digital" />
-        </main>
-
-        <SiteFooter />
-      </div>
+        <Section id="faq" width="prose" title={cartaFaqGroup.title}>
+          <FaqList items={cartaFaqGroup.items} />
+        </Section>
+        <RelatedServices currentId="carta-digital" />
+      </PageShell>
     </>
   );
 };

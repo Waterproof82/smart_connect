@@ -51,13 +51,13 @@ const HomeSolutionsSection: React.FC = () => {
     <>
       <section
         aria-labelledby="productos-title"
-        className="py-20 md:py-28"
+        className="ds-section"
       >
-        <div className="container mx-auto px-4 md:px-6">
+        <div className="ds-container">
           <div className="max-w-2xl mb-12">
             <h2
               id="productos-title"
-              className="text-3xl md:text-5xl font-bold font-display mb-4"
+              className="ds-h2 mb-4"
             >
               {t.homeStarsTitle}
             </h2>
@@ -100,12 +100,12 @@ const HomeSolutionsSection: React.FC = () => {
 
       <section
         aria-labelledby="servicios-title"
-        className="pb-20 md:pb-28"
+        className="pb-[var(--section-y)]"
       >
-        <div className="container mx-auto px-4 md:px-6">
+        <div className="ds-container">
           <h2
             id="servicios-title"
-            className="text-2xl md:text-3xl font-bold font-display mb-8"
+            className="ds-h2 mb-8"
           >
             {t.homeMoreTitle}
           </h2>

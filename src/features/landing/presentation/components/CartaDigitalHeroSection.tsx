@@ -15,7 +15,7 @@ const CartaDigitalHeroSection: React.FC<CartaDigitalHeroSectionProps> = ({
   return (
     <section
       id="hero"
-      className="min-h-screen flex flex-col items-center justify-center px-4 md:px-6 pt-24 pb-16 relative overflow-hidden bg-[var(--color-bg)]"
+      className="min-h-screen flex flex-col items-center justify-center px-[var(--page-gutter)] pt-[calc(var(--nav-h)+var(--space-2xl))] pb-[var(--space-2xl)] relative overflow-hidden bg-[var(--color-bg)]"
     >
       <DotField
         className="absolute inset-x-0 bottom-0 h-1/2"
@@ -32,10 +32,10 @@ const CartaDigitalHeroSection: React.FC<CartaDigitalHeroSectionProps> = ({
             {t.cartaHeroTenerife}
           </div>
 
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black leading-[1.1] mb-4 md:mb-6 font-display">
+          <h2 className="ds-h1 ds-h1--s mb-4 md:mb-6">
             {t.cartaHeroTitle1}
             <br />
-            <span className="text-[var(--color-primary)] italic">
+            <span className="text-[var(--color-primary)]">
               {t.cartaHeroTitleAccent}
             </span>
             <br />
@@ -113,7 +113,7 @@ const CartaDigitalHeroSection: React.FC<CartaDigitalHeroSectionProps> = ({
             />
 
             {/* Idiomas: globe + stacked language chips */}
-            <g className="animate-float-fancy" style={{ animationDelay: "0s" }}>
+            <g data-motif="">
               <g transform="translate(120,110)">
                 <circle
                   cx="0"
@@ -163,7 +163,7 @@ const CartaDigitalHeroSection: React.FC<CartaDigitalHeroSectionProps> = ({
 
             {/* Comisiones: coin with diagonal strike */}
             <g
-              className="animate-float-fancy"
+              data-motif=""
               style={{ animationDelay: "-1.2s" }}
             >
               <g transform="translate(360,110)">
@@ -197,7 +197,7 @@ const CartaDigitalHeroSection: React.FC<CartaDigitalHeroSectionProps> = ({
 
             {/* Pedidos online: clock overlapped by notification card */}
             <g
-              className="animate-float-fancy"
+              data-motif=""
               style={{ animationDelay: "-2.1s" }}
             >
               <g transform="translate(600,110)">
@@ -256,7 +256,7 @@ const CartaDigitalHeroSection: React.FC<CartaDigitalHeroSectionProps> = ({
             </g>
 
             {/* Clientes: 3 customer figures, last clipped by right edge */}
-            <g className="animate-float-fancy" style={{ animationDelay: "-3s" }}>
+            <g data-motif="">
               <g transform="translate(800,110)">
                 <circle
                   cx="0"

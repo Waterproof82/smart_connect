@@ -85,12 +85,12 @@ const HomeFaqSection: React.FC = () => {
       aria-label={t.homeFaqTitle}
       className="max-w-3xl mx-auto px-4 md:px-6"
     >
-      <h2 className="text-2xl sm:text-3xl md:text-4xl font-black leading-[1.15] font-display mb-10 md:mb-14 text-center">
+      <h2 className="ds-h2 mb-10 md:mb-14 text-center">
         {t.homeFaqTitle}
       </h2>
       {groups.map((group) => (
         <div key={group.title} className="mb-10 md:mb-14 last:mb-0">
-          <h3 className="text-lg font-bold text-muted uppercase tracking-wider mb-4">
+          <h3 className="ds-h3 text-muted uppercase tracking-wider mb-4">
             {group.title}
           </h3>
           <div className="space-y-3">

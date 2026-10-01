@@ -7,18 +7,18 @@ const CartaDigitalBBDDSection: React.FC = () => {
   return (
     <section
       id="bbdd"
-      className="py-16 md:py-24"
+      className="ds-section"
       style={{
         background:
           "linear-gradient(135deg, var(--color-bg) 0%, var(--color-bg-alt) 100%)",
       }}
     >
-      <div className="container mx-auto px-4 md:px-6">
+      <div className="ds-container">
         <div className="max-w-3xl mx-auto text-center mb-12 md:mb-16">
           <div className="text-xs font-semibold tracking-[0.3em] text-[var(--color-primary)] uppercase mb-3 md:mb-4">
             {t.cartaBBDDTitle}
           </div>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-[1.15] mb-4 md:mb-6 font-display">
+          <h2 className="ds-h2 mb-4 md:mb-6">
             {t.cartaBBDDSubtitle}
           </h2>
           <p className="text-base text-muted leading-relaxed">

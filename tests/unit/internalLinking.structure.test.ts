@@ -26,10 +26,16 @@ describe("internal linking", () => {
     expect(read(file)).toMatch(new RegExp(`<RelatedServices currentId="${id}" />`));
   });
 
-  it.each(ALL_PAGES)("%s renders the shared SiteFooter", (file) => {
+  it.each(ALL_PAGES)("%s renders the shared PageShell (site-wide footer)", (file) => {
     const source = read(file);
-    expect(source).toMatch(/<SiteFooter \/>/);
+    expect(source).toMatch(/<PageShell[\s>]/);
     expect(source).not.toMatch(/<footer[\s>]/);
+  });
+
+  it("PageShell renders the shared SiteFooter on every page", () => {
+    const shell = read("features/landing/presentation/components/PageShell.tsx");
+    expect(shell).toMatch(/<SiteFooter \/>/);
+    expect(shell).not.toMatch(/<footer[\s>]/);
   });
 
   it("SiteFooter links every SOLUTIONS page, /about and the three legal pages", () => {

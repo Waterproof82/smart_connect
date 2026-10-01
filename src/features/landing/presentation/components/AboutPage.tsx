@@ -1,8 +1,8 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
-import { SiteFooter } from "@shared/components/SiteFooter";
 import { Mail, MapPin, Phone } from "lucide-react";
-import { Navbar } from "./Navbar";
+import { PageHero, Section, WhatsAppCta } from "@shared/presentation/layout";
+import { PageShell } from "./PageShell";
 
 /**
  * About page — authorship and authority signals.
@@ -116,141 +116,118 @@ const AboutPage: React.FC = () => {
         </script>
       </Helmet>
 
-      <div className="min-h-screen bg-base text-default">
-        <Navbar scrolled={true} />
+      <PageShell>
+        <PageHero
+          title="Sobre Digitaliza Tenerife"
+          lede="Tecnología, inteligencia artificial y automatización para potenciar negocios locales en Tenerife y Canarias."
+          actions={<WhatsAppCta />}
+        />
 
-        {/* Hero */}
-        <section className="pt-32 pb-16 md:pt-40 md:pb-24 bg-gradient-to-b from-[var(--color-primary)]/20 via-[var(--color-primary)]/8 to-transparent">
-          <div className="container mx-auto px-6 text-center">
-            <h1 className="text-4xl md:text-6xl font-extrabold mb-6">
-              Sobre{" "}
-              <span className="bg-gradient-to-r from-[var(--color-icon-blue)] to-[var(--color-icon-purple)] bg-clip-text text-transparent">
-                Digitaliza Tenerife
-              </span>
-            </h1>
-            <p className="text-xl text-muted max-w-3xl mx-auto leading-relaxed">
-              Tecnología, inteligencia artificial y automatización para
-              potenciar negocios locales en Tenerife y Canarias.
-            </p>
-          </div>
-        </section>
-
-        {/* Mission */}
-        <section className="py-16 md:py-24">
-          <div className="container mx-auto px-6 max-w-4xl">
-            <h2 className="text-3xl md:text-4xl font-bold mb-8">
-              Nuestra misión
-            </h2>
-            <p className="text-lg text-muted leading-relaxed mb-6">
+        <Section id="mision" width="prose" title="Nuestra misión">
+          <div className="ds-prose text-lg text-muted grid gap-[var(--space-md)]">
+            <p className="m-0">
               En Digitaliza Tenerife creemos que la tecnología debe estar al
               servicio de los negocios locales. Nuestra misión es democratizar
               el acceso a herramientas de IA, automatización y hardware
               inteligente para que cualquier restaurante, bar o comercio en
               Tenerife y Canarias pueda competir en la era digital.
             </p>
-            <p className="text-lg text-muted leading-relaxed mb-6">
+            <p className="m-0">
               Desde la Carta Digital que transforma la experiencia en mesa,
               hasta tarjetas NFC que multiplican las reseñas en Google, pasando
               por automatizaciones con n8n que liberan horas de trabajo cada
               semana — cada solución está diseñada para generar resultados
               medibles desde el primer día.
             </p>
-            <p className="text-lg text-muted leading-relaxed">
+            <p className="m-0">
               Operamos desde Santa Cruz de Tenerife, con un equipo apasionado
               por la tecnología y el desarrollo del tejido empresarial canario.
             </p>
           </div>
-        </section>
+        </Section>
 
-        {/* Values */}
-        <section className="py-16 md:py-24 bg-base-alt">
-          <div className="container mx-auto px-6 max-w-5xl">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-              Nuestros valores
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {[
-                {
-                  title: "Tecnología con propósito",
-                  desc: "No implementamos tecnología por moda. Cada solución resuelve un problema real de negocio.",
-                },
-                {
-                  title: "Resultados medibles",
-                  desc: "Trabajamos con métricas claras: más reseñas, más pedidos, más ingresos por mesa.",
-                },
-                {
-                  title: "Cercanía local",
-                  desc: "Estamos en Tenerife, conocemos el mercado canario y ofrecemos soporte presencial.",
-                },
-              ].map((value) => (
-                <div
-                  key={value.title}
-                  className="bg-[var(--color-surface)] rounded-xl p-8 border border-subtle"
-                >
-                  <h3 className="text-xl font-bold mb-3 text-[var(--color-primary)]">
-                    {value.title}
-                  </h3>
-                  <p className="text-muted leading-relaxed">{value.desc}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+        <Section id="valores" tone="alt" title="Nuestros valores">
+          <ul className="grid grid-cols-1 md:grid-cols-3 gap-[var(--space-md)] list-none p-0 m-0">
+            {[
+              {
+                title: "Tecnología con propósito",
+                desc: "No implementamos tecnología por moda. Cada solución resuelve un problema real de negocio.",
+              },
+              {
+                title: "Resultados medibles",
+                desc: "Trabajamos con métricas claras: más reseñas, más pedidos, más ingresos por mesa.",
+              },
+              {
+                title: "Cercanía local",
+                desc: "Estamos en Tenerife, conocemos el mercado canario y ofrecemos soporte presencial.",
+              },
+            ].map((value) => (
+              <li key={value.title} className="ds-card">
+                <h3 className="ds-h3 mb-3">{value.title}</h3>
+                <p className="text-muted leading-relaxed m-0">{value.desc}</p>
+              </li>
+            ))}
+          </ul>
+        </Section>
 
-        {/* Contact info */}
-        <section className="py-16 md:py-24">
-          <div className="container mx-auto px-6 max-w-4xl">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-              Contacto
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="text-center">
-                <div className="w-14 h-14 rounded-full bg-[var(--color-accent-subtle)] border border-[var(--color-accent-border)] flex items-center justify-center mx-auto mb-4">
-                  <MapPin className="w-6 h-6 text-[var(--color-primary)]" />
-                </div>
-                <h3 className="font-semibold mb-2">Oficina</h3>
-                <p className="text-muted text-sm">
-                  Santa Cruz de Tenerife
-                  <br />
-                  Islas Canarias, España
-                </p>
-              </div>
-              <div className="text-center">
-                <div className="w-14 h-14 rounded-full bg-[var(--color-accent-subtle)] border border-[var(--color-accent-border)] flex items-center justify-center mx-auto mb-4">
-                  <Mail className="w-6 h-6 text-[var(--color-primary)]" />
-                </div>
-                <h3 className="font-semibold mb-2">Email</h3>
-                <p className="text-muted text-sm">
+        <Section id="contacto-info" title="Contacto">
+          <dl className="grid grid-cols-1 md:grid-cols-3 gap-[var(--space-lg)] m-0">
+            {[
+              {
+                icon: MapPin,
+                term: "Oficina",
+                value: (
+                  <>
+                    Santa Cruz de Tenerife
+                    <br />
+                    Islas Canarias, España
+                  </>
+                ),
+              },
+              {
+                icon: Mail,
+                term: "Email",
+                value: (
                   <a
                     href="mailto:info@digitalizatenerife.es"
-                    className="text-[var(--color-primary)] hover:text-[var(--color-accent-hover)] transition-colors"
+                    className="text-[var(--color-primary)] hover:underline"
                     rel="author"
                   >
                     info@digitalizatenerife.es
                   </a>
-                </p>
-              </div>
-              <div className="text-center">
-                <div className="w-14 h-14 rounded-full bg-[var(--color-accent-subtle)] border border-[var(--color-accent-border)] flex items-center justify-center mx-auto mb-4">
-                  <Phone className="w-6 h-6 text-[var(--color-primary)]" />
-                </div>
-                <h3 className="font-semibold mb-2">Web</h3>
-                <p className="text-muted text-sm">
+                ),
+              },
+              {
+                icon: Phone,
+                term: "Web",
+                value: (
                   <a
                     href="https://digitalizatenerife.es"
-                    className="text-[var(--color-primary)] hover:text-[var(--color-accent-hover)] transition-colors"
+                    className="text-[var(--color-primary)] hover:underline"
                     rel="author"
                   >
                     digitalizatenerife.es
                   </a>
-                </p>
+                ),
+              },
+            ].map(({ icon: Icon, term, value }) => (
+              <div
+                key={term}
+                className="border-t border-[var(--color-border)] pt-[var(--space-md)]"
+              >
+                <dt className="flex items-center gap-2 font-semibold mb-2">
+                  <Icon
+                    className="w-5 h-5 text-[var(--color-primary)]"
+                    aria-hidden="true"
+                  />
+                  {term}
+                </dt>
+                <dd className="text-muted m-0">{value}</dd>
               </div>
-            </div>
-          </div>
-        </section>
-
-        <SiteFooter />
-      </div>
+            ))}
+          </dl>
+        </Section>
+      </PageShell>
     </>
   );
 };

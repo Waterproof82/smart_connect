@@ -18,18 +18,18 @@ const CartaDigitalCTAFinalSection: React.FC<
   return (
     <section
       id="cta-final"
-      className="py-16 md:py-24"
+      className="ds-section"
       style={{
         background:
           "radial-gradient(ellipse at 50% 50%, color-mix(in oklch, var(--color-primary) 10%, transparent) 0%, transparent 70%), var(--color-bg)",
       }}
     >
-      <div className="container mx-auto px-4 md:px-6">
+      <div className="ds-container">
         <div className="text-center max-w-2xl mx-auto">
           <div className="text-xs font-semibold tracking-[0.25em] text-[var(--color-primary)] uppercase mb-4">
             {t.cartaCTATitle}
           </div>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-[1.1] mb-6 font-display">
+          <h2 className="ds-h2 mb-6">
             {t.cartaCTASubtitle}
           </h2>
           <p className="text-base md:text-lg text-muted max-w-md mx-auto mb-8 md:mb-12 leading-relaxed">

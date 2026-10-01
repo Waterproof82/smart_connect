@@ -15,33 +15,28 @@ describe("Hero", () => {
     expect(() => renderWithLanguage()).not.toThrow();
   });
 
-  it("renders the primary CTA (contact) button with btn-primary and type=button", () => {
+  it("renders the only h1 of the home page, without a reveal animation (LCP)", () => {
     renderWithLanguage();
-    const button = screen.getByRole("button", { name: /Contactar/i });
-    expect(button).toHaveAttribute("type", "button");
-    expect(button).toHaveClass("btn-primary");
+    const h1 = screen.getByRole("heading", { level: 1 });
+    expect(h1.className).not.toMatch(/reveal-/);
   });
 
-  it("renders the secondary CTA (demo) button with btn-secondary and type=button", () => {
+  it("renders the primary CTA as the shared WhatsApp link (crawlable, absolute fallback)", () => {
     renderWithLanguage();
-    const button = screen.getByRole("button", { name: /Ver Demo/i });
-    expect(button).toHaveAttribute("type", "button");
-    expect(button).toHaveClass("btn-secondary");
+    const link = screen.getByRole("link", { name: /Contactar/i });
+    expect(link).toHaveClass("btn-wa");
+    expect(link.getAttribute("href")).toMatch(/^\/#contacto/);
   });
 
-  it("does not carry stale conflicting utility classes on the primary CTA", () => {
+  it("renders the secondary CTA as a crawlable link to the solutions anchor", () => {
     renderWithLanguage();
-    const button = screen.getByRole("button", { name: /Contactar/i });
-    expect(button.className).not.toMatch(
-      /rounded-2xl|bg-\[var\(--color-accent\)\]|min-h-\[44px\]|focus-visible:ring-2/,
-    );
+    const link = screen.getByRole("link", { name: /Ver Demo/i });
+    expect(link).toHaveClass("btn-ghost");
+    expect(link).toHaveAttribute("href", "/#soluciones");
   });
 
-  it("does not carry stale conflicting utility classes on the secondary CTA", () => {
+  it("states the audience (hospitality, retail and businesses)", () => {
     renderWithLanguage();
-    const button = screen.getByRole("button", { name: /Ver Demo/i });
-    expect(button.className).not.toMatch(
-      /rounded-2xl|bg-\[var\(--color-overlay-subtle\)\]|min-h-\[44px\]|focus-visible:ring-2/,
-    );
+    expect(screen.getByText(/tiendas y empresas/i)).toBeInTheDocument();
   });
 });

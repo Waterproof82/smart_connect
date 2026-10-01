@@ -39,22 +39,22 @@ const SistemaAlergenosSection: React.FC<TpvModuleSectionProps> = ({
     },
   ];
 
-  const ctaHref = whatsappPhone ? `https://wa.me/${whatsappPhone}` : "#contacto";
+  const ctaHref = whatsappPhone ? `https://wa.me/${whatsappPhone}` : "/#contacto?servicio=TPV%20para%20restaurantes";
 
   return (
     <section
       id="sistema-alergenos"
       aria-labelledby="sistema-alergenos-title"
-      className="py-16 md:py-24 bg-[var(--color-bg)]"
+      className="ds-section bg-[var(--color-bg)]"
       style={accentStyle("--color-icon-magenta")}
     >
-      <div className="container mx-auto px-6 max-w-5xl">
+      <div className="ds-container">
         <div className="text-xs font-semibold tracking-wider uppercase text-[var(--color-primary)] mb-3">
           {t.sistemaAlergenosEyebrow}
         </div>
         <h2
           id="sistema-alergenos-title"
-          className="text-3xl md:text-4xl font-bold mb-4 text-default max-w-2xl"
+          className="ds-h2 mb-4 text-default max-w-2xl"
         >
           {t.sistemaAlergenosTitle}
         </h2>

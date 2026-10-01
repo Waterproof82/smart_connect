@@ -38,22 +38,22 @@ const FoodCostAvanzadoSection: React.FC<TpvModuleSectionProps> = ({
     },
   ];
 
-  const ctaHref = whatsappPhone ? `https://wa.me/${whatsappPhone}` : "#contacto";
+  const ctaHref = whatsappPhone ? `https://wa.me/${whatsappPhone}` : "/#contacto?servicio=TPV%20para%20restaurantes";
 
   return (
     <section
       id="food-cost-avanzado"
       aria-labelledby="food-cost-avanzado-title"
-      className="py-16 md:py-24 bg-[var(--color-bg-alt)]"
+      className="ds-section bg-[var(--color-bg-alt)]"
       style={accentStyle("--color-icon-cyan")}
     >
-      <div className="container mx-auto px-6 max-w-5xl">
+      <div className="ds-container">
         <div className="text-xs font-semibold tracking-wider uppercase text-[var(--color-primary)] mb-3">
           {t.foodCostAvanzadoEyebrow}
         </div>
         <h2
           id="food-cost-avanzado-title"
-          className="text-3xl md:text-4xl font-bold mb-4 text-default max-w-2xl"
+          className="ds-h2 mb-4 text-default max-w-2xl"
         >
           {t.foodCostAvanzadoTitle}
         </h2>
