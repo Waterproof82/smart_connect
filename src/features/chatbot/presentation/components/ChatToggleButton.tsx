@@ -1,5 +1,6 @@
 import React, { RefObject } from "react";
 import { Bot, MessageCircle } from "lucide-react";
+import { buildWhatsappLink } from "@shared/utils/whatsappLink";
 
 interface ChatToggleButtonProps {
   isOpen: boolean;
@@ -18,11 +19,11 @@ export const ChatToggleButton: React.FC<ChatToggleButtonProps> = ({
     <div className="flex items-center gap-3">
       {whatsappPhone && (
         <a
-          href={`https://wa.me/${whatsappPhone}`}
+          href={buildWhatsappLink(whatsappPhone).href}
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Contactar por WhatsApp"
-          className="flex items-center gap-2 sm:gap-3 bg-[var(--color-whatsapp)] hover:bg-[var(--color-whatsapp-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg)] text-[var(--color-on-accent)] px-4 py-3 sm:px-5 rounded-full shadow-lg transition-colors min-h-[44px]"
+          className="hidden md:flex items-center gap-2 sm:gap-3 bg-[var(--color-whatsapp)] hover:bg-[var(--color-whatsapp-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg)] text-[var(--color-on-whatsapp)] px-4 py-3 sm:px-5 rounded-full shadow-lg transition-colors min-h-[44px]"
         >
           Contactar
           <MessageCircle className="w-4 h-4" />

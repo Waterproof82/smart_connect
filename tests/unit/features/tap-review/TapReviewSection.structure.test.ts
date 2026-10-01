@@ -32,7 +32,9 @@ describe("TapReviewSection (merged into home)", () => {
     expect(source).not.toMatch(/application\/ld\+json/);
   });
 
-  it("accepts whatsappPhone as a prop, same shape as before", () => {
-    expect(source).toMatch(/whatsappPhone/);
+  it("uses the shared WhatsAppCta instead of hand-built wa.me links", () => {
+    expect(source).toMatch(/from ["']@shared\/presentation\/layout["']/);
+    expect(source).toMatch(/<WhatsAppCta/);
+    expect(source).not.toMatch(/wa\.me/);
   });
 });

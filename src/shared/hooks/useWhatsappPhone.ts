@@ -9,6 +9,25 @@ export function sanitizeWhatsappPhone(raw: string): string {
   return raw.replaceAll(/[^\d+]/g, "");
 }
 
+// One in-flight request per page load, shared by every caller (PageShell,
+// page components, sections) so the shared WhatsApp CTA adds no extra reads.
+let phonePromise: Promise<string> | null = null;
+
+function loadWhatsappPhone(): Promise<string> {
+  phonePromise ??= getAppSettings()
+    .then((settings) => sanitizeWhatsappPhone(settings.whatsappPhone ?? ""))
+    .catch(() => {
+      phonePromise = null;
+      return "";
+    });
+  return phonePromise;
+}
+
+/** Test-only: clears the shared request cache. */
+export function resetWhatsappPhoneCache(): void {
+  phonePromise = null;
+}
+
 /**
  * Fetches the WhatsApp contact phone once (wraps the canonical
  * `getAppSettings()` service) and returns it pre-sanitized for `wa.me` links.
@@ -23,18 +42,10 @@ export function useWhatsappPhone(): string {
   useEffect(() => {
     let cancelled = false;
 
-    const fetchWhatsApp = async () => {
-      try {
-        const settings = await getAppSettings();
-        if (!cancelled && settings.whatsappPhone) {
-          setWhatsappPhone(sanitizeWhatsappPhone(settings.whatsappPhone));
-        }
-      } catch {
-        // Silently fail — WhatsApp CTAs fall back to #contacto.
-      }
-    };
-
-    fetchWhatsApp();
+    // Failures resolve to "" — WhatsApp CTAs fall back to /#contacto.
+    loadWhatsappPhone().then((phone) => {
+      if (!cancelled && phone) setWhatsappPhone(phone);
+    });
     return () => {
       cancelled = true;
     };

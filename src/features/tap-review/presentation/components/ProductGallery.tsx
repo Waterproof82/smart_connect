@@ -40,7 +40,7 @@ const ProductGallery: React.FC = () => {
 
   return (
     <div className="space-y-4">
-      <div className="relative aspect-square bg-gradient-to-br from-[var(--color-bg-alt)] to-[var(--color-surface)] rounded-3xl overflow-hidden">
+      <div className="relative aspect-square bg-gradient-to-br from-[var(--color-bg-alt)] to-[var(--color-surface)] rounded-xl overflow-hidden">
         {products.map((product, idx) => (
           <div
             key={idx}

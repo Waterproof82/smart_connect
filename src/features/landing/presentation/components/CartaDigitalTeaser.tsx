@@ -16,13 +16,13 @@ const CartaDigitalTeaser: React.FC<CartaDigitalTeaserProps> = ({ id }) => {
     <section
       id={id}
       aria-label={t.cartaTeaserEyebrow}
-      className="py-16 md:py-24 bg-[var(--color-bg)] text-default"
+      className="ds-section bg-[var(--color-bg)] text-default"
     >
-      <div className="container mx-auto px-4 md:px-6 max-w-3xl text-center">
-        <div className="text-xs font-semibold tracking-[0.3em] text-[var(--color-primary)] uppercase mb-3 md:mb-4">
+      <div className="ds-container max-w-3xl text-center">
+        <div className="ds-kicker mb-3 md:mb-4">
           {t.cartaTeaserEyebrow}
         </div>
-        <h2 className="text-3xl sm:text-4xl md:text-5xl font-black leading-[1.15] mb-4 md:mb-6 font-display">
+        <h2 className="ds-h2 mb-4 md:mb-6">
           {t.cartaTeaserTitle}
         </h2>
         <p className="text-base md:text-lg text-muted leading-relaxed mb-8">

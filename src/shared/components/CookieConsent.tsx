@@ -26,7 +26,7 @@ declare global {
 }
 
 const REOPENER_CLASS =
-  "fixed bottom-4 left-4 z-[250] w-11 h-11 rounded-full flex items-center justify-center bg-[var(--color-bg)] border border-[var(--color-border)] text-default shadow-lg hover:bg-[var(--color-border)]/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]";
+  "fixed bottom-[calc(var(--wa-bar-h)+1rem)] left-4 md:bottom-4 z-[250] w-11 h-11 rounded-full flex items-center justify-center bg-[var(--color-bg)] border border-[var(--color-border)] text-default shadow-lg hover:bg-[var(--color-border)]/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]";
 
 export const CookieConsent: React.FC = () => {
   const { status, acceptAll, rejectAll, reopen } = useConsent();

@@ -202,7 +202,7 @@ export const ExpertAssistant: React.FC = () => {
   };
 
   return (
-    <div className="fixed bottom-4 right-4 sm:bottom-8 sm:right-8 z-[100] flex flex-col items-end gap-3">
+    <div className="fixed bottom-[calc(var(--wa-bar-h)+1rem)] right-4 md:bottom-8 md:right-8 z-[100] flex flex-col items-end gap-3">
       {isOpen && (
         <dialog
           ref={modalRef}

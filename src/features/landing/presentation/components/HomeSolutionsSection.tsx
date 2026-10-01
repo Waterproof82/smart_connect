@@ -51,13 +51,13 @@ const HomeSolutionsSection: React.FC = () => {
     <>
       <section
         aria-labelledby="productos-title"
-        className="py-20 md:py-28"
+        className="ds-section"
       >
-        <div className="container mx-auto px-4 md:px-6">
+        <div className="ds-container">
           <div className="max-w-2xl mb-12">
             <h2
               id="productos-title"
-              className="text-3xl md:text-5xl font-bold font-display mb-4"
+              className="ds-h2 mb-4"
             >
               {t.homeStarsTitle}
             </h2>
@@ -70,13 +70,13 @@ const HomeSolutionsSection: React.FC = () => {
               <li key={to}>
                 <Link
                   to={to}
-                  className="group flex flex-col h-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-8 md:p-10 hover:border-[var(--color-primary)] hover:-translate-y-1 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)]"
+                  className="group flex flex-col h-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl p-8 md:p-10 hover:border-[var(--color-primary)] hover:-translate-y-1 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)]"
                 >
                   <div className="flex items-center gap-3 mb-6">
                     <span className="w-11 h-11 rounded-xl flex items-center justify-center bg-[var(--color-accent-subtle)] text-[var(--color-primary)]">
                       <Icon className="w-5 h-5" aria-hidden="true" />
                     </span>
-                    <span className="text-xs font-semibold tracking-[0.25em] uppercase text-[var(--color-primary)]">
+                    <span className="ds-kicker">
                       {eyebrow}
                     </span>
                   </div>
@@ -100,12 +100,12 @@ const HomeSolutionsSection: React.FC = () => {
 
       <section
         aria-labelledby="servicios-title"
-        className="pb-20 md:pb-28"
+        className="pb-[var(--section-y)]"
       >
-        <div className="container mx-auto px-4 md:px-6">
+        <div className="ds-container">
           <h2
             id="servicios-title"
-            className="text-2xl md:text-3xl font-bold font-display mb-8"
+            className="ds-h2 mb-8"
           >
             {t.homeMoreTitle}
           </h2>

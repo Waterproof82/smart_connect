@@ -37,6 +37,7 @@ import {
   tiendaCartaDigitalCopy,
 } from "./tienda-carta-digital";
 import { PageCopy, pageCopy } from "./page-copy";
+import { DesignSystemCopy, designSystemCopy } from "./design-system";
 
 export interface TpvModuleTranslations
   extends TpvCobroCopy,
@@ -52,7 +53,8 @@ export interface TpvModuleTranslations
     SistemaAlergenosCopy,
     ComprasSialtiCopy,
     TiendaCartaDigitalCopy,
-    PageCopy {}
+    PageCopy,
+    DesignSystemCopy {}
 
 export const tpvModuleEs: TpvModuleTranslations = {
   ...tpvCobroCopy.es,
@@ -69,6 +71,7 @@ export const tpvModuleEs: TpvModuleTranslations = {
   ...comprasSialtiCopy.es,
   ...tiendaCartaDigitalCopy.es,
   ...pageCopy.es,
+  ...designSystemCopy.es,
 };
 
 export const tpvModuleEn: TpvModuleTranslations = {
@@ -86,4 +89,5 @@ export const tpvModuleEn: TpvModuleTranslations = {
   ...comprasSialtiCopy.en,
   ...tiendaCartaDigitalCopy.en,
   ...pageCopy.en,
+  ...designSystemCopy.en,
 };

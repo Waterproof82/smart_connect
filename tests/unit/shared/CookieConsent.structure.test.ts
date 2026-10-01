@@ -98,10 +98,10 @@ describe("CookieConsent (design.md: container — banner | reopener | null)", ()
     expect(source).not.toMatch(/backdrop/i);
   });
 
-  it("reopener control is fixed bottom-4 left-4 (bottom-left) — chatbot owns bottom-right z-[100]", () => {
+  it("reopener control is fixed bottom-left above the mobile WhatsApp bar — chatbot owns bottom-right z-[100]", () => {
     const source = readSource();
-    expect(source).toMatch(/bottom-4 left-4/);
-    expect(source).not.toMatch(/bottom-4 right-4/);
+    expect(source).toMatch(/fixed bottom-\[calc\(var\(--wa-bar-h\)\+1rem\)\] left-4 md:bottom-4/);
+    expect(source).not.toMatch(/right-4/);
   });
 
   it("reopener has no pre-ticked/checked inputs (it's a plain button, not a toggle)", () => {

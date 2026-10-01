@@ -1,15 +1,15 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
-import { SiteFooter } from "@shared/components/SiteFooter";
 import { RelatedServices } from "@shared/components/RelatedServices";
-import { Navbar } from "@features/landing/presentation/components/Navbar";
+import { PageShell } from "@features/landing/presentation/components/PageShell";
+import { Section, FaqList } from "@shared/presentation/layout";
+import { useLanguage } from "@shared/context/LanguageContext";
 import {
   ServiceSchema,
   SeoFaqSchema,
   BreadcrumbListSchema,
 } from "@shared/presentation/components/SeoSchema";
 import { useNfcFaqGroup } from "@features/landing/presentation/components/HomeFaqSection";
-import { useWhatsappPhone } from "@shared/hooks";
 import { SOLUTIONS } from "@shared/config/solutions";
 import { TapReviewSection } from "./TapReviewSection";
 
@@ -31,23 +31,10 @@ const PAGE_DESCRIPTION =
  * body + its own NFC FAQ group.
  */
 const TapReviewPage: React.FC = () => {
-  const [scrolled, setScrolled] = React.useState(false);
-  const sentinelRef = React.useRef<HTMLDivElement>(null);
-  const whatsappPhone = useWhatsappPhone();
+  const { t } = useLanguage();
   const nfcFaqGroup = useNfcFaqGroup();
 
   const solutionMeta = SOLUTIONS.find((s) => s.id === "tarjetas-nfc");
-
-  React.useEffect(() => {
-    const sentinel = sentinelRef.current;
-    if (!sentinel) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => setScrolled(!entry.isIntersecting),
-      { threshold: 1 },
-    );
-    observer.observe(sentinel);
-    return () => observer.disconnect();
-  }, []);
 
   return (
     <>
@@ -55,8 +42,8 @@ const TapReviewPage: React.FC = () => {
         <title>{PAGE_TITLE}</title>
         <meta name="description" content={PAGE_DESCRIPTION} />
         <link rel="canonical" href={PAGE_URL} />
-        <link rel="alternate" hrefLang="es" href={PAGE_URL} />
-        <link rel="alternate" hrefLang="x-default" href={PAGE_URL} />
+        <meta property="og:locale" content="es_ES" />
+        <meta property="og:site_name" content="Digitaliza Tenerife" />
         <meta property="og:title" content={PAGE_TITLE} />
         <meta property="og:description" content={PAGE_DESCRIPTION} />
         <meta property="og:type" content="website" />
@@ -103,51 +90,16 @@ const TapReviewPage: React.FC = () => {
         }))}
       />
 
-      <div className="min-h-screen bg-base text-default">
-        <div
-          ref={sentinelRef}
-          className="absolute top-[50px] h-px w-px"
-          aria-hidden="true"
-        />
-        <Navbar scrolled={scrolled} />
+      <PageShell waMessage={t.waMsgNfc} servicio="Tarjetas NFC">
+        {/* H1 wording frozen (SEO_PROTOCOL P-13) — do not change. */}
+        <h1 className="sr-only">{PAGE_H1}</h1>
+        <TapReviewSection />
 
-        <main id="main" aria-label="Contenido principal">
-          <section className="pt-20">
-            <h1 className="sr-only">{PAGE_H1}</h1>
-            <TapReviewSection whatsappPhone={whatsappPhone} />
-          </section>
-
-          <section
-            aria-label={nfcFaqGroup.title}
-            className="max-w-3xl mx-auto px-4 md:px-6 py-16 md:py-24"
-          >
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black leading-[1.15] font-display mb-10 md:mb-14 text-center">
-              {nfcFaqGroup.title}
-            </h2>
-            <div className="space-y-3">
-              {nfcFaqGroup.items.map((faq) => (
-                <details
-                  key={faq.q}
-                  className="group border border-[var(--color-border)] rounded-lg bg-[var(--color-surface)] overflow-hidden"
-                >
-                  <summary className="flex items-center justify-between px-5 py-4 cursor-pointer font-semibold text-base select-none hover:bg-[var(--color-accent-subtle)] transition-colors duration-150">
-                    {faq.q}
-                    <span className="ml-4 shrink-0 text-[var(--color-primary)] group-open:rotate-45 transition-transform duration-200">
-                      +
-                    </span>
-                  </summary>
-                  <p className="px-5 pb-4 pt-2 text-sm text-muted leading-relaxed">
-                    {faq.a}
-                  </p>
-                </details>
-              ))}
-            </div>
-          </section>
-          <RelatedServices currentId="tarjetas-nfc" />
-        </main>
-
-        <SiteFooter />
-      </div>
+        <Section id="faq" width="prose" title={nfcFaqGroup.title}>
+          <FaqList items={nfcFaqGroup.items} />
+        </Section>
+        <RelatedServices currentId="tarjetas-nfc" />
+      </PageShell>
     </>
   );
 };

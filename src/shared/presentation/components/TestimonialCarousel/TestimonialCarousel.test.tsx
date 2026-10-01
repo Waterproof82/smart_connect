@@ -39,9 +39,10 @@ describe("TestimonialCarousel Component", () => {
     render(<TestimonialCarousel testimonials={mockTestimonials} />);
 
     expect(screen.getByText("John Doe")).toBeInTheDocument();
-    expect(screen.getByText("This is a great product!")).toBeInTheDocument();
+    // The quote is rendered inside typographic quotes (“…”).
+    expect(screen.getByText("“This is a great product!”")).toBeInTheDocument();
     expect(screen.getByText("Jane Smith")).toBeInTheDocument();
-    expect(screen.getByText("I highly recommend it.")).toBeInTheDocument();
+    expect(screen.getByText("“I highly recommend it.”")).toBeInTheDocument();
   });
 
   it("should render the main title", () => {

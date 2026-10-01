@@ -52,19 +52,18 @@ describe("TapReviewPage (standalone /tarjetas-nfc route, PR3 un-merge)", () => {
     expect(source).not.toMatch(/<script[^>]*application\/ld\+json/);
   });
 
-  it("mounts the shared Navbar", () => {
+  it("mounts the shared PageShell (which owns Navbar + footer)", () => {
     expect(source).toMatch(
-      /from ["']@features\/landing\/presentation\/components\/Navbar["']/,
+      /from ["']@features\/landing\/presentation\/components\/PageShell["']/,
     );
-    expect(source).toMatch(/<Navbar/);
+    expect(source).toMatch(/<PageShell/);
   });
 
-  it("mounts TapReviewSection with the whatsappPhone prop", () => {
+  it("mounts TapReviewSection (WhatsApp phone resolved inside WhatsAppCta)", () => {
     expect(source).toMatch(
       /from ["']\.\/TapReviewSection["']/,
     );
-    expect(source).toMatch(/<TapReviewSection/);
-    expect(source).toMatch(/whatsappPhone/);
+    expect(source).toMatch(/<TapReviewSection \/>/);
   });
 
   it("renders the NFC FAQ group sourced from useNfcFaqGroup()", () => {

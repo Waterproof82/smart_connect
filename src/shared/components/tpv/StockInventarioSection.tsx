@@ -7,6 +7,7 @@
 import React from "react";
 import { Package, Trash2, AlertTriangle, BarChart3 } from "lucide-react";
 import { useLanguage } from "@shared/context/LanguageContext";
+import { buildWhatsappLink } from "@shared/utils/whatsappLink";
 import { accentStyle } from "@shared/config/accents";
 import type { TpvModuleSectionProps } from "./TpvModuleSections";
 import TpvModuleFigure from "./TpvModuleFigure";
@@ -25,22 +26,25 @@ const StockInventarioSection: React.FC<TpvModuleSectionProps> = ({
     { title: t.stockInventarioBullet4Title, desc: t.stockInventarioBullet4Desc },
   ];
 
-  const ctaHref = whatsappPhone ? `https://wa.me/${whatsappPhone}` : "#contacto";
+  const cta = buildWhatsappLink(whatsappPhone ?? "", {
+    message: t.waMsgTpv,
+    servicio: "TPV para restaurantes",
+  });
 
   return (
     <section
       id="stock-inventario"
       aria-labelledby="stock-inventario-title"
-      className="py-16 md:py-24 bg-[var(--color-bg)]"
+      className="ds-section bg-[var(--color-bg)]"
       style={accentStyle("--color-icon-green")}
     >
-      <div className="container mx-auto px-6 max-w-5xl">
-        <div className="text-xs font-semibold tracking-wider uppercase text-[var(--color-primary)] mb-3">
+      <div className="ds-container">
+        <div className="ds-kicker mb-3">
           {t.stockInventarioEyebrow}
         </div>
         <h2
           id="stock-inventario-title"
-          className="text-3xl md:text-4xl font-bold mb-4 text-default max-w-2xl"
+          className="ds-h2 mb-4 text-default max-w-2xl"
         >
           {t.stockInventarioTitle}
         </h2>
@@ -79,9 +83,9 @@ const StockInventarioSection: React.FC<TpvModuleSectionProps> = ({
         </div>
 
         <a
-          href={ctaHref}
-          target={whatsappPhone ? "_blank" : undefined}
-          rel={whatsappPhone ? "noopener noreferrer" : undefined}
+          href={cta.href}
+          target={cta.external ? "_blank" : undefined}
+          rel={cta.external ? "noopener noreferrer" : undefined}
           className="inline-flex items-center gap-2 text-sm font-bold text-[var(--color-primary)] hover:underline mt-10"
         >
           {t.stockInventarioCtaLabel}

@@ -44,7 +44,7 @@ const TpvModuleFigure: React.FC<TpvModuleFigureProps> = ({
 }) => (
   <figure className={`m-0 ${className ?? ""}`}>
     <div
-      className="relative w-full overflow-hidden rounded-2xl tpv-accent-frame"
+      className="relative w-full overflow-hidden rounded-xl tpv-accent-frame"
       style={{ aspectRatio: ratio }}
     >
       <img

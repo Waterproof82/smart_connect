@@ -40,13 +40,10 @@ interface CartaDigitalSectionProps {
    * (design.md D1/D2) without hardcoding the anchor internally.
    */
   id: string;
-  /** Pre-fetched, wa.me-ready phone number — single fetch lives in App.tsx via useWhatsappPhone(). */
-  whatsappPhone: string;
 }
 
 const CartaDigitalSection: React.FC<CartaDigitalSectionProps> = ({
   id,
-  whatsappPhone,
 }) => {
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
   const [isVideoPlaying, setIsVideoPlaying] = useState(true);
@@ -71,7 +68,7 @@ const CartaDigitalSection: React.FC<CartaDigitalSectionProps> = ({
   return (
     <div id={id} className="bg-[var(--color-bg)] text-default">
       <CartaDigitalHeroSection onScrollToSection={scrollToSection} />
-      <CartaDigitalGlovoSection whatsappPhone={whatsappPhone} />
+      <CartaDigitalGlovoSection />
       <CartaDigitalProblemaSection />
       <CartaDigitalSolucionSection />
       <CartaDigitalBeneficiosSection />
@@ -88,7 +85,7 @@ const CartaDigitalSection: React.FC<CartaDigitalSectionProps> = ({
         onToggleVideo={toggleVideo}
         onOpenLightbox={setLightboxImage}
       />
-      <CartaDigitalCTAFinalSection whatsappPhone={whatsappPhone} />
+      <CartaDigitalCTAFinalSection />
 
       <CartaDigitalLightbox
         image={lightboxImage}

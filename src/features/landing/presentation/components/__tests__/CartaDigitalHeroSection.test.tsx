@@ -23,25 +23,33 @@ describe("CartaDigitalHeroSection", () => {
     expect(container.querySelector("svg")).not.toBeNull();
   });
 
-  it("renders the primary CTA (demo) button with btn-primary and type=button", () => {
+  it("renders WhatsApp as the single primary CTA (shared btn-wa)", () => {
+    const { container } = renderWithLanguage();
+    const link = screen.getByRole("link", { name: /WhatsApp/i });
+    expect(link).toHaveClass("btn-wa");
+    expect(link.getAttribute("href")).toMatch(/^\/#contacto\?servicio=Carta%20Digital/);
+    expect(container.querySelectorAll(".btn-primary, .btn-wa")).toHaveLength(1);
+  });
+
+  it("renders the demo scroll button as a ghost button with type=button", () => {
     renderWithLanguage();
     const button = screen.getByRole("button", { name: /Ver cómo funciona/i });
     expect(button).toHaveAttribute("type", "button");
-    expect(button).toHaveClass("btn-primary");
+    expect(button).toHaveClass("btn-ghost");
   });
 
-  it("renders the secondary CTA (calc) button with btn-secondary and type=button", () => {
+  it("renders the calc scroll button as a ghost button with type=button", () => {
     renderWithLanguage();
     const button = screen.getByRole("button", { name: /Calcular ahorro/i });
     expect(button).toHaveAttribute("type", "button");
-    expect(button).toHaveClass("btn-secondary");
+    expect(button).toHaveClass("btn-ghost");
   });
 
-  it("does not carry stale conflicting utility classes on the primary CTA", () => {
+  it("does not carry stale conflicting utility classes on the demo CTA", () => {
     renderWithLanguage();
     const button = screen.getByRole("button", { name: /Ver cómo funciona/i });
     expect(button.className).not.toMatch(
-      /rounded-xl|bg-\[var\(--color-primary\)\]|min-h-\[44px\]/,
+      /rounded-xl|bg-\[var\(--color-primary\)\]|min-h-\[44px\]|uppercase/,
     );
   });
 
@@ -53,11 +61,20 @@ describe("CartaDigitalHeroSection", () => {
     );
   });
 
-  it("renders the title heading", () => {
+  it("renders the page's only h1, visible, with the SEO keyword wording", () => {
     renderWithLanguage();
-    expect(
-      screen.getByRole("heading", { name: /Tu carta,\s*tu negocio,\s*tus clientes\./ }),
-    ).toBeInTheDocument();
+    const h1 = screen.getByRole("heading", { level: 1 });
+    expect(h1).toHaveTextContent(
+      /Carta digital para restaurantes: pedidos sin pagar comisión a Glovo/,
+    );
+    expect(h1.className).not.toMatch(/sr-only/);
+  });
+
+  it("renders the slogan as display text, not as a competing heading", () => {
+    renderWithLanguage();
+    const slogan = screen.getByText(/Tu carta,/);
+    expect(slogan.closest("h1,h2,h3")).toBeNull();
+    expect(slogan.closest("p")).toHaveClass("ds-h1");
   });
 
   it("renders both CTA buttons", () => {
@@ -84,7 +101,7 @@ describe("CartaDigitalHeroSection", () => {
     expect(band).toBeInTheDocument();
 
     const motifs = container.querySelectorAll(
-      '[data-testid="carta-hero-band"] g.animate-float-fancy',
+      '[data-testid="carta-hero-band"] g[data-motif]',
     );
     expect(motifs.length).toBe(4);
   });

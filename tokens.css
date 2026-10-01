@@ -1,0 +1,97 @@
+/* Hallmark · genre: modern-minimal · macrostructure: Marquee Hero (home) / Long Document (product, content) · design-system: design.md · designed-as-app
+ * Hallmark · pre-emit critique: P4 H5 E4 S4 R5 V4
+ * theme: custom-preserved (brand blue oklch(65% 0.18 250) · paper oklch(8% 0.012 250) dark / oklch(98% 0.005 250) light)
+ * fonts: Space Grotesk (display) + DM Sans (body) · nav: N1b · footer: Ft5 · cta: WhatsApp (C4 sticky bar on mobile)
+ */
+
+/*
+ * Structural design tokens for Digitaliza Tenerife.
+ * Colour tokens (paper/ink/accent/whatsapp…) live in src/index.css because
+ * they switch between dark (:root) and light (.light). Everything here is
+ * theme-independent: type, space, radius, motion, layout widths.
+ * Source of truth: design.md at the project root.
+ */
+:root {
+  /* Typography */
+  --font-display: "Space Grotesk", "Space Grotesk Fallback", system-ui,
+    sans-serif;
+  --font-body: "DM Sans", "DM Sans Fallback", system-ui, sans-serif;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-md: 1rem;
+  --text-lede: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem);
+  --text-h3: clamp(1.125rem, 1.05rem + 0.3vw, 1.3125rem);
+  --text-h2: clamp(1.75rem, 1.35rem + 1.7vw, 2.75rem);
+  --text-display-s: clamp(2rem, 1.4rem + 2.6vw, 3.5rem);
+  --text-display: clamp(2.25rem, 1.4rem + 3.6vw, 4.5rem);
+
+  --tracking-display: -0.025em;
+  --leading-display: 1.05;
+  --leading-body: 1.65;
+  --measure: 65ch;
+
+  /* 4-pt spacing scale */
+  --space-3xs: 0.25rem;
+  --space-2xs: 0.5rem;
+  --space-xs: 0.75rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2rem;
+  --space-xl: 3rem;
+  --space-2xl: 4.5rem;
+  --space-3xl: 7rem;
+
+  /* Layout */
+  --page-gutter: clamp(1rem, 0.6rem + 1.6vw, 1.5rem);
+  --container-wide: 72rem;
+  --container-prose: 46rem;
+  --section-y: clamp(4rem, 2.8rem + 4.5vw, 7rem);
+  --nav-h: 4.5rem;
+  /* Height reserved for the mobile WhatsApp bar (0 on ≥ md). */
+  --wa-bar-h: 4.5rem;
+
+  /* Shape */
+  --rule-hair: 1px;
+  --radius-card: 0.75rem;
+  --radius-input: 0.625rem;
+  --radius-pill: 999px;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in: cubic-bezier(0.55, 0, 1, 0.45);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --dur-short: 150ms;
+  --dur-med: 220ms;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --wa-bar-h: 0px;
+  }
+}
+
+/*
+ * Metric-matched local fallbacks: while the Google Fonts load
+ * (display=swap) text renders in Arial scaled to the web font's average
+ * glyph width and vertical metrics, so the swap causes ~no layout shift.
+ * Values computed from @capsizecss/metrics (next/font method):
+ * size-adjust = xWidthAvg ratio vs Arial; overrides = metric / (UPM · size-adjust).
+ */
+@font-face {
+  font-family: "DM Sans Fallback";
+  src: local("Arial"), local("ArialMT"), local("Liberation Sans");
+  size-adjust: 104.53%;
+  ascent-override: 94.9%;
+  descent-override: 29.66%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Space Grotesk Fallback";
+  src: local("Arial"), local("ArialMT"), local("Liberation Sans");
+  size-adjust: 109.69%;
+  ascent-override: 89.71%;
+  descent-override: 26.62%;
+  line-gap-override: 0%;
+}
