@@ -62,12 +62,54 @@ class EmbeddingCache {
 const cache = new EmbeddingCache()
 
 // ============================================================================
+// RATE LIMITER (in-memory, per isolate — best-effort defence in depth)
+// The function is reachable without a session (anonymous chatbot users), so
+// CORS alone does not stop non-browser clients from spending the Gemini quota.
+// Same pattern as gemini-generate. Generous enough for normal conversations.
+const RATE_LIMIT_WINDOW_MS = 60_000
+const RATE_LIMIT_MAX = 20
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>()
+
+function getClientKey(req: Request): string {
+  const forwarded = req.headers.get('cf-connecting-ip') || req.headers.get('x-forwarded-for') || ''
+  return forwarded.split(',')[0].trim() || 'unknown'
+}
+
+function checkRateLimit(key: string): { allowed: boolean; retryAfter: number } {
+  const now = Date.now()
+  if (rateLimitMap.size > 1000) {
+    for (const [k, v] of rateLimitMap.entries()) {
+      if (now > v.resetAt) rateLimitMap.delete(k)
+    }
+    if (rateLimitMap.size > 1000) rateLimitMap.clear()
+  }
+  let entry = rateLimitMap.get(key)
+  if (!entry || now > entry.resetAt) {
+    entry = { count: 0, resetAt: now + RATE_LIMIT_WINDOW_MS }
+    rateLimitMap.set(key, entry)
+  }
+  if (entry.count >= RATE_LIMIT_MAX) {
+    return { allowed: false, retryAfter: Math.ceil((entry.resetAt - now) / 1000) }
+  }
+  entry.count++
+  return { allowed: true, retryAfter: 0 }
+}
+
+// ============================================================================
 // MAIN HANDLER
 serve(async (req) => {
   const corsHeaders = getCorsHeaders(req)
   if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders })
 
   const startTime = Date.now()
+
+  const rateLimit = checkRateLimit(getClientKey(req))
+  if (!rateLimit.allowed) {
+    return new Response(
+      JSON.stringify({ error: 'Too many requests. Please try again later.' }),
+      { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json', 'Retry-After': String(rateLimit.retryAfter) } }
+    )
+  }
 
   try {
     // 2️⃣ PARSE REQUEST (must be first to catch body parsing errors)
@@ -195,7 +237,11 @@ async function authenticateRequest(req) {
 async function parseRequest(req) {
   try {
     const body = await req.json()
-    const { query, conversationHistory = [], topK = 5, threshold = 0.4, source = null } = body
+    const { query, conversationHistory = [], source = null } = body
+    // Clamp client-controlled search parameters (defaults unchanged: 5 / 0.4)
+    const topK = Math.min(Math.max(Math.trunc(Number(body.topK ?? 5)) || 5, 1), 10)
+    const rawThreshold = Number(body.threshold ?? 0.4)
+    const threshold = Number.isFinite(rawThreshold) ? Math.min(Math.max(rawThreshold, 0), 1) : 0.4
     if (!query || typeof query !== 'string') {
       throw new Error('Missing or invalid "query"')
     }

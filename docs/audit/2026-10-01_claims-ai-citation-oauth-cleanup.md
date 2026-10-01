@@ -10,3 +10,13 @@
 
 ## Validation
 - `tsc --noEmit` clean; eslint clean on changed TS files; `jest`: 985 passed. The 11 failures in `tests/integration/admin/documents-rls.test.ts` also fail without these changes (they need a live Supabase). No build run.
+
+## Supabase review and follow-up (same day)
+
+**Scope:** read-only review of project `smartconnect-rag` via the Supabase MCP, one function redeploy, repo cleanup. Note: the sandbox env vars `NEXT_PUBLIC_SUPABASE_*` point to a different project (`multi_tienda`) and were not used.
+
+- **Findings:** all 5 deployed functions have `verify_jwt=false`. `chat-with-rag` accepts anonymous callers and had no rate limit (it calls paid Gemini). `gemini-generate` requires a JWT + 10 req/min; `gemini-embedding` requires a logged-in user (per repo code); `notify-lead` is origin-restricted. `test-log` is an unused leftover. Security advisors: only the known warnings (vector in public, anonymous `documents` SELECT, leaked-password protection off).
+- **Deployed:** `chat-with-rag` v43 (rate limit + parameter clamps; see CHANGELOG). Smoke test before/after: HTTP 200 with correct RAG answers for "¿Qué es la carta digital?" and the NFC question; CORS preflight 200.
+- **Known limitation:** a 24-request burst did **not** trigger HTTP 429. The limiter is in-memory per isolate (same pattern as `gemini-generate`), so requests spread across isolates are not counted together. It reduces nothing against a determined caller. A robust limit needs shared state (e.g. a Postgres counter via RPC) or a quota cap on the Gemini API key — not applied.
+- **Removed:** `api-catalog` and `http-message-signatures-directory` (and references). Left in place: `Link: </.well-known/mcp/server-card.json>; rel="api-catalog"` in `vercel.json` (mislabelled rel, harmless; decide separately).
+- **Not done:** deleting the `test-log` function (the MCP has no delete tool; remove from the Supabase dashboard or CLI).

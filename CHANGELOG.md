@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Security
+
+- **`chat-with-rag` Edge Function (deployed as v43)**: the function accepts anonymous requests by design (public chatbot) but had no request limit and trusted client-supplied search parameters. Added a best-effort in-memory per-client limit (20 requests/minute, HTTP 429 with `Retry-After`) and clamped `topK` (1–10) and `threshold` (0–1); defaults and the chatbot's own values (5 / 0.4) are unchanged. Verified against production: chatbot answers (HTTP 200, 5 documents), CORS preflight OK.
+
 ### Changed
 
 - **Softened unverifiable marketing claims and made content citable by AI**: replaced the contradictory "200+" / "850+" business counts with "Decenas / Dozens", prefixed performance claims with "Hasta / Up to" (6× reviews, 40% visits, 45% revenue per table), reworded the unsourced "Estudios demuestran…" sentence and the "Nuestros clientes multiplican…" FAQ answer as case-based claims (ES and EN). `SuccessStats.tsx` key stats now read from i18n instead of hardcoded values. `Content-Signal` is now `search=yes, ai-input=yes, ai-train=no` consistently in `robots.txt`, `vercel.json` and `vite.config.ts` (previously `ai-input=no` / the non-standard `use=reference`), so AI search can cite the site while training stays opted out. Updated `llms.txt` and the matching `sha256` in `agent-skills/index.json`.
@@ -214,6 +218,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+- **API catalog and HTTP message-signatures directory**: deleted `public/.well-known/api-catalog` (it advertised Supabase Edge Functions, two of which require a login and answer 401 to external agents) and `http-message-signatures-directory` (empty key set), plus their `Link` header entries, the `llms.txt` mention and related test assertions. Re-hashed `agent-skills/index.json`.
 - **OAuth discovery surfaces**: deleted `public/.well-known/openid-configuration`, `oauth-protected-resource` and `jwks.json`, the `oauth2-authorization-server` link in `api-catalog`, and their `Link` header entries in `vercel.json` and references in `llms.txt` and `geoSurfaces.test.ts`. The site exposes no public OAuth API, and the files leaked the Supabase project reference.
 
 ## [0.5.0] - 2026-03-16

@@ -23,7 +23,6 @@ const LIVE_ROUTES: string[] = JSON.parse(
 const SURFACE_FILES = [
   "public/llms.txt",
   "public/.well-known/llms.txt",
-  "public/.well-known/api-catalog",
   "public/.well-known/agent-skills/index.json",
   "public/robots.txt",
 ];
@@ -83,29 +82,6 @@ describe("geoSurfaces guard (design.md §4.7) — no dead URLs, honest hashes, v
     );
 
     expect(contactRequest.url).toBe("https://digitalizatenerife.es/#contacto");
-  });
-
-  it("the api-catalog JSON surface parses cleanly", () => {
-    expect(() =>
-      JSON.parse(read("public/.well-known/api-catalog")),
-    ).not.toThrow();
-  });
-
-  it("api-catalog has no reference to /docs/api or /privacy", () => {
-    const apiCatalog = read("public/.well-known/api-catalog");
-
-    expect(apiCatalog).not.toMatch(/\/docs\/api/);
-    expect(apiCatalog).not.toMatch(
-      /https:\/\/digitalizatenerife\.es\/privacy(?!\w)/,
-    );
-
-    const parsedCatalog = JSON.parse(apiCatalog);
-    const privacyLink = parsedCatalog.linkset[0].links.find(
-      (l: { rel: string }) => l.rel === "privacy-policy",
-    );
-    expect(privacyLink.href).toBe(
-      "https://digitalizatenerife.es/legal/privacidad",
-    );
   });
 
   it("no static surface references a dead, redirected, or unknown digitalizatenerife.es URL", () => {

@@ -44,7 +44,7 @@ Digitaliza Tenerife es una agencia de transformación digital especializada en r
 - Reglas de rastreo: https://digitalizatenerife.es/robots.txt (cabecera `Content-Signal: ai-train=no, search=yes, ai-input=yes`).
 - Markdown: cualquier página admite `Accept: text/markdown` y devuelve el contenido como Markdown limpio.
 - Herramientas WebMCP: expuestas vía `navigator.modelContext` (`get_product_info`, `get_contact_info`, `list_products`, `get_page_content_markdown`).
-- Descubrimiento: [agent-skills](https://digitalizatenerife.es/.well-known/agent-skills/index.json), [api-catalog](https://digitalizatenerife.es/.well-known/api-catalog).
+- Descubrimiento: [agent-skills](https://digitalizatenerife.es/.well-known/agent-skills/index.json).
 - Para consultas comerciales, usa el formulario en https://digitalizatenerife.es/#contacto.
 
 ## Accesibilidad
