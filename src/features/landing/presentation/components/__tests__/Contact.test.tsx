@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { LanguageProvider } from "@shared/context/LanguageContext";
-import { Contact } from "../Contact";
+import Contact from "../Contact";
 
 // jsdom has no IntersectionObserver; Contact.tsx uses it via
 // useIntersectionObserver for the scroll-reveal animation, which is
@@ -73,7 +73,9 @@ describe("Contact", () => {
     const button = await screen.findByRole("button", {
       name: /Enviar Mensaje/i,
     });
-    expect(button.className).not.toMatch(/rounded-2xl|focus:ring-2|min-h-\[44px\]/);
+    expect(button.className).not.toMatch(
+      /rounded-2xl|focus:ring-2|min-h-\[44px\]/,
+    );
   });
 
   it("submit button is disabled while required fields are empty", async () => {

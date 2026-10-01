@@ -75,14 +75,76 @@ export async function convertCartaDigitalScreenshot(name, dir = ASSETS_DIR) {
   return outPath;
 }
 
+/**
+ * Generates responsive WebP images for a given name and directory, at specified widths.
+ * Original image is assumed to be `name.webp`.
+ * Generated images will be named `{name}-{width}w.webp`.
+ */
+export async function generateResponsiveImage(
+  name,
+  dir = ASSETS_DIR,
+  widths = [],
+) {
+  const srcPath = path.join(dir, `${name}.webp`);
+  const results = [];
+  for (const width of widths) {
+    const outPath = path.join(dir, `${name}-${width}w.webp`);
+    try {
+      await fs.access(srcPath); // Throws if file does not exist
+    } catch (error) {
+      console.warn(
+        `Source file not found for responsive generation: ${srcPath}. Skipping.`,
+      );
+      continue;
+    }
+    await sharp(srcPath)
+      .resize(width, null, { fit: "inside" }) // Resize to width, maintain aspect ratio
+      .webp({ quality: WEBP_QUALITY })
+      .toFile(outPath);
+    results.push(outPath);
+  }
+  return results;
+}
+
 async function main() {
   for (const name of TPV_TARGETS) {
     const out = await resizeTpvFigure(name);
     console.log(`resized: ${out}`);
   }
+
+  const RESPONSIVE_WIDTHS = [320, 640, 1280];
   for (const name of CARTA_DIGITAL_TARGETS) {
-    const out = await convertCartaDigitalScreenshot(name);
-    console.log(`converted: ${out}`);
+    // Check if the original .webp exists before attempting to generate responsive versions
+    const originalWebpPath = path.join(ASSETS_DIR, `${name}.webp`);
+    try {
+      await fs.access(originalWebpPath);
+    } catch (error) {
+      console.warn(
+        `Original .webp not found for ${name}. Attempting to convert from PNG first.`,
+      );
+      try {
+        await convertCartaDigitalScreenshot(name);
+        console.log(`Converted ${name}.png to ${name}.webp.`);
+      } catch (pngError) {
+        console.error(
+          `Failed to convert ${name}.png to .webp: ${pngError}. Skipping responsive generation.`,
+        );
+        continue;
+      }
+    }
+
+    const responsiveOuts = await generateResponsiveImage(
+      name,
+      ASSETS_DIR,
+      RESPONSIVE_WIDTHS,
+    );
+    if (responsiveOuts.length > 0) {
+      responsiveOuts.forEach((out) =>
+        console.log(`generated responsive: ${out}`),
+      );
+    } else {
+      console.log(`No responsive images generated for ${name}.`);
+    }
   }
 }
 
@@ -90,7 +152,10 @@ async function main() {
 // when imported by tests (which use `node --input-type=module -e "..."`,
 // where `process.argv[1]` is undefined). Uses pathToFileURL (not a manual
 // `file://` string template) so this comparison is correct on Windows too.
-if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+if (
+  process.argv[1] &&
+  import.meta.url === pathToFileURL(process.argv[1]).href
+) {
   main().catch((err) => {
     console.error(err);
     process.exit(1);
