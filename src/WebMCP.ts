@@ -81,8 +81,8 @@ const tools: ToolDescriptor[] = [
       }
 
       const urls: Record<string, string> = {
-        "tap-review": "https://digitalizatenerife.es/#tarjetas-nfc",
-        "carta-digital": "https://digitalizatenerife.es/#carta-digital",
+        "tap-review": "https://digitalizatenerife.es/tarjetas-nfc",
+        "carta-digital": "https://digitalizatenerife.es/carta-digital",
       };
 
       return tk(

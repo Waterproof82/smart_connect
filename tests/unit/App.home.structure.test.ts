@@ -34,18 +34,18 @@ describe("Home page composition (App.tsx + merged sections)", () => {
     }
   });
 
-  it("mounts TpvModulesSection (the TPV_MODULES registry seam, PR4) between #soluciones and #por-que", () => {
+  it("mounts HomeSolutionsSection (hub cards) between #soluciones and #por-que", () => {
     const appSource = read("App.tsx");
     const solucionesIdx = appSource.indexOf('id="soluciones"');
-    const tpvModulesIdx = appSource.indexOf("<LazyTpvModulesSection");
+    const hubIdx = appSource.indexOf("<HomeSolutionsSection");
     const porQueIdx = appSource.indexOf('id="por-que"');
 
     expect(solucionesIdx).toBeGreaterThan(-1);
-    expect(tpvModulesIdx).toBeGreaterThan(solucionesIdx);
-    expect(porQueIdx).toBeGreaterThan(tpvModulesIdx);
-    // PR4: CartaDigitalSection is no longer mounted directly by App.tsx —
-    // it's looked up via TPV_MODULE_SECTIONS["tienda-carta-digital"].
+    expect(hubIdx).toBeGreaterThan(solucionesIdx);
+    expect(porQueIdx).toBeGreaterThan(hubIdx);
+    // Product content lives on its own URL — never duplicated on home.
     expect(appSource).not.toMatch(/<CartaDigitalSection/);
+    expect(appSource).not.toMatch(/TpvModulesSection/);
   });
 
   it("no longer mounts TapReviewSection on home (PR3: un-merged to /tarjetas-nfc)", () => {
@@ -77,46 +77,9 @@ describe("Home page composition (App.tsx + merged sections)", () => {
     expect(appSource).not.toMatch(/href=\{`https:\/\/digitalizatenerife\.es\$\{location\.pathname\}`\}/);
   });
 
-  it("Pilares Tecnológicos: 4 distinct lucide icons + 4 distinct accent tokens, zero <img> (PR5: accent-only, no photos)", () => {
+  it("drops the long 'Pilares Tecnológicos' block (home simplified, 2026-10)", () => {
     const appSource = read("App.tsx");
-    const pilaresStart = appSource.indexOf("Pilares Tecnológicos");
-    const pilaresEnd = appSource.indexOf("Closing statement");
-
-    expect(pilaresStart).toBeGreaterThan(-1);
-    expect(pilaresEnd).toBeGreaterThan(pilaresStart);
-
-    const pilaresBlock = appSource.slice(pilaresStart, pilaresEnd);
-
-    // Accent-only per spec (Pilares Tecnológicos Accent-Only requirement):
-    // MUST NOT gain any <img>.
-    expect(pilaresBlock).not.toMatch(/<img[\s>]/);
-
-    // 4 distinct lucide icons, imported eagerly from "lucide-react".
-    const importLine =
-      appSource.match(/import\s*\{[^}]*\}\s*from\s*["']lucide-react["'];?/)?.[0] ?? "";
-    expect(importLine).not.toBe("");
-
-    const icons = ["Workflow", "Utensils", "Monitor", "Bot"];
-    for (const icon of icons) {
-      expect(importLine).toMatch(new RegExp(`\\b${icon}\\b`));
-      expect(pilaresBlock).toMatch(new RegExp(`\\b${icon}\\b`));
-    }
-
-    // 4 distinct accent tokens (D5-consistent: n8n->indigo, Carta Digital->emerald,
-    // TPV->coral, IA->magenta), each rendered via accentStyle() + .tpv-accent-chip.
-    const accents = [
-      "--color-icon-indigo",
-      "--color-icon-emerald",
-      "--color-icon-coral",
-      "--color-icon-magenta",
-    ];
-    for (const accent of accents) {
-      const escaped = accent.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
-      expect(pilaresBlock).toMatch(new RegExp(escaped));
-    }
-    expect(new Set(accents).size).toBe(4);
-
-    expect(pilaresBlock).toMatch(/accentStyle\(/);
-    expect(pilaresBlock).toMatch(/tpv-accent-chip/);
+    expect(appSource).not.toMatch(/Pilares Tecnológicos/);
+    expect(appSource).not.toMatch(/from ["']lucide-react["']/);
   });
 });

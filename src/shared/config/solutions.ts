@@ -58,4 +58,36 @@ export const SOLUTIONS: SolutionConfig[] = [
       areaServed: ["Tenerife", "Canarias", "España"],
     },
   },
+  {
+    id: "ia-chatbots",
+    icon: "MessageSquare",
+    titleKey: "navbarIaChatbots",
+    descKey: "navbarIaChatbotsDesc",
+    href: "/ia-chatbots-tenerife",
+    internal: true,
+    iconColor: "text-[var(--color-icon-magenta)]",
+    serviceValue: "Chatbots IA y automatización",
+    jsonLd: {
+      description:
+        "Chatbots de IA para web y WhatsApp y automatización de procesos para empresas en Tenerife.",
+      serviceType: "AI Chatbot and Automation",
+      areaServed: ["Tenerife", "Canarias"],
+    },
+  },
+  {
+    id: "tpv-restaurantes",
+    icon: "ShoppingCart",
+    titleKey: "navbarTpv",
+    descKey: "navbarTpvDesc",
+    href: "/tpv-restaurantes",
+    internal: true,
+    iconColor: "text-[var(--color-icon-coral)]",
+    serviceValue: "TPV para restaurantes",
+    jsonLd: {
+      description:
+        "TPV para restaurantes con 13 módulos: cobro, comandero, cocina, reservas, stock, alérgenos y carta digital.",
+      serviceType: "Restaurant POS Platform",
+      areaServed: ["Tenerife", "Canarias", "España"],
+    },
+  },
 ];

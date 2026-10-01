@@ -1,8 +1,13 @@
 import { SOLUTIONS } from "@shared/config/solutions";
 
 describe("SOLUTIONS config", () => {
-  it("has exactly 2 entries: carta-digital and tarjetas-nfc", () => {
-    expect(SOLUTIONS.map((s) => s.id)).toEqual(["carta-digital", "tarjetas-nfc"]);
+  it("has exactly 4 entries, the two flagship products first", () => {
+    expect(SOLUTIONS.map((s) => s.id)).toEqual([
+      "carta-digital",
+      "tarjetas-nfc",
+      "ia-chatbots",
+      "tpv-restaurantes",
+    ]);
   });
 
   it("every entry has the base shape used by Navbar/Features/Contact", () => {

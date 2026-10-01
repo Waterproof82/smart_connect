@@ -5,7 +5,7 @@
       "path": "/",
       "priority": "1.0",
       "changefreq": "monthly",
-      "lastmod": "2026-08-12"
+      "lastmod": "2026-10-01"
     },
     {
       "path": "/tarjetas-nfc",
@@ -21,6 +21,12 @@
     },
     {
       "path": "/ia-chatbots-tenerife",
+      "priority": "0.8",
+      "changefreq": "monthly",
+      "lastmod": "2026-10-01"
+    },
+    {
+      "path": "/tpv-restaurantes",
       "priority": "0.8",
       "changefreq": "monthly",
       "lastmod": "2026-10-01"

@@ -23,3 +23,12 @@
 - Updated `llms.txt` + agent-skills hash; adjusted route-parity, sitemap, solutions and TPV structure tests.
 - Generated `docs/SEO_PROTOCOL.md` through an SEO-specialist subagent (read-only review of the repo SEO setup).
 - Validation: lint clean, `tsc` clean, build prerenders all 8 routes; unit tests pass (only `documents-rls` integration test fails, it needs a live Supabase and fails identically without these changes).
+
+## 2026-10-01 — /tpv-restaurantes and simplified home (PR 3 scope)
+
+- Added `TpvRestaurantesPage` (eager `TpvModulesSection` so the 13 modules prerender) and registered `/tpv-restaurantes` (client + SSR routes, `site-routes.json`, `vercel.json`, `llms.txt`).
+- Added `HomeSolutionsSection` (2 flagship cards + 2 service cards); removed the TPV modules and "Pilares Tecnológicos" from `App.tsx`; updated home title/description and `buildHomeSchema` input (SOLUTIONS, 4 entries).
+- Extended `SOLUTIONS` with `ia-chatbots` and `tpv-restaurantes` (Navbar + Contact options); moved the Carta Digital FAQ to `/carta-digital` (`useCartaFaqGroup`).
+- Retargeted 5 legacy 301s to the matching pages; fixed `WebMCP.ts` product URLs.
+- Replaced the obsolete "home is NFC-free" structure tests with `App.homeHub.structure.test.ts`; updated home, schema, solutions, sitemap and route-parity tests.
+- Validation: lint and `tsc` clean; build prerenders 9 routes; unit tests pass (only the `documents-rls` Supabase integration suite fails, pre-existing). Desktop and mobile screenshots checked. React error #419 (lazy Suspense boundaries in SSR) appears in the browser console both before and after this change.

@@ -1,34 +1,35 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
 import { Navbar } from "@features/landing/presentation/components/Navbar";
-import CartaDigitalSection from "@features/landing/presentation/components/CartaDigitalSection";
+import TpvModulesSection from "@shared/components/tpv/TpvModulesSection";
 import {
   ServiceSchema,
-  SeoFaqSchema,
   BreadcrumbListSchema,
 } from "@shared/presentation/components/SeoSchema";
-import { useCartaFaqGroup } from "@features/landing/presentation/components/HomeFaqSection";
 import { useLanguage } from "@shared/context/LanguageContext";
 import { useWhatsappPhone } from "@shared/hooks";
 import { SOLUTIONS } from "@shared/config/solutions";
 
 const ORG_URL = "https://digitalizatenerife.es";
-const PAGE_URL = `${ORG_URL}/carta-digital`;
-const PAGE_TITLE = "Carta Digital para Restaurantes | Digitaliza Tenerife";
+const PAGE_URL = `${ORG_URL}/tpv-restaurantes`;
+const PAGE_TITLE = "TPV para restaurantes: 13 módulos | Digitaliza Tenerife";
 const PAGE_DESCRIPTION =
-  "Carta digital con pedidos en mesa y para recoger. Sin pagar comisión a Glovo: ahorra el 30 % del margen de cada pedido.";
+  "TPV para restaurantes y bares en Canarias: cobro, comandero, KDS de cocina, reservas, stock, alérgenos y más. 13 módulos integrados en un solo sistema.";
 
 /**
- * Standalone /carta-digital route. Template = TapReviewPage.tsx: own
- * <Helmet> + page-level JSON-LD + shared Navbar + section body + FAQ group.
+ * Standalone /tpv-restaurantes route — the 13 TPV_MODULES sections moved
+ * off the home page. TpvModulesSection is imported eagerly (not lazy) so
+ * the prerendered HTML contains the module content.
  */
-const CartaDigitalPage: React.FC = () => {
+const TpvRestaurantesPage: React.FC = () => {
   const { t } = useLanguage();
   const [scrolled, setScrolled] = React.useState(false);
   const sentinelRef = React.useRef<HTMLDivElement>(null);
   const whatsappPhone = useWhatsappPhone();
-  const cartaFaqGroup = useCartaFaqGroup();
-  const solutionMeta = SOLUTIONS.find((s) => s.id === "carta-digital");
+  const solutionMeta = SOLUTIONS.find((s) => s.id === "tpv-restaurantes");
+  const ctaHref = whatsappPhone
+    ? `https://wa.me/${whatsappPhone}`
+    : "/#contacto?servicio=TPV%20para%20restaurantes";
 
   React.useEffect(() => {
     const sentinel = sentinelRef.current;
@@ -54,14 +55,14 @@ const CartaDigitalPage: React.FC = () => {
         <meta property="og:type" content="website" />
         <meta property="og:url" content={PAGE_URL} />
         <meta property="og:image" content={`${ORG_URL}/icon.png`} />
-        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:card" content="summary" />
         <meta name="twitter:title" content={PAGE_TITLE} />
         <meta name="twitter:description" content={PAGE_DESCRIPTION} />
         <meta name="twitter:image" content={`${ORG_URL}/icon.png`} />
       </Helmet>
 
       <ServiceSchema
-        name={solutionMeta?.serviceValue ?? "Carta Digital Premium"}
+        name={solutionMeta?.serviceValue ?? "TPV para restaurantes"}
         description={solutionMeta?.jsonLd.description ?? PAGE_DESCRIPTION}
         url={PAGE_URL}
         providerName="Digitaliza Tenerife"
@@ -73,14 +74,8 @@ const CartaDigitalPage: React.FC = () => {
       <BreadcrumbListSchema
         breadcrumbs={[
           { name: "Inicio", url: `${ORG_URL}/` },
-          { name: "Carta Digital", url: PAGE_URL },
+          { name: "TPV para restaurantes", url: PAGE_URL },
         ]}
-      />
-      <SeoFaqSchema
-        faqs={cartaFaqGroup.items.map((item) => ({
-          question: item.q,
-          answer: item.a,
-        }))}
       />
 
       <div className="min-h-screen bg-base text-default">
@@ -92,34 +87,35 @@ const CartaDigitalPage: React.FC = () => {
         <Navbar scrolled={scrolled} />
 
         <main id="main" aria-label="Contenido principal">
-          <h1 className="sr-only">{t.cartaPageH1}</h1>
-          <CartaDigitalSection id="carta-digital" whatsappPhone={whatsappPhone} />
-
-          <section
-            aria-label={cartaFaqGroup.title}
-            className="max-w-3xl mx-auto px-4 md:px-6 py-16 md:py-24"
-          >
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black leading-[1.15] font-display mb-10 md:mb-14 text-center">
-              {cartaFaqGroup.title}
-            </h2>
-            <div className="space-y-3">
-              {cartaFaqGroup.items.map((faq) => (
-                <details
-                  key={faq.q}
-                  className="group border border-[var(--color-border)] rounded-lg bg-[var(--color-surface)] overflow-hidden"
-                >
-                  <summary className="flex items-center justify-between px-5 py-4 cursor-pointer font-semibold text-base select-none hover:bg-[var(--color-accent-subtle)] transition-colors duration-150">
-                    {faq.q}
-                    <span className="ml-4 shrink-0 text-[var(--color-primary)] group-open:rotate-45 transition-transform duration-200">
-                      +
-                    </span>
-                  </summary>
-                  <p className="px-5 pb-4 pt-2 text-sm text-muted leading-relaxed">
-                    {faq.a}
-                  </p>
-                </details>
-              ))}
+          <section className="pt-32 pb-12 md:pt-40 md:pb-16">
+            <div className="container mx-auto px-4 md:px-6 max-w-4xl">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-black leading-[1.15] font-display mb-6">
+                {t.tpvH1}
+              </h1>
+              <p className="text-lg text-muted leading-relaxed max-w-2xl mb-10">
+                {t.tpvIntro}
+              </p>
+              <a
+                href={ctaHref}
+                className="inline-flex items-center justify-center min-h-[48px] px-8 py-3 rounded-xl font-bold bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-[var(--color-on-accent)] focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] transition-colors"
+              >
+                {t.tpvCtaButton}
+              </a>
             </div>
+          </section>
+
+          <TpvModulesSection whatsappPhone={whatsappPhone} />
+
+          <section className="py-16 bg-[var(--color-bg-alt)] text-center">
+            <h2 className="text-2xl md:text-3xl font-black font-display mb-6 px-4">
+              {t.tpvCtaTitle}
+            </h2>
+            <a
+              href={ctaHref}
+              className="inline-flex items-center justify-center min-h-[48px] px-8 py-3 rounded-xl font-bold bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-[var(--color-on-accent)] focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] transition-colors"
+            >
+              {t.tpvCtaButton}
+            </a>
           </section>
         </main>
 
@@ -133,4 +129,4 @@ const CartaDigitalPage: React.FC = () => {
   );
 };
 
-export default CartaDigitalPage;
+export default TpvRestaurantesPage;

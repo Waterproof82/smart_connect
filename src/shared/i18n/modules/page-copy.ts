@@ -42,6 +42,26 @@ export interface PageCopy {
   iaFaqA3: string;
   iaCtaTitle: string;
   iaCtaButton: string;
+  navbarIaChatbots: string;
+  navbarIaChatbotsDesc: string;
+  navbarTpv: string;
+  navbarTpvDesc: string;
+  serviceIaChatbots: string;
+  serviceTpv: string;
+  homeStarsTitle: string;
+  homeStarsSubtitle: string;
+  nfcCardEyebrow: string;
+  nfcCardTitle: string;
+  nfcCardDesc: string;
+  nfcCardCta: string;
+  homeMoreTitle: string;
+  tpvCardTitle: string;
+  tpvCardDesc: string;
+  tpvCardCta: string;
+  tpvH1: string;
+  tpvIntro: string;
+  tpvCtaTitle: string;
+  tpvCtaButton: string;
 }
 
 export const pageCopy: { es: PageCopy; en: PageCopy } = {
@@ -96,6 +116,30 @@ export const pageCopy: { es: PageCopy; en: PageCopy } = {
       "Es conectar tus herramientas para que las tareas repetitivas, como avisos o registros de clientes, se ejecuten sin intervención manual.",
     iaCtaTitle: "Cuéntanos qué quieres automatizar",
     iaCtaButton: "Hablar con nosotros",
+    navbarIaChatbots: "Chatbots IA",
+    navbarIaChatbotsDesc: "Atención 24/7 y automatización",
+    navbarTpv: "TPV Restaurantes",
+    navbarTpvDesc: "13 módulos en un solo sistema",
+    serviceIaChatbots: "Chatbots IA y automatización",
+    serviceTpv: "TPV para restaurantes",
+    homeStarsTitle: "Dos herramientas para vender más",
+    homeStarsSubtitle:
+      "Más margen en cada pedido y más reseñas en Google, sin complicaciones.",
+    nfcCardEyebrow: "Tarjetas NFC",
+    nfcCardTitle: "Multiplica tus reseñas en Google con un toque",
+    nfcCardDesc:
+      "Tus clientes acercan el móvil a la tarjeta y dejan su reseña en Google o te siguen en Instagram al instante.",
+    nfcCardCta: "Ver tarjetas NFC",
+    homeMoreTitle: "Más servicios para tu negocio",
+    tpvCardTitle: "TPV para restaurantes",
+    tpvCardDesc:
+      "Cobro, comandero, cocina, reservas, stock y alérgenos en un solo sistema.",
+    tpvCardCta: "Ver el TPV",
+    tpvH1: "TPV para restaurantes con 13 módulos integrados",
+    tpvIntro:
+      "Cobro, comandero móvil, pantalla de cocina, reservas, fichajes, stock, alérgenos y carta digital: todo tu restaurante en un solo sistema.",
+    tpvCtaTitle: "¿Quieres ver el TPV funcionando en tu local?",
+    tpvCtaButton: "Pedir una demo",
   },
   en: {
     glovoEyebrow: "No commissions",
@@ -147,5 +191,29 @@ export const pageCopy: { es: PageCopy; en: PageCopy } = {
       "Connecting your tools so repetitive tasks, such as notifications or customer records, run without manual work.",
     iaCtaTitle: "Tell us what you want to automate",
     iaCtaButton: "Talk to us",
+    navbarIaChatbots: "AI Chatbots",
+    navbarIaChatbotsDesc: "24/7 support and automation",
+    navbarTpv: "Restaurant POS",
+    navbarTpvDesc: "13 modules in one system",
+    serviceIaChatbots: "AI chatbots and automation",
+    serviceTpv: "Restaurant POS",
+    homeStarsTitle: "Two tools to sell more",
+    homeStarsSubtitle:
+      "More margin on every order and more Google reviews, without the hassle.",
+    nfcCardEyebrow: "NFC cards",
+    nfcCardTitle: "Multiply your Google reviews with one tap",
+    nfcCardDesc:
+      "Customers tap their phone on the card and leave a Google review or follow you on Instagram instantly.",
+    nfcCardCta: "See NFC cards",
+    homeMoreTitle: "More services for your business",
+    tpvCardTitle: "Restaurant POS",
+    tpvCardDesc:
+      "Payments, mobile ordering, kitchen display, bookings, stock and allergens in one system.",
+    tpvCardCta: "See the POS",
+    tpvH1: "Restaurant POS with 13 integrated modules",
+    tpvIntro:
+      "Payments, mobile ordering, kitchen display, bookings, time tracking, stock, allergens and digital menu: your whole restaurant in one system.",
+    tpvCtaTitle: "Want to see the POS running in your venue?",
+    tpvCtaButton: "Request a demo",
   },
 };

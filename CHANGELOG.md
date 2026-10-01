@@ -10,11 +10,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **Standalone `/carta-digital` page** (prerendered, in the sitemap, with its own title, canonical, Service/Breadcrumb/FAQ JSON-LD): the digital menu now lives on its own URL instead of inside the home page. It opens with a new "no commission" section: Glovo takes 30% of every order, with the digital menu you pay no commission.
+- **Standalone `/tpv-restaurantes` page** (prerendered): the 13 TPV module sections moved off the home page onto their own URL, with Service and Breadcrumb JSON-LD.
 - **Standalone `/ia-chatbots-tenerife` page**: AI chatbots (web and WhatsApp) and process automation, targeting the largest unserved search cluster found in Search Console.
 - `docs/PLAN_SEO_CARTA_DIGITAL_LANDING.md` (plan from the Search Console reports) and `docs/SEO_PROTOCOL.md` (per-page SEO spec, pre-merge checklist and internal-linking map).
 
 ### Changed
 
+- **Simplified home page**: home is now a hub. Two large flagship cards (Carta Digital, with the "Save the 30% margin Glovo takes" message, and Tarjetas NFC) and two secondary service cards (AI chatbots, restaurant POS), each linking to its own page. Removed the 13 TPV sections and the long "Pilares Tecnológicos" block (the stats strip stays). New home title and description; the home JSON-LD lists one Service per product page.
+- Navbar dropdown and contact form now include AI chatbots and restaurant POS (`SOLUTIONS` grows from 2 to 4 entries). The Carta Digital FAQ moved from home to `/carta-digital`, so its FAQPage markup appears on one URL only.
+- Legacy URLs now redirect in one hop to the matching page: `/automation-n8n`, `/whatsapp-automation`, `/automatizacion-restaurantes-n8n` and `/automatizacion-whatsapp-restaurante` → `/ia-chatbots-tenerife`; `/software-restaurantes-canarias` → `/tpv-restaurantes`.
+- `WebMCP.ts` product URLs point to `/carta-digital` and `/tarjetas-nfc` instead of old in-page anchors; `llms.txt` (and its hash) lists the new pages.
 - The home page now shows a short Carta Digital teaser ("Save the 30% margin Glovo takes from every order") linking to `/carta-digital`, instead of rendering the full menu content, to avoid duplicate content between `/` and `/carta-digital`.
 - `vercel.json`: removed the 301 from `/carta-digital` to `/`; added rewrites and cache headers for both new routes. `llms.txt` (and its `sha256` in `agent-skills/index.json`) lists the new pages. The carta-digital entry in `SOLUTIONS` now points to `/carta-digital`.
 

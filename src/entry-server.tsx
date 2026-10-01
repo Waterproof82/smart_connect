@@ -13,6 +13,7 @@ import AboutPage from "./features/landing/presentation/components/AboutPage";
 import TapReviewPage from "./features/tap-review/presentation/TapReviewPage";
 import CartaDigitalPage from "./features/landing/presentation/components/CartaDigitalPage";
 import IaChatbotsPage from "./features/landing/presentation/components/IaChatbotsPage";
+import TpvRestaurantesPage from "./features/landing/presentation/components/TpvRestaurantesPage";
 import AvisoLegalPage from "./features/legal/presentation/AvisoLegalPage";
 import PrivacidadPage from "./features/legal/presentation/PrivacidadPage";
 import CookiesPage from "./features/legal/presentation/CookiesPage";
@@ -37,6 +38,10 @@ export function render(url: string): { html: string; head: string } {
                   <Route
                     path="/ia-chatbots-tenerife"
                     element={<IaChatbotsPage />}
+                  />
+                  <Route
+                    path="/tpv-restaurantes"
+                    element={<TpvRestaurantesPage />}
                   />
                   <Route path="/legal/aviso" element={<AvisoLegalPage />} />
                   <Route path="/legal/privacidad" element={<PrivacidadPage />} />

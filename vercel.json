@@ -1,13 +1,13 @@
 {
   "buildCommand": "npm run build",
   "redirects": [
-    { "source": "/automation-n8n", "destination": "/", "permanent": true },
-    { "source": "/whatsapp-automation", "destination": "/", "permanent": true },
+    { "source": "/automation-n8n", "destination": "/ia-chatbots-tenerife", "permanent": true },
+    { "source": "/whatsapp-automation", "destination": "/ia-chatbots-tenerife", "permanent": true },
     { "source": "/software-canarias", "destination": "/", "permanent": true },
     { "source": "/digitalization-tenerife", "destination": "/", "permanent": true },
-    { "source": "/automatizacion-restaurantes-n8n", "destination": "/", "permanent": true },
-    { "source": "/automatizacion-whatsapp-restaurante", "destination": "/", "permanent": true },
-    { "source": "/software-restaurantes-canarias", "destination": "/", "permanent": true },
+    { "source": "/automatizacion-restaurantes-n8n", "destination": "/ia-chatbots-tenerife", "permanent": true },
+    { "source": "/automatizacion-whatsapp-restaurante", "destination": "/ia-chatbots-tenerife", "permanent": true },
+    { "source": "/software-restaurantes-canarias", "destination": "/tpv-restaurantes", "permanent": true },
     { "source": "/digitalizacion-hosteleria-tenerife", "destination": "/", "permanent": true },
     { "source": "/tap-review", "destination": "/tarjetas-nfc", "permanent": true },
     { "source": "/servicios", "destination": "/", "permanent": true },
@@ -38,7 +38,7 @@
       "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
     },
     {
-      "source": "/(|about|tarjetas-nfc|carta-digital|ia-chatbots-tenerife)",
+      "source": "/(|about|tarjetas-nfc|carta-digital|ia-chatbots-tenerife|tpv-restaurantes)",
       "headers": [{ "key": "Cache-Control", "value": "public, max-age=3600" }]
     }
   ],
@@ -48,6 +48,7 @@
     { "source": "/tarjetas-nfc", "destination": "/tarjetas-nfc/index.html" },
     { "source": "/carta-digital", "destination": "/carta-digital/index.html" },
     { "source": "/ia-chatbots-tenerife", "destination": "/ia-chatbots-tenerife/index.html" },
+    { "source": "/tpv-restaurantes", "destination": "/tpv-restaurantes/index.html" },
     { "source": "/legal/aviso", "destination": "/legal/aviso/index.html" },
     { "source": "/legal/privacidad", "destination": "/legal/privacidad/index.html" },
     { "source": "/legal/cookies", "destination": "/legal/cookies/index.html" },

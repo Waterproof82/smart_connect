@@ -63,12 +63,12 @@ describe("buildHomeSchema", () => {
     expect(faqNode.mainEntity).toHaveLength(2);
   });
 
-  it("emits exactly 2 Service nodes for the final two-solution catalog", () => {
+  it("emits exactly 4 Service nodes, one per product/service page", () => {
     const schema = buildHomeSchema(SOLUTIONS);
     const serviceNodes = schema["@graph"].filter(
       (node) => (node as { "@type"?: string })["@type"] === "Service",
     );
-    expect(serviceNodes).toHaveLength(2);
+    expect(serviceNodes).toHaveLength(4);
   });
 
   it("never emits a BreadcrumbList node (home is the site root)", () => {
@@ -81,8 +81,7 @@ describe("buildHomeSchema", () => {
     expect(breadcrumbNodes).toHaveLength(0);
   });
 
-  // PR4: home actually calls buildHomeSchema(TPV_MODULES, ...) now — the
-  // TPV module registry replaces SOLUTIONS as home's Service catalog.
+  // buildHomeSchema stays generic: it emits one Service per entry passed in.
   it("emits exactly one Service node per TPV_MODULES entry (13), one per home module", () => {
     const schema = buildHomeSchema(TPV_MODULES);
     const serviceNodes = schema["@graph"].filter(
