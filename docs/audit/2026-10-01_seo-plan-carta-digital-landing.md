@@ -13,3 +13,4 @@
 - Search Console sample is very small (25 clicks, ~420 impressions); findings are directional.
 - No search demand for carta digital / Glovo is visible yet; keyword research is recommended before finalising H1/URLs.
 - Largest unserved demand cluster: AI / chatbots for businesses in Tenerife (84 impressions).
+- Updated plan after product-owner decisions: Glovo messaging reduced to the ~30% commission vs 0% claim (no calculator or profit figures); AI chatbots on a single page.

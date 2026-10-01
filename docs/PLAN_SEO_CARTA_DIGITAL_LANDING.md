@@ -38,21 +38,18 @@
 
 ---
 
-## 2. Qué dice la comparativa Carta Digital vs Glovo (PDF)
+## 2. Mensaje Glovo (decisión del 2026-10-01)
 
-Escenario: 200 pedidos/mes · ticket 40 € · 8.000 €/mes. Las cuentas cuadran (8.000 − 2.400 = 5.600; 8.000 − 1.760 = 6.240; +640/mes; +7.680/año; +11,4 %).
+**No se publican cuentas, simulador ni cifras de beneficio del PDF.** El mensaje es único y simple:
 
-Mensajes aprovechables en web: **~30 % comisión**, **clientes propios vs. de la plataforma**, **recogida en local = margen máximo**, **promociones propias**, **cobro directo vía Redsys**, **chat de un clic con tiempo de preparación**.
+> Glovo se lleva un ~30 % de comisión de cada pedido. Con nuestra carta digital, **0 % de comisión**: no pagas comisión a Glovo. Solo pagas el envío cuando lo usas.
 
-**Riesgos a resolver antes de publicar (no son menores):**
-
-| Riesgo | Acción |
-|---|---|
-| El 30 % de Glovo y los 1.760 € de reparto son supuestos | Presentarlo como **simulador con entradas editables** (pedidos, ticket, % comisión, coste de reparto), con "Ejemplo orientativo" visible, no como promesa de +640 € |
-| Se ignoran costes propios: comisión de Redsys/tarjeta y el coste de la carta | Incluirlos en el simulador para no ser acusados de publicidad engañosa |
-| "Mismo precio para el cliente" y volumen de pedidos igual | Glovo aporta demanda; la carta propia no la genera sola. Mensaje honesto: "**complementa** Glovo: mueve a tus clientes habituales a tu canal" (más creíble y más vendible) |
-| Publicidad comparativa con marca registrada | Permitida si es veraz, verificable y no denigratoria (Ley de Competencia Desleal). Nombrar "Glovo" solo en comparativa objetiva; añadir fuente/fecha de la tarifa y aviso de que es marca de terceros |
-| Redsys y "chat de un clic" aparecen en el PDF | **Confirmar que existen en el producto hoy** (ya hay módulo `delivery-takeaway` con "cero comisiones"); si no, no prometerlo en la web |
+- **Landing:** frase destacada tipo «Ahorra el 30 % del margen que se lleva Glovo de cada pedido» en la tarjeta de Carta Digital.
+- **`/carta-digital`:** es el mensaje principal del hero y tiene su propia sección (Glovo cobra ~30 % vs. carta digital 0 % de comisión).
+- Sin posicionamiento "complementa/sustituye": solo el dato de la comisión.
+- **Redacción prudente (recomendado):** decir «hasta un 30 %» / «en torno al 30 %» y mantener la nota «Glovo es marca de terceros; tarifas según condiciones del partner, revisadas en [fecha]». Publicidad comparativa permitida si es veraz y verificable.
+- **Verificar:** que el modelo «0 % comisión, solo envío» coincide con las condiciones reales del servicio de reparto que usamos.
+- Las secciones existentes `CartaDigitalDineroSection` y `CartaDigitalComparacionSection` se reorientan a este mensaje.
 
 ---
 
@@ -96,9 +93,9 @@ Se **retira de la home**: los 13 módulos TPV (pasan a `/tpv-restaurantes`) y la
 Hoy hay 14 componentes `CartaDigital*Section` montados dentro del módulo `tienda-carta-digital` de la home. Orden propuesto para la página propia:
 
 1. Hero (`CartaDigitalHeroSection`) — H1 único: "Carta digital para restaurantes con pedidos en mesa y recogida sin comisiones"
-2. **NUEVO: Ahorro vs Glovo** (sustituye/absorbe `CartaDigitalDineroSection` y `CartaDigitalComparacionSection`) — simulador + comparativa visual en dos columnas (Glovo vs carta propia) + bloque "los clientes son tuyos"
+2. **NUEVO: 0 % comisión vs ~30 % de Glovo** (sustituye/absorbe `CartaDigitalDineroSection` y `CartaDigitalComparacionSection`) — comparativa visual en dos columnas (Glovo ~30 % de comisión vs carta digital 0 %) + bloque "los clientes son tuyos"; sin cuentas ni simulador
 3. Problema → Solución → Cómo funciona
-4. Recogida en local: incentivos (10 % descuento, bebida/entrante, puntos), promociones propias
+4. Clientes propios y promociones propias (cupones, fidelización)
 5. Demo (`CartaDigitalDemoSection`) + Beneficios + Modos (mesa / recoger / domicilio)
 6. Telegram, BBDD, Antidesperdicio (funcionalidades)
 7. FAQ específica (Schema `FAQPage`) + CTA final
@@ -132,14 +129,14 @@ Resultado esperado: un único H1 por página con el término de mayor volumen re
 |---|---|---|
 | **0** | Diagnóstico de Coverage: identificar las 7 URLs sin indexar; arreglar `http→https`, quitar `/tap-review` de cualquier enlace interno/sitemap, revisar thin content | Bajo |
 | **1** | Routing `/carta-digital` (rutas cliente+SSR, `site-routes.json`, `vercel.json`, sitemap) con las secciones existentes movidas tal cual | Medio: no romper el prerender/critical CSS |
-| **2** | Sección **Ahorro vs Glovo** + simulador (con tests de la fórmula, TDD) + i18n es/en | Medio: contenido legal |
+| **2** | Sección **«0 % comisión vs ~30 % de Glovo»** + frase en landing + i18n es/en | Bajo-medio: redacción comparativa |
 | **3** | Home simplificada + `/tpv-restaurantes` | Medio: es el cambio más visible; medir antes/después |
 | **4** | `/ia-chatbots-tenerife` (+ automatización) | Bajo |
 | **5** | `llms.txt`, JSON-LD, FAQs, enlazado interno, `CHANGELOG`, audit log, versión | Bajo |
 
 Protocolos del proyecto en cada PR: `npm run lint`, `npm run type-check`, `npm test`, `npm run build`; entrada en `CHANGELOG.md` ([Unreleased], inglés, Keep a Changelog) y log en `docs/audit/` (inglés, con timestamp).
 
-> Aviso heredado: `docs/audit/2026-08-11_landing-two-solutions.md` documenta que los `*.test.tsx` **no se ejecutan** bajo `npm test` (`testMatch` solo `.ts`, sin `jest-environment-jsdom`). Los tests nuevos de componentes deben ser `.test.ts` (inspección de código/lógica pura, p. ej. la fórmula del simulador) o resolverse ese gap primero.
+> Aviso heredado: `docs/audit/2026-08-11_landing-two-solutions.md` documenta que los `*.test.tsx` **no se ejecutan** bajo `npm test` (`testMatch` solo `.ts`, sin `jest-environment-jsdom`). Los tests nuevos de componentes deben ser `.test.ts` (inspección de código/lógica pura) o resolverse ese gap primero.
 
 ## 9. KPIs (revisar en GSC a 4, 8 y 12 semanas)
 
@@ -150,9 +147,10 @@ Protocolos del proyecto en cada PR: `npm run lint`, `npm run type-check`, `npm t
 - **Conversión:** clics a WhatsApp/formulario por página (GSC no lo mide: añadir eventos en GA4).
 - Mantener `/tarjetas-nfc` ≥ 14 clics y pos. ≤ 8 (línea base a no perder).
 
-## 10. Decisiones que necesito de ti
+## 10. Decisiones tomadas
 
-- **D1.** ¿Glovo en `/carta-digital` solo como sección, o también una página propia `/alternativa-glovo`? *(Recomendación: sección ahora, página propia solo si el volumen de búsqueda lo justifica.)*
-- **D2.** ¿IA/chatbots y automatización en **una** página o en dos? *(Recomendación: una al inicio — con ~100 impresiones totales no justifica dos.)*
-- **D3.** ¿Redsys y el chat de un clic con tiempo de preparación están ya disponibles en el producto?
-- **D4.** ¿Posicionamiento "complementa Glovo" (recomendado, más creíble) o "sustituye a Glovo"?
+- **D1.** Glovo: sección dentro de `/carta-digital` + frase en la landing (sin página propia por ahora).
+- **D2.** IA/chatbots: una página (`/ia-chatbots-tenerife`), con automatización incluida como apartado.
+- **D3.** Se elimina del alcance cualquier mención a Redsys o chat de un clic (no confirmados).
+- **D4.** Sin posicionamiento complementa/sustituye: solo «Glovo cobra ~30 %; con nuestra carta, 0 % de comisión».
+- **Pendiente:** diseño visual (el skill «Hallmark» no está disponible en esta sesión).
