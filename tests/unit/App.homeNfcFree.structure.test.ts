@@ -45,7 +45,7 @@ describe("Home (App.tsx) contains zero NFC marketing content (PR9 regression)", 
   it("still mounts TpvModulesSection inside #soluciones, before #por-que (PR4 seam intact)", () => {
     const appSource = read("App.tsx");
     const solucionesIdx = appSource.indexOf('id="soluciones"');
-    const tpvModulesIdx = appSource.indexOf("<TpvModulesSection");
+    const tpvModulesIdx = appSource.indexOf("<LazyTpvModulesSection");
     const porQueIdx = appSource.indexOf('id="por-que"');
 
     expect(solucionesIdx).toBeGreaterThan(-1);

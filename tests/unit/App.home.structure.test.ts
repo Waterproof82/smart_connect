@@ -37,7 +37,7 @@ describe("Home page composition (App.tsx + merged sections)", () => {
   it("mounts TpvModulesSection (the TPV_MODULES registry seam, PR4) between #soluciones and #por-que", () => {
     const appSource = read("App.tsx");
     const solucionesIdx = appSource.indexOf('id="soluciones"');
-    const tpvModulesIdx = appSource.indexOf("<TpvModulesSection");
+    const tpvModulesIdx = appSource.indexOf("<LazyTpvModulesSection");
     const porQueIdx = appSource.indexOf('id="por-que"');
 
     expect(solucionesIdx).toBeGreaterThan(-1);
