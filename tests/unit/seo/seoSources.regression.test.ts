@@ -40,6 +40,7 @@ function robotsGroups(robots: string): Array<{ agents: string[]; rules: string[]
       lastWasAgent = false;
       continue;
     }
+    if (line.startsWith("#")) continue;
     const [field, ...rest] = line.split(":");
     const key = field.toLowerCase();
     const value = rest.join(":").trim();
@@ -66,15 +67,25 @@ describe("SEO regression — robots.txt", () => {
     expect(robots).toMatch(new RegExp(`^Sitemap: ${OFFICIAL_ORIGIN}/sitemap\\.xml$`, "m"));
   });
 
-  it("never disallows the whole site for any user agent", () => {
+  // design.md D3 (crawler-policy, S6): training-only UAs now get an
+  // explicit `Disallow: /` group (the full UA→category table and its
+  // vendor citations live in crawlerPolicy.test.ts, the single source of
+  // truth). This check only guards that the blanket disallow never leaks
+  // onto the wildcard/default group, which would block everyone.
+  it("only disallows the whole site for the declared training-only group, never for the wildcard group", () => {
     const blockers = groups.filter((group) => group.rules.includes("disallow:/"));
-    expect(blockers).toEqual([]);
+    for (const blocker of blockers) {
+      expect(blocker.agents).not.toContain("*");
+    }
   });
 
-  it("lets Googlebot crawl the site", () => {
-    const googlebot = groups.find((group) => group.agents.includes("googlebot"));
-    expect(googlebot).toBeDefined();
-    expect(googlebot!.rules).toContain("allow:/");
+  it("lets Googlebot crawl the site (falls through to the wildcard group, per design.md D3)", () => {
+    expect(groups.some((group) => group.agents.includes("googlebot"))).toBe(
+      false,
+    );
+    const wildcard = groups.find((group) => group.agents.includes("*"));
+    expect(wildcard).toBeDefined();
+    expect(wildcard!.rules).not.toContain("disallow:/");
   });
 
   it("keeps private areas out of the crawl for the default group", () => {
