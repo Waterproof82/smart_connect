@@ -10,7 +10,12 @@ const { origin, routes } = readJson("scripts/site-routes.json") as {
   routes: Array<{ path: string; lastmod?: string }>;
 };
 const vercel = readJson("vercel.json") as {
-  redirects: Array<{ source: string; destination: string }>;
+  redirects: Array<{
+    source: string;
+    destination: string;
+    permanent?: boolean;
+    has?: Array<{ type: string; value?: string; key?: string }>;
+  }>;
   headers: Array<{ source: string; headers: Array<{ key: string; value: string }> }>;
 };
 
@@ -204,7 +209,13 @@ describe("SEO regression — site-routes.json as sitemap source", () => {
 });
 
 describe("SEO regression — vercel.json redirects", () => {
-  const sources = new Set(vercel.redirects.map((redirect) => redirect.source));
+  // Host-conditioned entries (e.g. the alias-host redirect, design.md D6)
+  // redirect to an absolute external URL by design and are never a route
+  // path or another redirect's source — they are excluded from the
+  // route-chain/route-destination checks below, which only make sense for
+  // same-origin path redirects.
+  const pathRedirects = vercel.redirects.filter((redirect) => !redirect.has);
+  const sources = new Set(pathRedirects.map((redirect) => redirect.source));
   const routePaths = new Set(routes.map((route) => route.path));
 
   it("are permanent (301/308)", () => {
@@ -213,16 +224,16 @@ describe("SEO regression — vercel.json redirects", () => {
   });
 
   it("have no duplicate sources", () => {
-    expect(sources.size).toBe(vercel.redirects.length);
+    expect(sources.size).toBe(pathRedirects.length);
   });
 
   it("never chain into another redirect or loop", () => {
-    const chained = vercel.redirects.filter((redirect) => sources.has(redirect.destination.split("#")[0]));
+    const chained = pathRedirects.filter((redirect) => sources.has(redirect.destination.split("#")[0]));
     expect(chained).toEqual([]);
   });
 
   it("point to a prerendered route", () => {
-    const orphans = vercel.redirects.filter((redirect) => !routePaths.has(redirect.destination.split("#")[0]));
+    const orphans = pathRedirects.filter((redirect) => !routePaths.has(redirect.destination.split("#")[0]));
     expect(orphans).toEqual([]);
   });
 });
