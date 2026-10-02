@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The home hero now states who we work with: restaurants, bars, shops and businesses in Tenerife and the Canary Islands.
 - Every WhatsApp link on the site (TPV modules, Carta Digital, contact card) now opens a pre-filled message for the right service.
 - Metric-matched fallback fonts, so text no longer jumps when the web fonts finish loading.
+- **`seo-geo-expert` project skill** (`.claude/skills/seo-geo-expert/`): reusable audit-and-implement workflow for technical SEO, on-page, GEO/AEO, structured data, Search Console/GA4 analysis, local and international SEO, Core Web Vitals and accessibility. Evidence-first rules (no invented Search Console/Analytics data, `NO VERIFICADO` when unverifiable, recommendation levels from requirement to experiment), severity/priority model, validation steps and report templates, with repo-specific context (official domain, Vite SSR stack, `llms.txt` hash sync). Available to Claude Code in the cloud and in local VS Code for this repository.
 
 ### Changed
 
