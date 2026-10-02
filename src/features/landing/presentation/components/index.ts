@@ -5,6 +5,6 @@
 
 export { Navbar } from "./Navbar";
 export { Hero } from "./Hero";
-export { SuccessStats } from "./SuccessStats";
+export { CartaDigitalReviews } from "./CartaDigitalReviews";
 import Contact from "./Contact";
 export { Contact };

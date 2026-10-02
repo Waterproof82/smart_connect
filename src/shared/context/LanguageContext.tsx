@@ -65,23 +65,12 @@ interface Translation extends TpvModuleTranslations {
   featuresCartaDigital: string;
   featuresCartaDigitalDesc: string;
   featuresDetails: string;
-  // Success Stats
-  successTitle: string;
-  successSubtitle: string;
-  successDesc: string;
-  successStat1Value: string;
-  successStat1Label: string;
-  successStat1Quote: string;
-  successStat1Author: string;
-  successStat2Label: string;
-  successStat2Quote: string;
-  successStat2Author: string;
-  successStat3Label: string;
-  successStat3Quote: string;
-  successStat3Author: string;
-  successStat4Label: string;
-  successStat4Quote: string;
-  successStat4Author: string;
+  // Carta Digital reviews (seo-trust-claims-cleanup PR2a — 2 real,
+  // attributed QR iBar reviews; replaces the unsourced Success Stats block)
+  cartaReviewsEyebrow: string;
+  cartaReviewsTitle: string;
+  cartaReviewsSource: string;
+  cartaReviewsRatingOf: string;
   // SEO
   seoAltTextNFC: string;
   // Contact
@@ -516,7 +505,7 @@ const translations: Record<Language, Translation> = {
 
     // Navigation
     navSolutions: "Soluciones",
-    navSuccess: "Éxito",
+    navSuccess: "Opiniones",
     navContact: "Contacto",
     navAdmin: "Admin",
     navBack: "Volver",
@@ -535,14 +524,14 @@ const translations: Record<Language, Translation> = {
     heroContactoTitleEnd: "",
     heroSubtitle:
       "TPV, comandero móvil, cocina, reservas, stock y más en una sola plataforma. Cobra más rápido, reduce tareas manuales y dedica tu tiempo a lo que importa: tu negocio. Sin comisiones ni intermediarios.",
-    statStrip1Value: "Decenas",
-    statStrip1Label: "de negocios en Canarias",
+    statStrip1Value: "5",
+    statStrip1Label: "idiomas en tu carta digital",
     statStrip2Value: "0%",
     statStrip2Label: "Comisiones por pedido",
-    statStrip3Value: "Hasta 6×",
-    statStrip3Label: "Más reseñas en 90 días",
-    statStrip4Value: "Hasta 40%",
-    statStrip4Label: "Más visitas con reseñas",
+    statStrip3Value: "5 s",
+    statStrip3Label: "para dejar una reseña con NFC",
+    statStrip4Value: "Pago único",
+    statStrip4Label: "en tarjetas NFC",
     heroButtonDemo: "Ver Demo",
     heroButtonContact: "Contactar",
 
@@ -576,28 +565,12 @@ const translations: Record<Language, Translation> = {
       "La carta digital que elimina intermediarios. 0% comisiones, 5 idiomas, pedidos por WhatsApp y tu propia base de datos de clientes.",
     featuresDetails: "Ver detalles",
 
-    // Success Stats
-    successTitle: "Casos de Éxito",
-    successSubtitle: "Resultados reales que transforman negocios",
-    successDesc:
-      "Empresas que ya confían en nosotros y han transformado su operación.",
-    successStat1Value: "Hasta 45%",
-    successStat1Label: "Aumento de ingresos por mesa",
-    successStat1Quote:
-      "Desde que implementamos la Carta Digital, nuestros ingresos por mesa aumentaron un 45%",
-    successStat1Author: "Restaurante L'Escale",
-    successStat2Label: "Satisfacción",
-    successStat2Quote:
-      "Mis clientes adoran la experiencia. Las reseñas positivas se dispararon",
-    successStat2Author: "Café Central Madrid",
-    successStat3Label: "Reseñas Ganadas",
-    successStat3Quote:
-      "Pasamos de 200 a 1200 reseñas en Google. Es increíble el impacto",
-    successStat3Author: "Bar Bodega Toledo",
-    successStat4Label: "Clientes Activos",
-    successStat4Quote:
-      "Decenas de negocios de hostelería confían en Digitaliza Tenerife para su transformación digital",
-    successStat4Author: "Comunidad Hostelera",
+    // Carta Digital reviews (seo-trust-claims-cleanup PR2a)
+    cartaReviewsEyebrow: "Opiniones",
+    cartaReviewsTitle: "Lo que dicen nuestros clientes",
+    cartaReviewsSource:
+      "Reseña en Google de QR iBar, la versión anterior de nuestra Carta Digital",
+    cartaReviewsRatingOf: "de 5 estrellas",
 
     // SEO
     seoAltTextNFC: "Tarjeta NFC Tap-to-Review para obtener reseñas en Google",
@@ -1035,9 +1008,9 @@ const translations: Record<Language, Translation> = {
     homeFaqQ1: "¿Qué es Digitaliza Tenerife?",
     homeFaqA1: "Digitaliza Tenerife es una agencia de transformación digital especializada en hostelería y comercios locales de Canarias. Ofrecemos menús digitales, tarjetas NFC para reseñas, automatización con n8n e IA conversacional.",
     homeFaqQ2: "¿Cuánto cuesta la Carta Digital?",
-    homeFaqA2: "La Carta Digital no tiene comisiones por pedido. El precio depende del plan y del tamaño del negocio. Contactá con nosotros para un presupuesto personalizado sin compromiso.",
+    homeFaqA2: "La Carta Digital no tiene comisiones por pedido. El precio depende del plan y del tamaño del negocio. Contacta con nosotros para un presupuesto personalizado sin compromiso.",
     homeFaqQ3: "¿Cómo funcionan las tarjetas NFC Tap-to-Review?",
-    homeFaqA3: "El cliente acerca su móvil a la tarjeta NFC y se abre directamente la página de reseñas de Google de tu negocio. Sin apps, sin fricción. Algunos de nuestros clientes han llegado a multiplicar sus reseñas por 6 en 90 días.",
+    homeFaqA3: "El cliente acerca su móvil a la tarjeta NFC y se abre directamente la página de reseñas de Google de tu negocio. Sin apps, sin fricción.",
     homeFaqQ4: "¿Sus soluciones sirven para negocios fuera de Canarias?",
     homeFaqA4: "Sí. Aunque nos especializamos en Tenerife y Canarias, nuestras soluciones digitales funcionan en cualquier negocio de España y Europa.",
     homeFaqQ5: "¿Necesito conocimientos técnicos para usar vuestras herramientas?",
@@ -1138,7 +1111,7 @@ const translations: Record<Language, Translation> = {
 
     // Navigation
     navSolutions: "Solutions",
-    navSuccess: "Success",
+    navSuccess: "Reviews",
     navContact: "Contact",
     navAdmin: "Admin",
     navBack: "Back",
@@ -1157,14 +1130,14 @@ const translations: Record<Language, Translation> = {
     heroContactoTitleEnd: "",
     heroSubtitle:
       "POS, mobile ordering, kitchen display, reservations, stock and more in one platform. Get paid faster, cut manual tasks, and spend your time on what matters — your business. No commissions, no middlemen.",
-    statStrip1Value: "Dozens",
-    statStrip1Label: "of businesses in the Canary Islands",
+    statStrip1Value: "5",
+    statStrip1Label: "languages in your digital menu",
     statStrip2Value: "0%",
     statStrip2Label: "Commissions per order",
-    statStrip3Value: "Up to 6×",
-    statStrip3Label: "More reviews in 90 days",
-    statStrip4Value: "Up to 40%",
-    statStrip4Label: "More visits with reviews",
+    statStrip3Value: "5 sec",
+    statStrip3Label: "to leave an NFC review",
+    statStrip4Value: "One-time payment",
+    statStrip4Label: "on NFC cards",
     heroButtonDemo: "View Demo",
     heroButtonContact: "Contact Us",
 
@@ -1197,27 +1170,11 @@ const translations: Record<Language, Translation> = {
     featuresCartaDigitalDesc:
       "The digital menu that eliminates intermediaries. 0% commissions, 5 languages, WhatsApp orders and your own customer database.",
     featuresDetails: "View details",
-    successTitle: "Success Stories",
-    successSubtitle: "Real results that transform businesses",
-    successDesc:
-      "Companies that already trust us and have transformed their operation.",
-    successStat1Value: "Up to 45%",
-    successStat1Label: "Revenue increase per table",
-    successStat1Quote:
-      "Since we implemented Carta Digital, our revenue per table increased by 45%",
-    successStat1Author: "Restaurante L'Escale",
-    successStat2Label: "Satisfaction",
-    successStat2Quote:
-      "My clients love the experience. Positive reviews skyrocketed",
-    successStat2Author: "Café Central Madrid",
-    successStat3Label: "Reviews Gained",
-    successStat3Quote:
-      "We went from 200 to 1200 Google reviews. The impact is incredible",
-    successStat3Author: "Bar Bodega Toledo",
-    successStat4Label: "Active Clients",
-    successStat4Quote:
-      "Dozens of hospitality businesses trust Digitaliza Tenerife for their digital transformation",
-    successStat4Author: "Hospitality Community",
+    cartaReviewsEyebrow: "Reviews",
+    cartaReviewsTitle: "What our customers say",
+    cartaReviewsSource:
+      "Google review of QR iBar, the earlier version of our Carta Digital",
+    cartaReviewsRatingOf: "out of 5 stars",
 
     // SEO
     seoAltTextNFC: "Tap-to-Review NFC card to get Google reviews",
@@ -1661,7 +1618,7 @@ const translations: Record<Language, Translation> = {
     homeFaqQ2: "How much does Carta Digital cost?",
     homeFaqA2: "Carta Digital has no per-order commissions. Pricing depends on the plan and business size. Contact us for a free personalized quote.",
     homeFaqQ3: "How do Tap-to-Review NFC cards work?",
-    homeFaqA3: "The customer taps their phone on the NFC card and your Google review page opens instantly — no app needed. Some of our clients have multiplied their reviews up to 6x in 90 days.",
+    homeFaqA3: "The customer taps their phone on the NFC card and your Google review page opens instantly — no app needed.",
     homeFaqQ4: "Do your solutions work for businesses outside the Canary Islands?",
     homeFaqA4: "Yes. While we specialize in Tenerife and the Canary Islands, our digital solutions work for any business across Spain and Europe.",
     homeFaqQ5: "Do I need technical knowledge to use your tools?",

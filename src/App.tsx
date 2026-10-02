@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet-async";
 import { PageShell } from "@features/landing/presentation/components/PageShell";
 import { Section } from "@shared/presentation/layout";
 import { Hero } from "@features/landing/presentation/components/Hero";
-import { SuccessStats } from "@features/landing/presentation/components/SuccessStats";
+import { CartaDigitalReviews } from "@features/landing/presentation/components/CartaDigitalReviews";
 import { ExpertAssistant } from "@features/chatbot/presentation";
 import HomeFaqSection, {
   useHomeFaqGroups,
@@ -85,7 +85,7 @@ const ErrorBoundaryFallback: React.FC = () => {
   H2: Más servicios para tu negocio
     H3: Chatbots IA → /ia-chatbots-tenerife · H3: TPV → /tpv-restaurantes
   H2: ¿Por qué Digitaliza Tenerife? (stat strip only)
-  H2: Resultados reales (SuccessStats) · H2: FAQ · H2: Contacto
+  H2: Opiniones (CartaDigitalReviews) · H2: FAQ · H2: Contacto
   Home is a hub: product content lives on each product's own URL (no
   duplicated content, no TPV module sections here — see /tpv-restaurantes).
   Hreflang: intentionally absent. Language is client state, not in the URL;
@@ -177,7 +177,10 @@ const App: React.FC = () => {
           title="¿Por qué Digitaliza Tenerife?"
           intro="Democratizamos el acceso a la tecnología para los negocios locales de Canarias. No creemos en soluciones genéricas."
         >
-          {/* Stats strip — i18n-driven (PR4), same truthful values as before */}
+          {/* Stats strip — i18n-driven. Values are verifiable facts stated
+              elsewhere in the copy (5 languages: cartaFaqA3; 5s NFC review:
+              tapReviewFeatSpeed; one-time payment: tapReviewHeroFeature1) —
+              seo-trust-claims-cleanup PR2a, design.md D8. */}
           <dl className="grid grid-cols-2 md:grid-cols-4 gap-[var(--space-md)] m-0 border-t border-[var(--color-border)] pt-[var(--space-lg)]">
             {[
               { value: t.statStrip1Value, label: t.statStrip1Label },
@@ -194,8 +197,8 @@ const App: React.FC = () => {
             ))}
           </dl>
         </Section>
-        <section id="exito" aria-label="Casos de Éxito" className="ds-section">
-          <SuccessStats />
+        <section id="exito" aria-labelledby="exito-title" className="ds-section">
+          <CartaDigitalReviews headingId="exito-title" />
         </section>
         <section
           id="faq"
