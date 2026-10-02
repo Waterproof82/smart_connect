@@ -9,7 +9,7 @@
       "sources": [
         "src/App.tsx",
         "src/features/landing/presentation/components/Hero.tsx",
-        "src/features/landing/presentation/components/SuccessStats.tsx",
+        "src/features/landing/presentation/components/CartaDigitalReviews.tsx",
         "src/features/landing/presentation/components/HomeFaqSection.tsx",
         "src/features/landing/presentation/components/HomeSolutionsSection.tsx",
         "src/features/landing/presentation/components/Contact.tsx",
