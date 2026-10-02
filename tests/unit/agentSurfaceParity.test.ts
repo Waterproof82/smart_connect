@@ -92,9 +92,15 @@ describe("vite-plugin-md-negotiation.ts — route parity (Phase 4, design.md D4)
   const readPluginSource = (): string =>
     fs.readFileSync(path.join(ROOT, "vite-plugin-md-negotiation.ts"), "utf-8");
 
-  it("references isAgentPagePath instead of an inline pageRoutes literal", () => {
+  it("derives its routes from site-routes.json instead of an inline pageRoutes literal", () => {
     const source = readPluginSource();
-    expect(source).toMatch(/isAgentPagePath/);
+    // Imported with an import attribute so Vite's native config loader
+    // accepts it (importing agentRoutes.ts, whose JSON import has no
+    // attribute for ts-jest's sake, re-triggers the loader warning).
+    expect(source).toMatch(
+      /import\s+\w+\s+from\s+["']\.\/scripts\/site-routes\.json["']\s+with\s*\{\s*type:\s*["']json["']\s*\}/,
+    );
+    expect(source).not.toMatch(/from\s+["'][^"']*agentRoutes/);
     expect(source).not.toMatch(/const\s+pageRoutes\s*=\s*\[/);
   });
 
