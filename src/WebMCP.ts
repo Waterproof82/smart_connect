@@ -11,6 +11,7 @@
  */
 
 import "@mcp-b/webmcp-polyfill";
+import { formatAddressLine } from "@shared/config/organization";
 
 // --- Types ---
 
@@ -93,7 +94,7 @@ const tools: ToolDescriptor[] = [
   {
     name: "get_contact_info",
     description:
-      "Get contact information for Digitaliza Tenerife, including email, WhatsApp, and office location in Santa Cruz de Tenerife.",
+      "Get contact information for Digitaliza Tenerife, including email, WhatsApp, and office location in Tacoronte, Tenerife.",
     inputSchema: {
       type: "object",
       properties: {
@@ -113,7 +114,7 @@ const tools: ToolDescriptor[] = [
             "",
             "- Email: info@digitalizatenerife.es",
             "- WhatsApp: available via the contact page",
-            "- Office: Santa Cruz de Tenerife, Canary Islands, Spain",
+            `- Office: ${formatAddressLine("en")}`,
             "- Website: https://digitalizatenerife.es",
             "- Contact page: https://digitalizatenerife.es/#contacto",
           ].join("\n"),
@@ -125,7 +126,7 @@ const tools: ToolDescriptor[] = [
           "",
           "- Email: info@digitalizatenerife.es",
           "- WhatsApp: disponible a través de la página de contacto",
-          "- Oficina: Santa Cruz de Tenerife, Islas Canarias, España",
+          `- Oficina: ${formatAddressLine("es")}`,
           "- Web: https://digitalizatenerife.es",
           "- Página de contacto: https://digitalizatenerife.es/#contacto",
         ].join("\n"),
