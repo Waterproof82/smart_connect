@@ -565,60 +565,6 @@ export const BreadcrumbListSchema: React.FC<BreadcrumbListSchemaProps> = ({
   );
 };
 
-// ─── Review Schema ─────────────────────────────────────────────
-interface ReviewSchemaProps {
-  author: string;
-  text: string;
-  rating?: number;
-  datePublished?: string;
-  /** The item being reviewed (required by Schema.org validation).
-   *  Do NOT default this to a fabricated `aggregateRating`/`offers` — those
-   *  numbers must come from a real, verifiable source (e.g. Google Business
-   *  Profile) or Google can treat the markup as spam. Until real aggregate
-   *  data exists, `SoftwareApplication` alone (name + applicationCategory +
-   *  operatingSystem) is valid schema.org, it just won't be eligible for the
-   *  star-rating rich snippet — which is correct until the rating is real. */
-  itemReviewed?: Record<string, unknown>;
-}
-
-export const ReviewSchema: React.FC<ReviewSchemaProps> = ({
-  author,
-  text,
-  rating = 5,
-  datePublished = new Date().toISOString().split("T")[0],
-  itemReviewed = {
-    "@type": "SoftwareApplication",
-    name: "Digitaliza Tenerife",
-    applicationCategory: "BusinessApplication",
-    operatingSystem: "Web, iOS, Android",
-  },
-}) => {
-  const schema: Record<string, unknown> = {
-    "@context": "https://schema.org",
-    "@type": "Review",
-    reviewBody: text,
-    datePublished,
-    itemReviewed,
-    author: {
-      "@type": "Person",
-      name: author,
-    },
-    reviewRating: {
-      "@type": "Rating",
-      ratingValue: rating,
-      bestRating: 5,
-      worstRating: 1,
-    },
-  };
-
-  return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-    />
-  );
-};
-
 interface CollectionPageItem {
   name: string;
   description?: string;
@@ -658,61 +604,6 @@ export const CollectionPageSchema: React.FC<CollectionPageSchemaProps> = ({
         },
       }),
       url: item.url,
-    })),
-  };
-
-  return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-    />
-  );
-};
-
-interface HowToStep {
-  name: string;
-  text: string;
-  image?: string;
-  video?: string;
-  thumbnail?: string;
-}
-
-interface HowToSchemaProps {
-  title: string;
-  description: string;
-  steps: HowToStep[];
-}
-
-export const HowToSchema: React.FC<HowToSchemaProps> = ({
-  title,
-  description,
-  steps,
-}) => {
-  const schema = {
-    "@context": "https://schema.org",
-    "@type": "HowTo",
-    name: title,
-    description,
-    step: steps.map((step, index) => ({
-      "@type": "HowToStep",
-      name: step.name,
-      text: step.text,
-      ...(step.image && {
-        image: {
-          "@type": "ImageObject",
-          url: step.image,
-        },
-      }),
-      ...(step.video && {
-        video: {
-          "@type": "VideoObject",
-          url: step.video,
-          ...(step.thumbnail && {
-            thumbnailUrl: step.thumbnail,
-          }),
-        },
-      }),
-      position: index + 1,
     })),
   };
 

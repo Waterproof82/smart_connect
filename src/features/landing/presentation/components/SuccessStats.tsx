@@ -2,7 +2,6 @@ import React, { useRef } from "react";
 import { Star, Quote } from "lucide-react";
 import { useIntersectionObserver } from "@shared/hooks";
 import { useLanguage } from "@shared/context/LanguageContext";
-import { ReviewSchema } from "@shared/presentation/components/SeoSchema";
 
 const StarRating: React.FC = () => (
   <div className="flex gap-0.5 mb-4" role="img" aria-label="5 estrellas">
@@ -97,11 +96,6 @@ export const SuccessStats: React.FC = () => {
 
   return (
     <>
-      <ReviewSchema author={testimonials[0].author} text={testimonials[0].quote} />
-      <ReviewSchema author={testimonials[1].author} text={testimonials[1].quote} />
-      <ReviewSchema author={testimonials[2].author} text={testimonials[2].quote} />
-      <ReviewSchema author={testimonials[3].author} text={testimonials[3].quote} />
-
       <div className="ds-container" ref={sectionRef}>
         {/* Left-aligned header */}
         <div

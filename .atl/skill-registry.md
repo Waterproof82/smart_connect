@@ -20,7 +20,7 @@ _Last updated: 2026-05-17_
 | webmcp-tools | `src/*.ts`, `src/entry-client.tsx`, `*.tsx` | webmcp, modelContext, registerTool, AI tools | WebMCP tools registered via `navigator.modelContext.registerTool()` con `@mcp-b/webmcp-polyfill`. Return type `{ content: [{ type: 'text', text }] }`. 4 tools: product info, contact, list, page content. |
 | authorship-signals | `*.tsx`, `src/App.tsx`, `AboutPage.tsx` | author, rel-author, publisher, JSON-LD, authority | Authorship signals: `<link rel="author">`, JSON-LD `author`/`publisher` in `@graph`, `/about` page with Organization schema. |
 | agent-skills | `public/.well-known/agent-skills/*` | agent skills, $schema, sha256, capability              | Agent Skills discovery index at `/.well-known/agent-skills/index.json` with `$schema`and proper sha256 hashes. |
-| structured-data |`*.tsx`, `src/shared/presentation/components/SeoSchema.tsx`, `*Container.tsx`| schema, JSON-LD, structured data, rich results, Review, SoftwareApplication, WebApplication, HowTo, CollectionPage, FAQPage | Structured data (JSON-LD) patterns for Google Rich Results. Schemas in`SeoSchema.tsx`: ServiceSchema, LocalBusinessSchema, BreadcrumbListSchema, ReviewSchema, SeoFaqSchema, CollectionPageSchema, HowToSchema, SoftwareApplicationSchema, WebApplicationSchema. |
+| structured-data |`*.tsx`, `src/shared/presentation/components/SeoSchema.tsx`, `*Container.tsx`| schema, JSON-LD, structured data, rich results, SoftwareApplication, WebApplication, CollectionPage, FAQPage | Structured data (JSON-LD) patterns for Google Rich Results. Schemas in`SeoSchema.tsx`: ServiceSchema, LocalBusinessSchema, BreadcrumbListSchema, SeoFaqSchema, CollectionPageSchema, SoftwareApplicationSchema, WebApplicationSchema. `ReviewSchema`/`HowToSchema` are retired — see policy below. |
 
 **Reference**: [SmartConnect Standards Documentation](.atl/smart-connect-standards.md)
 
@@ -171,19 +171,16 @@ Reglas para schemas de datos estructurados compatibles con Google Rich Results.
 | `LocalBusinessSchema`       | `LocalBusiness`           | _(ninguno)_         | ✅ Local Business   |
 | `ServiceSchema`             | `Service`                 | `{url}#service`     | ❌ No eligible      |
 | `BreadcrumbListSchema`      | `BreadcrumbList`          | _(ninguno)_         | ✅ Breadcrumbs      |
-| `ReviewSchema`              | `Review` + `itemReviewed` | _(ninguno, inline)_ | ✅ Review snippets  |
-| `SeoFaqSchema`              | `FAQPage`                 | _(ninguno)_         | ✅ FAQ              |
+| `SeoFaqSchema`              | `FAQPage`                 | _(ninguno)_         | ⚠️ Semantic-only — see policy |
 | `CollectionPageSchema`      | `CollectionPage`          | _(ninguno)_         | ✅ Collection       |
-| `HowToSchema`               | `HowTo`                   | _(ninguno)_         | ✅ HowTo            |
 | `SoftwareApplicationSchema` | `SoftwareApplication`     | `{url}#software`    | ✅ Software App     |
 | `WebApplicationSchema`      | `WebApplication`          | `{url}#webapp`      | ✅ Web App          |
 
-#### Reglas para `ReviewSchema` ⚠️
+#### Política de Structured Data (`seo-trust-claims-cleanup`, 2026-10-02) ⚠️
 
-- **`itemReviewed`**: El `@type` del `itemReviewed` DEBE ser uno de los tipos que Google acepta para Review rich results. **`Service` NO es válido.** Tipos válidos: `Product`, `LocalBusiness`, `SoftwareApplication`, `Book`, `Course`, `Event`, `HowTo`, `Movie`, `MusicPlaylist`, `MusicRecording`, `Organization`, `Recipe`.
-- **`SoftwareApplication` requirements**: Cuando `itemReviewed` es `SoftwareApplication`, debe incluir al menos 2 de: `offers`, `aggregateRating`, `applicationCategory`, `operatingSystem`. Incluir las 4 silencia todos los warnings.
-- Usar `Record<string, unknown>` para `itemReviewed` prop type si se necesitan propiedades dinámicas.
-- No usar `@id` en `itemReviewed` de ReviewSchema — Google lo trata como entidad inline y el `@id` no resuelve el error si el `@type` es inválido.
+- **No self-serving `Review`/`AggregateRating`.** `ReviewSchema` was deleted from `SeoSchema.tsx`. Google treats review markup authored by the business about its own product/service as spam — it is only legitimate when sourced from a genuine third-party review platform. Do NOT re-add a `Review`/`AggregateRating` builder unless the data comes from a real, verifiable source (e.g. a Google Business Profile API pull) with no fabricated numbers.
+- **`HowTo` is retired.** `HowToSchema` was deleted. Google retired the `HowTo` rich result (desktop, Sept 2023); the markup is dead weight. Step-by-step UI (e.g. `HowItWorks`) stays as plain JSX — visible content only, no JSON-LD wrapper.
+- **`FAQPage` is semantic-only, not a guaranteed rich result.** Google restricts FAQ rich results to a narrow set of authoritative government/health sites; for this site, `FAQPage` JSON-LD (`SeoFaqSchema`, `buildHomeSchema`'s FAQ node) exists for semantic/LLM-readability value, not for guaranteed SERP rich results. Any `Question`/`acceptedAnswer.text` emitted MUST stay character-identical to the visible FAQ answer text in the DOM, in both locales — never let the JSON-LD and the rendered copy drift apart.
 
 #### Patrón de integración
 
@@ -193,8 +190,7 @@ Cada página con schemas sigue este patrón en su Container:
 <ServiceSchema />        // Identifica el servicio (No elegible, pero informativo)
 <SoftwareApplicationSchema />  // O WebApplicationSchema según la página
 <BreadcrumbListSchema />       // Navegación
-<ReviewSchema />               // Reseñas (con itemReviewed correcto)
-<SeoFaqSchema />               // FAQ
+<SeoFaqSchema />               // FAQ (semantic-only, no rich-result guarantee)
 ```
 
 Los schemas se renderizan FUERA del `<main>` y `<Helmet>`, como siblings directos del Fragment:

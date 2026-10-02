@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useLanguage } from "@shared/context/LanguageContext";
 import { Smartphone, Star, Award } from "lucide-react";
 import { sanitizeInput } from "@shared/utils/sanitizer";
-import { HowToSchema } from "../../../../shared/presentation/components/SeoSchema";
 
 const HowItWorks: React.FC = () => {
   const { t } = useLanguage();
@@ -37,15 +36,6 @@ const HowItWorks: React.FC = () => {
 
   return (
     <>
-      <HowToSchema
-        title={t.tapReviewHowTitle}
-        description={t.tapReviewHowSubtitle}
-        steps={steps.map((step) => ({
-          name: step.title,
-          text: step.desc,
-          image: step.image,
-        }))}
-      />
       <section className="ds-section">
         <div className="ds-container">
           <div
