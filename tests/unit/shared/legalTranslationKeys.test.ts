@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import { ORGANIZATION } from "@shared/config/organization";
 
 /**
  * Regression guard for the "raw translation key rendered as text" bug class.
@@ -25,10 +26,6 @@ const LANGUAGE_CONTEXT_PATH = path.join(
   "shared/context/LanguageContext.tsx",
 );
 const SANITIZER_PATH = path.join(SRC, "shared/utils/sanitizer.ts");
-const SEO_SCHEMA_PATH = path.join(
-  SRC,
-  "shared/presentation/components/SeoSchema.tsx",
-);
 
 interface LegalPageCase {
   name: string;
@@ -104,16 +101,10 @@ function usedTags(html: string): string[] {
   return [...new Set([...html.matchAll(/<\s*([a-z0-9]+)[\s/>]/gi)].map((m) => m[1].toLowerCase()))];
 }
 
-/** Canonical NAP from SeoSchema.tsx — the single source of truth for the address. */
+/** Canonical NAP from the organization constant — the single source of truth for the address. */
 function seoAddressParts(): string[] {
-  const source = fs.readFileSync(SEO_SCHEMA_PATH, "utf-8");
-  const streetMatch = source.match(/streetAddress:\s*"([^"]+)"/);
-  const postalMatch = source.match(/postalCode:\s*"([^"]+)"/);
-  const localityMatch = source.match(/addressLocality:\s*"([^"]+)"/);
-  if (!streetMatch || !postalMatch || !localityMatch) {
-    throw new Error("Could not locate PostalAddress fields in SeoSchema.tsx");
-  }
-  return [streetMatch[1], postalMatch[1], localityMatch[1]];
+  const { streetAddress, postalCode, addressLocality } = ORGANIZATION.address;
+  return [streetAddress, postalCode, addressLocality];
 }
 
 const LEGAL_PAGES: LegalPageCase[] = [
