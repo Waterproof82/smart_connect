@@ -48,9 +48,33 @@ describe("HomeFaqSection", () => {
     expect(screen.getAllByRole("group").every((d) => d.querySelector("p"))).toBe(true);
   });
 
-  it("renders inside a section element with an aria-label", () => {
+  // accessibility-baseline spec: "No Duplicate FAQ Heading on Home" —
+  // the outer App.tsx <section id="faq"> already labels this content, so
+  // HomeFaqSection itself must not render a second, nested <section> (and
+  // must not duplicate its own h2 text into a sibling h3 when there is
+  // only one FAQ group).
+  it("renders a div, not a nested section (design.md D8)", () => {
     const { container } = renderWithLanguage();
-    const section = container.querySelector("section");
-    expect(section).toBeInTheDocument();
+    expect(container.querySelector("section")).not.toBeInTheDocument();
+    expect(container.querySelector("div")).toBeInTheDocument();
+  });
+
+  it("renders exactly one heading with the FAQ title (no duplicate h2+h3)", () => {
+    const { container } = renderWithLanguage();
+    const headings = Array.from(
+      container.querySelectorAll("h2, h3"),
+    ).filter((el) => /Preguntas Frecuentes/i.test(el.textContent ?? ""));
+    expect(headings).toHaveLength(1);
+    expect(headings[0].tagName).toBe("H2");
+  });
+
+  it("the single h2 carries id=\"faq-title\"", () => {
+    const { container } = renderWithLanguage();
+    const h2 = screen.getByRole("heading", {
+      level: 2,
+      name: /Preguntas Frecuentes/i,
+    });
+    expect(h2.id).toBe("faq-title");
+    expect(container.querySelector("#faq-title")).toBe(h2);
   });
 });

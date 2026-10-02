@@ -13,6 +13,7 @@
     --color-primary: oklch(65% 0.18 250);
     --color-accent: oklch(65% 0.18 250);
     --color-accent-hover: oklch(55% 0.18 250);
+    --color-accent-strong: oklch(50% 0.18 250);
     --color-on-accent: oklch(98% 0.005 250);
     --color-accent-subtle: oklch(25% 0.015 250);
     --color-accent-border: oklch(30% 0.018 250);
@@ -62,6 +63,7 @@
     --color-primary: oklch(47% 0.18 250);
     --color-accent: oklch(55% 0.18 250);
     --color-accent-hover: oklch(45% 0.18 250);
+    --color-accent-strong: oklch(42% 0.18 250);
     --color-on-accent: oklch(98% 0.005 250);
     --color-accent-subtle: oklch(90% 0.008 250);
     --color-accent-border: oklch(75% 0.01 250);
