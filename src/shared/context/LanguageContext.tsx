@@ -304,17 +304,14 @@ interface Translation extends TpvModuleTranslations {
   tapReviewFeatGoogleDesc: string;
   tapReviewFeatNoSub: string;
   tapReviewFeatNoSubDesc: string;
-  tapReviewSocialTitle: string;
-  tapReviewSocialSubtitle: string;
-  tapReviewTestimonial1Quote: string;
-  tapReviewTestimonial1Author: string;
-  tapReviewTestimonial1Business: string;
-  tapReviewTestimonial2Quote: string;
-  tapReviewTestimonial2Author: string;
-  tapReviewTestimonial2Business: string;
-  tapReviewTestimonial3Quote: string;
-  tapReviewTestimonial3Author: string;
-  tapReviewTestimonial3Business: string;
+  tapReviewFactsTitle: string;
+  tapReviewFactsSubtitle: string;
+  tapReviewFact1Title: string;
+  tapReviewFact1Desc: string;
+  tapReviewFact2Title: string;
+  tapReviewFact2Desc: string;
+  tapReviewFact3Title: string;
+  tapReviewFact3Desc: string;
   tapReviewFAQTitle: string;
   tapReviewFAQ1Question: string;
   tapReviewFAQ1Answer: string;
@@ -328,9 +325,9 @@ interface Translation extends TpvModuleTranslations {
   tapReviewCTAFeature1: string;
   tapReviewCTAFeature2: string;
   tapReviewCTAFeature3: string;
-  tapReviewTrust30Days: string;
-  tapReviewTrust24h: string;
-  tapReviewTrustSupport: string;
+  tapReviewTrustNoApp: string;
+  tapReviewTrustQrFallback: string;
+  tapReviewTrustCompat: string;
   tapReviewTrustNoSub: string;
   // Digital Menu Landing
   // Menu QR Landing
@@ -861,21 +858,18 @@ const translations: Record<Language, Translation> = {
     tapReviewFeatNoSubDesc:
       "Pago único. Sin cuotas mensuales, sin permanencia, sin sorpresas.",
 
-    tapReviewSocialTitle: "Miles de negocios confían en nosotros",
-    tapReviewSocialSubtitle:
-      "Negocios de hostelería en toda España ya están multiplicando sus reseñas",
-    tapReviewTestimonial1Quote:
-      "Pasamos de 50 a 500 reseñas en 3 meses. El impacto en nuevos clientes ha sido brutal.",
-    tapReviewTestimonial1Author: "Carlos Martínez",
-    tapReviewTestimonial1Business: "Restaurante El Bodegón",
-    tapReviewTestimonial2Quote:
-      "Mis clientes lo usan constantemente. Es facilísimo, solo tienen que acercar el teléfono.",
-    tapReviewTestimonial2Author: "María López",
-    tapReviewTestimonial2Business: "Café Central Madrid",
-    tapReviewTestimonial3Quote:
-      "La mejor inversión que hemos hecho. Las reseñas han mejorado nuestro posicionamiento en Google.",
-    tapReviewTestimonial3Author: "Pedro Sánchez",
-    tapReviewTestimonial3Business: "Bar La Tapa",
+    tapReviewFactsTitle: "Así funciona trabajar con nosotros",
+    tapReviewFactsSubtitle:
+      "Sin sorpresas: esto es lo que incluye tu dispositivo Tap-to-Review",
+    tapReviewFact1Title: "Lo configuramos por ti",
+    tapReviewFact1Desc:
+      "Nos das el nombre de tu negocio y configuramos el chip NFC para que apunte directamente a tu ficha de Google.",
+    tapReviewFact2Title: "Funciona con casi cualquier móvil",
+    tapReviewFact2Desc:
+      "NFC compatible con iPhone 8 en adelante y cualquier Android con NFC, con código QR de respaldo para el resto.",
+    tapReviewFact3Title: "Trato directo con un equipo de Tenerife",
+    tapReviewFact3Desc:
+      "Escríbenos por WhatsApp y te respondemos nosotros, sin intermediarios.",
 
     tapReviewFAQTitle: "Preguntas frecuentes",
     tapReviewFAQ1Question: "¿Realmente funciona el NFC con cualquier móvil?",
@@ -896,9 +890,9 @@ const translations: Record<Language, Translation> = {
     tapReviewCTAFeature2: "Envío gratis 24h",
     tapReviewCTAFeature3: "Sin suscripciones",
 
-    tapReviewTrust30Days: "Garantía 30 días",
-    tapReviewTrust24h: "Envío gratis 24h",
-    tapReviewTrustSupport: "Soporte 24/7",
+    tapReviewTrustNoApp: "Sin app",
+    tapReviewTrustQrFallback: "NFC + QR de respaldo",
+    tapReviewTrustCompat: "iPhone 8+ y Android con NFC",
     tapReviewTrustNoSub: "Sin suscripciones",
 
 
@@ -1469,21 +1463,18 @@ const translations: Record<Language, Translation> = {
     tapReviewFeatNoSubDesc:
       "One-time payment. No monthly fees, no commitment, no surprises.",
 
-    tapReviewSocialTitle: "Thousands of businesses trust us",
-    tapReviewSocialSubtitle:
-      "Hospitality businesses across Spain are already multiplying their reviews",
-    tapReviewTestimonial1Quote:
-      "We went from 50 to 500 reviews in 3 months. The impact on new customers has been brutal.",
-    tapReviewTestimonial1Author: "Carlos Martínez",
-    tapReviewTestimonial1Business: "Restaurante El Bodegón",
-    tapReviewTestimonial2Quote:
-      "My customers use it constantly. It's super easy, they just have to bring their phone closer.",
-    tapReviewTestimonial2Author: "María López",
-    tapReviewTestimonial2Business: "Café Central Madrid",
-    tapReviewTestimonial3Quote:
-      "The best investment we've made. The reviews have improved our positioning on Google.",
-    tapReviewTestimonial3Author: "Pedro Sánchez",
-    tapReviewTestimonial3Business: "Bar La Tapa",
+    tapReviewFactsTitle: "What it's like to work with us",
+    tapReviewFactsSubtitle:
+      "No surprises: here's what your Tap-to-Review device includes",
+    tapReviewFact1Title: "We set it up for you",
+    tapReviewFact1Desc:
+      "You give us your business name and we configure the NFC chip to point directly to your Google Business profile.",
+    tapReviewFact2Title: "Works with almost any phone",
+    tapReviewFact2Desc:
+      "NFC compatible with iPhone 8 and newer, and any Android phone with NFC, with a backup QR code for the rest.",
+    tapReviewFact3Title: "Direct contact with a team in Tenerife",
+    tapReviewFact3Desc:
+      "Message us on WhatsApp and we reply ourselves, no middlemen.",
 
     tapReviewFAQTitle: "Frequently Asked Questions",
     tapReviewFAQ1Question: "Does NFC really work with any phone?",
@@ -1504,9 +1495,9 @@ const translations: Record<Language, Translation> = {
     tapReviewCTAFeature2: "Free 24h shipping",
     tapReviewCTAFeature3: "No subscriptions",
 
-    tapReviewTrust30Days: "30-day guarantee",
-    tapReviewTrust24h: "Free 24h shipping",
-    tapReviewTrustSupport: "24/7 Support",
+    tapReviewTrustNoApp: "No app needed",
+    tapReviewTrustQrFallback: "NFC + backup QR",
+    tapReviewTrustCompat: "iPhone 8+ and Android with NFC",
     tapReviewTrustNoSub: "No subscriptions",
 
 
