@@ -12,6 +12,18 @@ Sin acceso a GSC/GA4/GBP (API, export CSV o capturas aportadas por el usuario) �
 **Acciones manuales y problemas de seguridad:** comprobar siempre.
 **Inspección de URL:** HTML renderizado, canonical declarada vs. elegida por Google, última visita, recursos bloqueados. "Solicitar indexación" es un empujón, no una garantía y tiene cuota.
 
+### Comparación temporal
+Comparar: últimos 7 días vs. periodo anterior · últimos 28 días vs. periodo anterior · últimos 3 meses · mismo periodo del año anterior si hay histórico suficiente. **No interpretar estacionalidad como problema SEO** (hostelería: temporada, festivos). Contrastar con despliegues (CHANGELOG) y actualizaciones de Google.
+
+### Análisis consulta → página
+Tabla de trabajo: `Query → URL → clics → impresiones → CTR → posición → intención`. Permite detectar canibalización, páginas que Google asocia con la intención equivocada, consultas sin landing adecuada y oportunidades de contenido.
+
+### URL Inspection como evidencia
+Con acceso, registrar por URL clave: canonical declarada · **canonical seleccionada por Google** · indexabilidad · rastreo permitido · última exploración · estado de indexación · rich results detectados · HTML renderizado. Permite distinguir "mi HTML dice X" de "Google ha interpretado X" (evidencia E4). Sin acceso → `NOT VERIFIED` con pasos manuales.
+
+### Canonical Reconciliation (resultado)
+Cruza canonical HTML, cabecera HTTP, sitemap, enlaces internos y canonical seleccionada por Google. Si discrepan: documenta, identifica la señal dominante y no asumas que Google seguirá la declarada ("Duplicada: Google eligió otra canonical" → investigar).
+
 ### Análisis avanzado (obligatorio cuando haya datos)
 - Consultas con muchas impresiones y CTR bajo → mejorar title/description/snippet y alinear intención.
 - Páginas con caída: comparar **periodos equivalentes** (28/90 días y año anterior si hay estacionalidad), descartar cambios de implementación (¿qué se desplegó y cuándo? ver CHANGELOG).

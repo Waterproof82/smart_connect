@@ -18,7 +18,7 @@
 
 ## Archivos SEO/GEO existentes
 - `public/robots.txt` (reglas bots IA + `Content-Signal: search=yes, ai-input=yes, ai-train=no`; mantener idéntico en `vercel.json` y `vite.config.ts`).
-- `public/llms.txt` y `public/.well-known/` (`llms.txt`, `mcp/server-card.json`, `agent-skills/index.json` con `sha256`, `api-catalog`, `openid-configuration`, `oauth-protected-resource`, `jwks.json`). Si se edita `llms.txt`, **recalcular el sha256** de `agent-skills/index.json`.
+- `public/llms.txt` y `public/.well-known/` (**recursos experimentales**, no señal SEO oficial; ver `geo-aeo.md`) (`llms.txt`, `mcp/server-card.json`, `agent-skills/index.json` con `sha256`, `api-catalog`, `openid-configuration`, `oauth-protected-resource`, `jwks.json`). Si se edita `llms.txt`, **recalcular el sha256** de `agent-skills/index.json`.
 - `docs/SEO_IMPLEMENTATION.md`, `docs/audit/` (p. ej. `2026-10-01_gsc-search-performance-analysis.md`: leer antes de analizar GSC para no repetir trabajo).
 
 ## Comandos de validación

@@ -6,13 +6,33 @@
 Estado general (1–3 frases con evidencia), 3–5 principales problemas, 3–5 principales oportunidades. Declara explícitamente qué quedó `NO VERIFICADO` y por qué.
 
 ### Hallazgos críticos
-| Prioridad | Problema | URL/Archivo:línea | Evidencia | Impacto | Solución | Estado |
-|---|---|---|---|---|---|---|
+| Prioridad | Estado | Severidad | Categoría | Problema | URL/Archivo:línea | Evidencia (E0–E5) | Impacto | Esfuerzo | Solución |
+|---|---|---|---|---|---|---|---|---|---|
 
-Estado: `Pendiente` · `Implementado` · `Validado` · `Requiere acción manual` · `NO VERIFICADO`.
+Estado de la comprobación: `PASS` · `FAIL` · `WARNING` · `NOT VERIFIED` · `NOT APPLICABLE`. Progreso del hallazgo: `Pendiente` · `Implementado` · `Validado` · `Requiere acción manual`.
+
+Por cada cambio implementado: **BEFORE / CHANGE / AFTER / REGRESSION CHECK** (ver `SKILL.md`). Si no hace falta cambiar nada: `PASS` + evidencia (NO CHANGE REQUIRED).
 
 ### Secciones (omite las que no apliquen al alcance)
 SEO técnico · SEO on-page · GEO/AEO · Schema · Search Console · Performance · Accesibilidad · SEO local · SEO internacional. En cada una: hallazgos con severidad, categoría, impacto, esfuerzo y nivel (`REQUISITO`/`RECOMENDACIÓN OFICIAL`/`BUENA PRÁCTICA`/`OPTIMIZACIÓN`/`HIPÓTESIS`/`EXPERIMENTO`).
+
+### QUALITY GATE (sin puntuación numérica)
+```
+SEO Technical ........ PASS/FAIL/WARNING
+Indexability ......... PASS/FAIL/WARNING
+Content .............. PASS/FAIL/WARNING
+Entities ............. PASS/FAIL/WARNING
+Structured Data ...... PASS/FAIL/WARNING
+GEO/AEO .............. PASS/FAIL/WARNING
+Performance .......... PASS/FAIL/WARNING
+Accessibility ........ PASS/FAIL/WARNING
+Security ............. PASS/FAIL/WARNING
+Spam policies ........ PASS/FAIL
+Local SEO ............ PASS/FAIL/NA
+International SEO .... PASS/FAIL/NA
+Search Console ....... VERIFIED/NOT VERIFIED
+```
+Un `FAIL` en Indexability, Security o Spam policies bloquea el cierre. Justifica cada línea con una referencia a un hallazgo.
 
 ### Validaciones ejecutadas
 Lista exacta de comandos y resultados (lint, type-check, tests, build, curl, validadores) y de las pendientes de ejecución manual con pasos.
