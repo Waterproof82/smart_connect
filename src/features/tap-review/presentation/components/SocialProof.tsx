@@ -1,6 +1,5 @@
 import React from "react";
 import { useLanguage } from "@shared/context/LanguageContext";
-import { ReviewSchema } from "@shared/presentation/components/SeoSchema";
 import { Star } from "lucide-react";
 
 const SocialProof: React.FC = () => {
@@ -26,18 +25,6 @@ const SocialProof: React.FC = () => {
 
   return (
     <>
-      <ReviewSchema
-        author={testimonials[0].author}
-        text={testimonials[0].quote}
-      />
-      <ReviewSchema
-        author={testimonials[1].author}
-        text={testimonials[1].quote}
-      />
-      <ReviewSchema
-        author={testimonials[2].author}
-        text={testimonials[2].quote}
-      />
       <div className="py-20">
         <div className="ds-container">
           <div
