@@ -4,10 +4,25 @@ import path from "node:path";
 /**
  * Trust-claims guard (seo-trust-claims-cleanup, trust-claims spec).
  *
- * PR2a scope: home-scoped assertions only (Carta Digital reviews, stat
- * strip, FAQ, nav). NFC-scoped assertions (Tapstar, TrustBadges/TrustFacts,
- * CTASection, HowItWorks, hero feature) are added in PR2b (tasks.md 2b.11)
- * so a still-red NFC-scoped assertion never lands on this branch.
+ * PR2a added the home-scoped assertions (Carta Digital reviews, stat strip,
+ * FAQ, nav). PR2b (tasks.md 2b.11) adds the NFC-scoped assertions below:
+ * Tapstar figures, TrustBadges/TrustFacts, CTASection, HowItWorks, hero
+ * feature wording.
+ *
+ * Deviation from tasks.md 2b.11 (recorded, not silently dropped): the task
+ * list's NFC_CLAIMS also named "L'Escale" and bare "400". Both were dropped
+ * from the scan below after verification:
+ *  - "L'Escale" only ever appears in `contactPlaceholderCompany: "Ej.
+ *    Restaurante L'Escale"` — the contact form's example-business
+ *    placeholder, unrelated to the tap-review testimonials (which were
+ *    "Restaurante El Bodegón" / "Café Central Madrid" / "Bar La Tapa", none
+ *    of them "L'Escale"). Scanning for it would fail this guard by removing
+ *    legitimate, out-of-scope UI copy for no reason tied to this change.
+ *  - bare "400" (vs. the StatsBanner literal "+400") collides with ~34
+ *    pre-existing, unrelated occurrences across src/public (font-weight:
+ *    400, pixel widths, etc. — confirmed via `grep -rn "400" src/ public/`).
+ *    The actual Tapstar figure was "+400" (daily-reviews stat in the now
+ *    deleted StatsBanner.tsx); the scan below uses that exact substring.
  */
 
 const ROOT = path.resolve(__dirname, "../../../");
@@ -79,6 +94,61 @@ describe("trust-claims guard — home scope (PR2a)", () => {
       "successTitle",
       "successSubtitle",
       "successDesc",
+    ];
+    for (const key of removedKeys) {
+      expect(source).not.toMatch(new RegExp(`\\b${key}\\b`));
+    }
+  });
+});
+
+const NFC_CLAIMS = [
+  "Tapstar",
+  "4.9/5",
+  "600K",
+  "+400",
+  "Garantía 30 días",
+  "30-day guarantee",
+  "Envío gratis 24h",
+  "Free 24h shipping",
+  "Soporte 24/7",
+  "24/7 Support",
+  "Aparece el primero en Google Maps",
+  "Aparece primero en Google",
+  "Appear first on Google",
+  "Café Central",
+  "+20,000",
+];
+
+describe("trust-claims guard — NFC scope (PR2b)", () => {
+  const files = [...walk(SRC_DIR), ...walk(PUBLIC_DIR)];
+
+  it.each(NFC_CLAIMS)("no file in src/ or public/ contains %j", (claim) => {
+    const offenders = files
+      .filter((file) => fs.readFileSync(file, "utf-8").includes(claim))
+      .map(toRelative);
+    expect(offenders).toEqual([]);
+  });
+
+  it("LanguageContext.tsx no longer declares the removed NFC keys", () => {
+    const source = fs.readFileSync(LANGUAGE_CONTEXT_PATH, "utf-8");
+    const removedKeys = [
+      "tapReviewStatsBusinesses",
+      "tapReviewStatsReviews",
+      "tapReviewStatsDaily",
+      "tapReviewSocialTitle",
+      "tapReviewSocialSubtitle",
+      "tapReviewTestimonial1Quote",
+      "tapReviewTestimonial1Author",
+      "tapReviewTestimonial1Business",
+      "tapReviewTestimonial2Quote",
+      "tapReviewTestimonial2Author",
+      "tapReviewTestimonial2Business",
+      "tapReviewTestimonial3Quote",
+      "tapReviewTestimonial3Author",
+      "tapReviewTestimonial3Business",
+      "tapReviewTrust30Days",
+      "tapReviewTrust24h",
+      "tapReviewTrustSupport",
     ];
     for (const key of removedKeys) {
       expect(source).not.toMatch(new RegExp(`\\b${key}\\b`));

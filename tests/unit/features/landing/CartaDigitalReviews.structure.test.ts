@@ -77,3 +77,28 @@ describe("CartaDigitalReviews (seo-trust-claims-cleanup PR2a, design.md D4/D6/D7
     expect(source).not.toMatch(/opacity-0/);
   });
 });
+
+describe("cartaReviewsTitle labels the reviews as diner reviews, not customer reviews (PR2b fix)", () => {
+  const LANGUAGE_CONTEXT_PATH = path.join(
+    SRC,
+    "shared/context/LanguageContext.tsx",
+  );
+  const source = fs.readFileSync(LANGUAGE_CONTEXT_PATH, "utf-8");
+
+  // The 2 QR iBar reviews are from diners who ordered through the app, not
+  // from business-owner customers of Digitaliza Tenerife — "clientes"/
+  // "customers" conflated the two audiences.
+  it('es "cartaReviewsTitle" reads "Lo que dicen los comensales" (not "clientes")', () => {
+    expect(source).toMatch(/cartaReviewsTitle:\s*"Lo que dicen los comensales"/);
+    expect(source).not.toMatch(
+      /cartaReviewsTitle:\s*"Lo que dicen nuestros clientes"/,
+    );
+  });
+
+  it('en "cartaReviewsTitle" reads "What diners say" (not "our customers")', () => {
+    expect(source).toMatch(/cartaReviewsTitle:\s*"What diners say"/);
+    expect(source).not.toMatch(
+      /cartaReviewsTitle:\s*"What our customers say"/,
+    );
+  });
+});

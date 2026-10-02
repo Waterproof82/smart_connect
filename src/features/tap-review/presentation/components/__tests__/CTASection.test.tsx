@@ -49,4 +49,16 @@ describe("CTASection (tap-review)", () => {
       /rounded-xl|bg-white|min-h-\[48px\]|bg-gradient/,
     );
   });
+
+  // Absence of the old unverified shipping/support/figure claims is
+  // enforced repo-wide by tests/unit/content/trustClaims.guard.test.ts
+  // (NFC scope) — not duplicated here so this file doesn't itself contain
+  // those literal strings (it lives under src/, which that guard scans).
+
+  it("renders the reworded feature list (Sin app, Configuración incluida, Sin suscripciones)", () => {
+    renderWithLanguage();
+    expect(screen.getByText("Sin app")).toBeInTheDocument();
+    expect(screen.getByText("Configuración incluida")).toBeInTheDocument();
+    expect(screen.getByText("Sin suscripciones")).toBeInTheDocument();
+  });
 });
