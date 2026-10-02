@@ -86,3 +86,6 @@ openspec/
 secrets/
 .superpowers/
 .firecrawl/
+
+# SEO exports (Search Console, GA4, GBP, leads) - never commit
+docs/seo-data/
