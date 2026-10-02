@@ -5,55 +5,95 @@
       "path": "/",
       "priority": "1.0",
       "changefreq": "monthly",
-      "lastmod": "2026-10-01"
+      "lastmod": "2026-10-01",
+      "sources": [
+        "src/App.tsx",
+        "src/features/landing/presentation/components/Hero.tsx",
+        "src/features/landing/presentation/components/SuccessStats.tsx",
+        "src/features/landing/presentation/components/HomeFaqSection.tsx",
+        "src/features/landing/presentation/components/HomeSolutionsSection.tsx",
+        "src/features/landing/presentation/components/Contact.tsx",
+        "src/shared/presentation/components/SeoSchema.tsx"
+      ]
     },
     {
       "path": "/tarjetas-nfc",
       "priority": "0.9",
       "changefreq": "monthly",
-      "lastmod": "2026-08-11"
+      "lastmod": "2026-10-01",
+      "sources": [
+        "src/features/tap-review/presentation/TapReviewPage.tsx",
+        "src/features/tap-review/presentation/TapReviewSection.tsx"
+      ]
     },
     {
       "path": "/carta-digital",
       "priority": "0.9",
       "changefreq": "monthly",
-      "lastmod": "2026-10-01"
+      "lastmod": "2026-10-01",
+      "sources": [
+        "src/features/landing/presentation/components/CartaDigitalPage.tsx",
+        "src/features/landing/presentation/components/CartaDigitalSection.tsx"
+      ]
     },
     {
       "path": "/ia-chatbots-tenerife",
       "priority": "0.8",
       "changefreq": "monthly",
-      "lastmod": "2026-10-01"
+      "lastmod": "2026-10-01",
+      "sources": [
+        "src/features/landing/presentation/components/IaChatbotsPage.tsx"
+      ]
     },
     {
       "path": "/tpv-restaurantes",
       "priority": "0.8",
       "changefreq": "monthly",
-      "lastmod": "2026-10-01"
+      "lastmod": "2026-10-01",
+      "sources": [
+        "src/features/landing/presentation/components/TpvRestaurantesPage.tsx",
+        "src/shared/components/tpv/TpvModulesSection.tsx"
+      ]
     },
     {
       "path": "/about",
       "priority": "0.7",
       "changefreq": "monthly",
-      "lastmod": "2026-08-12"
+      "lastmod": "2026-10-02",
+      "sources": [
+        "src/features/landing/presentation/components/AboutPage.tsx",
+        "src/shared/config/organization.ts"
+      ]
     },
     {
       "path": "/legal/aviso",
       "priority": "0.3",
       "changefreq": "yearly",
-      "lastmod": "2026-05-18"
+      "lastmod": "2026-10-02",
+      "sources": [
+        "src/features/legal/presentation/AvisoLegalPage.tsx",
+        "src/features/legal/presentation/LegalPage.tsx"
+      ]
     },
     {
       "path": "/legal/privacidad",
       "priority": "0.3",
       "changefreq": "yearly",
-      "lastmod": "2026-05-18"
+      "lastmod": "2026-10-02",
+      "sources": [
+        "src/features/legal/presentation/PrivacidadPage.tsx",
+        "src/features/legal/presentation/LegalPage.tsx"
+      ]
     },
     {
       "path": "/legal/cookies",
       "priority": "0.3",
       "changefreq": "yearly",
-      "lastmod": "2026-05-18"
+      "lastmod": "2026-05-18",
+      "sources": [
+        "src/features/legal/presentation/CookiesPage.tsx",
+        "src/features/legal/presentation/LegalPage.tsx"
+      ]
     }
   ]
 }
