@@ -63,9 +63,6 @@ const CartaDigitalPage: React.FC = () => {
         name={solutionMeta?.serviceValue ?? "Carta Digital Premium"}
         description={solutionMeta?.jsonLd.description ?? PAGE_DESCRIPTION}
         url={PAGE_URL}
-        providerName="Digitaliza Tenerife"
-        providerUrl={ORG_URL}
-        providerLogoUrl={`${ORG_URL}/icon.png`}
         areaServed={solutionMeta?.jsonLd.areaServed}
         serviceType={solutionMeta?.jsonLd.serviceType}
       />
