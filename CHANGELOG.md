@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Removed
+
+- **`Review` and `HowTo` JSON-LD**: deleted the `ReviewSchema`/`HowToSchema` exports (`SeoSchema.tsx`) and every consumer (`SuccessStats`, `SocialProof`, `HowItWorks`). The `Review` nodes were self-serving (`itemReviewed` was the company itself), which breaks Google's spam policy; `HowTo` is a retired rich result. `FAQPage` stays, documented as semantic-only markup.
+- The dead `TestimonialCarousel` component and its test (zero live imports).
+- **Every Tapstar-sourced figure and mention**: "4.9/5", "+20,000 negocios", "+600K reseñas", "+400 reseñas diarias", "Miles de negocios confían en nosotros", the "Tapstar" exhibitor wording, and the `StatsBanner`/`StarRating` components that rendered them.
+- **Fabricated testimonials**: the 3 invented `SocialProof` quotes/businesses and the home `SuccessStats` block's unsourced stat strip ("Decenas", "Hasta 6×", "Hasta 45%", a hardcoded "★★★★★").
+- **Unverified NFC guarantees**: "Garantía 30 días" / "30-day guarantee", "Envío gratis 24h" / "Free 24h shipping" and "Soporte 24/7" / "24/7 Support" from `TrustBadges` and `CTASection`.
+- Voseo in `homeFaqA2` ("Contactá" → "Contacta").
+
+### Changed
+
+- **Carta Digital social proof**: `SuccessStats` is now `CartaDigitalReviews`, showing 2 real, attributed Google reviews of QR iBar (Carlos S., Luis M.; 5★; 2022) instead of unsourced stats.
+- **`/tarjetas-nfc` trust strip**: `TrustBadges` now states 4 verifiable facts (no app needed, NFC with a backup QR, iPhone 8+/Android compatibility, no subscriptions) instead of the removed guarantee claims.
+- **`/tarjetas-nfc` social proof**: `SocialProof` is now `TrustFacts` — 3 factual cards (we configure the device, works with almost any phone, direct WhatsApp contact with a Tenerife-based team) instead of fabricated testimonials.
+- `CTASection`'s feature list now reads "Sin app" / "Configuración incluida" instead of the removed guarantee claims; its subtitle no longer cites the +20,000-businesses figure.
+- `tapReviewFeatGoogle` and `tapReviewHeroFeature3` reworded to "Mejora tu posicionamiento y ayuda a tener más visibilidad" / "Improve your ranking and help boost your visibility" (previously claimed a guaranteed #1 Google ranking).
+- The home `#por-que` stat strip and `navSuccess` ("Opiniones"/"Reviews") now state only verifiable facts.
+- `.atl/skill-registry.md` Structured Data section corrected: no self-serving `Review`/`AggregateRating`, `HowTo` retired, `FAQPage` documented as semantic-only.
+
 ### Added
 
 - **`seo-geo-expert` now closes every audit by requesting the external data it lacks** (`references/data-requests.md`): a "Data needed" section listing source, exact report path, date range, the finding it unblocks, priority and delivery format for Search Console, GA4, Google Business Profile, Google Sheets lead tracking, PageSpeed/CrUX, backlink tools and hosting logs. It asks only when a finding is `NOT VERIFIED` or a decision depends on the data, never requests personal data, and states explicitly when nothing more is needed. SEO exports go in `docs/seo-data/`, now git-ignored.
