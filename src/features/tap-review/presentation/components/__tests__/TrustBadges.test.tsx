@@ -25,12 +25,10 @@ describe("TrustBadges (tap-review, PR2b facts strip)", () => {
     expect(screen.getByText("Sin suscripciones")).toBeInTheDocument();
   });
 
-  it("does not render the removed unverified guarantee claims", () => {
-    renderWithLanguage();
-    expect(screen.queryByText(/Garantía 30 días/i)).toBeNull();
-    expect(screen.queryByText(/Envío gratis 24h/i)).toBeNull();
-    expect(screen.queryByText(/Soporte 24\/7/i)).toBeNull();
-  });
+  // Absence of the old unverified guarantee/shipping/support strings is
+  // enforced repo-wide by tests/unit/content/trustClaims.guard.test.ts
+  // (NFC scope) — not duplicated here so this file doesn't itself contain
+  // those literal strings (it lives under src/, which that guard scans).
 
   it("renders no star-rating group (facts strip, not a rating banner)", () => {
     renderWithLanguage();

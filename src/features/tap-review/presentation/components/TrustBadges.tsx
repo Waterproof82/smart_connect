@@ -4,8 +4,8 @@ import { Smartphone, QrCode, Nfc, MessageSquare } from "lucide-react";
 
 /**
  * Facts strip (seo-trust-claims-cleanup PR2b, design.md D2): replaces the
- * old unverified "30-day guarantee / free 24h shipping / 24/7 support"
- * badges with 4 verifiable product facts. No stars, no third-party figures.
+ * old unverified shipping/support/warranty badges with 4 verifiable
+ * product facts. No stars, no third-party figures.
  */
 const TrustBadges: React.FC = () => {
   const { t } = useLanguage();

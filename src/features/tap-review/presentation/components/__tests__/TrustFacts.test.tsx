@@ -37,11 +37,8 @@ describe("TrustFacts (tap-review, PR2b factual cards — replaces SocialProof)",
     expect(screen.queryByRole("img")).toBeNull();
   });
 
-  it("does not render fabricated testimonial content (no quotes, business names or avatar initials)", () => {
-    renderWithLanguage();
-    expect(
-      screen.queryByText(/Restaurante El Bodegón|Café Central|Bar La Tapa/),
-    ).toBeNull();
-    expect(screen.queryByText(/Pasamos de 50 a 500/)).toBeNull();
-  });
+  // Absence of the old fabricated testimonial businesses and quotes is
+  // enforced repo-wide by tests/unit/content/trustClaims.guard.test.ts
+  // (NFC scope) — not duplicated here so this file doesn't itself contain
+  // those literal strings (it lives under src/, which that guard scans).
 });

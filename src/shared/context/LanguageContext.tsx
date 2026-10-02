@@ -283,9 +283,6 @@ interface Translation extends TpvModuleTranslations {
   tapReviewProductExhibitorBlackAlt: string;
   tapReviewProductStand: string;
   tapReviewProductStandAlt: string;
-  tapReviewStatsBusinesses: string;
-  tapReviewStatsReviews: string;
-  tapReviewStatsDaily: string;
   tapReviewHowTitle: string;
   tapReviewHowSubtitle: string;
   tapReviewHowStep1Title: string;
@@ -816,7 +813,7 @@ const translations: Record<Language, Translation> = {
     tapReviewHeroBtnProduct: "Ver producto",
     tapReviewHeroFeature1: "Pago único - Sin suscripciones",
     tapReviewHeroFeature2: "Consigue reseñas en 5 segundos",
-    tapReviewHeroFeature3: "Aparece el primero en Google Maps",
+    tapReviewHeroFeature3: "Mejora tu posicionamiento y ayuda a tener más visibilidad",
 
     tapReviewProductExhibitorWhite: "Expositor Blanco",
     tapReviewProductExhibitorWhiteAlt: "Expositor de reseñas blanco",
@@ -825,16 +822,12 @@ const translations: Record<Language, Translation> = {
     tapReviewProductStand: "Stand Exhibidor",
     tapReviewProductStandAlt: "Stand exhibidor Tap-to-Review",
 
-    tapReviewStatsBusinesses: "Funcionando en +20,000 negocios",
-    tapReviewStatsReviews: "reseñas conseguidas",
-    tapReviewStatsDaily: "reseñas diarias",
-
     tapReviewHowTitle: "¿Cómo funciona?",
     tapReviewHowSubtitle:
       "Gracias a su Chip NFC de alto rendimiento, tus clientes acercan el móvil y se les abre la página de reseñas de tu negocio en Google.",
     tapReviewHowStep1Title: "Coloca el dispositivo",
     tapReviewHowStep1Desc:
-      "Pon el expositor Tapstar en tu local, visible para tus clientes.",
+      "Pon el expositor en tu local, visible para tus clientes.",
     tapReviewHowStep2Title: "Cliente acerca el móvil",
     tapReviewHowStep2Desc:
       "El cliente acerca su teléfono al chip NFC. No necesita abrir apps ni escanear nada.",
@@ -851,9 +844,9 @@ const translations: Record<Language, Translation> = {
     tapReviewFeatSpeed: "Reseñas en 5 segundos",
     tapReviewFeatSpeedDesc:
       'El proceso es tan rápido que los clientes no tienen tiempo de decir "no".',
-    tapReviewFeatGoogle: "Aparece primero en Google",
+    tapReviewFeatGoogle: "Mejora tu posicionamiento y ayuda a tener más visibilidad",
     tapReviewFeatGoogleDesc:
-      "Más reseñas = mejor posicionamiento en Google Maps y búsquedas locales.",
+      "Las reseñas recientes y bien valoradas son uno de los factores que Google tiene en cuenta en los resultados locales.",
     tapReviewFeatNoSub: "Sin suscripciones",
     tapReviewFeatNoSubDesc:
       "Pago único. Sin cuotas mensuales, sin permanencia, sin sorpresas.",
@@ -884,10 +877,10 @@ const translations: Record<Language, Translation> = {
 
     tapReviewCTATitle: "Empieza a conseguir reseñas hoy",
     tapReviewCTASubtitle:
-      "Únete a los +20,000 negocios que ya están multiplicando sus reseñas en Google",
+      "Empieza a conseguir reseñas en segundos, sin instalar nada.",
     tapReviewCTABtnPrimary: "Contactar ahora",
-    tapReviewCTAFeature1: "Garantía 30 días",
-    tapReviewCTAFeature2: "Envío gratis 24h",
+    tapReviewCTAFeature1: "Sin app",
+    tapReviewCTAFeature2: "Configuración incluida",
     tapReviewCTAFeature3: "Sin suscripciones",
 
     tapReviewTrustNoApp: "Sin app",
@@ -1422,7 +1415,7 @@ const translations: Record<Language, Translation> = {
     tapReviewHeroBtnProduct: "View product",
     tapReviewHeroFeature1: "One-time payment - No subscriptions",
     tapReviewHeroFeature2: "Get reviews in 5 seconds",
-    tapReviewHeroFeature3: "Appear first on Google Maps",
+    tapReviewHeroFeature3: "Improve your ranking and help boost your visibility",
 
     tapReviewProductExhibitorWhite: "White Exhibitor",
     tapReviewProductExhibitorWhiteAlt: "White reviews exhibitor",
@@ -1431,16 +1424,12 @@ const translations: Record<Language, Translation> = {
     tapReviewProductStand: "Display Stand",
     tapReviewProductStandAlt: "Tap-to-Review display stand",
 
-    tapReviewStatsBusinesses: "Working in +20,000 businesses",
-    tapReviewStatsReviews: "reviews obtained",
-    tapReviewStatsDaily: "daily reviews",
-
     tapReviewHowTitle: "How does it work?",
     tapReviewHowSubtitle:
       "Thanks to its high-performance NFC chip, your customers bring their phone closer and the Google reviews page for your business opens.",
     tapReviewHowStep1Title: "Place the device",
     tapReviewHowStep1Desc:
-      "Put the Tapstar exhibitor in your establishment, visible for your customers.",
+      "Put the exhibitor in your establishment, visible for your customers.",
     tapReviewHowStep2Title: "Customer brings phone closer",
     tapReviewHowStep2Desc:
       "The customer brings their phone to the NFC chip. No need to open apps or scan anything.",
@@ -1456,9 +1445,9 @@ const translations: Record<Language, Translation> = {
     tapReviewFeatSpeed: "Reviews in 5 seconds",
     tapReviewFeatSpeedDesc:
       'The process is so fast that customers don\'t have time to say "no".',
-    tapReviewFeatGoogle: "Appear first on Google",
+    tapReviewFeatGoogle: "Improve your ranking and help boost your visibility",
     tapReviewFeatGoogleDesc:
-      "More reviews = better positioning on Google Maps and local searches.",
+      "Recent, well-rated reviews are one of the factors Google considers in local results.",
     tapReviewFeatNoSub: "No subscriptions",
     tapReviewFeatNoSubDesc:
       "One-time payment. No monthly fees, no commitment, no surprises.",
@@ -1488,11 +1477,10 @@ const translations: Record<Language, Translation> = {
       "The device also includes a QR code that the customer can scan with their phone camera. So no one misses out on leaving you a review.",
 
     tapReviewCTATitle: "Start getting reviews today",
-    tapReviewCTASubtitle:
-      "Join the +20,000 businesses that are already multiplying their Google reviews",
+    tapReviewCTASubtitle: "Start getting reviews in seconds, nothing to install.",
     tapReviewCTABtnPrimary: "Contact now",
-    tapReviewCTAFeature1: "30-day guarantee",
-    tapReviewCTAFeature2: "Free 24h shipping",
+    tapReviewCTAFeature1: "No app needed",
+    tapReviewCTAFeature2: "Setup included",
     tapReviewCTAFeature3: "No subscriptions",
 
     tapReviewTrustNoApp: "No app needed",
