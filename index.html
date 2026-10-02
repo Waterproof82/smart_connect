@@ -12,6 +12,8 @@
 -->
 <html lang="es" class="bg-sc-dark min-h-full">
   <head>
+    <meta charset="UTF-8" />
+
     <!-- Google tag (gtag.js) — GA4 property for digitalizatenerife.es -->
     <script
       async
@@ -23,7 +25,11 @@
         dataLayer.push(arguments);
       }
 
-      // RGPD art.6 / LSSI-CE art.22.2 — nothing measured until explicit opt-in.
+      // Consent Mode v2 defaults (RGPD art.6 / LSSI-CE art.22.2): until
+      // opt-in, ad/analytics storage is denied below. gtag.js itself still
+      // loads and may send cookieless pings to Google (consent-mode ping),
+      // but no analytics cookies are set and no identifiable data is stored
+      // until the user grants consent.
       gtag("consent", "default", {
         ad_storage: "denied",
         ad_user_data: "denied",
@@ -63,7 +69,6 @@
       if (window.__scAnalyticsScope) gtag("config", "G-F9KQ7X8TSQ");
     </script>
 
-    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="theme-color"
@@ -84,13 +89,7 @@
     <meta name="format-detection" content="telephone=no" />
 
     <!-- Security -->
-    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
-    <meta
-      http-equiv="Permissions-Policy"
-      content="camera=(), microphone=(), geolocation=()"
-    />
 
     <!-- Preconnect -->
     <link rel="preconnect" href="https://tysjedvujvsmrzzrmesr.supabase.co" />
