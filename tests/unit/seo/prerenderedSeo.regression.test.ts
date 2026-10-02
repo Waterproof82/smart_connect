@@ -203,17 +203,22 @@ if (distBuilt) {
 
 // ─── Structured data policy: Review/HowTo must never ship (PR1) ──────────
 // `dist/` is gitignored and may exist locally from a build that predates
-// this change's source edits (SeoSchema.tsx / HowItWorks.tsx / SocialProof.tsx
-// / CartaDigitalReviews.tsx). Comparing against a stale dist would be a false
-// negative (old JSON-LD baked into old HTML), not a real regression. Gate on
-// `distFresh` — dist/index.html newer than every touched source file — so
-// this skips gracefully both when dist is absent AND when it's stale, and
-// only asserts for real once a build run after this change exists.
+// this change's source edits (SeoSchema.tsx / HowItWorks.tsx / TrustFacts.tsx
+// / TrustBadges.tsx / CTASection.tsx / CartaDigitalReviews.tsx). Comparing
+// against a stale dist would be a false negative (old JSON-LD baked into old
+// HTML), not a real regression. Gate on `distFresh` — dist/index.html newer
+// than every touched source file — so this skips gracefully both when dist
+// is absent AND when it's stale, and only asserts for real once a build run
+// after this change exists.
 const TOUCHED_SOURCES = [
   "src/shared/presentation/components/SeoSchema.tsx",
   "src/features/tap-review/presentation/components/HowItWorks.tsx",
-  "src/features/tap-review/presentation/components/SocialProof.tsx",
+  "src/features/tap-review/presentation/components/TrustFacts.tsx",
+  "src/features/tap-review/presentation/components/TrustBadges.tsx",
+  "src/features/tap-review/presentation/components/CTASection.tsx",
+  "src/features/tap-review/presentation/components/Features.tsx",
   "src/features/landing/presentation/components/CartaDigitalReviews.tsx",
+  "src/shared/context/LanguageContext.tsx",
 ].map((relative) => path.join(ROOT, relative));
 
 const distIndexPath = path.join(DIST, "index.html");
