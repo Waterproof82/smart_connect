@@ -507,9 +507,9 @@ const translations: Record<Language, Translation> = {
     // Hero — outcome-first: leads with business benefit (facturación /
     // tiempo ahorrado), platform breadth is supporting copy in the eyebrow.
     heroEyebrow: "Todo tu negocio en una pantalla",
-    heroTitle: "Aumenta tu facturación,",
-    heroTitleAccent: "ahorra horas",
-    heroTitleEnd: "cada semana",
+    heroTitle: "Carta digital y tarjetas NFC",
+    heroTitleAccent: "para restaurantes",
+    heroTitleEnd: "de Tenerife",
     heroServiciosTitle: "Soluciones de",
     heroServiciosTitleAccent: "IA y Automatización",
     heroServiciosTitleEnd: "para tu Negocio",
@@ -1106,9 +1106,9 @@ const translations: Record<Language, Translation> = {
     // Hero — outcome-first: leads with business benefit (revenue / time
     // saved), platform breadth is supporting copy in the eyebrow.
     heroEyebrow: "Your whole business, one screen",
-    heroTitle: "Boost your revenue,",
-    heroTitleAccent: "save hours",
-    heroTitleEnd: "every week",
+    heroTitle: "Digital menu and NFC cards",
+    heroTitleAccent: "for restaurants",
+    heroTitleEnd: "in Tenerife",
     heroServiciosTitle: "AI and Automation",
     heroServiciosTitleAccent: "Solutions",
     heroServiciosTitleEnd: "for Your Business",
