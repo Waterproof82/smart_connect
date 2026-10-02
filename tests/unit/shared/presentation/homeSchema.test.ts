@@ -1,6 +1,7 @@
 import { buildHomeSchema } from "@shared/presentation/components/SeoSchema";
 import { SOLUTIONS } from "@shared/config/solutions";
 import { TPV_MODULES } from "@shared/config/tpvModules";
+import { ORGANIZATION } from "@shared/config/organization";
 
 describe("buildHomeSchema", () => {
   it("emits exactly one Service node per solution passed in", () => {
@@ -47,6 +48,41 @@ describe("buildHomeSchema", () => {
     );
     expect(types).toContain("LocalBusiness");
     expect(types).toContain("WebPage");
+  });
+
+  it("LocalBusiness address matches the ORGANIZATION constant exactly", () => {
+    const schema = buildHomeSchema(SOLUTIONS);
+    const org = schema["@graph"].find(
+      (node) => (node as { "@type"?: string })["@type"] === "LocalBusiness",
+    ) as { address?: Record<string, unknown> };
+    expect(org.address).toEqual({
+      "@type": "PostalAddress",
+      ...ORGANIZATION.address,
+    });
+  });
+
+  it("LocalBusiness carries a geo property with the correct latitude/longitude", () => {
+    const schema = buildHomeSchema(SOLUTIONS);
+    const org = schema["@graph"].find(
+      (node) => (node as { "@type"?: string })["@type"] === "LocalBusiness",
+    ) as { geo?: Record<string, unknown> };
+    expect(org.geo).toEqual({
+      "@type": "GeoCoordinates",
+      latitude: ORGANIZATION.geo.latitude,
+      longitude: ORGANIZATION.geo.longitude,
+    });
+  });
+
+  it("LocalBusiness carries a founder Person node with the correct name and jobTitle", () => {
+    const schema = buildHomeSchema(SOLUTIONS);
+    const org = schema["@graph"].find(
+      (node) => (node as { "@type"?: string })["@type"] === "LocalBusiness",
+    ) as { founder?: Record<string, unknown> };
+    expect(org.founder).toEqual({
+      "@type": "Person",
+      name: ORGANIZATION.founder.name,
+      jobTitle: ORGANIZATION.founder.jobTitle,
+    });
   });
 
   it("emits no FAQPage node when no faqs are passed", () => {

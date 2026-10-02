@@ -26,3 +26,21 @@ describe("WebMCP tool descriptions (PR8 QRIBAR-free, platform-accurate copy)", (
     expect(source).toMatch(/name: "get_page_content_markdown"/);
   });
 });
+
+// seo-nap-eeat-fixes PR1: the description and office line must read the
+// address from the organization constant instead of a hand-synced literal.
+describe("WebMCP NAP consistency (seo-nap-eeat-fixes)", () => {
+  const source = fs.readFileSync(COMPONENT_PATH, "utf-8");
+
+  it("imports the organization constant", () => {
+    expect(source).toMatch(
+      /from\s+["']@shared\/config\/organization["']/,
+    );
+  });
+
+  it("no longer hardcodes the legacy office location literal", () => {
+    expect(source).not.toMatch(/office location in Santa Cruz de Tenerife/i);
+    expect(source).not.toMatch(/Oficina: Santa Cruz de Tenerife, Islas Canarias, España/);
+    expect(source).not.toMatch(/Office: Santa Cruz de Tenerife, Canary Islands, Spain/);
+  });
+});
