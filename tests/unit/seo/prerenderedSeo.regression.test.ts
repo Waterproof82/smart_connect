@@ -15,8 +15,6 @@ const routeFile = (routePath: string): string =>
     ? path.join(DIST, "index.html")
     : path.join(DIST, routePath.replace(/^\//, ""), "index.html");
 
-const KNOWN_HEADING_JUMPS = new Set(["/ia-chatbots-tenerife"]);
-
 const distBuilt = routes.every((route) => fs.existsSync(routeFile(route.path))) && fs.existsSync(path.join(DIST, "sitemap.xml"));
 const maybeDescribe = distBuilt ? describe : describe.skip;
 
@@ -84,9 +82,7 @@ maybeDescribe("SEO regression — prerendered HTML (requires `npm run build`)", 
       expect(h1s[0].length).toBeGreaterThan(5);
     });
 
-    const headingTest = KNOWN_HEADING_JUMPS.has(page.path) ? it.failing : it;
-
-    headingTest("keeps heading levels without skipping a level", () => {
+    it("keeps heading levels without skipping a level", () => {
       const levels = [...strip(page.html).matchAll(/<h([1-6])\b/gi)].map((m) => Number(m[1]));
       const jumps = levels.filter((level, i) => i > 0 && level > levels[i - 1] + 1);
       expect(jumps).toEqual([]);

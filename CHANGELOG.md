@@ -9,7 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- **Automated SEO regression tests** (`tests/unit/seo/`): `seoSources.regression.test.ts` guards `robots.txt`, `Content-Signal` consistency across `robots.txt`/`vercel.json`/`vite.config.ts`, the official domain, `.well-known` JSON validity, `site-routes.json`, redirect hygiene (permanent, no chains, prerendered destinations) and indexing/security headers; `prerenderedSeo.regression.test.ts` checks every prerendered page in `dist/` (language, unique title/description, self-referencing canonical, Open Graph, no noindex, single H1, heading order, JSON-LD validity and origin, image `alt`/dimensions, internal links) plus `sitemap.xml`, `404.html` and the built `robots.txt`; it is skipped when `dist/` has not been built. A known H1→H3 heading jump on `/ia-chatbots-tenerife` is tracked with `it.failing` so the test flags when it is fixed.
+- **CI runs the SEO regression tests against the built `dist/`** (`.github/workflows/ci-cd.yml`, new step after `npm run build`); previously the prerender checks were silently skipped in CI because `npm test` ran before any build.
+- **Automated SEO regression tests** (`tests/unit/seo/`): `seoSources.regression.test.ts` guards `robots.txt`, `Content-Signal` consistency across `robots.txt`/`vercel.json`/`vite.config.ts`, the official domain, `.well-known` JSON validity, `site-routes.json`, redirect hygiene (permanent, no chains, prerendered destinations) and indexing/security headers; `prerenderedSeo.regression.test.ts` checks every prerendered page in `dist/` (language, unique title/description, self-referencing canonical, Open Graph, no noindex, single H1, heading order, JSON-LD validity and origin, image `alt`/dimensions, internal links) plus `sitemap.xml`, `404.html` and the built `robots.txt`; it is skipped when `dist/` has not been built.
 - **Unified design system across every public page** (`design.md`, `tokens.css`): one hero layout, one section rhythm, one heading scale (Space Grotesk + DM Sans) and shared building blocks (`PageShell`, `PageHero`, `Section`, `FaqList`, `ClosingCta`) used by home, Carta Digital, Tarjetas NFC, Chatbots IA, TPV, About, legal pages and the 404.
 - **WhatsApp as the single primary action**: a shared green WhatsApp button (`WhatsAppCta`) in the nav, every hero, every closing block and the footer, with a pre-filled message per service; on mobile a sticky WhatsApp bar stays one tap away without covering the chatbot or the cookie button. Without a configured number the button falls back to the contact form.
 - The home hero now states who we work with: restaurants, bars, shops and businesses in Tenerife and the Canary Islands.
@@ -28,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Heading hierarchy on `/ia-chatbots-tenerife`**: the four service cards jumped from the H1 straight to H3; they are now H2 (same visual style), so the page outline is H1 → H2 → H3 for crawlers and screen readers.
 - Typo on the Carta Digital closing button ("Habar con asesor" → "Hablar con asesor").
 - `/carta-digital` had two identical "¿Cómo se ve?" headings; the steps section is now "¿Cómo funciona?", and the English demo heading reads "What does it look like?".
 - On mobile the chatbot's WhatsApp button no longer duplicates the sticky WhatsApp bar.

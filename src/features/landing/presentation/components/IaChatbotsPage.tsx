@@ -140,7 +140,7 @@ const IaChatbotsPage: React.FC = () => {
                   className="w-7 h-7 text-[var(--color-primary)] mb-4"
                   aria-hidden="true"
                 />
-                <h3 className="ds-h3 mb-2">{title}</h3>
+                <h2 className="ds-h3 mb-2">{title}</h2>
                 <p className="text-muted leading-relaxed m-0">{desc}</p>
               </li>
             ))}

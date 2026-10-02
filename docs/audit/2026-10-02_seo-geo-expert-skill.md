@@ -14,8 +14,9 @@
 - Reclassified `llms.txt` as an experimental, non-standard resource (never equivalent to robots.txt/sitemap/canonical; label EXPERIMENT/OPTIMIZATION).
 - Split references into dedicated files: rendering-javascript-seo, performance-cwv, accessibility, security, spam-policies, validation-protocol, regression-testing.
 - Iteration 3: converted the SEO regression checklist into automated Jest tests (`tests/unit/seo/seoSources.regression.test.ts`, `tests/unit/seo/prerenderedSeo.regression.test.ts`) and documented them in `references/regression-testing.md`.
-- Finding (not fixed, out of scope): `/ia-chatbots-tenerife` jumps from H1 to H3 (four H3 cards before the first H2). Tracked via `KNOWN_HEADING_JUMPS` / `it.failing`.
-- Finding: `CLAUDE.md` still lists `.well-known` files (`api-catalog`, `openid-configuration`, `oauth-protected-resource`, `jwks.json`) that no longer exist in `public/.well-known/`; the tests assert only what is published.
+- Finding (not fixed, out of scope): `/ia-chatbots-tenerife` jumps from H1 to H3 (four H3 cards before the first H2). Fixed in iteration 4: the four cards in `IaChatbotsPage.tsx` are now `<h2>` (same `ds-h3` styling); the temporary `it.failing` exception was removed.
+- Finding: `CLAUDE.md` still lists `.well-known` files (`api-catalog`, `openid-configuration`, `oauth-protected-resource`, `jwks.json`) that no longer exist in `public/.well-known/`; the tests assert only what is published. Fixed in iteration 4: `CLAUDE.md` now documents the files actually published.
+- Iteration 4: added a CI step running `tests/unit/seo` after `npm run build` so the dist-based checks are not skipped in CI.
 
 ## Validation
 - `npm test`: 85 suites passed, 2 skipped (1225 tests passed). `npm run lint` and `npm run type-check`: pass. `npm run build` run to generate `dist/` for the prerender tests.

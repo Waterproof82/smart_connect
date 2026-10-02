@@ -29,6 +29,8 @@ Siempre que sea posible, convertir los checks en tests automatizados del repo (T
 
 Ya existían y complementan: `geoSurfaces` (hash `sha256` de `llms.txt`, URLs muertas), `routeParity` (SSR ↔ `site-routes.json`), `vercelNotFound` (404 real, noindex en admin/panel/login), `criticalCssOutput`.
 
-**Excepciones conocidas** (`KNOWN_HEADING_JUMPS`): se marcan con `it.failing`, de modo que el test **se pone en rojo cuando el problema se corrige**, obligando a retirar la excepción. Hoy: `/ia-chatbots-tenerife` (H1 → H3 antes del primer H2).
+**Excepciones:** hoy no hay ninguna. Si hace falta tolerar un problema conocido, márcalo con `it.failing` y una lista explícita (así el test se pone en rojo al corregirlo y obliga a retirar la excepción).
+
+**CI:** `.github/workflows/ci-cd.yml` ejecuta `npx jest tests/unit/seo` justo después de `npm run build`, para que los checks de `dist/` corran de verdad (en el paso `npm test` previo se omiten por no existir `dist/`).
 
 Al añadir una ruta o un check nuevo: ampliar estos archivos (TDD) en lugar de comprobaciones manuales. Los tests no llevan comentarios (convención de `docs/context/readme_testing.md`).
