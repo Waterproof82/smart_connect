@@ -561,7 +561,7 @@ const translations: Record<Language, Translation> = {
 
     // Carta Digital reviews (seo-trust-claims-cleanup PR2a)
     cartaReviewsEyebrow: "Opiniones",
-    cartaReviewsTitle: "Lo que dicen nuestros clientes",
+    cartaReviewsTitle: "Lo que dicen los comensales",
     cartaReviewsSource:
       "Reseña en Google de QR iBar, la versión anterior de nuestra Carta Digital",
     cartaReviewsRatingOf: "de 5 estrellas",
@@ -1158,7 +1158,7 @@ const translations: Record<Language, Translation> = {
       "The digital menu that eliminates intermediaries. 0% commissions, 5 languages, WhatsApp orders and your own customer database.",
     featuresDetails: "View details",
     cartaReviewsEyebrow: "Reviews",
-    cartaReviewsTitle: "What our customers say",
+    cartaReviewsTitle: "What diners say",
     cartaReviewsSource:
       "Google review of QR iBar, the earlier version of our Carta Digital",
     cartaReviewsRatingOf: "out of 5 stars",
