@@ -2,12 +2,18 @@ import { buildAboutSchema } from "@shared/presentation/components/SeoSchema";
 import { ORGANIZATION } from "@shared/config/organization";
 
 describe("buildAboutSchema", () => {
-  it("builds an AboutPage node with an Organization mainEntity", () => {
+  it("builds an AboutPage node with the shared LocalBusiness mainEntity (design.md D4, S8)", () => {
     const schema = buildAboutSchema();
     expect(schema["@context"]).toBe("https://schema.org");
     expect(schema["@type"]).toBe("AboutPage");
+    // S8 (entity graph): mainEntity now embeds organizationNode() — the
+    // exact same LocalBusiness node home declares (@id #organization),
+    // not a second, independently-typed Organization redeclaration.
     expect((schema.mainEntity as Record<string, unknown>)["@type"]).toBe(
-      "Organization",
+      "LocalBusiness",
+    );
+    expect((schema.mainEntity as Record<string, unknown>)["@id"]).toBe(
+      "https://digitalizatenerife.es/#organization",
     );
   });
 

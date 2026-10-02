@@ -68,9 +68,6 @@ const TpvRestaurantesPage: React.FC = () => {
         name={solutionMeta?.serviceValue ?? "TPV para restaurantes"}
         description={solutionMeta?.jsonLd.description ?? PAGE_DESCRIPTION}
         url={PAGE_URL}
-        providerName="Digitaliza Tenerife"
-        providerUrl={ORG_URL}
-        providerLogoUrl={`${ORG_URL}/icon.png`}
         areaServed={solutionMeta?.jsonLd.areaServed}
         serviceType={solutionMeta?.jsonLd.serviceType}
       />
