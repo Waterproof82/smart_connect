@@ -318,6 +318,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Dead `SeoSchema.tsx` exports**: `GeoCoverage`/`GeoCoverageProps` and `InternalLinks`/`InternalLinksProps`/`RelatedLink` had zero consumers anywhere in the codebase; removed, and the `docs/SEO_PROTOCOL.md` P-23 row that referenced `InternalLinks` as if it were live was dropped
 
+### Fixed
+
+- **Hand-maintained, stale sitemap `lastmod` (P-20)**: every route's `lastmod` is now derived from git history instead of being hand-edited (and forgotten). New `scripts/lastmod.mjs` computes `max(gitDate, hardcodedFloor)` per route from `--first-parent` commit dates across the files each route declares as its `sources` in `scripts/site-routes.json`; the hardcoded value is a reviewed floor, never overridden by an older git date, because some real content edits (shared `LanguageContext.tsx` translation strings, Supabase content) never touch a route's own source files. Git missing, erroring, or a shallow clone (Vercel's default checkout) safely falls back to the floor — no fabricated dates, no failed build.
+  - `scripts/lastmod.mjs` (new): `defaultExec`, `hasFullHistory`, `gitLastmod`, `resolveRouteLastmods` — injectable `exec`, never throws
+  - `scripts/site-routes.json`: every route now declares a `sources` array; corrected the stale floor dates for `/about` (2026-08-12 → 2026-10-02) and `/tarjetas-nfc` (2026-08-11 → 2026-10-01), plus `/legal/aviso` and `/legal/privacidad` (2026-05-18 → 2026-10-02, the NAP address fix above touched their legal text but not their own route files)
+  - `scripts/prerender.mjs`: calls `resolveRouteLastmods` before `writeSitemap` and logs the resolved mode (`lastmod: mode=git` / `mode=fallback (<reason>)`); `scripts/sitemap.mjs` stays git-free
+  - `docs/SEO_PROTOCOL.md`: P-20 rewritten to describe the automation, the floor semantics, and the Vercel shallow-clone caveat (`VERCEL_DEEP_CLONE=true` is community-reported, not officially documented — verify via the build log)
+  - New `tests/unit/scripts/lastmod.test.ts`: success, floor-wins, git missing, git error, shallow clone, malformed date, plus a guard that every route's `sources` exist on disk
+
 ## [0.5.0] - 2026-03-16
 
 ### Added
