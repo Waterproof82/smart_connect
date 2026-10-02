@@ -6,9 +6,9 @@
     {
       "name": "product-information",
       "type": "information",
-      "description": "Get detailed information about Digitaliza Tenerife products: Tap-to-Review NFC, Carta Digital Premium, n8n automation, WhatsApp automation, software for Canarias, and digitalization for Tenerife.",
+      "description": "Get detailed information about Digitaliza Tenerife products: Carta Digital, Tarjetas NFC (Tap-to-Review), TPV, and Chatbots IA y automatización for restaurants, bars and cafes in Tenerife and the Canary Islands.",
       "url": "https://digitalizatenerife.es/llms.txt",
-      "sha256": "06b3d2fc53162f77ffbea7ea732b43fa2a082a2549e144f2b2e1ccdfbf960ed0"
+      "sha256": "98e143ceb1097ef6c047ebc1cf95307ebb208b5af7c28f4ae633c03becb07b2d"
     },
     {
       "name": "contact-request",
@@ -25,7 +25,7 @@
     {
       "name": "webmcp-tools",
       "type": "capability",
-      "description": "WebMCP tools available via navigator.modelContext.provideContext(). Tools include: get_product_info, get_contact_info, list_products, get_page_content_markdown.",
+      "description": "WebMCP tools registered via navigator.modelContext.registerTool(). Tools include: get_product_info, get_contact_info, list_products, get_page_content_markdown.",
       "url": "https://digitalizatenerife.es/"
     }
   ]
