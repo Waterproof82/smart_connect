@@ -1,7 +1,34 @@
 import React from "react";
 import { SolutionConfig } from "@shared/config/solutions";
+import { ORGANIZATION } from "@shared/config/organization";
 
 const ORG_URL = "https://digitalizatenerife.es";
+
+// ─── Shared identity node builders ──────────────────────────────
+// Pure, no React. Shared between buildHomeSchema and buildAboutSchema so
+// the two pages' JSON-LD can never drift apart on address/geo/founder.
+function postalAddressNode(): Record<string, unknown> {
+  return {
+    "@type": "PostalAddress",
+    ...ORGANIZATION.address,
+  };
+}
+
+function geoNode(): Record<string, unknown> {
+  return {
+    "@type": "GeoCoordinates",
+    latitude: ORGANIZATION.geo.latitude,
+    longitude: ORGANIZATION.geo.longitude,
+  };
+}
+
+function founderNode(): Record<string, unknown> {
+  return {
+    "@type": "Person",
+    name: ORGANIZATION.founder.name,
+    jobTitle: ORGANIZATION.founder.jobTitle,
+  };
+}
 
 // ─── Home page JSON-LD graph builder ────────────────────────────
 export interface HomeSchemaFaq {
@@ -37,17 +64,11 @@ export function buildHomeSchema(
     image: `${ORG_URL}/icon.png`,
     telephone: "+34 601 39 64 19",
     priceRange: "€€",
-    // Kept in sync manually with app_settings.physical_address (Supabase) —
-    // must match what Contact.tsx renders and what Google Business Profile
-    // has on file, or Google can't confidently resolve this as one entity.
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: "c/ Ernesto Castro, 57, Puerta 501",
-      addressLocality: "Santa Cruz de Tenerife",
-      addressRegion: "Canary Islands",
-      postalCode: "38001",
-      addressCountry: "ES",
-    },
+    // Sourced from src/shared/config/organization.ts — the single source of
+    // truth, also consumed by AboutPage, Contact.tsx, WebMCP and llms.txt.
+    address: postalAddressNode(),
+    geo: geoNode(),
+    founder: founderNode(),
     logo: {
       "@type": "ImageObject",
       url: `${ORG_URL}/icon.png`,
@@ -145,6 +166,41 @@ export function buildHomeSchema(
   return {
     "@context": "https://schema.org",
     "@graph": graph,
+  };
+}
+
+// ─── /about page JSON-LD builder ────────────────────────────────
+/**
+ * Builds the AboutPage/Organization JSON-LD for `/about`. Pure function —
+ * shares `postalAddressNode`/`geoNode`/`founderNode` with `buildHomeSchema`
+ * so the two pages' address/geo/founder facts can never drift apart.
+ */
+export function buildAboutSchema(): Record<string, unknown> {
+  return {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    name: "Sobre Digitaliza Tenerife",
+    description:
+      "Información sobre Digitaliza Tenerife, empresa tecnológica especializada en IA, automatización y hardware inteligente para negocios locales en Tenerife y Canarias.",
+    mainEntity: {
+      "@type": "Organization",
+      name: ORGANIZATION.name,
+      description:
+        "Empresa tecnológica especializada en IA, automatización y hardware inteligente para negocios locales en Tenerife y Canarias.",
+      url: ORGANIZATION.url,
+      logo: {
+        "@type": "ImageObject",
+        url: `${ORG_URL}/icon.png`,
+        width: 512,
+        height: 512,
+      },
+      email: ORGANIZATION.email,
+      telephone: ORGANIZATION.telephone,
+      address: postalAddressNode(),
+      geo: geoNode(),
+      foundingDate: "2025",
+      founder: founderNode(),
+    },
   };
 }
 
@@ -392,49 +448,6 @@ export const HowItWorks: React.FC<HowItWorksProps> = ({
 };
 
 /**
- * Renders a local GEO coverage section showing cities served.
- */
-interface GeoCoverageProps {
-  title: string;
-  subtitle: string;
-  cities: string[];
-  serviceArea: string;
-}
-
-export const GeoCoverage: React.FC<GeoCoverageProps> = ({
-  title,
-  subtitle,
-  cities,
-  serviceArea,
-}) => {
-  return (
-    <section className="py-16 md:py-24 bg-[var(--color-bg)]">
-      <div className="container mx-auto px-6">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-4 text-default">
-          {title}
-        </h2>
-        <p className="text-lg text-muted text-center max-w-2xl mx-auto mb-8">
-          {subtitle}
-        </p>
-        <div className="max-w-3xl mx-auto text-center">
-          <div className="flex flex-wrap justify-center gap-3 mb-6">
-            {cities.map((city) => (
-              <span
-                key={city}
-                className="px-4 py-2 rounded-full bg-[var(--color-accent-subtle)] border border-[var(--color-accent-border)] text-[var(--color-primary)] text-sm font-medium"
-              >
-                {city}
-              </span>
-            ))}
-          </div>
-          <p className="text-muted text-sm">{serviceArea}</p>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-/**
  * Renders a social proof stats bar.
  */
 interface StatItem {
@@ -458,47 +471,6 @@ export const StatsBar: React.FC<StatsBarProps> = ({ stats }) => {
               </div>
               <div className="text-sm text-muted">{stat.label}</div>
             </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
-
-/**
- * Renders an internal links section connecting related landing pages.
- */
-interface RelatedLink {
-  href: string;
-  label: string;
-  description: string;
-}
-
-interface InternalLinksProps {
-  title: string;
-  links: RelatedLink[];
-}
-
-export const InternalLinks: React.FC<InternalLinksProps> = ({
-  title,
-  links,
-}) => {
-  return (
-    <section className="py-16 bg-[var(--color-bg-alt)]">
-      <div className="container mx-auto px-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-center mb-8 text-default">
-          {title}
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto">
-          {links.map((link) => (
-            <a
-              key={`${link.href}-${link.label}`}
-              href={link.href}
-              className="block p-4 rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)] hover:border-[var(--color-accent-border)] transition-[border-color] duration-150"
-            >
-              <h3 className="text-default font-semibold mb-1">{link.label}</h3>
-              <p className="text-muted text-sm">{link.description}</p>
-            </a>
           ))}
         </div>
       </div>

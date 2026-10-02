@@ -163,7 +163,6 @@ Prioridad: **A** = bloquea/daña indexación, **M** = medio, **B** = bajo/higien
 | P-20 | B | `lastmod` del sitemap se mantiene a mano y `/tarjetas-nfc` tiene prioridad 0.9 mientras el doc indica 1.0 para producto (Google ignora `priority`/`changefreq`, importa solo `lastmod` fiable) | `scripts/site-routes.json:4-9`; `docs/SEO_IMPLEMENTATION.md:625` | Actualizar `lastmod` solo cuando cambie contenido real; no perseguir `priority` |
 | P-21 | B | Sin `"trailingSlash": false` explícito: `/about` y `/about/` pueden coexistir como URLs duplicadas (la canonical lo mitiga, pero conviene fijarlo) | `vercel.json` (ausente) | Añadir `"trailingSlash": false` y probar con `curl -sI` |
 | P-22 | B | Cabecera `Link` con `rel="ai-readable"` (no estándar) y `rel="api-catalog"` apuntando a `server-card.json` en lugar de `/.well-known/api-catalog` | `vercel.json:30-33` | Revisar; sin impacto en SEO clásico |
-| P-23 | B | `InternalLinks` usa `<a href>` plano: rastreable, pero provoca recarga completa en la SPA | `SeoSchema.tsx:493-496` | Usar `<Link>` de `react-router-dom` para enlaces internos |
 | P-24 | B | La home usa voseo ("te ponés", "te adelantás") en una web de Tenerife; incoherente con el público y con la regla de español de España | Plan §4 (nota de coherencia) | Corregir en la simplificación de la home |
 
 ### Orden de ejecución recomendado
