@@ -32,7 +32,7 @@ export interface CookieBannerProps {
 }
 
 const BUTTON_CLASS =
-  "px-6 py-2.5 rounded-lg font-semibold text-sm transition-colors bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-[var(--color-on-accent)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2";
+  "px-6 py-2.5 rounded-lg font-semibold text-sm transition-colors bg-[var(--color-accent-strong)] hover:bg-[var(--color-accent-hover)] text-[var(--color-on-accent)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-strong)] focus-visible:ring-offset-2";
 
 export const CookieBanner: React.FC<CookieBannerProps> = ({
   onAccept,

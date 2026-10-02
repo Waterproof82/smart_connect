@@ -202,7 +202,7 @@ const App: React.FC = () => {
         </section>
         <section
           id="faq"
-          aria-label="Preguntas Frecuentes"
+          aria-labelledby="faq-title"
           className="ds-section ds-section--alt"
         >
           <HomeFaqSection />

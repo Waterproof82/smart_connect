@@ -52,13 +52,17 @@ const CartaDigitalProblemaSection: React.FC = () => {
   ];
 
   return (
-    <section id="problema" className="ds-section bg-[var(--color-bg-alt)]">
+    <section
+      id="problema"
+      aria-labelledby="carta-problema-title"
+      className="ds-section bg-[var(--color-bg-alt)]"
+    >
       <div className="ds-container">
         <div className="max-w-6xl mx-auto">
-          <div className="ds-kicker mb-3 md:mb-4">
-            {t.cartaProblemaTitle}
-          </div>
-          <h2 className="ds-h2 mb-4 md:mb-6">
+          <h2 id="carta-problema-title" className="ds-h2 mb-4 md:mb-6">
+            <span className="ds-kicker mb-3 md:mb-4">
+              {t.cartaProblemaTitle}
+            </span>{" "}
             {t.cartaProblemaSubtitle}
           </h2>
           <p className="text-base text-muted leading-relaxed max-w-lg md:max-w-xl mb-10 md:mb-14">

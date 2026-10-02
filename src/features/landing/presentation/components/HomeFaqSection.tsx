@@ -82,22 +82,23 @@ const HomeFaqSection: React.FC = () => {
   const groups = useHomeFaqGroups();
 
   return (
-    <section
-      aria-label={t.homeFaqTitle}
-      className="ds-container ds-container--prose"
-    >
+    <div className="ds-container ds-container--prose">
       <div className="ds-section-head">
-        <h2 className="ds-h2">{t.homeFaqTitle}</h2>
+        <h2 id="faq-title" className="ds-h2">
+          {t.homeFaqTitle}
+        </h2>
       </div>
       <div className="grid gap-[var(--space-xl)]">
         {groups.map((group) => (
           <div key={group.title}>
-            <h3 className="ds-h3 text-muted mb-2">{group.title}</h3>
+            {groups.length > 1 && (
+              <h3 className="ds-h3 text-muted mb-2">{group.title}</h3>
+            )}
             <FaqList items={group.items} />
           </div>
         ))}
       </div>
-    </section>
+    </div>
   );
 };
 
