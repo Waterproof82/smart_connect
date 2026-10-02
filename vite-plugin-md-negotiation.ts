@@ -1,5 +1,6 @@
 import type { Plugin, ViteDevServer } from "vite";
 import TurndownService from "turndown";
+import { isAgentPagePath } from "./src/shared/config/agentRoutes.ts";
 
 /**
  * Vite plugin: content negotiation for text/markdown in dev mode.
@@ -18,21 +19,9 @@ export function markdownNegotiationPlugin(): Plugin {
           const url = req.url || "/";
           const pathname = new URL(url, "http://localhost").pathname;
 
-          // Only handle prerendered page routes
-          const pageRoutes = [
-            "/",
-            "/servicios",
-            "/contacto",
-            "/carta-digital",
-            "/tap-review",
-            "/automatizacion-restaurantes-n8n",
-            "/automatizacion-whatsapp-restaurante",
-            "/software-restaurantes-canarias",
-            "/digitalizacion-hosteleria-tenerife",
-            "/about",
-          ];
-
-          if (!pageRoutes.includes(pathname)) return next();
+          // Only handle prerendered page routes (scripts/site-routes.json is
+          // the single source of truth — design.md D4, agent-surface-drift)
+          if (!isAgentPagePath(pathname)) return next();
 
           try {
             // SSR-render the page via the server entry
