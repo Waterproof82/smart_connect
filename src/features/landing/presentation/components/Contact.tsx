@@ -12,6 +12,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { getAppSettings, AppSettings } from "@shared/services/settingsService";
+import { formatAddressLine } from "@shared/config/organization";
 import { useWhatsappPhone } from "@shared/hooks";
 import { buildWhatsappLink } from "@shared/utils/whatsappLink";
 import { createLandingContainer } from "../LandingContainer";
@@ -134,6 +135,9 @@ const Contact: React.FC = () => {
   >("idle");
   const successTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const whatsappPhone = useWhatsappPhone();
+  // Single source for the address fallback, reused for both the display
+  // value and the maps link below — see src/shared/config/organization.ts.
+  const fallbackAddress = formatAddressLine("es");
 
   useEffect(() => {
     return () => {
@@ -359,11 +363,10 @@ const Contact: React.FC = () => {
                 id: "location",
                 icon: <MapPin className="w-6 h-6" />,
                 title: t.contactLocationTitle,
-                value:
-                  settings?.physicalAddress || "Santa Cruz de Tenerife, España",
+                value: settings?.physicalAddress || fallbackAddress,
                 desc: "Hub Tecnológico de Innovación",
                 color: "text-[var(--color-icon-purple)]",
-                href: `https://maps.google.com/?q=${encodeURIComponent(settings?.physicalAddress || "Santa Cruz de Tenerife, España")}`,
+                href: `https://maps.google.com/?q=${encodeURIComponent(settings?.physicalAddress || fallbackAddress)}`,
                 external: true,
               },
             ].map((item, idx) => {

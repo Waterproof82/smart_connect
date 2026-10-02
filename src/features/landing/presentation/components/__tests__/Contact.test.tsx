@@ -1,6 +1,7 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { LanguageProvider } from "@shared/context/LanguageContext";
+import { formatAddressLine } from "@shared/config/organization";
 import Contact from "../Contact";
 
 // jsdom has no IntersectionObserver; Contact.tsx uses it via
@@ -58,6 +59,12 @@ const fillRequiredFields = async (user: ReturnType<typeof userEvent.setup>) => {
 describe("Contact", () => {
   it("renders without crashing", () => {
     expect(() => renderWithLanguage()).not.toThrow();
+  });
+
+  it("shows the ORGANIZATION fallback address before settings load, not the old literal", () => {
+    renderWithLanguage();
+    expect(screen.getByText(formatAddressLine("es"))).toBeInTheDocument();
+    expect(screen.queryByText("Santa Cruz de Tenerife, España")).not.toBeInTheDocument();
   });
 
   it("submit button uses the static btn-primary w-full className (no runtime branch)", async () => {

@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { writeSitemap } from "./sitemap.mjs";
+import { resolveRouteLastmods } from "./lastmod.mjs";
 import {
   buildProbeDocument,
   extractCriticalCss,
@@ -207,7 +208,14 @@ async function prerender() {
     );
   }
 
-  const sitemapPath = writeSitemap(distDir, origin, routeTable);
+  // Resolve each route's lastmod from git history (floor-protected, never
+  // fabricated — see scripts/lastmod.mjs and design.md D6-D9) before
+  // handing the table to the still-pure, git-free writeSitemap.
+  const { routes: resolvedRouteTable, mode, reason } =
+    resolveRouteLastmods(routeTable);
+  console.log(`🗓️  lastmod: mode=${mode}${reason ? ` (${reason})` : ""}`);
+
+  const sitemapPath = writeSitemap(distDir, origin, resolvedRouteTable);
   console.log(`🗺️  Sitemap written: ${sitemapPath}`);
 }
 

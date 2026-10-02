@@ -283,15 +283,11 @@ Esta regla se auto-inyecta via skill resolution al inicio de cada sesión.
 | sdd-verify  | mistral/codestral-latest | ✅     |
 | sdd-archive | mimo-v2-omni-free        | ✅     |
 
-**Archivos creados (7 en public/.well-known/):**
+**Archivos creados (histórico; hoy `public/.well-known/` solo conserva `llms.txt` —puntero—, `mcp/server-card.json` y `agent-skills/index.json`; los demás se retiraron por ser stubs sin endpoint real):**
 
 - `llms.txt` — Documento markdown para LLMs (+20 pts)
 - `mcp/server-card.json` — MCP Server Card (+15 pts)
 - `agent-skills/index.json` — Agent Skills index (+12 pts)
-- `api-catalog` — API Catalog en linkset+json (+7 pts)
-- `openid-configuration` — OAuth/OIDC discovery (+10 pts)
-- `oauth-protected-resource` — 3 APIs documentadas (+8 pts)
-- `jwks.json` — JWKS stub
 
 **Archivos modificados (5):**
 

@@ -9,11 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **CI runs the SEO regression tests against the built `dist/`** (`.github/workflows/ci-cd.yml`, new step after `npm run build`); previously the prerender checks were silently skipped in CI because `npm test` ran before any build.
+- **Automated SEO regression tests** (`tests/unit/seo/`): `seoSources.regression.test.ts` guards `robots.txt`, `Content-Signal` consistency across `robots.txt`/`vercel.json`/`vite.config.ts`, the official domain, `.well-known` JSON validity, `site-routes.json`, redirect hygiene (permanent, no chains, prerendered destinations) and indexing/security headers; `prerenderedSeo.regression.test.ts` checks every prerendered page in `dist/` (language, unique title/description, self-referencing canonical, Open Graph, no noindex, single H1, heading order, JSON-LD validity and origin, image `alt`/dimensions, internal links) plus `sitemap.xml`, `404.html` and the built `robots.txt`; it is skipped when `dist/` has not been built.
 - **Unified design system across every public page** (`design.md`, `tokens.css`): one hero layout, one section rhythm, one heading scale (Space Grotesk + DM Sans) and shared building blocks (`PageShell`, `PageHero`, `Section`, `FaqList`, `ClosingCta`) used by home, Carta Digital, Tarjetas NFC, Chatbots IA, TPV, About, legal pages and the 404.
 - **WhatsApp as the single primary action**: a shared green WhatsApp button (`WhatsAppCta`) in the nav, every hero, every closing block and the footer, with a pre-filled message per service; on mobile a sticky WhatsApp bar stays one tap away without covering the chatbot or the cookie button. Without a configured number the button falls back to the contact form.
 - The home hero now states who we work with: restaurants, bars, shops and businesses in Tenerife and the Canary Islands.
 - Every WhatsApp link on the site (TPV modules, Carta Digital, contact card) now opens a pre-filled message for the right service.
 - Metric-matched fallback fonts, so text no longer jumps when the web fonts finish loading.
+- **`seo-geo-expert` project skill** (`.claude/skills/seo-geo-expert/`): evidence-first, continuous-audit workflow for technical SEO, on-page, GEO/AEO, structured data, Search Console/GA4, local and international SEO, Core Web Vitals and accessibility. Includes a source-authority hierarchy, a Google Search Essentials gate, evidence levels E0–E5, PASS/FAIL/WARNING/NOT VERIFIED statuses, a Before/Change/After/Regression rule, a "no change required" rule, Rendering Triad and canonical reconciliation, SEO regression checks, Citation Readiness, a non-numeric Quality Gate, and `llms.txt` treated as experimental. Repo-specific context included (official domain, Vite SSR stack). Available to Claude Code in the cloud and in local VS Code for this repository only.
 
 ### Changed
 
@@ -26,6 +29,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **SEO prerender test crashed when `dist/` was missing** (`tests/unit/seo/prerenderedSeo.regression.test.ts`): `describe.each([])` throws at collection time, which failed `npm test` in CI (the suite runs before the build there). The suite is now only registered when `dist/` exists; otherwise a single skipped placeholder is reported.
+- **Heading hierarchy on `/ia-chatbots-tenerife`**: the four service cards jumped from the H1 straight to H3; they are now H2 (same visual style), so the page outline is H1 → H2 → H3 for crawlers and screen readers.
 - Typo on the Carta Digital closing button ("Habar con asesor" → "Hablar con asesor").
 - `/carta-digital` had two identical "¿Cómo se ve?" headings; the steps section is now "¿Cómo funciona?", and the English demo heading reads "What does it look like?".
 - On mobile the chatbot's WhatsApp button no longer duplicates the sticky WhatsApp bar.
@@ -296,6 +301,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **API catalog and HTTP message-signatures directory**: deleted `public/.well-known/api-catalog` (it advertised Supabase Edge Functions, two of which require a login and answer 401 to external agents) and `http-message-signatures-directory` (empty key set), plus their `Link` header entries, the `llms.txt` mention and related test assertions. Re-hashed `agent-skills/index.json`.
 - **OAuth discovery surfaces**: deleted `public/.well-known/openid-configuration`, `oauth-protected-resource` and `jwks.json`, the `oauth2-authorization-server` link in `api-catalog`, and their `Link` header entries in `vercel.json` and references in `llms.txt` and `geoSurfaces.test.ts`. The site exposes no public OAuth API, and the files leaked the Supabase project reference.
+
+### Fixed
+
+- **Stale business address (NAP) and placeholder founder identity**: the published address ("c/ Ernesto Castro, 57, Puerta 501, 38001, Santa Cruz de Tenerife") was incorrect; every public surface now reads the real address ("Calle Médico Ernesto Castro, 57, 38356 Tacoronte, Santa Cruz de Tenerife") plus real geo coordinates and the real founder ("José Miguel Aristía", "Fundador") from one new source of truth, `src/shared/config/organization.ts`
+  - `src/shared/config/organization.ts` (new): `ORGANIZATION` constant + `formatAddressLine(locale)`
+  - `src/shared/presentation/components/SeoSchema.tsx`: `buildHomeSchema`'s `LocalBusiness` node now carries `address`/`geo`/`founder` from the constant; new `buildAboutSchema()` builder for `/about`'s JSON-LD (shares private `postalAddressNode`/`geoNode`/`founderNode` helpers with `buildHomeSchema` so home and about can't drift apart)
+  - `src/features/landing/presentation/components/AboutPage.tsx`: calls `buildAboutSchema()` instead of an inline, hand-synced JSON-LD literal (which also had a placeholder founder, `"Digitaliza Tenerife Team"`, and a fabricated `sameAs` list); meta description and mission copy now say "Tacoronte (Tenerife)"; adds a visible founder block (`dl`) and corrects the visible "Oficina" address
+  - `src/features/landing/presentation/components/Contact.tsx`: the address fallback (shown before Supabase settings load) now reads `formatAddressLine("es")` once, reused for both the display value and the Google Maps link
+  - `src/WebMCP.ts`: `get_contact_info`'s ES/EN office line and description now read the constant instead of a hardcoded "Santa Cruz de Tenerife" line
+  - `src/shared/context/LanguageContext.tsx`: the 4 legal-address lines (ES/EN aviso legal + privacidad) now state the correct address; the jurisdiction clauses ("juzgados y tribunales de Santa Cruz de Tenerife") are unchanged — venue choice is a separate legal decision, not a NAP fact
+  - `public/llms.txt` + `public/.well-known/agent-skills/index.json`: corrected address line and recomputed `product-information.sha256`
+  - `tests/unit/shared/legalTranslationKeys.test.ts`: the NAP-consistency check now imports `ORGANIZATION` directly instead of regex-parsing `SeoSchema.tsx` source
+  - New guard `tests/unit/napConsistency.test.ts`: fails the build if the legacy "38001"/"Puerta" strings reappear anywhere in `src/` or `public/`
+
+### Removed
+
+- **Dead `SeoSchema.tsx` exports**: `GeoCoverage`/`GeoCoverageProps` and `InternalLinks`/`InternalLinksProps`/`RelatedLink` had zero consumers anywhere in the codebase; removed, and the `docs/SEO_PROTOCOL.md` P-23 row that referenced `InternalLinks` as if it were live was dropped
+
+### Fixed
+
+- **Hand-maintained, stale sitemap `lastmod` (P-20)**: every route's `lastmod` is now derived from git history instead of being hand-edited (and forgotten). New `scripts/lastmod.mjs` computes `max(gitDate, hardcodedFloor)` per route from `--first-parent` commit dates across the files each route declares as its `sources` in `scripts/site-routes.json`; the hardcoded value is a reviewed floor, never overridden by an older git date, because some real content edits (shared `LanguageContext.tsx` translation strings, Supabase content) never touch a route's own source files. Git missing, erroring, or a shallow clone (Vercel's default checkout) safely falls back to the floor — no fabricated dates, no failed build.
+  - `scripts/lastmod.mjs` (new): `defaultExec`, `hasFullHistory`, `gitLastmod`, `resolveRouteLastmods` — injectable `exec`, never throws
+  - `scripts/site-routes.json`: every route now declares a `sources` array; corrected the stale floor dates for `/about` (2026-08-12 → 2026-10-02) and `/tarjetas-nfc` (2026-08-11 → 2026-10-01), plus `/legal/aviso` and `/legal/privacidad` (2026-05-18 → 2026-10-02, the NAP address fix above touched their legal text but not their own route files)
+  - `scripts/prerender.mjs`: calls `resolveRouteLastmods` before `writeSitemap` and logs the resolved mode (`lastmod: mode=git` / `mode=fallback (<reason>)`); `scripts/sitemap.mjs` stays git-free
+  - `docs/SEO_PROTOCOL.md`: P-20 rewritten to describe the automation, the floor semantics, and the Vercel shallow-clone caveat (`VERCEL_DEEP_CLONE=true` is community-reported, not officially documented — verify via the build log)
+  - New `tests/unit/scripts/lastmod.test.ts`: success, floor-wins, git missing, git error, shallow clone, malformed date, plus a guard that every route's `sources` exist on disk
 
 ## [0.5.0] - 2026-03-16
 
