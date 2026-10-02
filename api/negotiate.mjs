@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import TurndownService from "turndown";
+import siteRoutes from "../scripts/site-routes.json" with { type: "json" };
 
 const turndownService = new TurndownService({
   headingStyle: "atx",
@@ -9,63 +10,80 @@ const turndownService = new TurndownService({
   linkStyle: "inlined",
 });
 
-// Fallback titles for routes where SSR metadata is embedded in JS
-const PAGE_TITLES = {
-  "/": "SmartConnect AI — Automatización e IA para Negocios Locales",
-  "/servicios": "Servicios — SmartConnect AI",
-  "/contacto": "Contacto — SmartConnect AI",
-  "/carta-digital": "Carta Digital Premium — SmartConnect AI",
-  "/tap-review": "Tap-to-Review NFC — SmartConnect AI",
-  "/about": "Sobre SmartConnect AI",
-  "/automatizacion-restaurantes-n8n": "Automatización con n8n para Restaurantes | SmartConnect AI",
-  "/automatizacion-whatsapp-restaurante": "Automatización WhatsApp para Restaurantes | SmartConnect AI",
-  "/software-restaurantes-canarias": "Software para Restaurantes en Canarias | SmartConnect AI",
-  "/digitalizacion-hosteleria-tenerife": "Digitalización Hostelería Tenerife | SmartConnect AI",
-  "/legal/aviso": "Aviso Legal — SmartConnect AI",
-  "/legal/privacidad": "Política de Privacidad — SmartConnect AI",
-  "/legal/cookies": "Política de Cookies — SmartConnect AI",
-};
+/**
+ * Single source of truth for the agent-surface route allowlist (design.md
+ * D3/D7/D8, agent-surface-drift). Kept in sync with the other 3 consumers
+ * (middleware.ts, vite-plugin-md-negotiation.ts, src/WebMCP.ts) by
+ * tests/unit/agentSurfaceParity.test.ts and tests/unit/scripts/negotiateApi.test.ts.
+ */
+export const MARKDOWN_ROUTES = siteRoutes.routes.map((r) => r.path);
+
+export const isMarkdownRoute = (requestedPath) =>
+  MARKDOWN_ROUTES.includes(requestedPath);
+
+function linkLabel(routePath) {
+  if (routePath === "/") return "Inicio";
+  return routePath
+    .split("/")
+    .filter(Boolean)
+    .join(" / ");
+}
+
+function buildQuickLinks() {
+  return MARKDOWN_ROUTES.map(
+    (routePath) =>
+      `- [${linkLabel(routePath)}](https://digitalizatenerife.es${routePath})`,
+  ).join("\n");
+}
+
+function buildNotFoundMarkdown(requestedPath) {
+  return [
+    `# SmartConnect AI`,
+    ``,
+    `> IA, automatización y hardware inteligente para negocios locales en Tenerife y Canarias.`,
+    ``,
+    `La ruta ${requestedPath} no existe o ya no está disponible.`,
+    ``,
+    `## Enlaces rápidos`,
+    ``,
+    buildQuickLinks(),
+  ].join("\n");
+}
 
 /**
  * Vercel Serverless Function — content negotiation for text/markdown.
  *
  * Reads the prerendered HTML from disk, extracts the #root content,
  * converts it to clean Markdown, and returns with text/markdown content-type.
+ *
+ * Any `?path=` not present in MARKDOWN_ROUTES (derived from
+ * scripts/site-routes.json) is rejected with a 404 markdown body before any
+ * filesystem access — this also closes a path-traversal vector (OWASP A01).
  */
 export default function handler(req, res) {
   const rawPath = typeof req.query.path === "string" ? req.query.path : "/";
   const cleanPath = rawPath || "/";
 
+  res.setHeader("Content-Type", "text/markdown; charset=utf-8");
+
+  if (!isMarkdownRoute(cleanPath)) {
+    res.status(404).send(buildNotFoundMarkdown(cleanPath));
+    return;
+  }
+
   try {
     // Resolve the dist directory (same level as api/ in the Vercel deployment)
     const distDir = path.resolve(process.cwd(), "dist");
-    let html;
-    let filePath;
+    const filePath =
+      cleanPath === "/"
+        ? path.join(distDir, "index.html")
+        : path.join(distDir, cleanPath.replace(/^\//, ""), "index.html");
 
-    // Map route to HTML file
-    if (cleanPath === "/") {
-      filePath = path.join(distDir, "index.html");
-    } else {
-      const routeDir = cleanPath.replace(/^\//, "") || "";
-      filePath = path.join(distDir, routeDir, "index.html");
-
-      // Fallback to SPA shell if the specific page doesn't exist
-      if (!fs.existsSync(filePath)) {
-        filePath = path.join(distDir, "_spa.html");
-      }
-    }
-
-    try {
-      html = fs.readFileSync(filePath, "utf-8");
-    } catch {
-      // Last resort fallback
-      html = fs.readFileSync(path.join(distDir, "_spa.html"), "utf-8");
-    }
+    const html = fs.readFileSync(filePath, "utf-8");
 
     // --- Extract metadata ---
     const titleMatch = html.match(/<title[^>]*>([^<]*)<\/title>/);
-    const title =
-      titleMatch?.[1] || PAGE_TITLES[cleanPath] || "SmartConnect AI";
+    const title = titleMatch?.[1] || "SmartConnect AI";
 
     const descMatch = html.match(
       /<meta[^>]+name="description"[^>]+content="([^"]*)"/i,
@@ -101,14 +119,14 @@ export default function handler(req, res) {
       .filter(Boolean)
       .join("\n");
 
-    res.setHeader("Content-Type", "text/markdown; charset=utf-8");
     res.setHeader("Cache-Control", "public, max-age=3600, s-maxage=3600");
     res.status(200).send(markdown);
   } catch (err) {
     console.error("[negotiate] Conversion failed:", err);
 
-    // Graceful fallback — return minimal markdown
-    res.setHeader("Content-Type", "text/markdown; charset=utf-8");
+    // Known route, but the prerendered file is missing or unreadable (e.g.
+    // dist/ not built yet in a local/dev run). Graceful minimal markdown —
+    // never the removed _spa.html fallback (design.md D7).
     res
       .status(200)
       .send(
@@ -122,10 +140,7 @@ export default function handler(req, res) {
           ``,
           `## Enlaces rápidos`,
           ``,
-          `- [Inicio](https://digitalizatenerife.es/)`,
-          `- [Servicios](https://digitalizatenerife.es/servicios)`,
-          `- [Contacto](https://digitalizatenerife.es/contacto)`,
-          `- [Sobre nosotros](https://digitalizatenerife.es/about)`,
+          buildQuickLinks(),
         ].join("\n"),
       );
   }

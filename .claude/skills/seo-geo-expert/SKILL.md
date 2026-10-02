@@ -81,6 +81,7 @@ Alcance según la petición (no auditar todo si piden algo puntual). Referencias
 | GEO/AEO, Citation Readiness, bots de IA, `llms.txt` | `references/geo-aeo.md` |
 | JSON-LD y entity graph | `references/structured-data.md` |
 | GSC, URL Inspection, canonical seleccionada, GA4, local, internacional | `references/search-console-ga4-local-intl.md` |
+| Datos externos que pedir al cerrar (GSC, GA4, GBP, Sheets…) | `references/data-requests.md` |
 | Cómo validar (automático y manual) | `references/validation-protocol.md` |
 | Tests de regresión SEO | `references/regression-testing.md` |
 | Informe, Quality Gate, audit log | `references/report-template.md` |
@@ -107,7 +108,7 @@ REGRESSION CHECK  qué podría haberse afectado · resultado
 Sigue `references/validation-protocol.md` y `references/regression-testing.md`. Un cambio estructural no está completo hasta pasar los regression checks aplicables. Herramientas externas sin acceso → `NOT VERIFIED` + pasos manuales concretos.
 
 ### Fase 5 — Documentación y Quality Gate
-Informe y **Quality Gate** (PASS/FAIL por área, sin nota numérica) según `references/report-template.md`. Protocolos del repo: entrada en `CHANGELOG.md` (inglés, Keep a Changelog, `[Unreleased]`) y audit log en `docs/audit/YYYY-MM-DD_<tema>.md` (inglés, con timestamp).
+Informe y **Quality Gate** (PASS/FAIL por área, sin nota numérica) según `references/report-template.md`. **Datos necesarios:** al cerrar, si algún hallazgo quedó `NOT VERIFIED` o una decisión depende de datos externos (Search Console, GA4, Google Business Profile, Google Sheets de leads, PageSpeed/CrUX, backlinks, logs…), añade la sección "Datos necesarios" con la fuente, la ruta exacta, el rango, qué hallazgo desbloquea y el formato de entrega (ver `references/data-requests.md`). Si no hace falta nada, dilo expresamente. Nunca pidas datos personales. Protocolos del repo: entrada en `CHANGELOG.md` (inglés, Keep a Changelog, `[Unreleased]`) y audit log en `docs/audit/YYYY-MM-DD_<tema>.md` (inglés, con timestamp).
 
 ## Coherencia de señales
 

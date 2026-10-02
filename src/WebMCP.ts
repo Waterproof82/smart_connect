@@ -11,6 +11,7 @@
  */
 
 import "@mcp-b/webmcp-polyfill";
+import { AGENT_PAGE_PATHS } from "@shared/config/agentRoutes";
 import { formatAddressLine } from "@shared/config/organization";
 
 // --- Types ---
@@ -184,14 +185,7 @@ const tools: ToolDescriptor[] = [
       properties: {
         path: {
           type: "string",
-          enum: [
-            "/",
-            "/contacto",
-            "/about",
-            "/legal/aviso",
-            "/legal/privacidad",
-            "/legal/cookies",
-          ],
+          enum: [...AGENT_PAGE_PATHS],
           description: "The URL path of the page to fetch content from.",
         },
       },

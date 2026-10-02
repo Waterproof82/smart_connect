@@ -40,6 +40,9 @@ Lista exacta de comandos y resultados (lint, type-check, tests, build, curl, val
 ### Plan de acción
 Ordenado P0 → P4, con esfuerzo estimado y dependencias. Nada de promesas de ranking/tráfico.
 
+### Datos necesarios (si procede)
+Tabla según `data-requests.md`: `Fuente · Informe/dato exacto y ruta · Rango · Desbloquea (hallazgo) · Prioridad (Imprescindible/Recomendado/Opcional) · Formato`. Solo lo que cierre un `NOT VERIFIED`, desbloquee una decisión o mida un cambio. Si no se necesita nada: *"No se necesitan datos externos adicionales"*. Sin datos personales.
+
 ### Acciones manuales para el usuario
 Lo que no se puede hacer desde código: solicitar indexación, enviar sitemap en GSC, rellenar GBP, activar protección de contraseñas filtradas, etc.
 

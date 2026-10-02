@@ -3,8 +3,9 @@ import path from "node:path";
 import { ORGANIZATION } from "@shared/config/organization";
 
 // design.md §3.4 (NAP) and §5/D12 (WebMCP.ts, PR#2 scope: 2 string literals
-// only — the get_page_content_markdown enum edit is explicitly DEFERRED to
-// a future change `agent-surface-drift`, see design.md §5).
+// only — the get_page_content_markdown enum edit was DEFERRED at the time
+// to the `agent-surface-drift` change, which has since implemented it
+// (see tests/unit/agentSurfaceParity.test.ts).
 const SRC = path.resolve(__dirname, "../../src");
 const read = (relPath: string) => fs.readFileSync(path.join(SRC, relPath), "utf-8");
 
@@ -26,12 +27,13 @@ describe("AboutPage.tsx — NAP consistency (design.md §3.4)", () => {
 });
 
 describe("WebMCP.ts — get_contact_info no longer returns the dead /contacto route (design.md §5/D12)", () => {
-  // Scope note: design.md §5/D12 explicitly DEFERS the get_page_content_markdown
-  // enum edit (removing /contacto, adding /tarjetas-nfc) to a future change
-  // `agent-surface-drift` — that is a schema change requiring markdown-
-  // negotiation parity across 4 files. This PR fixes only the 2 get_contact_info
-  // string literals (lines ~117/129) that actively hand agents a dead URL.
-  // The enum's own "/contacto" entry is intentionally left untouched here.
+  // Scope note: design.md §5/D12 deferred the get_page_content_markdown enum
+  // edit (removing /contacto, adding the live routes) to the
+  // `agent-surface-drift` change — a schema change requiring markdown-
+  // negotiation parity across 4 files, now implemented and guarded by
+  // tests/unit/agentSurfaceParity.test.ts. This file's scope stays limited
+  // to the 2 get_contact_info string literals (lines ~117/129) that
+  // actively hand agents a dead URL — left unchanged here on purpose.
   it("EN and ES get_contact_info branches point at the live #contacto anchor, not the dead route", () => {
     const source = read("WebMCP.ts");
     expect(source).toMatch(

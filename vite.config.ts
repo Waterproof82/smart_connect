@@ -2,7 +2,7 @@
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import { markdownNegotiationPlugin } from "./vite-plugin-md-negotiation";
+import { markdownNegotiationPlugin } from "./vite-plugin-md-negotiation.ts";
 
 export default defineConfig(({ mode }) => ({
   test: {
