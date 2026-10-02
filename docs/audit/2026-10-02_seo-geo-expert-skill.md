@@ -17,6 +17,7 @@
 - Finding (not fixed, out of scope): `/ia-chatbots-tenerife` jumps from H1 to H3 (four H3 cards before the first H2). Fixed in iteration 4: the four cards in `IaChatbotsPage.tsx` are now `<h2>` (same `ds-h3` styling); the temporary `it.failing` exception was removed.
 - Finding: `CLAUDE.md` still lists `.well-known` files (`api-catalog`, `openid-configuration`, `oauth-protected-resource`, `jwks.json`) that no longer exist in `public/.well-known/`; the tests assert only what is published. Fixed in iteration 4: `CLAUDE.md` now documents the files actually published.
 - Iteration 4: added a CI step running `tests/unit/seo` after `npm run build` so the dist-based checks are not skipped in CI.
+- Iteration 5: GitHub Actions run 36983301445 (workflow_dispatch on develop) failed in `npm test` because `describe.each` received an empty array when `dist/` was absent. Fixed by registering the prerender suite only when `dist/` exists; verified with and without `dist/`.
 
 ## Validation
 - `npm test`: 85 suites passed, 2 skipped (1225 tests passed). `npm run lint` and `npm run type-check`: pass. `npm run build` run to generate `dist/` for the prerender tests.

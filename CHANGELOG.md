@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **SEO prerender test crashed when `dist/` was missing** (`tests/unit/seo/prerenderedSeo.regression.test.ts`): `describe.each([])` throws at collection time, which failed `npm test` in CI (the suite runs before the build there). The suite is now only registered when `dist/` exists; otherwise a single skipped placeholder is reported.
 - **Heading hierarchy on `/ia-chatbots-tenerife`**: the four service cards jumped from the H1 straight to H3; they are now H2 (same visual style), so the page outline is H1 → H2 → H3 for crawlers and screen readers.
 - Typo on the Carta Digital closing button ("Habar con asesor" → "Hablar con asesor").
 - `/carta-digital` had two identical "¿Cómo se ve?" headings; the steps section is now "¿Cómo funciona?", and the English demo heading reads "What does it look like?".

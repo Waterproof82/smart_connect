@@ -16,7 +16,6 @@ const routeFile = (routePath: string): string =>
     : path.join(DIST, routePath.replace(/^\//, ""), "index.html");
 
 const distBuilt = routes.every((route) => fs.existsSync(routeFile(route.path))) && fs.existsSync(path.join(DIST, "sitemap.xml"));
-const maybeDescribe = distBuilt ? describe : describe.skip;
 
 const pages = distBuilt
   ? routes.map((route) => ({
@@ -39,7 +38,7 @@ const strip = (html: string): string =>
   html.replace(/<script[\s\S]*?<\/script>/gi, "").replace(/<style[\s\S]*?<\/style>/gi, "");
 const text = (fragment: string): string => fragment.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
 
-maybeDescribe("SEO regression — prerendered HTML (requires `npm run build`)", () => {
+const registerSuite = (): void => {
   describe.each(pages.map((page) => [page.path, page] as const))("route %s", (_route, page) => {
     it("declares the document language", () => {
       expect(page.html).toMatch(/<html[^>]*\blang="es"/i);
@@ -190,4 +189,14 @@ maybeDescribe("SEO regression — prerendered HTML (requires `npm run build`)", 
       );
     });
   });
-});
+};
+
+const SUITE_NAME = "SEO regression — prerendered HTML (requires `npm run build`)";
+
+if (distBuilt) {
+  describe(SUITE_NAME, registerSuite);
+} else {
+  describe.skip(SUITE_NAME, () => {
+    it("runs only after dist/ has been built", () => undefined);
+  });
+}
