@@ -13,9 +13,13 @@
 - Iteration 2 (review feedback): added source-authority hierarchy, Google Search Essentials gate, evidence levels E0-E5, PASS/FAIL/WARNING/NOT VERIFIED/NOT APPLICABLE statuses, Before/Change/After/Regression rule, NO CHANGE REQUIRED rule, Rendering Triad, canonical reconciliation, URL Inspection as evidence, query-to-URL analysis, temporal comparison, SEO regression testing, Citation Readiness, non-numeric Quality Gate.
 - Reclassified `llms.txt` as an experimental, non-standard resource (never equivalent to robots.txt/sitemap/canonical; label EXPERIMENT/OPTIMIZATION).
 - Split references into dedicated files: rendering-javascript-seo, performance-cwv, accessibility, security, spam-policies, validation-protocol, regression-testing.
+- Iteration 3: converted the SEO regression checklist into automated Jest tests (`tests/unit/seo/seoSources.regression.test.ts`, `tests/unit/seo/prerenderedSeo.regression.test.ts`) and documented them in `references/regression-testing.md`.
+- Finding (not fixed, out of scope): `/ia-chatbots-tenerife` jumps from H1 to H3 (four H3 cards before the first H2). Tracked via `KNOWN_HEADING_JUMPS` / `it.failing`.
+- Finding: `CLAUDE.md` still lists `.well-known` files (`api-catalog`, `openid-configuration`, `oauth-protected-resource`, `jwks.json`) that no longer exist in `public/.well-known/`; the tests assert only what is published.
 
 ## Validation
-- Frontmatter and file structure checked manually; skill is not application code, so lint/build are unaffected.
+- `npm test`: 85 suites passed, 2 skipped (1225 tests passed). `npm run lint` and `npm run type-check`: pass. `npm run build` run to generate `dist/` for the prerender tests.
+- Mutation checks: disallowing `/` in robots.txt and altering a built canonical each made the new tests fail, as intended.
 
 ## Follow-ups
 - Invoke the skill in a new session (`/seo-geo-expert`) and refine on first real use.
