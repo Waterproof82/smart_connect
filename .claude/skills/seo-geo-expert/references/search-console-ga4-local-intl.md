@@ -38,6 +38,39 @@ Cruza canonical HTML, cabecera HTTP, sitemap, enlaces internos y canonical selec
 ## Google Analytics 4
 Adquisición (orgánico), landing pages, engagement, eventos clave (envío de formulario, clic WhatsApp, clic llamada, demo), embudo. Cadena a relacionar: **GSC (consulta/página) → landing → comportamiento → conversión**. Verifica que los eventos existen y disparan (no inventes conversiones). Respeta consentimiento de cookies/RGPD (Consent Mode).
 
+### Lecciones de GA4 (verificadas 2026-10-05, interfaz actual)
+
+**Eventos clave**
+- **No existe un botón "Nuevo evento clave".** Un evento solo se marca como clave con la estrella en Administrar → Eventos, después de que haya llegado. La lista tarda hasta 24 h en mostrar eventos nuevos, aunque ya se vean en Tiempo real. Para hacer que llegue, disparalo una vez desde la web con una prueba real; si es un formulario, que el mensaje diga "PRUEBA".
+- **`purchase` es un evento clave predefinido y no se puede desmarcar.** Si el sitio nunca lo envía, queda en 0 y no molesta.
+- **Si la web ya envía un evento con `gtag('event', ...)`, nunca crees una regla "Crear evento" o "Crear eventos personalizados" con el mismo nombre: duplica cada conversión.** Esas reglas son solo para eventos que el código no envía.
+- Los clics automáticos de GA4 (medición mejorada) solo registran enlaces a otros dominios. `tel:` y `mailto:` necesitan código. En este repo los cubre `src/shared/utils/analyticsEvents.ts` (un listener delegado + `trackEvent`).
+
+**Conversiones falsas y pings de Ads**
+- Antes de analizar conversiones, buscá eventos clave sospechosos: nombres `ads_conversion_*` o reglas que conviertan `page_view` en conversión. Revisá:
+  - Administrar → Flujos de datos → Crear eventos personalizados;
+  - el `gtag.js` servido: `curl -s "https://www.googletagmanager.com/gtag/js?id=<G-ID>" | rg "__ogt_event_create|conversionRules|AW-"`.
+- **Un ping a `pagead2.googlesyndication.com` sin campañas de Ads indica una vinculación con Google Ads a nivel de propiedad** (Administrar → Vinculaciones con otros productos). Los flags `allow_google_signals: false` y `allow_ad_personalization_signals: false` ayudan, pero no la cortan. Hay que eliminar la vinculación. **Nunca abras la CSP a dominios de Ads para "arreglar" el error de consola.**
+
+**Verificar un evento de punta a punta**
+Hacé un clic real con la navegación bloqueada (`preventDefault` en el propio enlace; el listener delegado escucha en fase de captura) y comprobá tres cosas:
+1. que el evento entra en `dataLayer`;
+2. que sale una petición `/g/collect` con respuesta 204 (si es un POST por lotes, el nombre del evento va en el cuerpo, no en la URL);
+3. que aparece en Informes → Tiempo real.
+
+Avisá al propietario de cuántos eventos de prueba vas a generar antes de hacerlo.
+
+**Tráfico interno**
+- El filtro por IP falla con IP dinámica, que es lo habitual en conexiones domésticas en España. Si la IP cambia, deja de excluir y puede llegar a excluir a otra persona.
+- Para una sola persona, recomendá la extensión oficial "Inhabilitación para navegadores de Google Analytics".
+- Si igual se usa el filtro, se crea en modo Prueba y hay que pasarlo a Activo.
+
+**Configuración base que hay que comprobar**
+- Conservación de datos: 14 meses (por defecto son 2).
+- Vinculación con Search Console.
+- Señales de Google desactivadas si no hay publicidad.
+- Al analizar, excluí el periodo con datos contaminados. En este sitio, las conversiones son fiables desde el 2026-10-05.
+
 ## SEO local (Tenerife / Canarias)
 - **Google Business Profile** (si existe): categoría principal, servicios, horario, área de servicio, fotos propias, publicaciones, reseñas (responderlas; nunca comprarlas ni filtrarlas).
 - **NAP idéntico** en web, Schema, GBP, directorios y redes. Marca discrepancias.
