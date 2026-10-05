@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
-import { getAppSettings } from "@shared/services/settingsService";
+import {
+  getAppSettings,
+  resetAppSettingsCache,
+} from "@shared/services/settingsService";
 
 /**
  * Strips a raw phone string down to digits (and a leading `+`), the format
@@ -9,32 +12,26 @@ export function sanitizeWhatsappPhone(raw: string): string {
   return raw.replaceAll(/[^\d+]/g, "");
 }
 
-// One in-flight request per page load, shared by every caller (PageShell,
-// page components, sections) so the shared WhatsApp CTA adds no extra reads.
-let phonePromise: Promise<string> | null = null;
-
-function loadWhatsappPhone(): Promise<string> {
-  phonePromise ??= getAppSettings()
-    .then((settings) => sanitizeWhatsappPhone(settings.whatsappPhone ?? ""))
-    .catch(() => {
-      phonePromise = null;
-      return "";
-    });
-  return phonePromise;
-}
-
-/** Test-only: clears the shared request cache. */
+/**
+ * Test-only: clears the shared request cache. Delegates to
+ * `settingsService.resetAppSettingsCache()` — this hook no longer keeps
+ * its own `phonePromise` cache (S5, SDD `landing-main-thread-tbt`); the
+ * single in-flight/resolved request per page load is now shared by every
+ * `getAppSettings()` consumer (this hook, `Contact.tsx`) inside
+ * settingsService itself.
+ */
 export function resetWhatsappPhoneCache(): void {
-  phonePromise = null;
+  resetAppSettingsCache();
 }
 
 /**
- * Fetches the WhatsApp contact phone once (wraps the canonical
- * `getAppSettings()` service) and returns it pre-sanitized for `wa.me` links.
+ * Fetches the WhatsApp contact phone (wraps the canonical
+ * `getAppSettings()` service, which dedupes concurrent calls on its own)
+ * and returns it pre-sanitized for `wa.me` links.
  *
- * Intended to be called ONCE in `App.tsx` and prop-drilled to any section
- * that needs it (CartaDigitalSection, TapReviewSection), so the whole page
- * only performs a single Supabase read instead of one per section.
+ * Safe to call from every section that needs it (PageShell, WhatsAppCta,
+ * Contact, ExpertAssistantWithRAG) — the whole page performs at most one
+ * settings read no matter how many consumers mount.
  */
 export function useWhatsappPhone(): string {
   const [whatsappPhone, setWhatsappPhone] = useState<string>("");
@@ -43,9 +40,12 @@ export function useWhatsappPhone(): string {
     let cancelled = false;
 
     // Failures resolve to "" — WhatsApp CTAs fall back to /#contacto.
-    loadWhatsappPhone().then((phone) => {
-      if (!cancelled && phone) setWhatsappPhone(phone);
-    });
+    getAppSettings()
+      .then((settings) => sanitizeWhatsappPhone(settings.whatsappPhone ?? ""))
+      .catch(() => "")
+      .then((phone) => {
+        if (!cancelled && phone) setWhatsappPhone(phone);
+      });
     return () => {
       cancelled = true;
     };
