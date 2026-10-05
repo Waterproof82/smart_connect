@@ -1,36 +1,24 @@
-User-agent: Googlebot
-Allow: /
+# Digitaliza Tenerife: Content-Signal ai-train=no, search=yes, ai-input=yes.
+# RFC 9309: a crawler obeys only its most specific group.
 
-User-agent: Google-Extended
-Allow: /
-
+# Training-only crawlers (ai-train=no). Disallow: / already blocks these
+# paths too; listed explicitly so no group ever omits the private-path
+# disallows (crawler-policy spec: "Every Group Carries Private-Path
+# Disallows", regardless of whether the group also disallows /).
 User-agent: GPTBot
-Allow: /
-
 User-agent: ClaudeBot
-Allow: /
-
-User-agent: ChatGPT-User
-Allow: /
-
-User-agent: PerplexityBot
-Allow: /
-
-User-agent: OAI-SearchBot
-Allow: /
-
-User-agent: Amazonbot
-Allow: /
-
+User-agent: Applebot-Extended
 User-agent: CCBot
-Allow: /
-
 User-agent: Meta-ExternalAgent
-Allow: /
-
 User-agent: Bytespider
-Allow: /
+User-agent: Amazonbot
+Disallow: /
+Disallow: /admin
+Disallow: /panel
+Disallow: /login
 
+# Everyone else: search, AI search, user-triggered agents and
+# Google-Extended (allowed: it also governs Gemini grounding = ai-input).
 User-agent: *
 Content-Signal: search=yes, ai-input=yes, ai-train=no
 Disallow: /admin
