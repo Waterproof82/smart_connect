@@ -8,7 +8,7 @@ Hallazgos verificados en producción (`https://digitalizatenerife.es/`). Antes d
 |---|---|---|---|---|---|---|
 | F-05 | 2026-10-05 | Rendimiento | INFO | CLS de la home: 0.053 (PSI 2026-10-05 14:20; antes 0.049, dentro del ruido). Lo provoca el `<span>` de acento del H1 de Hero. Pasa el umbral (≤ 0.1). | PSI home | Baja prioridad |
 | F-07 | 2026-10-05 | Contenido | NOT VERIFIED | Derechos de uso de las fotos NFC del proveedor. | — | Manual, propietario |
-| F-09 | 2026-10-05 | Producto / Conversión | FAIL | **El chatbot de IA no responde en producción**: `chat-with-rag` devuelve 500 y su fallback `gemini-generate` 400; el usuario ve "Hubo un error al conectar con el asistente". No tiene que ver con la CSP (no hubo violaciones) y coincide con los 3 tests e2e de `tests/e2e/chatbotFlow.test.ts` que venían fallando. Es el producto demo de la página /ia-chatbots-tenerife. | Navegador real en producción 2026-10-05 (`responseStatus` 500/400) | Investigar los logs de las Edge Functions en Supabase |
+| F-09 | 2026-10-05 | Producto / Conversión | FAIL | **El chatbot de IA no responde en producción**: `chat-with-rag` devuelve 500 y su fallback `gemini-generate` 400; el usuario ve "Hubo un error al conectar con el asistente". No tiene que ver con la CSP (no hubo violaciones) y coincide con los 3 tests e2e de `tests/e2e/chatbotFlow.test.ts` que venían fallando. Es el producto demo de la página /ia-chatbots-tenerife. | Navegador real en producción 2026-10-05 (`responseStatus` 500/400)  **Causa raíz (logs de Supabase `function_logs`)**: Gemini responde **402 RESOURCE_EXHAUSTED, "Your prepayment credits are depleted"**: se agotó el saldo prepago de la API. No es un bug de código. | Propietario: recargar créditos en ai.studio/projects (no hace falta redesplegar). Mejora propuesta: si el backend de IA falla, que el chat muestre un CTA de WhatsApp en vez de un error genérico, para no perder el lead. |
 
 ## Resueltos (2026-10-05)
 
@@ -22,6 +22,9 @@ Hallazgos verificados en producción (`https://digitalizatenerife.es/`). Antes d
 | F-06 | 2026-10-05 | Seguridad | La CSP permitía `'unsafe-eval'` en `script-src` sin que ningún bundle lo usara. | Quitado de `vercel.json` + test de regresión. Smoke test en el preview de Vercel sin violaciones de CSP: /carta-digital (gtag + `page_view`), /ia-chatbots-tenerife (chat abierto y mensaje enviado), /admin (login). | #129 |
 
 ## Verificados OK (2026-10-05)
+
+- Eventos de conversión: `contact_whatsapp` entra en el `dataLayer` y sale un `/g/collect` (POST 204) en producción. No crear reglas "Crear evento" en GA4 para estos eventos, porque los duplicarían: se marcan como clave en Eventos clave → Nuevo evento clave.
+- Producción después del cambio `landing-main-thread-tbt`: sin `vendor-supabase` en páginas públicas, 1 sola lectura de ajustes por página, CSP sin `unsafe-eval`, CTA de carta en /tpv-restaurantes a 5.13:1 (modo oscuro).
 
 - Rich Results Test: home tiene 3 elementos válidos (Carruseles, Empresa local, Organización) y /carta-digital tiene Rutas de exploración.
 - `smart-connect-olive.vercel.app` → 308 a `https://digitalizatenerife.es/<ruta>`.
