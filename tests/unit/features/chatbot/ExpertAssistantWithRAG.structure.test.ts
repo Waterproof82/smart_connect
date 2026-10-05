@@ -80,4 +80,18 @@ describe("ExpertAssistantWithRAG.tsx (U3 chatbot chokepoint wiring)", () => {
     expect(source).toMatch(/export const ExpertAssistant/);
     expect(source).toMatch(/export default ExpertAssistant/);
   });
+
+  // S2b (design.md D7): drop the component's own getAppSettings effect in
+  // favor of the shared useWhatsappPhone() hook (same cache as the
+  // WhatsApp CTA — one fewer Supabase read on / and /ia-chatbots).
+  it("uses the shared useWhatsappPhone() hook instead of its own getAppSettings effect", () => {
+    expect(source).toMatch(/useWhatsappPhone\(\)/);
+    expect(source).not.toMatch(/import\s*\{[^}]*\bgetAppSettings\b[^}]*\}/);
+    expect(source).not.toMatch(/getAppSettings\(/);
+  });
+
+  it("accepts an initialOpen prop used as the isOpen initial state (D6 — DeferredExpertAssistant wiring)", () => {
+    expect(source).toMatch(/initialOpen/);
+    expect(source).toMatch(/useState\(initialOpen\)/);
+  });
 });
