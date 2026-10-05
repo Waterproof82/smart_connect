@@ -41,6 +41,23 @@ describe("CartaDigitalBeneficiosSection", () => {
     );
   });
 
+  // design.md D9 (S3/F-03): the decorative "01"-"04" step number is already
+  // repeated in the chip at the bottom of the card, so it is hidden from
+  // assistive tech and uses the quieter text-muted token (which clears
+  // 4.5:1 against --color-surface in both themes — accentContrast.test.ts)
+  // instead of --color-accent-subtle (which did not).
+  it("the decorative step number uses text-muted and is aria-hidden", () => {
+    const { container } = renderWithLanguage();
+    const items = container.querySelectorAll("[data-testid='beneficio-item']");
+    items.forEach((item) => {
+      const stepNumber = item.querySelector(".font-black");
+      expect(stepNumber).not.toBeNull();
+      expect(stepNumber!.className).toMatch(/\btext-muted\b/);
+      expect(stepNumber!.className).not.toMatch(/--color-accent-subtle/);
+      expect(stepNumber!.getAttribute("aria-hidden")).toBe("true");
+    });
+  });
+
   // accessibility-baseline spec: "Carta Digital Headings Are Not Split" —
   // the kicker + title fragments must render as a single, whole <h2>, not
   // a kicker <div> sibling to a separate <h2>.
