@@ -4,7 +4,7 @@ import { PageShell } from "@features/landing/presentation/components/PageShell";
 import { Section } from "@shared/presentation/layout";
 import { Hero } from "@features/landing/presentation/components/Hero";
 import { CartaDigitalReviews } from "@features/landing/presentation/components/CartaDigitalReviews";
-import { ExpertAssistant } from "@features/chatbot/presentation";
+import { DeferredExpertAssistant } from "@features/chatbot/presentation";
 import HomeFaqSection, {
   useHomeFaqGroups,
 } from "@features/landing/presentation/components/HomeFaqSection";
@@ -164,7 +164,7 @@ const App: React.FC = () => {
         />
         <script type="application/ld+json">{JSON.stringify(schemaData)}</script>
       </Helmet>
-      <PageShell extras={<ExpertAssistant />}>
+      <PageShell extras={<DeferredExpertAssistant />}>
         <section id="inicio" aria-label="Inicio">
           <Hero />
         </section>
