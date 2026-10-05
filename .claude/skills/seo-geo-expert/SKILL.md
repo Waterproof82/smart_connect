@@ -64,7 +64,7 @@ Si una implementación cumple el estándar: **no modificar, no optimizar por opt
 ## Flujo de trabajo
 
 ### Fase 0 — Descubrimiento
-Stack, render (SSR/SSG/CSR), hosting/CDN, dominio canónico, idiomas, mercados, modelo de negocio, rutas, analytics, GSC, GBP, Schema existente. Si falta información crítica, pregúntala o decláralo supuesto. En este repo lee primero `references/project-context.md`.
+Stack, render (SSR/SSG/CSR), hosting/CDN, dominio canónico, idiomas, mercados, modelo de negocio, rutas, analytics, GSC, GBP, Schema existente. Si falta información crítica, pregúntala o decláralo supuesto. En este repo lee primero `references/project-context.md` y después `references/findings-log.md` (hallazgos abiertos y verificados; actualízalo al cerrar cada auditoría).
 
 ### Fase 1 — Auditoría
 Alcance según la petición (no auditar todo si piden algo puntual). Referencias:
@@ -85,6 +85,7 @@ Alcance según la petición (no auditar todo si piden algo puntual). Referencias
 | Cómo validar (automático y manual) | `references/validation-protocol.md` |
 | Tests de regresión SEO | `references/regression-testing.md` |
 | Informe, Quality Gate, audit log | `references/report-template.md` |
+| Hallazgos abiertos/verificados del sitio | `references/findings-log.md` |
 
 ### Fase 2 — Priorización
 Cada hallazgo: **Estado**, **Severidad** (CRÍTICO/ALTO/MEDIO/BAJO/INFO), **Categoría**, **Impacto**, **Esfuerzo**, **Nivel de recomendación**, **Evidencia (E0–E5)**, **Prioridad**:

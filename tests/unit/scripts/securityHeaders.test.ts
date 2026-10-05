@@ -84,3 +84,21 @@ describe("index.html — Consent Mode comment is accurate", () => {
     expect(indexHtml).toMatch(/no analytics cookies/i);
   });
 });
+
+// F-01 (landing-main-thread-tbt S1): the owner runs no Google Ads campaigns,
+// so the CSP must never widen to allow Ads measurement/conversion domains —
+// the fix is disabling the signals at source (gtag config flags), not
+// opening the CSP.
+describe("vercel.json — CSP blocks Ad network domains (F-01)", () => {
+  it("does not allow googlesyndication.com or doubleclick.net in any CSP directive", () => {
+    const globalRule = vercel.headers.find((h) => h.source === "/(.*)");
+    expect(globalRule).toBeDefined();
+
+    const csp = globalRule?.headers.find(
+      (h) => h.key === "Content-Security-Policy",
+    );
+    expect(csp).toBeDefined();
+    expect(csp?.value).not.toContain("googlesyndication.com");
+    expect(csp?.value).not.toContain("doubleclick.net");
+  });
+});
