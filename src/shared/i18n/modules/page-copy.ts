@@ -114,7 +114,7 @@ export const pageCopy: { es: PageCopy; en: PageCopy } = {
     iaTeaserTitle: "Chatbots de IA y automatización",
     iaTeaserDesc:
       "Atiende a tus clientes 24/7 y automatiza tareas repetitivas en tu negocio.",
-    iaTeaserCta: "Ver chatbots de IA",
+    iaTeaserCta: "Ver soluciones de inteligencia artificial para empresas en Tenerife",
     iaH1: "Inteligencia artificial y automatización para empresas en Tenerife y Canarias",
     iaChatbotsTitle: "Chatbots con IA y robots de atención al público",
     iaCasesIntro:
@@ -161,7 +161,7 @@ export const pageCopy: { es: PageCopy; en: PageCopy } = {
     nfcCardTitle: "Multiplica tus reseñas en Google con un toque",
     nfcCardDesc:
       "Tus clientes acercan el móvil a la tarjeta y dejan su reseña en Google o te siguen en Instagram al instante.",
-    nfcCardCta: "Ver tarjetas NFC",
+    nfcCardCta: "Ver tarjetas NFC Tap to Review",
     homeMoreTitle: "Más servicios para tu negocio",
     tpvCardTitle: "TPV para restaurantes",
     tpvCardDesc:
@@ -230,7 +230,7 @@ export const pageCopy: { es: PageCopy; en: PageCopy } = {
     iaTeaserTitle: "AI chatbots and automation",
     iaTeaserDesc:
       "Serve your customers 24/7 and automate repetitive tasks in your business.",
-    iaTeaserCta: "See AI chatbots",
+    iaTeaserCta: "See AI solutions for businesses in Tenerife",
     iaH1: "Artificial intelligence and automation for businesses in Tenerife and the Canary Islands",
     iaChatbotsTitle: "AI chatbots and customer-service bots",
     iaCasesIntro:
@@ -276,7 +276,7 @@ export const pageCopy: { es: PageCopy; en: PageCopy } = {
     nfcCardTitle: "Multiply your Google reviews with one tap",
     nfcCardDesc:
       "Customers tap their phone on the card and leave a Google review or follow you on Instagram instantly.",
-    nfcCardCta: "See NFC cards",
+    nfcCardCta: "See Tap to Review NFC cards",
     homeMoreTitle: "More services for your business",
     tpvCardTitle: "Restaurant POS",
     tpvCardDesc:
