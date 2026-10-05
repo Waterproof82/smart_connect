@@ -77,6 +77,15 @@ describe("index.html — Consent Mode v2 (RGPD art.6 / LSSI-CE art.22.2)", () =>
     );
   });
 
+  it("disables Ads signals at source in the gtag('config',...) call (F-01)", () => {
+    const source = readSource();
+    const configIndex = source.indexOf('gtag("config"');
+    expect(configIndex).toBeGreaterThan(-1);
+    const configBlock = source.slice(configIndex, configIndex + 400);
+    expect(configBlock).toMatch(/allow_google_signals:\s*false/);
+    expect(configBlock).toMatch(/allow_ad_personalization_signals:\s*false/);
+  });
+
   it("the path-guard regex matches every /admin, /panel, /login rewrite prefix declared in vercel.json", () => {
     const source = readSource();
     const vercelSource = fs.readFileSync(VERCEL_JSON_PATH, "utf-8");
