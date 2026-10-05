@@ -1,11 +1,28 @@
 /**
  * Settings Service
  *
- * Shared service to fetch application settings from Supabase.
- * Used by Landing page to display dynamic contact information.
+ * Shared service to fetch application settings. Used by the Landing page
+ * (WhatsApp CTA, Contact) to display dynamic contact information.
+ *
+ * S5 (SDD `landing-main-thread-tbt`): reads the public `app_settings` row
+ * via a plain PostgREST `fetch` (anon key — RLS already allows public
+ * `SELECT` on `app_settings`) instead of resolving the Supabase SDK client
+ * (`getSupabase()`/`@shared/supabaseClient`). Public pages have no other
+ * reason to request `vendor-supabase`, so this keeps that chunk off every
+ * public route — it is only fetched later, lazily, if the user opens the
+ * chatbot (see `ExpertAssistantWithRAG.tsx`). Do NOT reintroduce a static
+ * or dynamic import of `@supabase/supabase-js`/`@shared/supabaseClient`
+ * here — `tests/unit/shared/settingsServiceNoVendorSupabase.guard.test.ts`
+ * guards against that regression.
+ *
+ * One in-flight/resolved request per page load, shared by every consumer
+ * (`useWhatsappPhone`, `Contact.tsx`) via `memoizeAsync` — a rejected
+ * fetch is NOT cached, so the next call retries from scratch instead of
+ * permanently bricking every consumer on a transient failure.
  */
 
-import { getSupabase } from "@shared/supabaseClient";
+import { ENV } from "@shared/config/env.config";
+import { memoizeAsync } from "@shared/utils/memoizeAsync";
 
 export interface AppSettings {
   n8nWebhookUrl: string;
@@ -15,42 +32,26 @@ export interface AppSettings {
   physicalAddress: string;
 }
 
-/**
- * Fetches application settings from Supabase
- */
-export async function getAppSettings(): Promise<AppSettings> {
-  try {
-    const supabase = await getSupabase();
-    const { data, error } = await supabase
-      .from("app_settings")
-      .select("*")
-      .eq("id", "global")
-      .single();
+const SETTINGS_FETCH_TIMEOUT_MS = 5000;
 
-    if (error) {
-      console.warn("Failed to fetch app settings:", error.message || error);
-      return getDefaultSettings();
-    }
+function isSettingsRow(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null;
+}
 
-    if (!data) {
-      return getDefaultSettings();
-    }
-
-    return {
-      n8nWebhookUrl: data.n8n_webhook_url || "",
-      n8nEnabled: data.n8n_enabled ?? false,
-      contactEmail: data.contact_email || "",
-      whatsappPhone: data.whatsapp_phone || "",
-      physicalAddress: data.physical_address || "",
-    };
-  } catch (error) {
-    console.warn("Error fetching app settings:", error);
-    return getDefaultSettings();
-  }
+function mapSettingsRow(row: Record<string, unknown>): AppSettings {
+  return {
+    n8nWebhookUrl: (row.n8n_webhook_url as string) || "",
+    n8nEnabled: (row.n8n_enabled as boolean) ?? false,
+    contactEmail: (row.contact_email as string) || "",
+    whatsappPhone: (row.whatsapp_phone as string) || "",
+    physicalAddress: (row.physical_address as string) || "",
+  };
 }
 
 /**
- * Returns default settings
+ * Returns default settings — used both as the public fallback (network
+ * error, non-OK response, missing env vars, unexpected shape) and when no
+ * `app_settings` row exists.
  */
 function getDefaultSettings(): AppSettings {
   return {
@@ -60,4 +61,75 @@ function getDefaultSettings(): AppSettings {
     whatsappPhone: "",
     physicalAddress: "",
   };
+}
+
+/**
+ * Raw fetcher — throws on any failure (missing env vars, network error,
+ * timeout, non-OK response, unexpected shape). Never called directly by
+ * consumers; always wrapped by the memoized cache below so a rejection
+ * clears the cache instead of poisoning it.
+ */
+async function fetchAppSettingsOrThrow(): Promise<AppSettings> {
+  const { SUPABASE_URL, SUPABASE_ANON_KEY } = ENV;
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+    throw new Error(
+      "Missing Supabase credentials. Ensure VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are set.",
+    );
+  }
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(
+    () => controller.abort(),
+    SETTINGS_FETCH_TIMEOUT_MS,
+  );
+
+  try {
+    const response = await fetch(
+      `${SUPABASE_URL}/rest/v1/app_settings?id=eq.global&select=*`,
+      {
+        headers: {
+          apikey: SUPABASE_ANON_KEY,
+          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        },
+        signal: controller.signal,
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch app settings: ${response.status}`);
+    }
+
+    const rows: unknown = await response.json();
+    const row = Array.isArray(rows) ? rows[0] : undefined;
+
+    if (!isSettingsRow(row)) {
+      throw new Error("Unexpected app_settings response shape.");
+    }
+
+    return mapSettingsRow(row);
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
+let getAppSettingsMemoized = memoizeAsync(fetchAppSettingsOrThrow);
+
+/**
+ * Fetches application settings. Resolves to `getDefaultSettings()` on any
+ * failure (never rejects) — preserves the existing fallback contract for
+ * every caller. Concurrent calls before the first resolves share a single
+ * underlying `fetch` (see module doc).
+ */
+export async function getAppSettings(): Promise<AppSettings> {
+  try {
+    return await getAppSettingsMemoized();
+  } catch (error) {
+    console.warn("Error fetching app settings:", error);
+    return getDefaultSettings();
+  }
+}
+
+/** Test-only: clears the shared request cache. */
+export function resetAppSettingsCache(): void {
+  getAppSettingsMemoized = memoizeAsync(fetchAppSettingsOrThrow);
 }

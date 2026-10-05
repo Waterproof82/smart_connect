@@ -417,3 +417,31 @@ entry below. Do not remove prior entries when appending.
 - **T3.9 [Manual-verify, post-deploy, not part of apply]:** Lighthouse
   a11y on `/carta-digital` and `/tpv-restaurantes`, both themes — remains
   outstanding until after deploy.
+
+## S5 — Public settings read without the Supabase SDK — 2026-10-05
+
+- **BEFORE:** `settingsService.getAppSettings()` resolved the Supabase SDK client through `getSupabase()`. `useWhatsappPhone` (mounted on almost every public page through `WhatsAppCta`) and `Contact.tsx` therefore pulled the `vendor-supabase` chunk onto every public page just to read one settings row. Each kept its own cache.
+- **CHANGE:**
+  - `src/shared/services/settingsService.ts` reads `app_settings?id=eq.global&select=*` with a plain PostgREST `fetch`. The query is the same as the previous `.eq("id","global").single()`.
+  - The request uses anon key headers and a 5 s `AbortController` timeout, and validates the response shape before use.
+  - One `memoizeAsync` cache is shared by all public consumers. A rejected call is not cached, so the next call retries.
+  - `useWhatsappPhone` drops its local cache.
+  - The admin Supabase client is untouched. The chatbot RAG backend still loads the SDK lazily, on the first open of the widget.
+- **AFTER:** tests show one settings request per page load, even with `Contact` and `WhatsAppCta` mounted together. The guard test `tests/unit/shared/settingsServiceNoVendorSupabase.guard.test.ts` keeps Supabase SDK references out of the public settings path.
+- **REGRESSION CHECK:**
+  - `npx tsc --noEmit` passes for the root and `tests/` configs.
+  - `npm run lint` is clean.
+  - Jest: 1364 passed, 43 skipped (dist-dependent suites; no fresh `dist/`), 3 failing. The 3 failures are the known `tests/e2e/chatbotFlow.test.ts` tests, which depend on the live network.
+  - Vitest: 165/165.
+  - The no-number fallback (the WhatsApp CTA falls back to the contact form) is unchanged: on error, `getAppSettings()` still returns the default empty settings.
+
+### Post-deploy PSI (mobile, Linux), 2026-10-05 ~14:20, with S1–S3 live
+
+| Page | Perf | TBT | FCP | LCP | CLS | A11y / BP / SEO |
+|---|---|---|---|---|---|---|
+| /carta-digital, before | 75 | 390 ms | 3.2 s | 3.5 s | 0.014 | 100 / 92 / 100 |
+| /carta-digital, after | **99** | **50 ms** | 1.7 s | 1.7 s | 0.014 | 100 / 100 / 100 |
+| home, before | 94 | 110 ms | 1.7 s | 2.7 s | 0.049 | 100 / 100 / 100 |
+| home, after | **97** | 100 ms | 1.8 s | 1.8 s | 0.053 | 100 / 100 / 100 |
+
+All success criteria in proposal.md are met: carta TBT < 200 ms, Perf ≥ 85, Best Practices 100, and no home regression. The home CLS of 0.053 is within noise and well under 0.1. F-02 is closed.
