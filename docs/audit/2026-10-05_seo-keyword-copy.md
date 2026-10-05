@@ -150,3 +150,158 @@ entry below — do not remove this entry when it does.
 only its sign-off)
 
 - D4: owner sign-off on "Tap to Review" (vs. "Tap and Review") wording.
+
+---
+
+# SEO Keyword Copy — Slice B / PR B (2026-10-05)
+
+SDD change: `seo-keyword-copy`, Phase 2 (tasks 2.1-2.9). Slice B covers the
+`/carta-digital` "restaurantes inteligentes" H2 block in
+`CartaDigitalTelegramSection.tsx`, the home-page `iaTeaserCta`/`nfcCardCta`
+anchor-text rewrite, the `AboutPage.tsx` proximity paragraph, and the
+`scripts/site-routes.json` `lastmod` bump for `/`, `/carta-digital` and
+`/about`. Branch `feat/seo-keyword-copy-b`, based on `feat/seo-keyword-copy-a`
+(chained PR, per the user-approved `ask-on-risk` → chained-PR delivery
+strategy already recorded for Slice A).
+
+## Before
+
+- `CartaDigitalTelegramSection.tsx`: rendered only the 4-feature Telegram
+  grid, no closing section tying the digital menu, Telegram orders and NFC
+  cards together as one "smart restaurant" offer.
+- Home (`HomeSolutionsSection.tsx`, via `page-copy.ts`): `iaTeaserCta` read
+  the generic "Ver chatbots de IA" / "See AI chatbots"; `nfcCardCta` read
+  "Ver tarjetas NFC" / "See NFC cards" — neither matched the GSC "ia para
+  empresas tenerife" or "tap to review" intent clusters.
+- `AboutPage.tsx`'s mission section's 3rd paragraph only said "Operamos
+  desde Tacoronte (Tenerife), con un equipo apasionado..." — no street
+  address, no explicit Canarian-market/direct-contact/on-site-visit
+  proximity signal.
+
+## Change
+
+- `src/shared/context/LanguageContext.tsx`: added `cartaSmartTitle`/
+  `cartaSmartDesc` (es/en) to the `Translation` interface and both locale
+  blocks, placed after `cartaTelegramFeature4Desc`.
+- `src/features/landing/presentation/components/CartaDigitalTelegramSection.tsx`:
+  added a closing `<div>` after the feature grid (inside the same
+  `<section>`, no new `<section>`, no `<Link>`) with
+  `<h2 id="carta-smart-title">{t.cartaSmartTitle}</h2>` and a `<p>` for
+  `t.cartaSmartDesc`. No second `<h1>` introduced.
+- `src/shared/i18n/modules/page-copy.ts`: `iaTeaserCta` → "Ver soluciones de
+  inteligencia artificial para empresas en Tenerife" / "See AI solutions for
+  businesses in Tenerife"; `nfcCardCta` → "Ver tarjetas NFC Tap to Review" /
+  "See Tap to Review NFC cards" (es/en, both locale blocks). Both CTAs are
+  the trailing `<span>` inside `HomeSolutionsSection.tsx`'s existing
+  `<Link>` cards — no new anchor added, per design.md D7.
+- `src/features/landing/presentation/components/AboutPage.tsx`: added a
+  module-level `ON_SITE_VISIT_NOTE` constant (single swappable string, per
+  task 2.5) and replaced the mission section's 3rd paragraph with: Tacoronte
+  + `ORGANIZATION.address.streetAddress`, direct/intermediary-free contact
+  with the Canarian market, and the owner-approved conditional on-site-visit
+  sentence ("Cuando el proyecto lo requiere, vamos a tu local en Tenerife
+  para instalarlo y configurarlo contigo") — never the blanket "we visit
+  every client in person" claim the owner rejected. No competitor named.
+- `scripts/site-routes.json`: `lastmod` bumped from `2026-10-01` to
+  `2026-10-05` for `/` and `/carta-digital`, and from `2026-10-02` to
+  `2026-10-05` for `/about`. `/carta-digital`'s `sources` gained
+  `CartaDigitalTelegramSection.tsx` (it is rendered by the already-listed
+  `CartaDigitalSection.tsx`, but was not itself in the list; the home route
+  still needed a manual floor bump because `page-copy.ts`/
+  `LanguageContext.tsx` are not in any route's `sources`, same P-20 pattern
+  as Slice A).
+- `CHANGELOG.md`: new `[Unreleased]` → `### Changed` bullet for Slice B,
+  directly below the Slice A bullet (both kept, per spec.md "Route Metadata
+  Stays Fresh Per Slice").
+- Updated tests (strict TDD, RED written and run before any implementation
+  edit): `src/features/landing/presentation/components/__tests__/CartaDigitalTelegramSection.test.tsx`
+  (4 new assertions) and `tests/unit/seo/keywordCopy.claims.test.ts`
+  (extended with Slice B describe blocks).
+
+## After
+
+- **RED** (`CartaDigitalTelegramSection.test.tsx`, vitest —
+  `npx vitest run src/features/landing/presentation/components/__tests__/CartaDigitalTelegramSection.test.tsx`):
+  baseline (safety net) 7/7 passing before any edit; after adding the 4 new
+  assertions only, before any production edit: 2 failed / 8 passed / 10
+  total (the "no second `<h1>`/no `<a>`" assertion pre-passed — the
+  component already had neither — recorded as a legitimate
+  triangulation-skip, not a false GREEN, since it is a regression guard for
+  a constraint the new code must not violate).
+- **RED** (`keywordCopy.claims.test.ts`, jest —
+  `npm test -- tests/unit/seo/keywordCopy.claims.test.ts`): 3 failed / 21
+  passed / 24 total before any production edit (`cartaSmartTitle`/
+  `cartaSmartDesc` not yet defined; the conditional-on-site-visit-sentence
+  check not yet present). `iaTeaserCta`/`nfcCardCta` pre-passed because the
+  original copy was already clean of banned substrings — not a false GREEN,
+  since that describe block's purpose is a banned-claim scan, not a
+  content-change scan.
+- **GREEN**: after the `LanguageContext.tsx`, `CartaDigitalTelegramSection.tsx`,
+  `page-copy.ts` and `AboutPage.tsx` edits — `CartaDigitalTelegramSection.test.tsx`
+  10/10 passing; `keywordCopy.claims.test.ts` 24/24 passing.
+  - One intermediate RED surfaced during GREEN: the first draft of the
+    `AboutPage.tsx` doc-comment explaining the swappable constant quoted the
+    banned blanket phrase verbatim ("te atendemos en persona en tu local"),
+    which the new claims-test regex correctly flagged since it scans the
+    whole file, not just JSX text. Fixed by rewording the comment to
+    describe the constraint without repeating the banned string; re-ran →
+    GREEN. This is the regex guard catching a real risk (the banned phrase
+    existing anywhere in the shipped file, including comments crawlers/future
+    editors could copy from) — not a false positive.
+- **REFACTOR / regression**: `npx tsc --noEmit` — 0 errors. `npx tsc -p
+  tests/tsconfig.json --noEmit` — 0 errors. `npm run lint` — 0 errors/0
+  warnings. Guard suites re-run and green:
+  `tests/unit/internalLinking.structure.test.ts`,
+  `tests/unit/ogImages.structure.test.ts`,
+  `tests/unit/App.homeHub.structure.test.ts`,
+  `tests/unit/content/localeParity.test.ts`,
+  `tests/unit/scripts/lastmod.test.ts`,
+  `tests/unit/scripts/routeParity.test.ts`,
+  `tests/unit/seo/nfcFrozenSurface.guard.test.ts`,
+  `tests/unit/seo/trustClaims.guard.test.ts` — 6 suites / 69 tests (3
+  skipped, 66 passed) in the combined run, plus `routeParity.test.ts`
+  separately green. Full `npm test` and full-suite line counts recorded in
+  the apply-progress artifact (`sdd/seo-keyword-copy/apply-progress`).
+
+## Regression check
+
+- `App.homeHub.structure.test.ts` only asserts the home hub's link targets,
+  no-H1, and the Carta Digital card's no-commission message — none of those
+  assert the literal `iaTeaserCta`/`nfcCardCta` strings, so the CTA reword
+  needed no test update.
+- `internalLinking.structure.test.ts` and `ogImages.structure.test.ts` only
+  assert structural tags (`<RelatedServices>`, `<PageShell>`, OG/Twitter
+  meta) on whole-page components; `CartaDigitalTelegramSection.tsx` and
+  `AboutPage.tsx`'s mission paragraph are untouched by either guard's
+  assertions.
+- `localeParity.test.ts` and `trustClaims.guard.test.ts` do not reference
+  `cartaSmart*`, `iaTeaserCta`, `nfcCardCta` or the About mission paragraph
+  by name, so neither needed updating; `keywordCopy.claims.test.ts` is the
+  dedicated guard for this slice's new strings instead.
+- No other test in the repo asserted the previous `iaTeaserCta`/
+  `nfcCardCta` wording or the old About 3rd paragraph text, so no other
+  assertion needed updating for this slice.
+
+## Deviations from tasks.md / design.md
+
+- **Owner-overridden About wording (recorded, not silent)**: design.md's
+  "Final copy" section specifies the About paragraph end with "...te
+  atendemos en persona en tu local: desde la instalación de las tarjetas
+  NFC hasta la puesta en marcha de la carta digital." This run's explicit
+  orchestrator instruction overrides that with cautious, conditional
+  wording ("Cuando el proyecto lo requiere, vamos a tu local en Tenerife
+  para instalarlo y configurarlo contigo") because the owner goes on-site
+  only for some services, not all, and a blanket claim would be
+  inaccurate — the swappable-constant mechanism design.md task 2.5 already
+  called for is what made this override low-risk. The `keywordCopy.claims.test.ts`
+  "AboutPage.tsx proximity paragraph" describe block asserts the blanket
+  phrase's absence as a permanent regression guard.
+- No other deviation from design.md/tasks.md for this slice.
+
+## Owner decisions still pending (do not block this slice's merge of code,
+only its sign-off)
+
+- D4 (Slice A, "Tap to Review" wording) — unchanged, still pending.
+- The About-paragraph wording override above is itself an owner decision
+  already applied in this run (not pending) — flagging for the record in
+  case the owner wants different phrasing before merge.

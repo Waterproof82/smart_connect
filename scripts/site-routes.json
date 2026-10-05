@@ -5,7 +5,7 @@
       "path": "/",
       "priority": "1.0",
       "changefreq": "monthly",
-      "lastmod": "2026-10-01",
+      "lastmod": "2026-10-05",
       "sources": [
         "src/App.tsx",
         "src/features/landing/presentation/components/Hero.tsx",
@@ -30,11 +30,12 @@
       "path": "/carta-digital",
       "priority": "0.9",
       "changefreq": "monthly",
-      "lastmod": "2026-10-01",
+      "lastmod": "2026-10-05",
       "sources": [
         "src/features/landing/presentation/components/CartaDigitalPage.tsx",
         "src/features/landing/presentation/components/CartaDigitalSection.tsx",
-        "src/features/landing/presentation/components/CartaDigitalReviews.tsx"
+        "src/features/landing/presentation/components/CartaDigitalReviews.tsx",
+        "src/features/landing/presentation/components/CartaDigitalTelegramSection.tsx"
       ]
     },
     {
@@ -60,7 +61,7 @@
       "path": "/about",
       "priority": "0.7",
       "changefreq": "monthly",
-      "lastmod": "2026-10-02",
+      "lastmod": "2026-10-05",
       "sources": [
         "src/features/landing/presentation/components/AboutPage.tsx",
         "src/shared/config/organization.ts"
