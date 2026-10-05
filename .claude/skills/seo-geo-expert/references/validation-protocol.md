@@ -15,5 +15,11 @@ Rich Results Test · Schema.org Validator · URL Inspection (canonical declarada
 ## Manual / sin acceso
 Marca `NOT VERIFIED` con: motivo, URL o dato a comprobar, herramienta exacta y resultado esperado. Ejemplo: *"Rich Results Test sobre https://digitalizatenerife.es/ → debe detectar Organization sin errores"*.
 
+## Verificar lo que reportan los sub-agentes
+Las cifras y atribuciones de un sub-agente no son evidencia hasta que se contrastan (el 2026-10-05, tres sub-agentes se equivocaron en este repo):
+- **Números de rendimiento:** recalculalos desde la traza (`--save-assets`, sumando los eventos `Layout`/`UpdateLayoutTree`). Uno reportó 212 ms de layout cuando eran 1025 ms.
+- **Atribuciones ("la mejora vino de X"):** cruzalas con el **orden de los deploys**. Una medición no puede atribuirse a un cambio desplegado después. Si no se midió un reparto por cambio, no lo inventes ("~160 ms por S5" fue inventado).
+- **Archivos movidos o copiados:** compará los listados de origen y destino antes de borrar el origen.
+
 ## Cierre
 Cada resultado: estado (`PASS/FAIL/WARNING/NOT VERIFIED/NOT APPLICABLE`) + evidencia (E0–E5). Nada se declara "arreglado" sin una comprobación posterior (AFTER).
