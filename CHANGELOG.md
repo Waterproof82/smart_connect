@@ -74,6 +74,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **Home hero subtitle now describes the carta digital and NFC cards** to match the H1 ("Carta digital y tarjetas NFC para restaurantes de Tenerife"); the previous subtitle described the TPV. The copy reuses facts already published on the site (5 languages, no commissions, table ordering, review in about 5 seconds without an app, setup included), so it introduces no new claims. es + en.
 - **Carta Digital social proof**: `SuccessStats` is now `CartaDigitalReviews`, showing 2 real, attributed Google reviews of QR iBar (Carlos S., Luis M.; 5★; 2022) instead of unsourced stats.
 - **`/tarjetas-nfc` trust strip**: `TrustBadges` now states 4 verifiable facts (no app needed, NFC with a backup QR, iPhone 8+/Android compatibility, no subscriptions) instead of the removed guarantee claims.
 - **`/tarjetas-nfc` social proof**: `SocialProof` is now `TrustFacts` — 3 factual cards (we configure the device, works with almost any phone, direct WhatsApp contact with a Tenerife-based team) instead of fabricated testimonials.

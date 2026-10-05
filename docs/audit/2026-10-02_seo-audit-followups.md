@@ -215,3 +215,9 @@
 | `/` | 0.048 |
 
 The remaining 0.048 on `/` comes from the new H1 re-wrapping when Space Grotesk loads; it is within the "good" threshold. Field CWV still need confirming via PageSpeed Insights/CrUX after deploy.
+
+## Home subtitle aligned with the H1 (2026-10-05)
+
+- **Action:** at the owner's request, `heroSubtitle` (es/en) now describes the carta digital + NFC instead of the TPV, so it matches the S4 H1. It reuses only facts already published on the site; no new claims.
+- **TDD:** 2 Hero tests (es/en) went RED, then GREEN.
+- **Validation:** jest (only the 3 pre-existing e2e failures), vitest, tsc and lint pass; build OK; home CLS unchanged at 0.048.
