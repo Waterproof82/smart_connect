@@ -120,6 +120,15 @@ export default function handler(req, res) {
       .join("\n");
 
     res.setHeader("Cache-Control", "public, max-age=3600, s-maxage=3600");
+    // The markdown body is a non-canonical representation of the HTML page
+    // (design.md D5, http-surface-hardening) — point back at the HTML
+    // canonical URL and keep this response itself out of the index.
+    res.setHeader(
+      "Link",
+      `<https://digitalizatenerife.es${cleanPath}>; rel="canonical"`,
+    );
+    res.setHeader("X-Robots-Tag", "noindex");
+    res.setHeader("Vary", "Accept");
     res.status(200).send(markdown);
   } catch (err) {
     console.error("[negotiate] Conversion failed:", err);
