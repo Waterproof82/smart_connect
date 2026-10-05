@@ -55,7 +55,7 @@ export const CookieBanner: React.FC<CookieBannerProps> = ({
             {labels.body}{" "}
             <a
               href={policyHref}
-              className="underline hover:text-[var(--color-accent)]"
+              className="underline hover:text-[var(--color-primary)]"
             >
               {labels.policy}
             </a>
