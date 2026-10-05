@@ -47,9 +47,9 @@ describe("buildAboutSchema", () => {
     expect(mainEntity.founder.name).not.toBe("Digitaliza Tenerife Team");
   });
 
-  it("does not carry any sameAs field on the Organization mainEntity", () => {
+  it("carries only the verified Google Business Profile as sameAs on the Organization mainEntity", () => {
     const schema = buildAboutSchema();
     const mainEntity = schema.mainEntity as Record<string, unknown>;
-    expect(mainEntity.sameAs).toBeUndefined();
+    expect(mainEntity.sameAs).toEqual(["https://maps.google.com/?cid=15389059418085053984"]);
   });
 });

@@ -57,9 +57,13 @@ describe("entity graph — buildHomeSchema (design.md D4)", () => {
     expect(webPage.publisher).toEqual({ "@id": ORGANIZATION_ID });
   });
 
-  it("no node anywhere in the graph carries sameAs", () => {
+  it("only the organization node carries sameAs, and only the verified Google Business Profile", () => {
     for (const node of graph) {
-      expect(node.sameAs).toBeUndefined();
+      if (node["@id"] === ORGANIZATION_ID) {
+        expect(node.sameAs).toEqual(["https://maps.google.com/?cid=15389059418085053984"]);
+      } else {
+        expect(node.sameAs).toBeUndefined();
+      }
     }
   });
 
@@ -110,7 +114,7 @@ describe("entity graph — buildAboutSchema reuses the shared organization node 
   it("mainEntity is the same organization node (same @id/@type) as home's — never a second, drifted entity", () => {
     expect(about.mainEntity["@type"]).toBe("LocalBusiness");
     expect(about.mainEntity["@id"]).toBe(ORGANIZATION_ID);
-    expect(about.mainEntity.sameAs).toBeUndefined();
+    expect(about.mainEntity.sameAs).toEqual(["https://maps.google.com/?cid=15389059418085053984"]);
   });
 });
 

@@ -221,3 +221,11 @@ The remaining 0.048 on `/` comes from the new H1 re-wrapping when Space Grotesk 
 - **Action:** at the owner's request, `heroSubtitle` (es/en) now describes the carta digital + NFC instead of the TPV, so it matches the S4 H1. It reuses only facts already published on the site; no new claims.
 - **TDD:** 2 Hero tests (es/en) went RED, then GREEN.
 - **Validation:** jest (only the 3 pre-existing e2e failures), vitest, tsc and lint pass; build OK; home CLS unchanged at 0.048.
+
+## sameAs → Google Business Profile (2026-10-05)
+
+- **Action:** added `ORGANIZATION.sameAs = ["https://maps.google.com/?cid=15389059418085053984"]`, emitted on the LocalBusiness `#organization` node (home and about).
+- **How the URL was obtained:** the CID was derived from the profile's feature id `0x…:0xd590ec018a56d620`. The URL was verified to open the "Digitaliza Tenerife" profile, whose name, phone (+34 601 39 64 19) and website match the site. The profile hides its street address (service-area business), which is consistent with the site.
+- **TDD:** 4 guard tests changed from "no sameAs" to "only the verified GBP"; RED, then GREEN.
+- **Validation:** jest (3 pre-existing e2e failures only), vitest 135/135, tsc and lint pass, build OK, `tests/unit/seo` 175/175.
+- **Owner follow-up:** the Maps pin is centred at 35.67 N, −6.81 W, which suggests the service area spans Canarias and mainland Spain. If service is Canarias-only, narrow the GBP service area.
