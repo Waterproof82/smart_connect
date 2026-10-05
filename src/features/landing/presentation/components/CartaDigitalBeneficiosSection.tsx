@@ -69,15 +69,16 @@ const CartaDigitalBeneficiosSection: React.FC = () => {
   return (
     <section
       id="beneficios"
+      aria-labelledby="carta-beneficios-title"
       className="ds-section bg-[var(--color-bg-alt)]"
     >
       <div className="ds-container">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12 md:mb-20">
-            <div className="ds-kicker mb-3 md:mb-4">
-              {t.cartaBeneficiosTitle}
-            </div>
-            <h2 className="ds-h2">
+            <h2 id="carta-beneficios-title" className="ds-h2">
+              <span className="ds-kicker mb-3 md:mb-4">
+                {t.cartaBeneficiosTitle}
+              </span>{" "}
               {t.cartaBeneficiosSubtitle}
             </h2>
           </div>

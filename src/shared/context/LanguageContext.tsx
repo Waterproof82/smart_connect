@@ -987,7 +987,7 @@ const translations: Record<Language, Translation> = {
       "Usamos cookies necesarias para el funcionamiento del sitio y, solo con tu consentimiento, cookies de análisis para entender cómo lo usas. Puedes aceptar o rechazar las cookies de análisis; tu elección no afecta a la navegación.",
     cookieBannerAccept: "Aceptar",
     cookieBannerReject: "Rechazar",
-    cookieBannerPolicy: "Más información",
+    cookieBannerPolicy: "Lee la política de cookies",
     cookieReopenerLabel: "Preferencias de cookies",
 
     // Home FAQ
@@ -1587,7 +1587,7 @@ const translations: Record<Language, Translation> = {
       "We use necessary cookies for the site to function and, only with your consent, analytics cookies to understand how it's used. You can accept or reject analytics cookies; your choice does not affect browsing.",
     cookieBannerAccept: "Accept",
     cookieBannerReject: "Reject",
-    cookieBannerPolicy: "Learn more",
+    cookieBannerPolicy: "Read the cookie policy",
     cookieReopenerLabel: "Cookie preferences",
 
     // Home FAQ
