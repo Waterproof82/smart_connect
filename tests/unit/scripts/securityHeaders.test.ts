@@ -102,3 +102,16 @@ describe("vercel.json — CSP blocks Ad network domains (F-01)", () => {
     expect(csp?.value).not.toContain("doubleclick.net");
   });
 });
+
+// F-06: no bundle or third-party script on the public site needs eval;
+// 'unsafe-eval' only widened the XSS surface.
+describe("vercel.json — CSP has no 'unsafe-eval' (F-06)", () => {
+  it("script-src does not allow 'unsafe-eval'", () => {
+    const globalRule = vercel.headers.find((h) => h.source === "/(.*)");
+    const csp = globalRule?.headers.find(
+      (h) => h.key === "Content-Security-Policy",
+    );
+    expect(csp?.value).toMatch(/script-src /);
+    expect(csp?.value).not.toContain("'unsafe-eval'");
+  });
+});
