@@ -75,6 +75,7 @@ export function organizationNode(): Record<string, unknown> {
     geo: geoNode(),
     founder: founderNode(),
     foundingDate: "2025",
+    sameAs: [...ORGANIZATION.sameAs],
   };
 }
 
