@@ -73,6 +73,7 @@ export function useNfcFaqGroup(): HomeFaqGroup {
       { q: t.tapReviewFAQ1Question, a: t.tapReviewFAQ1Answer },
       { q: t.tapReviewFAQ2Question, a: t.tapReviewFAQ2Answer },
       { q: t.tapReviewFAQ3Question, a: t.tapReviewFAQ3Answer },
+      { q: t.tapReviewFAQ4Question, a: t.tapReviewFAQ4Answer },
     ],
   };
 }
