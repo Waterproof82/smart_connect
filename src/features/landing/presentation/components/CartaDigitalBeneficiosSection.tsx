@@ -93,7 +93,10 @@ const CartaDigitalBeneficiosSection: React.FC = () => {
               <div
                 className={`bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-5 md:p-6 flex gap-4 md:gap-5 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200`}
               >
-                <div className="text-3xl md:text-4xl lg:text-5xl font-black text-[var(--color-accent-subtle)] font-display leading-none hidden sm:block">
+                <div
+                  className="text-3xl md:text-4xl lg:text-5xl font-black text-muted font-display leading-none hidden sm:block"
+                  aria-hidden="true"
+                >
                   {item.num}
                 </div>
                 <div className="flex-1 min-w-0">
