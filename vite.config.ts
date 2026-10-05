@@ -12,6 +12,7 @@ export default defineConfig(({ mode }) => ({
     include: [
       "src/shared/presentation/components/**/*.test.tsx",
       "src/shared/presentation/layout/**/*.test.tsx",
+      "src/shared/hooks/**/*.test.tsx",
       "src/features/**/*.test.tsx",
     ],
   },
