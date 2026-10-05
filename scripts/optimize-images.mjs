@@ -13,14 +13,58 @@ import sharp from "sharp";
 //
 // Not part of the app build graph — run manually via `npm run optimize:images`
 // whenever source assets are re-exported.
+//
+// design.md D9 (seo-audit-followups, S9): also generates the 480w/720w
+// responsive variants for the 10 TPV_TARGETS figures (936 stays the
+// original, no extra file) and the NFC gallery's 128w thumbnails from
+// their byte-copied AVIF mains.
 
 const ROOT = path.resolve(import.meta.dirname, "..");
 const TPV_DIR = path.join(ROOT, "public", "assets", "tpv");
 const ASSETS_DIR = path.join(ROOT, "public", "assets");
+const NFC_DIR = path.join(ROOT, "public", "assets", "nfc");
 
 export const TPV_WIDTH = 936;
 export const TPV_HEIGHT = 702;
 export const WEBP_QUALITY = 80;
+
+// design.md D9: the 480/720 responsive variants generated for every
+// TPV_TARGETS figure; 936 (the original file) needs no extra generated file.
+export const TPV_RESPONSIVE_WIDTHS = [480, 720];
+
+// Supplier SKU-style filenames -> descriptive names (byte-copy, same bytes,
+// same .avif extension — design.md D9). Order matches ProductGallery.tsx's
+// `products` array (2 photos of the white exhibitor, 1 black, 1 stand).
+export const NFC_RENAMES = {
+  "S0c0ed93c21c345e7ad3f8895ff09cec43.jpg_640x640q75.jpg_.avif":
+    "nfc-exhibidor-blanco-1.avif",
+  "Se5c21071b09f40a2bd15019ea423800eb.jpg_640x640q75.jpg_.avif":
+    "nfc-exhibidor-negro.avif",
+  "S3c28dfdc8fbc4adcaab2a58f3b235ca6m.jpg_640x640q75.jpg_.avif":
+    "nfc-stand-exhibidor.avif",
+  "S90c19838ba374d069994fec4075ffca20.jpg_640x640q75.jpg_.avif":
+    "nfc-exhibidor-blanco-2.avif",
+};
+
+// design.md D9: 128w thumbnail (64px at 2x DPR) generated from each
+// byte-copied AVIF main.
+export const NFC_THUMBNAIL_WIDTH = 128;
+
+/**
+ * Byte-copies every NFC gallery main from its supplier SKU-style filename to
+ * a descriptive one (design.md D9). Old files are left in place — callers
+ * decide when it's safe to delete them (kept until production verified).
+ */
+export async function renameNfcGalleryAssets(dir = NFC_DIR) {
+  const outputs = [];
+  for (const [oldName, newName] of Object.entries(NFC_RENAMES)) {
+    const srcPath = path.join(dir, oldName);
+    const destPath = path.join(dir, newName);
+    await fs.copyFile(srcPath, destPath);
+    outputs.push(destPath);
+  }
+  return outputs;
+}
 
 // Exactly the 10 TPV figures declaring 1400x1050 in their caller sections.
 // ComprasSialtiSection/FoodCostAvanzadoSection intentionally NOT listed here.
@@ -77,15 +121,17 @@ export async function convertCartaDigitalScreenshot(name, dir = ASSETS_DIR) {
 
 /**
  * Generates responsive WebP images for a given name and directory, at specified widths.
- * Original image is assumed to be `name.webp`.
- * Generated images will be named `{name}-{width}w.webp`.
+ * Original image is assumed to be `name.{sourceExt}` (defaults to "webp" — pass
+ * "avif" to read an AVIF source, e.g. the NFC gallery mains).
+ * Generated images are always WebP, named `{name}-{width}w.webp`.
  */
 export async function generateResponsiveImage(
   name,
   dir = ASSETS_DIR,
   widths = [],
+  { sourceExt = "webp" } = {},
 ) {
-  const srcPath = path.join(dir, `${name}.webp`);
+  const srcPath = path.join(dir, `${name}.${sourceExt}`);
   const results = [];
   for (const width of widths) {
     const outPath = path.join(dir, `${name}-${width}w.webp`);
@@ -110,6 +156,30 @@ async function main() {
   for (const name of TPV_TARGETS) {
     const out = await resizeTpvFigure(name);
     console.log(`resized: ${out}`);
+  }
+
+  for (const name of TPV_TARGETS) {
+    const responsiveOuts = await generateResponsiveImage(
+      name,
+      TPV_DIR,
+      TPV_RESPONSIVE_WIDTHS,
+    );
+    responsiveOuts.forEach((out) =>
+      console.log(`generated TPV responsive: ${out}`),
+    );
+  }
+
+  const nfcRenamed = await renameNfcGalleryAssets();
+  nfcRenamed.forEach((out) => console.log(`byte-copied NFC main: ${out}`));
+  for (const newName of Object.values(NFC_RENAMES)) {
+    const base = newName.replace(/\.avif$/, "");
+    const thumbOuts = await generateResponsiveImage(
+      base,
+      NFC_DIR,
+      [NFC_THUMBNAIL_WIDTH],
+      { sourceExt: "avif" },
+    );
+    thumbOuts.forEach((out) => console.log(`generated NFC thumbnail: ${out}`));
   }
 
   const RESPONSIVE_WIDTHS = [320, 640, 1280];

@@ -288,15 +288,33 @@ describe("public/assets/tpv/CREDITS.md provenance (design.md D8)", () => {
     (m) => m[1].trim(),
   );
 
-  it("every shipped .webp under public/assets/tpv has a CREDITS.md row (bidirectional completeness)", () => {
+  it("every shipped original .webp under public/assets/tpv has a CREDITS.md row (bidirectional completeness)", () => {
+    // seo-audit-followups S9 (design.md D9) generates `{name}-{480,720}w.webp`
+    // responsive variants of each already-credited original via
+    // generateResponsiveImage() — same photo, same Unsplash ID, not a
+    // separately-sourced asset, so they're excluded from this per-photo
+    // provenance check (same convention as excluding non-.webp files).
+    const RESPONSIVE_VARIANT = /-\d+w\.webp$/;
     const shippedWebps = fs
       .readdirSync(ASSETS_DIR)
-      .filter((f) => f.endsWith(".webp"));
+      .filter((f) => f.endsWith(".webp") && !RESPONSIVE_VARIANT.test(f));
     for (const file of shippedWebps) {
       expect(rows).toContain(file);
     }
     for (const row of rows) {
       expect(fs.existsSync(path.join(ASSETS_DIR, row))).toBe(true);
+    }
+  });
+
+  it("every generated responsive variant has a matching credited original", () => {
+    const RESPONSIVE_VARIANT = /^(.+)-\d+w\.webp$/;
+    const variants = fs
+      .readdirSync(ASSETS_DIR)
+      .filter((f) => RESPONSIVE_VARIANT.test(f));
+    expect(variants.length).toBeGreaterThan(0);
+    for (const file of variants) {
+      const [, baseName] = file.match(RESPONSIVE_VARIANT)!;
+      expect(rows).toContain(`${baseName}.webp`);
     }
   });
 

@@ -8,29 +8,29 @@ const ProductGallery: React.FC = () => {
   const products = [
     {
       name: t.tapReviewProductExhibitorWhite,
-      image:
-        "/assets/nfc/S0c0ed93c21c345e7ad3f8895ff09cec43.jpg_640x640q75.jpg_.avif",
+      image: "/assets/nfc/nfc-exhibidor-blanco-1.avif",
+      thumbnail: "/assets/nfc/nfc-exhibidor-blanco-1-128w.webp",
       alt: t.tapReviewProductExhibitorWhiteAlt,
       fallback: "/assets/Tarjeta_NFC_negra_MontesTAP.webp",
     },
     {
       name: t.tapReviewProductExhibitorBlack,
-      image:
-        "/assets/nfc/Se5c21071b09f40a2bd15019ea423800eb.jpg_640x640q75.jpg_.avif",
+      image: "/assets/nfc/nfc-exhibidor-negro.avif",
+      thumbnail: "/assets/nfc/nfc-exhibidor-negro-128w.webp",
       alt: t.tapReviewProductExhibitorBlackAlt,
       fallback: "/assets/Tarjeta_NFC_negra_MontesTAP.webp",
     },
     {
       name: t.tapReviewProductStand,
-      image:
-        "/assets/nfc/S3c28dfdc8fbc4adcaab2a58f3b235ca6m.jpg_640x640q75.jpg_.avif",
+      image: "/assets/nfc/nfc-stand-exhibidor.avif",
+      thumbnail: "/assets/nfc/nfc-stand-exhibidor-128w.webp",
       alt: t.tapReviewProductStandAlt,
       fallback: "/assets/Tarjeta_NFC_negra_MontesTAP.webp",
     },
     {
       name: t.tapReviewProductExhibitorWhite,
-      image:
-        "/assets/nfc/S90c19838ba374d069994fec4075ffca20.jpg_640x640q75.jpg_.avif",
+      image: "/assets/nfc/nfc-exhibidor-blanco-2.avif",
+      thumbnail: "/assets/nfc/nfc-exhibidor-blanco-2-128w.webp",
       alt: t.tapReviewProductExhibitorWhiteAlt,
       fallback: "/assets/Tarjeta_NFC_negra_MontesTAP.webp",
     },
@@ -84,7 +84,7 @@ const ProductGallery: React.FC = () => {
             }`}
           >
             <img
-              src={imageErrors[idx] ? product.fallback : product.image}
+              src={imageErrors[idx] ? product.fallback : product.thumbnail}
               alt={product.alt}
               width="640"
               height="640"
