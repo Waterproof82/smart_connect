@@ -130,13 +130,13 @@ export const DashboardPreview: React.FC = () => {
                   : "opacity-0 motion-safe:scale-90"
               }`}
             >
-              <h4 className="font-bold text-default mb-2">
+              <h4 className="font-bold text-[var(--color-on-accent)] mb-2">
                 {t.dashboardPlanPro}
               </h4>
               <p className="text-[10px] text-[var(--color-on-accent-muted)] mb-6">
                 {t.dashboardPlanActive}
               </p>
-              <div className="w-full bg-[var(--color-text)] text-[var(--color-accent)] py-2.5 rounded-lg text-[10px] font-bold shadow-xl text-center text-default">
+              <div className="w-full bg-[var(--color-on-accent)] text-[var(--color-accent)] py-2.5 rounded-lg text-[10px] font-bold shadow-xl text-center">
                 {t.dashboardManage}
               </div>
             </div>

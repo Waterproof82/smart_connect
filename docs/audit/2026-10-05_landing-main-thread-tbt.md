@@ -299,3 +299,121 @@ entry below. Do not remove prior entries when appending.
   `DeferredExpertAssistant` renders identically (`null`) on SSR and the
   first client render, so no #421 risk. `T1.4`/`T1.6` (S1) and
   `T2.18` (S2, manual-verify, post-deploy) remain out of apply scope.
+
+## S3 — F-03: Accent/on-accent contrast (+ orchestrator-added on-accent-muted and inverse-CTA fixes) — 2026-10-05
+
+- **Before:** Lighthouse/PSI flagged a contrast failure on `/carta-digital`.
+  Computing the actual OKLCH→WCAG ratio for every affected token pair
+  (helper math verified against design.md's own cited values — see
+  `tests/unit/theme/oklchContrast.test.ts`):
+
+  | Pair | Theme | Old ratio | Status |
+  |---|---|---|---|
+  | `--color-accent` / `--color-on-accent` | dark | 3.06:1 | FAIL |
+  | `--color-accent` / `--color-on-accent` | light | 4.52:1 | marginal pass |
+  | `--color-accent-hover` / `--color-on-accent` | dark | 4.52:1 | marginal pass |
+  | `--color-accent-hover` / `--color-on-accent` | light | 6.85:1 | pass |
+  | `--color-accent` (new, 52%) / `--color-on-accent-muted` (old) | dark | 2.43:1 | FAIL (new failure, see below) |
+  | `--color-accent` (new, 52%) / `--color-on-accent-muted` (old) | light | 2.09:1 | FAIL (new failure, see below) |
+  | `--color-text` / `--color-accent` (DashboardPreview.tsx:133 title, :139 inverted CTA) | dark | 2.80:1 (old) / 4.68:1 (new accent) | pre-existing FAIL, improves to pass with the new accent |
+  | `--color-text` / `--color-accent` | light | 4.11:1 (old) / 3.63:1 (new accent) | pre-existing FAIL both before and after — see finding below |
+  | `--color-text-muted` (carta step numbers) / `--color-surface` | dark/light | 5.05:1 / 5.86:1 | already passing (regression guard added, no change needed) |
+
+- **Change:**
+  - `src/index.css` — `--color-accent`: dark `65%`→`52%`, light `55%`→`52%`
+    (both now `oklch(52% 0.18 250)`, hue/chroma unchanged — D8).
+    `--color-accent-hover`: dark `55%`→`45%` (`oklch(45% 0.18 250)`); light
+    stays `45%` (already matched the target, no edit). Reaching the new
+    accent's contrast floor converged both themes on the same lightness.
+  - `--color-on-accent-muted` (chat header footer text at
+    `ExpertAssistantWithRAG.tsx:217,228`, `DashboardPreview.tsx:136`):
+    retuned lightness-only to `oklch(95% 0.008 250)` (dark, was 75%) and
+    `oklch(95% 0.01 250)` (light, was 35%) — the new, darker accent made
+    both old values fail (2.43:1/2.09:1); only the "much lighter than
+    accent" direction is mathematically reachable (going darker tops out
+    at ~3.87:1 — accent's own luminance is already low, so a darker text
+    color can never clear 4.5:1 against it; see the derivation in
+    `tests/unit/theme/accentContrast.test.ts`'s header comment). New value
+    clears 4.68:1/4.68:1.
+  - `CartaDigitalBeneficiosSection.tsx:96` (D9) — the decorative "01"-"04"
+    step number: `text-[var(--color-accent-subtle)]` → `text-muted` +
+    `aria-hidden="true"` (already repeated in the chip at line 115/below).
+  - **Orchestrator-addition finding, not resolvable at the token level:**
+    `--color-text`/`--color-accent` (DashboardPreview.tsx's "Plan Pro"
+    card title at line 133 and its inverted CTA pill at line 139) is
+    mathematically impossible to clear 4.5:1 in light mode at the same
+    time as `--color-accent`/`--color-on-accent` ≥4.5:1, given hue 250 +
+    chroma 0.18 are fixed and `--color-text`/`--color-on-accent` are each
+    used for dozens of other passing pairs. Proof: let `Y_accent` be the
+    accent's relative luminance. The on-accent pair requires
+    `(Y_on-accent + 0.05) / (Y_accent + 0.05) ≥ 4.5` → `Y_accent ≤ 0.170`
+    (using light `--color-on-accent`'s `Y = 0.942`). The text pair
+    requires `(Y_accent + 0.05) / (Y_text + 0.05) ≥ 4.5` → `Y_accent ≥
+    0.197` (using light `--color-text`'s `Y = 0.0048`). `0.197 > 0.170` —
+    no single accent lightness satisfies both. (Dark mode has no such
+    conflict: the new accent's `Y = 0.144` already clears both pairs.)
+    **Fix:** component-level, not a token retune — `DashboardPreview.tsx`
+    no longer pairs `--color-text` with `--color-accent` for normal text.
+    The title (`text-default` → `text-[var(--color-on-accent)]`) and the
+    CTA pill (`bg-[var(--color-text)]` → `bg-[var(--color-on-accent)]`,
+    dropped the redundant/conflicting trailing `text-default` class that
+    was fighting the pill's own `text-[var(--color-accent)]`) both now use
+    the same `--color-on-accent`/`--color-accent` pairing as
+    `.btn-primary-inverse`, which already clears 5.11:1 in both themes.
+  - New `tests/unit/theme/oklchContrast.test.ts`: known-value sanity for
+    the shared OKLCH→WCAG helper (`tests/helpers/oklchContrast.ts` —
+    **reused unmodified**, it already existed from an earlier, unrelated
+    change (`seo-audit-followups`/S7) with gamut-clamped math verified to
+    reproduce design.md's own cited ratios exactly; T3.2 did not need a
+    new helper). Pure-white-vs-black ≈21:1, identical colors =1:1,
+    symmetry, and 3 of design.md's own cited ratios reproduced exactly.
+  - New `tests/unit/theme/accentContrast.test.ts`: parses `:root`/`.light`
+    from `src/index.css` and asserts, in both themes: accent/on-accent,
+    accent-hover/on-accent, accent/on-accent-muted, text-muted/surface,
+    text-muted/bg, text/bg, text/surface all ≥4.5:1; accent and
+    accent-hover hue stay 250 and accent chroma stays 0.18 after the
+    retune; plus 3 source-text assertions that `DashboardPreview.tsx` no
+    longer uses the unsatisfiable `--color-text`/`--color-accent` pairing.
+  - Extended `src/features/landing/presentation/components/__tests__/
+    CartaDigitalBeneficiosSection.test.tsx`: the decorative step number
+    uses `text-muted` (not `--color-accent-subtle`) and is `aria-hidden`.
+- **After:**
+  - RED: `tests/unit/theme/accentContrast.test.ts` failed 6/27 against the
+    unmodified `src/index.css`/`DashboardPreview.tsx` — exactly the dark
+    accent/on-accent ratio, both themes' accent/on-accent-muted ratios,
+    and the 3 DashboardPreview source-text checks — confirmed failing for
+    the right reason (the other 21 assertions, covering pairs that were
+    already passing, were green from the start — a deliberate broader
+    regression sweep per the orchestrator's instruction, not a RED/GREEN
+    pair). `oklchContrast.test.ts` passed immediately (the helper
+    implementation predates this slice — pinned, not a RED/GREEN cycle).
+  - GREEN: `tests/unit/theme/` 27/27 passing after the CSS + component
+    changes. Full suite: `npx tsc --noEmit` and `npx tsc -p
+    tests/tsconfig.json --noEmit`: 0 errors. `npm run lint`: 0
+    errors/warnings. `npm test` (Jest): 1508/1515 — same 3 pre-existing
+    unrelated `tests/e2e/chatbotFlow.test.ts` live-network failures
+    (documented in `MEMORY.md`), no new failures. `npm run test:vitest --
+    run`: 156/156 (155 before S3 → 156 after, +1 net: the new
+    `CartaDigitalBeneficiosSection.test.tsx` assertion).
+- **Regression check:** `tests/unit/accentTokens.contrast.test.ts` and
+  `tests/unit/lightModeContrast.tokens.test.ts` keep their own older,
+  deliberately-unclamped local OKLCH math (per their own file-header
+  comments) and assert exact values only for `--color-icon-*`,
+  `--color-primary`, `--color-success-text` and `--color-accent-strong`
+  (via `tests/unit/a11y/contrastTokens.test.ts`, using the shared helper)
+  — none of those tokens changed in this slice, and the one indirectly
+  affected check (`--color-accent-strong` vs `--color-accent-hover`
+  visual-distinctness, ≥0.02 L points) still passes: dark
+  `0.50 - 0.45 = 0.05`, light `0.42 - 0.45 = 0.03` (both ≥0.02).
+  `scripts/critical-css.mjs`'s `collectThemeTokenCss` slices `:root`/
+  `.light` from the built CSS by selector, not by value, so it picks up
+  the new token values automatically — no edit needed (confirmed by
+  reading the function; did not run `npm run build` locally, per the
+  global no-build rule).
+- **T3.6 [Manual, not part of apply]:** visual check in both themes —
+  `.btn-primary`, the chat header, `DashboardPreview`'s "Plan Pro" card,
+  the carta step numbers — not performed by the agent; flagged for the
+  owner/reviewer before merge.
+- **T3.9 [Manual-verify, post-deploy, not part of apply]:** Lighthouse
+  a11y on `/carta-digital` and `/tpv-restaurantes`, both themes — remains
+  outstanding until after deploy.
