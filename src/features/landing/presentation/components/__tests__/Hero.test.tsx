@@ -68,6 +68,23 @@ describe("Hero", () => {
       );
     });
 
+    it("es: the subtitle describes the carta digital and NFC cards, not the TPV", () => {
+      renderWithLanguage();
+      const lede = document.querySelector(".ds-lede");
+      expect(lede).toHaveTextContent(/Carta digital/);
+      expect(lede).toHaveTextContent(/Tarjetas NFC/);
+      expect(lede).not.toHaveTextContent(/TPV/);
+    });
+
+    it("en: the subtitle describes the digital menu and NFC cards, not the POS", () => {
+      localStorage.setItem("language", "en");
+      renderWithLanguage();
+      const lede = document.querySelector(".ds-lede");
+      expect(lede).toHaveTextContent(/Digital menu/);
+      expect(lede).toHaveTextContent(/NFC cards/);
+      expect(lede).not.toHaveTextContent(/POS/);
+    });
+
     it("still renders the 3-part composition: plain text, one accent <span>, plain text", () => {
       renderWithLanguage();
       const h1 = screen.getByRole("heading", { level: 1 });
