@@ -19,6 +19,8 @@ Ver también: `rendering-javascript-seo.md`, `performance-cwv.md`, `accessibilit
 200/301/308 correctos; sin cadenas ni loops; 404 reales (no soft 404, p. ej. SPA que devuelve 200 con "no encontrado"); 410 si procede; sin 5xx. Un solo salto http→https y www↔apex.
 Comprobación: `curl -sIL -A "Googlebot" <url>`.
 
+**Para saber quién genera una redirección, mirá las cabeceras antes de tocar un panel** (lección del 2026-10-05). `server: cloudflare` junto con `x-vercel-id` significa que Cloudflare solo hace de proxy y que la respuesta la genera **Vercel**. Sin `x-vercel-id`, la genera Cloudflare (regla de redirección o "Always Use HTTPS"). En este sitio, `www` → apex se configura en Vercel → Settings → Domains → `www` → Redirect to Another Domain → **308**. No dupliques la regla en Cloudflare: dos fuentes de verdad se desincronizan. `http://www` hace dos saltos (301 de Cloudflare + 308 de Vercel); ambos son permanentes, así que es aceptable.
+
 ## 4. URLs
 Descriptivas, estables, minúsculas, sin parámetros innecesarios, trailing slash consistente, jerarquía lógica, sin huérfanas.
 
