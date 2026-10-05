@@ -27,12 +27,17 @@ describe("ORGANIZATION", () => {
     });
   });
 
-  it("exposes the correct founder identity, with no fabricated sameAs", () => {
+  it("exposes the correct founder identity", () => {
     expect(ORGANIZATION.founder).toEqual({
       name: "José Miguel Aristía",
       jobTitle: "Fundador",
     });
-    expect(ORGANIZATION).not.toHaveProperty("sameAs");
+  });
+
+  // Only profiles verified by the owner. The Google Business Profile was
+  // confirmed 2026-10-05: name, phone +34 601 39 64 19 and website match.
+  it("sameAs lists only the verified Google Business Profile (stable cid URL)", () => {
+    expect(ORGANIZATION.sameAs).toEqual(["https://maps.google.com/?cid=15389059418085053984"]);
   });
 });
 

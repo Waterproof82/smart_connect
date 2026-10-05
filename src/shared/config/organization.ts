@@ -26,6 +26,9 @@ export const ORGANIZATION = {
     name: "José Miguel Aristía",
     jobTitle: "Fundador",
   },
+  // Only official profiles verified by the owner (never placeholders).
+  // Google Business Profile, stable cid URL, verified 2026-10-05.
+  sameAs: ["https://maps.google.com/?cid=15389059418085053984"],
 } as const;
 
 /**
