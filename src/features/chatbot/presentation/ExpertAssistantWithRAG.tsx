@@ -16,7 +16,7 @@ import {
 } from "../domain/entities";
 import { sanitizeInput } from "@shared/utils/sanitizer";
 import { rateLimiter, RateLimitPresets } from "@shared/utils/rateLimiter";
-import { getAppSettings } from "@shared/services/settingsService";
+import { useWhatsappPhone } from "@shared/hooks/useWhatsappPhone";
 
 // Extracted UI components (SRP)
 import ChatMessages from "./components/ChatMessages";
@@ -40,11 +40,16 @@ const getSessionIdentifier = (): string => {
  */
 export const OPEN_ASSISTANT_EVENT = "sc:open-assistant";
 
-export const ExpertAssistant: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
+export const ExpertAssistant: React.FC<{ initialOpen?: boolean }> = ({
+  initialOpen = false,
+}) => {
+  const [isOpen, setIsOpen] = useState(initialOpen);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [whatsappPhone, setWhatsappPhone] = useState<string>("");
+  // D7: shares the same request/cache as the WhatsApp CTA
+  // (useWhatsappPhone -> settingsService.getAppSettings) instead of
+  // performing its own duplicate Supabase read.
+  const whatsappPhone = useWhatsappPhone();
   const scrollRef = useRef<HTMLDivElement>(null);
   const toggleBtnRef = useRef<HTMLButtonElement>(null);
   const modalRef = useRef<HTMLDialogElement>(null);
@@ -56,16 +61,6 @@ export const ExpertAssistant: React.FC = () => {
   const containerPromiseRef = useRef<ReturnType<
     typeof createChatbotContainer
   > | null>(null);
-
-  useEffect(() => {
-    const fetchWhatsApp = async () => {
-      const settings = await getAppSettings();
-      if (settings.whatsappPhone) {
-        setWhatsappPhone(settings.whatsappPhone.replaceAll(/[^\d+]/g, ""));
-      }
-    };
-    fetchWhatsApp();
-  }, []);
 
   useEffect(() => {
     const open = () => setIsOpen(true);

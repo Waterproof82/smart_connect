@@ -13,6 +13,7 @@ export default defineConfig(({ mode }) => ({
       "src/shared/presentation/components/**/*.test.tsx",
       "src/shared/presentation/layout/**/*.test.tsx",
       "src/shared/hooks/**/*.test.tsx",
+      "src/shared/context/**/*.test.tsx",
       "src/features/**/*.test.tsx",
     ],
   },
