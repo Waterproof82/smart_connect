@@ -147,6 +147,23 @@ describe("scripts/critical-css.mjs — collectThemeTokenCss", () => {
     expect(out).toContain("backdrop-filter:blur(8px)");
   });
 
+  it("force-includes the local metric-matched *Fallback @font-face rules so first paint uses them (no CLS when the full sheet arrives)", () => {
+    const css = `${FIXTURE_CSS}
+      @font-face{font-family:DM Sans Fallback;src:local(Arial),local(ArialMT);size-adjust:104.53%}
+      @font-face{font-family:"Space Grotesk Fallback";src:local(Arial);size-adjust:109.69%}
+      @font-face{font-family:Remote Font;src:url(/fonts/remote.woff2) format("woff2")}`;
+    const out = runScript(`
+      import { collectThemeTokenCss } from "./critical-css.mjs";
+      process.stdout.write(collectThemeTokenCss(${JSON.stringify(css)}));
+    `);
+    expect(out).toContain("font-family:DM Sans Fallback");
+    expect(out).toContain("size-adjust:104.53%");
+    expect(out).toContain('font-family:"Space Grotesk Fallback"');
+    // Only local-only fallback faces: a remote @font-face must not be pulled
+    // into the inlined critical CSS (it would trigger an early download).
+    expect(out).not.toContain("Remote Font");
+  });
+
   it("prepends the layer-order preamble matching first-appearance order (properties,theme,base,components,utilities)", () => {
     const out = runScript(`
       import { collectThemeTokenCss, LAYER_PREAMBLE } from "./critical-css.mjs";

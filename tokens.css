@@ -75,42 +75,23 @@
  * Metric-matched local fallbacks: while the Google Fonts load
  * (display=swap) text renders in Arial scaled to the web font's average
  * glyph width and vertical metrics, so the swap causes ~no layout shift.
- *
- * seo-audit-followups S9 correction: the values below replace an earlier,
- * backwards derivation (104.53%/94.9%/29.66% for DM Sans,
- * 109.69%/89.71%/26.62% for Space Grotesk) that computed `size-adjust` FROM
- * an assumed `ascent-override` instead of the other way around — Lighthouse
- * still measured 0.337 CLS on /tarjetas-nfc with those numbers in place
- * (2 shifts on ProductGallery's aspect-square box, both attributed to "Web
- * font loaded"), because the fallback's rendered glyph widths didn't
- * actually match DM Sans/Space Grotesk. Recomputed with the standard
- * next/font `local font fallback` / Capsize / `fontaine` formula, applied in
- * the correct order:
- *   sizeAdjust       = webfont.xWidthAvg / fallback.xWidthAvg
- *   ascentOverride   = (webfont.ascent  / webfont.unitsPerEm) / sizeAdjust
- *   descentOverride  = |webfont.descent / webfont.unitsPerEm| / sizeAdjust
- *   lineGapOverride  = (webfont.lineGap / webfont.unitsPerEm) / sizeAdjust
- * Metric source: `@capsizecss/metrics` v4.3.0 data bundle (`npx -y
- * @capsizecss/metrics`, accessed 2026-10-03) for "Arial", "DM Sans" and
- * "Space Grotesk" — the same collection next/font and fontaine both read
- * from. Recompute via `tests/unit/perf/fontFallbackMetrics.test.ts`, which
- * re-derives these values from the same raw metrics independently of this
- * file.
+ * Values computed from @capsizecss/metrics (next/font method):
+ * size-adjust = xWidthAvg ratio vs Arial; overrides = metric / (UPM · size-adjust).
  */
 @font-face {
   font-family: "DM Sans Fallback";
   src: local("Arial"), local("ArialMT"), local("Liberation Sans");
-  size-adjust: 51.04%;
-  ascent-override: 194.36%;
-  descent-override: 60.74%;
+  size-adjust: 104.53%;
+  ascent-override: 94.9%;
+  descent-override: 29.66%;
   line-gap-override: 0%;
 }
 
 @font-face {
   font-family: "Space Grotesk Fallback";
   src: local("Arial"), local("ArialMT"), local("Liberation Sans");
-  size-adjust: 53.56%;
-  ascent-override: 183.72%;
-  descent-override: 54.52%;
+  size-adjust: 109.69%;
+  ascent-override: 89.71%;
+  descent-override: 26.62%;
   line-gap-override: 0%;
 }

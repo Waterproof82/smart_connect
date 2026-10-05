@@ -2,24 +2,15 @@ import fs from "node:fs";
 import path from "node:path";
 
 /**
- * Lighthouse on the S1 production build measured 2 layout shifts on
- * `/tarjetas-nfc` (0.225 + 0.112, total CLS 0.337) on
- * `div#product > div.space-y-4 > div.relative` (ProductGallery's
- * aspect-square box), caused by DM Sans/Space Grotesk swapping in with
- * `display=swap` (index.html).
+ * Guards the metric-matched "DM Sans Fallback"/"Space Grotesk Fallback"
+ * `@font-face` rules in tokens.css (added in 8ce8df0) against drift.
  *
- * `tokens.css` ALREADY declared "DM Sans Fallback"/"Space Grotesk
- * Fallback" `@font-face` rules (added in an earlier change, commit
- * 8ce8df0) — the CLS wasn't caused by a *missing* fallback, as initially
- * suspected, but by an *incorrect* one: that earlier implementation
- * derived `size-adjust` FROM an assumed `ascent-override` (backwards),
- * instead of deriving the overrides FROM `size-adjust` (the correct,
- * standard order). Its fallback glyph widths didn't actually match DM
- * Sans/Space Grotesk, so the swap still reflowed the layout.
- *
- * Corrected using the standard Next.js `next/font` / `fontaine` / Capsize
- * formula, applied in the right order:
- *   sizeAdjust = webfont.xWidthAvg / fallback.xWidthAvg
+ * Formula (next/font / fontaine / Capsize). xWidthAvg is in font units, so it
+ * is normalized by each font's own unitsPerEm — Arial uses 2048, the web
+ * fonts 1000. Skipping that normalization yields a bogus ~51% size-adjust,
+ * which shipped briefly in seo-audit-followups S9 and was reverted:
+ *   sizeAdjust = (webfont.xWidthAvg / webfont.unitsPerEm)
+ *              / (fallback.xWidthAvg / fallback.unitsPerEm)
  *   ascentOverride = (webfont.ascent / webfont.unitsPerEm) / sizeAdjust
  *   descentOverride = |webfont.descent / webfont.unitsPerEm| / sizeAdjust
  *   lineGapOverride = (webfont.lineGap / webfont.unitsPerEm) / sizeAdjust
@@ -60,15 +51,19 @@ function computeOverrides(
     unitsPerEm: number;
     xWidthAvg: number;
   },
-  fallback: { xWidthAvg: number },
+  fallback: { unitsPerEm: number; xWidthAvg: number },
 ) {
-  const sizeAdjust = webfont.xWidthAvg / fallback.xWidthAvg;
+  // xWidthAvg is in font units, so each font must be normalized by its own
+  // unitsPerEm first (Arial uses 2048, DM Sans/Space Grotesk use 1000).
+  const sizeAdjust =
+    webfont.xWidthAvg / webfont.unitsPerEm /
+    (fallback.xWidthAvg / fallback.unitsPerEm);
   const ascentOverride = webfont.ascent / webfont.unitsPerEm / sizeAdjust;
   const descentOverride =
     Math.abs(webfont.descent / webfont.unitsPerEm) / sizeAdjust;
   const lineGapOverride = webfont.lineGap / webfont.unitsPerEm / sizeAdjust;
   const pct = (v: number) =>
-    v === 0 ? "0%" : `${(v * 100).toFixed(2)}%`;
+    v === 0 ? "0%" : `${parseFloat((v * 100).toFixed(2))}%`;
   return {
     sizeAdjust: pct(sizeAdjust),
     ascentOverride: pct(ascentOverride),

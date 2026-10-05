@@ -193,3 +193,25 @@
 3. No other deviations — the TPV/NFC image changes match design.md D9 and the `responsive-images` spec's scenarios exactly (srcset widths, sizes value, Compras/FoodCost exclusion, descriptive NFC filenames, unchanged alt/width/height).
 
 **Full-stack close-out (Phase 10, partial, this run):** grepped the diff from `develop` to this branch for `/admin` nav link, `sameAs`, and CSP `'unsafe-eval'` — none appear in any S1-S9 diff outside their own already-documented, in-scope changes (the `sameAs` conditional in `SeoSchema.tsx` is unchanged plumbing with no populated value anywhere in `solutions.ts`, confirmed in the S8a entry above). Did not run the full Phase 10 coverage-≥80% gate in this run (out of this batch's assigned scope: S8b + S9).
+
+## S9 correction — real CLS cause (orchestrator, 2026-10-05)
+
+**Supersedes** the S9 font-fallback findings above. The interim fallback values in the S9 commit (`size-adjust: 51.04%` etc.) were wrong: `xWidthAvg` was not normalized by `unitsPerEm`. Arial uses 2048 units per em and DM Sans/Space Grotesk use 1000. Normalized, the formula reproduces the ORIGINAL `8ce8df0` values exactly (104.53/94.9/29.66 and 109.69/89.71/26.62), so those were restored. `fontFallbackMetrics.test.ts` was fixed to normalize, so it would fail on the 51% values.
+
+**Measurement method:** puppeteer-core on the system Chrome, 412×823 mobile emulation, ~1.6 Mbps / 150 ms latency, with a buffered `layout-shift` PerformanceObserver recording each source's previous and current rect. The gallery's shrinking "height" in the earlier reports was only its viewport-clipped visible part (587+236 = 823): the box never resized, it was pushed down.
+
+**Real causes:**
+1. The critical CSS contained **0 `@font-face`** rules, so first paint used `system-ui` and the hero subtitle grew 84 → 112 px when the full sheet loaded. Fix: `collectThemeTokenCss()` in `scripts/critical-css.mjs` force-includes local-only `*Fallback` `@font-face` rules (TDD: RED on missing fallback, GREEN; remote `url()` faces stay excluded).
+2. `.ds-actions` went from 1 row to 2 when DM Sans loaded (50 → 111 px). Fix: `@media (max-width: 479px) { .ds-actions { flex-direction: column; align-items: stretch } }` (TDD: `tests/unit/perf/heroActionsStability.test.ts`).
+
+**Result (same harness):**
+
+| Route | CLS |
+|---|---|
+| `/tarjetas-nfc` | 0.337 → 0.000 |
+| `/carta-digital` | 0.000 |
+| `/tpv-restaurantes` | 0.000 |
+| `/about` | 0.000 |
+| `/` | 0.048 |
+
+The remaining 0.048 on `/` comes from the new H1 re-wrapping when Space Grotesk loads; it is within the "good" threshold. Field CWV still need confirming via PageSpeed Insights/CrUX after deploy.

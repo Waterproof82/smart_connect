@@ -374,6 +374,14 @@
     align-items: center;
     gap: var(--space-xs);
   }
+  /* Narrow screens: stacked full-width actions, so whether two buttons fit on
+     one row no longer depends on which font is rendering (CLS on swap). */
+  @media (max-width: 479px) {
+    .ds-actions {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
 
   /* --- WhatsApp CTA: the single primary action on every page --- */
   .btn-wa,
