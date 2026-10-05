@@ -2,79 +2,108 @@
  * settingsService Tests
  *
  * Shared service tests for landing page settings retrieval.
+ *
+ * S5 (SDD `landing-main-thread-tbt`): `getAppSettings()` no longer resolves
+ * the Supabase SDK client (`getSupabase()`/`@shared/supabaseClient`) — it
+ * issues a plain PostgREST `fetch` with the anon key, so `vendor-supabase`
+ * is never requested on public pages just to read a settings row. Mocks
+ * `global.fetch` directly instead of the Supabase client.
  */
 
-interface ChainMock {
-  select: jest.Mock;
-  eq: jest.Mock;
-  single: jest.Mock;
-}
+const mockEnv = { url: 'https://test.supabase.co', key: 'test-anon-key' };
 
-function createChain(result: { data: Record<string, unknown> | null; error: { message?: string } | null }): ChainMock {
-  const chain = {} as ChainMock;
-  chain.select = jest.fn(() => chain);
-  chain.eq = jest.fn(() => chain);
-  chain.single = jest.fn(() => Promise.resolve(result));
-  return chain;
-}
-
-const mockFrom = jest.fn();
-const mockGetSupabase = jest.fn();
-
-jest.mock('@shared/supabaseClient', () => ({
-  getSupabase: (...args: unknown[]) => mockGetSupabase(...args),
+jest.mock('@shared/config/env.config', () => ({
+  ENV: {
+    get SUPABASE_URL() {
+      return mockEnv.url;
+    },
+    get SUPABASE_ANON_KEY() {
+      return mockEnv.key;
+    },
+  },
 }));
 
-import { getAppSettings } from '@/shared/services/settingsService';
+const mockFetch = jest.fn();
+
+import {
+  getAppSettings,
+  resetAppSettingsCache,
+} from '@/shared/services/settingsService';
+
+function jsonResponse(body: unknown, init: { ok?: boolean; status?: number } = {}) {
+  return {
+    ok: init.ok ?? true,
+    status: init.status ?? 200,
+    json: () => Promise.resolve(body),
+  };
+}
+
+beforeEach(() => {
+  mockEnv.url = 'https://test.supabase.co';
+  mockEnv.key = 'test-anon-key';
+  mockFetch.mockReset();
+  globalThis.fetch = mockFetch as unknown as typeof fetch;
+  resetAppSettingsCache();
+});
 
 describe('settingsService', () => {
-  beforeEach(() => {
-    mockFrom.mockReset();
-    mockGetSupabase.mockReset();
-    mockGetSupabase.mockResolvedValue({
-      from: (...args: unknown[]) => mockFrom(...args),
-    });
-  });
-
   describe('getAppSettings', () => {
-    it('should map n8n_enabled=true from the row to n8nEnabled', async () => {
-      mockFrom.mockReturnValue(
-        createChain({
-          data: {
+    it('requests the app_settings row via a plain PostgREST fetch with the anon key headers', async () => {
+      mockFetch.mockResolvedValue(jsonResponse([]));
+
+      await getAppSettings();
+
+      expect(mockFetch).toHaveBeenCalledTimes(1);
+      const [url, init] = mockFetch.mock.calls[0];
+      expect(url).toBe(
+        'https://test.supabase.co/rest/v1/app_settings?id=eq.global&select=*',
+      );
+      expect(init.headers).toMatchObject({
+        apikey: 'test-anon-key',
+        Authorization: 'Bearer test-anon-key',
+      });
+    });
+
+    it('maps the snake_case row to the existing AppSettings camelCase shape unchanged', async () => {
+      mockFetch.mockResolvedValue(
+        jsonResponse([
+          {
             n8n_webhook_url: 'https://n8n.example.com/webhook',
             n8n_enabled: true,
             contact_email: 'contact@example.com',
-            whatsapp_phone: '',
-            physical_address: '',
+            whatsapp_phone: '+34600000000',
+            physical_address: 'Tacoronte',
           },
-          error: null,
-        })
+        ]),
       );
 
       const settings = await getAppSettings();
 
-      expect(settings.n8nEnabled).toBe(true);
+      expect(settings).toEqual({
+        n8nWebhookUrl: 'https://n8n.example.com/webhook',
+        n8nEnabled: true,
+        contactEmail: 'contact@example.com',
+        whatsappPhone: '+34600000000',
+        physicalAddress: 'Tacoronte',
+      });
     });
 
-    it('should default n8nEnabled to false when the query returns an error', async () => {
-      mockFrom.mockReturnValue(createChain({ data: null, error: { message: 'boom' } }));
+    it('falls back to default settings on a network error', async () => {
+      mockFetch.mockRejectedValue(new Error('offline'));
 
       const settings = await getAppSettings();
 
-      expect(settings.n8nEnabled).toBe(false);
+      expect(settings).toEqual({
+        n8nWebhookUrl: '',
+        n8nEnabled: false,
+        contactEmail: '',
+        whatsappPhone: '',
+        physicalAddress: '',
+      });
     });
 
-    it('should default n8nEnabled to false when data is missing', async () => {
-      mockFrom.mockReturnValue(createChain({ data: null, error: null }));
-
-      const settings = await getAppSettings();
-
-      expect(settings.n8nEnabled).toBe(false);
-    });
-
-    it('should return default settings when getSupabase() rejects (e.g. offline chunk fetch)', async () => {
-      mockGetSupabase.mockReset();
-      mockGetSupabase.mockRejectedValue(new Error('chunk fetch failed'));
+    it('falls back to default settings on a non-OK response', async () => {
+      mockFetch.mockResolvedValue(jsonResponse({}, { ok: false, status: 500 }));
 
       const settings = await getAppSettings();
 
@@ -82,12 +111,72 @@ describe('settingsService', () => {
       expect(settings.whatsappPhone).toBe('');
     });
 
-    it('resolves the client via getSupabase() (async chokepoint), not a static import', async () => {
-      mockFrom.mockReturnValue(createChain({ data: null, error: null }));
+    it('falls back to default settings when the row is missing (empty array)', async () => {
+      mockFetch.mockResolvedValue(jsonResponse([]));
+
+      const settings = await getAppSettings();
+
+      expect(settings.n8nEnabled).toBe(false);
+    });
+
+    it('falls back to default settings when env vars are missing, without calling fetch', async () => {
+      mockEnv.url = '';
+      mockEnv.key = '';
+
+      const settings = await getAppSettings();
+
+      expect(settings.n8nEnabled).toBe(false);
+      expect(mockFetch).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('getAppSettings caching (shared across useWhatsappPhone + Contact)', () => {
+    it('dedupes two concurrent calls into exactly one fetch', async () => {
+      let resolveFetch: (value: unknown) => void = () => {};
+      mockFetch.mockImplementation(
+        () =>
+          new Promise((resolve) => {
+            resolveFetch = resolve;
+          }),
+      );
+
+      const p1 = getAppSettings();
+      const p2 = getAppSettings();
+      await Promise.resolve();
+      resolveFetch(jsonResponse([{ whatsapp_phone: '+34600000000' }]));
+
+      const [a, b] = await Promise.all([p1, p2]);
+
+      expect(a).toEqual(b);
+      expect(mockFetch).toHaveBeenCalledTimes(1);
+    });
+
+    it('does not poison the cache on failure — the next call retries (fetch called again)', async () => {
+      mockFetch.mockRejectedValueOnce(new Error('offline'));
+      mockFetch.mockResolvedValueOnce(
+        jsonResponse([{ whatsapp_phone: '+34611111111' }]),
+      );
+
+      const first = await getAppSettings();
+      const second = await getAppSettings();
+
+      expect(first.whatsappPhone).toBe('');
+      expect(second.whatsappPhone).toBe('+34611111111');
+      expect(mockFetch).toHaveBeenCalledTimes(2);
+    });
+
+    it('memoizes the value obtained after a retry — a third call makes no further fetch', async () => {
+      mockFetch.mockRejectedValueOnce(new Error('offline'));
+      mockFetch.mockResolvedValueOnce(
+        jsonResponse([{ whatsapp_phone: '+34611111111' }]),
+      );
 
       await getAppSettings();
+      await getAppSettings();
+      const third = await getAppSettings();
 
-      expect(mockGetSupabase).toHaveBeenCalledTimes(1);
+      expect(third.whatsappPhone).toBe('+34611111111');
+      expect(mockFetch).toHaveBeenCalledTimes(2);
     });
   });
 });
