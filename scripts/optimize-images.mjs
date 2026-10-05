@@ -89,7 +89,8 @@ export const CARTA_DIGITAL_TARGETS = [
 
 /**
  * Resizes a single TPV WebP figure in place to TPV_WIDTH x TPV_HEIGHT at
- * WEBP_QUALITY, same filename.
+ * WEBP_QUALITY, same filename. Returns the path it rewrote, or null when the
+ * figure was already the right size and was left untouched.
  */
 export async function resizeTpvFigure(name, dir = TPV_DIR) {
   const filePath = path.join(dir, `${name}.webp`);
@@ -98,6 +99,10 @@ export async function resizeTpvFigure(name, dir = TPV_DIR) {
   // against the still-open read handle and fail with "unable to open for
   // write". Buffering the input decouples read/write entirely.
   const inputBuffer = await fs.readFile(filePath);
+  // Idempotent: an already-sized figure is left untouched, because a lossy
+  // re-encode would change its bytes on every run.
+  const { width, height } = await sharp(inputBuffer).metadata();
+  if (width === TPV_WIDTH && height === TPV_HEIGHT) return null;
   const outputBuffer = await sharp(inputBuffer)
     .resize(TPV_WIDTH, TPV_HEIGHT, { fit: "cover" })
     .webp({ quality: WEBP_QUALITY })
@@ -132,17 +137,25 @@ export async function generateResponsiveImage(
 ) {
   const srcPath = path.join(dir, `${name}.${sourceExt}`);
   if (widths.length === 0) return [];
+  let srcMtime;
   try {
-    await fs.access(srcPath); // Throws if file does not exist
+    srcMtime = (await fs.stat(srcPath)).mtimeMs; // Throws if file does not exist
   } catch {
     console.warn(
       `Source file not found for responsive generation: ${srcPath}. Skipping.`,
     );
     return [];
   }
-  return Promise.all(
+  // Returns only the variants actually (re)written in this run.
+  const written = await Promise.all(
     widths.map(async (width) => {
       const outPath = path.join(dir, `${name}-${width}w.webp`);
+      // Idempotent: keep a variant that is already newer than its source.
+      const outMtime = await fs
+        .stat(outPath)
+        .then((s) => s.mtimeMs)
+        .catch(() => -Infinity);
+      if (outMtime >= srcMtime) return null;
       await sharp(srcPath)
         .resize(width, null, { fit: "inside" }) // Resize to width, maintain aspect ratio
         .webp({ quality: WEBP_QUALITY })
@@ -150,6 +163,7 @@ export async function generateResponsiveImage(
       return outPath;
     }),
   );
+  return written.filter(Boolean);
 }
 
 /** Ensures `${name}.webp` exists, converting from PNG if needed; false if impossible. */
@@ -179,7 +193,7 @@ async function main() {
   // originals, so resizing must finish first. Items within a stage are
   // independent and run in parallel.
   const resized = await Promise.all(TPV_TARGETS.map((name) => resizeTpvFigure(name)));
-  resized.forEach((out) => console.log(`resized: ${out}`));
+  resized.filter(Boolean).forEach((out) => console.log(`resized: ${out}`));
 
   const tpvVariants = await Promise.all(
     TPV_TARGETS.map((name) =>
@@ -210,7 +224,7 @@ async function main() {
       if (outs.length > 0) {
         outs.forEach((out) => console.log(`generated responsive: ${out}`));
       } else {
-        console.log(`No responsive images generated for ${name}.`);
+        console.log(`Responsive images for ${name} already up to date.`);
       }
     }),
   );

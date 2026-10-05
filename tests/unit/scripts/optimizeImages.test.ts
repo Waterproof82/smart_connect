@@ -111,6 +111,78 @@ describe("scripts/optimize-images.mjs — resizeTpvFigure", () => {
     expect(meta.height).toBe(702);
     expect(meta.format).toBe("webp");
   });
+
+  // Idempotency: re-encoding an already-sized WebP changes its bytes on every
+  // run, so `npm run optimize:images` used to dirty 30 committed TPV assets.
+  it("leaves a figure that is already 936x702 byte-identical (no re-encode)", async () => {
+    const filePath = path.join(tmpDir, "tpv-cobro.webp");
+    await sharp({
+      create: { width: 936, height: 702, channels: 3, background: { r: 1, g: 2, b: 3 } },
+    })
+      // Different quality than the script's 80, so a re-encode WOULD change
+      // the bytes (a same-quality re-encode of a flat synthetic image can
+      // come out identical and mask the bug).
+      .webp({ quality: 50 })
+      .toFile(filePath);
+    const before = fs.readFileSync(filePath);
+
+    runOptimizeImagesScript(`
+      import { resizeTpvFigure } from "./optimize-images.mjs";
+      await resizeTpvFigure("tpv-cobro", ${JSON.stringify(tmpDir)});
+    `);
+
+    expect(fs.readFileSync(filePath).equals(before)).toBe(true);
+  });
+});
+
+describe("scripts/optimize-images.mjs — generateResponsiveImage idempotency", () => {
+  let tmpDir: string;
+
+  beforeEach(() => {
+    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "optimize-images-idem-"));
+  });
+
+  afterEach(() => {
+    fs.rmSync(tmpDir, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 });
+  });
+
+  const makeSource = () =>
+    sharp({
+      create: { width: 936, height: 702, channels: 3, background: { r: 9, g: 9, b: 9 } },
+    })
+      .webp()
+      .toFile(path.join(tmpDir, "tpv-cobro.webp"));
+
+  it("skips a variant that already exists and is newer than its source", async () => {
+    await makeSource();
+    const variant = path.join(tmpDir, "tpv-cobro-480w.webp");
+    fs.writeFileSync(variant, "existing-variant");
+    const later = new Date(Date.now() + 60_000);
+    fs.utimesSync(variant, later, later);
+
+    runOptimizeImagesScript(`
+      import { generateResponsiveImage } from "./optimize-images.mjs";
+      await generateResponsiveImage("tpv-cobro", ${JSON.stringify(tmpDir)}, [480]);
+    `);
+
+    expect(fs.readFileSync(variant, "utf-8")).toBe("existing-variant");
+  });
+
+  it("regenerates a variant when its source is newer", async () => {
+    const variant = path.join(tmpDir, "tpv-cobro-480w.webp");
+    fs.writeFileSync(variant, "stale-variant");
+    const earlier = new Date(Date.now() - 60_000);
+    fs.utimesSync(variant, earlier, earlier);
+    await makeSource();
+
+    runOptimizeImagesScript(`
+      import { generateResponsiveImage } from "./optimize-images.mjs";
+      await generateResponsiveImage("tpv-cobro", ${JSON.stringify(tmpDir)}, [480]);
+    `);
+
+    const meta = await sharp(fs.readFileSync(variant)).metadata();
+    expect(meta.width).toBe(480);
+  });
 });
 
 describe("scripts/optimize-images.mjs — generateResponsiveImage (design.md D9: optional {sourceExt})", () => {
