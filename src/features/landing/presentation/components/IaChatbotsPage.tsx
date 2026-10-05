@@ -101,9 +101,6 @@ const IaChatbotsPage: React.FC = () => {
         name="Chatbots IA y automatización"
         description={PAGE_DESCRIPTION}
         url={PAGE_URL}
-        providerName="Digitaliza Tenerife"
-        providerUrl={ORG_URL}
-        providerLogoUrl={`${ORG_URL}/icon.png`}
         areaServed={["Tenerife", "Canarias"]}
         serviceType="AI Chatbot and Automation"
       />

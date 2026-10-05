@@ -161,7 +161,7 @@ SmartConnect usa SSG custom con `react-dom/server` (renderToString). El servidor
 ### Qué NO hacer en SSR
 
 - ❌ NO uses `window`, `document`, `localStorage`, `matchMedia` durante el render (ni en `useState` initializer, ni en render functions, ni en módulo-level code)
-- ❌ NO uses `lazy()` en componentes de landing que se renderizan en SSR (Hero, Features, Contact, SuccessStats, ExpertAssistant)
+- ❌ NO uses `lazy()` en componentes de landing que se renderizan en SSR (Hero, Features, Contact, CartaDigitalReviews, ExpertAssistant)
 - ❌ NO dejes fuera del server componentes que retornan `null` (como `ScrollToTop`) — cuentan como elementos estructurales
 
 ### Seguridad de Tema (Theme SSR)

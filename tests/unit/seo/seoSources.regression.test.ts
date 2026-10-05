@@ -10,7 +10,12 @@ const { origin, routes } = readJson("scripts/site-routes.json") as {
   routes: Array<{ path: string; lastmod?: string }>;
 };
 const vercel = readJson("vercel.json") as {
-  redirects: Array<{ source: string; destination: string }>;
+  redirects: Array<{
+    source: string;
+    destination: string;
+    permanent?: boolean;
+    has?: Array<{ type: string; value?: string; key?: string }>;
+  }>;
   headers: Array<{ source: string; headers: Array<{ key: string; value: string }> }>;
 };
 
@@ -35,6 +40,7 @@ function robotsGroups(robots: string): Array<{ agents: string[]; rules: string[]
       lastWasAgent = false;
       continue;
     }
+    if (line.startsWith("#")) continue;
     const [field, ...rest] = line.split(":");
     const key = field.toLowerCase();
     const value = rest.join(":").trim();
@@ -61,15 +67,25 @@ describe("SEO regression — robots.txt", () => {
     expect(robots).toMatch(new RegExp(`^Sitemap: ${OFFICIAL_ORIGIN}/sitemap\\.xml$`, "m"));
   });
 
-  it("never disallows the whole site for any user agent", () => {
+  // design.md D3 (crawler-policy, S6): training-only UAs now get an
+  // explicit `Disallow: /` group (the full UA→category table and its
+  // vendor citations live in crawlerPolicy.test.ts, the single source of
+  // truth). This check only guards that the blanket disallow never leaks
+  // onto the wildcard/default group, which would block everyone.
+  it("only disallows the whole site for the declared training-only group, never for the wildcard group", () => {
     const blockers = groups.filter((group) => group.rules.includes("disallow:/"));
-    expect(blockers).toEqual([]);
+    for (const blocker of blockers) {
+      expect(blocker.agents).not.toContain("*");
+    }
   });
 
-  it("lets Googlebot crawl the site", () => {
-    const googlebot = groups.find((group) => group.agents.includes("googlebot"));
-    expect(googlebot).toBeDefined();
-    expect(googlebot!.rules).toContain("allow:/");
+  it("lets Googlebot crawl the site (falls through to the wildcard group, per design.md D3)", () => {
+    expect(groups.some((group) => group.agents.includes("googlebot"))).toBe(
+      false,
+    );
+    const wildcard = groups.find((group) => group.agents.includes("*"));
+    expect(wildcard).toBeDefined();
+    expect(wildcard!.rules).not.toContain("disallow:/");
   });
 
   it("keeps private areas out of the crawl for the default group", () => {
@@ -204,7 +220,13 @@ describe("SEO regression — site-routes.json as sitemap source", () => {
 });
 
 describe("SEO regression — vercel.json redirects", () => {
-  const sources = new Set(vercel.redirects.map((redirect) => redirect.source));
+  // Host-conditioned entries (e.g. the alias-host redirect, design.md D6)
+  // redirect to an absolute external URL by design and are never a route
+  // path or another redirect's source — they are excluded from the
+  // route-chain/route-destination checks below, which only make sense for
+  // same-origin path redirects.
+  const pathRedirects = vercel.redirects.filter((redirect) => !redirect.has);
+  const sources = new Set(pathRedirects.map((redirect) => redirect.source));
   const routePaths = new Set(routes.map((route) => route.path));
 
   it("are permanent (301/308)", () => {
@@ -213,16 +235,16 @@ describe("SEO regression — vercel.json redirects", () => {
   });
 
   it("have no duplicate sources", () => {
-    expect(sources.size).toBe(vercel.redirects.length);
+    expect(sources.size).toBe(pathRedirects.length);
   });
 
   it("never chain into another redirect or loop", () => {
-    const chained = vercel.redirects.filter((redirect) => sources.has(redirect.destination.split("#")[0]));
+    const chained = pathRedirects.filter((redirect) => sources.has(redirect.destination.split("#")[0]));
     expect(chained).toEqual([]);
   });
 
   it("point to a prerendered route", () => {
-    const orphans = vercel.redirects.filter((redirect) => !routePaths.has(redirect.destination.split("#")[0]));
+    const orphans = pathRedirects.filter((redirect) => !routePaths.has(redirect.destination.split("#")[0]));
     expect(orphans).toEqual([]);
   });
 });

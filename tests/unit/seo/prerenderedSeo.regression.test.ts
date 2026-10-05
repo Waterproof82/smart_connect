@@ -200,3 +200,47 @@ if (distBuilt) {
     it("runs only after dist/ has been built", () => undefined);
   });
 }
+
+// ─── Structured data policy: Review/HowTo must never ship (PR1) ──────────
+// `dist/` is gitignored and may exist locally from a build that predates
+// this change's source edits (SeoSchema.tsx / HowItWorks.tsx / TrustFacts.tsx
+// / TrustBadges.tsx / CTASection.tsx / CartaDigitalReviews.tsx). Comparing
+// against a stale dist would be a false negative (old JSON-LD baked into old
+// HTML), not a real regression. Gate on `distFresh` — dist/index.html newer
+// than every touched source file — so this skips gracefully both when dist
+// is absent AND when it's stale, and only asserts for real once a build run
+// after this change exists.
+const TOUCHED_SOURCES = [
+  "src/shared/presentation/components/SeoSchema.tsx",
+  "src/features/tap-review/presentation/components/HowItWorks.tsx",
+  "src/features/tap-review/presentation/components/TrustFacts.tsx",
+  "src/features/tap-review/presentation/components/TrustBadges.tsx",
+  "src/features/tap-review/presentation/components/CTASection.tsx",
+  "src/features/tap-review/presentation/components/Features.tsx",
+  "src/features/landing/presentation/components/CartaDigitalReviews.tsx",
+  "src/shared/context/LanguageContext.tsx",
+].map((relative) => path.join(ROOT, relative));
+
+const distIndexPath = path.join(DIST, "index.html");
+const distMtime = fs.existsSync(distIndexPath) ? fs.statSync(distIndexPath).mtimeMs : 0;
+const distFresh =
+  distBuilt && TOUCHED_SOURCES.every((file) => fs.statSync(file).mtimeMs <= distMtime);
+
+const describeIfFresh = distFresh ? describe : describe.skip;
+
+describeIfFresh("structured data policy — Review/HowTo markup (PR1)", () => {
+  it("has zero '@type':'Review' or '@type':'HowTo*' JSON-LD blocks in any prerendered route", () => {
+    const offenders: { path: string; type: string }[] = [];
+    for (const page of pages) {
+      for (const block of jsonLdBlocks(page.html)) {
+        if (/"@type"\s*:\s*"Review"/.test(block)) {
+          offenders.push({ path: page.path, type: "Review" });
+        }
+        if (/"@type"\s*:\s*"HowTo\w*"/.test(block)) {
+          offenders.push({ path: page.path, type: "HowTo" });
+        }
+      }
+    }
+    expect(offenders).toEqual([]);
+  });
+});

@@ -65,23 +65,12 @@ interface Translation extends TpvModuleTranslations {
   featuresCartaDigital: string;
   featuresCartaDigitalDesc: string;
   featuresDetails: string;
-  // Success Stats
-  successTitle: string;
-  successSubtitle: string;
-  successDesc: string;
-  successStat1Value: string;
-  successStat1Label: string;
-  successStat1Quote: string;
-  successStat1Author: string;
-  successStat2Label: string;
-  successStat2Quote: string;
-  successStat2Author: string;
-  successStat3Label: string;
-  successStat3Quote: string;
-  successStat3Author: string;
-  successStat4Label: string;
-  successStat4Quote: string;
-  successStat4Author: string;
+  // Carta Digital reviews (seo-trust-claims-cleanup PR2a — 2 real,
+  // attributed QR iBar reviews; replaces the unsourced Success Stats block)
+  cartaReviewsEyebrow: string;
+  cartaReviewsTitle: string;
+  cartaReviewsSource: string;
+  cartaReviewsRatingOf: string;
   // SEO
   seoAltTextNFC: string;
   // Contact
@@ -294,9 +283,6 @@ interface Translation extends TpvModuleTranslations {
   tapReviewProductExhibitorBlackAlt: string;
   tapReviewProductStand: string;
   tapReviewProductStandAlt: string;
-  tapReviewStatsBusinesses: string;
-  tapReviewStatsReviews: string;
-  tapReviewStatsDaily: string;
   tapReviewHowTitle: string;
   tapReviewHowSubtitle: string;
   tapReviewHowStep1Title: string;
@@ -315,17 +301,14 @@ interface Translation extends TpvModuleTranslations {
   tapReviewFeatGoogleDesc: string;
   tapReviewFeatNoSub: string;
   tapReviewFeatNoSubDesc: string;
-  tapReviewSocialTitle: string;
-  tapReviewSocialSubtitle: string;
-  tapReviewTestimonial1Quote: string;
-  tapReviewTestimonial1Author: string;
-  tapReviewTestimonial1Business: string;
-  tapReviewTestimonial2Quote: string;
-  tapReviewTestimonial2Author: string;
-  tapReviewTestimonial2Business: string;
-  tapReviewTestimonial3Quote: string;
-  tapReviewTestimonial3Author: string;
-  tapReviewTestimonial3Business: string;
+  tapReviewFactsTitle: string;
+  tapReviewFactsSubtitle: string;
+  tapReviewFact1Title: string;
+  tapReviewFact1Desc: string;
+  tapReviewFact2Title: string;
+  tapReviewFact2Desc: string;
+  tapReviewFact3Title: string;
+  tapReviewFact3Desc: string;
   tapReviewFAQTitle: string;
   tapReviewFAQ1Question: string;
   tapReviewFAQ1Answer: string;
@@ -339,9 +322,9 @@ interface Translation extends TpvModuleTranslations {
   tapReviewCTAFeature1: string;
   tapReviewCTAFeature2: string;
   tapReviewCTAFeature3: string;
-  tapReviewTrust30Days: string;
-  tapReviewTrust24h: string;
-  tapReviewTrustSupport: string;
+  tapReviewTrustNoApp: string;
+  tapReviewTrustQrFallback: string;
+  tapReviewTrustCompat: string;
   tapReviewTrustNoSub: string;
   // Digital Menu Landing
   // Menu QR Landing
@@ -516,7 +499,7 @@ const translations: Record<Language, Translation> = {
 
     // Navigation
     navSolutions: "Soluciones",
-    navSuccess: "Éxito",
+    navSuccess: "Opiniones",
     navContact: "Contacto",
     navAdmin: "Admin",
     navBack: "Volver",
@@ -524,9 +507,9 @@ const translations: Record<Language, Translation> = {
     // Hero — outcome-first: leads with business benefit (facturación /
     // tiempo ahorrado), platform breadth is supporting copy in the eyebrow.
     heroEyebrow: "Todo tu negocio en una pantalla",
-    heroTitle: "Aumenta tu facturación,",
-    heroTitleAccent: "ahorra horas",
-    heroTitleEnd: "cada semana",
+    heroTitle: "Carta digital y tarjetas NFC",
+    heroTitleAccent: "para restaurantes",
+    heroTitleEnd: "de Tenerife",
     heroServiciosTitle: "Soluciones de",
     heroServiciosTitleAccent: "IA y Automatización",
     heroServiciosTitleEnd: "para tu Negocio",
@@ -535,14 +518,14 @@ const translations: Record<Language, Translation> = {
     heroContactoTitleEnd: "",
     heroSubtitle:
       "TPV, comandero móvil, cocina, reservas, stock y más en una sola plataforma. Cobra más rápido, reduce tareas manuales y dedica tu tiempo a lo que importa: tu negocio. Sin comisiones ni intermediarios.",
-    statStrip1Value: "Decenas",
-    statStrip1Label: "de negocios en Canarias",
+    statStrip1Value: "5",
+    statStrip1Label: "idiomas en tu carta digital",
     statStrip2Value: "0%",
     statStrip2Label: "Comisiones por pedido",
-    statStrip3Value: "Hasta 6×",
-    statStrip3Label: "Más reseñas en 90 días",
-    statStrip4Value: "Hasta 40%",
-    statStrip4Label: "Más visitas con reseñas",
+    statStrip3Value: "5 s",
+    statStrip3Label: "para dejar una reseña con NFC",
+    statStrip4Value: "Pago único",
+    statStrip4Label: "en tarjetas NFC",
     heroButtonDemo: "Ver Demo",
     heroButtonContact: "Contactar",
 
@@ -576,28 +559,12 @@ const translations: Record<Language, Translation> = {
       "La carta digital que elimina intermediarios. 0% comisiones, 5 idiomas, pedidos por WhatsApp y tu propia base de datos de clientes.",
     featuresDetails: "Ver detalles",
 
-    // Success Stats
-    successTitle: "Casos de Éxito",
-    successSubtitle: "Resultados reales que transforman negocios",
-    successDesc:
-      "Empresas que ya confían en nosotros y han transformado su operación.",
-    successStat1Value: "Hasta 45%",
-    successStat1Label: "Aumento de ingresos por mesa",
-    successStat1Quote:
-      "Desde que implementamos la Carta Digital, nuestros ingresos por mesa aumentaron un 45%",
-    successStat1Author: "Restaurante L'Escale",
-    successStat2Label: "Satisfacción",
-    successStat2Quote:
-      "Mis clientes adoran la experiencia. Las reseñas positivas se dispararon",
-    successStat2Author: "Café Central Madrid",
-    successStat3Label: "Reseñas Ganadas",
-    successStat3Quote:
-      "Pasamos de 200 a 1200 reseñas en Google. Es increíble el impacto",
-    successStat3Author: "Bar Bodega Toledo",
-    successStat4Label: "Clientes Activos",
-    successStat4Quote:
-      "Decenas de negocios de hostelería confían en Digitaliza Tenerife para su transformación digital",
-    successStat4Author: "Comunidad Hostelera",
+    // Carta Digital reviews (seo-trust-claims-cleanup PR2a)
+    cartaReviewsEyebrow: "Opiniones",
+    cartaReviewsTitle: "Lo que dicen los comensales",
+    cartaReviewsSource:
+      "Reseña en Google de QR iBar, la versión anterior de nuestra Carta Digital",
+    cartaReviewsRatingOf: "de 5 estrellas",
 
     // SEO
     seoAltTextNFC: "Tarjeta NFC Tap-to-Review para obtener reseñas en Google",
@@ -846,7 +813,7 @@ const translations: Record<Language, Translation> = {
     tapReviewHeroBtnProduct: "Ver producto",
     tapReviewHeroFeature1: "Pago único - Sin suscripciones",
     tapReviewHeroFeature2: "Consigue reseñas en 5 segundos",
-    tapReviewHeroFeature3: "Aparece el primero en Google Maps",
+    tapReviewHeroFeature3: "Mejora tu posicionamiento y ayuda a tener más visibilidad",
 
     tapReviewProductExhibitorWhite: "Expositor Blanco",
     tapReviewProductExhibitorWhiteAlt: "Expositor de reseñas blanco",
@@ -855,16 +822,12 @@ const translations: Record<Language, Translation> = {
     tapReviewProductStand: "Stand Exhibidor",
     tapReviewProductStandAlt: "Stand exhibidor Tap-to-Review",
 
-    tapReviewStatsBusinesses: "Funcionando en +20,000 negocios",
-    tapReviewStatsReviews: "reseñas conseguidas",
-    tapReviewStatsDaily: "reseñas diarias",
-
     tapReviewHowTitle: "¿Cómo funciona?",
     tapReviewHowSubtitle:
       "Gracias a su Chip NFC de alto rendimiento, tus clientes acercan el móvil y se les abre la página de reseñas de tu negocio en Google.",
     tapReviewHowStep1Title: "Coloca el dispositivo",
     tapReviewHowStep1Desc:
-      "Pon el expositor Tapstar en tu local, visible para tus clientes.",
+      "Pon el expositor en tu local, visible para tus clientes.",
     tapReviewHowStep2Title: "Cliente acerca el móvil",
     tapReviewHowStep2Desc:
       "El cliente acerca su teléfono al chip NFC. No necesita abrir apps ni escanear nada.",
@@ -881,28 +844,25 @@ const translations: Record<Language, Translation> = {
     tapReviewFeatSpeed: "Reseñas en 5 segundos",
     tapReviewFeatSpeedDesc:
       'El proceso es tan rápido que los clientes no tienen tiempo de decir "no".',
-    tapReviewFeatGoogle: "Aparece primero en Google",
+    tapReviewFeatGoogle: "Mejora tu posicionamiento y ayuda a tener más visibilidad",
     tapReviewFeatGoogleDesc:
-      "Más reseñas = mejor posicionamiento en Google Maps y búsquedas locales.",
+      "Las reseñas recientes y bien valoradas son uno de los factores que Google tiene en cuenta en los resultados locales.",
     tapReviewFeatNoSub: "Sin suscripciones",
     tapReviewFeatNoSubDesc:
       "Pago único. Sin cuotas mensuales, sin permanencia, sin sorpresas.",
 
-    tapReviewSocialTitle: "Miles de negocios confían en nosotros",
-    tapReviewSocialSubtitle:
-      "Negocios de hostelería en toda España ya están multiplicando sus reseñas",
-    tapReviewTestimonial1Quote:
-      "Pasamos de 50 a 500 reseñas en 3 meses. El impacto en nuevos clientes ha sido brutal.",
-    tapReviewTestimonial1Author: "Carlos Martínez",
-    tapReviewTestimonial1Business: "Restaurante El Bodegón",
-    tapReviewTestimonial2Quote:
-      "Mis clientes lo usan constantemente. Es facilísimo, solo tienen que acercar el teléfono.",
-    tapReviewTestimonial2Author: "María López",
-    tapReviewTestimonial2Business: "Café Central Madrid",
-    tapReviewTestimonial3Quote:
-      "La mejor inversión que hemos hecho. Las reseñas han mejorado nuestro posicionamiento en Google.",
-    tapReviewTestimonial3Author: "Pedro Sánchez",
-    tapReviewTestimonial3Business: "Bar La Tapa",
+    tapReviewFactsTitle: "Así funciona trabajar con nosotros",
+    tapReviewFactsSubtitle:
+      "Sin sorpresas: esto es lo que incluye tu dispositivo Tap-to-Review",
+    tapReviewFact1Title: "Lo configuramos por ti",
+    tapReviewFact1Desc:
+      "Nos das el nombre de tu negocio y configuramos el chip NFC para que apunte directamente a tu ficha de Google.",
+    tapReviewFact2Title: "Funciona con casi cualquier móvil",
+    tapReviewFact2Desc:
+      "NFC compatible con iPhone 8 en adelante y cualquier Android con NFC, con código QR de respaldo para el resto.",
+    tapReviewFact3Title: "Trato directo con un equipo de Tenerife",
+    tapReviewFact3Desc:
+      "Escríbenos por WhatsApp y te respondemos nosotros, sin intermediarios.",
 
     tapReviewFAQTitle: "Preguntas frecuentes",
     tapReviewFAQ1Question: "¿Realmente funciona el NFC con cualquier móvil?",
@@ -917,15 +877,15 @@ const translations: Record<Language, Translation> = {
 
     tapReviewCTATitle: "Empieza a conseguir reseñas hoy",
     tapReviewCTASubtitle:
-      "Únete a los +20,000 negocios que ya están multiplicando sus reseñas en Google",
+      "Empieza a conseguir reseñas en segundos, sin instalar nada.",
     tapReviewCTABtnPrimary: "Contactar ahora",
-    tapReviewCTAFeature1: "Garantía 30 días",
-    tapReviewCTAFeature2: "Envío gratis 24h",
+    tapReviewCTAFeature1: "Sin app",
+    tapReviewCTAFeature2: "Configuración incluida",
     tapReviewCTAFeature3: "Sin suscripciones",
 
-    tapReviewTrust30Days: "Garantía 30 días",
-    tapReviewTrust24h: "Envío gratis 24h",
-    tapReviewTrustSupport: "Soporte 24/7",
+    tapReviewTrustNoApp: "Sin app",
+    tapReviewTrustQrFallback: "NFC + QR de respaldo",
+    tapReviewTrustCompat: "iPhone 8+ y Android con NFC",
     tapReviewTrustNoSub: "Sin suscripciones",
 
 
@@ -1027,7 +987,7 @@ const translations: Record<Language, Translation> = {
       "Usamos cookies necesarias para el funcionamiento del sitio y, solo con tu consentimiento, cookies de análisis para entender cómo lo usas. Puedes aceptar o rechazar las cookies de análisis; tu elección no afecta a la navegación.",
     cookieBannerAccept: "Aceptar",
     cookieBannerReject: "Rechazar",
-    cookieBannerPolicy: "Más información",
+    cookieBannerPolicy: "Lee la política de cookies",
     cookieReopenerLabel: "Preferencias de cookies",
 
     // Home FAQ
@@ -1035,9 +995,9 @@ const translations: Record<Language, Translation> = {
     homeFaqQ1: "¿Qué es Digitaliza Tenerife?",
     homeFaqA1: "Digitaliza Tenerife es una agencia de transformación digital especializada en hostelería y comercios locales de Canarias. Ofrecemos menús digitales, tarjetas NFC para reseñas, automatización con n8n e IA conversacional.",
     homeFaqQ2: "¿Cuánto cuesta la Carta Digital?",
-    homeFaqA2: "La Carta Digital no tiene comisiones por pedido. El precio depende del plan y del tamaño del negocio. Contactá con nosotros para un presupuesto personalizado sin compromiso.",
+    homeFaqA2: "La Carta Digital no tiene comisiones por pedido. El precio depende del plan y del tamaño del negocio. Contacta con nosotros para un presupuesto personalizado sin compromiso.",
     homeFaqQ3: "¿Cómo funcionan las tarjetas NFC Tap-to-Review?",
-    homeFaqA3: "El cliente acerca su móvil a la tarjeta NFC y se abre directamente la página de reseñas de Google de tu negocio. Sin apps, sin fricción. Algunos de nuestros clientes han llegado a multiplicar sus reseñas por 6 en 90 días.",
+    homeFaqA3: "El cliente acerca su móvil a la tarjeta NFC y se abre directamente la página de reseñas de Google de tu negocio. Sin apps, sin fricción.",
     homeFaqQ4: "¿Sus soluciones sirven para negocios fuera de Canarias?",
     homeFaqA4: "Sí. Aunque nos especializamos en Tenerife y Canarias, nuestras soluciones digitales funcionan en cualquier negocio de España y Europa.",
     homeFaqQ5: "¿Necesito conocimientos técnicos para usar vuestras herramientas?",
@@ -1138,7 +1098,7 @@ const translations: Record<Language, Translation> = {
 
     // Navigation
     navSolutions: "Solutions",
-    navSuccess: "Success",
+    navSuccess: "Reviews",
     navContact: "Contact",
     navAdmin: "Admin",
     navBack: "Back",
@@ -1146,9 +1106,9 @@ const translations: Record<Language, Translation> = {
     // Hero — outcome-first: leads with business benefit (revenue / time
     // saved), platform breadth is supporting copy in the eyebrow.
     heroEyebrow: "Your whole business, one screen",
-    heroTitle: "Boost your revenue,",
-    heroTitleAccent: "save hours",
-    heroTitleEnd: "every week",
+    heroTitle: "Digital menu and NFC cards",
+    heroTitleAccent: "for restaurants",
+    heroTitleEnd: "in Tenerife",
     heroServiciosTitle: "AI and Automation",
     heroServiciosTitleAccent: "Solutions",
     heroServiciosTitleEnd: "for Your Business",
@@ -1157,14 +1117,14 @@ const translations: Record<Language, Translation> = {
     heroContactoTitleEnd: "",
     heroSubtitle:
       "POS, mobile ordering, kitchen display, reservations, stock and more in one platform. Get paid faster, cut manual tasks, and spend your time on what matters — your business. No commissions, no middlemen.",
-    statStrip1Value: "Dozens",
-    statStrip1Label: "of businesses in the Canary Islands",
+    statStrip1Value: "5",
+    statStrip1Label: "languages in your digital menu",
     statStrip2Value: "0%",
     statStrip2Label: "Commissions per order",
-    statStrip3Value: "Up to 6×",
-    statStrip3Label: "More reviews in 90 days",
-    statStrip4Value: "Up to 40%",
-    statStrip4Label: "More visits with reviews",
+    statStrip3Value: "5 sec",
+    statStrip3Label: "to leave an NFC review",
+    statStrip4Value: "One-time payment",
+    statStrip4Label: "on NFC cards",
     heroButtonDemo: "View Demo",
     heroButtonContact: "Contact Us",
 
@@ -1197,27 +1157,11 @@ const translations: Record<Language, Translation> = {
     featuresCartaDigitalDesc:
       "The digital menu that eliminates intermediaries. 0% commissions, 5 languages, WhatsApp orders and your own customer database.",
     featuresDetails: "View details",
-    successTitle: "Success Stories",
-    successSubtitle: "Real results that transform businesses",
-    successDesc:
-      "Companies that already trust us and have transformed their operation.",
-    successStat1Value: "Up to 45%",
-    successStat1Label: "Revenue increase per table",
-    successStat1Quote:
-      "Since we implemented Carta Digital, our revenue per table increased by 45%",
-    successStat1Author: "Restaurante L'Escale",
-    successStat2Label: "Satisfaction",
-    successStat2Quote:
-      "My clients love the experience. Positive reviews skyrocketed",
-    successStat2Author: "Café Central Madrid",
-    successStat3Label: "Reviews Gained",
-    successStat3Quote:
-      "We went from 200 to 1200 Google reviews. The impact is incredible",
-    successStat3Author: "Bar Bodega Toledo",
-    successStat4Label: "Active Clients",
-    successStat4Quote:
-      "Dozens of hospitality businesses trust Digitaliza Tenerife for their digital transformation",
-    successStat4Author: "Hospitality Community",
+    cartaReviewsEyebrow: "Reviews",
+    cartaReviewsTitle: "What diners say",
+    cartaReviewsSource:
+      "Google review of QR iBar, the earlier version of our Carta Digital",
+    cartaReviewsRatingOf: "out of 5 stars",
 
     // SEO
     seoAltTextNFC: "Tap-to-Review NFC card to get Google reviews",
@@ -1471,7 +1415,7 @@ const translations: Record<Language, Translation> = {
     tapReviewHeroBtnProduct: "View product",
     tapReviewHeroFeature1: "One-time payment - No subscriptions",
     tapReviewHeroFeature2: "Get reviews in 5 seconds",
-    tapReviewHeroFeature3: "Appear first on Google Maps",
+    tapReviewHeroFeature3: "Improve your ranking and help boost your visibility",
 
     tapReviewProductExhibitorWhite: "White Exhibitor",
     tapReviewProductExhibitorWhiteAlt: "White reviews exhibitor",
@@ -1480,16 +1424,12 @@ const translations: Record<Language, Translation> = {
     tapReviewProductStand: "Display Stand",
     tapReviewProductStandAlt: "Tap-to-Review display stand",
 
-    tapReviewStatsBusinesses: "Working in +20,000 businesses",
-    tapReviewStatsReviews: "reviews obtained",
-    tapReviewStatsDaily: "daily reviews",
-
     tapReviewHowTitle: "How does it work?",
     tapReviewHowSubtitle:
       "Thanks to its high-performance NFC chip, your customers bring their phone closer and the Google reviews page for your business opens.",
     tapReviewHowStep1Title: "Place the device",
     tapReviewHowStep1Desc:
-      "Put the Tapstar exhibitor in your establishment, visible for your customers.",
+      "Put the exhibitor in your establishment, visible for your customers.",
     tapReviewHowStep2Title: "Customer brings phone closer",
     tapReviewHowStep2Desc:
       "The customer brings their phone to the NFC chip. No need to open apps or scan anything.",
@@ -1505,28 +1445,25 @@ const translations: Record<Language, Translation> = {
     tapReviewFeatSpeed: "Reviews in 5 seconds",
     tapReviewFeatSpeedDesc:
       'The process is so fast that customers don\'t have time to say "no".',
-    tapReviewFeatGoogle: "Appear first on Google",
+    tapReviewFeatGoogle: "Improve your ranking and help boost your visibility",
     tapReviewFeatGoogleDesc:
-      "More reviews = better positioning on Google Maps and local searches.",
+      "Recent, well-rated reviews are one of the factors Google considers in local results.",
     tapReviewFeatNoSub: "No subscriptions",
     tapReviewFeatNoSubDesc:
       "One-time payment. No monthly fees, no commitment, no surprises.",
 
-    tapReviewSocialTitle: "Thousands of businesses trust us",
-    tapReviewSocialSubtitle:
-      "Hospitality businesses across Spain are already multiplying their reviews",
-    tapReviewTestimonial1Quote:
-      "We went from 50 to 500 reviews in 3 months. The impact on new customers has been brutal.",
-    tapReviewTestimonial1Author: "Carlos Martínez",
-    tapReviewTestimonial1Business: "Restaurante El Bodegón",
-    tapReviewTestimonial2Quote:
-      "My customers use it constantly. It's super easy, they just have to bring their phone closer.",
-    tapReviewTestimonial2Author: "María López",
-    tapReviewTestimonial2Business: "Café Central Madrid",
-    tapReviewTestimonial3Quote:
-      "The best investment we've made. The reviews have improved our positioning on Google.",
-    tapReviewTestimonial3Author: "Pedro Sánchez",
-    tapReviewTestimonial3Business: "Bar La Tapa",
+    tapReviewFactsTitle: "What it's like to work with us",
+    tapReviewFactsSubtitle:
+      "No surprises: here's what your Tap-to-Review device includes",
+    tapReviewFact1Title: "We set it up for you",
+    tapReviewFact1Desc:
+      "You give us your business name and we configure the NFC chip to point directly to your Google Business profile.",
+    tapReviewFact2Title: "Works with almost any phone",
+    tapReviewFact2Desc:
+      "NFC compatible with iPhone 8 and newer, and any Android phone with NFC, with a backup QR code for the rest.",
+    tapReviewFact3Title: "Direct contact with a team in Tenerife",
+    tapReviewFact3Desc:
+      "Message us on WhatsApp and we reply ourselves, no middlemen.",
 
     tapReviewFAQTitle: "Frequently Asked Questions",
     tapReviewFAQ1Question: "Does NFC really work with any phone?",
@@ -1540,16 +1477,15 @@ const translations: Record<Language, Translation> = {
       "The device also includes a QR code that the customer can scan with their phone camera. So no one misses out on leaving you a review.",
 
     tapReviewCTATitle: "Start getting reviews today",
-    tapReviewCTASubtitle:
-      "Join the +20,000 businesses that are already multiplying their Google reviews",
+    tapReviewCTASubtitle: "Start getting reviews in seconds, nothing to install.",
     tapReviewCTABtnPrimary: "Contact now",
-    tapReviewCTAFeature1: "30-day guarantee",
-    tapReviewCTAFeature2: "Free 24h shipping",
+    tapReviewCTAFeature1: "No app needed",
+    tapReviewCTAFeature2: "Setup included",
     tapReviewCTAFeature3: "No subscriptions",
 
-    tapReviewTrust30Days: "30-day guarantee",
-    tapReviewTrust24h: "Free 24h shipping",
-    tapReviewTrustSupport: "24/7 Support",
+    tapReviewTrustNoApp: "No app needed",
+    tapReviewTrustQrFallback: "NFC + backup QR",
+    tapReviewTrustCompat: "iPhone 8+ and Android with NFC",
     tapReviewTrustNoSub: "No subscriptions",
 
 
@@ -1651,7 +1587,7 @@ const translations: Record<Language, Translation> = {
       "We use necessary cookies for the site to function and, only with your consent, analytics cookies to understand how it's used. You can accept or reject analytics cookies; your choice does not affect browsing.",
     cookieBannerAccept: "Accept",
     cookieBannerReject: "Reject",
-    cookieBannerPolicy: "Learn more",
+    cookieBannerPolicy: "Read the cookie policy",
     cookieReopenerLabel: "Cookie preferences",
 
     // Home FAQ
@@ -1661,7 +1597,7 @@ const translations: Record<Language, Translation> = {
     homeFaqQ2: "How much does Carta Digital cost?",
     homeFaqA2: "Carta Digital has no per-order commissions. Pricing depends on the plan and business size. Contact us for a free personalized quote.",
     homeFaqQ3: "How do Tap-to-Review NFC cards work?",
-    homeFaqA3: "The customer taps their phone on the NFC card and your Google review page opens instantly — no app needed. Some of our clients have multiplied their reviews up to 6x in 90 days.",
+    homeFaqA3: "The customer taps their phone on the NFC card and your Google review page opens instantly — no app needed.",
     homeFaqQ4: "Do your solutions work for businesses outside the Canary Islands?",
     homeFaqA4: "Yes. While we specialize in Tenerife and the Canary Islands, our digital solutions work for any business across Spain and Europe.",
     homeFaqQ5: "Do I need technical knowledge to use your tools?",

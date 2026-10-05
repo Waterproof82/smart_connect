@@ -6,11 +6,10 @@ Digitaliza Tenerife es una agencia de transformación digital especializada en r
 
 ## Servicios principales
 
-1. **Plataforma TPV** — TPV y cobro, comandero móvil, KDS de cocina, gestión de reservas, fichajes y control horario, delivery/takeaway sin comisiones, stock e inventario, multi-IVA/IGIC, roles y permisos (RBAC), food cost avanzado, sistema de alérgenos, compras y Tienda/Carta Digital — 13 módulos integrados.
-2. **Carta Digital** — Menú digital con fotos, vídeos, 5 idiomas y gestión de pedidos por Telegram. Sin comisiones.
-3. **Tap-to-Review NFC** — Tarjetas NFC para que los clientes dejen reseñas en Google con un solo toque.
-4. **Automatización n8n** — Flujos de trabajo automatizados que conectan CRM, email, WhatsApp y redes sociales.
-5. **Automatización WhatsApp** — Respuestas automáticas 24/7 para reservas, consultas y pedidos.
+1. **Carta Digital** — Menú digital con fotos, vídeos, 5 idiomas y gestión de pedidos por Telegram. Sin comisiones.
+2. **Tarjetas NFC (Tap-to-Review)** — Tarjetas NFC para que los clientes dejen reseñas en Google con un solo toque.
+3. **TPV** — TPV y cobro, comandero móvil, KDS de cocina, gestión de reservas, fichajes y control horario, delivery/takeaway sin comisiones, stock e inventario, multi-IVA/IGIC, roles y permisos (RBAC), food cost avanzado, sistema de alérgenos, compras y Tienda/Carta Digital — 13 módulos integrados.
+4. **Chatbots IA y automatización** — Chatbots con IA para web y WhatsApp, y automatización de procesos con n8n para CRM, email y redes sociales.
 
 ## Páginas clave
 
@@ -50,10 +49,10 @@ Digitaliza Tenerife es una agencia de transformación digital especializada en r
 
 ## Accesibilidad
 
-WCAG 2.1 AA. HTML semántico, atributos ARIA, navegación por teclado, alto contraste y soporte de `prefers-reduced-motion`.
+Diseñado siguiendo WCAG 2.1 AA (sin auditoría externa). HTML semántico, atributos ARIA, navegación por teclado, alto contraste y soporte de `prefers-reduced-motion`.
 
 ## Stack técnico
 
-- Framework: React 19 · Build: Vite 8 · Lenguaje: TypeScript 5.x · Estilos: Tailwind CSS 3.4
-- SEO: SSG pre-renderizado (react-dom/server) para las 6 rutas públicas
-- Datos estructurados: JSON-LD Schema.org (LocalBusiness, Service, FAQPage) en el `<head>`
+- Framework: React 18 · Build: Vite 8 · Lenguaje: TypeScript 5 · Estilos: Tailwind CSS 4
+- SEO: SSG pre-renderizado (react-dom/server) para las 9 rutas públicas
+- Datos estructurados: JSON-LD Schema.org (LocalBusiness, WebPage, AboutPage, Service, ItemList, BreadcrumbList, FAQPage) en el `<head>`

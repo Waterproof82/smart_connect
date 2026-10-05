@@ -1,7 +1,12 @@
 import React from "react";
 import { useLanguage } from "@shared/context/LanguageContext";
-import { Shield, Zap, Users, MessageSquare } from "lucide-react";
+import { Smartphone, QrCode, Nfc, MessageSquare } from "lucide-react";
 
+/**
+ * Facts strip (seo-trust-claims-cleanup PR2b, design.md D2): replaces the
+ * old unverified shipping/support/warranty badges with 4 verifiable
+ * product facts. No stars, no third-party figures.
+ */
 const TrustBadges: React.FC = () => {
   const { t } = useLanguage();
 
@@ -10,23 +15,25 @@ const TrustBadges: React.FC = () => {
       <div className="ds-container">
         <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16">
           <div className="flex items-center gap-2 text-muted">
-            <Shield className="w-5 h-5" />
+            <Smartphone className="w-5 h-5" aria-hidden="true" />
             <span className="text-sm font-medium">
-              {t.tapReviewTrust30Days}
+              {t.tapReviewTrustNoApp}
             </span>
           </div>
           <div className="flex items-center gap-2 text-muted">
-            <Zap className="w-5 h-5" />
-            <span className="text-sm font-medium">{t.tapReviewTrust24h}</span>
-          </div>
-          <div className="flex items-center gap-2 text-muted">
-            <Users className="w-5 h-5" />
+            <QrCode className="w-5 h-5" aria-hidden="true" />
             <span className="text-sm font-medium">
-              {t.tapReviewTrustSupport}
+              {t.tapReviewTrustQrFallback}
             </span>
           </div>
           <div className="flex items-center gap-2 text-muted">
-            <MessageSquare className="w-5 h-5" />
+            <Nfc className="w-5 h-5" aria-hidden="true" />
+            <span className="text-sm font-medium">
+              {t.tapReviewTrustCompat}
+            </span>
+          </div>
+          <div className="flex items-center gap-2 text-muted">
+            <MessageSquare className="w-5 h-5" aria-hidden="true" />
             <span className="text-sm font-medium">{t.tapReviewTrustNoSub}</span>
           </div>
         </div>

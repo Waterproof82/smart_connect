@@ -176,6 +176,14 @@ export function collectThemeTokenCss(builtCss) {
     if (node.type === "rule" && ruleMatchesTheme(node)) {
       unlayeredRules.push(node.clone());
     }
+    // Metric-matched fallback faces (tokens.css) are referenced by the font
+    // stacks in the critical CSS but are not "used" selectors, so beasties
+    // drops them; first paint then falls back to system-ui and the text
+    // reflows when the full sheet arrives. They are local()-only (no
+    // download), so inlining them is free.
+    if (node.type === "atrule" && isLocalFallbackFontFace(node)) {
+      unlayeredRules.push(node.clone());
+    }
   });
 
   if (baseLayerRules.length === 0 && unlayeredRules.length === 0) {
@@ -197,6 +205,20 @@ export function collectThemeTokenCss(builtCss) {
   }
 
   return parts.join("\n");
+}
+
+/** `@font-face` whose family ends in "Fallback" and whose src is local() only. */
+function isLocalFallbackFontFace(node) {
+  if (node.name !== "font-face") return false;
+  let family = "";
+  let src = "";
+  node.walkDecls((decl) => {
+    if (decl.prop === "font-family") family = decl.value;
+    if (decl.prop === "src") src = decl.value;
+  });
+  return (
+    /Fallback["']?\s*$/.test(family) && src !== "" && !/url\(/i.test(src)
+  );
 }
 
 function escapeRegExp(value) {

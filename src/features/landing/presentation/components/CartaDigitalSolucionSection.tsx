@@ -55,7 +55,7 @@ const CartaDigitalSolucionSection: React.FC = () => {
               </span>
               {t.cartaSolucionSuffix}
             </p>
-            <p className="text-base text-muted leading-relaxed mt-4 md:mt-6 max-w-2xl relative z-10">
+            <p className="text-base text-default leading-relaxed mt-4 md:mt-6 max-w-2xl relative z-10">
               {t.cartaSolucionDesc}
             </p>
             <div className="flex flex-wrap gap-2 md:gap-3 justify-center mt-6 md:mt-10 relative z-10">

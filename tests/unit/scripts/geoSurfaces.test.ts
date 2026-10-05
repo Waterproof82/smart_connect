@@ -36,6 +36,64 @@ function pathOf(url: string): string {
   return rest === "" ? "/" : rest;
 }
 
+// S6 (seo-audit-followups): agent-surface-routes spec ("Agent Surfaces
+// Match Live Site") + organization-identity spec ("llms.txt and Agent
+// Skills Hash Consistency") — llms.txt must list the live 4-service
+// product set in design.md's order, drop the unverified WCAG claim, state
+// the real installed stack majors (React 18.3.1, Tailwind 4.3.3 per
+// node_modules), and the real live route count (9, from site-routes.json).
+describe("geoSurfaces guard (design.md Interfaces/Contracts) — live service list, stack, route count, registerTool wording", () => {
+  const llmsTxt = read("public/llms.txt");
+  const agentSkills = JSON.parse(
+    read("public/.well-known/agent-skills/index.json"),
+  );
+
+  it("lists the 4 live services, in design.md's order", () => {
+    const servicesSection = llmsTxt
+      .split("## Servicios principales")[1]
+      ?.split(/\n## /)[0];
+    expect(servicesSection).toBeTruthy();
+
+    const expectedOrder = [
+      "Carta Digital",
+      "Tarjetas NFC",
+      "TPV",
+      "Chatbots IA",
+    ];
+    const indices = expectedOrder.map((label) => servicesSection!.indexOf(label));
+    expect(indices.every((i) => i !== -1)).toBe(true);
+    expect([...indices].sort((a, b) => a - b)).toEqual(indices);
+  });
+
+  // design.md's Interfaces/Contracts copy for this line is itself
+  // "Diseñado siguiendo WCAG 2.1 AA (sin auditoría externa)" — the point
+  // of the fix is the qualifier, not banning the string "WCAG 2.1 AA"
+  // outright (the old text made it an unqualified conformance claim).
+  it("does not claim unverified WCAG conformance", () => {
+    expect(llmsTxt).toMatch(/WCAG 2\.1 AA \(sin auditoría externa\)/);
+  });
+
+  it("states the real installed React/Vite/TypeScript/Tailwind majors", () => {
+    expect(llmsTxt).toMatch(/React 18/);
+    expect(llmsTxt).toMatch(/Vite 8/);
+    expect(llmsTxt).toMatch(/TypeScript 5/);
+    expect(llmsTxt).toMatch(/Tailwind CSS 4/);
+  });
+
+  it("states the real live route count (9 rutas)", () => {
+    expect(llmsTxt).toMatch(/9 rutas/);
+  });
+
+  it("webmcp-tools wording uses registerTool(), not the stale provideContext()", () => {
+    const webmcpTools = agentSkills.skills.find(
+      (s: { name: string }) => s.name === "webmcp-tools",
+    );
+    expect(webmcpTools).toBeDefined();
+    expect(webmcpTools.description).toMatch(/registerTool\(\)/);
+    expect(webmcpTools.description).not.toMatch(/provideContext\(\)/);
+  });
+});
+
 describe("geoSurfaces guard (design.md §4.7) — no dead URLs, honest hashes, valid JSON", () => {
   it("product-information sha256 matches the LF-normalized hash of public/llms.txt", () => {
     const llmsTxt = read("public/llms.txt").replace(/\r\n/g, "\n");

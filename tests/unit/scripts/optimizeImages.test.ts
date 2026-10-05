@@ -113,6 +113,68 @@ describe("scripts/optimize-images.mjs — resizeTpvFigure", () => {
   });
 });
 
+describe("scripts/optimize-images.mjs — generateResponsiveImage (design.md D9: optional {sourceExt})", () => {
+  let tmpDir: string;
+
+  beforeEach(() => {
+    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "optimize-images-responsive-"));
+  });
+
+  afterEach(() => {
+    fs.rmSync(tmpDir, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 });
+  });
+
+  it("defaults to a .webp source and writes {name}-{width}w.webp for each requested width", async () => {
+    await sharp({
+      create: {
+        width: 936,
+        height: 702,
+        channels: 3,
+        background: { r: 10, g: 20, b: 200 },
+      },
+    })
+      .webp()
+      .toFile(path.join(tmpDir, "tpv-cobro.webp"));
+
+    runOptimizeImagesScript(`
+      import { generateResponsiveImage } from "./optimize-images.mjs";
+      await generateResponsiveImage("tpv-cobro", ${JSON.stringify(tmpDir)}, [480, 720]);
+    `);
+
+    for (const w of [480, 720]) {
+      const outPath = path.join(tmpDir, `tpv-cobro-${w}w.webp`);
+      expect(fs.existsSync(outPath)).toBe(true);
+      const meta = await sharp(fs.readFileSync(outPath)).metadata();
+      expect(meta.width).toBe(w);
+      expect(meta.format).toBe("webp");
+    }
+  });
+
+  it("reads a non-.webp source when {sourceExt} is given, and still writes .webp output", async () => {
+    await sharp({
+      create: {
+        width: 640,
+        height: 640,
+        channels: 3,
+        background: { r: 200, g: 20, b: 20 },
+      },
+    })
+      .avif()
+      .toFile(path.join(tmpDir, "nfc-exhibidor-blanco-1.avif"));
+
+    runOptimizeImagesScript(`
+      import { generateResponsiveImage } from "./optimize-images.mjs";
+      await generateResponsiveImage("nfc-exhibidor-blanco-1", ${JSON.stringify(tmpDir)}, [128], { sourceExt: "avif" });
+    `);
+
+    const outPath = path.join(tmpDir, "nfc-exhibidor-blanco-1-128w.webp");
+    expect(fs.existsSync(outPath)).toBe(true);
+    const meta = await sharp(fs.readFileSync(outPath)).metadata();
+    expect(meta.width).toBe(128);
+    expect(meta.format).toBe("webp");
+  });
+});
+
 describe("scripts/optimize-images.mjs — convertCartaDigitalScreenshot", () => {
   let tmpDir: string;
 

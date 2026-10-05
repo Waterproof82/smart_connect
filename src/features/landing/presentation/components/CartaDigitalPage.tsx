@@ -4,6 +4,7 @@ import { RelatedServices } from "@shared/components/RelatedServices";
 import { PageShell } from "@features/landing/presentation/components/PageShell";
 import { Section, FaqList } from "@shared/presentation/layout";
 import CartaDigitalSection from "@features/landing/presentation/components/CartaDigitalSection";
+import { CartaDigitalReviews } from "@features/landing/presentation/components/CartaDigitalReviews";
 import {
   ServiceSchema,
   SeoFaqSchema,
@@ -63,9 +64,6 @@ const CartaDigitalPage: React.FC = () => {
         name={solutionMeta?.serviceValue ?? "Carta Digital Premium"}
         description={solutionMeta?.jsonLd.description ?? PAGE_DESCRIPTION}
         url={PAGE_URL}
-        providerName="Digitaliza Tenerife"
-        providerUrl={ORG_URL}
-        providerLogoUrl={`${ORG_URL}/icon.png`}
         areaServed={solutionMeta?.jsonLd.areaServed}
         serviceType={solutionMeta?.jsonLd.serviceType}
       />
@@ -84,6 +82,14 @@ const CartaDigitalPage: React.FC = () => {
 
       <PageShell waMessage={t.waMsgCarta} servicio="Carta Digital">
         <CartaDigitalSection id="carta-digital" />
+
+        <section
+          id="opiniones"
+          aria-labelledby="carta-opiniones-title"
+          className="ds-section"
+        >
+          <CartaDigitalReviews headingId="carta-opiniones-title" />
+        </section>
 
         <Section id="faq" width="prose" title={cartaFaqGroup.title}>
           <FaqList items={cartaFaqGroup.items} />

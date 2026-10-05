@@ -121,14 +121,15 @@ describe("api/negotiate.mjs — route allowlist (design.md D3/D7/D8)", () => {
         `
         const { default: handler } = await import(${JSON.stringify(modUrl)});
         let statusCode, body;
+        const headers = {};
         const req = { query: { path: "/tarjetas-nfc" } };
         const res = {
-          setHeader() {},
+          setHeader(key, value) { headers[key] = value; },
           status(code) { statusCode = code; return this; },
           send(b) { body = b; },
         };
         handler(req, res);
-        process.stdout.write(JSON.stringify({ statusCode, body }));
+        process.stdout.write(JSON.stringify({ statusCode, body, headers }));
       `,
       ],
       { encoding: "utf-8", cwd: tmpDir },
@@ -140,6 +141,99 @@ describe("api/negotiate.mjs — route allowlist (design.md D3/D7/D8)", () => {
     expect(statusCode).toBe(200);
     expect(body).toContain("# Tap-to-Review NFC — Test Title");
     expect(body).toContain("Hola");
+  });
+
+  // design.md D5 (http-surface-hardening) — the markdown response is a
+  // non-canonical representation of the HTML page: it must point back at
+  // the HTML canonical URL and never be indexed itself.
+  it("on a 200, sends a Link canonical header pointing at the HTML page and X-Robots-Tag: noindex", () => {
+    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "negotiate-test-"));
+    const routeDir = path.join(tmpDir, "dist", "tarjetas-nfc");
+    fs.mkdirSync(routeDir, { recursive: true });
+    fs.writeFileSync(
+      path.join(routeDir, "index.html"),
+      `<html><head><title>Tap-to-Review NFC — Test Title</title></head>` +
+        `<body><div id="root"><h1>Hola</h1></div><script></script></body></html>`,
+    );
+
+    const modUrl = pathToFileURL(
+      path.join(API_DIR, "negotiate.mjs"),
+    ).href;
+    const out = execFileSync(
+      process.execPath,
+      [
+        "--input-type=module",
+        "-e",
+        `
+        const { default: handler } = await import(${JSON.stringify(modUrl)});
+        let statusCode, body;
+        const headers = {};
+        const req = { query: { path: "/tarjetas-nfc" } };
+        const res = {
+          setHeader(key, value) { headers[key] = value; },
+          status(code) { statusCode = code; return this; },
+          send(b) { body = b; },
+        };
+        handler(req, res);
+        process.stdout.write(JSON.stringify({ statusCode, body, headers }));
+      `,
+      ],
+      { encoding: "utf-8", cwd: tmpDir },
+    );
+
+    fs.rmSync(tmpDir, { recursive: true, force: true });
+
+    const { statusCode, headers } = JSON.parse(out);
+    expect(statusCode).toBe(200);
+    expect(headers["Link"]).toBe(
+      '<https://digitalizatenerife.es/tarjetas-nfc>; rel="canonical"',
+    );
+    expect(headers["X-Robots-Tag"]).toBe("noindex");
+    expect(headers["Vary"]).toBe("Accept");
+  });
+
+  it("the canonical Link header for the home path (/) has no trailing path segment duplication", () => {
+    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "negotiate-test-"));
+    const routeDir = path.join(tmpDir, "dist");
+    fs.mkdirSync(routeDir, { recursive: true });
+    fs.writeFileSync(
+      path.join(routeDir, "index.html"),
+      `<html><head><title>Digitaliza Tenerife</title></head>` +
+        `<body><div id="root"><h1>Hola</h1></div><script></script></body></html>`,
+    );
+
+    const modUrl = pathToFileURL(
+      path.join(API_DIR, "negotiate.mjs"),
+    ).href;
+    const out = execFileSync(
+      process.execPath,
+      [
+        "--input-type=module",
+        "-e",
+        `
+        const { default: handler } = await import(${JSON.stringify(modUrl)});
+        let statusCode;
+        const headers = {};
+        const req = { query: { path: "/" } };
+        const res = {
+          setHeader(key, value) { headers[key] = value; },
+          status(code) { statusCode = code; return this; },
+          send() {},
+        };
+        handler(req, res);
+        process.stdout.write(JSON.stringify({ statusCode, headers }));
+      `,
+      ],
+      { encoding: "utf-8", cwd: tmpDir },
+    );
+
+    fs.rmSync(tmpDir, { recursive: true, force: true });
+
+    const { statusCode, headers } = JSON.parse(out);
+    expect(statusCode).toBe(200);
+    expect(headers["Link"]).toBe(
+      '<https://digitalizatenerife.es/>; rel="canonical"',
+    );
   });
 
   it("handler falls back to the literal 'SmartConnect AI' title when the prerendered file has no <title>", () => {

@@ -14,10 +14,10 @@ const ROOT = path.resolve(__dirname, "../..");
 const read = (absPath: string) => fs.readFileSync(absPath, "utf-8");
 
 describe("/tarjetas-nfc route registration (D5 — four points)", () => {
-  it("1) entry-client.tsx: lazy-imports TapReviewPage and registers the route (mirrors /about)", () => {
+  it("1) entry-client.tsx: sources TapReviewPage from the preloadable route-loader map and registers the route (mirrors /about; design.md D1/D2, seo-audit-followups S1)", () => {
     const source = read(path.join(SRC, "entry-client.tsx"));
     expect(source).toMatch(
-      /const TapReviewPage = lazy\(\s*\(\)\s*=>\s*\n?\s*import\(["']@features\/tap-review\/presentation\/TapReviewPage["']\)/,
+      /const TapReviewPage = PRERENDERED_ROUTES\["\/tarjetas-nfc"\]\.Component;/,
     );
     expect(source).toMatch(
       /<Route path="\/tarjetas-nfc" element={<TapReviewPage \/>} \/>/,

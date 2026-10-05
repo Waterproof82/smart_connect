@@ -16,10 +16,9 @@ import { WhatsAppCta } from "@shared/presentation/layout";
 
 // Import components from presentation/components/ (Clean Architecture)
 import ProductGallery from "./components/ProductGallery";
-import StatsBanner from "./components/StatsBanner";
 import HowItWorks from "./components/HowItWorks";
 import Features from "./components/Features";
-import SocialProof from "./components/SocialProof";
+import TrustFacts from "./components/TrustFacts";
 import CTASection from "./components/CTASection";
 import TrustBadges from "./components/TrustBadges";
 
@@ -81,10 +80,9 @@ export const TapReviewSection: React.FC = () => {
       </header>
 
       <TrustBadges />
-      <StatsBanner />
       <HowItWorks />
       <Features />
-      <SocialProof />
+      <TrustFacts />
       <CTASection />
     </div>
   );

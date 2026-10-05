@@ -22,11 +22,11 @@ describe("Home page composition (App.tsx + merged sections)", () => {
     expect(h1Matches).toHaveLength(1);
   });
 
-  it("HomeFaqSection.tsx, Contact.tsx, SuccessStats.tsx, Navbar.tsx declare no <h1>", () => {
+  it("HomeFaqSection.tsx, Contact.tsx, CartaDigitalReviews.tsx, Navbar.tsx declare no <h1>", () => {
     const files = [
       "features/landing/presentation/components/HomeFaqSection.tsx",
       "features/landing/presentation/components/Contact.tsx",
-      "features/landing/presentation/components/SuccessStats.tsx",
+      "features/landing/presentation/components/CartaDigitalReviews.tsx",
       "features/landing/presentation/components/Navbar.tsx",
     ];
     for (const file of files) {
