@@ -445,3 +445,15 @@ entry below. Do not remove prior entries when appending.
 | home, after | **97** | 100 ms | 1.8 s | 1.8 s | 0.053 | 100 / 100 / 100 |
 
 All success criteria in proposal.md are met: carta TBT < 200 ms, Perf ≥ 85, Best Practices 100, and no home regression. The home CLS of 0.053 is within noise and well under 0.1. F-02 is closed.
+
+## S4 — F-06: 'unsafe-eval' removed from CSP — 2026-10-05
+
+- **BEFORE:** `vercel.json` CSP `script-src` included `'unsafe-eval'`. No production chunk uses `eval` or `new Function`.
+- **CHANGE:** removed `'unsafe-eval'` (the only occurrence; there is no other CSP in `vite.config.ts` or the HTML). New regression test in `tests/unit/scripts/securityHeaders.test.ts`, RED → GREEN.
+- **AFTER:** smoke test on the Vercel preview of PR #129, with a `securitypolicyviolation` listener and a console check:
+  - `/carta-digital`: gtag.js loads and sends `page_view`; no `vendor-supabase`; one settings fetch; the WhatsApp link has the number.
+  - `/ia-chatbots-tenerife`: the chat opens and a message is sent; no CSP violation.
+  - `/admin`: the login form renders; gtag is correctly absent.
+  - No violations on any page.
+- **REGRESSION CHECK:** `tests/unit/scripts` 147 passed (38 dist-dependent skipped).
+- **Unrelated finding (F-09):** the chatbot backend fails in production too (`chat-with-rag` 500, `gemini-generate` 400). This matches the known failing `tests/e2e/chatbotFlow.test.ts`. It is not caused by this change: there were no CSP violations, and production still has `'unsafe-eval'`.
