@@ -223,8 +223,8 @@ describe("Module figure pattern per section (design.md D6/D9)", () => {
       });
 
       it("the FigureAlt i18n key exists, is non-empty, <=125 chars, and differs between es/en", () => {
-        const es = (tpvModuleEs as Record<string, string>)[figureAltKey];
-        const en = (tpvModuleEn as Record<string, string>)[figureAltKey];
+        const es = (tpvModuleEs as unknown as Record<string, string>)[figureAltKey];
+        const en = (tpvModuleEn as unknown as Record<string, string>)[figureAltKey];
         expect(typeof es).toBe("string");
         expect(typeof en).toBe("string");
         expect(es.length).toBeGreaterThan(0);
