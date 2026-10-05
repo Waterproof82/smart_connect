@@ -148,7 +148,9 @@ const describeIfFresh = distFresh ? describe : describe.skip;
 describeIfFresh(
   "/tarjetas-nfc frozen surface — built ServiceSchema JSON-LD (dist, fresh-gated)",
   () => {
-    const html = fs.readFileSync(distNfcPath, "utf-8");
+    // describe.skip still runs this body to collect tests, so only touch
+    // dist/ when it exists (CI runs tests before building).
+    const html = distFresh ? fs.readFileSync(distNfcPath, "utf-8") : "";
     const serviceBlock = [
       ...html.matchAll(
         /<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/gi,
