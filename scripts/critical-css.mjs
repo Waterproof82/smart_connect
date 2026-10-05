@@ -100,7 +100,7 @@ export async function extractCriticalCss(
     );
   }
 
-  const styleMatch = processed.match(/<style[^>]*>([\s\S]*?)<\/style>/);
+  const styleMatch = /<style[^>]*>([\s\S]*?)<\/style>/.exec(processed);
   const criticalCss = styleMatch?.[1]?.trim();
 
   if (!criticalCss) {
@@ -151,7 +151,7 @@ function ruleMatchesTheme(rule) {
  * @returns {string} `${LAYER_PREAMBLE}\n@layer base{...}\n<unlayered rules>`
  */
 export function collectThemeTokenCss(builtCss) {
-  if (!builtCss || !builtCss.trim()) {
+  if (!builtCss?.trim()) {
     throw new Error(
       "critical-css: collectThemeTokenCss requires non-empty built CSS",
     );
@@ -222,7 +222,7 @@ function isLocalFallbackFontFace(node) {
 }
 
 function escapeRegExp(value) {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return value.replace(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
 }
 
 const DEFERRED_MARKER = "onload=\"this.media='all'\"";
@@ -254,9 +254,9 @@ export function deferStylesheetLink(html, cssHref) {
   }
 
   const linkRegex = new RegExp(
-    `<link\\b[^>]*\\bhref=["']${escapeRegExp(cssHref)}["'][^>]*>`,
+    String.raw`<link\b[^>]*\bhref=["']${escapeRegExp(cssHref)}["'][^>]*>`,
   );
-  const match = html.match(linkRegex);
+  const match = linkRegex.exec(html);
 
   if (!match) {
     throw new Error(
@@ -272,7 +272,8 @@ export function deferStylesheetLink(html, cssHref) {
   }
 
   const selfClosing = /\/>\s*$/.test(originalTag);
-  const withoutClose = originalTag.replace(/\s*\/?>\s*$/, "");
+  // trimEnd + anchored literal instead of /\s*\/?>\s*$/ (super-linear backtracking).
+  const withoutClose = originalTag.trimEnd().replace(/\/?>$/, "").trimEnd();
   const deferredTag = `${withoutClose} media="print" ${DEFERRED_MARKER}${selfClosing ? " />" : ">"}`;
   const noscriptTag = `<noscript>${originalTag}</noscript>`;
 
@@ -289,10 +290,10 @@ export function deferStylesheetLink(html, cssHref) {
  * @returns {string}
  */
 function extractBodyRegion(html) {
-  const withClosingHtml = html.match(/<body[\s\S]*<\/html>/i);
+  const withClosingHtml = /<body[\s\S]*<\/html>/i.exec(html);
   if (withClosingHtml) return withClosingHtml[0];
 
-  const bodyOnly = html.match(/<body[\s\S]*/i);
+  const bodyOnly = /<body[\s\S]*/i.exec(html);
   if (bodyOnly) return bodyOnly[0];
 
   throw new Error(

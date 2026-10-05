@@ -56,14 +56,13 @@ export const NFC_THUMBNAIL_WIDTH = 128;
  * decide when it's safe to delete them (kept until production verified).
  */
 export async function renameNfcGalleryAssets(dir = NFC_DIR) {
-  const outputs = [];
-  for (const [oldName, newName] of Object.entries(NFC_RENAMES)) {
-    const srcPath = path.join(dir, oldName);
-    const destPath = path.join(dir, newName);
-    await fs.copyFile(srcPath, destPath);
-    outputs.push(destPath);
-  }
-  return outputs;
+  return Promise.all(
+    Object.entries(NFC_RENAMES).map(async ([oldName, newName]) => {
+      const destPath = path.join(dir, newName);
+      await fs.copyFile(path.join(dir, oldName), destPath);
+      return destPath;
+    }),
+  );
 }
 
 // Exactly the 10 TPV figures declaring 1400x1050 in their caller sections.
@@ -132,90 +131,89 @@ export async function generateResponsiveImage(
   { sourceExt = "webp" } = {},
 ) {
   const srcPath = path.join(dir, `${name}.${sourceExt}`);
-  const results = [];
-  for (const width of widths) {
-    const outPath = path.join(dir, `${name}-${width}w.webp`);
-    try {
-      await fs.access(srcPath); // Throws if file does not exist
-    } catch (error) {
-      console.warn(
-        `Source file not found for responsive generation: ${srcPath}. Skipping.`,
-      );
-      continue;
-    }
-    await sharp(srcPath)
-      .resize(width, null, { fit: "inside" }) // Resize to width, maintain aspect ratio
-      .webp({ quality: WEBP_QUALITY })
-      .toFile(outPath);
-    results.push(outPath);
+  if (widths.length === 0) return [];
+  try {
+    await fs.access(srcPath); // Throws if file does not exist
+  } catch {
+    console.warn(
+      `Source file not found for responsive generation: ${srcPath}. Skipping.`,
+    );
+    return [];
   }
-  return results;
+  return Promise.all(
+    widths.map(async (width) => {
+      const outPath = path.join(dir, `${name}-${width}w.webp`);
+      await sharp(srcPath)
+        .resize(width, null, { fit: "inside" }) // Resize to width, maintain aspect ratio
+        .webp({ quality: WEBP_QUALITY })
+        .toFile(outPath);
+      return outPath;
+    }),
+  );
+}
+
+/** Ensures `${name}.webp` exists, converting from PNG if needed; false if impossible. */
+async function ensureCartaWebp(name) {
+  try {
+    await fs.access(path.join(ASSETS_DIR, `${name}.webp`));
+    return true;
+  } catch {
+    console.warn(
+      `Original .webp not found for ${name}. Attempting to convert from PNG first.`,
+    );
+  }
+  try {
+    await convertCartaDigitalScreenshot(name);
+    console.log(`Converted ${name}.png to ${name}.webp.`);
+    return true;
+  } catch (pngError) {
+    console.error(
+      `Failed to convert ${name}.png to .webp: ${pngError}. Skipping responsive generation.`,
+    );
+    return false;
+  }
 }
 
 async function main() {
-  for (const name of TPV_TARGETS) {
-    const out = await resizeTpvFigure(name);
-    console.log(`resized: ${out}`);
-  }
+  // Stage order matters: TPV variants are generated FROM the resized
+  // originals, so resizing must finish first. Items within a stage are
+  // independent and run in parallel.
+  const resized = await Promise.all(TPV_TARGETS.map((name) => resizeTpvFigure(name)));
+  resized.forEach((out) => console.log(`resized: ${out}`));
 
-  for (const name of TPV_TARGETS) {
-    const responsiveOuts = await generateResponsiveImage(
-      name,
-      TPV_DIR,
-      TPV_RESPONSIVE_WIDTHS,
-    );
-    responsiveOuts.forEach((out) =>
-      console.log(`generated TPV responsive: ${out}`),
-    );
-  }
+  const tpvVariants = await Promise.all(
+    TPV_TARGETS.map((name) =>
+      generateResponsiveImage(name, TPV_DIR, TPV_RESPONSIVE_WIDTHS),
+    ),
+  );
+  tpvVariants.flat().forEach((out) => console.log(`generated TPV responsive: ${out}`));
 
   const nfcRenamed = await renameNfcGalleryAssets();
   nfcRenamed.forEach((out) => console.log(`byte-copied NFC main: ${out}`));
-  for (const newName of Object.values(NFC_RENAMES)) {
-    const base = newName.replace(/\.avif$/, "");
-    const thumbOuts = await generateResponsiveImage(
-      base,
-      NFC_DIR,
-      [NFC_THUMBNAIL_WIDTH],
-      { sourceExt: "avif" },
-    );
-    thumbOuts.forEach((out) => console.log(`generated NFC thumbnail: ${out}`));
-  }
+  const thumbs = await Promise.all(
+    Object.values(NFC_RENAMES).map((newName) =>
+      generateResponsiveImage(
+        newName.replace(/\.avif$/, ""),
+        NFC_DIR,
+        [NFC_THUMBNAIL_WIDTH],
+        { sourceExt: "avif" },
+      ),
+    ),
+  );
+  thumbs.flat().forEach((out) => console.log(`generated NFC thumbnail: ${out}`));
 
   const RESPONSIVE_WIDTHS = [320, 640, 1280];
-  for (const name of CARTA_DIGITAL_TARGETS) {
-    // Check if the original .webp exists before attempting to generate responsive versions
-    const originalWebpPath = path.join(ASSETS_DIR, `${name}.webp`);
-    try {
-      await fs.access(originalWebpPath);
-    } catch (error) {
-      console.warn(
-        `Original .webp not found for ${name}. Attempting to convert from PNG first.`,
-      );
-      try {
-        await convertCartaDigitalScreenshot(name);
-        console.log(`Converted ${name}.png to ${name}.webp.`);
-      } catch (pngError) {
-        console.error(
-          `Failed to convert ${name}.png to .webp: ${pngError}. Skipping responsive generation.`,
-        );
-        continue;
+  await Promise.all(
+    CARTA_DIGITAL_TARGETS.map(async (name) => {
+      if (!(await ensureCartaWebp(name))) return;
+      const outs = await generateResponsiveImage(name, ASSETS_DIR, RESPONSIVE_WIDTHS);
+      if (outs.length > 0) {
+        outs.forEach((out) => console.log(`generated responsive: ${out}`));
+      } else {
+        console.log(`No responsive images generated for ${name}.`);
       }
-    }
-
-    const responsiveOuts = await generateResponsiveImage(
-      name,
-      ASSETS_DIR,
-      RESPONSIVE_WIDTHS,
-    );
-    if (responsiveOuts.length > 0) {
-      responsiveOuts.forEach((out) =>
-        console.log(`generated responsive: ${out}`),
-      );
-    } else {
-      console.log(`No responsive images generated for ${name}.`);
-    }
-  }
+    }),
+  );
 }
 
 // Only run when executed directly (`node scripts/optimize-images.mjs`), not
@@ -226,8 +224,10 @@ if (
   process.argv[1] &&
   import.meta.url === pathToFileURL(process.argv[1]).href
 ) {
-  main().catch((err) => {
+  try {
+    await main();
+  } catch (err) {
     console.error(err);
     process.exit(1);
-  });
+  }
 }

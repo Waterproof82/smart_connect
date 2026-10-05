@@ -229,3 +229,11 @@ The remaining 0.048 on `/` comes from the new H1 re-wrapping when Space Grotesk 
 - **TDD:** 4 guard tests changed from "no sameAs" to "only the verified GBP"; RED, then GREEN.
 - **Validation:** jest (3 pre-existing e2e failures only), vitest 135/135, tsc and lint pass, build OK, `tests/unit/seo` 175/175.
 - **Owner follow-up:** the Maps pin is centred at 35.67 N, −6.81 W, which suggests the service area spans Canarias and mainland Spain. If service is Canarias-only, narrow the GBP service area.
+
+## SonarLint fixes (2026-10-05)
+
+- **Action:** fixed the S6594, S6582, S7780, S8786, S9382, S7785, S6479 and S5906 findings in `scripts/critical-css.mjs`, `scripts/optimize-images.mjs`, `ProductGallery.tsx` and 2 test files.
+- **Validation:**
+  - jest (3 pre-existing e2e failures only), vitest 135/135, tsc and lint pass, `tests/unit/seo` 175/175.
+  - Normalized-hash diff of the prerendered HTML and critical CSS against a develop build: identical on 5 routes.
+  - The old and new `optimize-images` scripts rewrite the same 30 TPV assets. This was already the case before: TPV resizing is not idempotent, it re-encodes every run. Those assets were not committed.

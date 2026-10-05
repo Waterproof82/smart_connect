@@ -147,7 +147,7 @@ describe("TpvModuleFigure component (design.md D6)", () => {
   it("renders exactly one native <img> with loading=lazy and decoding=async", () => {
     const source = readSource(FIGURE_COMPONENT_PATH);
     const imgTags = extractOpeningTags(source, "img");
-    expect(imgTags.length).toBe(1);
+    expect(imgTags).toHaveLength(1);
     expect(imgTags[0]).toMatch(/loading="lazy"/);
     expect(imgTags[0]).toMatch(/decoding="async"/);
   });
@@ -188,7 +188,7 @@ describe("Module figure pattern per section (design.md D6/D9)", () => {
       it("renders exactly one <TpvModuleFigure> with a non-empty src/alt", () => {
         const source = readSource(sectionPath);
         const occurrences = source.match(/<TpvModuleFigure\b/g) ?? [];
-        expect(occurrences.length).toBe(1);
+        expect(occurrences).toHaveLength(1);
         expect(source).toMatch(
           new RegExp(`src=["']/assets/tpv/${moduleId}\\.webp["']`),
         );
