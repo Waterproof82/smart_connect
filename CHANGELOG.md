@@ -321,6 +321,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+- **Removed `'unsafe-eval'` from the CSP `script-src`** (`vercel.json`, SDD `landing-main-thread-tbt` slice S4): no bundle or third-party script on the site needs it. Verified with a smoke test on the Vercel preview (public pages, chatbot, admin) with zero CSP violations. Guarded by a regression test.
+
 - `/admin`, `/panel` and `/login` now send `X-Robots-Tag: noindex, nofollow`; previously the site-wide `index, follow` header applied to them too (and `robots.txt` lets Googlebot crawl them).
 
 - **`chat-with-rag` Edge Function (deployed as v43)**: the function accepts anonymous requests by design (public chatbot) but had no request limit and trusted client-supplied search parameters. Added a best-effort in-memory per-client limit (20 requests/minute, HTTP 429 with `Retry-After`) and clamped `topK` (1–10) and `threshold` (0–1); defaults and the chatbot's own values (5 / 0.4) are unchanged. Verified against production: chatbot answers (HTTP 200, 5 documents), CORS preflight OK.
