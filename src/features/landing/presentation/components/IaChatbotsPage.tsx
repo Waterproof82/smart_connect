@@ -12,7 +12,7 @@ import {
   Store,
 } from "lucide-react";
 import {
-  ExpertAssistant,
+  DeferredExpertAssistant,
   OPEN_ASSISTANT_EVENT,
 } from "@features/chatbot/presentation";
 import { PageShell } from "@features/landing/presentation/components/PageShell";
@@ -115,7 +115,7 @@ const IaChatbotsPage: React.FC = () => {
       <PageShell
         waMessage={t.waMsgIa}
         servicio={servicio}
-        extras={<ExpertAssistant />}
+        extras={<DeferredExpertAssistant />}
       >
         <PageHero
           title={t.iaH1}

@@ -15,6 +15,7 @@ import React, {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
 } from "react";
 
 type Theme = "dark" | "light";
@@ -44,10 +45,19 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [theme, setThemeState] = useState<Theme>(getInitialTheme);
+  // design.md D4: the pre-paint inline script (index.html) already applies
+  // the correct class to <html> before hydration. Skipping the FIRST run
+  // of the [theme] effect below avoids a redundant (and, for light users,
+  // actively wrong — "dark" flips in, then back out) <html> class mutation
+  // during the mount commit, which was forcing a full-document restyle
+  // (Tailwind's darkMode:'class' compiles to :where(.dark, .dark *)).
+  const isFirstThemeEffect = useRef(true);
 
   // Post-hydration: sync React state with the html class set by the inline script.
   // Clears any stale localStorage value from the removed theme toggle.
-  // Runs once on mount.
+  // Runs once on mount. Does NOT call applyTheme directly — the class is
+  // already correct; only the [theme] effect below writes to the DOM, and
+  // it skips its own first run (see isFirstThemeEffect above).
   useEffect(() => {
     // Clear stale localStorage (the old theme toggle was removed)
     localStorage.removeItem(STORAGE_KEY);
@@ -58,12 +68,16 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
     if (systemTheme !== theme) {
       setThemeState(systemTheme);
     }
-    applyTheme(systemTheme);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Keep DOM in sync whenever React state changes
+  // Keep DOM in sync whenever React state changes, except on the very
+  // first run (mount) — see isFirstThemeEffect above.
   useEffect(() => {
+    if (isFirstThemeEffect.current) {
+      isFirstThemeEffect.current = false;
+      return;
+    }
     applyTheme(theme);
   }, [theme]);
 

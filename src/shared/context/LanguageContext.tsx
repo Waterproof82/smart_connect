@@ -1722,7 +1722,12 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({
     const saved = localStorage.getItem("language");
     const lang = saved === "es" || saved === "en" ? saved : "es";
     setLanguage(lang);
-    document.documentElement.lang = lang;
+    // design.md D5: avoid a redundant <html lang> attribute write when the
+    // pre-paint/SSR value already matches (no-op mutation, still a wasted
+    // DOM touch during the mount commit).
+    if (document.documentElement.lang !== lang) {
+      document.documentElement.lang = lang;
+    }
   }, []);
 
   const value: LanguageContextValue = useMemo(
