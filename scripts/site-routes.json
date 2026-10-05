@@ -33,7 +33,8 @@
       "lastmod": "2026-10-01",
       "sources": [
         "src/features/landing/presentation/components/CartaDigitalPage.tsx",
-        "src/features/landing/presentation/components/CartaDigitalSection.tsx"
+        "src/features/landing/presentation/components/CartaDigitalSection.tsx",
+        "src/features/landing/presentation/components/CartaDigitalReviews.tsx"
       ]
     },
     {
