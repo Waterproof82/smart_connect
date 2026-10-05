@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **`/tarjetas-nfc` and `/ia-chatbots-tenerife` copy aligned to Search Console intent queries (SDD `seo-keyword-copy`, Slice A / PR A)**: `tapReviewHowTitle`/`tapReviewFeatTitle` reworded toward "tap to review"/NFC-vs-QR intent (frozen `<title>`/`<h1>`/meta description untouched); a 4th NFC FAQ pair ("NFC vs QR for reviews") added to `useNfcFaqGroup()` with JSON-LD parity. `/ia-chatbots-tenerife`'s `PAGE_TITLE` shortened to "Chatbots IA para empresas en Tenerife | Digitaliza Tenerife" (59 chars, leads with "Chatbots"); `iaH1` rewritten to "Inteligencia artificial y automatización para empresas en Tenerife y Canarias"; the chatbot-card grid gains its own H2 (`iaChatbotsTitle`, cards now `<h3>`, fixing a flat 4-H2 outline); `iaCasesTitle` renamed from "Casos…" to "Aplicaciones prácticas de IA para pymes y negocios locales" with a new intro and the 3 case descriptions rewritten as capabilities ("Puede…") to avoid implying named-client case studies; a 6th FAQ pair added on how a local pyme can use AI. `docs/SEO_PROTOCOL.md` rows 22/40/41 updated to match the shipped title/H1/H2 outline, and `scripts/site-routes.json` `lastmod` bumped for both routes (`LanguageContext.tsx`'s translation strings are not in either route's `sources` list, per P-20). See `docs/audit/2026-10-05_seo-keyword-copy.md`.
+
 ### Added
 
 - **`sameAs` on the organization entity (`#organization`)**: it now links the owner-verified Google Business Profile (`https://maps.google.com/?cid=15389059418085053984`; name, phone and website match the site, checked 2026-10-05) on home and `/about`, so the site and the Maps profile resolve to the same entity. Only verified profiles are allowed; the guard tests now pin the exact list instead of forbidding `sameAs`.

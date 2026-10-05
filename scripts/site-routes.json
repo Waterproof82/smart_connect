@@ -20,7 +20,7 @@
       "path": "/tarjetas-nfc",
       "priority": "0.9",
       "changefreq": "monthly",
-      "lastmod": "2026-10-01",
+      "lastmod": "2026-10-05",
       "sources": [
         "src/features/tap-review/presentation/TapReviewPage.tsx",
         "src/features/tap-review/presentation/TapReviewSection.tsx"
@@ -41,7 +41,7 @@
       "path": "/ia-chatbots-tenerife",
       "priority": "0.8",
       "changefreq": "monthly",
-      "lastmod": "2026-10-01",
+      "lastmod": "2026-10-05",
       "sources": [
         "src/features/landing/presentation/components/IaChatbotsPage.tsx"
       ]
