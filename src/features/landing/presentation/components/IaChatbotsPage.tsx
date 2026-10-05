@@ -34,9 +34,9 @@ import { trackEvent } from "@shared/utils/analyticsEvents";
 const ORG_URL = "https://digitalizatenerife.es";
 const PAGE_URL = `${ORG_URL}/ia-chatbots-tenerife`;
 const PAGE_TITLE =
-  "Chatbots IA y Automatización en Tenerife | Digitaliza Tenerife";
+  "Chatbots IA para empresas en Tenerife | Digitaliza Tenerife";
 const PAGE_DESCRIPTION =
-  "Chatbots de IA para web y WhatsApp y automatización de procesos para empresas en Tenerife. Atiende a tus clientes 24/7.";
+  "Chatbots con IA para web y WhatsApp y automatización de procesos para empresas de Tenerife y Canarias. Atiende a tus clientes a cualquier hora.";
 
 const IaChatbotsPage: React.FC = () => {
   const { t } = useLanguage();
@@ -53,6 +53,7 @@ const IaChatbotsPage: React.FC = () => {
     { question: t.iaFaqQ3, answer: t.iaFaqA3 },
     { question: t.iaFaqQ4, answer: t.iaFaqA4 },
     { question: t.iaFaqQ5, answer: t.iaFaqA5 },
+    { question: t.iaFaqQ6, answer: t.iaFaqA6 },
   ];
   const cases = [
     { icon: Utensils, title: t.iaCase1Title, desc: t.iaCase1Desc },
@@ -86,7 +87,7 @@ const IaChatbotsPage: React.FC = () => {
         <meta property="og:image:height" content="630" />
         <meta
           property="og:image:alt"
-          content="Chatbots de IA y automatización en Tenerife"
+          content="Chatbots de IA y automatización para empresas en Tenerife"
         />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={PAGE_TITLE} />
@@ -129,7 +130,7 @@ const IaChatbotsPage: React.FC = () => {
           }
         />
 
-        <Section label={t.iaH1}>
+        <Section id="ia-chatbots" title={t.iaChatbotsTitle}>
           <ul className="grid grid-cols-1 sm:grid-cols-2 gap-[var(--space-md)] list-none p-0 m-0">
             {cards.map(({ icon: Icon, title, desc }) => (
               <li key={title} className="ds-card">
@@ -137,7 +138,7 @@ const IaChatbotsPage: React.FC = () => {
                   className="w-7 h-7 text-[var(--color-primary)] mb-4"
                   aria-hidden="true"
                 />
-                <h2 className="ds-h3 mb-2">{title}</h2>
+                <h3 className="ds-h3 mb-2">{title}</h3>
                 <p className="text-muted leading-relaxed m-0">{desc}</p>
               </li>
             ))}
@@ -157,7 +158,7 @@ const IaChatbotsPage: React.FC = () => {
           />
         </Section>
 
-        <Section id="ia-cases" title={t.iaCasesTitle}>
+        <Section id="ia-cases" title={t.iaCasesTitle} intro={t.iaCasesIntro}>
           <ul className="grid grid-cols-1 md:grid-cols-3 gap-[var(--space-md)] list-none p-0 m-0">
             {cases.map(({ icon: Icon, title, desc }) => (
               <li key={title} className="ds-card">
