@@ -75,6 +75,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **Code quality (SonarLint)**, no behaviour change. In `scripts/critical-css.mjs`: `RegExp.exec()`, an optional chain, `String.raw`, and a super-linear backtracking regex (`/s*/?>s*$/`) replaced by `trimEnd()` + an anchored literal. In `scripts/optimize-images.mjs`: independent per-image work runs with `Promise.all` (stage order kept: TPV variants are still generated after the resize), plus top-level `await`. In `ProductGallery`: stable `key`s (image path instead of array index). In tests: `toHaveLength`. Prerendered HTML and critical CSS are identical to `develop` once asset hashes are normalized (5 routes checked).
 - **Home hero subtitle now describes the carta digital and NFC cards** to match the H1 ("Carta digital y tarjetas NFC para restaurantes de Tenerife"); the previous subtitle described the TPV. The copy reuses facts already published on the site (5 languages, no commissions, table ordering, review in about 5 seconds without an app, setup included), so it introduces no new claims. es + en.
 - **Carta Digital social proof**: `SuccessStats` is now `CartaDigitalReviews`, showing 2 real, attributed Google reviews of QR iBar (Carlos S., Luis M.; 5★; 2022) instead of unsourced stats.
 - **`/tarjetas-nfc` trust strip**: `TrustBadges` now states 4 verifiable facts (no app needed, NFC with a backup QR, iPhone 8+/Android compatibility, no subscriptions) instead of the removed guarantee claims.

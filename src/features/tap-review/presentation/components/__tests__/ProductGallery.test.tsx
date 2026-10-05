@@ -35,7 +35,7 @@ describe("ProductGallery NFC asset swap (design.md D9, S9)", () => {
     const mainImgs = Array.from(
       container.querySelectorAll(".aspect-square img"),
     ) as HTMLImageElement[];
-    expect(mainImgs.length).toBe(4);
+    expect(mainImgs).toHaveLength(4);
     for (const img of mainImgs) {
       const src = img.getAttribute("src") ?? "";
       expect(src).toMatch(/^\/assets\/nfc\/nfc-[a-z0-9-]+\.avif$/);
@@ -52,7 +52,7 @@ describe("ProductGallery NFC asset swap (design.md D9, S9)", () => {
     const thumbImgs = Array.from(
       container.querySelectorAll("button img"),
     ) as HTMLImageElement[];
-    expect(thumbImgs.length).toBe(4);
+    expect(thumbImgs).toHaveLength(4);
     for (const img of thumbImgs) {
       const src = img.getAttribute("src") ?? "";
       expect(src).toMatch(/^\/assets\/nfc\/nfc-[a-z0-9-]+-128w\.webp$/);

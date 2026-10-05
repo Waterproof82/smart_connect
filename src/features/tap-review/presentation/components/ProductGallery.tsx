@@ -43,7 +43,7 @@ const ProductGallery: React.FC = () => {
       <div className="relative aspect-square bg-gradient-to-br from-[var(--color-bg-alt)] to-[var(--color-surface)] rounded-xl overflow-hidden">
         {products.map((product, idx) => (
           <div
-            key={idx}
+            key={product.image}
             className={`absolute inset-0 flex items-center justify-center transition-opacity duration-500 ${
               activeIndex === idx ? "opacity-100" : "opacity-0"
             }`}
@@ -74,7 +74,7 @@ const ProductGallery: React.FC = () => {
       <div className="flex gap-3 justify-center">
         {products.map((product, idx) => (
           <button
-            key={idx}
+            key={product.image}
             type="button"
             onClick={() => setActiveIndex(idx)}
             className={`w-16 h-16 rounded-xl overflow-hidden border-2 transition-all ${
