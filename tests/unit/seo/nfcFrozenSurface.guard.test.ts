@@ -106,26 +106,31 @@ describe("/tarjetas-nfc frozen surface — SOLUTIONS NFC service fields", () => 
 });
 
 describe("/tarjetas-nfc frozen surface — ServiceSchema provider @id is the single organization entity", () => {
-  // TapReviewPage.tsx passes providerUrl={ORG_URL}; SeoSchema.tsx's
-  // ServiceSchema computes provider["@id"] as
-  // `${providerUrl.replace(/\/$/, "")}/#organization`, which must resolve
-  // to the same @id as buildHomeSchema's single LocalBusiness/Organization
-  // node — never a second, drifted entity.
+  // S8 (seo-audit-followups): ServiceSchema no longer accepts
+  // providerName/providerUrl/providerLogoUrl props at all — it hardcodes
+  // provider: {"@id": ORGANIZATION_ID}, the exported single-source-of-
+  // truth constant buildHomeSchema's own LocalBusiness node also uses.
+  // This sub-describe's assertions are about HOW provider is wired
+  // (implementation detail), not the frozen head/FAQ/service-field
+  // literals above — updated per the structured-data-policy spec's
+  // documented "provider" exception (tasks.md 8.5).
   const seoSchemaSource = fs.readFileSync(SEO_SCHEMA_PATH, "utf-8");
 
-  it("TapReviewPage wires providerUrl to ORG_URL (the official domain)", () => {
-    expect(pageSource).toMatch(/providerUrl=\{ORG_URL\}/);
-    expect(pageSource).toMatch(/ORG_URL\s*=\s*"https:\/\/digitalizatenerife\.es"/);
+  it("TapReviewPage no longer wires providerName/providerUrl/providerLogoUrl props", () => {
+    expect(pageSource).not.toMatch(/providerUrl=/);
+    expect(pageSource).not.toMatch(/providerName=/);
+    expect(pageSource).not.toMatch(/providerLogoUrl=/);
   });
 
-  it("ServiceSchema's provider @id formula resolves to the single #organization node", () => {
+  it("ServiceSchema hardcodes provider as {\"@id\": ORGANIZATION_ID}", () => {
     expect(seoSchemaSource).toMatch(
-      /"@id":\s*`\$\{providerUrl\.replace\(\/\\\/\$\/,\s*""\)\}\/#organization`/,
+      /provider:\s*\{\s*"@id":\s*ORGANIZATION_ID\s*\}/,
     );
-    // buildHomeSchema's LocalBusiness/Organization node uses the identical
-    // ${ORG_URL}/#organization id — the single source of truth both this
-    // page's Service.provider and home's own node must agree on.
-    expect(seoSchemaSource).toMatch(/"@id":\s*`\$\{ORG_URL\}\/#organization`/);
+    // ORGANIZATION_ID is exported as `${ORG_URL}/#organization` — the
+    // same id buildHomeSchema's single LocalBusiness node uses.
+    expect(seoSchemaSource).toMatch(
+      /export const ORGANIZATION_ID\s*=\s*`\$\{ORG_URL\}\/#organization`/,
+    );
   });
 });
 

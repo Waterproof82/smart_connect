@@ -4,6 +4,14 @@ import { ORGANIZATION } from "@shared/config/organization";
 
 const ORG_URL = "https://digitalizatenerife.es";
 
+// ─── Single-source entity @ids (design.md D4) ───────────────────
+// The one LocalBusiness and one WebSite node in the whole site. Every
+// other reference (WebPage.author/publisher/isPartOf, every product
+// page's ServiceSchema.provider, /about's mainEntity) is a bare
+// `{"@id"}` into one of these two — never a redeclared inline object.
+export const ORGANIZATION_ID = `${ORG_URL}/#organization`;
+export const WEBSITE_ID = `${ORG_URL}/#website`;
+
 // ─── Shared identity node builders ──────────────────────────────
 // Pure, no React. Shared between buildHomeSchema and buildAboutSchema so
 // the two pages' JSON-LD can never drift apart on address/geo/founder.
@@ -30,6 +38,58 @@ function founderNode(): Record<string, unknown> {
   };
 }
 
+/**
+ * The single LocalBusiness/organization node (`#organization`). Shared by
+ * `buildHomeSchema` and `buildAboutSchema` — embedded once on each page,
+ * referenced by bare `{"@id"}` everywhere else (WebPage, ServiceSchema).
+ * `knowsAbout`/`description` lead with carta digital/NFC, the core
+ * products, before automation/n8n (organization-identity spec).
+ */
+export function organizationNode(): Record<string, unknown> {
+  return {
+    "@type": "LocalBusiness",
+    "@id": ORGANIZATION_ID,
+    name: ORGANIZATION.name,
+    url: ORGANIZATION.url,
+    email: ORGANIZATION.email,
+    telephone: ORGANIZATION.telephone,
+    description:
+      "Carta digital, tarjetas NFC para reseñas de Google, TPV y chatbots con IA para restaurantes, bares y cafeterías de Tenerife y Canarias.",
+    areaServed: "Tenerife, Canarias, España",
+    knowsAbout: [
+      "Carta digital para restaurantes",
+      "Tarjetas NFC para reseñas de Google",
+      "TPV para hostelería",
+      "Chatbots con IA para hostelería",
+      "Automatización de procesos con IA",
+    ],
+    priceRange: "€€",
+    image: `${ORG_URL}/icon.png`,
+    logo: {
+      "@type": "ImageObject",
+      url: `${ORG_URL}/icon.png`,
+      width: 512,
+      height: 512,
+    },
+    address: postalAddressNode(),
+    geo: geoNode(),
+    founder: founderNode(),
+    foundingDate: "2025",
+  };
+}
+
+/** The single WebSite node (`#website`). Embedded once, on home. */
+function websiteNode(): Record<string, unknown> {
+  return {
+    "@type": "WebSite",
+    "@id": WEBSITE_ID,
+    url: `${ORG_URL}/`,
+    name: ORGANIZATION.name,
+    inLanguage: "es",
+    publisher: { "@id": ORGANIZATION_ID },
+  };
+}
+
 // ─── Home page JSON-LD graph builder ────────────────────────────
 export interface HomeSchemaFaq {
   question: string;
@@ -47,35 +107,8 @@ export function buildHomeSchema(
   solutions: SolutionConfig[],
   faqs: HomeSchemaFaq[] = [],
 ): { "@context": string; "@graph": Record<string, unknown>[] } {
-  const organization = {
-    "@type": "LocalBusiness",
-    "@id": `${ORG_URL}/#organization`,
-    name: "Digitaliza Tenerife",
-    url: ORG_URL,
-    description:
-      "Automatización con IA, n8n, NFC para Google Reviews y Carta Digital para negocios en Tenerife y Canarias.",
-    areaServed: "Tenerife, Canarias, España",
-    knowsAbout: [
-      "Automatización de negocios",
-      "Inteligencia Artificial",
-      "Menús digitales NFC",
-      "Google Reviews",
-    ],
-    image: `${ORG_URL}/icon.png`,
-    telephone: "+34 601 39 64 19",
-    priceRange: "€€",
-    // Sourced from src/shared/config/organization.ts — the single source of
-    // truth, also consumed by AboutPage, Contact.tsx, WebMCP and llms.txt.
-    address: postalAddressNode(),
-    geo: geoNode(),
-    founder: founderNode(),
-    logo: {
-      "@type": "ImageObject",
-      url: `${ORG_URL}/icon.png`,
-      width: 512,
-      height: 512,
-    },
-  };
+  const organization = organizationNode();
+  const website = websiteNode();
 
   const webPage = {
     "@type": "WebPage",
@@ -86,26 +119,9 @@ export function buildHomeSchema(
     description:
       "Carta digital sin comisiones, tarjetas NFC para reseñas de Google, chatbots con IA y TPV para restaurantes y negocios de Tenerife y Canarias.",
     inLanguage: "es",
-    author: {
-      "@type": "Organization",
-      name: "Digitaliza Tenerife",
-      url: ORG_URL,
-      logo: {
-        "@type": "ImageObject",
-        url: `${ORG_URL}/icon.png`,
-        width: 512,
-        height: 512,
-      },
-    },
-    publisher: {
-      "@type": "Organization",
-      name: "Digitaliza Tenerife",
-      url: ORG_URL,
-      logo: {
-        "@type": "ImageObject",
-        url: `${ORG_URL}/icon.png`,
-      },
-    },
+    isPartOf: { "@id": WEBSITE_ID },
+    author: { "@id": ORGANIZATION_ID },
+    publisher: { "@id": ORGANIZATION_ID },
   };
 
   const serviceUrl = (solution: SolutionConfig): string =>
@@ -118,7 +134,7 @@ export function buildHomeSchema(
       name: solution.serviceValue,
       description: solution.jsonLd.description,
       url: serviceUrl(solution),
-      provider: { "@id": `${ORG_URL}/#organization` },
+      provider: { "@id": ORGANIZATION_ID },
       areaServed: solution.jsonLd.areaServed,
       serviceType: solution.jsonLd.serviceType,
     };
@@ -144,6 +160,7 @@ export function buildHomeSchema(
 
   const graph: Record<string, unknown>[] = [
     organization,
+    website,
     webPage,
     ...serviceNodes,
     itemList,
@@ -171,36 +188,21 @@ export function buildHomeSchema(
 
 // ─── /about page JSON-LD builder ────────────────────────────────
 /**
- * Builds the AboutPage/Organization JSON-LD for `/about`. Pure function —
- * shares `postalAddressNode`/`geoNode`/`founderNode` with `buildHomeSchema`
- * so the two pages' address/geo/founder facts can never drift apart.
+ * Builds the AboutPage JSON-LD for `/about`. `mainEntity` embeds the same
+ * `organizationNode()` home uses (identical `@id`) — one organization
+ * entity, never a second, drifted redeclaration (design.md D4).
  */
 export function buildAboutSchema(): Record<string, unknown> {
   return {
     "@context": "https://schema.org",
     "@type": "AboutPage",
+    "@id": `${ORG_URL}/about#webpage`,
+    url: `${ORG_URL}/about`,
     name: "Sobre Digitaliza Tenerife",
     description:
       "Información sobre Digitaliza Tenerife, empresa tecnológica especializada en IA, automatización y hardware inteligente para negocios locales en Tenerife y Canarias.",
-    mainEntity: {
-      "@type": "Organization",
-      name: ORGANIZATION.name,
-      description:
-        "Empresa tecnológica especializada en IA, automatización y hardware inteligente para negocios locales en Tenerife y Canarias.",
-      url: ORGANIZATION.url,
-      logo: {
-        "@type": "ImageObject",
-        url: `${ORG_URL}/icon.png`,
-        width: 512,
-        height: 512,
-      },
-      email: ORGANIZATION.email,
-      telephone: ORGANIZATION.telephone,
-      address: postalAddressNode(),
-      geo: geoNode(),
-      foundingDate: "2025",
-      founder: founderNode(),
-    },
+    isPartOf: { "@id": WEBSITE_ID },
+    mainEntity: organizationNode(),
   };
 }
 
@@ -483,9 +485,6 @@ interface ServiceSchemaProps {
   name: string;
   description: string;
   url: string;
-  providerName: string;
-  providerUrl: string;
-  providerLogoUrl?: string;
   areaServed?: string[];
   serviceType?: string;
 }
@@ -494,9 +493,6 @@ export const ServiceSchema: React.FC<ServiceSchemaProps> = ({
   name,
   description,
   url,
-  providerName,
-  providerUrl,
-  providerLogoUrl,
   areaServed,
   serviceType,
 }) => {
@@ -507,21 +503,10 @@ export const ServiceSchema: React.FC<ServiceSchemaProps> = ({
     name,
     description,
     url,
-    // @id ties every page's Service to the single LocalBusiness entity
-    // declared on home (buildHomeSchema → `${ORG_URL}/#organization`).
-    provider: {
-      "@type": "Organization",
-      "@id": `${providerUrl.replace(/\/$/, "")}/#organization`,
-      name: providerName,
-      url: providerUrl,
-    },
+    // A bare @id ref into the single LocalBusiness entity declared once
+    // on home (design.md D4) — never a redeclared inline Organization.
+    provider: { "@id": ORGANIZATION_ID },
   };
-  if (providerLogoUrl) {
-    (schema.provider as Record<string, unknown>).logo = {
-      "@type": "ImageObject",
-      url: providerLogoUrl,
-    };
-  }
   if (areaServed) schema.areaServed = areaServed;
   if (serviceType) schema.serviceType = serviceType;
 
