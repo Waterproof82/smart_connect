@@ -517,7 +517,7 @@ const translations: Record<Language, Translation> = {
     heroContactoTitleAccent: "Proyecto",
     heroContactoTitleEnd: "",
     heroSubtitle:
-      "TPV, comandero móvil, cocina, reservas, stock y más en una sola plataforma. Cobra más rápido, reduce tareas manuales y dedica tu tiempo a lo que importa: tu negocio. Sin comisiones ni intermediarios.",
+      "Carta digital con pedidos desde la mesa, en 5 idiomas y sin comisiones. Tarjetas NFC para que tus clientes te dejen una reseña en Google en 5 segundos, sin apps. Lo configuramos todo por ti.",
     statStrip1Value: "5",
     statStrip1Label: "idiomas en tu carta digital",
     statStrip2Value: "0%",
@@ -1116,7 +1116,7 @@ const translations: Record<Language, Translation> = {
     heroContactoTitleAccent: "Your Project",
     heroContactoTitleEnd: "",
     heroSubtitle:
-      "POS, mobile ordering, kitchen display, reservations, stock and more in one platform. Get paid faster, cut manual tasks, and spend your time on what matters — your business. No commissions, no middlemen.",
+      "Digital menu with table ordering, in 5 languages and commission-free. NFC cards so your customers leave a Google review in 5 seconds, no apps needed. We set everything up for you.",
     statStrip1Value: "5",
     statStrip1Label: "languages in your digital menu",
     statStrip2Value: "0%",
