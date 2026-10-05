@@ -237,3 +237,10 @@ The remaining 0.048 on `/` comes from the new H1 re-wrapping when Space Grotesk 
   - jest (3 pre-existing e2e failures only), vitest 135/135, tsc and lint pass, `tests/unit/seo` 175/175.
   - Normalized-hash diff of the prerendered HTML and critical CSS against a develop build: identical on 5 routes.
   - The old and new `optimize-images` scripts rewrite the same 30 TPV assets. This was already the case before: TPV resizing is not idempotent, it re-encodes every run. Those assets were not committed.
+
+## optimize-images idempotency (2026-10-05)
+
+- **Action:** `resizeTpvFigure` skips figures already at 936×702 and returns null for them. `generateResponsiveImage` skips variants whose mtime is ≥ the source mtime and returns only the files it wrote.
+- **TDD:** 3 new tests. The byte-identical test first passed falsely with a flat synthetic fixture; the fixture was changed to quality 50 so a re-encode would change the bytes. It then went RED → GREEN.
+- **Validation:** two consecutive `npm run optimize:images` runs change 0 assets (previously 30). Script tests 183/183; lint clean.
+- **Caveat:** variant freshness is mtime-based. After replacing a source image, its newer mtime triggers regeneration. On a fresh clone, mtimes come from checkout, so committed variants are trusted as-is.
