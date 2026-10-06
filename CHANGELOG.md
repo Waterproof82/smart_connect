@@ -326,6 +326,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+- **pgvector moved out of the exposed `public` schema** (`supabase/migrations/20261006100000_move_vector_extension_out_of_public.sql`): the `vector` extension now lives in `extensions`, clearing Supabase linter warning 0014 `extension_in_public`. The five RAG functions (`match_documents`, `match_documents_by_source`, `insert_document`, `insert_document_with_embedding`, `batch_insert_document`) pin their `search_path`, so it was widened to `public, extensions` in the same migration; otherwise `::vector` casts and the `<=>` operator would stop resolving and the chatbot search would fail. Verified in production: `match_documents` still returns results. The remaining warning, leaked password protection, needs the Supabase Pro plan and is accepted for now.
+
 - **Removed `'unsafe-eval'` from the CSP `script-src`** (`vercel.json`, SDD `landing-main-thread-tbt` slice S4): no bundle or third-party script on the site needs it. Verified with a smoke test on the Vercel preview (public pages, chatbot, admin) with zero CSP violations. Guarded by a regression test.
 
 - `/admin`, `/panel` and `/login` now send `X-Robots-Tag: noindex, nofollow`; previously the site-wide `index, follow` header applied to them too (and `robots.txt` lets Googlebot crawl them).
