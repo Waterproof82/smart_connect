@@ -67,6 +67,15 @@ const CartaDigitalTelegramSection: React.FC = () => {
               </div>
             ))}
           </div>
+
+          <div className="mt-12 md:mt-16 text-center">
+            <h2 id="carta-smart-title" className="ds-h2">
+              {t.cartaSmartTitle}
+            </h2>
+            <p className="text-base text-muted mt-4 max-w-2xl mx-auto leading-relaxed">
+              {t.cartaSmartDesc}
+            </p>
+          </div>
         </div>
       </div>
     </section>

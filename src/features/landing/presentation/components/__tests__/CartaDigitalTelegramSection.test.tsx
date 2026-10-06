@@ -55,4 +55,32 @@ describe("CartaDigitalTelegramSection", () => {
     const { container } = renderWithLanguage();
     expect(container.textContent).not.toMatch(/📱|👥|✅|🍽️/);
   });
+
+  it("displays the smart-restaurants closing heading", () => {
+    renderWithLanguage();
+    expect(
+      screen.getByRole("heading", {
+        level: 2,
+        name: /restaurantes inteligentes/i,
+      }),
+    ).toBeInTheDocument();
+  });
+
+  it("the smart-restaurants block links digital menu, Telegram orders and NFC cards", () => {
+    renderWithLanguage();
+    const heading = screen.getByRole("heading", {
+      level: 2,
+      name: /restaurantes inteligentes/i,
+    });
+    const desc = heading.nextElementSibling;
+    expect(desc?.textContent).toMatch(/carta digital/i);
+    expect(desc?.textContent).toMatch(/Telegram/i);
+    expect(desc?.textContent).toMatch(/NFC/i);
+  });
+
+  it("renders no second <h1> and no <a> link inside this component", () => {
+    const { container } = renderWithLanguage();
+    expect(container.querySelectorAll("h1")).toHaveLength(0);
+    expect(container.querySelector("a")).toBeNull();
+  });
 });

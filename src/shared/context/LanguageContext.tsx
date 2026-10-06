@@ -472,6 +472,9 @@ interface Translation extends TpvModuleTranslations {
   cartaTelegramFeature3Desc: string;
   cartaTelegramFeature4Title: string;
   cartaTelegramFeature4Desc: string;
+  // Carta Digital — Smart restaurants closing block
+  cartaSmartTitle: string;
+  cartaSmartDesc: string;
   // Carta Digital — Modos section
   cartaModosTitle: string;
   cartaModosSubtitle: string;
@@ -1076,6 +1079,10 @@ const translations: Record<Language, Translation> = {
     cartaTelegramFeature3Desc: "Confirmás el tiempo de recogida con un solo toque. Sin llamadas, sin confusión.",
     cartaTelegramFeature4Title: "Camarero en mesa desde el móvil",
     cartaTelegramFeature4Desc: "El camarero gestiona pedidos en sala desde su móvil sin pantallas adicionales.",
+    cartaSmartTitle:
+      "Convierte tu local en uno de los nuevos restaurantes inteligentes de Tenerife",
+    cartaSmartDesc:
+      "Une la carta digital con pedidos en mesa, los avisos de pedido por Telegram para tu equipo y las tarjetas NFC para conseguir reseñas en Google. Tres herramientas que funcionan juntas, sin comisiones por pedido y sin que tus clientes instalen ninguna app.",
 
     // Carta Digital — Modos section
     cartaModosTitle: "Dos modos, un sistema",
@@ -1681,6 +1688,10 @@ const translations: Record<Language, Translation> = {
     cartaTelegramFeature3Desc: "Confirm the pickup time with a single tap. No calls, no confusion.",
     cartaTelegramFeature4Title: "Waiter on the floor via mobile",
     cartaTelegramFeature4Desc: "Staff manage table orders from their phone — no additional screens needed.",
+    cartaSmartTitle:
+      "Turn your venue into one of Tenerife's new smart restaurants",
+    cartaSmartDesc:
+      "Combine the digital menu with table ordering, Telegram order alerts for your team and NFC cards for collecting Google reviews. Three tools that work together, with no per-order commissions and no app for your customers to install.",
 
     // Carta Digital — Modos section
     cartaModosTitle: "Two modes, one system",

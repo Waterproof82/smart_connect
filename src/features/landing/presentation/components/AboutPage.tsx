@@ -7,6 +7,16 @@ import { ORGANIZATION } from "@shared/config/organization";
 import { PageShell } from "./PageShell";
 
 /**
+ * On-site visit sentence — kept as a single swappable constant (SDD
+ * `seo-keyword-copy`, Phase 2 task 2.5). Owner-approved wording: on-site
+ * visits happen only "cuando el proyecto lo requiere" (some services, not
+ * all) — this is deliberately NOT an unconditional "we visit every client
+ * in person" claim, which the owner rejected as inaccurate.
+ */
+const ON_SITE_VISIT_NOTE =
+  "Cuando el proyecto lo requiere, vamos a tu local en Tenerife para instalarlo y configurarlo contigo.";
+
+/**
  * About page — authorship and authority signals.
  * Provides organization info, verifiable authorship, and social proof
  * for AI crawlers and human visitors alike.
@@ -90,8 +100,12 @@ const AboutPage: React.FC = () => {
               medibles desde el primer día.
             </p>
             <p className="m-0">
-              Operamos desde Tacoronte (Tenerife), con un equipo apasionado
-              por la tecnología y el desarrollo del tejido empresarial canario.
+              Operamos desde Tacoronte (Tenerife), en{" "}
+              {ORGANIZATION.address.streetAddress}. Atendemos negocios de toda
+              Tenerife y Canarias, conocemos el mercado canario de primera
+              mano y hablamos contigo de forma directa y cercana, sin
+              intermediarios ni agencias a kilómetros de distancia.{" "}
+              {ON_SITE_VISIT_NOTE}
             </p>
           </div>
           <dl className="grid grid-cols-1 gap-[var(--space-md)] m-0 mt-[var(--space-lg)] max-w-xs">

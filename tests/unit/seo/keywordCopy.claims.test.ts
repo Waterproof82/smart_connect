@@ -2,13 +2,15 @@ import fs from "node:fs";
 import path from "node:path";
 
 /**
- * Trust-claims guard — SEO keyword copy, Slice A only (SDD
- * `seo-keyword-copy`, Phase 1 / PR A). Scoped to the exact strings this
- * slice adds/changes (`trust-claims` spec + Project Standards): no
- * "Tapstar", no "ayudas", no guarantee/free-shipping/24-7-support claim, no
- * unsourced figure, no fabricated client/case-study framing, and (as a
- * repo-wide regression guard carried over from the existing convention)
- * never "QRiBar" without the space.
+ * Trust-claims guard — SEO keyword copy, Slice A + Slice B (SDD
+ * `seo-keyword-copy`, Phase 1 / PR A + Phase 2 / PR B). Scoped to the exact
+ * strings each slice adds/changes (`trust-claims` spec + Project
+ * Standards): no "Tapstar", no "ayudas", no guarantee/free-shipping/24-7
+ * -support claim, no unsourced figure, no fabricated client/case-study
+ * framing, and (as a repo-wide regression guard carried over from the
+ * existing convention) never "QRiBar" without the space. Slice B also
+ * guards the About-page proximity paragraph against the blanket in-person
+ * claim the owner rejected.
  */
 
 const ROOT = path.resolve(__dirname, "../../../");
@@ -24,10 +26,15 @@ const IA_PAGE_PATH = path.join(
   ROOT,
   "src/features/landing/presentation/components/IaChatbotsPage.tsx",
 );
+const ABOUT_PAGE_PATH = path.join(
+  ROOT,
+  "src/features/landing/presentation/components/AboutPage.tsx",
+);
 
 const languageContextSource = fs.readFileSync(LANGUAGE_CONTEXT_PATH, "utf-8");
 const pageCopySource = fs.readFileSync(PAGE_COPY_PATH, "utf-8");
 const iaPageSource = fs.readFileSync(IA_PAGE_PATH, "utf-8");
+const aboutPageSource = fs.readFileSync(ABOUT_PAGE_PATH, "utf-8");
 
 /** Extracts a key's string literal value(s) — may be more than one (es+en). */
 function valuesOf(source: string, key: string): string[] {
@@ -129,5 +136,58 @@ describe("Brand spacing — 'QR iBar' (with space), never 'QRiBar', anywhere the
     for (const source of [languageContextSource, pageCopySource, iaPageSource]) {
       expect(source).not.toMatch(/QRiBar/i);
     }
+  });
+});
+
+const SLICE_B_LANGUAGE_CONTEXT_KEYS = ["cartaSmartTitle", "cartaSmartDesc"];
+
+const SLICE_B_PAGE_COPY_KEYS = ["iaTeaserCta", "nfcCardCta"];
+
+describe("Slice B new/changed strings contain no banned claim (LanguageContext.tsx cartaSmart*)", () => {
+  for (const key of SLICE_B_LANGUAGE_CONTEXT_KEYS) {
+    it(`${key} is clean`, () => {
+      const values = valuesOf(languageContextSource, key);
+      expect(values.length).toBeGreaterThanOrEqual(2); // es + en
+      for (const value of values) {
+        for (const banned of BANNED_SUBSTRINGS) {
+          expect(value).not.toContain(banned);
+        }
+      }
+    });
+  }
+});
+
+describe("Slice B new/changed strings contain no banned claim (page-copy.ts iaTeaserCta/nfcCardCta)", () => {
+  for (const key of SLICE_B_PAGE_COPY_KEYS) {
+    it(`${key} is clean`, () => {
+      const values = valuesOf(pageCopySource, key);
+      expect(values.length).toBeGreaterThanOrEqual(2); // es + en
+      for (const value of values) {
+        for (const banned of BANNED_SUBSTRINGS) {
+          expect(value).not.toContain(banned);
+        }
+      }
+    });
+  }
+});
+
+describe("AboutPage.tsx proximity paragraph — owner-approved cautious wording, no competitor named", () => {
+  it("does not contain the blanket in-person claim the owner rejected", () => {
+    expect(aboutPageSource).not.toMatch(/te atendemos en persona en tu local/i);
+  });
+
+  it("does not name a competitor", () => {
+    for (const competitor of ["Tapstar"]) {
+      expect(aboutPageSource).not.toContain(competitor);
+    }
+  });
+
+  it("mentions Tacoronte and the Canarian market", () => {
+    expect(aboutPageSource).toMatch(/Tacoronte/);
+    expect(aboutPageSource).toMatch(/canario|Canarias/i);
+  });
+
+  it("the on-site-visit sentence is conditional ('cuando el proyecto lo requiere'), not unconditional", () => {
+    expect(aboutPageSource).toMatch(/cuando el proyecto lo requiere/i);
   });
 });
