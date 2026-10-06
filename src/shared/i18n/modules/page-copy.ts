@@ -22,6 +22,8 @@ export interface PageCopy {
   iaTeaserDesc: string;
   iaTeaserCta: string;
   iaH1: string;
+  iaChatbotsTitle: string;
+  iaCasesIntro: string;
   iaIntro: string;
   iaCard1Title: string;
   iaCard1Desc: string;
@@ -87,6 +89,8 @@ export interface PageCopy {
   iaFaqA4: string;
   iaFaqQ5: string;
   iaFaqA5: string;
+  iaFaqQ6: string;
+  iaFaqA6: string;
 }
 
 export const pageCopy: { es: PageCopy; en: PageCopy } = {
@@ -111,7 +115,10 @@ export const pageCopy: { es: PageCopy; en: PageCopy } = {
     iaTeaserDesc:
       "Atiende a tus clientes 24/7 y automatiza tareas repetitivas en tu negocio.",
     iaTeaserCta: "Ver chatbots de IA",
-    iaH1: "Chatbots de IA y automatización para empresas en Tenerife",
+    iaH1: "Inteligencia artificial y automatización para empresas en Tenerife y Canarias",
+    iaChatbotsTitle: "Chatbots con IA y robots de atención al público",
+    iaCasesIntro:
+      "Algunas tareas que un asistente de IA puede cubrir en un negocio local, según el sector.",
     iaIntro:
       "Un asistente de IA (lo que muchos llaman robot de atención al público) que responde a tus clientes a cualquier hora, y flujos automáticos que se encargan de las tareas repetitivas para que tú te centres en tu negocio.",
     iaCard1Title: "Chatbot para tu web",
@@ -169,16 +176,16 @@ export const pageCopy: { es: PageCopy; en: PageCopy } = {
     footerServicesTitle: "Servicios",
     footerCompanyTitle: "Empresa",
     footerAbout: "Sobre nosotros",
-    iaCasesTitle: "Casos para hostelería y comercio local",
+    iaCasesTitle: "Aplicaciones prácticas de IA para pymes y negocios locales",
     iaCase1Title: "Restaurantes y bares",
     iaCase1Desc:
-      "Responde dudas sobre la carta, alérgenos, horarios y cómo llegar sin que nadie tenga que coger el teléfono en plena hora punta.",
+      "Puede responder dudas sobre la carta, alérgenos, horarios y cómo llegar, sin que nadie tenga que coger el teléfono en plena hora punta.",
     iaCase2Title: "Reservas por WhatsApp",
     iaCase2Desc:
-      "Recoge las peticiones de reserva por WhatsApp y avisa a tu equipo con todos los datos para confirmarlas.",
+      "Puede recoger peticiones de reserva por WhatsApp y avisar a tu equipo con todos los datos para confirmarlas.",
     iaCase3Title: "Comercio y servicios",
     iaCase3Desc:
-      "Atiende preguntas sobre productos, precios y disponibilidad, y convierte cada consulta en un contacto.",
+      "Puede atender preguntas sobre productos, precios y disponibilidad, y dejar cada consulta registrada como contacto.",
     iaStepsTitle: "Cómo trabajamos",
     iaStep1Title: "1. Analizamos tu negocio",
     iaStep1Desc:
@@ -199,6 +206,9 @@ export const pageCopy: { es: PageCopy; en: PageCopy } = {
     iaFaqQ5: "¿Tenéis relación con el programa Canarias Digitaliza?",
     iaFaqA5:
       "No. Digitaliza Tenerife es una agencia privada de Tenerife y no forma parte de ningún programa público.",
+    iaFaqQ6: "¿Cómo puede usar la inteligencia artificial una pyme de Tenerife?",
+    iaFaqA6:
+      "Con aplicaciones prácticas: un chatbot que responde a tus clientes en la web o en WhatsApp, la recogida de reservas y contactos, y automatizaciones que envían avisos o registran datos sin trabajo manual. Empezamos por la tarea que más tiempo te quita cada día.",
   },
   en: {
     glovoEyebrow: "No commissions",
@@ -221,7 +231,10 @@ export const pageCopy: { es: PageCopy; en: PageCopy } = {
     iaTeaserDesc:
       "Serve your customers 24/7 and automate repetitive tasks in your business.",
     iaTeaserCta: "See AI chatbots",
-    iaH1: "AI chatbots and automation for businesses in Tenerife",
+    iaH1: "Artificial intelligence and automation for businesses in Tenerife and the Canary Islands",
+    iaChatbotsTitle: "AI chatbots and customer-service bots",
+    iaCasesIntro:
+      "Some tasks an AI assistant can handle in a local business, by sector.",
     iaIntro:
       "An AI assistant (what many call a customer-service bot) that answers your customers at any hour, and automated workflows that handle repetitive tasks so you can focus on your business.",
     iaCard1Title: "Website chatbot",
@@ -278,16 +291,16 @@ export const pageCopy: { es: PageCopy; en: PageCopy } = {
     footerServicesTitle: "Services",
     footerCompanyTitle: "Company",
     footerAbout: "About us",
-    iaCasesTitle: "Use cases for hospitality and local retail",
+    iaCasesTitle: "Practical AI applications for SMEs and local businesses",
     iaCase1Title: "Restaurants and bars",
     iaCase1Desc:
-      "Answers questions about the menu, allergens, opening hours and directions, so nobody has to pick up the phone during the rush.",
+      "It can answer questions about the menu, allergens, opening hours and directions, so nobody has to pick up the phone during the rush.",
     iaCase2Title: "WhatsApp bookings",
     iaCase2Desc:
-      "Collects booking requests on WhatsApp and notifies your team with all the details to confirm them.",
+      "It can collect booking requests on WhatsApp and notify your team with all the details to confirm them.",
     iaCase3Title: "Retail and services",
     iaCase3Desc:
-      "Answers questions about products, prices and availability, and turns every enquiry into a contact.",
+      "It can answer questions about products, prices and availability, and log every enquiry as a contact.",
     iaStepsTitle: "How we work",
     iaStep1Title: "1. We study your business",
     iaStep1Desc: "We look at the questions you get and the tasks you repeat every day.",
@@ -307,5 +320,8 @@ export const pageCopy: { es: PageCopy; en: PageCopy } = {
     iaFaqQ5: "Are you part of the Canarias Digitaliza programme?",
     iaFaqA5:
       "No. Digitaliza Tenerife is a private agency based in Tenerife and is not part of any public programme.",
+    iaFaqQ6: "How can a small business in Tenerife use artificial intelligence?",
+    iaFaqA6:
+      "Through practical applications: a chatbot that answers your customers on your website or WhatsApp, collecting bookings and contacts, and automations that send notifications or record data without manual work. We start with the task that takes up most of your time each day.",
   },
 };

@@ -316,6 +316,8 @@ interface Translation extends TpvModuleTranslations {
   tapReviewFAQ2Answer: string;
   tapReviewFAQ3Question: string;
   tapReviewFAQ3Answer: string;
+  tapReviewFAQ4Question: string;
+  tapReviewFAQ4Answer: string;
   tapReviewCTATitle: string;
   tapReviewCTASubtitle: string;
   tapReviewCTABtnPrimary: string;
@@ -822,7 +824,8 @@ const translations: Record<Language, Translation> = {
     tapReviewProductStand: "Stand Exhibidor",
     tapReviewProductStandAlt: "Stand exhibidor Tap-to-Review",
 
-    tapReviewHowTitle: "¿Cómo funciona?",
+    tapReviewHowTitle:
+      "¿Cómo funciona la tecnología Tap NFC para conseguir reseñas en Google?",
     tapReviewHowSubtitle:
       "Gracias a su Chip NFC de alto rendimiento, tus clientes acercan el móvil y se les abre la página de reseñas de tu negocio en Google.",
     tapReviewHowStep1Title: "Coloca el dispositivo",
@@ -835,7 +838,7 @@ const translations: Record<Language, Translation> = {
     tapReviewHowStep3Desc:
       "Se abre directamente la página de reseñas de tu negocio en Google. El cliente solo tiene que tocar 5 estrellas.",
 
-    tapReviewFeatTitle: "Ventajas Tap-to-Review",
+    tapReviewFeatTitle: "Dispositivos Tap to Review listos para usar en Canarias",
     tapReviewFeatSubtitle:
       "Todo lo que necesitas para conseguir reseñas de forma automática",
     tapReviewFeatNFC: "NFC de Alto Rendimiento",
@@ -874,6 +877,10 @@ const translations: Record<Language, Translation> = {
     tapReviewFAQ3Question: "¿Qué pasa si el cliente no tiene NFC?",
     tapReviewFAQ3Answer:
       "El dispositivo también incluye un código QR que el cliente puede escanear con la cámara de su móvil. Así nadie se queda sin poder dejarte su reseña.",
+    tapReviewFAQ4Question:
+      "¿Qué diferencia hay entre una tarjeta NFC y un código QR para reseñas?",
+    tapReviewFAQ4Answer:
+      "Con NFC, el cliente solo acerca el móvil a la tarjeta y se abre tu página de reseñas de Google; necesita un móvil con NFC (iPhone 8 en adelante o Android con NFC). El código QR funciona con la cámara de casi cualquier móvil, pero hay que abrirla y enfocar. Por eso nuestros dispositivos incluyen los dos: NFC para ir más rápido y QR de respaldo.",
 
     tapReviewCTATitle: "Empieza a conseguir reseñas hoy",
     tapReviewCTASubtitle:
@@ -1424,7 +1431,8 @@ const translations: Record<Language, Translation> = {
     tapReviewProductStand: "Display Stand",
     tapReviewProductStandAlt: "Tap-to-Review display stand",
 
-    tapReviewHowTitle: "How does it work?",
+    tapReviewHowTitle:
+      "How does Tap NFC technology work for Google reviews?",
     tapReviewHowSubtitle:
       "Thanks to its high-performance NFC chip, your customers bring their phone closer and the Google reviews page for your business opens.",
     tapReviewHowStep1Title: "Place the device",
@@ -1437,7 +1445,7 @@ const translations: Record<Language, Translation> = {
     tapReviewHowStep3Desc:
       "Your business Google reviews page opens directly. The customer just has to tap 5 stars.",
 
-    tapReviewFeatTitle: "Tap-to-Review Advantages",
+    tapReviewFeatTitle: "Tap to Review devices, ready to use in the Canary Islands",
     tapReviewFeatSubtitle: "Everything you need to get reviews automatically",
     tapReviewFeatNFC: "High-Performance NFC",
     tapReviewFeatNFCDesc:
@@ -1475,6 +1483,10 @@ const translations: Record<Language, Translation> = {
     tapReviewFAQ3Question: "What if the customer doesn't have NFC?",
     tapReviewFAQ3Answer:
       "The device also includes a QR code that the customer can scan with their phone camera. So no one misses out on leaving you a review.",
+    tapReviewFAQ4Question:
+      "What is the difference between an NFC card and a QR code for reviews?",
+    tapReviewFAQ4Answer:
+      "With NFC, customers just hold their phone near the card and your Google review page opens; it needs an NFC-enabled phone (iPhone 8 or newer, or Android with NFC). A QR code works with almost any phone camera, but they have to open the camera and scan it. That is why our devices include both: NFC for speed and a backup QR code.",
 
     tapReviewCTATitle: "Start getting reviews today",
     tapReviewCTASubtitle: "Start getting reviews in seconds, nothing to install.",
