@@ -1,0 +1,16 @@
+# Snyk (https://snyk.io) policy file
+version: v1.25.0
+ignore:
+  SNYK-JS-ZOD-20510278:
+    - '*':
+        reason: >-
+          Owner-authorized 2026-10-06. No fixed zod version exists (affects all
+          versions; upstream fix in colinhacks/zod#6475). Not exploitable here:
+          the direct zod@3 dependency only validates browser-side forms
+          (contact, login, settings) and the codebase has no z.array() schemas;
+          the zod@4 copy comes from @vercel/cli-config (via @vercel/functions >
+          @vercel/oidc), which reads local Vercel CLI config and never parses
+          request input.
+        expires: 2026-11-05T00:00:00.000Z
+        created: 2026-10-06T00:00:00.000Z
+patch: {}
