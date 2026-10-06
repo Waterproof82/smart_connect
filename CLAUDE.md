@@ -180,13 +180,10 @@ El agente debe registrar cada operación que realice (generación, refactorizaci
 
 Al ejecutar el linter de Supabase, pueden aparecer warnings que requieren acciones manuales:
 
-**Configuración manual (Dashboard de Supabase):**
-
-- **Leaked Password Protection:** Ir a Authentication > Providers > Email y habilitar "Enable leaked password protection"
-
 **Warnings conocidos (no críticos):**
 
-- **Extension in public:** La extensión `vector` en schema `public` es aceptable en Supabase
+- **Leaked Password Protection:** Requiere plan Pro de Supabase; aceptado mientras el proyecto esté en plan Free. Si se sube a Pro: Authentication > Providers > Email > "Enable leaked password protection"
+- **Extension in public:** RESUELTO (2026-10-06). `vector` vive en el schema `extensions`. Toda función nueva que use `vector` o `<=>` debe declarar `SET search_path = public, extensions`
 - **Auth allow anonymous sign_ins:** Son intencionales para permitir el chatbot RAG y landing page:
   - `documents`: SELECT público para chatbot
   - `app_settings`: SELECT público para landing page
