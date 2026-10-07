@@ -148,3 +148,43 @@ describe("Self-hosted font delivery (tokens.css + index.html + vercel.json)", ()
     });
   });
 });
+
+describe("DM Sans wght-only payload (sdd/font-stability PR1, design.md D1)", () => {
+  const tokensCss = readSource(TOKENS_CSS_PATH);
+  const indexHtml = readSource(INDEX_HTML_PATH);
+
+  /** Root-relative /fonts/ woff2 filenames referenced anywhere in a source string. */
+  function fontFilenamesIn(source: string): string[] {
+    return [...source.matchAll(/\/fonts\/([^"')\s]+\.woff2)/g)].map((m) => m[1]);
+  }
+
+  it("no filename referenced in tokens.css or index.html contains the opsz axis", () => {
+    const filenames = [
+      ...fontFilenamesIn(tokensCss),
+      ...fontFilenamesIn(indexHtml),
+    ];
+    expect(filenames.length).toBeGreaterThan(0);
+    for (const filename of filenames) {
+      expect(filename).not.toMatch(/opsz/);
+    }
+  });
+
+  it("no file in public/fonts/ has an opsz filename", () => {
+    const files = fs.readdirSync(PUBLIC_FONTS_DIR);
+    const opszFiles = files.filter((f) => /opsz/.test(f));
+    expect(opszFiles).toEqual([]);
+  });
+
+  it("DM Sans woff2 total payload (latin + latin-ext) is <= 56,000 B", () => {
+    const dmSansBlocks = primaryFontFaceBlocks(tokensCss).filter(
+      (block) => /font-family:\s*["']?DM Sans["']?/.test(block),
+    );
+    const dmSansUrls = dmSansBlocks.flatMap(fontUrlsIn);
+    expect(dmSansUrls.length).toBeGreaterThan(0);
+    const totalBytes = dmSansUrls.reduce((sum, url) => {
+      const filePath = path.join(PUBLIC_FONTS_DIR, path.basename(url));
+      return sum + fs.statSync(filePath).size;
+    }, 0);
+    expect(totalBytes).toBeLessThanOrEqual(56_000);
+  });
+});

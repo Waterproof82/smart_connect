@@ -128,7 +128,7 @@ describe("dist/*.html — critical CSS output guards (design.md Testing Strategy
           // Self-hosted primary faces — present via root-relative /fonts/
           // woff2 url()s so font-display:optional's block window isn't
           // missed on first paint.
-          expect(criticalBlock).toMatch(/\/fonts\/dm-sans-latin-opsz-wght\.woff2/);
+          expect(criticalBlock).toMatch(/\/fonts\/dm-sans-latin-wght\.woff2/);
           expect(criticalBlock).toMatch(/\/fonts\/space-grotesk-latin-wght\.woff2/);
         },
       );
