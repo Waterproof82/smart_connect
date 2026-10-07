@@ -12,11 +12,19 @@
  *
  * `status === "unknown"` (server render AND first client render, per
  * `ConsentContext`) always renders null — no hydration mismatch possible.
+ *
+ * Also gated on `useAppStylesheetApplied` (font-stability PR3, design.md
+ * D4): the banner/reopener are `position: fixed`, so mounting them before
+ * the deferred app stylesheet has applied would render them in normal
+ * flow first, then "snap" to fixed once the CSS arrives — a layout shift.
+ * Returning null until the stylesheet is applied means they only ever
+ * mount already fully styled.
  */
 
 import React from "react";
 import { useConsent } from "../context/ConsentContext";
 import { useLanguage } from "../context/LanguageContext";
+import { useAppStylesheetApplied } from "@shared/hooks/useAppStylesheetApplied";
 import { CookieBanner } from "./CookieBanner";
 
 declare global {
@@ -29,6 +37,7 @@ const REOPENER_CLASS =
   "fixed bottom-[calc(var(--wa-bar-h)+1rem)] left-4 md:bottom-4 z-[250] w-11 h-11 rounded-full flex items-center justify-center bg-[var(--color-bg)] border border-[var(--color-border)] text-default shadow-lg hover:bg-[var(--color-border)]/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]";
 
 export const CookieConsent: React.FC = () => {
+  const stylesheetApplied = useAppStylesheetApplied();
   const { status, acceptAll, rejectAll, reopen } = useConsent();
   const { t } = useLanguage();
 
@@ -39,6 +48,11 @@ export const CookieConsent: React.FC = () => {
   }
 
   if (status === "unknown") return null;
+
+  // Fixed-position elements need the real (deferred) CSS to have applied
+  // first — otherwise they'd render in normal flow, then snap to fixed
+  // (CLS). See design.md D4.
+  if (!stylesheetApplied) return null;
 
   if (status === "pending") {
     return (

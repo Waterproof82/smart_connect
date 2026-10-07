@@ -109,4 +109,28 @@ describe("CookieConsent (design.md: container — banner | reopener | null)", ()
     expect(source).not.toMatch(/defaultChecked/);
     expect(source).not.toMatch(/\bchecked=/);
   });
+
+  it("imports useAppStylesheetApplied (font-stability PR3: fixed-element mount gate)", () => {
+    const source = readSource();
+    expect(source).toMatch(/useAppStylesheetApplied/);
+  });
+
+  it("calls useAppStylesheetApplied unconditionally, before any early return (hooks must not be called conditionally)", () => {
+    const source = readSource();
+    const hookCallIndex = source.indexOf("useAppStylesheetApplied(");
+    const firstReturnNullIndex = source.indexOf("return null;");
+    expect(hookCallIndex).toBeGreaterThan(-1);
+    expect(firstReturnNullIndex).toBeGreaterThan(-1);
+    expect(hookCallIndex).toBeLessThan(firstReturnNullIndex);
+  });
+
+  it('returns null until the app stylesheet has applied, even once status !== "unknown" (no fixed-position element renders with only critical CSS)', () => {
+    const source = readSource();
+    expect(source).toMatch(/if \(!stylesheetApplied\) return null;/);
+  });
+
+  it('still returns null when status === "unknown" (regression — the stylesheet gate must not replace this check)', () => {
+    const source = readSource();
+    expect(source).toMatch(/status === "unknown"/);
+  });
 });

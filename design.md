@@ -57,21 +57,37 @@ The WhatsApp green is reserved for the primary action.
 - **Body:** DM Sans 400/500/600 — `var(--font-body)`.
 - Two families only. Instrument Sans was removed.
 - Metric-matched local fallbacks (`DM Sans Fallback`, `Space Grotesk
-  Fallback`: Arial + `size-adjust`/ascent/descent overrides, values from
-  `@capsizecss/metrics`) keep the font swap free of layout shift.
+  Fallback`: Arial + `size-adjust`/ascent/descent overrides) keep the font
+  swap free of layout shift. `DM Sans Fallback` values come straight from
+  `@capsizecss/metrics`. `Space Grotesk Fallback` (sdd/font-stability PR2,
+  2026-10-07) uses an EMPIRICAL `size-adjust: 106%` instead: the pure
+  Capsize value (109.69%) matches the real font's `.ds-h1` line breaks at
+  412px but flips the line count at 375px (a common real-user viewport).
+  106% was chosen by measuring rendered `.ds-h1` line counts at
+  360/375/390/412/1024/1350px in headless Chrome — it keeps 375px exact and
+  introduces no line-count flip at any of the other widths. ascent/descent
+  overrides are re-derived from this explicit size-adjust via the same
+  formula (see `tests/unit/perf/fontFallbackMetrics.test.ts` and
+  `docs/audit/2026-10-07_font-stability-pr2.md`).
 - Self-hosted (sdd/core-web-vitals-perf PR1, 2026-10-07): variable woff2
   pulled from the Google Fonts CSS2 API, served from `public/fonts/`,
   `font-display: optional` on all 4 primary faces (zero font-swap CLS by
   construction — see owner decision on file). Real file sizes:
-  `dm-sans-latin-opsz-wght.woff2` 62,724 B, `dm-sans-latin-ext-opsz-wght.woff2`
-  31,292 B, `space-grotesk-latin-wght.woff2` 22,288 B,
+  `space-grotesk-latin-wght.woff2` 22,288 B,
   `space-grotesk-latin-ext-wght.woff2` 18,940 B. Only 2 faces (latin) are
   preloaded in `index.html`; latin-ext loads on demand via `unicode-range`.
-  Risk: the DM Sans latin face (~61 KB) is noticeably larger than the ~40 KB
-  budget assumed in design — it carries the full opsz 9..40 + wght 400..700
-  variable axes; not changing the plan, flagging for verify/future
-  subsetting.
+  DM Sans ships `wght`-only (sdd/font-stability PR1, 2026-10-07 — see
+  `docs/audit/2026-10-07_font-stability-pr1.md`): `dm-sans-latin-wght.woff2`
+  36,932 B, `dm-sans-latin-ext-wght.woff2` 18,228 B (total 55,160 B, under
+  the 56,000 B budget). The original DM Sans faces carried the full `opsz
+  9..40` + `wght 400..700` variable axes (94,016 B total); the `opsz` axis
+  was dropped since the design only ever used a single optical size.
 - Display tracking `-0.025em`, leading `1.05`. All headings roman — never italic.
+- `.ds-h1` overrides the shared `.ds-h1,.ds-h2,.ds-h3` balanced wrapping
+  with `text-wrap: wrap` (sdd/font-stability PR2, 2026-10-07): `.ds-h1` is
+  the hero LCP element (`Hero.tsx`) and balanced wrapping caused a 360px
+  line-break CLS on the real-font/fallback swap. `.ds-h2`/`.ds-h3` are
+  below the fold and keep the balanced mode.
 - Scale (`tokens.css`): `--text-display`, `--text-display-s`, `--text-h2`,
   `--text-h3`, `--text-lede`. Classes: `.ds-h1`, `.ds-h1--s`, `.ds-h2`,
   `.ds-h3`, `.ds-lede`, `.ds-kicker`.

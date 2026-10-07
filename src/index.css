@@ -288,6 +288,12 @@
     font-weight: 700;
     line-height: var(--leading-display);
     letter-spacing: var(--tracking-display);
+    /* Overrides the shared .ds-h1,.ds-h2,.ds-h3 balanced wrapping set above.
+     * h1 is the LCP element (Hero.tsx); the balanced mode caused a 360px
+     * line-break CLS when swapping real Space Grotesk <-> its Arial
+     * fallback (measured in sdd-explore #1163). h2/h3 stay below the fold
+     * and keep the balanced mode unchanged. */
+    text-wrap: wrap;
   }
   .ds-h1--s {
     font-size: var(--text-display-s);
