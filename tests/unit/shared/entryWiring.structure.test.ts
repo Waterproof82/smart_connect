@@ -102,16 +102,21 @@ describe("entry-client.tsx — WebMCP registration is deferred past hydration (d
     expect(source).toMatch(/scheduleWebMCPRegistration\(\)/);
   });
 
-  it("locates the scheduleWebMCPRegistration() call after both the hydrateRoot and createRoot branches inside boot()", () => {
+  it("boots with top-level await instead of an async boot() wrapper", () => {
     const source = readSource();
-    const bootIndex = source.indexOf("async function boot()");
+
+    expect(source).not.toMatch(/async function boot\(/);
+    expect(source).toMatch(/^\s*await route\.preload\(\);/m);
+  });
+
+  it("locates the scheduleWebMCPRegistration() call after both the hydrateRoot and createRoot branches", () => {
+    const source = readSource();
     const hydrateIndex = source.indexOf("hydrateRoot(root, app)");
     const createRootIndex = source.indexOf("createRoot(root).render(app)");
     const scheduleCallIndex = source.indexOf("scheduleWebMCPRegistration()");
 
-    expect(bootIndex).toBeGreaterThan(-1);
-    expect(hydrateIndex).toBeGreaterThan(bootIndex);
-    expect(createRootIndex).toBeGreaterThan(bootIndex);
+    expect(hydrateIndex).toBeGreaterThan(-1);
+    expect(createRootIndex).toBeGreaterThan(-1);
     expect(scheduleCallIndex).toBeGreaterThan(hydrateIndex);
     expect(scheduleCallIndex).toBeGreaterThan(createRootIndex);
   });
