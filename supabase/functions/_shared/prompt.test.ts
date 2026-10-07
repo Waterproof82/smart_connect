@@ -68,4 +68,16 @@ describe('buildSystemInstruction', () => {
     expect(instruction).not.toMatch(/no tengo informaci[oó]n/i);
     expect(instruction).not.toMatch(/No encontré información relevante/i);
   });
+
+  it('instructs the model to answer in plain text, never Markdown formatting', () => {
+    // Production smoke test showed the model emitting "**15 € a 35 €**" —
+    // ChatMessages.tsx renders plain text, so the asterisks showed up
+    // literally. Forbid Markdown syntax at the source instead of trying to
+    // strip it client-side. Bare https URLs stay allowed (linkified in the UI).
+    const instruction = buildSystemInstruction({ documents: [DOC] });
+    expect(instruction).toMatch(/texto plano/i);
+    expect(instruction).toMatch(/markdown/i);
+    expect(instruction).toMatch(/\*\*/); // names the forbidden ** syntax explicitly
+    expect(instruction).toMatch(/URLs? .*https/i);
+  });
 });

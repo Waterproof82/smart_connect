@@ -77,6 +77,7 @@ export function buildSystemInstruction(params: BuildSystemInstructionParams): st
     `4. Si preguntan sobre privacidad, cookies, protección de datos o aviso legal, NO respondas con contenido del contexto bajo ninguna circunstancia: redirige siempre a la página correspondiente — privacidad: ${LEGAL_URLS.privacy}, cookies: ${LEGAL_URLS.cookies}, aviso legal: ${LEGAL_URLS.legalNotice}.`,
     '5. Si no hay documentos relevantes (p. ej. un saludo o una pregunta genérica), responde con naturalidad y de forma breve; no la trates como un error.',
     '6. Sé conciso, directo y profesional.',
+    '7. Responde SIEMPRE en texto plano, nunca en formato Markdown: no uses **negrita**, *cursiva*, # encabezados, `código`, listas con guiones ni tablas. Las URLs en formato https:// sí están permitidas tal cual, sin envolverlas en sintaxis de enlace Markdown.',
     '',
     'CONTEXTO:',
     buildContextBlock(documents),
