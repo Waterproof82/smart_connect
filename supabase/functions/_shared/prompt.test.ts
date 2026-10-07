@@ -80,4 +80,14 @@ describe('buildSystemInstruction', () => {
     expect(instruction).toMatch(/\*\*/); // names the forbidden ** syntax explicitly
     expect(instruction).toMatch(/URLs? .*https/i);
   });
+
+  it('requires Spanish from Spain (tuteo, peninsular/Canarian vocabulary), never voseo or Latin American usage', () => {
+    // The business and its customers are in Tenerife: "celular", "computadora"
+    // or voseo would make the bot sound generic and foreign.
+    const instruction = buildSystemInstruction({ documents: [DOC] });
+    expect(instruction).toMatch(/español de España/i);
+    expect(instruction).toMatch(/tuteo|tú/i);
+    expect(instruction).toMatch(/voseo/i);
+    expect(instruction).toMatch(/móvil/i);
+  });
 });
