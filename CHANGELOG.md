@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **`entry-client.tsx` uses top-level await instead of an `async function boot()` wrapper** (SonarLint `typescript:S7785`). The order is unchanged: preload the matched route chunk, then `hydrateRoot`/`createRoot`, then `scheduleWebMCPRegistration()`, so the React #421 protection and the deferred WebMCP registration still behave the same. This is safe here because the project targets ES2022/ESNext and nothing imports the entry module. `tests/unit/shared/entryWiring.structure.test.ts` now asserts that there is no `boot()` wrapper and that `route.preload()` is awaited at top level.
 - **`seo-geo-expert` skill updated with the 2026-10-07 Core Web Vitals lessons** (`references/performance-cwv.md`, `findings-log.md`, `regression-testing.md`). New guidance:
   - PSI lab scores don't depend on Google indexing.
   - Always take the median of several runs from the same region: runs from the US showed about +1 s FCP.

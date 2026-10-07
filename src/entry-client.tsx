@@ -45,9 +45,7 @@ const LoadingFallback = () => (
 
 const rootElement = document.getElementById("root");
 if (!rootElement) throw new Error("Could not find root element to mount to");
-// Re-bound to a non-nullable local: TS does not carry the narrowing above
-// into the nested async boot() closure below, since rootElement itself is
-// still typed HTMLElement | null at its declaration site.
+// Non-nullable alias used by the hydrate/render calls below.
 const root: HTMLElement = rootElement;
 
 // Prerendered pages (/, /about, /tarjetas-nfc, /carta-digital, /ia-chatbots-tenerife, /tpv-restaurantes, /legal/*) ship SSR HTML inside
@@ -99,27 +97,25 @@ const app = (
 // null) and /admin never has SSR content, so neither one preloads
 // anything here. If the chunk fails to load, hydrate anyway — same
 // fallback behaviour as before this change.
-async function boot() {
-  if (hasSSRContent) {
-    const route = routeForPath(window.location.pathname);
-    if (route) {
-      try {
-        await route.preload();
-      } catch {
-        // Preload failed — fall through and hydrate with the
-        // existing Suspense/lazy fallback behaviour.
-      }
+// Top-level await (ES2022 module): nothing imports this entry, so awaiting
+// here blocks no other module.
+if (hasSSRContent) {
+  const route = routeForPath(window.location.pathname);
+  if (route) {
+    try {
+      await route.preload();
+    } catch {
+      // Preload failed — fall through and hydrate with the
+      // existing Suspense/lazy fallback behaviour.
     }
-    hydrateRoot(root, app);
-  } else {
-    createRoot(root).render(app);
   }
-  // design.md D8 (core-web-vitals-perf PR3): schedule WebMCP tool
-  // registration after hydration/render instead of statically importing
-  // and calling it at module scope, so @mcp-b/webmcp-polyfill and the
-  // tool descriptors no longer pay their eval cost before/during
-  // hydration. Runs after BOTH branches to keep /admin parity.
-  scheduleWebMCPRegistration();
+  hydrateRoot(root, app);
+} else {
+  createRoot(root).render(app);
 }
-
-void boot();
+// design.md D8 (core-web-vitals-perf PR3): schedule WebMCP tool
+// registration after hydration/render instead of statically importing
+// and calling it at module scope, so @mcp-b/webmcp-polyfill and the
+// tool descriptors no longer pay their eval cost before/during
+// hydration. Runs after BOTH branches to keep /admin parity.
+scheduleWebMCPRegistration();
