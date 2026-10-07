@@ -21,7 +21,6 @@ export class GenerateResponseUseCase {
     return this.chatRepository.generateResponse({
       userQuery: params.userQuery,
       conversationHistory: params.conversationHistory,
-      useRAG: params.useRAG ?? true,
       ragOptions: params.ragOptions,
     });
   }
