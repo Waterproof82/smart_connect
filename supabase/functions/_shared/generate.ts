@@ -46,6 +46,8 @@ export interface GenerateContentMessage {
 export interface GenerateRequestConfig {
   readonly contents: ReadonlyArray<GenerateContentMessage>;
   readonly generationConfig?: Record<string, unknown>;
+  /** Grounding/redirect rules (design D6) — sent as Gemini's `systemInstruction`, not inlined into the user turn. */
+  readonly systemInstruction?: string;
 }
 
 /** Minimal fetch surface this module depends on — real `fetch` satisfies it. */
@@ -137,6 +139,9 @@ async function attemptGenerate(
       headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
       body: JSON.stringify({
         contents: request.contents,
+        ...(request.systemInstruction
+          ? { systemInstruction: { parts: [{ text: request.systemInstruction }] } }
+          : {}),
         generationConfig: request.generationConfig ?? DEFAULT_GENERATION_CONFIG,
       }),
       signal: controller.signal,

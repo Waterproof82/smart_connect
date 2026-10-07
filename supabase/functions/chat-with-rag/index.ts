@@ -2,6 +2,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.7'
 import { generateWithFailover, MODEL_NAME_REGEX } from '../_shared/generate.ts'
+import { buildSystemInstruction } from '../_shared/prompt.ts'
 
 // Generation timeout + backup-model failover (design D1/D2). Env swap = no
 // redeploy; defaults verified available via ListModels for the current key.
@@ -166,22 +167,10 @@ serve(async (req) => {
     if (searchError) throw new Error(`Vector search failed: ${searchError.message}`)
     const searchTime = Date.now() - searchStartTime
 
-    // 5️⃣ CONSTRUCT PROMPT WITH RAG CONTEXT
-    let prompt
-    if (searchResults && searchResults.length > 0) {
-      const contextBlocks = searchResults
-        .map((doc, idx) => `[Documento ${idx + 1} - Relevancia: ${(doc.similarity * 100).toFixed(1)}%]\nFuente: ${doc.source || 'Desconocida'}\nContenido: ${doc.content}\n`)
-        .join('\n---\n\n')
-      prompt = `Eres un asistente que responde preguntas basándose ÚNICAMENTE en el contexto proporcionado.\n\nREGLAS IMPORTANTES:\n1. Responde SOLO con información del contexto\n2. Si el contexto no contiene la respuesta, di "No tengo información sobre eso en mi base de conocimiento"\n3. Sé conciso, directo y preciso\n4. NO inventes información que no esté en el contexto\n\nCONTEXTO:\n${contextBlocks}\n\n---\n\nPREGUNTA DEL USUARIO:\n${query}\n\nRESPUESTA:`
-    } else {
-      return new Response(
-        JSON.stringify({ 
-          response: `No encontré información relevante en mi base de conocimiento para: "${query}"`,
-          metadata: { documentsFound: 0, cacheHit, timings: { embedding: embeddingTime, search: 0, total: Date.now() - startTime } }
-        }),
-        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
-    }
+    // 5️⃣ BUILD SYSTEM INSTRUCTION (grounding + redirect rules, design D6)
+    // Zero documents is NOT a dead end: the instruction still lets the model
+    // answer greetings/small talk and redirects genuine unknowns to the CTA.
+    const systemInstruction = buildSystemInstruction({ documents: searchResults || [] })
 
     // 6️⃣ GENERATE RESPONSE WITH GEMINI (primary + backup-model failover)
     const generateStartTime = Date.now()
@@ -190,7 +179,7 @@ serve(async (req) => {
         role: (c.role === 'user' || c.role === 'model') ? c.role : 'user',
         parts: Array.isArray(c.parts) ? c.parts : [{ text: String(c.parts) }]
       })),
-      { role: 'user', parts: [{ text: prompt }] }
+      { role: 'user', parts: [{ text: query }] }
     ]
 
     const primaryModel = resolveModel(Deno.env.get('GEMINI_PRIMARY_MODEL'), DEFAULT_PRIMARY_MODEL)
@@ -200,7 +189,7 @@ serve(async (req) => {
     const generation = await generateWithFailover({
       models: [primaryModel, backupModel],
       apiKey: geminiKey,
-      request: { contents },
+      request: { contents, systemInstruction },
       fetchFn: fetch,
       now: () => Date.now(),
       deadlineMs: remainingDeadlineMs,
