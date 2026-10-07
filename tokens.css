@@ -147,11 +147,25 @@
   line-gap-override: 0%;
 }
 
+/*
+ * Space Grotesk Fallback uses an EMPIRICAL size-adjust (106%), not the pure
+ * Capsize-derived value (109.69%, commented out below for provenance).
+ * 109.69% matches the real font's .ds-h1 line breaks at 412px but FLIPS the
+ * line count at 375px (iPhone SE/8/X — a very common real-user viewport),
+ * which is a bigger CLS risk than the small sub-pixel offsets this formula
+ * is meant to prevent. 106% was chosen by measuring real .ds-h1 renders at
+ * 360/375/390/412/1024/1350px in headless Chrome: it is the highest value
+ * in the design-selected [105%, 106.5%] band, it keeps 375px byte-for-byte
+ * identical to the real font, and it introduces zero line-count flips at
+ * any of the other 5 measured widths (see docs/audit/2026-10-07_font-stability-pr2.md
+ * and tests/unit/perf/fontFallbackMetrics.test.ts).
+ */
 @font-face {
   font-family: "Space Grotesk Fallback";
   src: local("Arial"), local("ArialMT"), local("Liberation Sans");
-  size-adjust: 109.69%;
-  ascent-override: 89.71%;
-  descent-override: 26.62%;
+  /* size-adjust: 109.69%; ascent-override: 89.71%; descent-override: 26.62%; -- pure Capsize, superseded above */
+  size-adjust: 106%;
+  ascent-override: 92.83%;
+  descent-override: 27.55%;
   line-gap-override: 0%;
 }
