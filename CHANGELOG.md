@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **Chatbot back online (F-09): generation model switched to `gemini-3.1-flash-lite`.** The chatbot returned 500 because Gemini answered 402 `RESOURCE_EXHAUSTED` ("prepayment credits are depleted") on the old AI Studio project. The owner moved `GEMINI_API_KEY` (a Supabase secret, never used by the frontend) to a new project. New projects can no longer call `gemini-2.5-flash` (404 "no longer available to new users"). `gemini-3.8-flash` worked but took 15–60 s and returned 503 under high demand, so `chat-with-rag` and `gemini-generate` now call `gemini-3.1-flash-lite`. `chat-with-rag` also sets `thinkingConfig.thinkingLevel: 'low'`. Measured generation time is about 1–2 s, with one 22 s outlier caused by upstream load. Embeddings still use `gemini-embedding-001`. Still pending: a model fallback on 503/timeout, and a knowledge-base entry for web development questions. See `docs/audit/2026-10-07_gemini-model-flash-lite.md`.
+
 ### Changed
 
 - **`entry-client.tsx` uses top-level await instead of an `async function boot()` wrapper** (SonarLint `typescript:S7785`). The order is unchanged: preload the matched route chunk, then `hydrateRoot`/`createRoot`, then `scheduleWebMCPRegistration()`, so the React #421 protection and the deferred WebMCP registration still behave the same. This is safe here because the project targets ES2022/ESNext and nothing imports the entry module. `tests/unit/shared/entryWiring.structure.test.ts` now asserts that there is no `boot()` wrapper and that `route.preload()` is awaited at top level.
