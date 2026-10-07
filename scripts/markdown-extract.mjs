@@ -21,8 +21,8 @@ const turndownService = new TurndownService({
   linkStyle: "inlined",
 });
 
-function extractTitle(html) {
-  return html.match(/<title[^>]*>([^<]*)<\/title>/)?.[1] || "SmartConnect AI";
+function extractTitle(html, fallbackTitle) {
+  return html.match(/<title[^>]*>([^<]*)<\/title>/)?.[1] || fallbackTitle;
 }
 
 function extractDescription(html) {
@@ -61,12 +61,21 @@ function extractMainContent(html) {
 }
 
 /**
+ * `fallbackTitle` is caller-supplied (not hardcoded here) so this module
+ * never embeds a historical brand string itself — brand copy is each
+ * consumer's own concern (and api/negotiate.mjs keeps its own legacy
+ * fallback literal there only, for byte-identical output — see
+ * tests/unit/scripts/negotiateApi.test.ts).
+ *
  * @param {string} html
- * @param {{ route?: string, scope?: "root" | "main" }} [options]
+ * @param {{ route?: string, scope?: "root" | "main", fallbackTitle?: string }} [options]
  * @returns {{ title: string, description: string, markdown: string }}
  */
-export function extractPageMarkdown(html, { route, scope = "root" } = {}) {
-  const title = extractTitle(html);
+export function extractPageMarkdown(
+  html,
+  { route, scope = "root", fallbackTitle = "Untitled Page" } = {},
+) {
+  const title = extractTitle(html, fallbackTitle);
   const description = extractDescription(html);
 
   const rawContent =
