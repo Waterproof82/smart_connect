@@ -13,9 +13,19 @@
 import { renderToString } from "react-dom/server";
 import { act, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import type { ReactElement } from "react";
 
 import { DeferredExpertAssistant } from "../DeferredExpertAssistant";
 import { OPEN_ASSISTANT_EVENT } from "../ExpertAssistantWithRAG";
+import { LanguageProvider } from "@shared/context/LanguageContext";
+
+// U3: `ExpertAssistantWithRAG` now reads `useLanguage()` (grounded-failure
+// message, design D7), so every render here needs a `LanguageProvider`
+// ancestor — exactly like the real tree (`entry-client.tsx`/
+// `entry-server.tsx` always wrap the whole app in one).
+function withLanguage(ui: ReactElement) {
+  return <LanguageProvider>{ui}</LanguageProvider>;
+}
 
 // `useAppStylesheetApplied` (font-stability PR3, design.md D4) is mocked
 // directly at its own import path rather than exercised end-to-end here —
@@ -48,16 +58,16 @@ describe("DeferredExpertAssistant", () => {
   });
 
   it("renders null server-side (SSR markup parity)", () => {
-    expect(renderToString(<DeferredExpertAssistant />)).toBe("");
+    expect(renderToString(withLanguage(<DeferredExpertAssistant />))).toBe("");
   });
 
   it("renders null on first client render", () => {
-    const { container } = render(<DeferredExpertAssistant />);
+    const { container } = render(withLanguage(<DeferredExpertAssistant />));
     expect(container).toBeEmptyDOMElement();
   });
 
   it("mounts the assistant once idle fires", async () => {
-    render(<DeferredExpertAssistant />);
+    render(withLanguage(<DeferredExpertAssistant />));
 
     act(() => {
       idleCallbacks.forEach((cb) => cb());
@@ -69,7 +79,7 @@ describe("DeferredExpertAssistant", () => {
   });
 
   it("mounts the assistant on first pointerdown, even before idle fires", async () => {
-    render(<DeferredExpertAssistant />);
+    render(withLanguage(<DeferredExpertAssistant />));
 
     act(() => {
       window.dispatchEvent(new Event("pointerdown"));
@@ -81,7 +91,7 @@ describe("DeferredExpertAssistant", () => {
   });
 
   it("mounts immediately, already open, on OPEN_ASSISTANT_EVENT — even before idle/interaction", async () => {
-    render(<DeferredExpertAssistant />);
+    render(withLanguage(<DeferredExpertAssistant />));
 
     act(() => {
       window.dispatchEvent(new Event(OPEN_ASSISTANT_EVENT));
@@ -94,7 +104,7 @@ describe("DeferredExpertAssistant", () => {
 
   it("does NOT mount once idle fires if the app stylesheet has not applied yet (design.md D4 — no fixed-position render pre-CSS)", () => {
     mockStylesheetApplied.value = false;
-    const { container } = render(<DeferredExpertAssistant />);
+    const { container } = render(withLanguage(<DeferredExpertAssistant />));
 
     act(() => {
       idleCallbacks.forEach((cb) => cb());
@@ -105,7 +115,7 @@ describe("DeferredExpertAssistant", () => {
 
   it("mounts once idle fires AND the stylesheet has applied", async () => {
     mockStylesheetApplied.value = true;
-    render(<DeferredExpertAssistant />);
+    render(withLanguage(<DeferredExpertAssistant />));
 
     act(() => {
       idleCallbacks.forEach((cb) => cb());
@@ -118,7 +128,7 @@ describe("DeferredExpertAssistant", () => {
 
   it("openedEarly (OPEN_ASSISTANT_EVENT) bypasses the stylesheet gate — mounts even if the stylesheet has not applied yet", async () => {
     mockStylesheetApplied.value = false;
-    render(<DeferredExpertAssistant />);
+    render(withLanguage(<DeferredExpertAssistant />));
 
     act(() => {
       window.dispatchEvent(new Event(OPEN_ASSISTANT_EVENT));
