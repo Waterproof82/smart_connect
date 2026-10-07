@@ -78,3 +78,41 @@ describe("entry-server.tsx — <CookieConsent /> renders null server-side (no DO
     expect(source).toMatch(/<CookieConsent\s*\/>/);
   });
 });
+
+describe("entry-client.tsx — WebMCP registration is deferred past hydration (design.md D8, SDD core-web-vitals-perf PR3)", () => {
+  const readSource = () => fs.readFileSync(CLIENT_PATH, "utf-8");
+
+  it("does not statically import registerWebMCPTools from ./WebMCP", () => {
+    const source = readSource();
+    expect(source).not.toMatch(
+      /import\s*\{\s*registerWebMCPTools\s*\}\s*from\s*["']\.\/WebMCP["']/,
+    );
+  });
+
+  it("does not call registerWebMCPTools() at module scope", () => {
+    const source = readSource();
+    expect(source).not.toMatch(/^\s*registerWebMCPTools\(\)/m);
+  });
+
+  it("calls scheduleWebMCPRegistration(), imported from ./webmcpBoot", () => {
+    const source = readSource();
+    expect(source).toMatch(
+      /import\s*\{\s*scheduleWebMCPRegistration\s*\}\s*from\s*["']\.\/webmcpBoot["']/,
+    );
+    expect(source).toMatch(/scheduleWebMCPRegistration\(\)/);
+  });
+
+  it("locates the scheduleWebMCPRegistration() call after both the hydrateRoot and createRoot branches inside boot()", () => {
+    const source = readSource();
+    const bootIndex = source.indexOf("async function boot()");
+    const hydrateIndex = source.indexOf("hydrateRoot(root, app)");
+    const createRootIndex = source.indexOf("createRoot(root).render(app)");
+    const scheduleCallIndex = source.indexOf("scheduleWebMCPRegistration()");
+
+    expect(bootIndex).toBeGreaterThan(-1);
+    expect(hydrateIndex).toBeGreaterThan(bootIndex);
+    expect(createRootIndex).toBeGreaterThan(bootIndex);
+    expect(scheduleCallIndex).toBeGreaterThan(hydrateIndex);
+    expect(scheduleCallIndex).toBeGreaterThan(createRootIndex);
+  });
+});

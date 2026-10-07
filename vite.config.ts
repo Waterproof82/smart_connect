@@ -3,6 +3,7 @@ import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { markdownNegotiationPlugin } from "./vite-plugin-md-negotiation.ts";
+import { vendorChunkFor } from "./vite-manual-chunks.ts";
 
 export default defineConfig(({ mode }) => ({
   test: {
@@ -52,15 +53,11 @@ export default defineConfig(({ mode }) => ({
           outDir: "dist",
           rollupOptions: {
             output: {
-              manualChunks: (id: string) => {
-                if (id.includes("node_modules")) {
-                  if (id.includes("@supabase")) return "vendor-supabase";
-                  if (id.includes("react") || id.includes("scheduler"))
-                    return "vendor-react";
-                  if (id.includes("lucide-react")) return "vendor-lucide";
-                  if (id.includes("recharts")) return "vendor-recharts";
-                }
-              },
+              // design.md D7 (sdd/core-web-vitals-perf): exact package-name
+              // matching via vite-manual-chunks.ts — see that file for why
+              // the previous substring check was wrong and why
+              // vendor-recharts was dropped.
+              manualChunks: (id: string) => vendorChunkFor(id),
             },
           },
         },

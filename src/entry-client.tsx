@@ -7,14 +7,11 @@ import { ThemeProvider } from "@shared/context/ThemeContext";
 import { ConsentProvider } from "@shared/context/ConsentContext";
 import { ScrollToTop } from "@shared/components/ScrollToTop";
 import { CookieConsent } from "@shared/components/CookieConsent";
-import { registerWebMCPTools } from "./WebMCP";
+import { scheduleWebMCPRegistration } from "./webmcpBoot";
 import { registerContactClickTracking } from "@shared/utils/analyticsEvents";
 import { PRERENDERED_ROUTES, NOT_FOUND_ROUTE, routeForPath } from "./clientRoutes";
 import "./index.css";
 import App from "./App";
-
-// Register WebMCP tools for AI agent discovery
-registerWebMCPTools();
 
 // GA4: WhatsApp / phone / email link clicks as conversion events
 registerContactClickTracking();
@@ -117,6 +114,12 @@ async function boot() {
   } else {
     createRoot(root).render(app);
   }
+  // design.md D8 (core-web-vitals-perf PR3): schedule WebMCP tool
+  // registration after hydration/render instead of statically importing
+  // and calling it at module scope, so @mcp-b/webmcp-polyfill and the
+  // tool descriptors no longer pay their eval cost before/during
+  // hydration. Runs after BOTH branches to keep /admin parity.
+  scheduleWebMCPRegistration();
 }
 
 void boot();
