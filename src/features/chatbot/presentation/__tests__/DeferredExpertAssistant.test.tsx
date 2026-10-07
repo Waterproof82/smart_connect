@@ -17,11 +17,22 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { DeferredExpertAssistant } from "../DeferredExpertAssistant";
 import { OPEN_ASSISTANT_EVENT } from "../ExpertAssistantWithRAG";
 
+// `useAppStylesheetApplied` (font-stability PR3, design.md D4) is mocked
+// directly at its own import path rather than exercised end-to-end here —
+// its own detection logic has its dedicated suite in
+// `useAppStylesheetApplied.test.tsx`. This file only asserts
+// DeferredExpertAssistant's own gating decision.
+const mockStylesheetApplied = { value: true };
+vi.mock("@shared/hooks/useAppStylesheetApplied", () => ({
+  useAppStylesheetApplied: () => mockStylesheetApplied.value,
+}));
+
 describe("DeferredExpertAssistant", () => {
   let idleCallbacks: Array<() => void>;
 
   beforeEach(() => {
     idleCallbacks = [];
+    mockStylesheetApplied.value = true;
     vi.stubGlobal(
       "requestIdleCallback",
       (cb: () => void) => {
@@ -70,6 +81,43 @@ describe("DeferredExpertAssistant", () => {
   });
 
   it("mounts immediately, already open, on OPEN_ASSISTANT_EVENT — even before idle/interaction", async () => {
+    render(<DeferredExpertAssistant />);
+
+    act(() => {
+      window.dispatchEvent(new Event(OPEN_ASSISTANT_EVENT));
+    });
+
+    expect(
+      await screen.findByRole("dialog", { name: "Chat con asistente experto" }),
+    ).toBeInTheDocument();
+  });
+
+  it("does NOT mount once idle fires if the app stylesheet has not applied yet (design.md D4 — no fixed-position render pre-CSS)", () => {
+    mockStylesheetApplied.value = false;
+    const { container } = render(<DeferredExpertAssistant />);
+
+    act(() => {
+      idleCallbacks.forEach((cb) => cb());
+    });
+
+    expect(container).toBeEmptyDOMElement();
+  });
+
+  it("mounts once idle fires AND the stylesheet has applied", async () => {
+    mockStylesheetApplied.value = true;
+    render(<DeferredExpertAssistant />);
+
+    act(() => {
+      idleCallbacks.forEach((cb) => cb());
+    });
+
+    expect(
+      await screen.findByRole("button", { name: "Asistente Experto" }),
+    ).toBeInTheDocument();
+  });
+
+  it("openedEarly (OPEN_ASSISTANT_EVENT) bypasses the stylesheet gate — mounts even if the stylesheet has not applied yet", async () => {
+    mockStylesheetApplied.value = false;
     render(<DeferredExpertAssistant />);
 
     act(() => {

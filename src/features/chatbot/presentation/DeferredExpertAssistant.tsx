@@ -15,29 +15,41 @@
  * widget mounts immediately, already open (`initialOpen`), instead of
  * the event being lost.
  *
+ * Idle-mount is additionally gated on `useAppStylesheetApplied`
+ * (font-stability PR3, design.md D4): the FAB is `position: fixed`, so
+ * mounting it before the deferred app stylesheet has applied would
+ * render it in normal flow first, then snap to fixed (CLS). The
+ * `openedEarly` (user-initiated) path bypasses this gate — user input is
+ * excluded from CLS scoring (`hadRecentInput`).
+ *
  * See design.md D6 — SDD `landing-main-thread-tbt`, slice S2b.
  */
 import React, { useEffect, useState } from "react";
 
+import { useAppStylesheetApplied } from "@shared/hooks/useAppStylesheetApplied";
 import { useIdleOrInteraction } from "@shared/hooks/useIdleOrInteraction";
 
 import { ExpertAssistant, OPEN_ASSISTANT_EVENT } from "./ExpertAssistantWithRAG";
 
 export const DeferredExpertAssistant: React.FC = () => {
   const idleOrInteracted = useIdleOrInteraction();
+  const stylesheetApplied = useAppStylesheetApplied();
   const [openedEarly, setOpenedEarly] = useState(false);
 
+  const readyToMount = (idleOrInteracted && stylesheetApplied) || openedEarly;
+
   useEffect(() => {
-    // Once mounted (idle/interaction already happened, or the event below
-    // already fired once), ExpertAssistant's own listener takes over.
-    if (idleOrInteracted || openedEarly) return;
+    // Once mounted (idle/interaction + stylesheet already happened, or the
+    // event below already fired once), ExpertAssistant's own listener
+    // takes over.
+    if (readyToMount) return;
 
     const handleOpen = () => setOpenedEarly(true);
     globalThis.addEventListener(OPEN_ASSISTANT_EVENT, handleOpen);
     return () => globalThis.removeEventListener(OPEN_ASSISTANT_EVENT, handleOpen);
-  }, [idleOrInteracted, openedEarly]);
+  }, [readyToMount]);
 
-  if (!idleOrInteracted && !openedEarly) return null;
+  if (!readyToMount) return null;
 
   return <ExpertAssistant initialOpen={openedEarly} />;
 };
