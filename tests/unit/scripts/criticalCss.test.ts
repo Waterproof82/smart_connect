@@ -151,7 +151,7 @@ describe("scripts/critical-css.mjs — collectThemeTokenCss", () => {
     const css = `${FIXTURE_CSS}
       @font-face{font-family:DM Sans Fallback;src:local(Arial),local(ArialMT);size-adjust:104.53%}
       @font-face{font-family:"Space Grotesk Fallback";src:local(Arial);size-adjust:109.69%}
-      @font-face{font-family:Remote Font;src:url(/fonts/remote.woff2) format("woff2")}`;
+      @font-face{font-family:Remote Font;src:url(https://fonts.gstatic.com/s/remote.woff2) format("woff2")}`;
     const out = runScript(`
       import { collectThemeTokenCss } from "./critical-css.mjs";
       process.stdout.write(collectThemeTokenCss(${JSON.stringify(css)}));
@@ -159,9 +159,24 @@ describe("scripts/critical-css.mjs — collectThemeTokenCss", () => {
     expect(out).toContain("font-family:DM Sans Fallback");
     expect(out).toContain("size-adjust:104.53%");
     expect(out).toContain('font-family:"Space Grotesk Fallback"');
-    // Only local-only fallback faces: a remote @font-face must not be pulled
-    // into the inlined critical CSS (it would trigger an early download).
+    // Cross-origin @font-face must not be pulled into the inlined critical
+    // CSS (it would trigger an early cross-origin download).
     expect(out).not.toContain("Remote Font");
+  });
+
+  it("force-includes a primary @font-face whose every url() is same-origin root-relative /fonts/*.woff2 (design.md D5)", () => {
+    const css = `${FIXTURE_CSS}
+      @font-face{font-family:"Space Grotesk";font-display:optional;src:url(/fonts/space-grotesk-latin-wght.woff2) format("woff2")}
+      @font-face{font-family:"Remote Primary";font-display:optional;src:url(https://fonts.gstatic.com/s/remote.woff2) format("woff2")}`;
+    const out = runScript(`
+      import { collectThemeTokenCss } from "./critical-css.mjs";
+      process.stdout.write(collectThemeTokenCss(${JSON.stringify(css)}));
+    `);
+    // Same-origin root-relative url() face: inlined.
+    expect(out).toContain('font-family:"Space Grotesk"');
+    expect(out).toContain("/fonts/space-grotesk-latin-wght.woff2");
+    // Cross-origin https url() face: excluded, even though font-display matches.
+    expect(out).not.toContain("Remote Primary");
   });
 
   it("prepends the layer-order preamble matching first-appearance order (properties,theme,base,components,utilities)", () => {

@@ -72,9 +72,69 @@
 }
 
 /*
- * Metric-matched local fallbacks: while the Google Fonts load
- * (display=swap) text renders in Arial scaled to the web font's average
- * glyph width and vertical metrics, so the swap causes ~no layout shift.
+ * Self-hosted primary faces (sdd/core-web-vitals-perf PR1, 2026-10-07):
+ * variable woff2 pulled from the Google Fonts CSS2 API, served from
+ * `public/fonts/` (same origin — see design.md D1/D2). `font-display:
+ * optional` means the browser blocks render for a short period only; if the
+ * font isn't ready by then, the fallback face below renders for the page's
+ * entire life — it never swaps late, so font-driven CLS is 0 BY
+ * CONSTRUCTION regardless of which OS fonts a lab/user machine has (owner
+ * decision on file). `unicode-range` + unused-weight exclusion mean only
+ * the latin subset downloads for normal Spanish copy; latin-ext loads on
+ * demand. Weight range 400–700 covers every weight actually used in src/
+ * (no italic, no 300 weight — see design.md "Verified facts").
+ */
+@font-face {
+  font-family: "DM Sans";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: optional;
+  src: url("/fonts/dm-sans-latin-opsz-wght.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
+    U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+    U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "DM Sans";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: optional;
+  src: url("/fonts/dm-sans-latin-ext-opsz-wght.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7,
+    U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F,
+    U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F,
+    U+A720-A7FF;
+}
+
+@font-face {
+  font-family: "Space Grotesk";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: optional;
+  src: url("/fonts/space-grotesk-latin-wght.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
+    U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+    U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Space Grotesk";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: optional;
+  src: url("/fonts/space-grotesk-latin-ext-wght.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7,
+    U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F,
+    U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F,
+    U+A720-A7FF;
+}
+
+/*
+ * Metric-matched local fallbacks: while the self-hosted faces above load,
+ * text renders in Arial scaled to the web font's average glyph width and
+ * vertical metrics, so the swap (or the `optional` cosmetic fallback for
+ * the rest of the page view) causes ~no layout shift.
  * Values computed from @capsizecss/metrics (next/font method):
  * size-adjust = xWidthAvg ratio vs Arial; overrides = metric / (UPM · size-adjust).
  */
