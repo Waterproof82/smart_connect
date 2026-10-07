@@ -3,6 +3,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.7'
 import { generateWithFailover, MODEL_NAME_REGEX } from '../_shared/generate.ts'
 import { buildSystemInstruction } from '../_shared/prompt.ts'
+import { buildEmbedRequest, parseEmbedResponse, resolveEmbeddingMode, EMBED_URL } from '../_shared/embedding.ts'
 
 // Generation timeout + backup-model failover (design D1/D2). Env swap = no
 // redeploy; defaults verified available via ListModels for the current key.
@@ -289,17 +290,28 @@ async function getQueryEmbedding(query: string, cache: EmbeddingCache, geminiKey
   if (cacheHit) {
     // Using cached embedding
   } else {
+    // Query-side embedding. EMBEDDING_MODE flips together with
+    // gemini-embedding's document side so vectors stay comparable (design
+    // D4) — legacy by default, byte-identical to the pre-refactor payload
+    // until both sides move to v2 after a full re-embed.
+    const mode = resolveEmbeddingMode(Deno.env.get('EMBEDDING_MODE'))
+    const embedRequest = buildEmbedRequest(query, { mode, role: 'query' })
     const embResponse = await fetch(
-      'https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:embedContent',
-      { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-goog-api-key': geminiKey }, body: JSON.stringify({ content: { parts: [{ text: query }] } }) }
+      EMBED_URL,
+      { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-goog-api-key': geminiKey }, body: JSON.stringify(embedRequest) }
     )
     const embData = await embResponse.json()
-    if (!embResponse.ok || !Array.isArray(embData.embedding?.values) || embData.embedding.values.length === 0) {
+    if (!embResponse.ok) {
       // Log Gemini's status/message (never the API key or the user's text) so failures are diagnosable.
       console.error('[RAG] Embedding failed: status', embResponse.status, 'queryLength', query.length, 'error', JSON.stringify(embData?.error ?? null).slice(0, 300))
       throw new Error('Embedding generation failed')
     }
-    queryEmbedding = embData.embedding.values.slice(0, 768)
+    try {
+      queryEmbedding = parseEmbedResponse(embData)
+    } catch {
+      console.error('[RAG] Embedding failed: invalid payload, queryLength', query.length)
+      throw new Error('Embedding generation failed')
+    }
     await cache.set(cacheKey, queryEmbedding)
     cacheHit = false
   }
