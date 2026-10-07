@@ -7,9 +7,6 @@ export interface RAGOptions {
   export interface GenerateResponseParams {
     userQuery: string;
     conversationHistory?: Array<{ role: string; content: string }>;
-    temperature?: number;
-    maxTokens?: number;
-    useRAG?: boolean;
     ragOptions?: RAGOptions;
   }
 

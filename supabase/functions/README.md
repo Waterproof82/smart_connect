@@ -30,38 +30,14 @@ These Edge Functions act as a secure proxy layer between the React frontend and 
 }
 ```
 
-### 2. `gemini-generate`
-- **Endpoint:** `/functions/v1/gemini-generate`
-- **Method:** POST
-- **Purpose:** Generate AI responses with RAG context
-- **Model:** `gemini-2.0-flash-exp`
+### 2. `chat-with-rag`
+- **Endpoint:** `/functions/v1/chat-with-rag`
+- **Method:** POST, body `{ "query": "..." }`
+- **Purpose:** RAG chatbot: embeds the query, retrieves documents, generates a grounded answer.
+- **Models:** `GEMINI_PRIMARY_MODEL` (default `gemini-3.1-flash-lite`) with failover to `GEMINI_BACKUP_MODEL` (default `gemini-3.5-flash-lite`); returns 503 `generation_unavailable` when both fail.
 
-**Request Body:**
-```json
-{
-  "contents": [
-    { "parts": [{ "text": "System prompt..." }] },
-    { "parts": [{ "text": "User query..." }] }
-  ],
-  "generationConfig": {
-    "temperature": 0.7,
-    "maxOutputTokens": 500
-  }
-}
-```
+> `gemini-generate` was removed on 2026-10-07: it answered without knowledge-base context and could hallucinate.
 
-**Response:**
-```json
-{
-  "candidates": [
-    {
-      "content": {
-        "parts": [{ "text": "AI response..." }]
-      }
-    }
-  ]
-}
-```
 
 ## Deployment
 

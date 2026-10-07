@@ -73,6 +73,10 @@ interface Translation extends TpvModuleTranslations {
   cartaReviewsRatingOf: string;
   // SEO
   seoAltTextNFC: string;
+  // Chatbot — grounded-failure UX (U3, design D7): no ungrounded fallback
+  // exists anymore (gemini-generate removed), so any chat-with-rag failure
+  // shows this static message instead of risking a hallucinated answer.
+  chatbotGroundedFailure: string;
   // Contact
   contactTitle: string;
   contactSubtitle: string;
@@ -573,6 +577,10 @@ const translations: Record<Language, Translation> = {
 
     // SEO
     seoAltTextNFC: "Tarjeta NFC Tap-to-Review para obtener reseñas en Google",
+
+    // Chatbot
+    chatbotGroundedFailure:
+      "Ahora mismo no puedo generar una respuesta fiable. Escríbenos directamente en https://digitalizatenerife.es/#contacto y te ayudamos personalmente.",
 
     // Contact
     contactTitle: "Contacto",
@@ -1179,6 +1187,10 @@ const translations: Record<Language, Translation> = {
 
     // SEO
     seoAltTextNFC: "Tap-to-Review NFC card to get Google reviews",
+
+    // Chatbot
+    chatbotGroundedFailure:
+      "I can't generate a reliable answer right now. Reach out directly at https://digitalizatenerife.es/#contacto and we'll help you personally.",
 
     // Contact
     contactTitle: "Boost Your Business Today",
