@@ -20,6 +20,14 @@ const DOC: RagDocument = {
 };
 
 describe('buildSystemInstruction', () => {
+  it('presents the current brand and services, not the pre-rebrand ones', () => {
+    const instruction = buildSystemInstruction({ documents: [DOC] });
+    expect(instruction).toContain('Digitaliza Tenerife');
+    expect(instruction).not.toMatch(/SmartConnect|QRIBAR/);
+    expect(instruction).toMatch(/páginas web personalizadas/);
+    expect(instruction).toMatch(/tiendas/);
+  });
+
   it('always instructs the model to answer in the user\'s input language', () => {
     const instruction = buildSystemInstruction({ documents: [DOC] });
     expect(instruction).toMatch(/mismo idioma/i);

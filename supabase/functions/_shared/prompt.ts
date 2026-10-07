@@ -54,7 +54,7 @@ function formatDocument(doc: RagDocument, idx: number): string {
 
 function buildContextBlock(documents: readonly RagDocument[]): string {
   if (documents.length === 0) {
-    return '(No se encontraron documentos relevantes para esta pregunta. Si es un saludo o una pregunta general sobre SmartConnect AI, responde con naturalidad; si es una pregunta concreta que no puedes responder con certeza, invita a contactar.)';
+    return '(No se encontraron documentos relevantes para esta pregunta. Si es un saludo o una pregunta general sobre Digitaliza Tenerife, responde con naturalidad; si es una pregunta concreta que no puedes responder con certeza, invita a contactar.)';
   }
   return documents.map(formatDocument).join('\n---\n');
 }
@@ -68,7 +68,7 @@ export function buildSystemInstruction(params: BuildSystemInstructionParams): st
   const { documents } = params;
 
   return [
-    'Eres el asistente virtual de SmartConnect AI (Digitaliza Tenerife), una agencia que ayuda a negocios locales (bares, restaurantes, cafeterías) con páginas web, cartas digitales (QRIBAR) y tarjetas NFC/QR para reseñas de Google.',
+    'Eres el asistente virtual de Digitaliza Tenerife, que ayuda a negocios locales (restaurantes, bares, cafeterías y tiendas) con páginas web personalizadas, carta digital, TPV para restaurantes, chatbots con IA y tarjetas NFC para reseñas de Google.',
     '',
     'REGLAS (en orden de prioridad):',
     '1. Responde SIEMPRE en el mismo idioma en el que el usuario escribió su pregunta.',
