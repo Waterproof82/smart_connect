@@ -176,12 +176,15 @@ export function collectThemeTokenCss(builtCss) {
     if (node.type === "rule" && ruleMatchesTheme(node)) {
       unlayeredRules.push(node.clone());
     }
-    // Metric-matched fallback faces (tokens.css) are referenced by the font
-    // stacks in the critical CSS but are not "used" selectors, so beasties
-    // drops them; first paint then falls back to system-ui and the text
-    // reflows when the full sheet arrives. They are local()-only (no
-    // download), so inlining them is free.
-    if (node.type === "atrule" && isLocalFallbackFontFace(node)) {
+    // Metric-matched fallback faces AND the self-hosted primary faces
+    // (tokens.css) are referenced by the font stacks in the critical CSS but
+    // are not "used" selectors, so beasties drops them. The fallback faces
+    // are local()-only (no download), so inlining them is free. The primary
+    // faces are `font-display: optional` same-origin woff2 — if they only
+    // arrived with the deferred sheet, the face would be defined after first
+    // paint and the optional block window would be missed (late swap = CLS).
+    // See design.md Decision 5.
+    if (node.type === "atrule" && isInlinableFontFace(node)) {
       unlayeredRules.push(node.clone());
     }
   });
@@ -207,8 +210,18 @@ export function collectThemeTokenCss(builtCss) {
   return parts.join("\n");
 }
 
-/** `@font-face` whose family ends in "Fallback" and whose src is local() only. */
-function isLocalFallbackFontFace(node) {
+/**
+ * A top-level `@font-face` is inlinable in critical CSS when EITHER:
+ * - its family ends in "Fallback" and its `src` is local()-only (no
+ *   network download — the metric-matched fallback faces in tokens.css), OR
+ * - its `src` contains at least one `url()`, and EVERY `url()` is a
+ *   same-origin, root-relative `/fonts/*.woff2` reference (the self-hosted
+ *   primary faces). A `src` with any cross-origin/absolute `url()` (e.g.
+ *   `https://fonts.gstatic.com/...`) is excluded — inlining it would trigger
+ *   an early cross-origin download before the browser even owns the
+ *   preload hint. See design.md Decision 5.
+ */
+function isInlinableFontFace(node) {
   if (node.name !== "font-face") return false;
   let family = "";
   let src = "";
@@ -216,9 +229,17 @@ function isLocalFallbackFontFace(node) {
     if (decl.prop === "font-family") family = decl.value;
     if (decl.prop === "src") src = decl.value;
   });
-  return (
-    /Fallback["']?\s*$/.test(family) && src !== "" && !/url\(/i.test(src)
+  if (src === "") return false;
+
+  const urls = [...src.matchAll(/url\(\s*["']?([^"')]+)["']?\s*\)/gi)].map(
+    (match) => match[1],
   );
+
+  if (urls.length === 0) {
+    return /Fallback["']?\s*$/.test(family);
+  }
+
+  return urls.every((url) => /^\/fonts\/[^/]+\.woff2$/.test(url));
 }
 
 function escapeRegExp(value) {
@@ -236,9 +257,9 @@ const DEFERRED_MARKER = "onload=\"this.media='all'\"";
  * stylesheet.
  *
  * Only the link matching `cssHref` is touched. Any other `<link>` in the
- * document (e.g. the Google Fonts stylesheet link, which already ships its
- * own independent `media="print"` swap) is left byte-for-byte untouched,
- * because the match is scoped to that exact href.
+ * document (e.g. a third-party stylesheet link that already ships its own
+ * independent `media="print"` swap) is left byte-for-byte untouched, because
+ * the match is scoped to that exact href.
  *
  * Idempotent: if the matched link has already been deferred by a prior call
  * (detected via the exact onload marker this function writes), `html` is

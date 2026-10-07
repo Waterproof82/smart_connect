@@ -113,6 +113,25 @@ describe("dist/*.html — critical CSS output guards (design.md Testing Strategy
       maybeIt("preserves the React Suspense marker <!--$-->", () => {
         expect(html).toContain("<!--$-->");
       });
+
+      maybeIt(
+        "inlines BOTH the metric-matched fallback faces AND the self-hosted primary faces in the critical <style> (design.md Decision 5 — isInlinableFontFace)",
+        () => {
+          const styleBlocks = html!.match(/<style>[\s\S]*?<\/style>/g) ?? [];
+          const criticalBlock = styleBlocks.find(
+            (block) => block.includes(".light{") && block.includes("--color-bg"),
+          );
+          expect(criticalBlock).toBeDefined();
+          // Metric-matched local() fallback faces.
+          expect(criticalBlock).toContain("DM Sans Fallback");
+          expect(criticalBlock).toContain("Space Grotesk Fallback");
+          // Self-hosted primary faces — present via root-relative /fonts/
+          // woff2 url()s so font-display:optional's block window isn't
+          // missed on first paint.
+          expect(criticalBlock).toMatch(/\/fonts\/dm-sans-latin-opsz-wght\.woff2/);
+          expect(criticalBlock).toMatch(/\/fonts\/space-grotesk-latin-wght\.woff2/);
+        },
+      );
     });
   }
 });
