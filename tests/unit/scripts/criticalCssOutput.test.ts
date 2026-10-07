@@ -16,15 +16,97 @@
  *        e.g. re-running scripts/prerender.mjs more than once against the
  *        same template without an intervening fresh `vite build`, which is
  *        not a supported use case of that script).
+ * 3. `deferStylesheetLink` → `APP_STYLESHEET_DEFERRED_SELECTOR` contract
+ *    (font-stability PR3, design.md "Data Flow (PR3)") — binds the build
+ *    marker `scripts/critical-css.mjs` writes to the runtime selector
+ *    `useAppStylesheetApplied` queries for, so the two can never drift
+ *    independently. `critical-css.mjs` is plain ESM with no TS/JSX (same
+ *    constraint as `scripts/sitemap.mjs` — ts-jest can't `import()` it
+ *    directly), so this reuses `criticalCss.test.ts`'s `runScript`
+ *    subprocess pattern rather than a direct import.
  */
 
 import fs from "node:fs";
 import path from "node:path";
+import { execFileSync } from "node:child_process";
+
+import { APP_STYLESHEET_DEFERRED_SELECTOR } from "@shared/utils/appStylesheet";
 
 const ROOT = path.resolve(__dirname, "../../../");
 const INDEX_HTML_PATH = path.join(ROOT, "index.html");
 const DIST_DIR = path.join(ROOT, "dist");
 const SITE_ROUTES_PATH = path.join(ROOT, "scripts/site-routes.json");
+const SCRIPTS_DIR = path.join(ROOT, "scripts");
+
+/** Runs an ESM snippet in a real Node subprocess, cwd = scripts/ (same
+ * helper as `criticalCss.test.ts`'s — duplicated locally rather than
+ * shared, matching this repo's existing per-file-helper convention for
+ * these two sibling suites). */
+function runScript(script: string): string {
+  return execFileSync(process.execPath, ["--input-type=module", "-e", script], {
+    encoding: "utf-8",
+    cwd: SCRIPTS_DIR,
+  });
+}
+
+/**
+ * A tiny, purpose-built matcher for exactly the shape of selector
+ * `APP_STYLESHEET_DEFERRED_SELECTOR` uses: a tag name followed by one or
+ * more `[attr="value"]` / `[attr^="value"]` conditions. NOT a general CSS
+ * selector engine — this repo has no jsdom-under-Jest capability (see
+ * `indexHtml.consentMode.structure.test.ts`'s header comment: `jsdom`'s
+ * own ESM dependency, `parse5`, isn't Jest-transformable here), so this
+ * is the regex-based equivalent, scoped to this one contract.
+ */
+function matchesDeferredSelector(linkTag: string, selector: string): boolean {
+  const tagMatch = /^([a-zA-Z]+)/.exec(selector);
+  if (!tagMatch || !new RegExp(`^<${tagMatch[1]}\\b`, "i").test(linkTag)) {
+    return false;
+  }
+
+  const attrs: Record<string, string> = {};
+  for (const m of linkTag.matchAll(/([a-zA-Z-]+)=["']([^"']*)["']/g)) {
+    attrs[m[1]] = m[2];
+  }
+
+  for (const cond of selector.matchAll(/\[([a-zA-Z-]+)(\^?=)"([^"]*)"\]/g)) {
+    const [, attr, op, value] = cond;
+    const actual = attrs[attr];
+    if (actual === undefined) return false;
+    if (op === "^=" ? !actual.startsWith(value) : actual !== value) return false;
+  }
+
+  return true;
+}
+
+describe("scripts/critical-css.mjs deferStylesheetLink — binds to APP_STYLESHEET_DEFERRED_SELECTOR (font-stability PR3 contract)", () => {
+  const SAMPLE_HTML = `<!doctype html><html><head>
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Test" />
+    <link rel="stylesheet" crossorigin href="/assets/index-abc123.css">
+    </head><body><div id="root"></div></body></html>`;
+
+  it("produces exactly one <link> matching the runtime APP_STYLESHEET_DEFERRED_SELECTOR", () => {
+    const out = runScript(`
+      import { deferStylesheetLink } from "./critical-css.mjs";
+      process.stdout.write(deferStylesheetLink(${JSON.stringify(SAMPLE_HTML)}, "/assets/index-abc123.css"));
+    `);
+
+    const linkTags = out.match(/<link\b[^>]*>/g) ?? [];
+    const matches = linkTags.filter((tag) =>
+      matchesDeferredSelector(tag, APP_STYLESHEET_DEFERRED_SELECTOR),
+    );
+
+    expect(matches).toHaveLength(1);
+  });
+
+  it("does NOT match the Google Fonts preload link (different tag/rel) nor the pre-swap app link before deferral", () => {
+    const beforeLinkTags = SAMPLE_HTML.match(/<link\b[^>]*>/g) ?? [];
+    const beforeMatches = beforeLinkTags.filter((tag) =>
+      matchesDeferredSelector(tag, APP_STYLESHEET_DEFERRED_SELECTOR),
+    );
+    expect(beforeMatches).toHaveLength(0);
+  });
+});
 
 describe("index.html — light-mode background fallback (design.md Decision 3)", () => {
   const readSource = () => fs.readFileSync(INDEX_HTML_PATH, "utf-8");
