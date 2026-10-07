@@ -180,11 +180,11 @@ serve(async (req) => {
       { role: 'user', parts: [{ text: prompt }] }
     ]
     const geminiResponse = await fetch(
-      'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent',
+      'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent',
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'x-goog-api-key': geminiKey },
-        body: JSON.stringify({ contents, generationConfig: { temperature: 0.3, topK: 40, topP: 0.95, maxOutputTokens: 2048 } })
+        body: JSON.stringify({ contents, generationConfig: { temperature: 0.3, topK: 40, topP: 0.95, maxOutputTokens: 2048, thinkingConfig: { thinkingLevel: 'low' } } })
       }
     )
     const geminiData = await geminiResponse.json()
