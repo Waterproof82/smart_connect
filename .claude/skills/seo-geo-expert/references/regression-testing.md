@@ -29,6 +29,22 @@ Siempre que sea posible, convertir los checks en tests automatizados del repo (T
 
 Ya existían y complementan: `geoSurfaces` (hash `sha256` de `llms.txt`, URLs muertas), `routeParity` (SSR ↔ `site-routes.json`), `vercelNotFound` (404 real, noindex en admin/panel/login), `criticalCssOutput`.
 
+Guardas de Core Web Vitals (2026-10-07):
+
+| Archivo | Cubre |
+|---|---|
+| `tests/unit/perf/fontSelfHosting.test.ts` | Fuentes en el propio dominio, sin Google Fonts, CSP `font-src 'self'`, `font-display: optional`, una sola precarga (la del H1), DM Sans sin `opsz` y ≤ 56.000 B |
+| `tests/unit/perf/fontFallbackMetrics.test.ts` | `size-adjust` de fallback medido (106 %) y `.ds-h1 { text-wrap: wrap }` |
+| `tests/unit/scripts/criticalCssOutput.test.ts` | Fuentes propias inlineadas en cada ruta y exactamente un `<link>` CSS diferido por ruta (si hay `dist/`) |
+| `tests/unit/vite/manualChunks.test.ts` | Asignación de chunks por nombre exacto de paquete |
+| `tests/unit/webmcpBoot.test.ts`, `entryWiring.structure.test.ts` | WebMCP fuera del chunk de entrada, registrado tras hidratar |
+| `src/shared/utils/appStylesheet.test.ts`, `useAppStylesheetApplied.test.tsx`, `CookieConsent.structure.test.ts`, `DeferredExpertAssistant.test.tsx` | Los elementos `fixed` no se montan antes de que se aplique el CSS diferido |
+
+Trampas al verificar en local:
+- **Un `dist/` viejo hace que los tests que dependen del build validen un HTML antiguo** y fallen sin motivo (o pasen sin motivo). Bórralo o regenéralo antes de fiarte del resultado.
+- **`vite preview` no aplica la redirección de Vercel `/admin → /_spa.html`.** En local, `/admin` hidrata el HTML de la home y da errores #418/#422 que en producción no existen. Para probarlo, sirve `_spa.html` a mano.
+- **La carpeta `build/` está en `.gitignore` (sin `/`).** Cualquier carpeta llamada `build` en cualquier nivel, incluida `tests/unit/build/`, queda fuera de git sin aviso.
+
 **Excepciones:** hoy no hay ninguna. Si hace falta tolerar un problema conocido, márcalo con `it.failing` y una lista explícita (así el test se pone en rojo al corregirlo y obliga a retirar la excepción).
 
 **CI:** `.github/workflows/ci-cd.yml` ejecuta `npx jest tests/unit/seo` justo después de `npm run build`, para que los checks de `dist/` corran de verdad (en el paso `npm test` previo se omiten por no existir `dist/`).
