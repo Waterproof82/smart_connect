@@ -81,6 +81,16 @@ describe('buildSystemInstruction', () => {
     expect(instruction).toMatch(/URLs? .*https/i);
   });
 
+  it('answers price questions for custom projects with "depends on type and complexity" plus the contact CTA', () => {
+    // Owner decision 2026-10-07: no prices for websites, digital menu, TPV or
+    // chatbots — the price depends on the project's type and complexity.
+    const instruction = buildSystemInstruction({ documents: [DOC] });
+    expect(instruction).toMatch(/depende del tipo/i);
+    expect(instruction).toMatch(/complejidad/i);
+    expect(instruction).toMatch(/páginas web.*carta digital.*TPV.*chatbots/i);
+    expect(instruction).not.toContain('${'); // every placeholder interpolated
+  });
+
   it('requires Spanish from Spain (tuteo, peninsular/Canarian vocabulary), never voseo or Latin American usage', () => {
     // The business and its customers are in Tenerife: "celular", "computadora"
     // or voseo would make the bot sound generic and foreign.
