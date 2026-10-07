@@ -1,6 +1,21 @@
 // @ts-nocheck
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.7'
+import { generateWithFailover, MODEL_NAME_REGEX } from '../_shared/generate.ts'
+import { buildSystemInstruction } from '../_shared/prompt.ts'
+import { buildEmbedRequest, parseEmbedResponse, resolveEmbeddingMode, EMBED_URL } from '../_shared/embedding.ts'
+
+// Generation timeout + backup-model failover (design D1/D2). Env swap = no
+// redeploy; defaults verified available via ListModels for the current key.
+const DEFAULT_PRIMARY_MODEL = 'gemini-3.1-flash-lite'
+const DEFAULT_BACKUP_MODEL = 'gemini-3.5-flash-lite'
+const TOTAL_REQUEST_DEADLINE_MS = 20_000
+
+function resolveModel(envValue: string | undefined, fallback: string): string {
+  if (envValue && MODEL_NAME_REGEX.test(envValue)) return envValue
+  if (envValue) console.error('[RAG] Ignoring invalid model name from env:', envValue)
+  return fallback
+}
 
 const ALLOWED_ORIGINS = [
   'https://digitalizatenerife.es',
@@ -153,46 +168,43 @@ serve(async (req) => {
     if (searchError) throw new Error(`Vector search failed: ${searchError.message}`)
     const searchTime = Date.now() - searchStartTime
 
-    // 5️⃣ CONSTRUCT PROMPT WITH RAG CONTEXT
-    let prompt
-    if (searchResults && searchResults.length > 0) {
-      const contextBlocks = searchResults
-        .map((doc, idx) => `[Documento ${idx + 1} - Relevancia: ${(doc.similarity * 100).toFixed(1)}%]\nFuente: ${doc.source || 'Desconocida'}\nContenido: ${doc.content}\n`)
-        .join('\n---\n\n')
-      prompt = `Eres un asistente que responde preguntas basándose ÚNICAMENTE en el contexto proporcionado.\n\nREGLAS IMPORTANTES:\n1. Responde SOLO con información del contexto\n2. Si el contexto no contiene la respuesta, di "No tengo información sobre eso en mi base de conocimiento"\n3. Sé conciso, directo y preciso\n4. NO inventes información que no esté en el contexto\n\nCONTEXTO:\n${contextBlocks}\n\n---\n\nPREGUNTA DEL USUARIO:\n${query}\n\nRESPUESTA:`
-    } else {
-      return new Response(
-        JSON.stringify({ 
-          response: `No encontré información relevante en mi base de conocimiento para: "${query}"`,
-          metadata: { documentsFound: 0, cacheHit, timings: { embedding: embeddingTime, search: 0, total: Date.now() - startTime } }
-        }),
-        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
-    }
+    // 5️⃣ BUILD SYSTEM INSTRUCTION (grounding + redirect rules, design D6)
+    // Zero documents is NOT a dead end: the instruction still lets the model
+    // answer greetings/small talk and redirects genuine unknowns to the CTA.
+    const systemInstruction = buildSystemInstruction({ documents: searchResults || [] })
 
-    // 6️⃣ GENERATE RESPONSE WITH GEMINI
+    // 6️⃣ GENERATE RESPONSE WITH GEMINI (primary + backup-model failover)
     const generateStartTime = Date.now()
     const contents = [
       ...conversationHistory.map(c => ({
         role: (c.role === 'user' || c.role === 'model') ? c.role : 'user',
         parts: Array.isArray(c.parts) ? c.parts : [{ text: String(c.parts) }]
       })),
-      { role: 'user', parts: [{ text: prompt }] }
+      { role: 'user', parts: [{ text: query }] }
     ]
-    const geminiResponse = await fetch(
-      'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent',
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'x-goog-api-key': geminiKey },
-        body: JSON.stringify({ contents, generationConfig: { temperature: 0.3, topK: 40, topP: 0.95, maxOutputTokens: 2048, thinkingConfig: { thinkingLevel: 'low' } } })
-      }
-    )
-    const geminiData = await geminiResponse.json()
-    if (!geminiResponse.ok || !geminiData.candidates?.[0]?.content) {
-      console.error('[RAG] Gemini error, status:', geminiResponse.status)
-      throw new Error(`Response generation failed: ${geminiData.error?.message || 'Unknown error'}`)
+
+    const primaryModel = resolveModel(Deno.env.get('GEMINI_PRIMARY_MODEL'), DEFAULT_PRIMARY_MODEL)
+    const backupModel = resolveModel(Deno.env.get('GEMINI_BACKUP_MODEL'), DEFAULT_BACKUP_MODEL)
+    const remainingDeadlineMs = TOTAL_REQUEST_DEADLINE_MS - (Date.now() - startTime)
+
+    const generation = await generateWithFailover({
+      models: [primaryModel, backupModel],
+      apiKey: geminiKey,
+      request: { contents, systemInstruction },
+      fetchFn: fetch,
+      now: () => Date.now(),
+      deadlineMs: remainingDeadlineMs,
+    })
+
+    if (!generation.ok) {
+      console.error('[RAG] Generation failed on both models:', JSON.stringify(generation.attempts))
+      return new Response(
+        JSON.stringify({ error: 'generation_unavailable' }),
+        { status: 503, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
     }
-    const generatedText = geminiData.candidates[0].content.parts.map(p => p.text).join('')
+
+    const generatedText = generation.text
     const generateTime = Date.now() - generateStartTime
     const totalTime = Date.now() - startTime
 
@@ -204,6 +216,7 @@ serve(async (req) => {
           documentsFound: searchResults.length,
           sources: searchResults.map(d => ({ source: d.source, similarity: d.similarity })),
           cacheHit,
+          modelUsed: generation.modelUsed,
           timings: { embedding: embeddingTime, search: searchTime, generation: generateTime, total: totalTime }
         }
       }),
@@ -277,17 +290,28 @@ async function getQueryEmbedding(query: string, cache: EmbeddingCache, geminiKey
   if (cacheHit) {
     // Using cached embedding
   } else {
+    // Query-side embedding. EMBEDDING_MODE flips together with
+    // gemini-embedding's document side so vectors stay comparable (design
+    // D4) — legacy by default, byte-identical to the pre-refactor payload
+    // until both sides move to v2 after a full re-embed.
+    const mode = resolveEmbeddingMode(Deno.env.get('EMBEDDING_MODE'))
+    const embedRequest = buildEmbedRequest(query, { mode, role: 'query' })
     const embResponse = await fetch(
-      'https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:embedContent',
-      { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-goog-api-key': geminiKey }, body: JSON.stringify({ content: { parts: [{ text: query }] } }) }
+      EMBED_URL,
+      { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-goog-api-key': geminiKey }, body: JSON.stringify(embedRequest) }
     )
     const embData = await embResponse.json()
-    if (!embResponse.ok || !Array.isArray(embData.embedding?.values) || embData.embedding.values.length === 0) {
+    if (!embResponse.ok) {
       // Log Gemini's status/message (never the API key or the user's text) so failures are diagnosable.
       console.error('[RAG] Embedding failed: status', embResponse.status, 'queryLength', query.length, 'error', JSON.stringify(embData?.error ?? null).slice(0, 300))
       throw new Error('Embedding generation failed')
     }
-    queryEmbedding = embData.embedding.values.slice(0, 768)
+    try {
+      queryEmbedding = parseEmbedResponse(embData)
+    } catch {
+      console.error('[RAG] Embedding failed: invalid payload, queryLength', query.length)
+      throw new Error('Embedding generation failed')
+    }
     await cache.set(cacheKey, queryEmbedding)
     cacheHit = false
   }

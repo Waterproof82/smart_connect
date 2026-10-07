@@ -1,6 +1,7 @@
 // @ts-nocheck
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.7'
+import { buildEmbedRequest, parseEmbedResponse, resolveEmbeddingMode, EMBED_URL } from '../_shared/embedding.ts'
 
 const ALLOWED_ORIGINS = [
   'https://digitalizatenerife.es',
@@ -90,17 +91,22 @@ serve(async (req) => {
     const geminiKey = Deno.env.get('GEMINI_API_KEY')
     if (!geminiKey) throw new Error('Missing GEMINI_API_KEY')
 
-const response = await fetch(
-  'https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:embedContent',
-  {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-goog-api-key': geminiKey },
-    body: JSON.stringify({
-      content: { parts: [{ text }] }
-    })
-  }
-)
+    // Document-side embedding (admin KB ingestion). EMBEDDING_MODE flips
+    // together with chat-with-rag's query side so vectors stay comparable
+    // (design D4) — legacy by default, byte-identical to the pre-refactor
+    // payload until both sides move to v2 after a full re-embed.
+    const mode = resolveEmbeddingMode(Deno.env.get('EMBEDDING_MODE'))
+    const title = typeof body?.title === 'string' ? body.title : undefined
+    const embedRequest = buildEmbedRequest(text, { mode, role: 'document', title })
 
+    const response = await fetch(
+      EMBED_URL,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-goog-api-key': geminiKey },
+        body: JSON.stringify(embedRequest)
+      }
+    )
 
     const raw = await response.text()
     if (!raw) {
@@ -120,13 +126,13 @@ const response = await fetch(
       throw new Error('Gemini API error')
     }
 
-    if (!data.embedding?.values) {
+    let embedding768: number[]
+    try {
+      embedding768 = parseEmbedResponse(data)
+    } catch {
       console.error('Unexpected Gemini embedding payload structure')
       throw new Error('Invalid embedding response')
     }
-
-    // Recortar a 768 dimensiones
-    const embedding768 = data.embedding.values.slice(0, 768)
     return new Response(
       JSON.stringify({ embedding: embedding768 }),
       { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }

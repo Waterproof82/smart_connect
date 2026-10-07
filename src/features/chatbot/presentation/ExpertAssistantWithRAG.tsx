@@ -17,6 +17,7 @@ import {
 import { sanitizeInput } from "@shared/utils/sanitizer";
 import { rateLimiter, RateLimitPresets } from "@shared/utils/rateLimiter";
 import { useWhatsappPhone } from "@shared/hooks/useWhatsappPhone";
+import { useLanguage } from "@shared/context/LanguageContext";
 
 // Extracted UI components (SRP)
 import ChatMessages from "./components/ChatMessages";
@@ -50,6 +51,7 @@ export const ExpertAssistant: React.FC<{ initialOpen?: boolean }> = ({
   // (useWhatsappPhone -> settingsService.getAppSettings) instead of
   // performing its own duplicate Supabase read.
   const whatsappPhone = useWhatsappPhone();
+  const { t } = useLanguage();
   const scrollRef = useRef<HTMLDivElement>(null);
   const toggleBtnRef = useRef<HTMLButtonElement>(null);
   const modalRef = useRef<HTMLDialogElement>(null);
@@ -127,7 +129,6 @@ export const ExpertAssistant: React.FC<{ initialOpen?: boolean }> = ({
       const response = await container.generateResponseUseCase.execute({
         userQuery: message,
         conversationHistory: currentMessages,
-        useRAG: true,
         ragOptions: { topK: 5, threshold: 0.4, source: null },
       });
       const assistantEntity = new MessageEntity({
@@ -140,10 +141,14 @@ export const ExpertAssistant: React.FC<{ initialOpen?: boolean }> = ({
       // future message would fail forever on a single transient failure
       // (offline, a stale chunk after deploy).
       containerPromiseRef.current = null;
+      // D7: no ungrounded fallback exists anymore (gemini-generate removed —
+      // see ChatRepositoryImpl) — ANY failure on this single code path (RAG
+      // generation exhausted, or the data layer itself failing to load)
+      // must show this static, grounded message with a contact CTA, never a
+      // fabricated answer.
       const errorEntity = new MessageEntity({
         role: "assistant",
-        content:
-          "Hubo un error al conectar con el asistente. Por favor, intenta de nuevo.",
+        content: t.chatbotGroundedFailure,
       });
       setChatSession((prev) => prev.addMessage(errorEntity));
     } finally {
