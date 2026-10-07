@@ -1,6 +1,19 @@
 // @ts-nocheck
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.7'
+import { generateWithFailover, MODEL_NAME_REGEX } from '../_shared/generate.ts'
+
+// Generation timeout + backup-model failover (design D1/D2). Env swap = no
+// redeploy; defaults verified available via ListModels for the current key.
+const DEFAULT_PRIMARY_MODEL = 'gemini-3.1-flash-lite'
+const DEFAULT_BACKUP_MODEL = 'gemini-3.5-flash-lite'
+const TOTAL_REQUEST_DEADLINE_MS = 20_000
+
+function resolveModel(envValue: string | undefined, fallback: string): string {
+  if (envValue && MODEL_NAME_REGEX.test(envValue)) return envValue
+  if (envValue) console.error('[RAG] Ignoring invalid model name from env:', envValue)
+  return fallback
+}
 
 const ALLOWED_ORIGINS = [
   'https://digitalizatenerife.es',
@@ -170,7 +183,7 @@ serve(async (req) => {
       )
     }
 
-    // 6️⃣ GENERATE RESPONSE WITH GEMINI
+    // 6️⃣ GENERATE RESPONSE WITH GEMINI (primary + backup-model failover)
     const generateStartTime = Date.now()
     const contents = [
       ...conversationHistory.map(c => ({
@@ -179,20 +192,29 @@ serve(async (req) => {
       })),
       { role: 'user', parts: [{ text: prompt }] }
     ]
-    const geminiResponse = await fetch(
-      'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent',
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'x-goog-api-key': geminiKey },
-        body: JSON.stringify({ contents, generationConfig: { temperature: 0.3, topK: 40, topP: 0.95, maxOutputTokens: 2048, thinkingConfig: { thinkingLevel: 'low' } } })
-      }
-    )
-    const geminiData = await geminiResponse.json()
-    if (!geminiResponse.ok || !geminiData.candidates?.[0]?.content) {
-      console.error('[RAG] Gemini error, status:', geminiResponse.status)
-      throw new Error(`Response generation failed: ${geminiData.error?.message || 'Unknown error'}`)
+
+    const primaryModel = resolveModel(Deno.env.get('GEMINI_PRIMARY_MODEL'), DEFAULT_PRIMARY_MODEL)
+    const backupModel = resolveModel(Deno.env.get('GEMINI_BACKUP_MODEL'), DEFAULT_BACKUP_MODEL)
+    const remainingDeadlineMs = TOTAL_REQUEST_DEADLINE_MS - (Date.now() - startTime)
+
+    const generation = await generateWithFailover({
+      models: [primaryModel, backupModel],
+      apiKey: geminiKey,
+      request: { contents },
+      fetchFn: fetch,
+      now: () => Date.now(),
+      deadlineMs: remainingDeadlineMs,
+    })
+
+    if (!generation.ok) {
+      console.error('[RAG] Generation failed on both models:', JSON.stringify(generation.attempts))
+      return new Response(
+        JSON.stringify({ error: 'generation_unavailable' }),
+        { status: 503, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
     }
-    const generatedText = geminiData.candidates[0].content.parts.map(p => p.text).join('')
+
+    const generatedText = generation.text
     const generateTime = Date.now() - generateStartTime
     const totalTime = Date.now() - startTime
 
@@ -204,6 +226,7 @@ serve(async (req) => {
           documentsFound: searchResults.length,
           sources: searchResults.map(d => ({ source: d.source, similarity: d.similarity })),
           cacheHit,
+          modelUsed: generation.modelUsed,
           timings: { embedding: embeddingTime, search: searchTime, generation: generateTime, total: totalTime }
         }
       }),
