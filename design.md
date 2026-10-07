@@ -63,14 +63,15 @@ The WhatsApp green is reserved for the primary action.
   pulled from the Google Fonts CSS2 API, served from `public/fonts/`,
   `font-display: optional` on all 4 primary faces (zero font-swap CLS by
   construction — see owner decision on file). Real file sizes:
-  `dm-sans-latin-opsz-wght.woff2` 62,724 B, `dm-sans-latin-ext-opsz-wght.woff2`
-  31,292 B, `space-grotesk-latin-wght.woff2` 22,288 B,
+  `space-grotesk-latin-wght.woff2` 22,288 B,
   `space-grotesk-latin-ext-wght.woff2` 18,940 B. Only 2 faces (latin) are
   preloaded in `index.html`; latin-ext loads on demand via `unicode-range`.
-  Risk: the DM Sans latin face (~61 KB) is noticeably larger than the ~40 KB
-  budget assumed in design — it carries the full opsz 9..40 + wght 400..700
-  variable axes; not changing the plan, flagging for verify/future
-  subsetting.
+  DM Sans ships `wght`-only (sdd/font-stability PR1, 2026-10-07 — see
+  `docs/audit/2026-10-07_font-stability-pr1.md`): `dm-sans-latin-wght.woff2`
+  36,932 B, `dm-sans-latin-ext-wght.woff2` 18,228 B (total 55,160 B, under
+  the 56,000 B budget). The original DM Sans faces carried the full `opsz
+  9..40` + `wght 400..700` variable axes (94,016 B total); the `opsz` axis
+  was dropped since the design only ever used a single optical size.
 - Display tracking `-0.025em`, leading `1.05`. All headings roman — never italic.
 - Scale (`tokens.css`): `--text-display`, `--text-display-s`, `--text-h2`,
   `--text-h3`, `--text-lede`. Classes: `.ds-h1`, `.ds-h1--s`, `.ds-h2`,
