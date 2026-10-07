@@ -8,7 +8,7 @@ import path from "node:path";
  * Covers, independent of any build step:
  * - every primary @font-face in tokens.css points to a file that exists in
  *   public/fonts/
- * - the 2 preloaded faces in index.html have hrefs matching the tokens.css
+ * - the preloaded face in index.html (Space Grotesk only) has an href matching the tokens.css
  *   url()s, with crossorigin set
  * - zero fonts.googleapis.com / fonts.gstatic.com references remain in
  *   index.html
@@ -95,13 +95,18 @@ describe("Self-hosted font delivery (tokens.css + index.html + vercel.json)", ()
     expect(families).toContain("Space Grotesk");
   });
 
-  it("index.html preloads exactly 2 same-origin woff2 faces (the latin subsets) with crossorigin set", () => {
+  // Only the h1 face (Space Grotesk) is preloaded. Preloading DM Sans let it
+  // land inside the font-display: optional block window in Lighthouse's
+  // unthrottled pass, making p.ds-lede the LCP element with the font request
+  // in its simulated dependency chain (mobile PSI swinging 74-99, 2026-10-07).
+  it("index.html preloads only the Space Grotesk latin face, same-origin woff2 with crossorigin set", () => {
     const preloadLinks = [
       ...indexHtml.matchAll(
         /<link\s+rel="preload"\s+as="font"[^>]*>/g,
       ),
     ].map((m) => m[0]);
-    expect(preloadLinks).toHaveLength(2);
+    expect(preloadLinks).toHaveLength(1);
+    expect(preloadLinks[0]).toMatch(/href="\/fonts\/space-grotesk-latin-wght\.woff2"/);
     for (const link of preloadLinks) {
       expect(link).toMatch(/type="font\/woff2"/);
       expect(link).toMatch(/\bcrossorigin\b/);
