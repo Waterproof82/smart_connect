@@ -142,21 +142,16 @@
     <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
 
     <!-- Self-hosted fonts (sdd/core-web-vitals-perf PR1, 2026-10-07):
-         same-origin, preloaded, font-display: optional — see tokens.css and
-         design.md D1-D4. Only the latin subset of each family is preloaded;
-         latin-ext loads on demand via unicode-range. -->
+         same-origin, font-display: optional — see tokens.css and design.md
+         D1-D4. Only the h1 face (Space Grotesk latin) is preloaded. DM Sans
+         is not: preloading it made p.ds-lede the LCP element with the font
+         in its dependency chain (mobile PSI 74-99). latin-ext and DM Sans
+         load on demand via the inlined @font-face rules. -->
     <link
       rel="preload"
       as="font"
       type="font/woff2"
       href="/fonts/space-grotesk-latin-wght.woff2"
-      crossorigin
-    />
-    <link
-      rel="preload"
-      as="font"
-      type="font/woff2"
-      href="/fonts/dm-sans-latin-wght.woff2"
       crossorigin
     />
 
