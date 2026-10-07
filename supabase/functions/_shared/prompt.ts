@@ -20,10 +20,9 @@
 //   model answer (greetings, small talk) and redirect unknowns to the CTA —
 //   it must not hard-refuse.
 //
-// The chat UI (`ChatMessages.tsx`) renders `message.content` as plain text
-// (no markdown parser, no dangerouslySetInnerHTML) — so links are NOT
-// clickable. URLs below are intentionally spelled out in full so they read
-// as a clear, copyable reference even though they won't render as <a> tags.
+// The chat UI renders plain text (no markdown parser, no
+// dangerouslySetInnerHTML) and turns bare https URLs into links via
+// `LinkifiedText`. URLs below are spelled out in full so they get linkified.
 
 /** Contact CTA for questions the knowledge base cannot ground an answer to. */
 export const CONTACT_URL = 'https://digitalizatenerife.es/#contacto';
