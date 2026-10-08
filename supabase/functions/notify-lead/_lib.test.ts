@@ -11,9 +11,11 @@ import {
   buildBrevoPayload,
   buildEmailHtml,
   buildEmailText,
+  buildN8nPayload,
   buildSubject,
   escapeHtml,
   isOriginAllowed,
+  resolveLeadRouting,
   validateLeadPayload,
   type LeadPayload,
 } from './_lib';
@@ -239,5 +241,99 @@ describe('buildBrevoPayload', () => {
     const result = buildBrevoPayload(base, 'owner@digitalizatenerife.es');
     expect(result.htmlContent.length).toBeGreaterThan(0);
     expect(result.textContent.length).toBeGreaterThan(0);
+  });
+});
+
+describe('resolveLeadRouting', () => {
+  it('returns null n8nUrl when the settings row is null/non-object', () => {
+    expect(resolveLeadRouting(null)).toEqual({ contactEmail: null, n8nUrl: null });
+    expect(resolveLeadRouting(undefined)).toEqual({ contactEmail: null, n8nUrl: null });
+    expect(resolveLeadRouting('string')).toEqual({ contactEmail: null, n8nUrl: null });
+  });
+
+  it('returns null n8nUrl when n8n_enabled is not strictly true', () => {
+    expect(
+      resolveLeadRouting({
+        contact_email: 'owner@digitalizatenerife.es',
+        n8n_enabled: false,
+        n8n_webhook_url: 'https://n8n.example.com/webhook/abc',
+      })
+    ).toEqual({ contactEmail: 'owner@digitalizatenerife.es', n8nUrl: null });
+
+    expect(
+      resolveLeadRouting({
+        contact_email: 'owner@digitalizatenerife.es',
+        n8n_enabled: 'true', // truthy but not === true
+        n8n_webhook_url: 'https://n8n.example.com/webhook/abc',
+      })
+    ).toEqual({ contactEmail: 'owner@digitalizatenerife.es', n8nUrl: null });
+  });
+
+  it('returns null n8nUrl when the webhook url is missing, empty, or malformed', () => {
+    expect(
+      resolveLeadRouting({ contact_email: 'a@b.com', n8n_enabled: true, n8n_webhook_url: null })
+    ).toEqual({ contactEmail: 'a@b.com', n8nUrl: null });
+
+    expect(
+      resolveLeadRouting({ contact_email: 'a@b.com', n8n_enabled: true, n8n_webhook_url: '' })
+    ).toEqual({ contactEmail: 'a@b.com', n8nUrl: null });
+
+    expect(
+      resolveLeadRouting({
+        contact_email: 'a@b.com',
+        n8n_enabled: true,
+        n8n_webhook_url: 'not a url',
+      })
+    ).toEqual({ contactEmail: 'a@b.com', n8nUrl: null });
+  });
+
+  it('returns null n8nUrl for a non-https url, even if n8n_enabled is true', () => {
+    expect(
+      resolveLeadRouting({
+        contact_email: 'a@b.com',
+        n8n_enabled: true,
+        n8n_webhook_url: 'http://n8n.example.com/webhook/abc',
+      })
+    ).toEqual({ contactEmail: 'a@b.com', n8nUrl: null });
+  });
+
+  it('returns the n8nUrl when enabled, https, and well-formed', () => {
+    expect(
+      resolveLeadRouting({
+        contact_email: 'a@b.com',
+        n8n_enabled: true,
+        n8n_webhook_url: 'https://n8n.example.com/webhook/abc',
+      })
+    ).toEqual({ contactEmail: 'a@b.com', n8nUrl: 'https://n8n.example.com/webhook/abc' });
+  });
+
+  it('resolves contactEmail to null when missing or not a string', () => {
+    expect(resolveLeadRouting({ n8n_enabled: false })).toEqual({ contactEmail: null, n8nUrl: null });
+    expect(resolveLeadRouting({ contact_email: 123, n8n_enabled: false })).toEqual({
+      contactEmail: null,
+      n8nUrl: null,
+    });
+  });
+});
+
+describe('buildN8nPayload', () => {
+  const base: LeadPayload = {
+    name: 'Ana Pérez',
+    company: 'Bar El Puerto',
+    email: 'ana@example.com',
+    service: 'QRIBAR',
+    message: 'Quiero más info',
+    submittedAt: '2026-08-10T10:00:00.000Z',
+  };
+
+  it('maps to the legacy Spanish keys expected by the n8n workflow', () => {
+    expect(buildN8nPayload(base)).toEqual({
+      nombre: 'Ana Pérez',
+      empresa: 'Bar El Puerto',
+      email: 'ana@example.com',
+      servicio_interes: 'QRIBAR',
+      mensaje_cuerpo: 'Quiero más info',
+      timestamp: '2026-08-10T10:00:00.000Z',
+    });
   });
 });

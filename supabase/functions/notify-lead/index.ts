@@ -1,16 +1,22 @@
 // ========================================
 // SUPABASE EDGE FUNCTION - notify-lead
 // ========================================
-// Email fallback channel for the contact form (used when `n8n_enabled` is
-// false). Receives a lead payload, resolves the recipient SERVER-SIDE from
-// `app_settings.contact_email`, and sends it via Brevo.
+// Single lead entry point (sdd/notify-lead-antibot). Receives a lead
+// payload, resolves routing SERVER-SIDE from `app_settings` using the
+// service role (`contact_email`, `n8n_enabled`, `n8n_webhook_url` — none
+// of which the browser can read anymore), forwards to n8n when enabled,
+// and ALWAYS falls back to Brevo on any n8n failure so a lead is never
+// lost. The browser never sees the n8n webhook URL.
 //
-// See design ADR-4 (sdd/contact-form-n8n-toggle/design) for the full contract.
+// See design sdd/notify-lead-antibot/design for the full contract.
 // @ts-nocheck - Deno runtime types
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.7';
 import {
   buildBrevoPayload,
+  buildN8nPayload,
   isOriginAllowed,
+  N8N_FORWARD_TIMEOUT_MS,
+  resolveLeadRouting,
   validateLeadPayload,
 } from './_lib.ts';
 
@@ -118,9 +124,11 @@ Deno.serve(async (req) => {
     }
 
     const clientIp = firstIpFromForwardedFor(req.headers.get('x-forwarded-for'));
+    // Log hygiene (D6): the rate-limit key still needs to be per client+email
+    // to be effective, but it MUST NOT be logged verbatim (name/email is PII).
     const rateLimitKey = `${clientIp}|${lead.email}`;
     if (!checkRateLimit(rateLimitKey)) {
-      console.warn('SECURITY: notify-lead — rate limit exceeded for', rateLimitKey);
+      console.warn('SECURITY: notify-lead — rate limit exceeded');
       return new Response(
         JSON.stringify({ error: 'Rate limit exceeded', retryAfter: 600 }),
         { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -128,10 +136,10 @@ Deno.serve(async (req) => {
     }
 
     const supabaseUrl = Deno.env.get('SUPABASE_URL');
-    const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY');
+    const supabaseServiceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
     const brevoApiKey = Deno.env.get('BREVO_API_KEY');
 
-    if (!supabaseUrl || !supabaseAnonKey || !brevoApiKey) {
+    if (!supabaseUrl || !supabaseServiceRoleKey || !brevoApiKey) {
       console.error('SECURITY: notify-lead — missing server configuration (Supabase/Brevo env)');
       return new Response(JSON.stringify({ error: 'Server configuration error' }), {
         status: 500,
@@ -139,23 +147,41 @@ Deno.serve(async (req) => {
       });
     }
 
-    // ANON key on purpose — least privilege. `anon` already holds SELECT on
-    // `app_settings`, the query is a fixed single-row read with zero user
-    // input, and a public `verify_jwt=false` function has no business
-    // holding a service-role credential (design ADR-4).
-    const supabase = createClient(supabaseUrl, supabaseAnonKey);
+    // Service role on purpose (D2): `anon` no longer holds SELECT on the
+    // delivery-secret columns (`n8n_enabled`, `n8n_webhook_url`), so this is
+    // the only role that can resolve routing. The query is a fixed
+    // single-row read with zero user input.
+    const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
     const { data: settingsRow, error: settingsError } = await supabase
       .from('app_settings')
-      .select('contact_email')
+      .select('contact_email,n8n_enabled,n8n_webhook_url')
       .eq('id', 'global')
       .single();
 
-    const contactEmail = settingsRow?.contact_email;
-    if (settingsError || typeof contactEmail !== 'string' || contactEmail.trim() === '') {
-      console.error(
-        'notify-lead: recipient not configured',
-        settingsError?.message ?? 'empty contact_email'
-      );
+    if (settingsError) {
+      console.error('notify-lead: settings lookup failed', settingsError.message);
+      return new Response(JSON.stringify({ error: 'Notification recipient not configured' }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    const { contactEmail, n8nUrl } = resolveLeadRouting(settingsRow);
+
+    if (n8nUrl) {
+      const forwarded = await forwardToN8n(n8nUrl, lead);
+      if (forwarded.ok) {
+        console.log('notify-lead: delivered channel=n8n');
+        return new Response(JSON.stringify({ ok: true }), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+      console.warn(`notify-lead: n8n_fallback reason=${forwarded.reason}`);
+      // Falls through to Brevo below — "never lose a lead" (D3).
+    }
+
+    if (typeof contactEmail !== 'string' || contactEmail.trim() === '') {
+      console.error('notify-lead: recipient not configured');
       return new Response(JSON.stringify({ error: 'Notification recipient not configured' }), {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -184,6 +210,7 @@ Deno.serve(async (req) => {
       });
     }
 
+    console.log('notify-lead: delivered channel=brevo');
     return new Response(JSON.stringify({ ok: true }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
@@ -195,3 +222,37 @@ Deno.serve(async (req) => {
     });
   }
 });
+
+type ForwardResult = { ok: true } | { ok: false; reason: string };
+
+/**
+ * Forwards the lead to n8n server-side, with a hard timeout (D3). ANY
+ * failure (network error, timeout, non-2xx) is reported as a tagged
+ * `ForwardResult` so the caller can fall back to Brevo — this function
+ * never throws.
+ */
+async function forwardToN8n(n8nUrl: string, lead: Parameters<typeof buildN8nPayload>[0]): Promise<ForwardResult> {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), N8N_FORWARD_TIMEOUT_MS);
+
+  try {
+    const response = await fetch(n8nUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      body: JSON.stringify(buildN8nPayload(lead)),
+      signal: controller.signal,
+    });
+
+    if (!response.ok) {
+      return { ok: false, reason: `http_${response.status}` };
+    }
+    return { ok: true };
+  } catch (error) {
+    if (error instanceof Error && error.name === 'AbortError') {
+      return { ok: false, reason: 'timeout' };
+    }
+    return { ok: false, reason: 'network' };
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
