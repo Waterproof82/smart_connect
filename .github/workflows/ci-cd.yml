@@ -10,7 +10,8 @@ on:
     # Also validates chained/stacked PRs whose base is an intermediate
     # feature branch (not main yet) — otherwise CI silently skips them
     # until they're retargeted, which defeats the point of chaining.
-    branches: [ "main", "feat/**", "fix/**" ]
+    # develop is the normal PR target — without it regular PRs skip CI.
+    branches: [ "main", "develop", "feat/**", "fix/**" ]
     paths-ignore:
       - 'docs/**'
       - '*.md'

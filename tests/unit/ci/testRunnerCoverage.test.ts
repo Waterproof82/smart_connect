@@ -51,4 +51,18 @@ describe("CI test runner coverage guard", () => {
 
     expect(workflow).toContain("npx vitest run");
   });
+
+  // PRs normally target develop; pull_request.branches filters on the PR
+  // BASE branch, so without develop here every regular PR skips CI.
+  it("CI workflow runs on pull requests into develop", () => {
+    const workflow = fs.readFileSync(
+      path.join(ROOT, ".github/workflows/ci-cd.yml"),
+      "utf-8",
+    );
+    const pullRequestBranches = workflow.match(
+      /pull_request:[\s\S]*?branches:\s*\[([^\]]*)\]/,
+    );
+
+    expect(pullRequestBranches?.[1]).toContain('"develop"');
+  });
 });
