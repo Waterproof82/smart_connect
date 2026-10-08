@@ -133,3 +133,26 @@ describe("Unit 6 — content_hash, HNSW, upsert/delete RPCs, embedding_cache rem
     expect(sql).not.toMatch(/DROP TRIGGER[^;]*ON\s+public\.embedding_cache/i);
   });
 });
+
+describe("documents.updated_at — required by upsert_document", () => {
+  // 2026-10-08: the first real ingestion failed on its first row with
+  // `column "updated_at" of relation "documents" does not exist`. The
+  // upsert_document RPC writes updated_at, but production never had the
+  // column (it only existed in an older repo migration that was not applied).
+  let sql: string;
+
+  beforeAll(() => {
+    sql = findMigration(/_add_documents_updated_at\.sql$/);
+  });
+
+  it("adds updated_at idempotently as timestamptz NOT NULL DEFAULT now()", () => {
+    expect(sql).toMatch(
+      /ALTER TABLE public\.documents\s+ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ NOT NULL DEFAULT now\(\)/i,
+    );
+  });
+
+  it("is purely additive (no DROP, no data rewrite of existing columns)", () => {
+    expect(sql).not.toMatch(/\bDROP\b/i);
+    expect(sql).not.toMatch(/\bUPDATE\s+public\.documents\b/i);
+  });
+});
