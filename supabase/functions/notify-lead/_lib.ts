@@ -23,6 +23,22 @@ export interface BrevoEmailPayload {
   readonly textContent: string;
 }
 
+/** Legacy Spanish-key shape expected by the external n8n workflow (D4 — contract unchanged). */
+export interface N8nWebhookPayload {
+  readonly nombre: string;
+  readonly empresa: string;
+  readonly email: string;
+  readonly servicio_interes: string;
+  readonly mensaje_cuerpo: string;
+  readonly timestamp?: string;
+}
+
+/** Routing settings resolved from the `app_settings` service-role read. */
+export interface LeadRouting {
+  readonly contactEmail: string | null;
+  readonly n8nUrl: string | null;
+}
+
 export const ALLOWED_ORIGINS = [
   'https://digitalizatenerife.es',
   'http://localhost:5173',
@@ -31,6 +47,9 @@ export const ALLOWED_ORIGINS = [
 
 const SENDER_NAME = 'SmartConnect AI';
 const SENDER_EMAIL = 'info@digitalizatenerife.es';
+
+/** Hard timeout for the server-side n8n forward (D3). */
+export const N8N_FORWARD_TIMEOUT_MS = 5000;
 
 const FIELD_LIMITS = {
   name: 100,
@@ -177,4 +196,48 @@ export function buildBrevoPayload(payload: LeadPayload, recipientEmail: string):
     htmlContent: buildEmailHtml(payload),
     textContent: buildEmailText(payload),
   };
+}
+
+/**
+ * Builds the body forwarded to the n8n workflow. Keeps the legacy Spanish
+ * keys (D4) — the external workflow's contract is independent of this
+ * refactor.
+ */
+export function buildN8nPayload(payload: LeadPayload): N8nWebhookPayload {
+  return {
+    nombre: payload.name,
+    empresa: payload.company,
+    email: payload.email,
+    servicio_interes: payload.service,
+    mensaje_cuerpo: payload.message,
+    timestamp: payload.submittedAt,
+  };
+}
+
+function isUsableHttpsUrl(raw: unknown): raw is string {
+  if (typeof raw !== 'string' || raw.trim() === '') return false;
+  try {
+    return new URL(raw).protocol === 'https:';
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Resolves routing from the `app_settings` row (service-role read). The
+ * n8n URL is surfaced ONLY when `n8n_enabled === true` (strict boolean —
+ * no truthy coercion) AND the URL is a well-formed `https:` URL. Any other
+ * combination silently falls through to the Brevo fallback (D3).
+ */
+export function resolveLeadRouting(row: unknown): LeadRouting {
+  if (!row || typeof row !== 'object') return { contactEmail: null, n8nUrl: null };
+  const candidate = row as Record<string, unknown>;
+
+  const contactEmail = typeof candidate.contact_email === 'string' ? candidate.contact_email : null;
+  const n8nEnabled = candidate.n8n_enabled === true;
+  const n8nUrl = n8nEnabled && isUsableHttpsUrl(candidate.n8n_webhook_url)
+    ? (candidate.n8n_webhook_url as string)
+    : null;
+
+  return { contactEmail, n8nUrl };
 }
