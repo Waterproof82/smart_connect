@@ -89,3 +89,6 @@ secrets/
 
 # SEO exports (Search Console, GA4, GBP, leads) - never commit
 docs/seo-data/
+
+# Claude Code isolated worktrees (temporary, per-session)
+.claude/worktrees/
