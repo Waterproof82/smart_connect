@@ -7,6 +7,27 @@
     "mustNotInclude": ["39", "1450", "celular", "computadora"]
   },
   {
+    "id": "web-plazo",
+    "lang": "es",
+    "question": "¿Cuánto tardáis en hacer una página web personalizada?",
+    "mustInclude": [["semana", "Semana"], ["diez días", "10 días"]],
+    "mustNotInclude": ["€", "euros"]
+  },
+  {
+    "id": "web-ventajas",
+    "lang": "es",
+    "question": "¿Qué ventajas tiene hacer la web con vosotros?",
+    "mustInclude": ["mantenimiento", ["hosting", "SEO"], "Tenerife"],
+    "mustNotInclude": ["€", "euros"]
+  },
+  {
+    "id": "web-hosting",
+    "lang": "es",
+    "question": "¿La página web incluye hosting y mantenimiento?",
+    "mustInclude": [["sí", "Sí", "incluye"], "hosting", "mantenimiento"],
+    "mustNotInclude": ["€", "euros"]
+  },
+  {
     "id": "carta-tiendas",
     "lang": "es",
     "question": "¿Tienen carta digital para tiendas?",
