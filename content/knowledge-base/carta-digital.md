@@ -26,4 +26,4 @@ Los pedidos de la carta digital llegan por Telegram, no por WhatsApp. Telegram e
 
 ## Compra y envío a domicilio
 
-El proyecto estándar de carta digital y tienda digital incluye una landing page de presentación con la descripción del local, sus datos y el enlace a sus reseñas de Google; acceso de contacto por WhatsApp; y un catálogo con todo el sistema de compra y envío a domicilio.
+El proyecto estándar de carta digital y tienda digital incluye una landing page de presentación con la descripción del local, sus datos y el enlace a sus reseñas de Google; acceso de contacto por WhatsApp; y un catálogo con todo el sistema de compra y envío a domicilio. También incluye el hosting y el mantenimiento.

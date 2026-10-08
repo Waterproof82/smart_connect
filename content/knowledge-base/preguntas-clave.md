@@ -11,6 +11,10 @@ Sí, Digitaliza Tenerife hace páginas web personalizadas para negocios locales 
 
 Porque te ahorras el mantenimiento, las actualizaciones y varios pagos por separado de hosting y de posicionamiento SEO. Además, tienes la garantía de contar con una persona física en Tenerife que da la cara ante los clientes.
 
+## ¿La carta digital o la tienda digital incluyen hosting?
+
+Sí. El proyecto estándar de carta digital y tienda digital incluye el hosting y el mantenimiento, igual que la página web personalizada. No tienes que contratar ni pagar el hosting por separado.
+
 ## ¿Tienen carta digital para tiendas?
 
 Sí, la carta digital no es solo para restaurantes: también está disponible para tiendas. Se accede por código QR o tarjeta NFC, sin necesidad de instalar ninguna app ni de registrarse, y es multilingüe.

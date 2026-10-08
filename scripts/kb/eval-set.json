@@ -14,6 +14,13 @@
     "mustNotInclude": ["€", "euros"]
   },
   {
+    "id": "carta-hosting",
+    "lang": "es",
+    "question": "¿El servicio de carta digital o tienda digital incluye hosting?",
+    "mustInclude": [["Sí", "sí", "incluye"], "hosting"],
+    "mustNotInclude": ["no especifica", "no dispongo", "no tengo información"]
+  },
+  {
     "id": "pedidos-telegram",
     "lang": "es",
     "question": "¿Los pedidos de la carta digital llegan por WhatsApp?",
