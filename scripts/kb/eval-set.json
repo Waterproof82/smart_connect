@@ -17,8 +17,8 @@
     "id": "pedidos-telegram",
     "lang": "es",
     "question": "¿Los pedidos de la carta digital llegan por WhatsApp?",
-    "mustInclude": ["Telegram"],
-    "mustNotInclude": ["pedidos por WhatsApp", "llegan por WhatsApp"]
+    "mustInclude": ["Telegram", ["No", "no llegan"]],
+    "mustNotInclude": ["Sí, los pedidos", "Sí, llegan"]
   },
   {
     "id": "web-ventajas",
