@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Removed
+
+- **Dead code and unused dependencies cleaned up (SDD `project-dead-code-cleanup`)**: modules and dependencies confirmed zero-reference via `knip` and manual `rg` verification were deleted, with every work unit kept green on `npm run lint`, `npx tsc --noEmit`, `npm test` and `npx vitest run`.
+  - Dead modules: `src/core/data/datasources/{FetchHttpClient,IHttpClient,index}.ts`, `src/shared/utils/retryLogic.ts`, `src/shared/utils/secureStorage.ts`, `src/shared/components/{DashboardPreview,LazyBarChart}.tsx`, `src/shared/components/HoneypotField.tsx` (and its test).
+  - Zero-importer barrels: `src/shared/components/index.ts`, `src/shared/constants/index.ts`, `src/shared/types/index.ts`, `src/features/admin/{data,domain}/index.ts`, `src/features/chatbot/{data,domain}/index.ts`, `src/features/landing/{data,domain}/index.ts`.
+  - Unused dependencies: `crypto-js`, `@types/crypto-js`, `recharts`, `axios`, `swiper`, `react-helmet`, `@types/react-helmet`, `react-icons`, `@types/testing-library__user-event`, `@types/dompurify`, `@babel/preset-env`, `babel-jest`, `eslint-config-prettier`, `eslint-plugin-simple-import-sort`, `eslint-plugin-unicorn`, `globals`, `prettier`, `vite-plugin-compression`, `vite-plugin-svgr`.
+  - Unused tooling files: `jest.setup.js` (root, unreferenced — distinct from the active `tests/jest.setup.ts`), `scripts/clean-duplicates.mjs`.
+  - Out of scope (deliberately untouched): Supabase RPC/migration drift, `kb_backup`, unused-exports/duplicate-exports cleanup (31/27 items still flagged by `knip`), orphaned `dashboard*` i18n keys in `LanguageContext.tsx`.
+  See `docs/audit/2026-10-08_dead-code-cleanup.md`.
+
+### Changed
+
+- **CI now runs both test runners.** `.github/workflows/ci-cd.yml` adds a `Run tests (Vitest, jsdom)` step (`npx vitest run`) right after the existing Jest step, so `.tsx` suites are no longer silently skipped. `vite.config.ts`'s Vitest `include` was widened from 5 explicit globs to `src/**/*.test.tsx`. A new guard test, `tests/unit/ci/testRunnerCoverage.test.ts`, fails if any `*.test.tsx` file exists outside `src/` or if either config regresses. `@jest/globals@^29.7.0` was pinned as an explicit `devDependency` (it was previously a phantom hoisted dependency used by 3 Jest suites).
+
 ### Fixed
 
 - **Site copy uses Spanish from Spain, and digital-menu orders are described as arriving by Telegram.** Six voseo forms on the `/carta-digital` page and one admin validation message are now tuteo:
