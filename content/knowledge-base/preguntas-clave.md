@@ -7,6 +7,10 @@ lang: es
 
 Sí, Digitaliza Tenerife hace páginas web personalizadas para negocios locales (restaurantes, bares, cafeterías y tiendas), adaptadas a cada proyecto y no basadas en plantillas. El precio depende del tipo de proyecto y de su complejidad; para pedir presupuesto hay que contactar en https://digitalizatenerife.es/#contacto.
 
+## ¿Por qué hacer mi web con vosotros?
+
+Porque te ahorras el mantenimiento, las actualizaciones y varios pagos por separado de hosting y de posicionamiento SEO. Además, tienes la garantía de contar con una persona física en Tenerife que da la cara ante los clientes.
+
 ## ¿Tienen carta digital para tiendas?
 
 Sí, la carta digital no es solo para restaurantes: también está disponible para tiendas. Se accede por código QR o tarjeta NFC, sin necesidad de instalar ninguna app ni de registrarse, y es multilingüe.
@@ -15,17 +19,17 @@ Sí, la carta digital no es solo para restaurantes: también está disponible pa
 
 Digitaliza Tenerife ofrece un TPV (Terminal Punto de Venta) pensado para restaurantes, como parte de su catálogo de servicios para digitalizar negocios locales en Tenerife.
 
-## Detalle del TPV TODO(owner)
+## Qué módulos incluye el TPV
 
-TODO(owner): confirmar qué módulos y funcionalidades concretas incluye el TPV (comandas, caja, informes, integración con la carta digital) antes de publicar el detalle completo.
+El TPV para restaurantes reúne 13 módulos en un solo sistema: cobro y cierre de caja (tarjeta, contactless, efectivo o Bizum desde el mismo terminal), comandero móvil, pantalla de cocina (KDS), gestión de reservas, fichajes y control horario del equipo, pedidos para llevar y a domicilio sin comisiones, stock e inventario, facturación con varios tipos de IVA e IGIC, roles y permisos por empleado, food cost avanzado para saber cuánto cuesta cada plato, sistema de alérgenos, compras con trazabilidad y tienda o carta digital. Más detalle en https://digitalizatenerife.es/tpv-restaurantes.
 
 ## Qué hacen los chatbots con inteligencia artificial
 
 Digitaliza Tenerife implementa chatbots con inteligencia artificial para negocios locales, pensados para responder dudas de clientes de forma automática.
 
-## Detalle de los chatbots TODO(owner)
+## En qué canales funcionan los chatbots
 
-TODO(owner): confirmar el alcance exacto de los chatbots (canales soportados, idiomas, integración con WhatsApp u otros) antes de publicar el detalle completo.
+Los chatbots funcionan en la web del negocio y en WhatsApp, y atienden a los clientes las 24 horas. Se entrenan con la información del propio negocio (servicios, horarios, carta, reservas) y se pueden conectar con sus herramientas, como formularios, email u hojas de cálculo, para automatizar avisos y registros. No hace falta tener conocimientos técnicos: Digitaliza Tenerife configura el asistente y las automatizaciones. Más detalle en https://digitalizatenerife.es/ia-chatbots-tenerife.
 
 ## ¿Cuánto cuestan las tarjetas NFC?
 
