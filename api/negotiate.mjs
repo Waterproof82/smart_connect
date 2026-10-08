@@ -1,14 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
-import TurndownService from "turndown";
 import siteRoutes from "../scripts/site-routes.json" with { type: "json" };
-
-const turndownService = new TurndownService({
-  headingStyle: "atx",
-  codeBlockStyle: "fenced",
-  emDelimiter: "*",
-  linkStyle: "inlined",
-});
+import { extractPageMarkdown } from "../scripts/markdown-extract.mjs";
 
 /**
  * Single source of truth for the agent-surface route allowlist (design.md
@@ -81,43 +74,15 @@ export default function handler(req, res) {
 
     const html = fs.readFileSync(filePath, "utf-8");
 
-    // --- Extract metadata ---
-    const titleMatch = html.match(/<title[^>]*>([^<]*)<\/title>/);
-    const title = titleMatch?.[1] || "SmartConnect AI";
-
-    const descMatch = html.match(
-      /<meta[^>]+name="description"[^>]+content="([^"]*)"/i,
-    );
-    const description = descMatch?.[1] || "";
-
-    // --- Extract content from #root div ---
-    // Capture everything between <div id="root"...> and the next <script or <style tag
-    const rootMatch = html.match(/<div\s+id="root"[^>]*>([\s\S]*?)<\/div>\s*</);
-    const rootContent = rootMatch?.[1] || html;
-
-    // Clean React hydration markers and SSR comments
-    const cleanContent = rootContent
-      .replace(/<!--\s*\?|\?\s*-->/g, "")
-      .replace(/<!--ssr-outlet-->/g, "")
-      .replace(/<!--\$-->/g, "")
-      .replace(/<!--\/\$-->/g, "")
-      .replace(/<!--\[-->/g, "")
-      .replace(/<!--\]-->/g, "")
-      .replace(/\s*$/, "")
-      .trim();
-
-    // --- Convert to Markdown ---
-    const markdownBody = turndownService.turndown(cleanContent);
-
-    const markdown = [
-      `# ${title}`,
-      description ? `> ${description}\n` : "",
-      markdownBody,
-      "",
-      `---\n_Source: [https://digitalizatenerife.es${cleanPath}](https://digitalizatenerife.es${cleanPath})_`,
-    ]
-      .filter(Boolean)
-      .join("\n");
+    // Extraction logic lives in scripts/markdown-extract.mjs (shared with
+    // the knowledge-base ingestion pipeline, design.md D8). 'root' scope is
+    // byte-identical to the pre-refactor inline logic — guarded by
+    // tests/unit/scripts/negotiateApi.test.ts.
+    const { markdown } = extractPageMarkdown(html, {
+      route: cleanPath,
+      scope: "root",
+      fallbackTitle: "SmartConnect AI",
+    });
 
     res.setHeader("Cache-Control", "public, max-age=3600, s-maxage=3600");
     // The markdown body is a non-canonical representation of the HTML page

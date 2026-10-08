@@ -16,7 +16,9 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "test:vitest": "vitest",
-    "optimize:images": "node scripts/optimize-images.mjs"
+    "optimize:images": "node scripts/optimize-images.mjs",
+    "ingest-kb": "node scripts/ingest-knowledge-base.mjs",
+    "eval-kb": "node scripts/eval-knowledge-base.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.9.1",
