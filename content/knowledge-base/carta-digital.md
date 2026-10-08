@@ -20,6 +20,6 @@ El precio de la carta digital depende del tipo de proyecto y de su complejidad. 
 
 La carta digital muestra los platos con fotos, vídeos y descripciones en hasta 5 idiomas. Los clientes pueden pedir en mesa o para recoger, y los pedidos llegan al grupo de Telegram del equipo en tiempo real. No hay comisiones por pedido, a diferencia de plataformas como Glovo o Uber Eats. Incluye una base de datos de clientes propia para enviar promociones, y permite publicar platos del día o productos próximos a caducar con descuento para reducir el desperdicio. Sin permanencia, con alta en 48 horas y soporte.
 
-## Pago online y envío a domicilio TODO(owner)
+## Compra y envío a domicilio
 
-TODO(owner): confirmar si la carta digital acepta pago online (pasarela de pago) y si gestiona envíos a domicilio, y si son parte del plan base o extras.
+El proyecto estándar de carta digital y tienda digital incluye una landing page de presentación con la descripción del local, sus datos y el enlace a sus reseñas de Google; acceso de contacto por WhatsApp; y un catálogo con todo el sistema de compra y envío a domicilio.
