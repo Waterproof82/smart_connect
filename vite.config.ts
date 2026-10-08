@@ -10,13 +10,7 @@ export default defineConfig(({ mode }) => ({
     globals: true,
     environment: "jsdom",
     setupFiles: "src/setupTests.ts",
-    include: [
-      "src/shared/presentation/components/**/*.test.tsx",
-      "src/shared/presentation/layout/**/*.test.tsx",
-      "src/shared/hooks/**/*.test.tsx",
-      "src/shared/context/**/*.test.tsx",
-      "src/features/**/*.test.tsx",
-    ],
+    include: ["src/**/*.test.tsx"],
   },
   plugins: [react(), markdownNegotiationPlugin()],
 
