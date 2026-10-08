@@ -48,7 +48,7 @@ beforeEach(() => {
 
 describe('settingsService', () => {
   describe('getAppSettings', () => {
-    it('requests the app_settings row via a plain PostgREST fetch with the anon key headers', async () => {
+    it('requests the app_settings row via a plain PostgREST fetch with an explicit column list (anon no longer has table-level SELECT — sdd/notify-lead-antibot)', async () => {
       mockFetch.mockResolvedValue(jsonResponse([]));
 
       await getAppSettings();
@@ -56,7 +56,7 @@ describe('settingsService', () => {
       expect(mockFetch).toHaveBeenCalledTimes(1);
       const [url, init] = mockFetch.mock.calls[0];
       expect(url).toBe(
-        'https://test.supabase.co/rest/v1/app_settings?id=eq.global&select=*',
+        'https://test.supabase.co/rest/v1/app_settings?id=eq.global&select=id,contact_email,whatsapp_phone,physical_address',
       );
       expect(init.headers).toMatchObject({
         apikey: 'test-anon-key',
@@ -64,12 +64,19 @@ describe('settingsService', () => {
       });
     });
 
-    it('maps the snake_case row to the existing AppSettings camelCase shape unchanged', async () => {
+    it('NEVER uses a wildcard select — anon only has column-level grants post-migration (regression guard)', async () => {
+      mockFetch.mockResolvedValue(jsonResponse([]));
+
+      await getAppSettings();
+
+      const [url] = mockFetch.mock.calls[0];
+      expect(url).not.toContain('select=*');
+    });
+
+    it('maps the snake_case row to the public AppSettings camelCase shape (n8n fields are no longer part of the client contract)', async () => {
       mockFetch.mockResolvedValue(
         jsonResponse([
           {
-            n8n_webhook_url: 'https://n8n.example.com/webhook',
-            n8n_enabled: true,
             contact_email: 'contact@example.com',
             whatsapp_phone: '+34600000000',
             physical_address: 'Tacoronte',
@@ -80,8 +87,6 @@ describe('settingsService', () => {
       const settings = await getAppSettings();
 
       expect(settings).toEqual({
-        n8nWebhookUrl: 'https://n8n.example.com/webhook',
-        n8nEnabled: true,
         contactEmail: 'contact@example.com',
         whatsappPhone: '+34600000000',
         physicalAddress: 'Tacoronte',
@@ -94,8 +99,6 @@ describe('settingsService', () => {
       const settings = await getAppSettings();
 
       expect(settings).toEqual({
-        n8nWebhookUrl: '',
-        n8nEnabled: false,
         contactEmail: '',
         whatsappPhone: '',
         physicalAddress: '',
@@ -107,7 +110,6 @@ describe('settingsService', () => {
 
       const settings = await getAppSettings();
 
-      expect(settings.n8nEnabled).toBe(false);
       expect(settings.whatsappPhone).toBe('');
     });
 
@@ -116,7 +118,7 @@ describe('settingsService', () => {
 
       const settings = await getAppSettings();
 
-      expect(settings.n8nEnabled).toBe(false);
+      expect(settings.contactEmail).toBe('');
     });
 
     it('falls back to default settings when env vars are missing, without calling fetch', async () => {
@@ -125,7 +127,7 @@ describe('settingsService', () => {
 
       const settings = await getAppSettings();
 
-      expect(settings.n8nEnabled).toBe(false);
+      expect(settings.contactEmail).toBe('');
       expect(mockFetch).not.toHaveBeenCalled();
     });
   });

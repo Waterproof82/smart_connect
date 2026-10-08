@@ -161,13 +161,10 @@ const Contact: React.FC = () => {
     fetchSettings();
   }, []);
 
-  const container = useMemo(() => {
-    if (isLoadingSettings || !settings) return null;
-    return createLandingContainer({
-      n8nEnabled: settings.n8nEnabled,
-      n8nWebhookUrl: settings.n8nWebhookUrl,
-    });
-  }, [settings, isLoadingSettings]);
+  // sdd/notify-lead-antibot (D14): the container no longer depends on
+  // settings — notify-lead resolves delivery routing server-side. Built
+  // once per mount instead of waiting on getAppSettings().
+  const container = useMemo(() => createLandingContainer(), []);
 
   const {
     register,
@@ -196,7 +193,9 @@ const Contact: React.FC = () => {
     formValues.email &&
     formValues.service &&
     formValues.message;
-  const canSubmit = hasAllRequiredFields && !isSubmitting && !isLoadingSettings;
+  // sdd/notify-lead-antibot (D14): no longer gated on isLoadingSettings —
+  // the lead container doesn't depend on settings anymore.
+  const canSubmit = hasAllRequiredFields && !isSubmitting;
 
   const getFieldClassName = (field: keyof ContactFormData): string => {
     if (touchedFields[field] && errors[field])
@@ -252,10 +251,6 @@ const Contact: React.FC = () => {
       };
 
       if (!isValidEmail(sanitizedData.email)) {
-        setSubmitStatus("error");
-        return;
-      }
-      if (!container) {
         setSubmitStatus("error");
         return;
       }

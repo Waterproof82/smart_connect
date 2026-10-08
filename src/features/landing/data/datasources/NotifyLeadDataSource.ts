@@ -1,23 +1,25 @@
 /**
- * Email Notify Data Source
+ * Notify Lead Data Source
  *
- * Handles the Brevo email fallback channel by invoking the `notify-lead`
- * Supabase Edge Function. Symmetric to N8NWebhookDataSource, but for the
- * `n8nEnabled === false` path (ADR-1, ADR-5).
+ * Invokes the `notify-lead` Supabase Edge Function — the SINGLE lead
+ * entry point (sdd/notify-lead-antibot, D13). notify-lead itself decides
+ * server-side whether to forward to n8n or send via Brevo; the browser
+ * never calls n8n directly and never sees its webhook URL.
  */
 
 import { SupabaseClient } from '@supabase/supabase-js';
 import { getSupabase } from '@shared/supabaseClient';
 import { ConsoleLogger } from '@core/domain/usecases';
 
-const logger = new ConsoleLogger('[EmailNotify]');
+const logger = new ConsoleLogger('[NotifyLead]');
 
 /**
  * Payload sent to the `notify-lead` Edge Function.
  *
- * Deliberately NOT the same shape as `WebhookPayload` (n8n's Spanish keys):
- * this is our own domain-aligned contract, independent of the n8n channel,
- * so changing one channel cannot break the other (ADR-5).
+ * Deliberately NOT the n8n workflow's Spanish-key shape — this is our own
+ * domain-aligned contract. notify-lead maps it internally (`buildN8nPayload`)
+ * when it forwards to n8n, so this contract stays independent of the n8n
+ * channel's shape (D4).
  */
 export interface LeadNotificationPayload {
   name: string;
@@ -28,7 +30,7 @@ export interface LeadNotificationPayload {
   submittedAt: string;
 }
 
-export class EmailNotifyDataSource {
+export class NotifyLeadDataSource {
   constructor(private readonly client?: SupabaseClient) {}
 
   /**

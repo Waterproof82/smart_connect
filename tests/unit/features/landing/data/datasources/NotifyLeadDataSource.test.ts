@@ -1,12 +1,12 @@
 /**
- * EmailNotifyDataSource Tests
+ * NotifyLeadDataSource Tests
  *
  * Clean Architecture: Data Layer Tests
- * Verifies the email fallback channel (ADR-5) calls the `notify-lead` Edge
+ * Verifies the single lead entry point (D13) calls the `notify-lead` Edge
  * Function with the exact payload and interprets its response correctly.
  */
 
-// EmailNotifyDataSource imports ConsoleLogger via the @core/domain/usecases barrel,
+// NotifyLeadDataSource imports ConsoleLogger via the @core/domain/usecases barrel,
 // which transitively pulls in NoOpSecurityLogger -> supabaseClient (import.meta.env).
 // Mock the barrel so this suite never touches the real Supabase client module.
 jest.mock('@core/domain/usecases', () => ({
@@ -28,9 +28,9 @@ jest.mock('@shared/supabaseClient', () => ({
 
 import type { SupabaseClient } from '@supabase/supabase-js';
 import {
-  EmailNotifyDataSource,
+  NotifyLeadDataSource,
   LeadNotificationPayload,
-} from '@/features/landing/data/datasources/EmailNotifyDataSource';
+} from '@/features/landing/data/datasources/NotifyLeadDataSource';
 
 const buildPayload = (): LeadNotificationPayload => ({
   name: 'Ada Lovelace',
@@ -47,14 +47,14 @@ function buildClient(invokeImpl: jest.Mock): SupabaseClient {
   } as unknown as SupabaseClient;
 }
 
-describe('EmailNotifyDataSource', () => {
+describe('NotifyLeadDataSource', () => {
   beforeEach(() => {
     mockGetSupabase.mockReset();
   });
 
   it('invokes the notify-lead function with the exact payload as the body', async () => {
     const invoke = jest.fn().mockResolvedValue({ data: { ok: true }, error: null });
-    const ds = new EmailNotifyDataSource(buildClient(invoke));
+    const ds = new NotifyLeadDataSource(buildClient(invoke));
     const payload = buildPayload();
 
     await ds.sendLead(payload);
@@ -64,7 +64,7 @@ describe('EmailNotifyDataSource', () => {
 
   it('returns true when the function responds with { ok: true }', async () => {
     const invoke = jest.fn().mockResolvedValue({ data: { ok: true }, error: null });
-    const ds = new EmailNotifyDataSource(buildClient(invoke));
+    const ds = new NotifyLeadDataSource(buildClient(invoke));
 
     const result = await ds.sendLead(buildPayload());
 
@@ -73,7 +73,7 @@ describe('EmailNotifyDataSource', () => {
 
   it('returns false when the invoke call returns an error', async () => {
     const invoke = jest.fn().mockResolvedValue({ data: null, error: { message: 'boom' } });
-    const ds = new EmailNotifyDataSource(buildClient(invoke));
+    const ds = new NotifyLeadDataSource(buildClient(invoke));
 
     const result = await ds.sendLead(buildPayload());
 
@@ -82,7 +82,7 @@ describe('EmailNotifyDataSource', () => {
 
   it('returns false when the function responds with { ok: false }', async () => {
     const invoke = jest.fn().mockResolvedValue({ data: { ok: false }, error: null });
-    const ds = new EmailNotifyDataSource(buildClient(invoke));
+    const ds = new NotifyLeadDataSource(buildClient(invoke));
 
     const result = await ds.sendLead(buildPayload());
 
@@ -91,7 +91,7 @@ describe('EmailNotifyDataSource', () => {
 
   it('returns false when invoke throws', async () => {
     const invoke = jest.fn().mockRejectedValue(new Error('network down'));
-    const ds = new EmailNotifyDataSource(buildClient(invoke));
+    const ds = new NotifyLeadDataSource(buildClient(invoke));
 
     const result = await ds.sendLead(buildPayload());
 
@@ -101,7 +101,7 @@ describe('EmailNotifyDataSource', () => {
   it('resolves the client via getSupabase() when constructed without an explicit client', async () => {
     const invoke = jest.fn().mockResolvedValue({ data: { ok: true }, error: null });
     mockGetSupabase.mockResolvedValue(buildClient(invoke));
-    const ds = new EmailNotifyDataSource();
+    const ds = new NotifyLeadDataSource();
 
     const result = await ds.sendLead(buildPayload());
 
@@ -112,7 +112,7 @@ describe('EmailNotifyDataSource', () => {
 
   it('returns false (not a throw) when getSupabase() rejects', async () => {
     mockGetSupabase.mockRejectedValue(new Error('chunk fetch failed'));
-    const ds = new EmailNotifyDataSource();
+    const ds = new NotifyLeadDataSource();
 
     const result = await ds.sendLead(buildPayload());
 
@@ -121,7 +121,7 @@ describe('EmailNotifyDataSource', () => {
 
   it('does NOT call getSupabase() when an explicit client is injected', async () => {
     const invoke = jest.fn().mockResolvedValue({ data: { ok: true }, error: null });
-    const ds = new EmailNotifyDataSource(buildClient(invoke));
+    const ds = new NotifyLeadDataSource(buildClient(invoke));
 
     await ds.sendLead(buildPayload());
 

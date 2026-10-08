@@ -19,14 +19,23 @@
  * (`useWhatsappPhone`, `Contact.tsx`) via `memoizeAsync` — a rejected
  * fetch is NOT cached, so the next call retries from scratch instead of
  * permanently bricking every consumer on a transient failure.
+ *
+ * sdd/notify-lead-antibot (D1): `anon` lost table-level SELECT on
+ * `app_settings` and only has column-level grants on the public columns
+ * below. `select=*` FAILS under column grants, so this MUST always use
+ * an explicit column list — guarded by a regression test in
+ * `tests/unit/shared/settingsService.test.ts`. `n8n_enabled`/
+ * `n8n_webhook_url` are intentionally NOT in the allow-list: the browser
+ * no longer needs them (notify-lead resolves routing server-side with
+ * the service role).
  */
 
 import { ENV } from "@shared/config/env.config";
 import { memoizeAsync } from "@shared/utils/memoizeAsync";
 
+const PUBLIC_COLUMNS = "id,contact_email,whatsapp_phone,physical_address";
+
 export interface AppSettings {
-  n8nWebhookUrl: string;
-  n8nEnabled: boolean;
   contactEmail: string;
   whatsappPhone: string;
   physicalAddress: string;
@@ -40,8 +49,6 @@ function isSettingsRow(value: unknown): value is Record<string, unknown> {
 
 function mapSettingsRow(row: Record<string, unknown>): AppSettings {
   return {
-    n8nWebhookUrl: (row.n8n_webhook_url as string) || "",
-    n8nEnabled: (row.n8n_enabled as boolean) ?? false,
     contactEmail: (row.contact_email as string) || "",
     whatsappPhone: (row.whatsapp_phone as string) || "",
     physicalAddress: (row.physical_address as string) || "",
@@ -55,8 +62,6 @@ function mapSettingsRow(row: Record<string, unknown>): AppSettings {
  */
 function getDefaultSettings(): AppSettings {
   return {
-    n8nWebhookUrl: "",
-    n8nEnabled: false,
     contactEmail: "",
     whatsappPhone: "",
     physicalAddress: "",
@@ -85,7 +90,7 @@ async function fetchAppSettingsOrThrow(): Promise<AppSettings> {
 
   try {
     const response = await fetch(
-      `${SUPABASE_URL}/rest/v1/app_settings?id=eq.global&select=*`,
+      `${SUPABASE_URL}/rest/v1/app_settings?id=eq.global&select=${PUBLIC_COLUMNS}`,
       {
         headers: {
           apikey: SUPABASE_ANON_KEY,
