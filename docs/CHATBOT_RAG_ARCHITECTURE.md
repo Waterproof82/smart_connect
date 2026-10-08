@@ -6,7 +6,82 @@ Implementar un chatbot experto con arquitectura RAG (Retrieval-Augmented Generat
 
 ---
 
-## 🏗️ Arquitectura del Sistema
+## ⚠️ Arquitectura Actual (2026-10-08) — sustituye lo descrito más abajo
+
+> El diagrama y los ejemplos de código de las secciones siguientes (p. ej. `gemini-generate` como fallback, generación de embeddings desde el Admin Panel, `gemini-2.5-flash`) documentan una versión anterior del sistema y se conservan solo como referencia histórica. Esta sección describe el estado real tras el cambio `rag-knowledge-base-refresh` (Unidades 1-8).
+
+### Generación con failover (sin fallback sin grounding)
+
+- `chat-with-rag` ya NO usa `gemini-generate` como fallback. Si la generación falla, el usuario recibe un mensaje de error estático con CTA de contacto; nunca una respuesta sin grounding.
+- `supabase/functions/_shared/generate.ts` → `generateWithFailover({models, fetchFn, now, deadlineMs})`:
+  - Modelo primario: env `GEMINI_PRIMARY_MODEL` (default `gemini-3.1-flash-lite`).
+  - Modelo backup: env `GEMINI_BACKUP_MODEL` (default `gemini-3.5-flash-lite`).
+  - Timeout primario 10s; backup `min(8s, tiempo restante - 500ms)`; techo total de 20s (`AbortController` por intento).
+  - Reintenta en: abort/timeout, error de red, 429, 404 (modelo retirado), 5xx, 200 sin candidates (salvo `blockReason`). NO reintenta en 400/401/403 (mismo fallo en ambos modelos).
+  - `supabase/functions/gemini-generate/` fue eliminada del código fuente; si aún está desplegada, el owner debe borrarla manualmente (`supabase functions delete gemini-generate`) tras desplegar el frontend.
+
+### Prompt grounding (`_shared/prompt.ts`)
+
+- `buildSystemInstruction({documents})` construye el `systemInstruction` de Gemini (no se inyecta en el turno de usuario, así sobrevive mejor al historial).
+- Reglas: responder en el idioma del usuario (español de España: tuteo, sin voseo ni "celular/computadora"); basarse solo en el CONTEXTO (nunca inventar precios/plazos/garantías); si preguntan el precio de páginas web, carta digital, TPV o chatbots → "depende del tipo de proyecto y de su complejidad" + CTA a `https://digitalizatenerife.es/#contacto`; si no hay información suficiente → invitar a contactar (nunca un callejón sin salida); preguntas de privacidad/cookies/aviso legal → redirigir siempre a `/legal/privacidad`, `/legal/cookies`, `/legal/aviso` (nunca responder con contenido del contexto); 0 documentos recuperados → seguir generando (saludos funcionan, dudas genéricas también); texto plano, nunca Markdown.
+
+### Embedding contract (`_shared/embedding.ts`)
+
+- `buildEmbedRequest(text, {mode, role, title?})` + `parseEmbedResponse`.
+- `EMBEDDING_MODE` (env, compartido por `chat-with-rag` y `gemini-embedding`):
+  - `legacy` (default, sin definir la variable): sin `taskType`, vector recortado a 768 dims — compatible con los vectores ya existentes.
+  - `v2`: `taskType RETRIEVAL_QUERY` (consulta) / `RETRIEVAL_DOCUMENT` (documento, con `title`), `outputDimensionality: 768`.
+- Modelo: `gemini-embedding-001` (no cambia entre modos).
+- El flag se cambia SOLO después de re-embeber todo el contenido con `npm run ingest-kb` (ver abajo) — cambiarlo antes mezclaría vectores legacy con consultas v2, que no son comparables por coseno.
+
+### Ingesta de la base de conocimiento (`npm run ingest-kb`)
+
+Reemplaza por completo el flujo "Admin Panel → CreateDocumentUseCase → generateEmbedding()" descrito más abajo. Pipeline (`scripts/ingest-knowledge-base.mjs`):
+
+```
+dist/*.html (rutas de site-routes.json, scope "main") ─┐
+dist JSON-LD FAQ ───────────────────────────────────────┼─> chunk ─> guarda TODO ─> hash ─> diff vs. documents ─> embed (solo nuevos) ─> upsert_document ─> delete_stale_documents
+content/knowledge-base/*.md (curado) ───────────────────┘
+```
+
+- Fuentes: `site:<ruta>` (todas las rutas de `scripts/site-routes.json` excepto `/legal/*`), `faq:<ruta>` (JSON-LD FAQPage ya prerenderizado), `curated:<archivo>` (`content/knowledge-base/*.md`).
+- Chunking por encabezado (`##`/`###`), 400-1200 caracteres, con solape de ~150 caracteres en secciones largas (`scripts/kb/chunk.mjs`).
+- Idempotente: `content_hash = sha256(contractVersion + source + url + section + contenido)`. Solo se generan embeddings para chunks nuevos; `delete_stale_documents` borra filas cuyo hash ya no está en el keep-set (p. ej. una página eliminada o un archivo curado modificado).
+- Comandos:
+  ```bash
+  npm run build                                         # genera dist/ (necesario para extraer las páginas)
+  npm run ingest-kb -- --dry-run                        # revisa cuántos chunks se extraerían, sin tocar la base
+  npm run ingest-kb                                      # ejecuta el pipeline completo (requiere SUPABASE_SERVICE_ROLE_KEY)
+  npm run ingest-kb -- --purge-legacy                    # lista (no borra) filas con content_hash NULL
+  npm run ingest-kb -- --purge-legacy --confirm-purge    # las borra (solo tras confirmar que son basura real)
+  ```
+- `populate-knowledge-base.mjs` y `clean-knowledge-base.mjs` (truncar-y-reinsertar) fueron eliminados — sustituidos por este pipeline idempotente.
+
+### Contenido curado (`content/knowledge-base/*.md`)
+
+- Solo hechos confirmados por el owner. Frontmatter: `title`, `lang`, `url?`, `draft?`.
+- Cualquier sección (`##`/`###`) que contenga el token literal `TODO(owner)` se excluye automáticamente de la ingesta (`scripts/kb/curated.mjs`) — nunca llega a `documents`. `draft: true` excluye el archivo completo.
+- Política de precios: NUNCA se cita una cifra para páginas web, carta digital, TPV o chatbots — siempre "depende del tipo de proyecto y de su complejidad" + CTA de contacto. La ÚNICA excepción confirmada es el precio de las tarjetas NFC: "de 15 € a 35 € por unidad, con descuentos por volumen".
+- Archivos actuales: `servicios-web.md`, `carta-digital.md`, `preguntas-clave.md`.
+
+### Evaluación (`npm run eval-kb`)
+
+- `scripts/kb/eval-set.json`: ≥15 preguntas en español + ≥5 en inglés, cada una con `mustInclude`/`mustNotInclude`.
+- `scripts/eval-knowledge-base.mjs`: inicia sesión anónima (clave publicable/anon), llama a `chat-with-rag` desplegado para cada pregunta, comprueba los criterios, imprime una tabla pass/fail + p95 de latencia. Sale con código distinto de 0 si el % de aciertos es menor al 90% o si alguna respuesta contiene un término prohibido (precio inventado, marca antigua, etc.).
+- Ejecutar SOLO manualmente, después de desplegar y de haber ingerido contenido: `npm run eval-kb`.
+
+### Rollout y rollback (manual, owner)
+
+1. Desplegar funciones: `supabase functions deploy chat-with-rag`, `supabase functions deploy gemini-embedding`. Variables: `GEMINI_PRIMARY_MODEL`, `GEMINI_BACKUP_MODEL`, `EMBEDDING_MODE` (dejar sin definir = `legacy` al principio).
+2. Migraciones (snapshot `kb_backup.documents_YYYYMMDD` + `content_hash`/`updated_at`/HNSW/RPCs) — ya aplicadas en producción el 2026-10-08.
+3. `npm run build` → `npm run ingest-kb -- --dry-run` (revisar chunks y que no haya `TODO`) → `npm run ingest-kb`.
+4. Cambiar `EMBEDDING_MODE=v2` y volver a ejecutar `npm run ingest-kb` (re-embeber todo bajo el nuevo contrato) → `npm run eval-kb`.
+5. Si el eval pasa (≥90%, sin términos prohibidos): `npm run ingest-kb -- --purge-legacy --confirm-purge` para limpiar filas legacy reales (revisar la lista primero).
+6. **Rollback**: volver `EMBEDDING_MODE=legacy`, restaurar `documents` desde `kb_backup.documents_YYYYMMDD`, recrear el índice `ivfflat` si es necesario.
+
+---
+
+## 🏗️ Arquitectura del Sistema (histórico — ver sección anterior para el estado actual)
 
 ```
 ┌──────────────────────────────────────────────────────────────────┐
@@ -68,7 +143,7 @@ Implementar un chatbot experto con arquitectura RAG (Retrieval-Augmented Generat
 
 ---
 
-## 🏢 Flujo de Administración de Documentos
+## 🏢 Flujo de Administración de Documentos (histórico — reemplazado por `npm run ingest-kb`, ver arriba)
 
 El Admin Panel permite crear, actualizar y eliminar documentos del conocimiento RAG. La generación de embeddings se realiza automáticamente al crear/actualizar documentos.
 

@@ -107,7 +107,7 @@ Regla obligatoria para el Gentle-Orchestrator: determina cuándo DEBE usar SDD v
 - Supabase 2.105.4 (PostgreSQL + pgvector)
 - **Database project**: `smartconnect-rag` (`tysjedvujvsmrzzrmesr`, eu-west-1)
   - Tables: `documents` (RAG with embeddings), `security_logs`, `app_settings` (n8n webhook, email, WhatsApp)
-  - Edge Functions: `gemini-embedding`, `gemini-generate`, `chat-with-rag`
+  - Edge Functions: `gemini-embedding`, `chat-with-rag`, `notify-lead` (`gemini-generate` removed 2026-10 — grounded-failure UX replaced the ungrounded fallback)
   - ⚠️ `multi_tienda` is a SEPARATE project for QRIBAR digital menu, NOT the frontend DB
 - Gemini API 1.44.0 para AI
 - DOMPurify 3.4.2 para sanitización
@@ -155,10 +155,12 @@ El sitio soporta estas capacidades para crawlers de IA y LLMs:
 
 ### RAG Chatbot
 
-- Embeddings: `gemini-embedding-001` → pgvector
-- Búsqueda: similarity search en Supabase
-- Respuesta: `gemini-2.5-flash` con contexto
-- Cache: TTL 7 días
+- Embeddings: `gemini-embedding-001` → pgvector (`EMBEDDING_MODE=legacy|v2` env, shared by `chat-with-rag` + `gemini-embedding`)
+- Búsqueda: similarity search en Supabase (`match_documents`/`match_documents_by_source`, incluyen `metadata`)
+- Respuesta: failover primario/backup vía env (`GEMINI_PRIMARY_MODEL`/`GEMINI_BACKUP_MODEL`, default `gemini-3.1-flash-lite`/`gemini-3.5-flash-lite`), techo 20s; `gemini-generate` (fallback sin grounding) fue eliminado — fallo total → 503 + CTA de contacto, nunca respuesta sin grounding
+- Ingesta: `npm run ingest-kb` (site + FAQ + `content/knowledge-base/*.md` curado, idempotente por `content_hash`); contenido curado excluye toda sección con `TODO(owner)`; precios siempre "depende" + contacto, salvo NFC (15€-35€)
+- Evaluación: `npm run eval-kb` (`scripts/kb/eval-set.json`, ≥15 ES + ≥5 EN) — manual, nunca en CI
+- Ver `docs/CHATBOT_RAG_ARCHITECTURE.md` → "Arquitectura Actual (2026-10-08)"
 
 ### Structured Data (JSON-LD) ⚠️
 

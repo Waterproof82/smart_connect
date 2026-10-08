@@ -1,5 +1,16 @@
 # 🤖 Guía Completa: Implementación RAG para Chatbot
 
+## ⚠️ Estado actual (2026-10-08)
+
+> Esta guía documenta la puesta en marcha ORIGINAL del proyecto (configuración inicial de Supabase/Gemini, script `train_rag.js`). Ese script ya no existe y el flujo de ingesta descrito en el PASO 3 está obsoleto. Para el pipeline real hoy, ver `docs/CHATBOT_RAG_ARCHITECTURE.md` → "Arquitectura Actual (2026-10-08)". Resumen:
+>
+> - **Modelos de generación**: primario/backup vía env (`GEMINI_PRIMARY_MODEL`/`GEMINI_BACKUP_MODEL`, default `gemini-3.1-flash-lite`/`gemini-3.5-flash-lite`), con failover y techo de 20s. `gemini-generate` (fallback sin grounding) fue eliminado.
+> - **Embeddings**: `EMBEDDING_MODE=legacy|v2` (env compartido por `chat-with-rag` y `gemini-embedding`), modelo `gemini-embedding-001`.
+> - **Ingesta**: `npm run ingest-kb` (`scripts/ingest-knowledge-base.mjs`) — extrae el sitio construido (`dist/`), las FAQ (JSON-LD) y el contenido curado (`content/knowledge-base/*.md`), los trocea, hashea, y hace upsert/delete idempotente contra `documents`. Sustituye por completo a `train_rag.js` y a los antiguos `populate-knowledge-base.mjs`/`clean-knowledge-base.mjs`.
+> - **Contenido curado**: solo hechos confirmados por el owner en `content/knowledge-base/*.md`; cualquier sección con el token `TODO(owner)` se excluye de la ingesta. Precios: siempre "depende del tipo de proyecto" + CTA de contacto, excepto las tarjetas NFC (de 15 € a 35 € por unidad).
+> - **Evaluación**: `npm run eval-kb` (`scripts/eval-knowledge-base.mjs` + `scripts/kb/eval-set.json`, ≥15 preguntas ES + ≥5 EN) — ejecutar manualmente tras ingerir, nunca en CI.
+> - **Rollout/rollback**: ver la sección "Rollout y rollback" en `docs/CHATBOT_RAG_ARCHITECTURE.md`.
+
 ## 📊 Costos Estimados (Tier Gratuito)
 
 | Servicio | Plan Gratuito | Costo Real |
