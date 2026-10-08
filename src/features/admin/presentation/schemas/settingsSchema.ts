@@ -23,7 +23,7 @@ export const settingsSchema = z
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ['n8nWebhookUrl'],
-        message: 'Para activar n8n necesitás una URL de webhook válida',
+        message: 'Para activar n8n necesitas una URL de webhook válida',
       });
     }
   });

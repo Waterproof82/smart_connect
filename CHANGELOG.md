@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **Site copy uses Spanish from Spain, and digital-menu orders are described as arriving by Telegram.** Six voseo forms on the `/carta-digital` page and one admin validation message are now tuteo:
+  - "Pagás" → "Pagas", "Confirmás" → "Confirmas"
+  - "Elegí" → "Elige", "Publicá" → "Publica", "Marcá" → "Marca", "Recuperá" → "Recupera"
+  - "necesitás" → "necesitas" (admin message)
+
+  The "pedidos por WhatsApp" / "WhatsApp orders" claim was wrong and now says Telegram, which is the real ordering channel (owner-confirmed). It appeared in the page's final call to action (ES/EN) and in the `WebMCP.ts` product description that AI agents read.
+
+  A new regression gate, `src/__tests__/spanishLocale.guard.test.ts`, scans `src/`, `public/` and `scripts/` for voseo forms and for that WhatsApp-orders claim. It uses Unicode-aware boundaries, because JS `\b` never matches after an accented final letter such as "Elegí". The curated knowledge base now explains why orders arrive by Telegram, with one-tap scheduled replies and cleaner message handling, and the eval set adds a question that checks it. See `docs/audit/2026-10-08_site-spain-spanish-telegram.md`.
+
 ### Added
 
 - **Curated knowledge base completed; no `TODO(owner)` left.** TPV modules, chatbot channels and digital-menu features were filled in from copy the site already publishes. The owner supplied the rest:

@@ -66,8 +66,8 @@ const tools: ToolDescriptor[] = [
           en: "Tap-to-Review NFC: NFC cards for customers to leave Google reviews with one tap. One-time payment, no subscriptions. Includes table stand and 24/7 support.",
         },
         "carta-digital": {
-          es: "Carta Digital Premium: Menú digital avanzado con fotos, vídeos, 5 idiomas, pedidos por WhatsApp y base de datos propia de clientes. 0% comisiones. Es uno de los módulos del TPV de Digitaliza Tenerife.",
-          en: "Carta Digital Premium: Advanced digital menu with photos, videos, 5 languages, WhatsApp orders, and your own customer database. 0% commissions. One of the modules in the Digitaliza Tenerife TPV.",
+          es: "Carta Digital Premium: Menú digital avanzado con fotos, vídeos, 5 idiomas, pedidos por Telegram y base de datos propia de clientes. 0% comisiones. Es uno de los módulos del TPV de Digitaliza Tenerife.",
+          en: "Carta Digital Premium: Advanced digital menu with photos, videos, 5 languages, Telegram orders, and your own customer database. 0% commissions. One of the modules in the Digitaliza Tenerife TPV.",
         },
       };
 

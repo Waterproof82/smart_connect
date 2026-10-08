@@ -49,7 +49,7 @@ describe('UpdateSettingsUseCase', () => {
   it('should throw when enabling n8n with an empty webhook URL in the same update', async () => {
     await expect(
       useCase.execute({ n8nEnabled: true, n8nWebhookUrl: '' })
-    ).rejects.toThrow('Para activar n8n necesitás una URL de webhook válida');
+    ).rejects.toThrow('Para activar n8n necesitas una URL de webhook válida');
 
     expect(mockRepository.updateSettings).not.toHaveBeenCalled();
   });
@@ -58,7 +58,7 @@ describe('UpdateSettingsUseCase', () => {
     mockRepository.getSettings = jest.fn().mockResolvedValue(buildSettings({ n8nWebhookUrl: '' }));
 
     await expect(useCase.execute({ n8nEnabled: true })).rejects.toThrow(
-      'Para activar n8n necesitás una URL de webhook válida'
+      'Para activar n8n necesitas una URL de webhook válida'
     );
 
     expect(mockRepository.getSettings).toHaveBeenCalled();

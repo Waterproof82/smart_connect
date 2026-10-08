@@ -14,6 +14,13 @@
     "mustNotInclude": ["€", "euros"]
   },
   {
+    "id": "pedidos-telegram",
+    "lang": "es",
+    "question": "¿Los pedidos de la carta digital llegan por WhatsApp?",
+    "mustInclude": ["Telegram"],
+    "mustNotInclude": ["pedidos por WhatsApp", "llegan por WhatsApp"]
+  },
+  {
     "id": "web-ventajas",
     "lang": "es",
     "question": "¿Qué ventajas tiene hacer la web con vosotros?",
