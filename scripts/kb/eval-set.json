@@ -1,0 +1,156 @@
+[
+  {
+    "id": "web-si",
+    "lang": "es",
+    "question": "¿Hacen páginas web?",
+    "mustInclude": [["sí", "Sí"], "páginas web", "digitalizatenerife.es/#contacto"],
+    "mustNotInclude": ["39", "1450", "celular", "computadora"]
+  },
+  {
+    "id": "carta-tiendas",
+    "lang": "es",
+    "question": "¿Tienen carta digital para tiendas?",
+    "mustInclude": [["sí", "Sí"], "tienda"],
+    "mustNotInclude": ["39", "1450", "celular", "computadora"]
+  },
+  {
+    "id": "privacidad",
+    "lang": "es",
+    "question": "¿Qué hacen con mis datos personales?",
+    "mustInclude": [["legal/privacidad", "legal/cookies", "legal/aviso"]],
+    "mustNotInclude": ["celular", "computadora"]
+  },
+  {
+    "id": "precio-web",
+    "lang": "es",
+    "question": "¿Cuánto cuesta una página web?",
+    "mustInclude": ["depende", "digitalizatenerife.es/#contacto"],
+    "mustNotInclude": ["39", "1450", "100 €"]
+  },
+  {
+    "id": "precio-carta",
+    "lang": "es",
+    "question": "¿Cuánto cuesta la carta digital?",
+    "mustInclude": ["depende", "digitalizatenerife.es/#contacto"],
+    "mustNotInclude": ["39", "1450", "100 €"]
+  },
+  {
+    "id": "precio-tpv",
+    "lang": "es",
+    "question": "¿Cuánto cuesta el TPV?",
+    "mustInclude": ["depende", "digitalizatenerife.es/#contacto"],
+    "mustNotInclude": ["39", "1450", "100 €"]
+  },
+  {
+    "id": "precio-chatbot",
+    "lang": "es",
+    "question": "¿Cuánto cuesta un chatbot?",
+    "mustInclude": ["depende", "digitalizatenerife.es/#contacto"],
+    "mustNotInclude": ["39", "1450", "100 €"]
+  },
+  {
+    "id": "precio-nfc",
+    "lang": "es",
+    "question": "¿Cuánto cuestan las tarjetas NFC?",
+    "mustInclude": [["15", "35"], "€"],
+    "mustNotInclude": ["39", "1450"]
+  },
+  {
+    "id": "tpv-que-es",
+    "lang": "es",
+    "question": "¿Qué es el TPV para restaurantes?",
+    "mustInclude": ["TPV"],
+    "mustNotInclude": ["celular", "computadora"]
+  },
+  {
+    "id": "chatbot-que-es",
+    "lang": "es",
+    "question": "¿Qué hacen los chatbots con IA?",
+    "mustInclude": ["chatbot"],
+    "mustNotInclude": ["celular", "computadora"]
+  },
+  {
+    "id": "nfc-que-es",
+    "lang": "es",
+    "question": "¿Para qué sirven las tarjetas NFC?",
+    "mustInclude": ["reseña"],
+    "mustNotInclude": ["39"]
+  },
+  {
+    "id": "contacto",
+    "lang": "es",
+    "question": "¿Cómo puedo contactar con vosotros?",
+    "mustInclude": ["contacto"],
+    "mustNotInclude": []
+  },
+  {
+    "id": "saludo",
+    "lang": "es",
+    "question": "Hola, ¿qué tal?",
+    "mustInclude": [],
+    "mustNotInclude": []
+  },
+  {
+    "id": "fuera-alcance",
+    "lang": "es",
+    "question": "¿Hacéis reformas de cocinas?",
+    "mustInclude": ["contacto"],
+    "mustNotInclude": []
+  },
+  {
+    "id": "carta-multiidioma",
+    "lang": "es",
+    "question": "¿La carta digital es multilingüe?",
+    "mustInclude": [["sí", "Sí", "multilingüe", "idioma"]],
+    "mustNotInclude": []
+  },
+  {
+    "id": "voseo-check",
+    "lang": "es",
+    "question": "¿Ustedes tienen descuentos para varias tiendas?",
+    "mustInclude": [],
+    "mustNotInclude": ["tenés", "celular", "computadora"]
+  },
+  {
+    "id": "web-yes-en",
+    "lang": "en",
+    "question": "Do you build websites?",
+    "mustInclude": [["yes", "Yes"]],
+    "mustNotInclude": ["39", "1450"]
+  },
+  {
+    "id": "carta-shops-en",
+    "lang": "en",
+    "question": "Do you have digital menus for shops?",
+    "mustInclude": [["yes", "Yes"]],
+    "mustNotInclude": ["39", "1450"]
+  },
+  {
+    "id": "privacy-en",
+    "lang": "en",
+    "question": "What do you do with my personal data?",
+    "mustInclude": [["legal/privacidad", "legal/cookies", "legal/aviso"]],
+    "mustNotInclude": []
+  },
+  {
+    "id": "price-web-en",
+    "lang": "en",
+    "question": "How much does a website cost?",
+    "mustInclude": [["depend", "Depend"], "digitalizatenerife.es/#contacto"],
+    "mustNotInclude": ["39", "1450", "100 €"]
+  },
+  {
+    "id": "nfc-price-en",
+    "lang": "en",
+    "question": "How much do the NFC cards cost?",
+    "mustInclude": [["15", "35"]],
+    "mustNotInclude": ["39", "1450"]
+  },
+  {
+    "id": "contact-en",
+    "lang": "en",
+    "question": "How can I contact you?",
+    "mustInclude": ["contacto"],
+    "mustNotInclude": []
+  }
+]
