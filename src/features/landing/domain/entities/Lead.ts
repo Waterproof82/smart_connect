@@ -17,6 +17,17 @@ export interface Lead {
   readonly message: string;
 }
 
+/**
+ * Anti-bot transport metadata (sdd/notify-lead-antibot, D12). Deliberately
+ * NOT part of `Lead` — the lead is a pure business entity, this is
+ * transport/request context (honeypot value + fill-time), so it travels as
+ * a separate, optional parameter through the repository chain.
+ */
+export interface LeadSubmissionMeta {
+  readonly website: string;
+  readonly elapsedMs: number;
+}
+
 export class LeadEntity implements Lead {
   readonly name: string;
   readonly company: string;

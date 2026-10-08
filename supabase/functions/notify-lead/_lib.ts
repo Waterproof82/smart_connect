@@ -51,6 +51,9 @@ const SENDER_EMAIL = 'info@digitalizatenerife.es';
 /** Hard timeout for the server-side n8n forward (D3). */
 export const N8N_FORWARD_TIMEOUT_MS = 5000;
 
+/** Conservative minimum fill-time (D9) — below this, a submission is rejected as too_fast. */
+export const MIN_FILL_MS = 3000;
+
 const FIELD_LIMITS = {
   name: 100,
   company: 100,
@@ -229,6 +232,57 @@ function isUsableHttpsUrl(raw: unknown): raw is string {
  * no truthy coercion) AND the URL is a well-formed `https:` URL. Any other
  * combination silently falls through to the Brevo fallback (D3).
  */
+/** Anti-bot rejection reasons (D6 — also used verbatim as the PII-free log tag). */
+export type BotReason = 'honeypot' | 'too_fast' | 'missing_signals';
+
+export type BotVerdict = { readonly isBot: false } | { readonly isBot: true; readonly reason: BotReason };
+
+export interface EvaluateBotSignalsOptions {
+  /** Strict mode (env `NOTIFY_LEAD_REQUIRE_ANTIBOT_SIGNALS=true`): a missing elapsedMs rejects. Tolerant (default): it is allowed through. */
+  readonly requireSignals: boolean;
+  readonly minFillMs?: number;
+}
+
+/**
+ * Honeypot verdict for the `website` field. A key that is entirely ABSENT
+ * (not just empty) is treated as "no signal" rather than "filled" — this
+ * keeps a stale cached client bundle (shipped before this field existed)
+ * from being silently rejected (D11 — "cached old bundles must not lose a
+ * lead"). A present-but-wrong-typed value (number, boolean, object) is
+ * treated as suspicious and counted as filled.
+ */
+function isHoneypotFilled(website: unknown): boolean {
+  if (website === undefined) return false;
+  if (typeof website !== 'string') return true;
+  return website.trim().length > 0;
+}
+
+/**
+ * Evaluates the honeypot + fill-time anti-bot signals (owner decision,
+ * sdd/notify-lead-antibot). Honeypot is checked first — if filled, it wins
+ * over any elapsedMs verdict. Rejection is ALWAYS silent (caller returns a
+ * 200-shaped response) regardless of the reason.
+ */
+export function evaluateBotSignals(body: unknown, opts: EvaluateBotSignalsOptions): BotVerdict {
+  const candidate = body && typeof body === 'object' ? (body as Record<string, unknown>) : {};
+  const minFillMs = opts.minFillMs ?? MIN_FILL_MS;
+
+  if (isHoneypotFilled(candidate.website)) {
+    return { isBot: true, reason: 'honeypot' };
+  }
+
+  const elapsedMs = candidate.elapsedMs;
+  if (elapsedMs === undefined) {
+    return opts.requireSignals ? { isBot: true, reason: 'missing_signals' } : { isBot: false };
+  }
+
+  if (typeof elapsedMs !== 'number' || !Number.isFinite(elapsedMs) || elapsedMs < minFillMs) {
+    return { isBot: true, reason: 'too_fast' };
+  }
+
+  return { isBot: false };
+}
+
 export function resolveLeadRouting(row: unknown): LeadRouting {
   if (!row || typeof row !== 'object') return { contactEmail: null, n8nUrl: null };
   const candidate = row as Record<string, unknown>;

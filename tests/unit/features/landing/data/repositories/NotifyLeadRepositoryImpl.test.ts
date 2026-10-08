@@ -60,4 +60,41 @@ describe('NotifyLeadRepositoryImpl', () => {
 
     expect(result).toBe(false);
   });
+
+  describe('anti-bot meta passthrough (sdd/notify-lead-antibot, D12)', () => {
+    it('includes website and elapsedMs in the payload when meta is provided', async () => {
+      const sendLead = jest.fn().mockResolvedValue(true);
+      const dataSource = { sendLead } as unknown as NotifyLeadDataSource;
+      const repository = new NotifyLeadRepositoryImpl(dataSource);
+
+      await repository.submitLead(buildLead(), { website: '', elapsedMs: 4200 });
+
+      const [payload] = sendLead.mock.calls[0];
+      expect(payload.website).toBe('');
+      expect(payload.elapsedMs).toBe(4200);
+    });
+
+    it('still sends a 0ms elapsedMs (falsy but valid) rather than dropping it', async () => {
+      const sendLead = jest.fn().mockResolvedValue(true);
+      const dataSource = { sendLead } as unknown as NotifyLeadDataSource;
+      const repository = new NotifyLeadRepositoryImpl(dataSource);
+
+      await repository.submitLead(buildLead(), { website: '', elapsedMs: 0 });
+
+      const [payload] = sendLead.mock.calls[0];
+      expect(payload.elapsedMs).toBe(0);
+    });
+
+    it('omits website/elapsedMs from the payload when no meta is provided (backward compatible)', async () => {
+      const sendLead = jest.fn().mockResolvedValue(true);
+      const dataSource = { sendLead } as unknown as NotifyLeadDataSource;
+      const repository = new NotifyLeadRepositoryImpl(dataSource);
+
+      await repository.submitLead(buildLead());
+
+      const [payload] = sendLead.mock.calls[0];
+      expect(payload.website).toBeUndefined();
+      expect(payload.elapsedMs).toBeUndefined();
+    });
+  });
 });

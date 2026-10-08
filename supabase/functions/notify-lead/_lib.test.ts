@@ -14,7 +14,9 @@ import {
   buildN8nPayload,
   buildSubject,
   escapeHtml,
+  evaluateBotSignals,
   isOriginAllowed,
+  MIN_FILL_MS,
   resolveLeadRouting,
   validateLeadPayload,
   type LeadPayload,
@@ -334,6 +336,130 @@ describe('buildN8nPayload', () => {
       servicio_interes: 'QRIBAR',
       mensaje_cuerpo: 'Quiero más info',
       timestamp: '2026-08-10T10:00:00.000Z',
+    });
+  });
+});
+
+describe('evaluateBotSignals', () => {
+  const tolerant = { requireSignals: false };
+  const strict = { requireSignals: true };
+
+  describe('honeypot (website field)', () => {
+    it('is NOT a bot when website is an empty string and elapsedMs clears the threshold', () => {
+      expect(evaluateBotSignals({ website: '', elapsedMs: MIN_FILL_MS }, tolerant)).toEqual({
+        isBot: false,
+      });
+    });
+
+    it('is a bot when website is a non-empty string', () => {
+      expect(
+        evaluateBotSignals({ website: 'http://spam.example.com', elapsedMs: MIN_FILL_MS }, tolerant)
+      ).toEqual({ isBot: true, reason: 'honeypot' });
+    });
+
+    it('trims before checking — whitespace-only website is NOT honeypot-filled', () => {
+      expect(evaluateBotSignals({ website: '   ', elapsedMs: MIN_FILL_MS }, tolerant)).toEqual({
+        isBot: false,
+      });
+    });
+
+    it('is a bot when website is present but not a string (wrong type, suspicious)', () => {
+      expect(evaluateBotSignals({ website: 123, elapsedMs: MIN_FILL_MS }, tolerant)).toEqual({
+        isBot: true,
+        reason: 'honeypot',
+      });
+      expect(evaluateBotSignals({ website: true, elapsedMs: MIN_FILL_MS }, tolerant)).toEqual({
+        isBot: true,
+        reason: 'honeypot',
+      });
+      expect(evaluateBotSignals({ website: {}, elapsedMs: MIN_FILL_MS }, tolerant)).toEqual({
+        isBot: true,
+        reason: 'honeypot',
+      });
+    });
+
+    it('honeypot takes priority over an also-too-fast elapsedMs', () => {
+      expect(evaluateBotSignals({ website: 'filled', elapsedMs: 10 }, tolerant)).toEqual({
+        isBot: true,
+        reason: 'honeypot',
+      });
+    });
+
+    it('a website key entirely absent is NOT treated as honeypot-filled (falls through to the elapsedMs check)', () => {
+      expect(evaluateBotSignals({ elapsedMs: MIN_FILL_MS }, tolerant)).toEqual({ isBot: false });
+    });
+  });
+
+  describe('elapsedMs (fill-time)', () => {
+    it('rejects as too_fast when elapsedMs is below the default threshold', () => {
+      expect(evaluateBotSignals({ website: '', elapsedMs: MIN_FILL_MS - 1 }, tolerant)).toEqual({
+        isBot: true,
+        reason: 'too_fast',
+      });
+    });
+
+    it('rejects as too_fast when elapsedMs is negative', () => {
+      expect(evaluateBotSignals({ website: '', elapsedMs: -50 }, tolerant)).toEqual({
+        isBot: true,
+        reason: 'too_fast',
+      });
+    });
+
+    it('rejects as too_fast when elapsedMs is present but not a finite number (string)', () => {
+      expect(evaluateBotSignals({ website: '', elapsedMs: 'soon' }, tolerant)).toEqual({
+        isBot: true,
+        reason: 'too_fast',
+      });
+    });
+
+    it('rejects as too_fast when elapsedMs is present but not finite (Infinity/NaN)', () => {
+      expect(evaluateBotSignals({ website: '', elapsedMs: Infinity }, tolerant)).toEqual({
+        isBot: true,
+        reason: 'too_fast',
+      });
+      expect(evaluateBotSignals({ website: '', elapsedMs: NaN }, tolerant)).toEqual({
+        isBot: true,
+        reason: 'too_fast',
+      });
+    });
+
+    it('accepts elapsedMs exactly at the threshold', () => {
+      expect(evaluateBotSignals({ website: '', elapsedMs: MIN_FILL_MS }, tolerant)).toEqual({
+        isBot: false,
+      });
+    });
+
+    it('respects a custom minFillMs override', () => {
+      expect(evaluateBotSignals({ website: '', elapsedMs: 1500 }, { requireSignals: false, minFillMs: 1000 })).toEqual({
+        isBot: false,
+      });
+      expect(evaluateBotSignals({ website: '', elapsedMs: 900 }, { requireSignals: false, minFillMs: 1000 })).toEqual({
+        isBot: true,
+        reason: 'too_fast',
+      });
+    });
+
+    it('tolerant mode (default): missing elapsedMs ALLOWS the submission through (no reject)', () => {
+      expect(evaluateBotSignals({ website: '' }, tolerant)).toEqual({ isBot: false });
+    });
+
+    it('strict mode: missing elapsedMs rejects as missing_signals', () => {
+      expect(evaluateBotSignals({ website: '' }, strict)).toEqual({
+        isBot: true,
+        reason: 'missing_signals',
+      });
+    });
+  });
+
+  describe('malformed body', () => {
+    it('treats a null/non-object body as having no signals (tolerant mode allows it)', () => {
+      expect(evaluateBotSignals(null, tolerant)).toEqual({ isBot: false });
+      expect(evaluateBotSignals(undefined, tolerant)).toEqual({ isBot: false });
+      expect(evaluateBotSignals('oops', tolerant)).toEqual({ isBot: false });
+    });
+
+    it('treats a null/non-object body as missing signals in strict mode', () => {
+      expect(evaluateBotSignals(null, strict)).toEqual({ isBot: true, reason: 'missing_signals' });
     });
   });
 });
