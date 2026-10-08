@@ -16,6 +16,10 @@ Es multilingüe y se ve bien en cualquier pantalla. El negocio puede actualizar 
 
 El precio de la carta digital depende del tipo de proyecto y de su complejidad. Para pedir presupuesto hay que contactar en https://digitalizatenerife.es/#contacto.
 
-## Funcionalidades adicionales TODO(owner)
+## Qué incluye
 
-TODO(owner): confirmar qué funcionalidades adicionales (pasarela de pago, pedidos a domicilio, integración con TPV externo, número de idiomas incluidos) forman parte del plan base frente a extras.
+La carta digital muestra los platos con fotos, vídeos y descripciones en hasta 5 idiomas. Los clientes pueden pedir en mesa o para recoger, y los pedidos llegan al grupo de Telegram del equipo en tiempo real. No hay comisiones por pedido, a diferencia de plataformas como Glovo o Uber Eats. Incluye una base de datos de clientes propia para enviar promociones, y permite publicar platos del día o productos próximos a caducar con descuento para reducir el desperdicio. Sin permanencia, con alta en 48 horas y soporte.
+
+## Pago online y envío a domicilio TODO(owner)
+
+TODO(owner): confirmar si la carta digital acepta pago online (pasarela de pago) y si gestiona envíos a domicilio, y si son parte del plan base o extras.
