@@ -14,8 +14,8 @@ this change touches only the SQL files and their accompanying test suite.
 
 ### Files
 
-- `supabase/migrations/20261008000000_snapshot_documents_before_hash_refresh.sql` (new)
-- `supabase/migrations/20261008000001_kb_content_hash_hnsw_upsert_rpcs.sql` (new)
+- `supabase/migrations/20261008065303_snapshot_documents_before_hash_refresh.sql` (new)
+- `supabase/migrations/20261008065448_kb_content_hash_hnsw_upsert_rpcs.sql` (new)
 - `tests/unit/kbSchemaMigration.structure.test.ts` (new, 16 tests — structural
   assertions against migration SQL text; no live DB available in this test
   environment, so these are the TDD RED/GREEN gate for the migration content)
@@ -91,8 +91,8 @@ until now.
 
 ```bash
 supabase db push   # or apply individually in this exact order:
-# 1. 20261008000000_snapshot_documents_before_hash_refresh.sql
-# 2. 20261008000001_kb_content_hash_hnsw_upsert_rpcs.sql
+# 1. 20261008065303_snapshot_documents_before_hash_refresh.sql
+# 2. 20261008065448_kb_content_hash_hnsw_upsert_rpcs.sql
 ```
 
 Both files are idempotent (`IF NOT EXISTS` / `CREATE OR REPLACE` /
@@ -167,3 +167,16 @@ simplifications noted inline in the migration SQL: a plain (non-partial)
 unique index on `content_hash` is sufficient for "NULLs allowed" (standard
 btree semantics), and `updated_at` was already present on `documents` from
 an earlier migration, so Unit 6 only adds `content_hash`.
+
+## Applied to production — 2026-10-08
+
+- Applied by the orchestrator via Supabase MCP `apply_migration`, after confirming the production signatures of `match_documents` / `match_documents_by_source` matched the `DROP FUNCTION` signatures exactly.
+- First attempt at the second migration **failed and rolled back atomically**. The error was `42P01 relation "public.embedding_cache" does not exist`: `DROP TRIGGER IF EXISTS ... ON <table>` still requires the table to exist, and production no longer had it. Fix: removed the standalone trigger drop (`DROP TABLE ... CASCADE` already removes it) and added a structure test that forbids it. Structural regex tests cannot catch runtime errors like this one; only a real apply did.
+- The migration files were renamed to the versions recorded by the remote history (`20261008065303`, `20261008065448`), so a future `supabase db push` does not re-apply them.
+- Verified after applying:
+  - the `content_hash` column exists;
+  - indexes are `documents_content_hash_key` and `documents_embedding_hnsw_idx` (ivfflat removed);
+  - `anon` and `authenticated` cannot execute `upsert_document` / `delete_stale_documents`, and `service_role` can;
+  - `anon` can still execute `match_documents`;
+  - the security advisor reports only the known Leaked Password Protection warning (Pro plan);
+  - `chat-with-rag` returns HTTP 200 and finds 3 documents in 1.6–1.9 s.
