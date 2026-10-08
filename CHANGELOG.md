@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Curated knowledge base completed; no `TODO(owner)` left.** TPV modules, chatbot channels and digital-menu features were filled in from copy the site already publishes. The owner supplied the rest:
+  - Website project types. A custom website includes hosting and maintenance and is delivered in one week to ten days. The standard digital-menu and digital-shop project includes a landing page, WhatsApp contact, and a catalogue with purchase and home delivery.
+  - Why build the website with Digitaliza Tenerife: no separate maintenance, updates, hosting or SEO payments, and a real person in Tenerife who deals with customers.
+
+  Incremental `v2` ingestion added 8 chunks (111 in total; none re-embedded or deleted). `npm run eval-kb` now has 25 questions and passes 25/25 with a p95 latency of 2.9 s.
+
 - **Knowledge base now built from the whole site and live in production.** `npm run ingest-kb` loaded 103 chunks into `documents`: 69 from the site pages, 21 FAQ Q&As and 13 curated. They were embedded in `v2` mode, and `EMBEDDING_MODE=v2` is now set for `chat-with-rag`. `npm run eval-kb` passes 22/22 key questions (16 ES, 6 EN) with a p95 latency of 4.5 s. Two gaps that only showed up in production were fixed on the way:
   - `documents.updated_at` did not exist, even though `upsert_document` writes it. The new migration `20261008075727_add_documents_updated_at.sql` adds it.
   - The eval runner no longer signs in anonymously, because anonymous sign-ins are disabled in production. It now calls `chat-with-rag` with the publishable key, exactly like the public widget.
