@@ -13,15 +13,11 @@ function readScript(name: string): string {
 }
 
 describe("scripts/ source cleanup (PR8)", () => {
-  it("populate-knowledge-base.mjs has zero 'qribar' matches", () => {
-    expect(readScript("populate-knowledge-base.mjs")).not.toMatch(/qribar/i);
-  });
-
-  it("populate-knowledge-base.mjs has zero 'SmartConnect' matches", () => {
-    expect(readScript("populate-knowledge-base.mjs")).not.toMatch(
-      /smart[- ]?connect/i,
-    );
-  });
+  // populate-knowledge-base.mjs / clean-knowledge-base.mjs were removed by
+  // rag-knowledge-base-refresh Unit 7 — superseded by
+  // scripts/ingest-knowledge-base.mjs (npm run ingest-kb), which is
+  // idempotent (content_hash upsert + delete_stale_documents) instead of
+  // truncate-and-reinsert. See tests/unit/scripts/ingestKnowledgeBase.test.ts.
 
   it("check-documents.mjs has zero 'qribar' matches", () => {
     expect(readScript("check-documents.mjs")).not.toMatch(/qribar/i);
