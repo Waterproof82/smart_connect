@@ -121,9 +121,15 @@ describe("Unit 6 — content_hash, HNSW, upsert/delete RPCs, embedding_cache rem
     expect(searchPathCount).toBeGreaterThanOrEqual(4);
   });
 
-  it("drops the dead embedding_cache table, trigger and cleanup functions", () => {
-    expect(sql).toMatch(/DROP TABLE IF EXISTS public\.embedding_cache/i);
-    expect(sql).toMatch(/DROP TRIGGER IF EXISTS update_embedding_cache_updated_at_trigger/i);
+  it("drops the dead embedding_cache table (CASCADE takes its trigger) and cleanup functions", () => {
+    expect(sql).toMatch(/DROP TABLE IF EXISTS public\.embedding_cache CASCADE/i);
     expect(sql).toMatch(/DROP FUNCTION IF EXISTS public\.clean_expired_embedding_cache/i);
+  });
+
+  it("never runs DROP TRIGGER ... ON embedding_cache (Postgres errors when the table is already gone, as in production)", () => {
+    // 2026-10-08: applying the migration to production failed with
+    // `42P01 relation "public.embedding_cache" does not exist` — IF EXISTS
+    // covers the trigger, not the table it is attached to.
+    expect(sql).not.toMatch(/DROP TRIGGER[^;]*ON\s+public\.embedding_cache/i);
   });
 });

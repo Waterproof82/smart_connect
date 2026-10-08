@@ -213,7 +213,9 @@ GRANT EXECUTE ON FUNCTION public.match_documents_by_source(TEXT, TEXT, float, in
 -- 6. Drop dead embedding_cache (ADR-003 Phase 2, no real caller)
 -- ============================================================
 
-DROP TRIGGER IF EXISTS update_embedding_cache_updated_at_trigger ON public.embedding_cache;
+-- No `DROP TRIGGER ... ON public.embedding_cache`: Postgres raises 42P01 when
+-- the table is already gone (as in production), even with IF EXISTS. The
+-- DROP TABLE ... CASCADE below removes the trigger together with the table.
 DROP FUNCTION IF EXISTS public.update_embedding_cache_updated_at() CASCADE;
 DROP FUNCTION IF EXISTS public.clean_expired_embedding_cache() CASCADE;
 DROP TABLE IF EXISTS public.embedding_cache CASCADE;
