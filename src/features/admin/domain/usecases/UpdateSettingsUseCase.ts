@@ -35,12 +35,12 @@ export class UpdateSettingsUseCase {
     if (updates.n8nEnabled === true) {
       if (updates.n8nWebhookUrl !== undefined) {
         if (!updates.n8nWebhookUrl) {
-          throw new Error('Para activar n8n necesitás una URL de webhook válida');
+          throw new Error('Para activar n8n necesitas una URL de webhook válida');
         }
       } else {
         const currentSettings = await this.settingsRepository.getSettings();
         if (!currentSettings.n8nWebhookUrl) {
-          throw new Error('Para activar n8n necesitás una URL de webhook válida');
+          throw new Error('Para activar n8n necesitas una URL de webhook válida');
         }
       }
     }

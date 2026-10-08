@@ -565,7 +565,7 @@ const translations: Record<Language, Translation> = {
       "Hardware físico con alma digital. Tarjetas NFC elegantes que permiten a tus clientes dejar reseñas positivas al instante con un solo toque.",
     featuresCartaDigital: "Carta Digital Premium",
     featuresCartaDigitalDesc:
-      "La carta digital que elimina intermediarios. 0% comisiones, 5 idiomas, pedidos por WhatsApp y tu propia base de datos de clientes.",
+      "La carta digital que elimina intermediarios. 0% comisiones, 5 idiomas, pedidos por Telegram y tu propia base de datos de clientes.",
     featuresDetails: "Ver detalles",
 
     // Carta Digital reviews (seo-trust-claims-cleanup PR2a)
@@ -1032,7 +1032,7 @@ const translations: Record<Language, Translation> = {
     cartaFaqQ3: "¿Cuántos idiomas soporta la carta?",
     cartaFaqA3: "La carta digital soporta hasta 5 idiomas de forma simultánea, lo que es clave para la hostelería turística de Canarias.",
     cartaFaqQ4: "¿Hay comisiones por pedido?",
-    cartaFaqA4: "No. A diferencia de plataformas como Glovo o Uber Eats, la Carta Digital no cobra ninguna comisión por pedido. Pagás una tarifa fija mensual.",
+    cartaFaqA4: "No. A diferencia de plataformas como Glovo o Uber Eats, la Carta Digital no cobra ninguna comisión por pedido. Pagas una tarifa fija mensual.",
     cartaFaqQ5: "¿Cuánto tiempo lleva la puesta en marcha?",
     cartaFaqA5: "La carta digital puede estar operativa el mismo día. Configuramos el menú, generamos los QR y formamos a tu equipo en menos de 24 horas.",
     cartaComparTitle: "Carta Digital vs. Alternativas",
@@ -1084,7 +1084,7 @@ const translations: Record<Language, Translation> = {
     cartaTelegramFeature2Title: "Grupo de Telegram del equipo",
     cartaTelegramFeature2Desc: "El pedido llega al grupo compartido. Todo el equipo lo ve en tiempo real.",
     cartaTelegramFeature3Title: "Respuesta con un botón",
-    cartaTelegramFeature3Desc: "Confirmás el tiempo de recogida con un solo toque. Sin llamadas, sin confusión.",
+    cartaTelegramFeature3Desc: "Confirmas el tiempo de recogida con un solo toque. Sin llamadas, sin confusión.",
     cartaTelegramFeature4Title: "Camarero en mesa desde el móvil",
     cartaTelegramFeature4Desc: "El camarero gestiona pedidos en sala desde su móvil sin pantallas adicionales.",
     cartaSmartTitle:
@@ -1094,7 +1094,7 @@ const translations: Record<Language, Translation> = {
 
     // Carta Digital — Modos section
     cartaModosTitle: "Dos modos, un sistema",
-    cartaModosSubtitle: "Elegí el modo que se adapta a tu negocio.",
+    cartaModosSubtitle: "Elige el modo que se adapta a tu negocio.",
     cartaModoRestauranteTitle: "Modo Restaurante",
     cartaModoRestauranteDesc: "Pedidos online y en mesa desde Telegram. Perfecto para bares, restaurantes y cafeterías.",
     cartaModoRestauranteFeature1: "Pedidos en mesa vía QR + Telegram",
@@ -1107,13 +1107,13 @@ const translations: Record<Language, Translation> = {
     // Carta Digital — Antidesperdicio section
     cartaAntidesperdicioTitle: "Reduce el desperdicio alimentario",
     cartaAntidesperdicioSubtitle: "Convierte el stock próximo a caducar en ingresos",
-    cartaAntidesperdicioDesc: "Publicá tus platos del día o ingredientes próximos a caducar con descuento. Tus clientes los descubren primero — al estilo Too Good To Go, pero integrado en tu carta.",
+    cartaAntidesperdicioDesc: "Publica tus platos del día o ingredientes próximos a caducar con descuento. Tus clientes los descubren primero — al estilo Too Good To Go, pero integrado en tu carta.",
     cartaAntidesperdicioFeature1Title: "Descuentos por tiempo limitado",
-    cartaAntidesperdicioFeature1Desc: "Marcá productos con descuento directo en la carta digital. Visibles desde el QR.",
+    cartaAntidesperdicioFeature1Desc: "Marca productos con descuento directo en la carta digital. Visibles desde el QR.",
     cartaAntidesperdicioFeature2Title: "Notificación a clientes frecuentes",
     cartaAntidesperdicioFeature2Desc: "Los clientes guardados en tu BBDD reciben promos automáticas por Telegram.",
     cartaAntidesperdicioFeature3Title: "Menos pérdidas, más margen",
-    cartaAntidesperdicioFeature3Desc: "Recuperá el valor de stock que de otro modo se desperdiciaría.",
+    cartaAntidesperdicioFeature3Desc: "Recupera el valor de stock que de otro modo se desperdiciaría.",
   },
   en: {
     ...tpvModuleEn,
@@ -1177,7 +1177,7 @@ const translations: Record<Language, Translation> = {
       "Physical hardware with a digital soul. Elegant NFC cards that allow your customers to leave positive reviews instantly with a single tap.",
     featuresCartaDigital: "Carta Digital Premium",
     featuresCartaDigitalDesc:
-      "The digital menu that eliminates intermediaries. 0% commissions, 5 languages, WhatsApp orders and your own customer database.",
+      "The digital menu that eliminates intermediaries. 0% commissions, 5 languages, Telegram orders and your own customer database.",
     featuresDetails: "View details",
     cartaReviewsEyebrow: "Reviews",
     cartaReviewsTitle: "What diners say",
