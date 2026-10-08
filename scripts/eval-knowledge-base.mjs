@@ -88,12 +88,10 @@ async function main() {
     process.exit(1);
   }
 
+  // No anonymous sign-in: it is disabled in production, and chat-with-rag
+  // accepts the publishable key alone, which is exactly how the public chat
+  // widget calls it. Evaluating through the same path keeps the eval honest.
   const supabase = createClient(env.SUPABASE_URL, env.SUPABASE_ANON_KEY);
-  const { error: authError } = await supabase.auth.signInAnonymously();
-  if (authError) {
-    console.error(`eval-kb: anonymous sign-in failed: ${authError.message}`);
-    process.exit(1);
-  }
 
   const askFn = async (query) => {
     const { data, error } = await supabase.functions.invoke("chat-with-rag", { body: { query } });

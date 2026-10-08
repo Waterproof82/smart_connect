@@ -171,3 +171,18 @@ taken by Unit 6's first migration, before this run touches anything).
 `feat/rag-unit7-ingest`, based on `feat/rag-units-4-6-integration` (which
 already merges Units 4, 5 and 6). Not pushed, not merged, not run against
 production. No `npm run build` was run in this session (per instruction).
+
+## Production rollout — 2026-10-08
+
+1. Build + dry-run (fake credentials, invalid URL, zero network writes): 103 chunks.
+   - Breakdown: site 69, FAQ JSON-LD 21, curated 13.
+   - Scan results: the only price is NFC 15–35 €; 0 old-brand hits; 0 `TODO(owner)`; no legal pages.
+2. First real run (`EMBEDDING_MODE=v2`) aborted on the first upsert, with nothing written: `column "updated_at" of relation "documents" does not exist`.
+   - Cause: `upsert_document` writes `updated_at`, but production never had that column. It existed only in an old repo migration that was never applied remotely.
+   - Fix: additive migration `20261008075727_add_documents_updated_at.sql`, with a structure test written first.
+3. Second real run: 103 chunks embedded (v2) and upserted, 0 stale rows deleted. The 3 manual rows were untouched.
+4. `supabase secrets set EMBEDDING_MODE=v2` (takes effect without a redeploy).
+5. `npm run eval-kb`: 22/22 passed (16 ES + 6 EN), 100%; latency p95 4473 ms.
+   - The runner previously signed in anonymously. That fails in production because anonymous sign-ins are disabled, and `chat-with-rag` accepts the publishable key alone, as the public widget does. The runner now calls it the same way.
+
+Rollback: `supabase secrets set EMBEDDING_MODE=legacy`, then restore `documents` from `kb_backup.documents_20261008`.

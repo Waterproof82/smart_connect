@@ -52,7 +52,7 @@
     "id": "precio-nfc",
     "lang": "es",
     "question": "¿Cuánto cuestan las tarjetas NFC?",
-    "mustInclude": [["15", "35"], "€"],
+    "mustInclude": [["15", "35"], ["€", "euros"]],
     "mustNotInclude": ["39", "1450"]
   },
   {
@@ -122,7 +122,7 @@
     "id": "carta-shops-en",
     "lang": "en",
     "question": "Do you have digital menus for shops?",
-    "mustInclude": [["yes", "Yes"]],
+    "mustInclude": [["yes", "Yes", "available for shops"]],
     "mustNotInclude": ["39", "1450"]
   },
   {
