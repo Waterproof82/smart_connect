@@ -14,6 +14,13 @@
     "mustNotInclude": ["€", "euros"]
   },
   {
+    "id": "web-ventajas",
+    "lang": "es",
+    "question": "¿Qué ventajas tiene hacer la web con vosotros?",
+    "mustInclude": ["mantenimiento", ["hosting", "SEO"], "Tenerife"],
+    "mustNotInclude": ["€", "euros"]
+  },
+  {
     "id": "web-hosting",
     "lang": "es",
     "question": "¿La página web incluye hosting y mantenimiento?",

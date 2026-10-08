@@ -7,6 +7,10 @@ lang: es
 
 Sí, Digitaliza Tenerife hace páginas web personalizadas para negocios locales (restaurantes, bares, cafeterías y tiendas), adaptadas a cada proyecto y no basadas en plantillas. El precio depende del tipo de proyecto y de su complejidad; para pedir presupuesto hay que contactar en https://digitalizatenerife.es/#contacto.
 
+## ¿Por qué hacer mi web con vosotros?
+
+Porque te ahorras el mantenimiento, las actualizaciones y varios pagos por separado de hosting y de posicionamiento SEO. Además, tienes la garantía de contar con una persona física en Tenerife que da la cara ante los clientes.
+
 ## ¿Tienen carta digital para tiendas?
 
 Sí, la carta digital no es solo para restaurantes: también está disponible para tiendas. Se accede por código QR o tarjeta NFC, sin necesidad de instalar ninguna app ni de registrarse, y es multilingüe.
