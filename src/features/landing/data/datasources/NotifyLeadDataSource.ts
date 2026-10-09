@@ -28,6 +28,9 @@ export interface LeadNotificationPayload {
   service: string;
   message: string;
   submittedAt: string;
+  /** Honeypot value + fill-time (D12) — present only when the caller supplied anti-bot meta. */
+  website?: string;
+  elapsedMs?: number;
 }
 
 export class NotifyLeadDataSource {

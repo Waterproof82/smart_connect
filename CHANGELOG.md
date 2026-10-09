@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Security
+
+- **`notify-lead` is now the single, anti-bot lead entry point; the n8n webhook URL is no longer anon-readable (SDD `notify-lead-antibot`)**: `app_settings.n8n_webhook_url` was readable by the anonymous role (live-verified), so any bot could POST straight to the n8n webhook with no validation. Three chained PRs:
+  - **PR1** — `notify-lead` reads `contact_email`/`n8n_enabled`/`n8n_webhook_url` with the service role (was anon), forwards to n8n server-side with a 5s timeout, and always falls back to Brevo on any n8n failure so a lead is never lost. Dropped a PII-bearing (`ip|email`) rate-limit log line.
+  - **PR2** — the browser no longer calls n8n directly or reads its webhook URL; `N8NWebhookDataSource`/`LeadRepositoryImpl`/`EmailLeadRepositoryImpl` removed, `EmailNotifyDataSource`→`NotifyLeadDataSource` renamed. A new migration (owner applies it — see audit log) revokes anon's table-level `SELECT` on `app_settings` and grants column-level `SELECT` on the public columns only; `settingsService.ts` switched from `select=*` to an explicit column list.
+  - **PR3** — a hidden honeypot field and a minimum fill-time (3s) now reject bot submissions silently (`{ ok: true }` 200, no email/n8n delivery, no PII in logs). Tolerant by default (a missing/invalid timestamp still delivers); the owner flips `NOTIFY_LEAD_REQUIRE_ANTIBOT_SIGNALS=true` ~48h after deploy to make it strict.
+  See `docs/audit/2026-10-08_notify-lead-antibot.md` for the full PR-by-PR breakdown, the owner's pending deploy/migration/rotation actions, and a documented deviation from the design doc's literal honeypot-absent wording.
+
 ### Removed
 
 - **Dead code and unused dependencies cleaned up (SDD `project-dead-code-cleanup`)**: modules and dependencies confirmed zero-reference via `knip` and manual `rg` verification were deleted, with every work unit kept green on `npm run lint`, `npx tsc --noEmit`, `npm test` and `npx vitest run`.
