@@ -27,10 +27,14 @@ vi.mock("@shared/services/settingsService", () => ({
   }),
 }));
 
+const { mockExecute } = vi.hoisted(() => ({
+  mockExecute: vi.fn().mockResolvedValue({ success: true }),
+}));
+
 vi.mock("../../LandingContainer", () => ({
   createLandingContainer: vi.fn(() => ({
     submitLeadUseCase: {
-      execute: vi.fn().mockResolvedValue({ success: true }),
+      execute: mockExecute,
     },
   })),
 }));
@@ -104,5 +108,89 @@ describe("Contact", () => {
 
     await waitFor(() => expect(button).not.toBeDisabled());
     expect(button.className).toBe("btn-primary w-full");
+  });
+
+  describe("anti-bot honeypot + fill-time (sdd/notify-lead-antibot, D10/D8)", () => {
+    beforeEach(() => {
+      mockExecute.mockClear();
+    });
+
+    it("renders a hidden honeypot field with the expected attributes, identical SSR/CSR markup", () => {
+      renderWithLanguage();
+
+      const honeypot = document.getElementById(
+        "contact-website",
+      ) as HTMLInputElement;
+      expect(honeypot).toBeInTheDocument();
+      expect(honeypot).toHaveAttribute("name", "website");
+      expect(honeypot).toHaveAttribute("type", "text");
+      expect(honeypot).toHaveAttribute("autocomplete", "off");
+      expect(honeypot).toHaveAttribute("tabindex", "-1");
+
+      // Hidden via absolute positioning + overflow, NOT display:none (D10) —
+      // display:none would make the value unreadable by some bots, which
+      // defeats the purpose of a honeypot.
+      expect(honeypot.style.display).not.toBe("none");
+
+      const wrapper = honeypot.closest('[aria-hidden="true"]');
+      expect(wrapper).not.toBeNull();
+    });
+
+    it("does not register the honeypot in the zod-validated form state (not required to submit)", async () => {
+      const user = userEvent.setup();
+      renderWithLanguage();
+
+      await waitFor(() =>
+        expect(
+          screen.getByRole("button", { name: /Enviar Mensaje/i }),
+        ).toBeDisabled(),
+      );
+      await fillRequiredFields(user);
+
+      const button = await screen.findByRole("button", {
+        name: /Enviar Mensaje/i,
+      });
+      await waitFor(() => expect(button).not.toBeDisabled());
+    });
+
+    it("sends a numeric elapsedMs and an empty honeypot for a normal human submission", async () => {
+      const user = userEvent.setup();
+
+      renderWithLanguage();
+      await fillRequiredFields(user);
+
+      const button = await screen.findByRole("button", {
+        name: /Enviar Mensaje/i,
+      });
+      await waitFor(() => expect(button).not.toBeDisabled());
+      await user.click(button);
+
+      await waitFor(() => expect(mockExecute).toHaveBeenCalledTimes(1));
+      const [, meta] = mockExecute.mock.calls[0];
+      expect(meta.website).toBe("");
+      expect(typeof meta.elapsedMs).toBe("number");
+      expect(meta.elapsedMs).toBeGreaterThanOrEqual(0);
+      expect(Number.isFinite(meta.elapsedMs)).toBe(true);
+    });
+
+    it("still sends a 0ms elapsed (falsy but valid) rather than omitting it", async () => {
+      const user = userEvent.setup();
+      const nowSpy = vi.spyOn(performance, "now").mockReturnValue(1000);
+
+      renderWithLanguage();
+      await fillRequiredFields(user);
+
+      const button = await screen.findByRole("button", {
+        name: /Enviar Mensaje/i,
+      });
+      await waitFor(() => expect(button).not.toBeDisabled());
+      await user.click(button);
+
+      await waitFor(() => expect(mockExecute).toHaveBeenCalledTimes(1));
+      const [, meta] = mockExecute.mock.calls[0];
+      expect(meta.elapsedMs).toBe(0);
+
+      nowSpy.mockRestore();
+    });
   });
 });

@@ -16,7 +16,7 @@ import { formatAddressLine } from "@shared/config/organization";
 import { useWhatsappPhone } from "@shared/hooks";
 import { buildWhatsappLink } from "@shared/utils/whatsappLink";
 import { createLandingContainer } from "../LandingContainer";
-import { LeadEntity } from "../../domain/entities";
+import { LeadEntity, LeadSubmissionMeta } from "../../domain/entities";
 import { sanitizeInput, isValidEmail } from "@shared/utils/sanitizer";
 import { rateLimiter, RateLimitPresets } from "@shared/utils/rateLimiter";
 import { contactSchema, ContactFormData } from "../schemas/contactSchema";
@@ -134,6 +134,12 @@ const Contact: React.FC = () => {
     "idle" | "success" | "error"
   >("idle");
   const successTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  // Anti-bot (sdd/notify-lead-antibot, D8/D10): honeypot value is read
+  // uncontrolled at submit time (never registered in the zod schema), and
+  // startedAt is stamped in an effect — NOT during render, so this stays
+  // SSR-safe (no `performance`/`window` access while rendering).
+  const honeypotRef = useRef<HTMLInputElement | null>(null);
+  const startedAtRef = useRef<number | null>(null);
   const whatsappPhone = useWhatsappPhone();
   // Single source for the address fallback, reused for both the display
   // value and the maps link below — see src/shared/config/organization.ts.
@@ -145,6 +151,11 @@ const Contact: React.FC = () => {
         clearTimeout(successTimeoutRef.current);
       }
     };
+  }, []);
+
+  // D8: stamped on mount, in an effect — never during render.
+  useEffect(() => {
+    startedAtRef.current = performance.now();
   }, []);
 
   useEffect(() => {
@@ -256,7 +267,19 @@ const Contact: React.FC = () => {
       }
 
       const lead = new LeadEntity(sanitizedData);
-      const result = await container.submitLeadUseCase.execute(lead);
+      // D8: elapsed is computed here, never cached/rendered — a startedAt
+      // that somehow never got stamped (effect didn't run yet) falls back
+      // to 0, which the server-side fill-time check rejects as too_fast,
+      // the conservative failure mode for an unreachable edge case.
+      const elapsedMs =
+        startedAtRef.current === null
+          ? 0
+          : performance.now() - startedAtRef.current;
+      const meta: LeadSubmissionMeta = {
+        website: honeypotRef.current?.value ?? "",
+        elapsedMs,
+      };
+      const result = await container.submitLeadUseCase.execute(lead, meta);
 
       if (result.success) {
         setSubmitStatus("success");
@@ -416,6 +439,33 @@ const Contact: React.FC = () => {
           >
             <div className="bg-[var(--color-bg-alt)] p-6 md:p-10 rounded-[var(--radius-card)] border border-[var(--color-border)]">
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+                {/* Anti-bot honeypot (D10): hidden via absolute positioning +
+                    overflow, NOT display:none (a display:none field is often
+                    skipped by unsophisticated bot scripts, which would defeat
+                    the honeypot). aria-hidden + tabIndex=-1 keep it out of the
+                    accessibility tree and the tab order for real users. Not
+                    registered in the zod schema — read uncontrolled at
+                    submit. Identical markup on the server and the client. */}
+                <div
+                  aria-hidden="true"
+                  style={{
+                    position: "absolute",
+                    left: "-9999px",
+                    width: "1px",
+                    height: "1px",
+                    overflow: "hidden",
+                  }}
+                >
+                  <input
+                    ref={honeypotRef}
+                    id="contact-website"
+                    name="website"
+                    type="text"
+                    autoComplete="off"
+                    tabIndex={-1}
+                    defaultValue=""
+                  />
+                </div>
                 <div className="grid md:grid-cols-2 gap-5">
                   <div>
                     <label

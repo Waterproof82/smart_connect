@@ -14,6 +14,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.7';
 import {
   buildBrevoPayload,
   buildN8nPayload,
+  evaluateBotSignals,
   isOriginAllowed,
   N8N_FORWARD_TIMEOUT_MS,
   resolveLeadRouting,
@@ -119,6 +120,19 @@ Deno.serve(async (req) => {
     if (!lead) {
       return new Response(JSON.stringify({ error: 'Invalid payload' }), {
         status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    // Anti-bot (owner decision, sdd/notify-lead-antibot): honeypot + fill-time,
+    // checked BEFORE the rate limiter so a bot never consumes a rate-limit
+    // slot a real lead might need. Rejection is ALWAYS silent — a 200-shaped
+    // response, no email/n8n delivery, no PII in the log (D6).
+    const requireAntibotSignals = Deno.env.get('NOTIFY_LEAD_REQUIRE_ANTIBOT_SIGNALS') === 'true';
+    const botVerdict = evaluateBotSignals(body, { requireSignals: requireAntibotSignals });
+    if (botVerdict.isBot) {
+      console.warn(`notify-lead: bot_rejected reason=${botVerdict.reason}`);
+      return new Response(JSON.stringify({ ok: true }), {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }

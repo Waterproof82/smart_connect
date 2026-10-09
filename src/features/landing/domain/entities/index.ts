@@ -4,4 +4,4 @@
  */
 
 export { LeadEntity } from './Lead';
-export type { Lead } from './Lead';
+export type { Lead, LeadSubmissionMeta } from './Lead';
