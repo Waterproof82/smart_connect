@@ -456,14 +456,22 @@ const Contact: React.FC = () => {
                     overflow: "hidden",
                   }}
                 >
+                  {/* name/id deliberately meaningless: Chrome autofill ignores
+                      autocomplete="off" and filled a field named "website"
+                      for a real user (hotfix 2026-10-09). The value is still
+                      sent to notify-lead under the `website` payload key. */}
                   <input
                     ref={honeypotRef}
-                    id="contact-website"
-                    name="website"
+                    id="contact-sc-hp"
+                    name="sc_hp_field"
                     type="text"
                     autoComplete="off"
                     tabIndex={-1}
                     defaultValue=""
+                    data-lpignore="true"
+                    data-1p-ignore="true"
+                    data-bwignore="true"
+                    data-form-type="other"
                   />
                 </div>
                 <div className="grid md:grid-cols-2 gap-5">

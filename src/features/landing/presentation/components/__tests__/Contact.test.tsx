@@ -119,13 +119,25 @@ describe("Contact", () => {
       renderWithLanguage();
 
       const honeypot = document.getElementById(
-        "contact-website",
+        "contact-sc-hp",
       ) as HTMLInputElement;
       expect(honeypot).toBeInTheDocument();
-      expect(honeypot).toHaveAttribute("name", "website");
+      // Hotfix 2026-10-09: Chrome autofill ignores autocomplete="off" and
+      // filled a field named "website" for a real user. The name/id must not
+      // match any autofill heuristic (url, website, company, name, email...).
+      expect(honeypot).toHaveAttribute("name", "sc_hp_field");
+      expect(honeypot.name).not.toMatch(
+        /web|site|url|company|name|mail|phone|tel|address/i,
+      );
+      expect(honeypot.id).not.toMatch(/web|site|url|company|mail|phone/i);
       expect(honeypot).toHaveAttribute("type", "text");
       expect(honeypot).toHaveAttribute("autocomplete", "off");
       expect(honeypot).toHaveAttribute("tabindex", "-1");
+      // Password-manager opt-outs (LastPass, 1Password, Bitwarden, Dashlane).
+      expect(honeypot).toHaveAttribute("data-lpignore", "true");
+      expect(honeypot).toHaveAttribute("data-1p-ignore", "true");
+      expect(honeypot).toHaveAttribute("data-bwignore", "true");
+      expect(honeypot).toHaveAttribute("data-form-type", "other");
 
       // Hidden via absolute positioning + overflow, NOT display:none (D10) —
       // display:none would make the value unreadable by some bots, which

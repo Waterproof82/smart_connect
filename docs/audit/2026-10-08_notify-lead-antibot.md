@@ -64,3 +64,12 @@ Three stacked PRs, `stacked-to-main` chain strategy (per `sdd-tasks`' Review Wor
 - PR #146 merged to develop, promoted to main (7d38249); Vercel production deploy and main CI green. Live bundle verified: settings read uses the explicit column list, no `select=*`, no `n8n_webhook_url`.
 - Migration applied via Supabase MCP (remote version `20261009071321`; local file renamed to match, not via `db push` because of pre-existing local-only migrations). Verified: anon `n8n_webhook_url`/`n8n_enabled` = false, public columns = true, authenticated still reads the webhook; REST as anon → public columns 200, `select=n8n_webhook_url` and `select=*` → 42501; live page still renders the contact email.
 - PR1 smoke test: real lead from production form delivered via Brevo (`notify-lead: delivered channel=brevo`, no PII in log); owner confirmed email received.
+
+## 2026-10-09T07:45Z — Hotfix: honeypot dropped a real lead (Chrome autofill)
+
+- **Incident**: after PR3 went live, the owner's real test submission was rejected silently (`notify-lead: bot_rejected reason=honeypot`). Owner confirmed Chrome + autofill. Root cause: Chrome ignores `autocomplete="off"` and its heuristics filled the hidden input named `website`. The design assumed `autocomplete="off"` was enough — never verified against real Chrome behavior.
+- **Fix (branch `fix/honeypot-chrome-autofill`, TDD)**:
+  - `Contact.tsx`: honeypot `name`/`id` → `sc_hp_field` / `contact-sc-hp` (matches no autofill heuristic) + `data-lpignore`, `data-1p-ignore`, `data-bwignore`, `data-form-type="other"`. Payload key stays `website`, so the server contract is unchanged.
+  - `_lib.ts` `evaluateBotSignals`: a filled string honeypot no longer rejects on its own. With `elapsedMs >= 3000` (or missing in tolerant mode) → `{ isBot: false, suspect: true }`; filled + too fast → reject `honeypot`; non-string honeypot → reject; strict mode + missing timing → reject `missing_signals`.
+  - `index.ts`: suspect leads are delivered (`notify-lead: suspect_delivered reason=honeypot`, no PII) and the Brevo subject gets a `[Posible spam] ` prefix.
+- **Deploy order**: deploy `notify-lead` first (stops the silent drops immediately, also for cached old bundles), then promote the client.

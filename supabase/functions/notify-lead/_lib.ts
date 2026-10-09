@@ -47,6 +47,8 @@ export const ALLOWED_ORIGINS = [
 
 const SENDER_NAME = 'SmartConnect AI';
 const SENDER_EMAIL = 'info@digitalizatenerife.es';
+/** Subject prefix for leads delivered despite a filled honeypot (owner triages them). */
+const SUSPECT_SUBJECT_PREFIX = '[Posible spam] ';
 
 /** Hard timeout for the server-side n8n forward (D3). */
 export const N8N_FORWARD_TIMEOUT_MS = 5000;
@@ -190,12 +192,17 @@ export function isOriginAllowed(origin: string | null | undefined): boolean {
  * MUST come from a server-side lookup (`app_settings.contact_email`) — NEVER
  * from the client payload.
  */
-export function buildBrevoPayload(payload: LeadPayload, recipientEmail: string): BrevoEmailPayload {
+export function buildBrevoPayload(
+  payload: LeadPayload,
+  recipientEmail: string,
+  opts: { readonly suspect?: boolean } = {}
+): BrevoEmailPayload {
+  const subject = buildSubject(payload);
   return {
     sender: { name: SENDER_NAME, email: SENDER_EMAIL },
     to: [{ email: recipientEmail }],
     replyTo: { email: payload.email, name: payload.name },
-    subject: buildSubject(payload),
+    subject: opts.suspect ? `${SUSPECT_SUBJECT_PREFIX}${subject}` : subject,
     htmlContent: buildEmailHtml(payload),
     textContent: buildEmailText(payload),
   };
@@ -235,7 +242,9 @@ function isUsableHttpsUrl(raw: unknown): raw is string {
 /** Anti-bot rejection reasons (D6 — also used verbatim as the PII-free log tag). */
 export type BotReason = 'honeypot' | 'too_fast' | 'missing_signals';
 
-export type BotVerdict = { readonly isBot: false } | { readonly isBot: true; readonly reason: BotReason };
+export type BotVerdict =
+  | { readonly isBot: false; readonly suspect?: true }
+  | { readonly isBot: true; readonly reason: BotReason };
 
 export interface EvaluateBotSignalsOptions {
   /** Strict mode (env `NOTIFY_LEAD_REQUIRE_ANTIBOT_SIGNALS=true`): a missing elapsedMs rejects. Tolerant (default): it is allowed through. */
@@ -249,7 +258,7 @@ export interface EvaluateBotSignalsOptions {
  * keeps a stale cached client bundle (shipped before this field existed)
  * from being silently rejected (D11 — "cached old bundles must not lose a
  * lead"). A present-but-wrong-typed value (number, boolean, object) is
- * treated as suspicious and counted as filled.
+ * treated as tampering — a real browser always sends the input's string value.
  */
 function isHoneypotFilled(website: unknown): boolean {
   if (website === undefined) return false;
@@ -259,28 +268,36 @@ function isHoneypotFilled(website: unknown): boolean {
 
 /**
  * Evaluates the honeypot + fill-time anti-bot signals (owner decision,
- * sdd/notify-lead-antibot). Honeypot is checked first — if filled, it wins
- * over any elapsedMs verdict. Rejection is ALWAYS silent (caller returns a
+ * sdd/notify-lead-antibot). Rejection is ALWAYS silent (caller returns a
  * 200-shaped response) regardless of the reason.
+ *
+ * Hotfix 2026-10-09: Chrome autofill ignores autocomplete="off" and filled
+ * the honeypot for a real human in production. A filled STRING honeypot is
+ * therefore never enough to drop a lead on its own: if the fill-time signal
+ * passes, the lead is delivered flagged `suspect` for the owner to triage.
+ * Filled + too fast (or wrong-typed honeypot) still rejects.
  */
 export function evaluateBotSignals(body: unknown, opts: EvaluateBotSignalsOptions): BotVerdict {
   const candidate = body && typeof body === 'object' ? (body as Record<string, unknown>) : {};
   const minFillMs = opts.minFillMs ?? MIN_FILL_MS;
+  const website = candidate.website;
 
-  if (isHoneypotFilled(candidate.website)) {
+  if (website !== undefined && typeof website !== 'string') {
     return { isBot: true, reason: 'honeypot' };
   }
+  const honeypotFilled = isHoneypotFilled(website);
 
   const elapsedMs = candidate.elapsedMs;
   if (elapsedMs === undefined) {
-    return opts.requireSignals ? { isBot: true, reason: 'missing_signals' } : { isBot: false };
+    if (opts.requireSignals) return { isBot: true, reason: 'missing_signals' };
+    return honeypotFilled ? { isBot: false, suspect: true } : { isBot: false };
   }
 
   if (typeof elapsedMs !== 'number' || !Number.isFinite(elapsedMs) || elapsedMs < minFillMs) {
-    return { isBot: true, reason: 'too_fast' };
+    return { isBot: true, reason: honeypotFilled ? 'honeypot' : 'too_fast' };
   }
 
-  return { isBot: false };
+  return honeypotFilled ? { isBot: false, suspect: true } : { isBot: false };
 }
 
 export function resolveLeadRouting(row: unknown): LeadRouting {

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **Real leads silently dropped by the contact-form honeypot when Chrome autofill was used**: Chrome ignores `autocomplete="off"` and filled the hidden field named `website`, so a real production lead was rejected as `honeypot`. The field now has a meaningless name/id (`sc_hp_field` / `contact-sc-hp`) plus password-manager opt-outs (`data-lpignore`, `data-1p-ignore`, `data-bwignore`, `data-form-type`), and `notify-lead` no longer drops a lead on a filled honeypot alone: with human-plausible timing it is delivered with a `[Posible spam]` subject prefix. Filled honeypot + too fast, or a non-string honeypot, still rejects silently.
+
 ### Security
 
 - **`notify-lead` is now the single, anti-bot lead entry point; the n8n webhook URL is no longer anon-readable (SDD `notify-lead-antibot`)**: `app_settings.n8n_webhook_url` was readable by the anonymous role (live-verified), so any bot could POST straight to the n8n webhook with no validation. Three chained PRs:

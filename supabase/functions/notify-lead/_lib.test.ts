@@ -244,6 +244,16 @@ describe('buildBrevoPayload', () => {
     expect(result.htmlContent.length).toBeGreaterThan(0);
     expect(result.textContent.length).toBeGreaterThan(0);
   });
+
+  it('prefixes the subject with [Posible spam] when the lead is flagged as suspect', () => {
+    const result = buildBrevoPayload(base, 'owner@digitalizatenerife.es', { suspect: true });
+    expect(result.subject).toBe('[Posible spam] Nuevo lead: Ana Pérez — QRIBAR');
+  });
+
+  it('keeps the plain subject when the lead is not flagged', () => {
+    const result = buildBrevoPayload(base, 'owner@digitalizatenerife.es', { suspect: false });
+    expect(result.subject).toBe('Nuevo lead: Ana Pérez — QRIBAR');
+  });
 });
 
 describe('resolveLeadRouting', () => {
@@ -351,10 +361,27 @@ describe('evaluateBotSignals', () => {
       });
     });
 
-    it('is a bot when website is a non-empty string', () => {
+    // Hotfix 2026-10-09: Chrome autofill ignores autocomplete="off" and filled
+    // the honeypot for a real human in production. A filled string honeypot
+    // alone must never drop a lead — it is delivered flagged as suspect.
+    it('flags as suspect (NOT a bot) when website is a non-empty string and elapsedMs clears the threshold', () => {
       expect(
-        evaluateBotSignals({ website: 'http://spam.example.com', elapsedMs: MIN_FILL_MS }, tolerant)
-      ).toEqual({ isBot: true, reason: 'honeypot' });
+        evaluateBotSignals({ website: 'https://bar-el-puerto.es', elapsedMs: MIN_FILL_MS }, tolerant)
+      ).toEqual({ isBot: false, suspect: true });
+    });
+
+    it('flags as suspect when website is filled and elapsedMs is missing in tolerant mode', () => {
+      expect(evaluateBotSignals({ website: 'https://bar-el-puerto.es' }, tolerant)).toEqual({
+        isBot: false,
+        suspect: true,
+      });
+    });
+
+    it('still rejects a filled website with missing elapsedMs in strict mode', () => {
+      expect(evaluateBotSignals({ website: 'https://bar-el-puerto.es' }, strict)).toEqual({
+        isBot: true,
+        reason: 'missing_signals',
+      });
     });
 
     it('trims before checking — whitespace-only website is NOT honeypot-filled', () => {
