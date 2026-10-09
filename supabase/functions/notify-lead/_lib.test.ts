@@ -18,6 +18,7 @@ import {
   isOriginAllowed,
   MIN_FILL_MS,
   resolveLeadRouting,
+  summarizeBrevoError,
   validateLeadPayload,
   type LeadPayload,
 } from './_lib';
@@ -488,5 +489,27 @@ describe('evaluateBotSignals', () => {
     it('treats a null/non-object body as missing signals in strict mode', () => {
       expect(evaluateBotSignals(null, strict)).toEqual({ isBot: true, reason: 'missing_signals' });
     });
+  });
+});
+
+describe('summarizeBrevoError', () => {
+  it('keeps only the HTTP status and Brevo error code', () => {
+    const body = JSON.stringify({ code: 'invalid_parameter', message: 'email is not valid: ana@example.com' });
+    expect(summarizeBrevoError(400, body)).toBe('status=400 code=invalid_parameter');
+  });
+
+  it('never leaks the message text (it can echo the lead email)', () => {
+    const body = JSON.stringify({ code: 'invalid_parameter', message: 'ana@example.com rejected' });
+    expect(summarizeBrevoError(400, body)).not.toContain('ana@example.com');
+  });
+
+  it('falls back to code=unknown for a non-JSON or code-less body', () => {
+    expect(summarizeBrevoError(502, '<html>Bad Gateway ana@example.com</html>')).toBe('status=502 code=unknown');
+    expect(summarizeBrevoError(500, JSON.stringify({ message: 'x' }))).toBe('status=500 code=unknown');
+  });
+
+  it('sanitizes the code to a safe token', () => {
+    const body = JSON.stringify({ code: 'bad code\nana@example.com' });
+    expect(summarizeBrevoError(400, body)).toBe('status=400 code=unknown');
   });
 });

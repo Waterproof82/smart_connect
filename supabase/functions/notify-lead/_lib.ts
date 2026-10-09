@@ -312,3 +312,20 @@ export function resolveLeadRouting(row: unknown): LeadRouting {
 
   return { contactEmail, n8nUrl };
 }
+
+/**
+ * PII-safe summary of a Brevo error response for server logs. Brevo's
+ * `message` can echo the lead's email address, so only the HTTP status and
+ * the machine-readable `code` (restricted to a safe token) are kept.
+ */
+export function summarizeBrevoError(status: number, body: string): string {
+  let code = 'unknown';
+  try {
+    const parsed: unknown = JSON.parse(body);
+    const raw = parsed && typeof parsed === 'object' ? (parsed as Record<string, unknown>).code : undefined;
+    if (typeof raw === 'string' && /^[a-z0-9_]{1,64}$/i.test(raw)) code = raw;
+  } catch {
+    // Non-JSON body (e.g. gateway HTML) — keep `unknown`.
+  }
+  return `status=${status} code=${code}`;
+}
