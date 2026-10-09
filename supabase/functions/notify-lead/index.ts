@@ -136,6 +136,12 @@ Deno.serve(async (req) => {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
+    // Filled honeypot but human-plausible timing (e.g. Chrome autofill): never
+    // drop it — deliver flagged so the owner triages it (hotfix 2026-10-09).
+    const suspect = botVerdict.suspect === true;
+    if (suspect) {
+      console.warn('notify-lead: suspect_delivered reason=honeypot');
+    }
 
     const clientIp = firstIpFromForwardedFor(req.headers.get('x-forwarded-for'));
     // Log hygiene (D6): the rate-limit key still needs to be per client+email
@@ -202,7 +208,7 @@ Deno.serve(async (req) => {
       });
     }
 
-    const brevoPayload = buildBrevoPayload(lead, contactEmail);
+    const brevoPayload = buildBrevoPayload(lead, contactEmail, { suspect });
 
     const brevoResponse = await fetch('https://api.brevo.com/v3/smtp/email', {
       method: 'POST',
