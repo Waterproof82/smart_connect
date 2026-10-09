@@ -139,13 +139,22 @@ describe("Contact", () => {
       expect(honeypot).toHaveAttribute("data-bwignore", "true");
       expect(honeypot).toHaveAttribute("data-form-type", "other");
 
-      // Hidden via absolute positioning + overflow, NOT display:none (D10) —
-      // display:none would make the value unreadable by some bots, which
-      // defeats the purpose of a honeypot.
-      expect(honeypot.style.display).not.toBe("none");
-
-      const wrapper = honeypot.closest('[aria-hidden="true"]');
+      // Hotfix #2 2026-10-09: Chrome autofill fills off-screen
+      // (left:-9999px) inputs — the honeypot was still filled for a real
+      // user after the rename. Chrome never autofills non-focusable fields,
+      // so the wrapper must be display:none (bots filling raw HTML still hit
+      // it).
+      const wrapper = honeypot.closest('[aria-hidden="true"]') as HTMLElement;
       expect(wrapper).not.toBeNull();
+      expect(wrapper.style.display).toBe("none");
+
+      // Last field of the form, away from the name/company/email section so
+      // autofill never groups it with personal-data fields.
+      const form = honeypot.closest("form") as HTMLFormElement;
+      const fields = Array.from(
+        form.querySelectorAll("input, textarea, select"),
+      );
+      expect(fields[fields.length - 1]).toBe(honeypot);
     });
 
     it("does not register the honeypot in the zod-validated form state (not required to submit)", async () => {

@@ -73,3 +73,9 @@ Three stacked PRs, `stacked-to-main` chain strategy (per `sdd-tasks`' Review Wor
   - `_lib.ts` `evaluateBotSignals`: a filled string honeypot no longer rejects on its own. With `elapsedMs >= 3000` (or missing in tolerant mode) → `{ isBot: false, suspect: true }`; filled + too fast → reject `honeypot`; non-string honeypot → reject; strict mode + missing timing → reject `missing_signals`.
   - `index.ts`: suspect leads are delivered (`notify-lead: suspect_delivered reason=honeypot`, no PII) and the Brevo subject gets a `[Posible spam] ` prefix.
 - **Deploy order**: deploy `notify-lead` first (stops the silent drops immediately, also for cached old bundles), then promote the client.
+
+## 2026-10-09T08:00Z — Hotfix #2: renamed honeypot still autofilled
+
+- **Evidence**: after hotfix #1 went live, the owner's Chrome-autofill test was delivered but logged `suspect_delivered reason=honeypot` — the renamed field was still filled. Browser inspection of production: our code never writes to the field (empty without autofill), it was the FIRST form field with no label, right before "Nombre completo", hidden with `position:absolute; left:-9999px` — the off-screen pattern Chrome autofill is known to fill (only non-focusable fields are skipped). Native autofill could not be triggered via browser automation (Chrome UI popup), so the fix targets the documented behavior.
+- **Fix (branch `fix/honeypot-unfocusable`, TDD)**: wrapper `style={{ display: "none" }}` (non-focusable → never autofilled; raw-HTML bots still fill it) and the field moved to the end of the form, just before the submit button. Test asserts `display:none` and last-field position.
+- **Supersedes** D10's "not display:none" rationale: a false positive on real leads costs more than missing the rare bot that skips display:none inputs; the fill-time check still covers those.
