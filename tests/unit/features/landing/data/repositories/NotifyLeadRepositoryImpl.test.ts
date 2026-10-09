@@ -1,12 +1,12 @@
 /**
- * EmailLeadRepositoryImpl Tests
+ * NotifyLeadRepositoryImpl Tests
  *
  * Clean Architecture: Data Layer Tests
- * Mirrors LeadRepositoryImpl's shape (design ADR-5) but for the email channel.
+ * Uses NotifyLeadDataSource — the single lead entry point (D13).
  */
 
-import { EmailLeadRepositoryImpl } from '@/features/landing/data/repositories/EmailLeadRepositoryImpl';
-import type { EmailNotifyDataSource } from '@/features/landing/data/datasources/EmailNotifyDataSource';
+import { NotifyLeadRepositoryImpl } from '@/features/landing/data/repositories/NotifyLeadRepositoryImpl';
+import type { NotifyLeadDataSource } from '@/features/landing/data/datasources/NotifyLeadDataSource';
 import { LeadEntity } from '@/features/landing/domain/entities';
 
 function buildLead(): LeadEntity {
@@ -19,11 +19,11 @@ function buildLead(): LeadEntity {
   });
 }
 
-describe('EmailLeadRepositoryImpl', () => {
+describe('NotifyLeadRepositoryImpl', () => {
   it('maps the Lead fields onto the email payload', async () => {
     const sendLead = jest.fn().mockResolvedValue(true);
-    const dataSource = { sendLead } as unknown as EmailNotifyDataSource;
-    const repository = new EmailLeadRepositoryImpl(dataSource);
+    const dataSource = { sendLead } as unknown as NotifyLeadDataSource;
+    const repository = new NotifyLeadRepositoryImpl(dataSource);
 
     await repository.submitLead(buildLead());
 
@@ -40,8 +40,8 @@ describe('EmailLeadRepositoryImpl', () => {
 
   it('stamps submittedAt as an ISO-8601 string', async () => {
     const sendLead = jest.fn().mockResolvedValue(true);
-    const dataSource = { sendLead } as unknown as EmailNotifyDataSource;
-    const repository = new EmailLeadRepositoryImpl(dataSource);
+    const dataSource = { sendLead } as unknown as NotifyLeadDataSource;
+    const repository = new NotifyLeadRepositoryImpl(dataSource);
 
     await repository.submitLead(buildLead());
 
@@ -53,8 +53,8 @@ describe('EmailLeadRepositoryImpl', () => {
 
   it('passes through the boolean result from the data source', async () => {
     const sendLead = jest.fn().mockResolvedValue(false);
-    const dataSource = { sendLead } as unknown as EmailNotifyDataSource;
-    const repository = new EmailLeadRepositoryImpl(dataSource);
+    const dataSource = { sendLead } as unknown as NotifyLeadDataSource;
+    const repository = new NotifyLeadRepositoryImpl(dataSource);
 
     const result = await repository.submitLead(buildLead());
 

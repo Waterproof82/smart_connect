@@ -24,8 +24,6 @@ vi.mock("@shared/services/settingsService", () => ({
     contactEmail: "hola@digitalizatenerife.es",
     whatsappPhone: "+34600000000",
     physicalAddress: "Santa Cruz de Tenerife, España",
-    n8nEnabled: false,
-    n8nWebhookUrl: "",
   }),
 }));
 

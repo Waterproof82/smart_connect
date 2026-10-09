@@ -144,27 +144,4 @@ export class LeadEntity implements Lead {
     const errors = this.validate();
     return Object.values(errors).every(error => error === '');
   }
-
-  /**
-   * Converts to webhook payload format
-   * 
-   * Security: All fields are already validated and sanitized
-   */
-  toWebhookPayload(): Record<string, string> {
-    // Sanitize message one more time before sending
-    const sanitizedMessage = DOMPurify.sanitize(this.message, { 
-      ALLOWED_TAGS: [],
-      ALLOWED_ATTR: [],
-      KEEP_CONTENT: true,
-    });
-    
-    return {
-      nombre: this.name,
-      empresa: this.company,
-      email: this.email,
-      servicio_interes: this.service,
-      mensaje_cuerpo: sanitizedMessage,
-      timestamp: new Date().toISOString(),
-    };
-  }
 }

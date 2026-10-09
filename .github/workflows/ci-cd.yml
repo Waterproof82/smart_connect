@@ -10,7 +10,8 @@ on:
     # Also validates chained/stacked PRs whose base is an intermediate
     # feature branch (not main yet) — otherwise CI silently skips them
     # until they're retargeted, which defeats the point of chaining.
-    branches: [ "main", "feat/**", "fix/**" ]
+    # develop is the normal PR target — without it regular PRs skip CI.
+    branches: [ "main", "develop", "feat/**", "fix/**" ]
     paths-ignore:
       - 'docs/**'
       - '*.md'
@@ -60,6 +61,9 @@ jobs:
       - name: Run tests
         run: npm test
 
+      - name: Run tests (Vitest, jsdom)
+        run: npx vitest run
+
       # 5. ANÁLISIS DE SEGURIDAD (GATE)
       - name: Snyk Security Gate (PR)
         if: github.event_name == 'pull_request' && github.actor != 'dependabot[bot]' && success()
@@ -108,7 +112,7 @@ jobs:
           echo "📊 WORKFLOW SUMMARY"
           echo "================================"
           echo "🧪 Lint & Type Check: ${{ needs.validate_and_build.result }}"
-          echo "✅ Tests (Jest):      ${{ needs.validate_and_build.result }}"
+          echo "✅ Tests (Jest + Vitest): ${{ needs.validate_and_build.result }}"
           echo "🛡️ Security (Snyk):   ${{ needs.validate_and_build.result }}"
           echo "🏗️ Build:             ${{ needs.validate_and_build.result }}"
           echo "================================"
