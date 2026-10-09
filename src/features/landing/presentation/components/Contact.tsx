@@ -439,41 +439,6 @@ const Contact: React.FC = () => {
           >
             <div className="bg-[var(--color-bg-alt)] p-6 md:p-10 rounded-[var(--radius-card)] border border-[var(--color-border)]">
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-                {/* Anti-bot honeypot (D10): hidden via absolute positioning +
-                    overflow, NOT display:none (a display:none field is often
-                    skipped by unsophisticated bot scripts, which would defeat
-                    the honeypot). aria-hidden + tabIndex=-1 keep it out of the
-                    accessibility tree and the tab order for real users. Not
-                    registered in the zod schema — read uncontrolled at
-                    submit. Identical markup on the server and the client. */}
-                <div
-                  aria-hidden="true"
-                  style={{
-                    position: "absolute",
-                    left: "-9999px",
-                    width: "1px",
-                    height: "1px",
-                    overflow: "hidden",
-                  }}
-                >
-                  {/* name/id deliberately meaningless: Chrome autofill ignores
-                      autocomplete="off" and filled a field named "website"
-                      for a real user (hotfix 2026-10-09). The value is still
-                      sent to notify-lead under the `website` payload key. */}
-                  <input
-                    ref={honeypotRef}
-                    id="contact-sc-hp"
-                    name="sc_hp_field"
-                    type="text"
-                    autoComplete="off"
-                    tabIndex={-1}
-                    defaultValue=""
-                    data-lpignore="true"
-                    data-1p-ignore="true"
-                    data-bwignore="true"
-                    data-form-type="other"
-                  />
-                </div>
                 <div className="grid md:grid-cols-2 gap-5">
                   <div>
                     <label
@@ -703,6 +668,33 @@ const Contact: React.FC = () => {
                     </p>
                   </div>
                 )}
+
+                {/* Anti-bot honeypot (D10, reworked by two hotfixes on
+                    2026-10-09). Chrome autofill ignores autocomplete="off"
+                    and DOES fill off-screen (left:-9999px) inputs — a real
+                    user's lead was dropped. Chrome never autofills
+                    non-focusable fields, so the wrapper is display:none
+                    (scripts that fill raw HTML still hit it). It is the last
+                    field, away from the personal-data section, and its
+                    name/id match no autofill heuristic. aria-hidden keeps it
+                    out of the accessibility tree. Not in the zod schema —
+                    read uncontrolled at submit and sent as the `website`
+                    payload key. Identical markup on server and client. */}
+                <div aria-hidden="true" style={{ display: "none" }}>
+                  <input
+                    ref={honeypotRef}
+                    id="contact-sc-hp"
+                    name="sc_hp_field"
+                    type="text"
+                    autoComplete="off"
+                    tabIndex={-1}
+                    defaultValue=""
+                    data-lpignore="true"
+                    data-1p-ignore="true"
+                    data-bwignore="true"
+                    data-form-type="other"
+                  />
+                </div>
 
                 <button
                   type="submit"
