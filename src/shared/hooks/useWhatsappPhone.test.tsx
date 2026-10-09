@@ -44,8 +44,6 @@ describe("useWhatsappPhone", () => {
 
   it("resolves to the sanitized phone from settingsService.getAppSettings()", async () => {
     vi.spyOn(settingsService, "getAppSettings").mockResolvedValue({
-      n8nWebhookUrl: "",
-      n8nEnabled: false,
       contactEmail: "",
       whatsappPhone: "+34 601 39 64 19",
       physicalAddress: "",
@@ -74,8 +72,6 @@ describe("useWhatsappPhone", () => {
     const getAppSettingsSpy = vi
       .spyOn(settingsService, "getAppSettings")
       .mockResolvedValue({
-        n8nWebhookUrl: "",
-        n8nEnabled: false,
         contactEmail: "",
         whatsappPhone: "+34600000000",
         physicalAddress: "",

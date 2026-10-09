@@ -3,5 +3,4 @@
  * @module features/landing/data/repositories
  */
 
-export { LeadRepositoryImpl } from './LeadRepositoryImpl';
-export { EmailLeadRepositoryImpl } from './EmailLeadRepositoryImpl';
+export { NotifyLeadRepositoryImpl } from './NotifyLeadRepositoryImpl';
