@@ -19,7 +19,7 @@ Out of scope (deferred, with an explicit trigger — per the proposal): a persis
 ### PR2 — `feat/notify-lead-client-and-grants` (base = PR1 branch)
 
 2. `feat(landing): route every lead through notify-lead, drop anon n8n read` —
-   - New migration `supabase/migrations/20261008160000_app_settings_anon_column_grants.sql` (file only — **owner applies it**, see Owner Actions): revokes table-level anon `SELECT` on `app_settings` and grants column-level `SELECT (id, contact_email, whatsapp_phone, physical_address)`. `n8n_enabled`/`n8n_webhook_url` are deliberately excluded.
+   - New migration `supabase/migrations/20261009071321_app_settings_anon_column_grants.sql` (file only — **owner applies it**, see Owner Actions): revokes table-level anon `SELECT` on `app_settings` and grants column-level `SELECT (id, contact_email, whatsapp_phone, physical_address)`. `n8n_enabled`/`n8n_webhook_url` are deliberately excluded.
    - `settingsService.ts` switched from `select=*` (fails under column-level grants) to the explicit public column list; `AppSettings` drops `n8nWebhookUrl`/`n8nEnabled`. A new regression test (`NEVER uses a wildcard select`) guards against reverting to `select=*`.
    - The browser's n8n branch is deleted: `N8NWebhookDataSource.ts`, `LeadRepositoryImpl.ts`, `EmailLeadRepositoryImpl.ts` removed; `EmailNotifyDataSource`→`NotifyLeadDataSource`, `EmailLeadRepositoryImpl`→`NotifyLeadRepositoryImpl` (renamed via `git mv`, tests renamed with them). `LandingContainer` no longer takes a config or exposes `leadChannel` — it always wires `NotifyLeadDataSource → NotifyLeadRepositoryImpl → SubmitLeadUseCase`. `LeadEntity.toWebhookPayload` (dead code, zero callers) removed. `Contact.tsx` builds the container with `useMemo(() => createLandingContainer(), [])` and no longer gates the submit button on `isLoadingSettings` (the container never depended on settings).
    - Verification: `npx jest tests/unit/shared/settingsService.test.ts tests/unit/features/landing/...` (data/domain/presentation layers), `npx vitest run` (`Contact.test.tsx`, `useWhatsappPhone.test.tsx`), `npx tsc --noEmit`, `npm run lint`.
@@ -52,9 +52,15 @@ The design's literal interface comment for the honeypot check reads "non-string 
 ## Owner Actions (NOT done by this change — explicitly out of scope for `sdd-apply`)
 
 - **PR1**: deploy the `notify-lead` Edge Function; confirm production still delivers leads (client is unchanged by PR1).
-- **PR2**: after merge, confirm the browser no longer issues any request to the n8n host (DevTools/Network) — THEN apply `supabase/migrations/20261008160000_app_settings_anon_column_grants.sql` via the Supabase CLI/dashboard; verify `has_column_privilege('anon','public.app_settings','n8n_webhook_url','SELECT') = false`, `contact_email` = true, `has_table_privilege('authenticated','public.app_settings','SELECT') = true`; REST sanity check (anon `select=n8n_webhook_url` → 401/42501, explicit column list → 200); confirm the admin panel still loads every column; **rotate the n8n webhook path** and update it in the admin settings (the old path was anon-readable up to this point).
+- **PR2**: after merge, confirm the browser no longer issues any request to the n8n host (DevTools/Network) — THEN apply `supabase/migrations/20261009071321_app_settings_anon_column_grants.sql` via the Supabase CLI/dashboard; verify `has_column_privilege('anon','public.app_settings','n8n_webhook_url','SELECT') = false`, `contact_email` = true, `has_table_privilege('authenticated','public.app_settings','SELECT') = true`; REST sanity check (anon `select=n8n_webhook_url` → 401/42501, explicit column list → 200); confirm the admin panel still loads every column; **rotate the n8n webhook path** and update it in the admin settings (the old path was anon-readable up to this point).
 - **PR3**: deploy `notify-lead` again (now anti-bot aware); monitor logs for ~48h (no `bot_rejected reason=missing_signals` spikes expected while tolerant); then flip `NOTIFY_LEAD_REQUIRE_ANTIBOT_SIGNALS=true` as a secret (no redeploy required).
 
 ## Review workload note
 
 Three stacked PRs, `stacked-to-main` chain strategy (per `sdd-tasks`' Review Workload Forecast — `400-line budget risk: Low` per PR). Estimated ~120 / ~220 (deletion-heavy) / ~180 changed lines respectively, all under the 400-line reviewer budget.
+
+## 2026-10-09T07:13Z — PR2 rollout
+
+- PR #146 merged to develop, promoted to main (7d38249); Vercel production deploy and main CI green. Live bundle verified: settings read uses the explicit column list, no `select=*`, no `n8n_webhook_url`.
+- Migration applied via Supabase MCP (remote version `20261009071321`; local file renamed to match, not via `db push` because of pre-existing local-only migrations). Verified: anon `n8n_webhook_url`/`n8n_enabled` = false, public columns = true, authenticated still reads the webhook; REST as anon → public columns 200, `select=n8n_webhook_url` and `select=*` → 42501; live page still renders the contact email.
+- PR1 smoke test: real lead from production form delivered via Brevo (`notify-lead: delivered channel=brevo`, no PII in log); owner confirmed email received.
