@@ -18,6 +18,7 @@ import {
   isOriginAllowed,
   N8N_FORWARD_TIMEOUT_MS,
   resolveLeadRouting,
+  summarizeBrevoError,
   validateLeadPayload,
 } from './_lib.ts';
 
@@ -222,8 +223,9 @@ Deno.serve(async (req) => {
 
     if (!brevoResponse.ok) {
       const errorBody = await brevoResponse.text().catch(() => '');
-      // Brevo's error body is logged server-side only — NEVER echoed to the client.
-      console.error('notify-lead: Brevo API error', brevoResponse.status, errorBody);
+      // Never echoed to the client, and only a PII-safe summary is logged:
+      // Brevo's `message` can repeat the lead's email address.
+      console.error(`notify-lead: Brevo API error ${summarizeBrevoError(brevoResponse.status, errorBody)}`);
       return new Response(JSON.stringify({ error: 'Notification provider error' }), {
         status: 502,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
