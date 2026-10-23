@@ -17,8 +17,8 @@ const readSiteRoutePaths = (): string[] => {
 };
 
 describe("agentRoutes.ts — AGENT_PAGE_PATHS matches site-routes.json (Phase 1)", () => {
-  it("has exactly 9 entries (extraction sanity check)", () => {
-    expect(AGENT_PAGE_PATHS).toHaveLength(9);
+  it("has exactly 14 entries (extraction sanity check)", () => {
+    expect(AGENT_PAGE_PATHS).toHaveLength(14);
   });
 
   it("deep-equals scripts/site-routes.json paths, in order", () => {
@@ -37,9 +37,9 @@ describe("middleware.ts — matcher parity and runtime (Phase 2, design.md D1/D2
     return [...matcherBlock[1].matchAll(/"([^"]+)"/g)].map((m) => m[1]);
   }
 
-  it("matcher is a static literal array with exactly 9 paths (extraction sanity check)", () => {
+  it("matcher is a static literal array with exactly 14 paths (extraction sanity check)", () => {
     const matcherPaths = extractMatcherPaths(readMiddlewareSource());
-    expect(matcherPaths).toHaveLength(9);
+    expect(matcherPaths).toHaveLength(14);
   });
 
   it("matcher path set exactly equals scripts/site-routes.json, ignoring order", () => {

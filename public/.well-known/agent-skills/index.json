@@ -8,7 +8,7 @@
       "type": "information",
       "description": "Get detailed information about Digitaliza Tenerife products: Carta Digital, Tarjetas NFC (Tap-to-Review), TPV, and Chatbots IA y automatización for restaurants, bars and cafes in Tenerife and the Canary Islands.",
       "url": "https://digitalizatenerife.es/llms.txt",
-      "sha256": "8b202acbc14096b5c6969b312c4d7fc16264dc37698dbba505007509e5806610"
+      "sha256": "ac8d97badc8c13ac8548f475276363cccb65520b877f99b3689837de26dddba5"
     },
     {
       "name": "contact-request",

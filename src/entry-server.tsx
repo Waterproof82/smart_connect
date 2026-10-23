@@ -14,6 +14,8 @@ import TapReviewPage from "./features/tap-review/presentation/TapReviewPage";
 import CartaDigitalPage from "./features/landing/presentation/components/CartaDigitalPage";
 import IaChatbotsPage from "./features/landing/presentation/components/IaChatbotsPage";
 import TpvRestaurantesPage from "./features/landing/presentation/components/TpvRestaurantesPage";
+import BlogIndexPage from "./features/landing/presentation/components/BlogIndexPage";
+import BlogPostPage from "./features/landing/presentation/components/BlogPostPage";
 import AvisoLegalPage from "./features/legal/presentation/AvisoLegalPage";
 import PrivacidadPage from "./features/legal/presentation/PrivacidadPage";
 import CookiesPage from "./features/legal/presentation/CookiesPage";
@@ -58,6 +60,23 @@ export function render(
                     <Route
                       path="/tpv-restaurantes"
                       element={<TpvRestaurantesPage />}
+                    />
+                    <Route path="/blog" element={<BlogIndexPage />} />
+                    <Route
+                      path="/blog/carta-digital-vs-comisiones-glovo"
+                      element={<BlogPostPage />}
+                    />
+                    <Route
+                      path="/blog/chatbot-ia-hoteles-alojamientos-pequenos-canarias"
+                      element={<BlogPostPage />}
+                    />
+                    <Route
+                      path="/blog/cuanto-cuesta-un-tpv-restaurante"
+                      element={<BlogPostPage />}
+                    />
+                    <Route
+                      path="/blog/tarjetas-nfc-mas-resenas-google-restaurante"
+                      element={<BlogPostPage />}
                     />
                     <Route path="/legal/aviso" element={<AvisoLegalPage />} />
                     <Route

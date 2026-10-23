@@ -61,6 +61,11 @@ export const SiteFooter: React.FC = () => {
                 </Link>
               </li>
               <li>
+                <Link to="/blog" className={linkClass}>
+                  {t.footerBlog}
+                </Link>
+              </li>
+              <li>
                 <Link to="/#contacto" className={linkClass}>
                   {t.footerNavContacto}
                 </Link>

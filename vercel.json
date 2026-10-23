@@ -84,7 +84,7 @@
       "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
     },
     {
-      "source": "/(|about|tarjetas-nfc|carta-digital|ia-chatbots-tenerife|tpv-restaurantes)",
+      "source": "/(|about|tarjetas-nfc|carta-digital|ia-chatbots-tenerife|tpv-restaurantes|blog|blog/carta-digital-vs-comisiones-glovo|blog/chatbot-ia-hoteles-alojamientos-pequenos-canarias|blog/cuanto-cuesta-un-tpv-restaurante|blog/tarjetas-nfc-mas-resenas-google-restaurante)",
       "headers": [{ "key": "Cache-Control", "value": "public, max-age=3600" }]
     }
   ],
@@ -95,6 +95,11 @@
     { "source": "/carta-digital", "destination": "/carta-digital/index.html" },
     { "source": "/ia-chatbots-tenerife", "destination": "/ia-chatbots-tenerife/index.html" },
     { "source": "/tpv-restaurantes", "destination": "/tpv-restaurantes/index.html" },
+    { "source": "/blog", "destination": "/blog/index.html" },
+    { "source": "/blog/carta-digital-vs-comisiones-glovo", "destination": "/blog/carta-digital-vs-comisiones-glovo/index.html" },
+    { "source": "/blog/chatbot-ia-hoteles-alojamientos-pequenos-canarias", "destination": "/blog/chatbot-ia-hoteles-alojamientos-pequenos-canarias/index.html" },
+    { "source": "/blog/cuanto-cuesta-un-tpv-restaurante", "destination": "/blog/cuanto-cuesta-un-tpv-restaurante/index.html" },
+    { "source": "/blog/tarjetas-nfc-mas-resenas-google-restaurante", "destination": "/blog/tarjetas-nfc-mas-resenas-google-restaurante/index.html" },
     { "source": "/legal/aviso", "destination": "/legal/aviso/index.html" },
     { "source": "/legal/privacidad", "destination": "/legal/privacidad/index.html" },
     { "source": "/legal/cookies", "destination": "/legal/cookies/index.html" },

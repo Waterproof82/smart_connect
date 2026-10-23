@@ -78,9 +78,8 @@ describe("/tpv-restaurantes covers the queried variants", () => {
       expect(seoCopy).toContain(word);
     }
   });
-  it("does not claim supermarket support (unverified), only offers to review the case", () => {
-    expect(seoCopy).toMatch(/te decimos si encaja/);
-    expect(seoCopy).not.toMatch(/TPV para supermercados/);
+  it("does not mention supermarkets (out of scope)", () => {
+    expect(seoCopy).not.toMatch(/supermercad|supermarket/i);
   });
 });
 
@@ -117,5 +116,42 @@ describe("Canarias Digitaliza disambiguation (home FAQ + /about)", () => {
     for (const href of ["/tpv-restaurantes", "/carta-digital", "/ia-chatbots-tenerife", "/tarjetas-nfc"]) {
       expect(about).toContain(`to="${href}"`);
     }
+  });
+});
+
+describe("blog (4 articles, no invented data)", () => {
+  const posts = read("features/landing/data/blogPosts.ts");
+  const slugs = [...posts.matchAll(/slug:\s*"([^"]+)"/g)].map((m) => m[1]);
+
+  it("has 4 articles, each registered in the sitemap routes and the SSR table", () => {
+    expect(slugs).toHaveLength(4);
+    const server = read("entry-server.tsx");
+    const routes = JSON.parse(
+      fs.readFileSync(path.join(SRC, "../scripts/site-routes.json"), "utf-8"),
+    ).routes.map((r: { path: string }) => r.path);
+    for (const slug of slugs) {
+      expect(server).toContain(`path="/blog/${slug}"`);
+      expect(routes).toContain(`/blog/${slug}`);
+    }
+    expect(routes).toContain("/blog");
+  });
+  it("descriptions fit a SERP snippet (<= 155 chars)", () => {
+    for (const m of posts.matchAll(/description:\s*\n?\s*"([^"]+)"/g)) {
+      expect(m[1].length).toBeLessThanOrEqual(155);
+    }
+  });
+  it("each article links its service page with a keyword anchor", () => {
+    expect(posts).toMatch(/to: "\/tpv-restaurantes"/);
+    expect(posts).toMatch(/to: "\/carta-digital"/);
+    expect(posts).toMatch(/to: "\/ia-chatbots-tenerife"/);
+    expect(posts).toMatch(/to: "\/tarjetas-nfc"/);
+  });
+  it("the TPV price article gives no price figure", () => {
+    const start = posts.indexOf('slug: "cuanto-cuesta-un-tpv-restaurante"');
+    const end = posts.indexOf('slug: "tarjetas-nfc', start);
+    expect(posts.slice(start, end)).not.toMatch(/\d+\s?(€|euros)/);
+  });
+  it("footer links the blog", () => {
+    expect(read("shared/components/SiteFooter.tsx")).toMatch(/to="\/blog"/);
   });
 });

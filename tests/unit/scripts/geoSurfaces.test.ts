@@ -41,7 +41,7 @@ function pathOf(url: string): string {
 // Skills Hash Consistency") — llms.txt must list the live 4-service
 // product set in design.md's order, drop the unverified WCAG claim, state
 // the real installed stack majors (React 18.3.1, Tailwind 4.3.3 per
-// node_modules), and the real live route count (9, from site-routes.json).
+// node_modules), and the real live route count (14, from site-routes.json).
 describe("geoSurfaces guard (design.md Interfaces/Contracts) — live service list, stack, route count, registerTool wording", () => {
   const llmsTxt = read("public/llms.txt");
   const agentSkills = JSON.parse(
@@ -80,8 +80,8 @@ describe("geoSurfaces guard (design.md Interfaces/Contracts) — live service li
     expect(llmsTxt).toMatch(/Tailwind CSS 4/);
   });
 
-  it("states the real live route count (9 rutas)", () => {
-    expect(llmsTxt).toMatch(/9 rutas/);
+  it("states the real live route count (14 rutas)", () => {
+    expect(llmsTxt).toMatch(/14 rutas/);
   });
 
   it("webmcp-tools wording uses registerTool(), not the stale provideContext()", () => {

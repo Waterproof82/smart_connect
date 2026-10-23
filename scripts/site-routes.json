@@ -66,6 +66,46 @@
       ]
     },
     {
+      "path": "/blog",
+      "lastmod": "2026-10-23",
+      "sources": [
+        "src/features/landing/presentation/components/BlogIndexPage.tsx",
+        "src/features/landing/data/blogPosts.ts"
+      ]
+    },
+    {
+      "path": "/blog/carta-digital-vs-comisiones-glovo",
+      "lastmod": "2026-10-23",
+      "sources": [
+        "src/features/landing/presentation/components/BlogPostPage.tsx",
+        "src/features/landing/data/blogPosts.ts"
+      ]
+    },
+    {
+      "path": "/blog/chatbot-ia-hoteles-alojamientos-pequenos-canarias",
+      "lastmod": "2026-10-23",
+      "sources": [
+        "src/features/landing/presentation/components/BlogPostPage.tsx",
+        "src/features/landing/data/blogPosts.ts"
+      ]
+    },
+    {
+      "path": "/blog/cuanto-cuesta-un-tpv-restaurante",
+      "lastmod": "2026-10-23",
+      "sources": [
+        "src/features/landing/presentation/components/BlogPostPage.tsx",
+        "src/features/landing/data/blogPosts.ts"
+      ]
+    },
+    {
+      "path": "/blog/tarjetas-nfc-mas-resenas-google-restaurante",
+      "lastmod": "2026-10-23",
+      "sources": [
+        "src/features/landing/presentation/components/BlogPostPage.tsx",
+        "src/features/landing/data/blogPosts.ts"
+      ]
+    },
+    {
       "path": "/legal/aviso",
       "indexable": false,
       "lastmod": "2026-10-02",

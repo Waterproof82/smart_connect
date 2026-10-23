@@ -9,7 +9,12 @@ import { ScrollToTop } from "@shared/components/ScrollToTop";
 import { CookieConsent } from "@shared/components/CookieConsent";
 import { scheduleWebMCPRegistration } from "./webmcpBoot";
 import { registerContactClickTracking } from "@shared/utils/analyticsEvents";
-import { PRERENDERED_ROUTES, NOT_FOUND_ROUTE, routeForPath } from "./clientRoutes";
+import {
+  PRERENDERED_ROUTES,
+  BLOG_POST_ROUTE,
+  NOT_FOUND_ROUTE,
+  routeForPath,
+} from "./clientRoutes";
 import "./index.css";
 import App from "./App";
 
@@ -32,6 +37,8 @@ const CartaDigitalPage = PRERENDERED_ROUTES["/carta-digital"].Component;
 const IaChatbotsPage = PRERENDERED_ROUTES["/ia-chatbots-tenerife"].Component;
 const TpvRestaurantesPage =
   PRERENDERED_ROUTES["/tpv-restaurantes"].Component;
+const BlogIndexPage = PRERENDERED_ROUTES["/blog"].Component;
+const BlogPostPage = BLOG_POST_ROUTE.Component;
 const AvisoLegalPage = PRERENDERED_ROUTES["/legal/aviso"].Component;
 const PrivacidadPage = PRERENDERED_ROUTES["/legal/privacidad"].Component;
 const CookiesPage = PRERENDERED_ROUTES["/legal/cookies"].Component;
@@ -76,6 +83,8 @@ const app = (
                   path="/tpv-restaurantes"
                   element={<TpvRestaurantesPage />}
                 />
+                <Route path="/blog" element={<BlogIndexPage />} />
+                <Route path="/blog/:slug" element={<BlogPostPage />} />
                 <Route path="/legal/aviso" element={<AvisoLegalPage />} />
                 <Route path="/legal/privacidad" element={<PrivacidadPage />} />
                 <Route path="/legal/cookies" element={<CookiesPage />} />

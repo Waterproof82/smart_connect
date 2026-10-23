@@ -1,0 +1,238 @@
+/**
+ * Blog articles (Spanish only, like /about). Editorial content, not UI copy,
+ * so it lives here instead of LanguageContext. Rules for new articles:
+ * no invented prices, statistics, clients or results; examples with numbers
+ * must be labelled as illustrations; every article links the service page it
+ * supports with a keyword anchor.
+ */
+export interface BlogSection {
+  heading: string;
+  paragraphs: readonly string[];
+  bullets?: readonly string[];
+}
+
+export interface BlogPost {
+  slug: string;
+  title: string;
+  /** Meta description / index teaser, <= 155 chars. */
+  description: string;
+  /** ISO date of first publication. */
+  datePublished: string;
+  intro: string;
+  sections: readonly BlogSection[];
+  cta: {
+    to: string;
+    anchor: string;
+    text: string;
+  };
+}
+
+export const BLOG_BASE_PATH = "/blog";
+
+export const BLOG_POSTS: readonly BlogPost[] = [
+  {
+    slug: "carta-digital-vs-comisiones-glovo",
+    title:
+      "Carta digital frente a las comisiones de Glovo: cuánto te cuesta cada pedido",
+    description:
+      "Compara la comisión por pedido de una plataforma de reparto con una carta digital propia sin comisión por pedido, con un ejemplo con números.",
+    datePublished: "2026-10-23",
+    intro:
+      "Las plataformas de reparto traen pedidos, pero cobran una comisión por cada uno. Si tu margen ya es ajustado, conviene saber cuánto te cuesta realmente y qué alternativa tienes para los clientes que ya te conocen.",
+    sections: [
+      {
+        heading: "Cuánto cuesta cada pedido en una plataforma",
+        paragraphs: [
+          "Las comisiones dependen de tu contrato, y en muchos casos rondan el 30 % del importe del pedido. Revisa el tuyo: lo importante es el porcentaje exacto que te aplican y si hay costes añadidos.",
+          "Un ejemplo ilustrativo, no un dato de ningún local concreto: con una comisión del 30 %, un pedido de 20 € deja 6 € en la plataforma. Si recibes 100 pedidos al mes de ese importe, son 600 € mensuales que no llegan a tu caja.",
+        ],
+      },
+      {
+        heading: "Qué cambia con una carta digital propia",
+        paragraphs: [
+          "Con una carta digital propia, el cliente pide desde la mesa o para recoger escaneando un código QR o acercando una tarjeta NFC, y el pedido llega directamente a barra y cocina. No hay comisión por pedido, y los datos de tu cliente son tuyos.",
+        ],
+        bullets: [
+          "Sin comisión por pedido.",
+          "Pedidos en mesa y para recoger desde el móvil, sin descargar ninguna app.",
+          "Carta en varios idiomas, útil si recibes turismo.",
+          "Conexión con el TPV para no duplicar el trabajo.",
+        ],
+      },
+      {
+        heading: "Lo que una carta digital no sustituye",
+        paragraphs: [
+          "Una plataforma de reparto también te da visibilidad y reparto a domicilio, y una carta digital propia no monta una flota de repartidores. Por eso muchos negocios usan ambas cosas: la plataforma para que te descubran y la carta propia para los clientes de siempre, en mesa y para recoger.",
+        ],
+      },
+      {
+        heading: "Cómo empezar",
+        paragraphs: [
+          "Configuramos la carta por ti y la conectamos con tu local en Tenerife o en el resto de Canarias. Si quieres ver cómo quedaría con tu carta, escríbenos por WhatsApp.",
+        ],
+      },
+    ],
+    cta: {
+      to: "/carta-digital",
+      anchor: "carta digital para restaurantes sin comisiones",
+      text: "Mira cómo funciona la ",
+    },
+  },
+  {
+    slug: "chatbot-ia-hoteles-alojamientos-pequenos-canarias",
+    title: "Chatbot con IA para hoteles y alojamientos pequeños en Canarias",
+    description:
+      "Qué puede hacer un chatbot con IA en un hotel rural, apartamento o alojamiento pequeño de Canarias, qué no debe hacer y cómo se configura.",
+    datePublished: "2026-10-23",
+    intro:
+      "En un alojamiento pequeño, quien contesta los mensajes suele ser también quien hace las camas. Un chatbot con IA no sustituye al anfitrión, pero puede quitarle las preguntas que se repiten cada día.",
+    sections: [
+      {
+        heading: "Las preguntas que se repiten",
+        paragraphs: [
+          "Casi todos los alojamientos reciben las mismas consultas, a cualquier hora y en varios idiomas.",
+        ],
+        bullets: [
+          "Hora y forma de llegada, y cómo recoger las llaves.",
+          "Aparcamiento, wifi, desayuno y normas de la casa.",
+          "Cómo llegar desde el aeropuerto y qué transporte hay.",
+          "Si se admiten mascotas, niños o estancias cortas.",
+        ],
+      },
+      {
+        heading: "Qué hace el chatbot",
+        paragraphs: [
+          "Responde con la información que tú le das sobre tu alojamiento, en tu web y en WhatsApp, y puede contestar en el idioma del huésped. Cuando alguien quiere reservar, recoge sus datos y avisa a tu equipo para que lo confirme.",
+        ],
+      },
+      {
+        heading: "Qué no debe hacer",
+        paragraphs: [
+          "Un chatbot no debe inventarse disponibilidad ni precios que no le hayas dado. Las reservas las confirma siempre una persona de tu equipo. Por eso el asistente se limita a la información de tu negocio y deriva a ti lo que no sabe.",
+        ],
+      },
+      {
+        heading: "Cómo se configura",
+        paragraphs: [
+          "Analizamos qué te preguntan, entrenamos el asistente con la información de tu alojamiento y lo conectamos a tu web y a WhatsApp. Después revisamos las conversaciones contigo y ajustamos las respuestas. Se hace a distancia, también si tu alojamiento está en Lanzarote, Fuerteventura u otra isla.",
+        ],
+      },
+      {
+        heading: "Qué preparar antes de empezar",
+        paragraphs: [
+          "Con una lista de las diez preguntas que más te hacen, tus horarios y normas, y las instrucciones de llegada, ya se puede montar una primera versión.",
+        ],
+      },
+    ],
+    cta: {
+      to: "/ia-chatbots-tenerife",
+      anchor: "chatbot con IA para empresas en Tenerife y Canarias",
+      text: "Conoce nuestro ",
+    },
+  },
+  {
+    slug: "cuanto-cuesta-un-tpv-restaurante",
+    title: "¿Cuánto cuesta un TPV para un restaurante? De qué depende el precio",
+    description:
+      "De qué depende el precio de un TPV táctil para restaurantes y bares en Tenerife y qué preguntar antes de contratar, sin cifras inventadas.",
+    datePublished: "2026-10-23",
+    intro:
+      "No hay un precio único para un TPV de hostelería: depende de lo que necesite tu local. En lugar de darte una cifra que no sería cierta para ti, te explicamos qué mueve el precio y qué preguntar antes de contratar.",
+    sections: [
+      {
+        heading: "Qué hace subir o bajar el precio",
+        paragraphs: [
+          "Estos son los factores que más pesan en el coste de un TPV táctil para un restaurante o un bar.",
+        ],
+        bullets: [
+          "Número de puestos de cobro y de dispositivos para los camareros.",
+          "Módulos que necesitas: comandero móvil, pantalla de cocina, reservas, fichajes, stock, alérgenos, compras.",
+          "Hardware: tablet o pantalla táctil, impresora de tickets, cajón y datáfono.",
+          "Modelo de pago: pago único, cuota mensual o licencia por puesto.",
+          "Formación, puesta en marcha y soporte cercano.",
+        ],
+      },
+      {
+        heading: "Costes que se suelen olvidar",
+        paragraphs: [
+          "El datáfono suele tener sus propias comisiones por cobro, aparte del TPV. Y conviene preguntar quién se encarga de cargar tu carta, tus precios y tu IGIC al empezar, y qué pasa si cambias de local o de equipo.",
+        ],
+      },
+      {
+        heading: "Ocho preguntas antes de contratar",
+        paragraphs: ["Pregúntalas a cualquier proveedor, también a nosotros."],
+        bullets: [
+          "¿Qué incluye exactamente el precio y qué se paga aparte?",
+          "¿Hay permanencia o cuota mensual?",
+          "¿Funciona con IGIC y con varios tipos de impuesto?",
+          "¿Cumple con la normativa fiscal que te afecta?",
+          "¿Puedo empezar con pocos módulos y añadir más después?",
+          "¿Quién me forma a mí y a mi equipo?",
+          "¿Con quién hablo si falla en pleno servicio?",
+          "¿Puedo sacar mis datos si algún día me cambio?",
+        ],
+      },
+      {
+        heading: "Cómo calcularlo para tu local",
+        paragraphs: [
+          "Cuéntanos cuántos puestos tienes, qué tipo de local es y qué módulos te interesan, y te orientamos para tu caso. Trabajamos con restaurantes, pizzerías, bares y cafeterías de Tenerife y Canarias.",
+        ],
+      },
+    ],
+    cta: {
+      to: "/tpv-restaurantes",
+      anchor: "TPV táctil para hostelería en Tenerife",
+      text: "Consulta los módulos de nuestro ",
+    },
+  },
+  {
+    slug: "tarjetas-nfc-mas-resenas-google-restaurante",
+    title:
+      "Cómo conseguir más reseñas en Google en tu restaurante con tarjetas NFC",
+    description:
+      "Cómo usar tarjetas NFC para pedir reseñas en Google a tus clientes: dónde colocarlas, cuándo pedirlas y qué no hacer.",
+    datePublished: "2026-10-23",
+    intro:
+      "Las reseñas de Google son lo primero que mira mucha gente antes de elegir dónde comer. La mayoría de clientes satisfechos no las deja porque requiere buscar el local y varios pasos. Una tarjeta NFC los reduce a un toque.",
+    sections: [
+      {
+        heading: "Cómo funciona una tarjeta NFC de reseñas",
+        paragraphs: [
+          "El cliente acerca el móvil a la tarjeta y se abre directamente la ventana para dejar su reseña en Google, sin instalar ninguna app. Todo el proceso lleva unos segundos.",
+        ],
+      },
+      {
+        heading: "Dónde colocarla",
+        paragraphs: [
+          "Donde el cliente ya tiene el móvil a mano y está contento: en la mesa, junto a la cuenta, en la barra o en la caja. Un expositor pequeño y visible funciona mejor que una tarjeta suelta.",
+        ],
+      },
+      {
+        heading: "Cuándo pedirla",
+        paragraphs: [
+          "Al final del servicio, cuando el cliente ha disfrutado. Basta una frase del camarero al traer la cuenta: «si te ha gustado, puedes dejarnos tu reseña acercando el móvil aquí».",
+        ],
+      },
+      {
+        heading: "Qué no hacer",
+        paragraphs: [
+          "No ofrezcas descuentos ni regalos a cambio de reseñas: las normas de Google no lo permiten. Y responde a las reseñas, también a las negativas, con calma y sin discutir: las lee quien aún no te conoce.",
+        ],
+      },
+      {
+        heading: "Qué esperar",
+        paragraphs: [
+          "Una tarjeta facilita que más clientes dejen su opinión, pero no garantiza una nota ni un número de reseñas: eso depende de tu servicio. Si quieres verla en tu local, te la configuramos con el enlace a tu ficha de Google.",
+        ],
+      },
+    ],
+    cta: {
+      to: "/tarjetas-nfc",
+      anchor: "tarjetas NFC para reseñas en Google",
+      text: "Descubre nuestras ",
+    },
+  },
+];
+
+export const getBlogPost = (slug: string): BlogPost | undefined =>
+  BLOG_POSTS.find((post) => post.slug === slug);

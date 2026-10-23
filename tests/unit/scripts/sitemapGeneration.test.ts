@@ -42,7 +42,7 @@ describe("scripts/site-routes.json (design.md §1.2 — single source of truth)"
     expect(() => JSON.parse(raw)).not.toThrow();
   });
 
-  it("has origin https://digitalizatenerife.es and exactly the 9 prerendered routes", () => {
+  it("has origin https://digitalizatenerife.es and exactly the 14 prerendered routes", () => {
     const data = JSON.parse(
       fs.readFileSync(path.join(SCRIPTS_DIR, "site-routes.json"), "utf-8"),
     );
@@ -55,6 +55,11 @@ describe("scripts/site-routes.json (design.md §1.2 — single source of truth)"
       "/ia-chatbots-tenerife",
       "/tpv-restaurantes",
       "/about",
+      "/blog",
+      "/blog/carta-digital-vs-comisiones-glovo",
+      "/blog/chatbot-ia-hoteles-alojamientos-pequenos-canarias",
+      "/blog/cuanto-cuesta-un-tpv-restaurante",
+      "/blog/tarjetas-nfc-mas-resenas-google-restaurante",
       "/legal/aviso",
       "/legal/privacidad",
       "/legal/cookies",

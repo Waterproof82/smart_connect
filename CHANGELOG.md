@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Home H1 aligned with the `<title>`**: the H1 now reads "TPV, carta digital y chatbot con IA para restaurantes de Tenerife y Canarias" (ES and EN) and the subtitle covers the four services. The hub puts Carta Digital and the TPV as the two flagship cards, with the chatbot and NFC cards as secondary services.
 - **Home internal links use keyword anchors**: "Ver el TPV" became "TPV táctil para hostelería en Tenerife"; the carta card anchor became "Carta digital para restaurantes sin comisiones".
 - **`/tpv-restaurantes`**: title, description and H1 use "TPV táctil"; new H2 sections "TPV táctil en Tenerife" and "TPV para restaurantes, pizzerías, bares y comercios" (one block per business type); 4th FAQ entry in the page and its `FAQPage` JSON-LD.
+- **`/tpv-restaurantes`**: removed the supermarket mentions (out of scope).
 - **`/ia-chatbots-tenerife`**: new section with distinct copy for Tenerife, Lanzarote and Fuerteventura; `areaServed` of the chatbot `Service` JSON-LD now lists the same islands.
 - **Public navigation**: removed the `/admin` link from the desktop and mobile menus (the route stays `noindex` via `X-Robots-Tag` and `robots.txt`) and the "Opiniones" link.
 
@@ -25,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Real product images on the home** (carta digital screenshot, TPV payment photo) as indexable `<img>` with descriptive `alt`, intrinsic size, `srcset` and lazy loading.
 - **"Canarias Digitaliza" disambiguation**: 7th home FAQ entry (also in the home `FAQPage` JSON-LD) and a section on `/about` stating that Digitaliza Tenerife is a private agency and not part of the public programme. `/about` also links the four services with keyword anchors.
+- **Blog** (`/blog` + 4 articles: carta digital vs Glovo commissions, chatbot for small accommodation in the Canary Islands, what drives the price of a TPV, NFC cards for Google reviews). Prerendered, in the sitemap (now 11 URLs), `BlogPosting` + `BreadcrumbList` JSON-LD, linked from the footer and `llms.txt`. No invented prices, statistics or clients; the only numeric example is labelled as an illustration. Parity tests, `middleware.ts` matcher, `vercel.json` rewrites and the `llms.txt` hash updated.
 - Regression tests for all of the above in `tests/unit/seo/keywordAlignment.gsc.test.ts`.
 - **FAQ on `/tpv-restaurantes`** (3 entries, incl. "¿Qué es un TPV para hostelería?") with `FAQPage` JSON-LD, and a 7th entry on `/ia-chatbots-tenerife` ("chatbot inteligente con IA para empresas en Canarias").
 

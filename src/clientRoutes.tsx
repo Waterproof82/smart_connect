@@ -62,15 +62,31 @@ type PrerenderedPath =
   | "/carta-digital"
   | "/ia-chatbots-tenerife"
   | "/tpv-restaurantes"
+  | "/blog"
+  | "/blog/carta-digital-vs-comisiones-glovo"
+  | "/blog/chatbot-ia-hoteles-alojamientos-pequenos-canarias"
+  | "/blog/cuanto-cuesta-un-tpv-restaurante"
+  | "/blog/tarjetas-nfc-mas-resenas-google-restaurante"
   | "/legal/aviso"
   | "/legal/privacidad"
   | "/legal/cookies";
 
 // Every page module below uses a named default export re-wrapped as
-// `{ default }`, so this one helper replaces 8 near-identical `.then()`s.
+// `{ default }`, so this one helper replaces the near-identical `.then()`s.
 const asPageModule = (mod: { default: ComponentType }): PageModule => ({
   default: mod.default,
 });
+
+/**
+ * Every article path shares ONE preloadable: they render the same module,
+ * so a single preload() settles for all of them and the client's one
+ * `<Route path="/blog/:slug">` mounts the resolved component on hydration.
+ */
+export const BLOG_POST_ROUTE: PreloadableRoute = preloadable(() =>
+  import("@features/landing/presentation/components/BlogPostPage").then(
+    asPageModule,
+  ),
+);
 
 export const PRERENDERED_ROUTES: Readonly<
   Record<PrerenderedPath, PreloadableRoute>
@@ -100,6 +116,15 @@ export const PRERENDERED_ROUTES: Readonly<
       "@features/landing/presentation/components/TpvRestaurantesPage"
     ).then(asPageModule),
   ),
+  "/blog": preloadable(() =>
+    import("@features/landing/presentation/components/BlogIndexPage").then(
+      asPageModule,
+    ),
+  ),
+  "/blog/carta-digital-vs-comisiones-glovo": BLOG_POST_ROUTE,
+  "/blog/chatbot-ia-hoteles-alojamientos-pequenos-canarias": BLOG_POST_ROUTE,
+  "/blog/cuanto-cuesta-un-tpv-restaurante": BLOG_POST_ROUTE,
+  "/blog/tarjetas-nfc-mas-resenas-google-restaurante": BLOG_POST_ROUTE,
   "/legal/aviso": preloadable(() =>
     import("@features/legal/presentation/AvisoLegalPage").then(asPageModule),
   ),

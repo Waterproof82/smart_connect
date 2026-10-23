@@ -6,6 +6,7 @@
  * LanguageContext.tsx is not reopened.
  */
 export interface SeoLandingCopy {
+  footerBlog: string;
   homeFaqQ7: string;
   homeFaqA7: string;
   homeCartaImageAlt: string;
@@ -36,6 +37,7 @@ export interface SeoLandingCopy {
 
 export const seoLandingCopy: { es: SeoLandingCopy; en: SeoLandingCopy } = {
   es: {
+    footerBlog: "Blog",
     homeFaqQ7: "¿Digitaliza Tenerife es lo mismo que Canarias Digitaliza?",
     homeFaqA7:
       "No. Digitaliza Tenerife es una agencia privada con sede en Tacoronte (Tenerife) que ofrece TPV táctil, carta digital, tarjetas NFC y chatbots con IA a negocios de Tenerife y Canarias. «Canarias Digitaliza» es un programa público distinto, del que no formamos parte. Si buscas digitalizar tu negocio en Canarias con un proveedor local, escríbenos por WhatsApp.",
@@ -59,10 +61,10 @@ export const seoLandingCopy: { es: SeoLandingCopy; en: SeoLandingCopy } = {
       "Cobro rápido en barra y en terraza con el comandero móvil, control de stock de bebidas y fichajes de tu equipo, sin hojas de cálculo.",
     tpvSectorShopTitle: "TPV para comercio y tiendas",
     tpvSectorShopDesc:
-      "Si vendes productos, controla el stock, aplica el IGIC en cada venta y completa el TPV con una tienda digital con código QR. ¿Tienes un supermercado o un comercio con muchos artículos? Cuéntanos tu caso por WhatsApp y te decimos si encaja.",
+      "Si vendes productos, controla el stock, aplica el IGIC en cada venta y completa el TPV con una tienda digital con código QR.",
     tpvFaqQ4: "¿Sirve el TPV para pizzerías, bares, cafeterías y comercios?",
     tpvFaqA4:
-      "Sí para restaurantes, pizzerías, bares y cafeterías: cobro, comandero móvil, cocina, pedidos para llevar y stock. Para comercios y tiendas, el stock, el IGIC y la tienda digital cubren lo habitual; si tienes un supermercado o un catálogo muy amplio, cuéntanos tu caso y lo revisamos antes de proponerte nada.",
+      "Sí para restaurantes, pizzerías, bares y cafeterías: cobro, comandero móvil, cocina, pedidos para llevar y stock. Para comercios y tiendas, el stock, el IGIC y la tienda digital cubren lo habitual.",
     iaIslandsTitle: "Chatbot con IA en Tenerife, Lanzarote y Fuerteventura",
     iaIslandsIntro:
       "Trabajamos con empresas de todas las islas. Cada isla tiene un tipo de cliente distinto y el asistente se configura para el tuyo. La puesta en marcha se hace a distancia, por videollamada y WhatsApp, así que la isla no es un obstáculo.",
@@ -77,6 +79,7 @@ export const seoLandingCopy: { es: SeoLandingCopy; en: SeoLandingCopy } = {
       "Pequeños hoteles, apartamentos, escuelas de surf y restaurantes de costa suelen tener poco personal y muchas preguntas repetidas: llegada, normas, precios, disponibilidad. Un chatbot en tu web y en WhatsApp filtra esas consultas y te deja las reservas listas para confirmar.",
   },
   en: {
+    footerBlog: "Blog",
     homeFaqQ7: "Is Digitaliza Tenerife the same as Canarias Digitaliza?",
     homeFaqA7:
       "No. Digitaliza Tenerife is a private agency based in Tacoronte (Tenerife) that offers touch-screen POS, digital menus, NFC cards and AI chatbots to businesses in Tenerife and the Canary Islands. “Canarias Digitaliza” is a separate public programme that we are not part of. If you want to digitise your business in the Canary Islands with a local provider, message us on WhatsApp.",
@@ -100,10 +103,10 @@ export const seoLandingCopy: { es: SeoLandingCopy; en: SeoLandingCopy } = {
       "Fast payment at the bar and on the terrace with the mobile waiter app, drinks stock control and staff clock-ins, no spreadsheets.",
     tpvSectorShopTitle: "POS for retail and shops",
     tpvSectorShopDesc:
-      "If you sell products, track stock, apply IGIC on every sale and complete the POS with a digital shop with a QR code. Running a supermarket or a shop with many items? Tell us about it on WhatsApp and we will tell you whether it fits.",
+      "If you sell products, track stock, apply IGIC on every sale and complete the POS with a digital shop with a QR code.",
     tpvFaqQ4: "Does the POS work for pizzerias, bars, cafés and shops?",
     tpvFaqA4:
-      "Yes for restaurants, pizzerias, bars and cafés: payments, mobile waiter app, kitchen, takeaway orders and stock. For shops, stock, IGIC and the digital shop cover the usual needs; if you run a supermarket or a very large catalogue, tell us about it and we will review it before proposing anything.",
+      "Yes for restaurants, pizzerias, bars and cafés: payments, mobile waiter app, kitchen, takeaway orders and stock. For shops, stock, IGIC and the digital shop cover the usual needs.",
     iaIslandsTitle: "AI chatbot in Tenerife, Lanzarote and Fuerteventura",
     iaIslandsIntro:
       "We work with businesses on every island. Each island has a different kind of customer and the assistant is set up for yours. Setup is done remotely by video call and WhatsApp, so the island is no obstacle.",

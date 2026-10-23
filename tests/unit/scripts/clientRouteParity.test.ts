@@ -35,7 +35,7 @@ describe("client route loader parity (design.md D1/D2, S1)", () => {
     expect(loaderPaths).toEqual(serverPaths);
     // Sanity check the extraction itself isn't vacuously matching zero
     // routes (same guard rationale as routeParity.test.ts).
-    expect(loaderPaths.size).toBe(9);
+    expect(loaderPaths.size).toBe(14);
   });
 
   it("entry-client.tsx has no lazy( calls besides the admin chunk", () => {
