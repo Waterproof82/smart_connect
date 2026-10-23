@@ -7,6 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Carta Digital differentiation sections on `/carta-digital`**: five new sections, with all copy in a new i18n module (`src/shared/i18n/modules/carta-diferenciacion.ts`, ES/EN):
+  - **Who is behind your menu** (`#confianza`): what customer data is at stake, and an anonymous app compared against a real contact person in Tenerife.
+  - **Full ecosystem** (`#ecosistema`): discovery → orders (online, pickup, delivery, table, waiter PDA) → preparation (one-tap reply, kitchen/bar routing) → payment and management (table payment with tips, POS, Veri*factu).
+  - **Table payment** (`#pago-en-mesa`): suggested tip on the receipt, even split, pay-for-what-you-ordered, and a Google review after paying.
+  - **SEO + GEO** (`#visibilidad`): local SEO and AI-assistant visibility, plus a six-step feedback loop with the Google Business Profile and reviews from the menu.
+  - **30-day free trial** (`#prueba-gratis`): commitment wording, no guarantee claim.
+- **Carta Digital comparison table**: three new rows (contact person, table payment with tips, local SEO and GEO).
+- **Carta Digital FAQ**: three new entries (table payment, who manages the menu and data, free trial). They also feed the FAQPage JSON-LD.
+- **Home hub**: Carta Digital is now the featured flagship card. It spans two of three columns and shows five differentiators and a "30-day free trial" badge. It still links to `/carta-digital` and carries no duplicated product content.
+- **Guard test** `tests/unit/seo/keywordCopy.cartaDiferenciacion.test.ts`:
+  - ES/EN key parity.
+  - No banned claims and no guarantee wording.
+  - Only owner-confirmed figures.
+  - Consistent "Veri*factu" spelling.
+
+### Changed
+
+- **Carta Digital `Service` JSON-LD description** (`solutions.ts`) and `public/llms.txt` now describe table payment with tips, split bills, waiter PDA, POS + Veri*factu, the contact person and the free trial. The `product-information` sha256 in `agent-skills/index.json` was recomputed.
+- **`scripts/site-routes.json`**:
+  - `/` and `/carta-digital` `lastmod` floors were raised to 2026-10-23.
+  - The new section files were added as `/carta-digital` sources.
+- **Chatbot knowledge base** (`content/knowledge-base/carta-digital.md`): extended with table payment, reviews, the ecosystem, the contact person, SEO/GEO and the free trial. Run `npm run ingest-kb` to re-index it.
+
 ### Security
 
 - **`match_documents` / `match_documents_by_source` no longer granted to `PUBLIC`**: the chatbot (`chat-with-rag`) calls them with the anon key, so `anon`, `authenticated` and `service_role` keep their explicit EXECUTE grants; only the redundant implicit `PUBLIC` grant is revoked (migration `20261023095144_revoke_public_execute_match_documents.sql`). Restricting `anon` was reviewed and rejected: the chatbot depends on it and `documents` is anon-readable by design, so it would protect nothing.

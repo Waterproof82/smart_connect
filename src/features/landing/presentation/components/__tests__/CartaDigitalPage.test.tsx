@@ -56,6 +56,30 @@ describe("CartaDigitalPage (S8b: mount CartaDigitalReviews)", () => {
     expect(screen.getByText("Lo que dicen los comensales")).toBeInTheDocument();
   });
 
+  it("mounts the differentiation sections in reading order", () => {
+    const { container } = renderCartaDigitalPage();
+    const html = container.innerHTML;
+    const order = [
+      'id="solucion"',
+      'id="confianza"',
+      'id="ecosistema"',
+      'id="pago-en-mesa"',
+      'id="visibilidad"',
+      'id="prueba-gratis"',
+    ].map((marker) => html.indexOf(marker));
+    order.forEach((idx) => expect(idx).toBeGreaterThan(-1));
+    expect([...order].sort((a, b) => a - b)).toEqual(order);
+  });
+
+  it("answers the table-payment, contact-person and free-trial questions in the FAQ", () => {
+    renderCartaDigitalPage();
+    expect(screen.getByText("¿Se puede pagar desde la mesa?")).toBeInTheDocument();
+    expect(
+      screen.getByText("¿Quién gestiona mi carta y los datos de mis clientes?"),
+    ).toBeInTheDocument();
+    expect(screen.getByText("¿Puedo probarla antes de pagar?")).toBeInTheDocument();
+  });
+
   it("mounts the reviews section after CartaDigitalSection and before the FAQ section", () => {
     const { container } = renderCartaDigitalPage();
     const cartaIdx = container.innerHTML.indexOf('id="carta-digital"');

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, MessageSquare, Monitor, Smartphone, Utensils } from "lucide-react";
+import { ArrowRight, Check, MessageSquare, Monitor, Smartphone, Utensils } from "lucide-react";
 import { useLanguage } from "@shared/context/LanguageContext";
 
 /**
@@ -11,7 +11,20 @@ import { useLanguage } from "@shared/context/LanguageContext";
 const HomeSolutionsSection: React.FC = () => {
   const { t } = useLanguage();
 
-  const flagships = [
+  // Carta Digital is the main service: it spans two of three columns and
+  // lists its differentiators (real contact person, orders, table payment,
+  // SEO/GEO, POS + Veri*factu) plus the free-trial badge. The full content
+  // still lives only on /carta-digital.
+  const flagships: Array<{
+    to: string;
+    icon: typeof Utensils;
+    eyebrow: string;
+    title: string;
+    desc: string;
+    cta: string;
+    badge?: string;
+    highlights?: string[];
+  }> = [
     {
       to: "/carta-digital",
       icon: Utensils,
@@ -19,6 +32,14 @@ const HomeSolutionsSection: React.FC = () => {
       title: t.cartaTeaserTitle,
       desc: t.cartaTeaserDesc,
       cta: t.cartaTeaserCta,
+      badge: t.homeCartaBadge,
+      highlights: [
+        t.homeCartaHighlight1,
+        t.homeCartaHighlight2,
+        t.homeCartaHighlight3,
+        t.homeCartaHighlight4,
+        t.homeCartaHighlight5,
+      ],
     },
     {
       to: "/tarjetas-nfc",
@@ -65,25 +86,46 @@ const HomeSolutionsSection: React.FC = () => {
               {t.homeStarsSubtitle}
             </p>
           </div>
-          <ul className="grid grid-cols-1 lg:grid-cols-2 gap-6 list-none">
-            {flagships.map(({ to, icon: Icon, eyebrow, title, desc, cta }) => (
-              <li key={to}>
+          <ul className="grid grid-cols-1 lg:grid-cols-3 gap-6 list-none">
+            {flagships.map(({ to, icon: Icon, eyebrow, title, desc, cta, badge, highlights }) => (
+              <li key={to} className={highlights ? "lg:col-span-2" : undefined}>
                 <Link
                   to={to}
-                  className="group flex flex-col h-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl p-8 md:p-10 hover:border-[var(--color-primary)] hover:-translate-y-1 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)]"
+                  className={`group flex flex-col h-full bg-[var(--color-surface)] border rounded-xl p-8 md:p-10 hover:border-[var(--color-primary)] hover:-translate-y-1 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] ${highlights ? "border-[var(--color-accent-border)]" : "border-[var(--color-border)]"}`}
                 >
-                  <div className="flex items-center gap-3 mb-6">
+                  <div className="flex flex-wrap items-center gap-3 mb-6">
                     <span className="w-11 h-11 rounded-xl flex items-center justify-center bg-[var(--color-accent-subtle)] text-[var(--color-primary)]">
                       <Icon className="w-5 h-5" aria-hidden="true" />
                     </span>
                     <span className="ds-kicker">
                       {eyebrow}
                     </span>
+                    {badge && (
+                      <span className="ml-auto px-3 py-1 rounded-full bg-[var(--color-accent-subtle)] border border-[var(--color-accent-border)] text-sm font-semibold text-[var(--color-primary)]">
+                        {badge}
+                      </span>
+                    )}
                   </div>
                   <h3 className="text-2xl md:text-3xl font-black font-display leading-tight mb-4">
                     {title}
                   </h3>
                   <p className="text-muted leading-relaxed mb-8">{desc}</p>
+                  {highlights && (
+                    <ul
+                      aria-label={t.homeCartaHighlightsLabel}
+                      className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 list-none mb-8"
+                    >
+                      {highlights.map((item) => (
+                        <li key={item} className="flex items-start gap-2 text-sm md:text-base">
+                          <Check
+                            className="w-5 h-5 shrink-0 mt-0.5 text-[var(--color-primary)]"
+                            aria-hidden="true"
+                          />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                   <span className="mt-auto inline-flex items-center gap-2 font-bold text-[var(--color-primary)]">
                     {cta}
                     <ArrowRight

@@ -6,7 +6,7 @@ Digitaliza Tenerife es una agencia de transformación digital especializada en r
 
 ## Servicios principales
 
-1. **Carta Digital** — Menú digital con fotos, vídeos, 5 idiomas y gestión de pedidos por Telegram. Sin comisiones.
+1. **Carta Digital** — Menú digital autogestionable con fotos, vídeos y 5 idiomas, landing propia conectada al perfil de empresa de Google y a redes sociales, pedidos online, para recoger, a domicilio y desde la mesa, PDA para camareros con envío de comandas a cocina y barra, pago desde la mesa con propinas y cuenta dividida, reseñas en Google desde la carta y conexión con el punto de venta (ver servicio 3) y Veri*factu. Sin comisiones, con una persona de contacto en Tenerife y 30 días de prueba gratis.
 2. **Tarjetas NFC (Tap-to-Review)** — Tarjetas NFC para que los clientes dejen reseñas en Google con un solo toque.
 3. **TPV** — TPV y cobro, comandero móvil, KDS de cocina, gestión de reservas, fichajes y control horario, delivery/takeaway sin comisiones, stock e inventario, multi-IVA/IGIC, roles y permisos (RBAC), food cost avanzado, sistema de alérgenos, compras y Tienda/Carta Digital — 13 módulos integrados.
 4. **Chatbots IA y automatización** — Chatbots con IA para web y WhatsApp, y automatización de procesos con n8n para CRM, email y redes sociales.
@@ -14,7 +14,7 @@ Digitaliza Tenerife es una agencia de transformación digital especializada en r
 ## Páginas clave
 
 - [Inicio](https://digitalizatenerife.es/): portada con los productos y servicios, casos de éxito, FAQ y contacto.
-- [Carta digital para restaurantes](https://digitalizatenerife.es/carta-digital): carta digital con pedidos en mesa y para recoger, sin pagar comisión a Glovo.
+- [Carta digital para restaurantes](https://digitalizatenerife.es/carta-digital): carta digital con pedidos en mesa y para recoger, pago en mesa con propinas, SEO local y GEO, sin pagar comisión a Glovo.
 - [Chatbots IA y automatización](https://digitalizatenerife.es/ia-chatbots-tenerife): chatbots de IA para web y WhatsApp y automatización de procesos en Tenerife.
 - [TPV para restaurantes](https://digitalizatenerife.es/tpv-restaurantes): TPV con 13 módulos (cobro, comandero, cocina, reservas, stock, alérgenos, carta digital).
 - [Tarjetas NFC Tap-to-Review](https://digitalizatenerife.es/tarjetas-nfc): página de producto de las tarjetas NFC para reseñas de Google.

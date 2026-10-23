@@ -55,6 +55,9 @@ export function useCartaFaqGroup(): HomeFaqGroup {
       { q: t.cartaFaqQ3, a: t.cartaFaqA3 },
       { q: t.cartaFaqQ4, a: t.cartaFaqA4 },
       { q: t.cartaFaqQ5, a: t.cartaFaqA5 },
+      { q: t.cartaFaqQ6, a: t.cartaFaqA6 },
+      { q: t.cartaFaqQ7, a: t.cartaFaqA7 },
+      { q: t.cartaFaqQ8, a: t.cartaFaqA8 },
     ],
   };
 }
