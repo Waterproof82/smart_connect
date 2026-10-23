@@ -2,8 +2,8 @@ import React from "react";
 import {
   Smartphone,
   Users,
-  CheckCircle2,
-  UtensilsCrossed,
+  Tablet,
+  ShoppingBag,
 } from "lucide-react";
 import { useLanguage } from "@shared/context/LanguageContext";
 
@@ -22,12 +22,12 @@ const CartaDigitalTelegramSection: React.FC = () => {
       desc: t.cartaTelegramFeature2Desc,
     },
     {
-      icon: <CheckCircle2 className="w-full h-full" aria-hidden="true" />,
+      icon: <Tablet className="w-full h-full" aria-hidden="true" />,
       title: t.cartaTelegramFeature3Title,
       desc: t.cartaTelegramFeature3Desc,
     },
     {
-      icon: <UtensilsCrossed className="w-full h-full" aria-hidden="true" />,
+      icon: <ShoppingBag className="w-full h-full" aria-hidden="true" />,
       title: t.cartaTelegramFeature4Title,
       desc: t.cartaTelegramFeature4Desc,
     },

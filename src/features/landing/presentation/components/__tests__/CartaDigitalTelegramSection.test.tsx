@@ -18,7 +18,7 @@ describe("CartaDigitalTelegramSection", () => {
   it("displays the Telegram section heading", () => {
     renderWithLanguage();
     expect(
-      screen.getByText(/Pedidos por Telegram/i),
+      screen.getByText(/Pedidos en mesa y para recoger/i),
     ).toBeInTheDocument();
   });
 
@@ -31,16 +31,16 @@ describe("CartaDigitalTelegramSection", () => {
   it("displays the subtitle text", () => {
     renderWithLanguage();
     expect(
-      screen.getByText(/El cliente pide desde el QR/i),
+      screen.getByText(/En mesa, el pedido llega a la app de tu equipo/i),
     ).toBeInTheDocument();
   });
 
   it("displays all 4 feature titles", () => {
     renderWithLanguage();
-    expect(screen.getByText(/Pedido online al instante/i)).toBeInTheDocument();
-    expect(screen.getByText(/Grupo de Telegram del equipo/i)).toBeInTheDocument();
-    expect(screen.getByText(/Respuesta con un botón/i)).toBeInTheDocument();
-    expect(screen.getByText(/Camarero en mesa desde el móvil/i)).toBeInTheDocument();
+    expect(screen.getByText(/Pedido en mesa desde el QR/i)).toBeInTheDocument();
+    expect(screen.getByText(/App propia para camareros/i)).toBeInTheDocument();
+    expect(screen.getByText(/Barra y cocina en tiempo real/i)).toBeInTheDocument();
+    expect(screen.getByText(/Recoger en el local: aviso por Telegram/i)).toBeInTheDocument();
   });
 
   it("renders a lucide svg icon (not an emoji) inside each feature item", () => {

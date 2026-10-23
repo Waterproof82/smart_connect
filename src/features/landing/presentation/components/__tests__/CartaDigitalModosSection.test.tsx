@@ -38,8 +38,8 @@ describe("CartaDigitalModosSection", () => {
 
   it("displays feature items for both modes", () => {
     renderWithLanguage();
-    expect(screen.getByText(/Pedidos en mesa vía QR \+ Telegram/i)).toBeInTheDocument();
-    expect(screen.getByText(/Pedidos online con gestión de clientes/i)).toBeInTheDocument();
+    expect(screen.getByText(/Pedidos en mesa vía QR \+ app de camareros/i)).toBeInTheDocument();
+    expect(screen.getByText(/Pedidos para recoger avisados por Telegram/i)).toBeInTheDocument();
   });
 
   it("renders a lucide svg icon (not an emoji) inside each mode card", () => {
