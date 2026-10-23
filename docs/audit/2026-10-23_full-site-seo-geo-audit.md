@@ -27,8 +27,29 @@
 - `npm run build`: not run (owner rule).
 - External tools: PSI done (browser). Rich Results Test, URL Inspection and GSC: pending manual.
 
+## Resolution (same day, 2026-10-23 18:00–19:10 WEST)
+
+| ID | Outcome | Commit | Live check |
+|---|---|---|---|
+| F-15 | `api/negotiate.mjs` uses `scope: "main"`; regression test with nested divs + inline JSON-LD (RED → GREEN). | a0b4558 (merge c089816) | `/` 4957 B, `/about` 2170 B, `/carta-digital` 16152 B, `/tpv-restaurantes` 13125 B; no raw JSON-LD |
+| F-17 | Single `BRAND = "Digitaliza Tenerife"` constant for 404/error markdown; tests forbid the legacy name. | 06a4e3f | `/api/negotiate?path=/no-existe` → `# Digitaliza Tenerife` |
+| F-16 | Owner disabled Cloudflare Scrape Shield → Email Obfuscation. | manual | 0 obfuscation markers; `mailto:info@digitalizatenerife.es` on /about, plain email on aviso/privacidad |
+| F-13 | Diagnosed; no change (score ≥ 90). | fb8a034 (docs) | See below |
+
+### F-13 diagnosis (PSI mobile FCP 2.3 s)
+- Home PSI mobile, 5 runs: 90 / 94 / 91 / 90 / — with FCP 2.3 s every run, LCP 2.6–3.0 s, CLS 0 except one run at 0.024.
+- **Not home-specific**: a later `/carta-digital` run also gave FCP 2.3 s / LCP 3.6 s; its earlier 0.9 s was a favourable run.
+- PSI observed load is fast: TTFB ≈ 0 ms, observed LCP ≈ 270 ms, no render-blocking requests. The served critical path is identical on both pages (same entry chunk, same 16 modulepreloads, 0 blocking stylesheets) and TTFB is equal (Vercel cache HIT).
+- Lighthouse critical chain on both pages: HTML → `index.js` (9 KiB) and HTML → `dm-sans-latin-wght.woff2` (37.85 KiB, not preloaded). When the font lands before the observed first paint, Lantern puts it in the FCP graph and simulates ~2.3 s on slow 4G; otherwise ~0.9 s. Same bimodal mechanism as F-11.
+- Ruled out: hidden hero CSS, pending Suspense boundaries, blocking CSS, server latency.
+- Decision: NO CHANGE REQUIRED (threshold: act only below 90). If needed later: a lighter DM Sans subset/static weights, or a system font for body text. Do not preload DM Sans again (F-11).
+- Local Lighthouse (headless, Windows) is not usable for this: both pages paint after `load` locally.
+
+### Tooling
+- Graphify MCP fixed: the user-scope entry used `python -m graphify --mcp`, which graphifyy 0.9.14 removed. Built this repo's code graph (`graphify update .`, 4939 nodes), registered a project-local MCP (`graphify-mcp.exe <repo>/graphify-out/graph.json --transport stdio`) and removed the broken user-scope entry. `graphify-out/` is gitignored.
+
 ## Follow-ups
-- F-15: IMPLEMENTED on branch fix/markdown-negotiation-main-scope (scope main + nested-fixture regression test, RED→GREEN, 305 tests pass). Pending deploy + live curl check. Original plan: switch `api/negotiate.mjs` to `scope: "main"` (or a balanced `#root` extraction) and add a test fixture with nested divs + inline JSON-LD; TDD.
-- F-16: Cloudflare → Scrape Shield → disable Email Obfuscation (or wrap the email in `<!--email_off-->`).
-- Re-run PSI mobile on `/` 2–3 times before acting on F-13.
-- GSC: request indexing of `/tpv-restaurantes` and `/ia-chatbots-tenerife` after today's copy change; check canonical selected by Google in URL Inspection.
+- Owner: rotate the Supabase access token stored in plain text in the user MCP config.
+- Owner: indexing was re-requested in GSC for all pages (2026-10-23); check the Google-selected canonical in URL Inspection in about a week.
+- Local: rebuild `dist/` before trusting `prerenderedSeo.regression.test.ts` locally.
+- Refresh the code graph with `graphify update .` after large changes.
