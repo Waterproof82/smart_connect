@@ -18,9 +18,7 @@ type Language = "es" | "en";
 interface Translation extends TpvModuleTranslations {
   // Navigation
   navSolutions: string;
-  navSuccess: string;
   navContact: string;
-  navAdmin: string;
   navBack: string;
   // Hero
   heroEyebrow: string;
@@ -489,17 +487,15 @@ const translations: Record<Language, Translation> = {
 
     // Navigation
     navSolutions: "Soluciones",
-    navSuccess: "Opiniones",
     navContact: "Contacto",
-    navAdmin: "Admin",
     navBack: "Volver",
 
     // Hero — outcome-first: leads with business benefit (facturación /
     // tiempo ahorrado), platform breadth is supporting copy in the eyebrow.
     heroEyebrow: "Todo tu negocio en una pantalla",
-    heroTitle: "Carta digital y tarjetas NFC",
+    heroTitle: "TPV, carta digital y chatbot con IA",
     heroTitleAccent: "para restaurantes",
-    heroTitleEnd: "de Tenerife",
+    heroTitleEnd: "de Tenerife y Canarias",
     heroServiciosTitle: "Soluciones de",
     heroServiciosTitleAccent: "IA y Automatización",
     heroServiciosTitleEnd: "para tu Negocio",
@@ -507,7 +503,7 @@ const translations: Record<Language, Translation> = {
     heroContactoTitleAccent: "Proyecto",
     heroContactoTitleEnd: "",
     heroSubtitle:
-      "Carta digital con pedidos desde la mesa, en 5 idiomas y sin comisiones. Tarjetas NFC para que tus clientes te dejen una reseña en Google en 5 segundos, sin apps. Lo configuramos todo por ti.",
+      "TPV táctil para hostelería, carta digital con pedidos desde la mesa y sin comisiones, chatbot con IA que atiende a tus clientes y tarjetas NFC para que te dejen una reseña en Google en 5 segundos. Lo configuramos todo por ti.",
     statStrip1Value: "5",
     statStrip1Label: "idiomas en tu carta digital",
     statStrip2Value: "0%",
@@ -1080,17 +1076,15 @@ const translations: Record<Language, Translation> = {
 
     // Navigation
     navSolutions: "Solutions",
-    navSuccess: "Reviews",
     navContact: "Contact",
-    navAdmin: "Admin",
     navBack: "Back",
 
     // Hero — outcome-first: leads with business benefit (revenue / time
     // saved), platform breadth is supporting copy in the eyebrow.
     heroEyebrow: "Your whole business, one screen",
-    heroTitle: "Digital menu and NFC cards",
+    heroTitle: "POS, digital menu and AI chatbot",
     heroTitleAccent: "for restaurants",
-    heroTitleEnd: "in Tenerife",
+    heroTitleEnd: "in Tenerife and the Canary Islands",
     heroServiciosTitle: "AI and Automation",
     heroServiciosTitleAccent: "Solutions",
     heroServiciosTitleEnd: "for Your Business",
@@ -1098,7 +1092,7 @@ const translations: Record<Language, Translation> = {
     heroContactoTitleAccent: "Your Project",
     heroContactoTitleEnd: "",
     heroSubtitle:
-      "Digital menu with table ordering, in 5 languages and commission-free. NFC cards so your customers leave a Google review in 5 seconds, no apps needed. We set everything up for you.",
+      "Touch-screen POS for hospitality, a commission-free digital menu with table ordering, an AI chatbot that answers your customers, and NFC cards so they leave a Google review in 5 seconds. We set everything up for you.",
     statStrip1Value: "5",
     statStrip1Label: "languages in your digital menu",
     statStrip2Value: "0%",

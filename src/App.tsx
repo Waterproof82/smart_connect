@@ -3,7 +3,6 @@ import { Helmet } from "react-helmet-async";
 import { PageShell } from "@features/landing/presentation/components/PageShell";
 import { Section } from "@shared/presentation/layout";
 import { Hero } from "@features/landing/presentation/components/Hero";
-import { CartaDigitalReviews } from "@features/landing/presentation/components/CartaDigitalReviews";
 import { DeferredExpertAssistant } from "@features/chatbot/presentation";
 import HomeFaqSection, {
   useHomeFaqGroups,
@@ -80,12 +79,15 @@ const ErrorBoundaryFallback: React.FC = () => {
 
 /* Heading structure:
   / → H1 (Hero.tsx)
-  H2: Dos herramientas para vender más (HomeSolutionsSection)
-    H3: Carta digital → /carta-digital · H3: Tarjetas NFC → /tarjetas-nfc
+  H2: TPV, carta digital, chatbot y reseñas (HomeSolutionsSection)
+    H3: Carta digital → /carta-digital · H3: TPV táctil → /tpv-restaurantes
   H2: Más servicios para tu negocio
-    H3: Chatbots IA → /ia-chatbots-tenerife · H3: TPV → /tpv-restaurantes
+    H3: Chatbots IA → /ia-chatbots-tenerife · H3: Tarjetas NFC → /tarjetas-nfc
   H2: ¿Por qué Digitaliza Tenerife? (stat strip only)
-  H2: Opiniones (CartaDigitalReviews) · H2: FAQ · H2: Contacto
+  H2: FAQ · H2: Contacto
+  No reviews block on home: the only real reviews we hold are 2022 QR iBar
+  (previous product) ones, which live on /carta-digital with that context.
+  Re-add a home reviews section only with recent, attributable reviews.
   Home is a hub: product content lives on each product's own URL (no
   duplicated content, no TPV module sections here — see /tpv-restaurantes).
   Hreflang: intentionally absent. Language is client state, not in the URL;
@@ -197,9 +199,6 @@ const App: React.FC = () => {
             ))}
           </dl>
         </Section>
-        <section id="exito" aria-labelledby="exito-title" className="ds-section">
-          <CartaDigitalReviews headingId="exito-title" />
-        </section>
         <section
           id="faq"
           aria-labelledby="faq-title"

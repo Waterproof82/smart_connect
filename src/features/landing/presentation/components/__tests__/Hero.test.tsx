@@ -51,38 +51,40 @@ describe("Hero", () => {
       localStorage.removeItem("language");
     });
 
-    it("es: reads 'Carta digital y tarjetas NFC' / 'para restaurantes' / 'de Tenerife'", () => {
+    it("es: reads 'TPV, carta digital y chatbot con IA' / 'para restaurantes' / 'de Tenerife y Canarias'", () => {
       renderWithLanguage();
       const h1 = screen.getByRole("heading", { level: 1 });
       expect(h1).toHaveTextContent(
-        "Carta digital y tarjetas NFC para restaurantes de Tenerife",
+        "TPV, carta digital y chatbot con IA para restaurantes de Tenerife y Canarias",
       );
     });
 
-    it("en: reads 'Digital menu and NFC cards' / 'for restaurants' / 'in Tenerife'", () => {
+    it("en: reads 'POS, digital menu and AI chatbot' / 'for restaurants' / 'in Tenerife and the Canary Islands'", () => {
       localStorage.setItem("language", "en");
       renderWithLanguage();
       const h1 = screen.getByRole("heading", { level: 1 });
       expect(h1).toHaveTextContent(
-        "Digital menu and NFC cards for restaurants in Tenerife",
+        "POS, digital menu and AI chatbot for restaurants in Tenerife and the Canary Islands",
       );
     });
 
-    it("es: the subtitle describes the carta digital and NFC cards, not the TPV", () => {
+    it("es: the subtitle covers TPV táctil, carta digital, chatbot con IA and NFC cards", () => {
       renderWithLanguage();
       const lede = document.querySelector(".ds-lede");
-      expect(lede).toHaveTextContent(/Carta digital/);
-      expect(lede).toHaveTextContent(/Tarjetas NFC/);
-      expect(lede).not.toHaveTextContent(/TPV/);
+      expect(lede).toHaveTextContent(/TPV táctil/);
+      expect(lede).toHaveTextContent(/carta digital/);
+      expect(lede).toHaveTextContent(/chatbot con IA/);
+      expect(lede).toHaveTextContent(/tarjetas NFC/);
     });
 
-    it("en: the subtitle describes the digital menu and NFC cards, not the POS", () => {
+    it("en: the subtitle covers the POS, digital menu, AI chatbot and NFC cards", () => {
       localStorage.setItem("language", "en");
       renderWithLanguage();
       const lede = document.querySelector(".ds-lede");
-      expect(lede).toHaveTextContent(/Digital menu/);
+      expect(lede).toHaveTextContent(/POS/);
+      expect(lede).toHaveTextContent(/digital menu/);
+      expect(lede).toHaveTextContent(/AI chatbot/);
       expect(lede).toHaveTextContent(/NFC cards/);
-      expect(lede).not.toHaveTextContent(/POS/);
     });
 
     it("still renders the 3-part composition: plain text, one accent <span>, plain text", () => {
@@ -91,10 +93,10 @@ describe("Hero", () => {
       const spans = h1.querySelectorAll("span");
       expect(spans).toHaveLength(1);
       expect(spans[0]).toHaveTextContent("para restaurantes");
-      expect(h1.textContent?.startsWith("Carta digital y tarjetas NFC")).toBe(
-        true,
-      );
-      expect(h1.textContent?.endsWith("de Tenerife")).toBe(true);
+      expect(
+        h1.textContent?.startsWith("TPV, carta digital y chatbot con IA"),
+      ).toBe(true);
+      expect(h1.textContent?.endsWith("de Tenerife y Canarias")).toBe(true);
     });
   });
 });

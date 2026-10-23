@@ -11,7 +11,8 @@
         "src/features/landing/presentation/components/HomeFaqSection.tsx",
         "src/features/landing/presentation/components/HomeSolutionsSection.tsx",
         "src/features/landing/presentation/components/Contact.tsx",
-        "src/shared/presentation/components/SeoSchema.tsx"
+        "src/shared/presentation/components/SeoSchema.tsx",
+        "src/shared/i18n/modules/seo-landing.ts"
       ]
     },
     {
@@ -42,7 +43,8 @@
       "path": "/ia-chatbots-tenerife",
       "lastmod": "2026-10-23",
       "sources": [
-        "src/features/landing/presentation/components/IaChatbotsPage.tsx"
+        "src/features/landing/presentation/components/IaChatbotsPage.tsx",
+        "src/shared/i18n/modules/seo-landing.ts"
       ]
     },
     {
@@ -50,7 +52,8 @@
       "lastmod": "2026-10-23",
       "sources": [
         "src/features/landing/presentation/components/TpvRestaurantesPage.tsx",
-        "src/shared/components/tpv/TpvModulesSection.tsx"
+        "src/shared/components/tpv/TpvModulesSection.tsx",
+        "src/shared/i18n/modules/seo-landing.ts"
       ]
     },
     {
@@ -58,7 +61,8 @@
       "lastmod": "2026-10-23",
       "sources": [
         "src/features/landing/presentation/components/AboutPage.tsx",
-        "src/shared/config/organization.ts"
+        "src/shared/config/organization.ts",
+        "src/shared/i18n/modules/seo-landing.ts"
       ]
     },
     {

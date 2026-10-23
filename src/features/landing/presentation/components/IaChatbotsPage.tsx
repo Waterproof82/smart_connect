@@ -66,6 +66,11 @@ const IaChatbotsPage: React.FC = () => {
     { title: t.iaStep2Title, desc: t.iaStep2Desc },
     { title: t.iaStep3Title, desc: t.iaStep3Desc },
   ];
+  const islands = [
+    { title: t.iaIslandTfTitle, desc: t.iaIslandTfDesc },
+    { title: t.iaIslandLzTitle, desc: t.iaIslandLzDesc },
+    { title: t.iaIslandFvTitle, desc: t.iaIslandFvDesc },
+  ];
   const servicio = "Chatbots IA";
 
   return (
@@ -103,7 +108,7 @@ const IaChatbotsPage: React.FC = () => {
         name="Chatbots IA y automatización"
         description={PAGE_DESCRIPTION}
         url={PAGE_URL}
-        areaServed={["Tenerife", "Canarias"]}
+        areaServed={["Tenerife", "Lanzarote", "Fuerteventura", "Canarias"]}
         serviceType="AI Chatbot and Automation"
       />
       <BreadcrumbListSchema
@@ -214,6 +219,22 @@ const IaChatbotsPage: React.FC = () => {
               </li>
             ))}
           </ol>
+        </Section>
+
+        <Section
+          id="ia-islas"
+          tone="alt"
+          title={t.iaIslandsTitle}
+          intro={t.iaIslandsIntro}
+        >
+          <ul className="grid grid-cols-1 md:grid-cols-3 gap-[var(--space-md)] list-none p-0 m-0">
+            {islands.map(({ title, desc }) => (
+              <li key={title} className="ds-card">
+                <h3 className="ds-h3 mb-2">{title}</h3>
+                <p className="text-muted leading-relaxed m-0">{desc}</p>
+              </li>
+            ))}
+          </ul>
         </Section>
 
         <Section id="ia-faq" width="prose" title={t.iaFaqTitle}>

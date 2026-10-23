@@ -43,6 +43,8 @@ import {
   cartaDiferenciacionCopy,
 } from "./carta-diferenciacion";
 
+import { SeoLandingCopy, seoLandingCopy } from "./seo-landing";
+
 export interface TpvModuleTranslations
   extends TpvCobroCopy,
     ComanderoMovilCopy,
@@ -59,7 +61,8 @@ export interface TpvModuleTranslations
     TiendaCartaDigitalCopy,
     PageCopy,
     DesignSystemCopy,
-    CartaDiferenciacionCopy {}
+    CartaDiferenciacionCopy,
+    SeoLandingCopy {}
 
 export const tpvModuleEs: TpvModuleTranslations = {
   ...tpvCobroCopy.es,
@@ -78,6 +81,7 @@ export const tpvModuleEs: TpvModuleTranslations = {
   ...pageCopy.es,
   ...designSystemCopy.es,
   ...cartaDiferenciacionCopy.es,
+  ...seoLandingCopy.es,
 };
 
 export const tpvModuleEn: TpvModuleTranslations = {
@@ -97,4 +101,5 @@ export const tpvModuleEn: TpvModuleTranslations = {
   ...pageCopy.en,
   ...designSystemCopy.en,
   ...cartaDiferenciacionCopy.en,
+  ...seoLandingCopy.en,
 };

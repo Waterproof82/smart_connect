@@ -117,7 +117,7 @@ export const pageCopy: { es: PageCopy; en: PageCopy } = {
     cartaTeaserTitle: "Ahorra el 30 % del margen que se lleva Glovo de cada pedido",
     cartaTeaserDesc:
       "Carta digital con pedidos en mesa y para recoger. Sin comisiones por pedido.",
-    cartaTeaserCta: "Ver la carta digital",
+    cartaTeaserCta: "Carta digital para restaurantes sin comisiones",
     cartaPageH1:
       "Carta digital para restaurantes: pedidos sin pagar comisión a Glovo",
     iaTeaserTitle: "Chatbots de IA y automatización",
@@ -163,22 +163,22 @@ export const pageCopy: { es: PageCopy; en: PageCopy } = {
     navbarTpvDesc: "13 módulos en un solo sistema",
     serviceIaChatbots: "Chatbots IA y automatización",
     serviceTpv: "TPV para restaurantes",
-    homeStarsTitle: "Dos herramientas para vender más",
+    homeStarsTitle: "TPV, carta digital, chatbot y reseñas: lo que más usan los restaurantes",
     homeStarsSubtitle:
-      "Más margen en cada pedido y más reseñas en Google, sin complicaciones.",
+      "Más margen en cada pedido, menos tiempo atendiendo consultas y más reseñas en Google, sin complicaciones.",
     nfcCardEyebrow: "Tarjetas NFC",
     nfcCardTitle: "Multiplica tus reseñas en Google con un toque",
     nfcCardDesc:
       "Tus clientes acercan el móvil a la tarjeta y dejan su reseña en Google o te siguen en Instagram al instante.",
     nfcCardCta: "Ver tarjetas NFC Tap to Review",
     homeMoreTitle: "Más servicios para tu negocio",
-    tpvCardTitle: "TPV para restaurantes",
+    tpvCardTitle: "TPV táctil para restaurantes",
     tpvCardDesc:
       "Cobro, comandero, cocina, reservas, stock y alérgenos en un solo sistema.",
-    tpvCardCta: "Ver el TPV",
-    tpvH1: "TPV para restaurantes en Tenerife y Canarias: 13 módulos integrados",
+    tpvCardCta: "TPV táctil para hostelería en Tenerife",
+    tpvH1: "TPV táctil para restaurantes en Tenerife y Canarias: 13 módulos integrados",
     tpvIntro:
-      "TPV para restaurantes y bares en Tenerife y Canarias: cobro, comandero móvil, pantalla de cocina, reservas, fichajes, stock, alérgenos y carta digital: todo tu restaurante en un solo sistema.",
+      "TPV táctil para restaurantes, pizzerías y bares en Tenerife y Canarias: cobro, comandero móvil, pantalla de cocina, reservas, fichajes, stock, alérgenos y carta digital: todo tu local en un solo sistema.",
     tpvFaqTitle: "Preguntas frecuentes sobre el TPV para restaurantes",
     tpvFaqQ1: "¿Qué es un TPV para hostelería?",
     tpvFaqA1:
@@ -246,7 +246,7 @@ export const pageCopy: { es: PageCopy; en: PageCopy } = {
     cartaTeaserTitle: "Save the 30% margin Glovo takes from every order",
     cartaTeaserDesc:
       "A digital menu with table and pick-up orders. No per-order commissions.",
-    cartaTeaserCta: "See the digital menu",
+    cartaTeaserCta: "Commission-free digital menu for restaurants",
     cartaPageH1:
       "Digital menu for restaurants: orders without paying commission to Glovo",
     iaTeaserTitle: "AI chatbots and automation",
@@ -291,22 +291,22 @@ export const pageCopy: { es: PageCopy; en: PageCopy } = {
     navbarTpvDesc: "13 modules in one system",
     serviceIaChatbots: "AI chatbots and automation",
     serviceTpv: "Restaurant POS",
-    homeStarsTitle: "Two tools to sell more",
+    homeStarsTitle: "POS, digital menu, chatbot and reviews: what restaurants use most",
     homeStarsSubtitle:
-      "More margin on every order and more Google reviews, without the hassle.",
+      "More margin on every order, less time answering enquiries and more Google reviews, without the hassle.",
     nfcCardEyebrow: "NFC cards",
     nfcCardTitle: "Multiply your Google reviews with one tap",
     nfcCardDesc:
       "Customers tap their phone on the card and leave a Google review or follow you on Instagram instantly.",
     nfcCardCta: "See Tap to Review NFC cards",
     homeMoreTitle: "More services for your business",
-    tpvCardTitle: "Restaurant POS",
+    tpvCardTitle: "Touch-screen POS for restaurants",
     tpvCardDesc:
       "Payments, mobile ordering, kitchen display, bookings, stock and allergens in one system.",
-    tpvCardCta: "See the POS",
-    tpvH1: "Restaurant POS in Tenerife and the Canary Islands: 13 integrated modules",
+    tpvCardCta: "Touch-screen POS for hospitality in Tenerife",
+    tpvH1: "Touch-screen POS for restaurants in Tenerife and the Canary Islands: 13 integrated modules",
     tpvIntro:
-      "Restaurant POS for bars and restaurants in Tenerife and the Canary Islands: payments, mobile ordering, kitchen display, bookings, time tracking, stock, allergens and digital menu: your whole restaurant in one system.",
+      "Touch-screen POS for restaurants, pizzerias and bars in Tenerife and the Canary Islands: payments, mobile ordering, kitchen display, bookings, time tracking, stock, allergens and digital menu: your whole venue in one system.",
     tpvFaqTitle: "Restaurant POS FAQ",
     tpvFaqQ1: "What is a hospitality POS?",
     tpvFaqA1:

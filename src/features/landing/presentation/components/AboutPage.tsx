@@ -1,5 +1,6 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
+import { Link } from "react-router-dom";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { PageHero, Section, WhatsAppCta } from "@shared/presentation/layout";
 import { buildAboutSchema } from "@shared/presentation/components/SeoSchema";
@@ -138,6 +139,73 @@ const AboutPage: React.FC = () => {
               </li>
             ))}
           </ul>
+        </Section>
+
+        <Section
+          id="que-hacemos"
+          width="prose"
+          title="Qué hacemos por tu negocio"
+        >
+          <ul className="ds-prose list-none p-0 m-0 grid gap-[var(--space-sm)] text-lg text-muted">
+            <li>
+              <Link
+                to="/tpv-restaurantes"
+                className="text-[var(--color-primary)] hover:underline"
+              >
+                TPV táctil para hostelería en Tenerife
+              </Link>
+              : cobro, comandero, cocina, reservas y stock.
+            </li>
+            <li>
+              <Link
+                to="/carta-digital"
+                className="text-[var(--color-primary)] hover:underline"
+              >
+                Carta digital para restaurantes sin comisiones
+              </Link>
+              : pedidos desde la mesa y para recoger.
+            </li>
+            <li>
+              <Link
+                to="/ia-chatbots-tenerife"
+                className="text-[var(--color-primary)] hover:underline"
+              >
+                Chatbot con IA para empresas en Tenerife y Canarias
+              </Link>
+              : atención a clientes por web y WhatsApp.
+            </li>
+            <li>
+              <Link
+                to="/tarjetas-nfc"
+                className="text-[var(--color-primary)] hover:underline"
+              >
+                Tarjetas NFC para reseñas en Google
+              </Link>
+              : una reseña con un toque de móvil.
+            </li>
+          </ul>
+        </Section>
+
+        <Section
+          id="canarias-digitaliza"
+          tone="alt"
+          width="prose"
+          title="Digitaliza Tenerife y «Canarias Digitaliza»: no son lo mismo"
+        >
+          <div className="ds-prose text-lg text-muted grid gap-[var(--space-md)]">
+            <p className="m-0">
+              Digitaliza Tenerife es una agencia privada con sede en Tacoronte
+              (Tenerife). «Canarias Digitaliza» es un programa público distinto,
+              del que no formamos parte. Nos escriben a menudo buscando uno u
+              otro porque los nombres se parecen.
+            </p>
+            <p className="m-0">
+              Lo que sí hacemos es lo que ves en esta web: ayudar a negocios de
+              Tenerife y del resto de Canarias a digitalizarse con un TPV, una
+              carta digital, tarjetas NFC o un chatbot con IA, con una persona
+              de contacto real y sin intermediarios.
+            </p>
+          </div>
         </Section>
 
         <Section id="contacto-info" title="Contacto">

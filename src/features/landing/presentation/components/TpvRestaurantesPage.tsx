@@ -21,9 +21,10 @@ import { SOLUTIONS } from "@shared/config/solutions";
 
 const ORG_URL = "https://digitalizatenerife.es";
 const PAGE_URL = `${ORG_URL}/tpv-restaurantes`;
-const PAGE_TITLE = "TPV para restaurantes en Tenerife | Digitaliza Tenerife";
+const PAGE_TITLE =
+  "TPV táctil para restaurantes en Tenerife | Digitaliza Tenerife";
 const PAGE_DESCRIPTION =
-  "TPV para restaurantes en Tenerife y Canarias: cobro, comandero, cocina, reservas, stock y alérgenos. TPV de hostelería con 13 módulos.";
+  "TPV táctil en Tenerife y Canarias para restaurantes, pizzerías, bares y comercios: cobro, comandero, cocina, reservas, stock y alérgenos. 13 módulos.";
 
 /**
  * Standalone /tpv-restaurantes route — the 13 TPV_MODULES sections moved
@@ -39,6 +40,13 @@ const TpvRestaurantesPage: React.FC = () => {
     { question: t.tpvFaqQ1, answer: t.tpvFaqA1 },
     { question: t.tpvFaqQ2, answer: t.tpvFaqA2 },
     { question: t.tpvFaqQ3, answer: t.tpvFaqA3 },
+    { question: t.tpvFaqQ4, answer: t.tpvFaqA4 },
+  ];
+  const sectors = [
+    { title: t.tpvSectorRestTitle, desc: t.tpvSectorRestDesc },
+    { title: t.tpvSectorPizzaTitle, desc: t.tpvSectorPizzaDesc },
+    { title: t.tpvSectorBarTitle, desc: t.tpvSectorBarDesc },
+    { title: t.tpvSectorShopTitle, desc: t.tpvSectorShopDesc },
   ];
 
   return (
@@ -61,7 +69,7 @@ const TpvRestaurantesPage: React.FC = () => {
         <meta property="og:image:height" content="630" />
         <meta
           property="og:image:alt"
-          content="TPV para restaurantes con 13 módulos"
+          content="TPV táctil para restaurantes y bares con 13 módulos"
         />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={PAGE_TITLE} />
@@ -100,6 +108,29 @@ const TpvRestaurantesPage: React.FC = () => {
             />
           }
         />
+
+        <Section
+          id="tpv-tactil-tenerife"
+          width="prose"
+          title={t.tpvTactilTitle}
+          intro={t.tpvTactilDesc}
+        />
+
+        <Section
+          id="tpv-por-negocio"
+          tone="alt"
+          title={t.tpvSectorsTitle}
+          intro={t.tpvSectorsIntro}
+        >
+          <ul className="grid grid-cols-1 sm:grid-cols-2 gap-[var(--space-md)] list-none p-0 m-0">
+            {sectors.map(({ title, desc }) => (
+              <li key={title} className="ds-card">
+                <h3 className="ds-h3 mb-2">{title}</h3>
+                <p className="text-muted leading-relaxed m-0">{desc}</p>
+              </li>
+            ))}
+          </ul>
+        </Section>
 
         <TpvModulesSection whatsappPhone={whatsappPhone} />
 

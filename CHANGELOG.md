@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **Home H1 aligned with the `<title>`**: the H1 now reads "TPV, carta digital y chatbot con IA para restaurantes de Tenerife y Canarias" (ES and EN) and the subtitle covers the four services. The hub puts Carta Digital and the TPV as the two flagship cards, with the chatbot and NFC cards as secondary services.
+- **Home internal links use keyword anchors**: "Ver el TPV" became "TPV táctil para hostelería en Tenerife"; the carta card anchor became "Carta digital para restaurantes sin comisiones".
+- **`/tpv-restaurantes`**: title, description and H1 use "TPV táctil"; new H2 sections "TPV táctil en Tenerife" and "TPV para restaurantes, pizzerías, bares y comercios" (one block per business type); 4th FAQ entry in the page and its `FAQPage` JSON-LD.
+- **`/ia-chatbots-tenerife`**: new section with distinct copy for Tenerife, Lanzarote and Fuerteventura; `areaServed` of the chatbot `Service` JSON-LD now lists the same islands.
+- **Public navigation**: removed the `/admin` link from the desktop and mobile menus (the route stays `noindex` via `X-Robots-Tag` and `robots.txt`) and the "Opiniones" link.
+
 - **Sitemap** (`scripts/sitemap.mjs`, `scripts/site-routes.json`): removed `<changefreq>` and `<priority>` (ignored by Google) and the three `/legal/*` pages, which are now flagged `indexable: false`: they are still prerendered but never listed. `lastmod` floors for `/`, `/ia-chatbots-tenerife`, `/tpv-restaurantes` and `/about` bumped to 2026-10-23, the date their content actually changed.
 - **Legal pages** (`/legal/aviso`, `/legal/privacidad`, `/legal/cookies`): `<meta name="robots" content="noindex,follow">` plus `X-Robots-Tag: noindex, follow` in `vercel.json` (the `index, follow` rule now excludes `/legal/`). Footer links are unchanged.
 - **Redirects**: `/tap-review` → `/tarjetas-nfc` and `/servicios` → `/` now return an explicit 301 (`statusCode`) instead of Vercel's 308 `permanent`.
@@ -17,6 +23,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Real product images on the home** (carta digital screenshot, TPV payment photo) as indexable `<img>` with descriptive `alt`, intrinsic size, `srcset` and lazy loading.
+- **"Canarias Digitaliza" disambiguation**: 7th home FAQ entry (also in the home `FAQPage` JSON-LD) and a section on `/about` stating that Digitaliza Tenerife is a private agency and not part of the public programme. `/about` also links the four services with keyword anchors.
+- Regression tests for all of the above in `tests/unit/seo/keywordAlignment.gsc.test.ts`.
 - **FAQ on `/tpv-restaurantes`** (3 entries, incl. "¿Qué es un TPV para hostelería?") with `FAQPage` JSON-LD, and a 7th entry on `/ia-chatbots-tenerife` ("chatbot inteligente con IA para empresas en Canarias").
 
 ### Fixed
@@ -27,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+- **Home reviews block**: it showed two 2022 reviews of QR iBar, the previous product. They stay on `/carta-digital`, where they are labelled as such. Add a home block again only with recent, attributable reviews.
 - **`tests/integration/security-logger.test.js`**: a manual Node script, not a test (Jest only matches `*.test.ts`) and imported by nothing. It wrote to `security_logs` with columns that do not exist in production (`event_type`, `ip_address`, `user_agent`, `metadata`; the real ones are `type`, `client_ip`, `details`, …), and with a service-role key it would have inserted test rows into the production table. Found in the post-migration cleanup review of 2026-10-23.
 
 ### Added

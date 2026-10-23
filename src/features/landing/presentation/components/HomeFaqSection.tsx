@@ -34,6 +34,7 @@ export function useHomeFaqGroups(): HomeFaqGroup[] {
         { q: t.homeFaqQ4, a: t.homeFaqA4 },
         { q: t.homeFaqQ5, a: t.homeFaqA5 },
         { q: t.homeFaqQ6, a: t.homeFaqA6 },
+        { q: t.homeFaqQ7, a: t.homeFaqA7 },
       ],
     },
   ];

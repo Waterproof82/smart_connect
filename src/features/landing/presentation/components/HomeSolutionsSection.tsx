@@ -4,10 +4,21 @@ import { ArrowRight, Check, MessageSquare, Monitor, Smartphone, Utensils } from 
 import { useLanguage } from "@shared/context/LanguageContext";
 
 /**
- * Home hub: the two flagship products (Carta Digital, Tarjetas NFC) as large
- * cards, then secondary services. Every card links to its own indexable
- * page — home carries no duplicated product content.
+ * Home hub: the two flagship products (Carta Digital, TPV) as large cards
+ * with a real product image (indexable `<img>` + descriptive alt), then the
+ * secondary services (chatbot, NFC cards). Every card links to its own
+ * indexable page with a keyword anchor — home carries no duplicated product
+ * content.
  */
+
+interface CardImage {
+  src: string;
+  srcSet: string;
+  sizes: string;
+  width: number;
+  height: number;
+  alt: string;
+}
 const HomeSolutionsSection: React.FC = () => {
   const { t } = useLanguage();
 
@@ -24,6 +35,7 @@ const HomeSolutionsSection: React.FC = () => {
     cta: string;
     badge?: string;
     highlights?: string[];
+    image?: CardImage;
   }> = [
     {
       to: "/carta-digital",
@@ -40,14 +52,32 @@ const HomeSolutionsSection: React.FC = () => {
         t.homeCartaHighlight4,
         t.homeCartaHighlight5,
       ],
+      image: {
+        src: "/assets/carta-digital-cliente-640w.webp",
+        srcSet:
+          "/assets/carta-digital-cliente-320w.webp 320w, /assets/carta-digital-cliente-640w.webp 640w, /assets/carta-digital-cliente-1280w.webp 1280w",
+        sizes: "(min-width: 1024px) 700px, calc(100vw - 2rem)",
+        width: 640,
+        height: 501,
+        alt: t.homeCartaImageAlt,
+      },
     },
     {
-      to: "/tarjetas-nfc",
-      icon: Smartphone,
-      eyebrow: t.nfcCardEyebrow,
-      title: t.nfcCardTitle,
-      desc: t.nfcCardDesc,
-      cta: t.nfcCardCta,
+      to: "/tpv-restaurantes",
+      icon: Monitor,
+      eyebrow: t.tpvCardEyebrow,
+      title: t.tpvCardTitle,
+      desc: t.tpvCardDesc,
+      cta: t.tpvCardCta,
+      image: {
+        src: "/assets/tpv/tpv-cobro-480w.webp",
+        srcSet:
+          "/assets/tpv/tpv-cobro-480w.webp 480w, /assets/tpv/tpv-cobro-720w.webp 720w, /assets/tpv/tpv-cobro.webp 936w",
+        sizes: "(min-width: 1024px) 340px, calc(100vw - 2rem)",
+        width: 480,
+        height: 360,
+        alt: t.tpvCobroFigureAlt,
+      },
     },
   ];
 
@@ -60,11 +90,11 @@ const HomeSolutionsSection: React.FC = () => {
       cta: t.iaTeaserCta,
     },
     {
-      to: "/tpv-restaurantes",
-      icon: Monitor,
-      title: t.tpvCardTitle,
-      desc: t.tpvCardDesc,
-      cta: t.tpvCardCta,
+      to: "/tarjetas-nfc",
+      icon: Smartphone,
+      title: t.nfcCardTitle,
+      desc: t.nfcCardDesc,
+      cta: t.nfcCardCta,
     },
   ];
 
@@ -87,12 +117,27 @@ const HomeSolutionsSection: React.FC = () => {
             </p>
           </div>
           <ul className="grid grid-cols-1 lg:grid-cols-3 gap-6 list-none">
-            {flagships.map(({ to, icon: Icon, eyebrow, title, desc, cta, badge, highlights }) => (
+            {flagships.map(({ to, icon: Icon, eyebrow, title, desc, cta, badge, highlights, image }) => (
               <li key={to} className={highlights ? "lg:col-span-2" : undefined}>
                 <Link
                   to={to}
                   className={`group flex flex-col h-full bg-[var(--color-surface)] border rounded-xl p-8 md:p-10 hover:border-[var(--color-primary)] hover:-translate-y-1 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] ${highlights ? "border-[var(--color-accent-border)]" : "border-[var(--color-border)]"}`}
                 >
+                  {image && (
+                    <div className="mb-6 overflow-hidden rounded-lg border border-[var(--color-border)] aspect-[16/9]">
+                      <img
+                        src={image.src}
+                        srcSet={image.srcSet}
+                        sizes={image.sizes}
+                        alt={image.alt}
+                        width={image.width}
+                        height={image.height}
+                        loading="lazy"
+                        decoding="async"
+                        className="w-full h-full object-cover object-top"
+                      />
+                    </div>
+                  )}
                   <div className="flex flex-wrap items-center gap-3 mb-6">
                     <span className="w-11 h-11 rounded-xl flex items-center justify-center bg-[var(--color-accent-subtle)] text-[var(--color-primary)]">
                       <Icon className="w-5 h-5" aria-hidden="true" />

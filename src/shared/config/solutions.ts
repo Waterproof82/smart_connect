@@ -71,7 +71,7 @@ export const SOLUTIONS: SolutionConfig[] = [
       description:
         "Chatbots de IA para web y WhatsApp y automatización de procesos para empresas en Tenerife.",
       serviceType: "AI Chatbot and Automation",
-      areaServed: ["Tenerife", "Canarias"],
+      areaServed: ["Tenerife", "Lanzarote", "Fuerteventura", "Canarias"],
     },
   },
   {

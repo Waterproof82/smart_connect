@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Cpu, ChevronDown, ArrowLeft, Shield, X, Menu } from "lucide-react";
+import { Cpu, ChevronDown, ArrowLeft, X, Menu } from "lucide-react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { LanguageSelector } from "@shared/components/LanguageSelector";
 import { useLanguage } from "@shared/context/LanguageContext";
@@ -296,14 +296,6 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
               </div>
             </div>
           </div>
-
-          <a
-            href="/#exito"
-            className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline focus-visible:outline-none transition-colors min-h-[48px] flex items-center"
-            onClick={(e) => handleNavClick(e, "#exito")}
-          >
-            {t.navSuccess}
-          </a>
           <a
             href="/#contacto"
             className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline focus-visible:outline-none transition-colors min-h-[48px] flex items-center"
@@ -312,15 +304,6 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
             {t.navContact}
           </a>
           <LanguageSelector />
-          {isHomePage && (
-            <Link
-              to="/admin"
-              className="flex items-center gap-2 min-h-[48px] text-muted hover:text-[var(--color-primary)] transition-colors"
-            >
-              <Shield className="w-4 h-4" />
-              <span>{t.navAdmin}</span>
-            </Link>
-          )}
           <WhatsAppCta size="sm" label={t.waCtaShort} />
         </div>
 
@@ -436,29 +419,12 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
                 })}
                 <hr className="border-[var(--color-border)] my-2" />
                 <a
-                  href="/#exito"
-                  className="text-muted p-3 min-h-[48px] flex items-center hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-xl transition-colors"
-                  onClick={(e) => handleNavClick(e, "#exito")}
-                >
-                  {t.navSuccess}
-                </a>
-                <a
                   href="/#contacto"
                   className="text-muted p-3 min-h-[48px] flex items-center hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-xl transition-colors"
                   onClick={(e) => handleNavClick(e, "#contacto")}
                 >
                   {t.navContact}
                 </a>
-                {isHomePage && (
-                  <Link
-                    to="/admin"
-                    className="text-muted flex items-center gap-2 p-3 min-h-[48px] hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-xl transition-colors"
-                    onClick={closeMobileMenu}
-                  >
-                    <Shield className="w-4 h-4" />
-                    <span>Admin</span>
-                  </Link>
-                )}
               </nav>
               <div className="mt-auto pt-4 border-t border-[var(--color-border)]">
                 <WhatsAppCta block />
