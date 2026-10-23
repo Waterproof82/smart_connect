@@ -147,7 +147,7 @@ export const BLOG_POSTS: readonly BlogPost[] = [
         bullets: [
           "Número de puestos de cobro y de dispositivos para los camareros.",
           "Módulos que necesitas: comandero móvil, pantalla de cocina, reservas, fichajes, stock, alérgenos, compras.",
-          "Hardware: tablet o pantalla táctil, impresora de tickets, cajón y datáfono.",
+          "Hardware: pantalla táctil, impresora de tickets, cajón y datáfono.",
           "Modelo de pago: pago único, cuota mensual o licencia por puesto.",
           "Formación, puesta en marcha y soporte cercano.",
         ],

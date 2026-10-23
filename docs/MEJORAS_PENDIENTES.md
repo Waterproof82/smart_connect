@@ -10,7 +10,6 @@ Origen: revisión externa de digitalizatenerife.es (2026-10-23) y la implementac
 | 2 | `/about` con historia y equipo | Texto real de la historia, equipo y fotos. | `AboutPage.tsx`; considerar `Person` en `buildAboutSchema()` solo con datos reales. | F-19 |
 | 3 | Fotos propias | Foto real del TPV en un local, tarjeta NFC en una mesa, carta en un móvil. | `HomeSolutionsSection.tsx` (hoy: captura de carta y foto de Unsplash). Mantener `alt` descriptivo, `width`/`height` y `srcset`. | F-20, F-07 |
 | 4 | Precios en el artículo del TPV | Cifras publicables (o rangos) y qué incluyen. | `src/features/landing/data/blogPosts.ts`, artículo `cuanto-cuesta-un-tpv-restaurante`. Hoy solo explica de qué depende el precio. | F-19 |
-| 5 | Confirmar "TPV táctil" | Que el TPV está pensado para tablets y pantallas táctiles. | Copy en `src/shared/i18n/modules/seo-landing.ts` (`tpvTactilDesc`). | — |
 
 ## Se pueden hacer sin más datos
 
@@ -23,6 +22,8 @@ Origen: revisión externa de digitalizatenerife.es (2026-10-23) y la implementac
 | 10 | Revisar si mantener `/tarjetas-nfc` como servicio principal en la home | La home da peso a TPV, carta y chatbot; NFC pasó a secundaria. Decidir con datos de GSC. | Baja |
 
 ## Descartado
+
+- Confirmado por el propietario (2026-10-23): es un TPV táctil. Se retiró la mención a tablets del copy porque no estaba confirmada.
 
 - Cobertura de supermercados y página `/tpv-tenerife`: el propietario indicó que no tiene peso (2026-10-23).
 - Forzar la frase literal "tpv tenerife": no es natural; el H2 usa "TPV táctil en Tenerife".

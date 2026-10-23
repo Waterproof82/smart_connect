@@ -46,7 +46,7 @@ export const seoLandingCopy: { es: SeoLandingCopy; en: SeoLandingCopy } = {
       "Ejemplo de carta digital de un restaurante en pantalla: categorías, platos con foto, precio y botón para añadir al carrito",
     tpvTactilTitle: "TPV táctil en Tenerife: cobra y comanda con un par de toques",
     tpvTactilDesc:
-      "Nuestro TPV táctil para hostelería está pensado para usarse con el dedo desde una tablet o una pantalla táctil, sin menús enrevesados: el camarero abre la mesa, añade los platos y cobra en pocos pasos. Es un TPV en Tenerife pensado para el servicio real de un local canario, con IGIC y varios tipos de impuesto ya contemplados.",
+      "Nuestro TPV táctil para hostelería está pensado para usarse con el dedo sobre una pantalla táctil, sin menús enrevesados: el camarero abre la mesa, añade los platos y cobra en pocos pasos. Es un TPV en Tenerife pensado para el servicio real de un local canario, con IGIC y varios tipos de impuesto ya contemplados.",
     tpvSectorsTitle: "TPV para restaurantes, pizzerías, bares y comercios",
     tpvSectorsIntro:
       "Cada negocio trabaja distinto. Estos son los módulos que más se usan según el tipo de local.",
@@ -88,7 +88,7 @@ export const seoLandingCopy: { es: SeoLandingCopy; en: SeoLandingCopy } = {
       "Example of a restaurant's digital menu on screen: categories, dishes with photos, prices and an add-to-cart button",
     tpvTactilTitle: "Touch-screen POS in Tenerife: charge and order in a few taps",
     tpvTactilDesc:
-      "Our touch-screen POS for hospitality is designed to be used by finger on a tablet or touch display, with no convoluted menus: the waiter opens the table, adds the dishes and charges in a few steps. It is a POS built for the day-to-day service of a Canarian venue, with IGIC and several tax rates already covered.",
+      "Our touch-screen POS for hospitality is designed to be used by finger on a touch screen, with no convoluted menus: the waiter opens the table, adds the dishes and charges in a few steps. It is a POS built for the day-to-day service of a Canarian venue, with IGIC and several tax rates already covered.",
     tpvSectorsTitle: "POS for restaurants, pizzerias, bars and shops",
     tpvSectorsIntro:
       "Every business works differently. These are the modules used most, by type of venue.",
