@@ -92,3 +92,6 @@ docs/seo-data/
 
 # Claude Code isolated worktrees (temporary, per-session)
 .claude/worktrees/
+
+# graphify knowledge graph (generated: graphify update .)
+graphify-out/
