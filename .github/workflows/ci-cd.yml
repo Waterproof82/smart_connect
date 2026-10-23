@@ -58,6 +58,9 @@ jobs:
       - name: Type check
         run: npm run type-check
 
+      - name: Dead code (knip)
+        run: npm run knip -- --include files,dependencies,devDependencies,unlisted,unresolved
+
       - name: Run tests
         run: npm test
 
