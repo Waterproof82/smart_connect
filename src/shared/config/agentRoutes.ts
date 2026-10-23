@@ -9,6 +9,3 @@ import siteRoutes from "../../../scripts/site-routes.json";
 export const AGENT_PAGE_PATHS: readonly string[] = siteRoutes.routes.map(
   (r) => r.path,
 );
-
-export const isAgentPagePath = (p: string): boolean =>
-  AGENT_PAGE_PATHS.includes(p);
