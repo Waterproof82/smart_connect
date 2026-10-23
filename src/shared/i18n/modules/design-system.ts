@@ -32,7 +32,7 @@ export const designSystemCopy: {
     waMsgIa: "Hola, me interesa un chatbot con IA para mi negocio.",
     waMsgTpv: "Hola, me interesa el TPV para restaurantes.",
     heroAudience:
-      "Para restaurantes, bares, tiendas y empresas de Tenerife y Canarias.",
+      "Digitaliza Tenerife: TPV para restaurantes, carta digital, NFC y chatbot con IA para bares, tiendas y empresas de Tenerife y Canarias.",
     footerStatement:
       "Tecnología práctica para hostelería, comercio y empresas de Tenerife.",
     // Distinct from the demo section's "¿Cómo se ve?" (no duplicate h2).
@@ -49,7 +49,7 @@ export const designSystemCopy: {
     waMsgIa: "Hi, I'm interested in an AI chatbot for my business.",
     waMsgTpv: "Hi, I'm interested in the restaurant POS.",
     heroAudience:
-      "For restaurants, bars, shops and businesses in Tenerife and the Canary Islands.",
+      "Digitaliza Tenerife: restaurant POS, digital menu, NFC and AI chatbot for bars, shops and businesses in Tenerife and the Canary Islands.",
     footerStatement:
       "Practical technology for hospitality, retail and businesses in Tenerife.",
     cartaComoFuncionaTitle: "How does it work?",

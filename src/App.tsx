@@ -95,9 +95,9 @@ const ErrorBoundaryFallback: React.FC = () => {
 
 const CANONICAL_URL = "https://digitalizatenerife.es/";
 const PAGE_TITLE =
-  "Digitaliza Tenerife | Carta digital, NFC e IA para negocios";
+  "Digitaliza Tenerife | TPV, carta digital y chatbot con IA";
 const PAGE_DESCRIPTION =
-  "Carta digital sin comisiones, tarjetas NFC para reseñas de Google, chatbots con IA y TPV para restaurantes y negocios de Tenerife y Canarias.";
+  "Digitaliza Tenerife: TPV para restaurantes, carta digital sin comisiones, tarjetas NFC para reseñas y chatbot con IA en Tenerife y Canarias.";
 
 const App: React.FC = () => {
   const { t } = useLanguage();

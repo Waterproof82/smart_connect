@@ -10,13 +10,22 @@ import path from "node:path";
 // (see prerender.mjs) is what turns a broken sitemap into a failed build —
 // consistent with the D4 fix that made that catch handler meaningful again.
 
+// Google ignores <changefreq> and <priority>, so only <loc> + <lastmod> are
+// emitted. Routes flagged `indexable: false` (e.g. the legal pages, served
+// with noindex) are prerendered but never listed: a sitemap must only hold
+// canonical, 200, indexable URLs.
+const isIndexable = (route) => route?.indexable !== false;
+
 /**
  * Builds the sitemap.xml document for a set of routes.
  * @param {string} origin - e.g. "https://digitalizatenerife.es" (no trailing slash)
- * @param {Array<{path: string, priority?: string, changefreq?: string, lastmod?: string}>} routes
+ * @param {Array<{path: string, lastmod?: string, indexable?: boolean}>} routes
  * @returns {string} well-formed sitemap XML
  */
-export function buildSitemapXml(origin, routes) {
+export function buildSitemapXml(origin, allRoutes) {
+  const routes = Array.isArray(allRoutes)
+    ? allRoutes.filter(isIndexable)
+    : allRoutes;
   // G1 — table non-empty. An empty-but-valid <urlset> is accepted by Search
   // Console and would silently deindex the site.
   if (!Array.isArray(routes) || routes.length === 0) {
@@ -38,10 +47,6 @@ export function buildSitemapXml(origin, routes) {
         "  <url>",
         `    <loc>${loc(route.path)}</loc>`,
         route.lastmod ? `    <lastmod>${route.lastmod}</lastmod>` : null,
-        route.changefreq
-          ? `    <changefreq>${route.changefreq}</changefreq>`
-          : null,
-        route.priority ? `    <priority>${route.priority}</priority>` : null,
         "  </url>",
       ]
         .filter(Boolean)
@@ -60,7 +65,8 @@ export function buildSitemapXml(origin, routes) {
  * @param {string} origin
  * @returns {true}
  */
-export function validateSitemapXml(xml, routes, origin) {
+export function validateSitemapXml(xml, allRoutes, origin) {
+  const routes = allRoutes.filter(isIndexable);
   // G2 — artifact non-empty + <loc> count matches route count.
   if (!xml || Buffer.byteLength(xml, "utf-8") <= 200) {
     throw new Error(
@@ -97,7 +103,7 @@ export function validateSitemapXml(xml, routes, origin) {
  * Builds, validates, and writes dist/sitemap.xml.
  * @param {string} distDir - absolute path to the build output directory
  * @param {string} origin
- * @param {Array<{path: string, priority?: string, changefreq?: string, lastmod?: string}>} routes
+ * @param {Array<{path: string, lastmod?: string, indexable?: boolean}>} routes
  * @returns {string} absolute path of the written sitemap.xml
  */
 export function writeSitemap(distDir, origin, routes) {

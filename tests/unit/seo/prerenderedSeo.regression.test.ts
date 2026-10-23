@@ -5,7 +5,7 @@ const ROOT = path.resolve(__dirname, "../../../");
 const DIST = path.join(ROOT, "dist");
 const { origin, routes } = JSON.parse(
   fs.readFileSync(path.join(ROOT, "scripts/site-routes.json"), "utf-8"),
-) as { origin: string; routes: Array<{ path: string; lastmod?: string }> };
+) as { origin: string; routes: Array<{ path: string; lastmod?: string; indexable?: boolean }> };
 const vercel = JSON.parse(fs.readFileSync(path.join(ROOT, "vercel.json"), "utf-8")) as {
   redirects: Array<{ source: string; destination: string }>;
 };
@@ -20,6 +20,7 @@ const distBuilt = routes.every((route) => fs.existsSync(routeFile(route.path))) 
 const pages = distBuilt
   ? routes.map((route) => ({
       path: route.path,
+      indexable: route.indexable !== false,
       url: route.path === "/" ? `${origin}/` : `${origin}${route.path}`,
       html: fs.readFileSync(routeFile(route.path), "utf-8"),
     }))
@@ -70,9 +71,13 @@ const registerSuite = (): void => {
       expect(metaContent(page.html, "property", "og:image")[0]).toMatch(new RegExp(`^${origin}/`));
     });
 
-    it("is not noindex", () => {
+    it("is noindex,follow only when flagged indexable:false", () => {
       const robots = metaContent(page.html, "name", "robots").join(",");
-      expect(robots).not.toMatch(/noindex/i);
+      if (page.indexable) {
+        expect(robots).not.toMatch(/noindex/i);
+      } else {
+        expect(robots).toBe("noindex,follow");
+      }
     });
 
     it("has exactly one H1 with text in the server HTML", () => {
@@ -158,11 +163,13 @@ const registerSuite = (): void => {
 
     it("lists exactly the prerendered routes, once each", () => {
       expect(new Set(locs).size).toBe(locs.length);
-      expect([...locs].sort()).toEqual(pages.map((page) => page.url).sort());
+      expect([...locs].sort()).toEqual(
+        pages.filter((page) => page.indexable).map((page) => page.url).sort(),
+      );
     });
 
     it("lists only URLs equal to each page's canonical", () => {
-      const canonicals = pages.map(
+      const canonicals = pages.filter((page) => page.indexable).map(
         (page) => tags(page.html, "link").find((tag) => attr(tag, "rel") === "canonical" && attr(tag, "href"))?.match(/href="([^"]+)"/)?.[1],
       );
       expect([...locs].sort()).toEqual([...(canonicals as string[])].sort());

@@ -61,37 +61,63 @@ describe("scripts/site-routes.json (design.md §1.2 — single source of truth)"
     ]);
   });
 
-  it("every route has priority and changefreq; lastmod is optional but present today", () => {
+  it("routes carry a lastmod and no changefreq/priority (Google ignores both)", () => {
     const data = JSON.parse(
       fs.readFileSync(path.join(SCRIPTS_DIR, "site-routes.json"), "utf-8"),
     );
     for (const route of data.routes) {
-      expect(typeof route.priority).toBe("string");
-      expect(typeof route.changefreq).toBe("string");
+      expect(route.lastmod).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+      expect(route).not.toHaveProperty("changefreq");
+      expect(route).not.toHaveProperty("priority");
     }
+  });
+
+  it("only the three legal pages are flagged indexable:false", () => {
+    const data = JSON.parse(
+      fs.readFileSync(path.join(SCRIPTS_DIR, "site-routes.json"), "utf-8"),
+    );
+    const noindex = data.routes
+      .filter((r: { indexable?: boolean }) => r.indexable === false)
+      .map((r: { path: string }) => r.path);
+    expect(noindex).toEqual(["/legal/aviso", "/legal/privacidad", "/legal/cookies"]);
   });
 });
 
 describe("scripts/sitemap.mjs — buildSitemapXml (design.md §1.4)", () => {
-  it("emits one <url> per route with <loc>, <lastmod>, <changefreq>, <priority>", () => {
+  it("emits one <url> per route with <loc> and <lastmod> only", () => {
     const xml = runSitemapScript(`
       import { buildSitemapXml } from "./sitemap.mjs";
       process.stdout.write(buildSitemapXml("https://example.com", [
-        { path: "/", priority: "1.0", changefreq: "monthly", lastmod: "2026-01-01" },
+        { path: "/", lastmod: "2026-01-01" },
       ]));
     `);
     expect(xml).toContain("<loc>https://example.com/</loc>");
     expect(xml).toContain("<lastmod>2026-01-01</lastmod>");
-    expect(xml).toContain("<changefreq>monthly</changefreq>");
-    expect(xml).toContain("<priority>1.0</priority>");
+    expect(xml).not.toContain("<changefreq>");
+    expect(xml).not.toContain("<priority>");
     expect(xml.match(/<url>/g) ?? []).toHaveLength(1);
+  });
+
+  it("skips routes flagged indexable:false (noindex pages never enter the sitemap)", () => {
+    const xml = runSitemapScript(`
+      import { buildSitemapXml, validateSitemapXml } from "./sitemap.mjs";
+      const routes = [
+        { path: "/", lastmod: "2026-01-01" },
+        { path: "/legal/aviso", indexable: false, lastmod: "2026-01-01" },
+      ];
+      const xml = buildSitemapXml("https://digitalizatenerife.es", routes);
+      validateSitemapXml(xml, routes, "https://digitalizatenerife.es");
+      process.stdout.write(xml);
+    `);
+    expect(xml).toContain("<loc>https://digitalizatenerife.es/</loc>");
+    expect(xml).not.toContain("/legal/aviso");
   });
 
   it("omits <lastmod> when a route has no lastmod (never fabricates a date)", () => {
     const xml = runSitemapScript(`
       import { buildSitemapXml } from "./sitemap.mjs";
       process.stdout.write(buildSitemapXml("https://example.com", [
-        { path: "/about", priority: "0.7", changefreq: "monthly" },
+        { path: "/about" },
       ]));
     `);
     expect(xml).not.toContain("<lastmod>");
@@ -101,8 +127,8 @@ describe("scripts/sitemap.mjs — buildSitemapXml (design.md §1.4)", () => {
     const xml = runSitemapScript(`
       import { buildSitemapXml } from "./sitemap.mjs";
       process.stdout.write(buildSitemapXml("https://example.com", [
-        { path: "/", priority: "1.0", changefreq: "monthly" },
-        { path: "/about", priority: "0.7", changefreq: "monthly" },
+        { path: "/" },
+        { path: "/about" },
       ]));
     `);
     expect(xml).toContain("<loc>https://example.com/</loc>");
@@ -128,8 +154,8 @@ describe("scripts/sitemap.mjs — writeSitemap guards (design.md §1.5 G1-G4)", 
     runSitemapScript(`
       import { writeSitemap } from "./sitemap.mjs";
       writeSitemap(${tmpDirEscaped}, "https://digitalizatenerife.es", [
-        { path: "/", priority: "1.0", changefreq: "monthly" },
-        { path: "/about", priority: "0.7", changefreq: "monthly" },
+        { path: "/" },
+        { path: "/about" },
       ]);
     `);
     const written = fs.readFileSync(path.join(tmpDir, "sitemap.xml"), "utf-8");
@@ -143,7 +169,7 @@ describe("scripts/sitemap.mjs — writeSitemap guards (design.md §1.5 G1-G4)", 
       runSitemapScript(`
         import { buildSitemapXml, validateSitemapXml } from "./sitemap.mjs";
         const origin = "https://digitalizatenerife.es";
-        const routes = [{ path: "/about", priority: "0.7", changefreq: "monthly" }];
+        const routes = [{ path: "/about", lastmod: "2026-10-05" }, { path: "/tpv-restaurantes", lastmod: "2026-10-05" }];
         const xml = buildSitemapXml(origin, routes);
         validateSitemapXml(xml, routes, origin);
       `),

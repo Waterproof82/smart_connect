@@ -33,21 +33,21 @@ function extractLiteral(source: string, name: string): string {
   return match![1];
 }
 
-describe("PAGE_TITLE — ≤60 chars, starts with 'Chatbots' (spec.md)", () => {
+describe("PAGE_TITLE — ≤60 chars, starts with 'Chatbot' (spec.md)", () => {
   const title = extractLiteral(iaPageSource, "PAGE_TITLE");
 
   it("is at most 60 characters", () => {
     expect(title.length).toBeLessThanOrEqual(60);
   });
 
-  it("starts with 'Chatbots' and keeps the brand suffix (design.md D1)", () => {
-    expect(title.startsWith("Chatbots")).toBe(true);
+  it("starts with 'Chatbot' and keeps the brand suffix (design.md D1)", () => {
+    expect(title.startsWith("Chatbot")).toBe(true);
     expect(title.endsWith("| Digitaliza Tenerife")).toBe(true);
   });
 
   it("exact shipped value", () => {
     expect(title).toBe(
-      "Chatbots IA para empresas en Tenerife | Digitaliza Tenerife",
+      "Chatbot con IA en Tenerife y Canarias | Digitaliza Tenerife",
     );
   });
 });
@@ -61,7 +61,7 @@ describe("PAGE_DESCRIPTION — ≤155 chars", () => {
 
   it("exact shipped value", () => {
     expect(description).toBe(
-      "Chatbots con IA para web y WhatsApp y automatización de procesos para empresas de Tenerife y Canarias. Atiende a tus clientes a cualquier hora.",
+      "Chatbot inteligente con IA para empresas en Tenerife y Canarias: atiende a tus clientes por web y WhatsApp a cualquier hora y automatiza tareas.",
     );
   });
 });
@@ -77,13 +77,13 @@ describe("og:image:alt — matches shipped copy", () => {
 describe("iaH1 — capability-framed, no case-study language (design.md D2/D3)", () => {
   it("es", () => {
     expect(pageCopySource).toMatch(
-      /iaH1:\s*"Inteligencia artificial y automatización para empresas en Tenerife y Canarias"/,
+      /iaH1:\s*"Chatbot con IA para empresas en Tenerife y Canarias"/,
     );
   });
 
   it("en", () => {
     expect(pageCopySource).toMatch(
-      /iaH1:\s*"Artificial intelligence and automation for businesses in Tenerife and the Canary Islands"/,
+      /iaH1:\s*"AI chatbot for businesses in Tenerife and the Canary Islands"/,
     );
   });
 });

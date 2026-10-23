@@ -30,7 +30,7 @@ const MARKDOWN_MISSING = {
 };
 
 describe("vercel.json — header rules exclude /api/ and markdown requests (design.md D5)", () => {
-  it("the index, follow rule source excludes admin/panel/login/_spa AND api/", () => {
+  it("the index, follow rule source excludes admin/panel/login/_spa, api/ AND legal/", () => {
     const indexFollowRule = vercel.headers.find((h) =>
       h.headers.some(
         (header) => header.key === "X-Robots-Tag" && header.value === "index, follow",
@@ -38,7 +38,7 @@ describe("vercel.json — header rules exclude /api/ and markdown requests (desi
     );
     expect(indexFollowRule).toBeDefined();
     expect(indexFollowRule!.source).toBe(
-      "/((?!admin|panel|login|_spa|api/).*)",
+      "/((?!admin|panel|login|_spa|api/|legal/).*)",
     );
   });
 
@@ -49,6 +49,14 @@ describe("vercel.json — header rules exclude /api/ and markdown requests (desi
       ),
     );
     expect(indexFollowRule!.missing).toContainEqual(MARKDOWN_MISSING);
+  });
+
+  it("a dedicated /legal/(.*) rule sends X-Robots-Tag: noindex, follow", () => {
+    const rule = vercel.headers.find((h) => h.source === "/legal/(.*)");
+    expect(rule?.headers).toContainEqual({
+      key: "X-Robots-Tag",
+      value: "noindex, follow",
+    });
   });
 
   it("a dedicated /api/(.*) rule sends X-Robots-Tag: noindex", () => {

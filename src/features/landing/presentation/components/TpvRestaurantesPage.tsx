@@ -6,11 +6,14 @@ import {
   PageHero,
   WhatsAppCta,
   ClosingCta,
+  Section,
+  FaqList,
 } from "@shared/presentation/layout";
 import TpvModulesSection from "@shared/components/tpv/TpvModulesSection";
 import {
   ServiceSchema,
   BreadcrumbListSchema,
+  SeoFaqSchema,
 } from "@shared/presentation/components/SeoSchema";
 import { useLanguage } from "@shared/context/LanguageContext";
 import { useWhatsappPhone } from "@shared/hooks";
@@ -18,9 +21,9 @@ import { SOLUTIONS } from "@shared/config/solutions";
 
 const ORG_URL = "https://digitalizatenerife.es";
 const PAGE_URL = `${ORG_URL}/tpv-restaurantes`;
-const PAGE_TITLE = "TPV para restaurantes: 13 módulos | Digitaliza Tenerife";
+const PAGE_TITLE = "TPV para restaurantes en Tenerife | Digitaliza Tenerife";
 const PAGE_DESCRIPTION =
-  "TPV para restaurantes y bares en Canarias: cobro, comandero, KDS de cocina, reservas, stock, alérgenos y más. 13 módulos integrados en un solo sistema.";
+  "TPV para restaurantes en Tenerife y Canarias: cobro, comandero, cocina, reservas, stock y alérgenos. TPV de hostelería con 13 módulos.";
 
 /**
  * Standalone /tpv-restaurantes route — the 13 TPV_MODULES sections moved
@@ -32,6 +35,11 @@ const TpvRestaurantesPage: React.FC = () => {
   const whatsappPhone = useWhatsappPhone();
   const solutionMeta = SOLUTIONS.find((s) => s.id === "tpv-restaurantes");
   const servicio = "TPV para restaurantes";
+  const faqs = [
+    { question: t.tpvFaqQ1, answer: t.tpvFaqA1 },
+    { question: t.tpvFaqQ2, answer: t.tpvFaqA2 },
+    { question: t.tpvFaqQ3, answer: t.tpvFaqA3 },
+  ];
 
   return (
     <>
@@ -78,6 +86,8 @@ const TpvRestaurantesPage: React.FC = () => {
         ]}
       />
 
+      <SeoFaqSchema faqs={faqs} />
+
       <PageShell waMessage={t.waMsgTpv} servicio={servicio}>
         <PageHero
           title={t.tpvH1}
@@ -92,6 +102,10 @@ const TpvRestaurantesPage: React.FC = () => {
         />
 
         <TpvModulesSection whatsappPhone={whatsappPhone} />
+
+        <Section id="tpv-faq" width="prose" title={t.tpvFaqTitle}>
+          <FaqList items={faqs.map((f) => ({ q: f.question, a: f.answer }))} />
+        </Section>
 
         <ClosingCta
           id="tpv-cta"

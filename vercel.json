@@ -21,8 +21,8 @@
     { "source": "/automatizacion-whatsapp-restaurante", "destination": "/ia-chatbots-tenerife", "permanent": true },
     { "source": "/software-restaurantes-canarias", "destination": "/tpv-restaurantes", "permanent": true },
     { "source": "/digitalizacion-hosteleria-tenerife", "destination": "/", "permanent": true },
-    { "source": "/tap-review", "destination": "/tarjetas-nfc", "permanent": true },
-    { "source": "/servicios", "destination": "/", "permanent": true },
+    { "source": "/tap-review", "destination": "/tarjetas-nfc", "statusCode": 301 },
+    { "source": "/servicios", "destination": "/", "statusCode": 301 },
     { "source": "/contacto", "destination": "/#contacto", "permanent": true }
   ],
   "headers": [
@@ -57,7 +57,7 @@
       ]
     },
     {
-      "source": "/((?!admin|panel|login|_spa|api/).*)",
+      "source": "/((?!admin|panel|login|_spa|api/|legal/).*)",
       "missing": [
         { "type": "header", "key": "accept", "value": ".*text/markdown.*" }
       ],
@@ -66,6 +66,10 @@
     {
       "source": "/(admin|panel|login|_spa)(.*)",
       "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
+    },
+    {
+      "source": "/legal/(.*)",
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, follow" }]
     },
     {
       "source": "/api/(.*)",

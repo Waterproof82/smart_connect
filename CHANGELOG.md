@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **Sitemap** (`scripts/sitemap.mjs`, `scripts/site-routes.json`): removed `<changefreq>` and `<priority>` (ignored by Google) and the three `/legal/*` pages, which are now flagged `indexable: false`: they are still prerendered but never listed. `lastmod` floors for `/`, `/ia-chatbots-tenerife`, `/tpv-restaurantes` and `/about` bumped to 2026-10-23, the date their content actually changed.
+- **Legal pages** (`/legal/aviso`, `/legal/privacidad`, `/legal/cookies`): `<meta name="robots" content="noindex,follow">` plus `X-Robots-Tag: noindex, follow` in `vercel.json` (the `index, follow` rule now excludes `/legal/`). Footer links are unchanged.
+- **Redirects**: `/tap-review` → `/tarjetas-nfc` and `/servicios` → `/` now return an explicit 301 (`statusCode`) instead of Vercel's 308 `permanent`.
+- **On-page SEO**: new titles, descriptions and H1 for `/tpv-restaurantes` ("TPV para restaurantes ... Tenerife y Canarias"), `/ia-chatbots-tenerife` ("Chatbot con IA ... Tenerife y Canarias") and the home (title, description, hero audience line mention the brand, TPV and chatbot). ES and EN.
+- **Organization JSON-LD**: added `alternateName` (`DigitalizaTenerife`, `digitalizatenerife.es`).
+
+### Added
+
+- **FAQ on `/tpv-restaurantes`** (3 entries, incl. "¿Qué es un TPV para hostelería?") with `FAQPage` JSON-LD, and a 7th entry on `/ia-chatbots-tenerife` ("chatbot inteligente con IA para empresas en Canarias").
+
 ### Fixed
 
 - **Carta Digital ordering copy (ES/EN)**: Telegram was presented as the channel for all orders. It is now described correctly: table orders (QR) reach our own waiter app, which waiters can also use to take orders and which connects to bar and kitchen tablets in real time; Telegram is used only for pickup orders at the restaurant or shop. Updated the ordering section, modes, benefits, flow steps, comparison table, FAQ, meta description and WebMCP description.

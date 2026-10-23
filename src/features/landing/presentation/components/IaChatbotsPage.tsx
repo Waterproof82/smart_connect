@@ -34,9 +34,9 @@ import { trackEvent } from "@shared/utils/analyticsEvents";
 const ORG_URL = "https://digitalizatenerife.es";
 const PAGE_URL = `${ORG_URL}/ia-chatbots-tenerife`;
 const PAGE_TITLE =
-  "Chatbots IA para empresas en Tenerife | Digitaliza Tenerife";
+  "Chatbot con IA en Tenerife y Canarias | Digitaliza Tenerife";
 const PAGE_DESCRIPTION =
-  "Chatbots con IA para web y WhatsApp y automatización de procesos para empresas de Tenerife y Canarias. Atiende a tus clientes a cualquier hora.";
+  "Chatbot inteligente con IA para empresas en Tenerife y Canarias: atiende a tus clientes por web y WhatsApp a cualquier hora y automatiza tareas.";
 
 const IaChatbotsPage: React.FC = () => {
   const { t } = useLanguage();
@@ -54,6 +54,7 @@ const IaChatbotsPage: React.FC = () => {
     { question: t.iaFaqQ4, answer: t.iaFaqA4 },
     { question: t.iaFaqQ5, answer: t.iaFaqA5 },
     { question: t.iaFaqQ6, answer: t.iaFaqA6 },
+    { question: t.iaFaqQ7, answer: t.iaFaqA7 },
   ];
   const cases = [
     { icon: Utensils, title: t.iaCase1Title, desc: t.iaCase1Desc },

@@ -35,6 +35,7 @@ const LegalPage: React.FC<LegalPageProps> = ({
       <Helmet>
         <title>{tr(titleKey)}</title>
         <meta name="description" content={tr(descriptionKey)} />
+        <meta name="robots" content="noindex,follow" />
         <link rel="canonical" href={url} />
         <meta property="og:locale" content="es_ES" />
         <meta property="og:site_name" content="Digitaliza Tenerife" />
