@@ -28,10 +28,6 @@ export type AccentToken =
 /** Tailwind-scannable literal form stored in `TpvModuleConfig.iconColor`. */
 export type AccentClass = `text-[var(${AccentToken})]`;
 
-/** Type-level inverse of AccentClass (no runtime parsing needed in app code). */
-export type AccentTokenOf<C extends AccentClass> =
-  C extends `text-[var(${infer T extends AccentToken})]` ? T : never;
-
 /**
  * Sole `as` cast in the feature — TS's `CSSProperties` has no custom-prop
  * index signature. `--tpv-accent` is set to `var(${token})`, not a literal
