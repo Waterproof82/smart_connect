@@ -136,25 +136,6 @@ interface Translation extends TpvModuleTranslations {
   errorBoundaryButton: string;
   // Skip Link
   skipLink: string;
-  // Dashboard Preview
-  dashboardTitle: string;
-  dashboardDesc: string;
-  dashboardPanelTitle: string;
-  dashboardLastUpdate: string;
-  dashboardSystemStatus: string;
-  dashboardTotalScans: string;
-  dashboardVsLastMonth: string;
-  dashboardGoogleReviews: string;
-  dashboardRatingExcellent: string;
-  dashboardPlanPro: string;
-  dashboardPlanActive: string;
-  dashboardManage: string;
-  dashboardLeadTemp: string;
-  dashboardLast7Days: string;
-  dashboardRecentActivity: string;
-  dashboardActivityScan: string;
-  dashboardActivityReview: string;
-  dashboardActivityWebhook: string;
   // Carta Digital Page
   cartaHeroEyebrow: string;
   cartaHeroTenerife: string;
@@ -614,27 +595,6 @@ const translations: Record<Language, Translation> = {
     contactFormEmailInvalid: "El email no es válido",
     contactFormServiceRequired: "Selecciona un servicio",
     contactFormMessageMinLength: "El mensaje debe tener al menos 10 caracteres",
-
-    // Dashboard Preview
-    dashboardTitle: "Control Total en Tiempo Real",
-    dashboardDesc:
-      "Monitorea tus KPIs y la reputación de tu negocio desde un solo lugar.",
-    dashboardPanelTitle: "Panel de Control",
-    dashboardLastUpdate: "Última actualización: hace 2 min",
-    dashboardSystemStatus: "Sistema Operativo",
-    dashboardTotalScans: "Total Scans",
-    dashboardVsLastMonth: "↗ +12% vs mes pasado",
-    dashboardGoogleReviews: "Reseñas Google",
-    dashboardRatingExcellent: "Excelente",
-    dashboardPlanPro: "Plan Pro",
-    dashboardPlanActive: "Tu suscripción está activa hasta Dic 2024.",
-    dashboardManage: "Gestionar",
-    dashboardLeadTemp: "Lead Temperature",
-    dashboardLast7Days: "Últimos 7 días",
-    dashboardRecentActivity: "Actividad Reciente",
-    dashboardActivityScan: "Usuario Escaneo NFC",
-    dashboardActivityReview: "Nueva Reseña 5★",
-    dashboardActivityWebhook: "Webhook Ejecutado",
 
     // Footer
     footerTagline: "Tecnología de nueva generación para negocios locales.",
@@ -1224,27 +1184,6 @@ const translations: Record<Language, Translation> = {
     contactFormEmailInvalid: "Email is not valid",
     contactFormServiceRequired: "Please select a service",
     contactFormMessageMinLength: "Message must be at least 10 characters",
-
-    // Dashboard Preview
-    dashboardTitle: "Real-Time Control",
-    dashboardDesc:
-      "Monitor your KPIs and business reputation from a single place.",
-    dashboardPanelTitle: "Control Panel",
-    dashboardLastUpdate: "Last updated: 2 min ago",
-    dashboardSystemStatus: "System Online",
-    dashboardTotalScans: "Total Scans",
-    dashboardVsLastMonth: "↗ +12% vs last month",
-    dashboardGoogleReviews: "Google Reviews",
-    dashboardRatingExcellent: "Excellent",
-    dashboardPlanPro: "Pro Plan",
-    dashboardPlanActive: "Your subscription is active until Dec 2024.",
-    dashboardManage: "Manage",
-    dashboardLeadTemp: "Lead Temperature",
-    dashboardLast7Days: "Last 7 days",
-    dashboardRecentActivity: "Recent Activity",
-    dashboardActivityScan: "NFC Scan User",
-    dashboardActivityReview: "New 5★ Review",
-    dashboardActivityWebhook: "Webhook Executed",
 
     // Footer
     footerTagline: "Next-generation technology for local businesses.",

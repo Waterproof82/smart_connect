@@ -37,5 +37,3 @@ export const ChatWelcome: React.FC<ChatWelcomeProps> = ({ onPromptClick }) => {
     </div>
   );
 };
-
-export default ChatWelcome;

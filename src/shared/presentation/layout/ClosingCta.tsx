@@ -38,5 +38,3 @@ export const ClosingCta: React.FC<ClosingCtaProps> = ({
     </section>
   );
 };
-
-export default ClosingCta;

@@ -11,7 +11,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
-import LinkifiedText from "../LinkifiedText";
+import { LinkifiedText } from "../LinkifiedText";
 
 describe("LinkifiedText", () => {
   it("renders a same-site https URL as a link, without target=_blank", () => {

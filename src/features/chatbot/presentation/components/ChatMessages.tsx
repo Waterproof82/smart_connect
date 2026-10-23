@@ -1,7 +1,7 @@
 import React from "react";
 import { User, Bot, Loader2 } from "lucide-react";
 import { Message } from "../../domain/entities";
-import LinkifiedText from "./LinkifiedText";
+import { LinkifiedText } from "./LinkifiedText";
 
 interface ChatMessagesProps {
   messages: Message[];
@@ -50,5 +50,3 @@ export const ChatMessages: React.FC<ChatMessagesProps> = ({
     </div>
   );
 };
-
-export default ChatMessages;

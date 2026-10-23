@@ -15,12 +15,12 @@ import { useAdmin } from "../AdminContext";
 import { ConsoleLogger } from "@core/domain/usecases/Logger";
 
 // Extracted components (SRP)
-import DocumentFilters from "./DocumentFilters";
-import DocumentPagination from "./DocumentPagination";
-import DocumentEmptyState from "./DocumentEmptyState";
-import DocumentViewModal from "./DocumentViewModal";
-import DocumentCreateModal from "./DocumentCreateModal";
-import DeleteConfirmDialog from "./DeleteConfirmDialog";
+import { DocumentFilters } from "./DocumentFilters";
+import { DocumentPagination } from "./DocumentPagination";
+import { DocumentEmptyState } from "./DocumentEmptyState";
+import { DocumentViewModal } from "./DocumentViewModal";
+import { DocumentCreateModal } from "./DocumentCreateModal";
+import { DeleteConfirmDialog } from "./DeleteConfirmDialog";
 
 const logger = new ConsoleLogger("[DocumentList]");
 
@@ -429,5 +429,3 @@ export const DocumentList: React.FC<DocumentListProps> = ({
     </div>
   );
 };
-
-export default DocumentList;

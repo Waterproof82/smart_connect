@@ -48,5 +48,3 @@ export const ChatToggleButton: React.FC<ChatToggleButtonProps> = ({
     </div>
   );
 };
-
-export default ChatToggleButton;

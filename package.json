@@ -16,6 +16,7 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "test:vitest": "vitest",
+    "knip": "knip",
     "optimize:images": "node scripts/optimize-images.mjs",
     "ingest-kb": "node scripts/ingest-knowledge-base.mjs",
     "eval-kb": "node scripts/eval-knowledge-base.mjs"
@@ -61,6 +62,7 @@
     "eslint-plugin-react-hooks": "^4.6.2",
     "jest": "^29.7.0",
     "jsdom": "^29.1.1",
+    "knip": "5.88.1",
     "postcss": "^8.5.28",
     "sharp": "^0.35.5",
     "tailwindcss": "^4.3.0",

@@ -76,9 +76,9 @@ describe("ExpertAssistantWithRAG.tsx (U3 chatbot chokepoint wiring)", () => {
     expect(source).not.toMatch(/await\s+import\(/);
   });
 
-  it("keeps ExpertAssistant as a plain named/default export (still eagerly imported by App.tsx, never React.lazy)", () => {
+  it("keeps ExpertAssistant as a named-only export (still eagerly imported by App.tsx, never React.lazy)", () => {
     expect(source).toMatch(/export const ExpertAssistant/);
-    expect(source).toMatch(/export default ExpertAssistant/);
+    expect(source).not.toMatch(/export default ExpertAssistant/);
   });
 
   // S2b (design.md D7): drop the component's own getAppSettings effect in

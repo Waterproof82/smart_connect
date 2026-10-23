@@ -70,5 +70,3 @@ export const CartaDigitalReviews: React.FC<CartaDigitalReviewsProps> = ({
     </div>
   );
 };
-
-export default CartaDigitalReviews;

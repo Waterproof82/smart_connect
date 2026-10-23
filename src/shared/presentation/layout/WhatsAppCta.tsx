@@ -59,5 +59,3 @@ export const WhatsAppCta: React.FC<WhatsAppCtaProps> = ({
     </a>
   );
 };
-
-export default WhatsAppCta;

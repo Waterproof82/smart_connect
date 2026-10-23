@@ -5,5 +5,4 @@
  */
 
 export * from './Message';
-export * from './Document';
 export * from './ChatSession';

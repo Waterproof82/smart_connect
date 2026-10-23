@@ -20,10 +20,10 @@ import { useWhatsappPhone } from "@shared/hooks/useWhatsappPhone";
 import { useLanguage } from "@shared/context/LanguageContext";
 
 // Extracted UI components (SRP)
-import ChatMessages from "./components/ChatMessages";
-import ChatInput from "./components/ChatInput";
-import ChatWelcome from "./components/ChatWelcome";
-import ChatToggleButton from "./components/ChatToggleButton";
+import { ChatMessages } from "./components/ChatMessages";
+import { ChatInput } from "./components/ChatInput";
+import { ChatWelcome } from "./components/ChatWelcome";
+import { ChatToggleButton } from "./components/ChatToggleButton";
 
 const getSessionIdentifier = (): string => {
   const key = "sc_chat_session_id";
@@ -283,5 +283,3 @@ export const ExpertAssistant: React.FC<{ initialOpen?: boolean }> = ({
     </div>
   );
 };
-
-export default ExpertAssistant;

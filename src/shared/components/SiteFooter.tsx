@@ -97,5 +97,3 @@ export const SiteFooter: React.FC = () => {
     </footer>
   );
 };
-
-export default SiteFooter;
