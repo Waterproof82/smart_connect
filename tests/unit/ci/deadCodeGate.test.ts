@@ -56,4 +56,14 @@ describe("Dead code gate (knip)", () => {
     expect(typeCheckIndex).toBeGreaterThan(-1);
     expect(knipIndex).toBeGreaterThan(typeCheckIndex);
   });
+
+  // PR3 (design.md): once the duplicate/unused export cleanup lands, the
+  // gate widens to the FULL knip check — no --include filter left.
+  it("CI workflow's knip step has no --include flag (full gate)", () => {
+    const workflow = readFile(".github/workflows/ci-cd.yml");
+    const knipLineMatch = workflow.match(/run:\s*npm run knip[^\n]*/);
+
+    expect(knipLineMatch).not.toBeNull();
+    expect(knipLineMatch?.[0]).not.toContain("--include");
+  });
 });

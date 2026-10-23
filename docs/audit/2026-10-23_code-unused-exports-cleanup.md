@@ -51,3 +51,23 @@ None functionally. Noted a cosmetic knip count mismatch (28 vs. discovery's 21 "
 ### Deviation from design
 
 None functionally. One commit-grouping deviation: because `git rm` stages deletions independently of `git add <specific-files>`, two early commits (`test(ci): add knip dead-code gate guard test and config` in PR1, and `refactor(chatbot): drop dead getChatbotContainer alias and barrel re-export` in PR2) absorbed file deletions that were intended for separate commits (the 10 barrels, and `DocumentModal.tsx`, respectively). All deletions were still verified pre-delete via `rg` and the full suite stayed green throughout — this is a commit-history organization note only, not a functional or review-risk issue.
+
+## PR3 — 2026-10-23 — SeoSchema deletions + full CI gate (`size:exception`)
+
+**Branch**: `fix/seo-schema-dead-components` (from `fix/single-export-convention`)
+
+### Actions
+
+1. Confirmed via `rg` that none of the 8 target symbols (`PageHero`, `LocalBusinessSchema`, `BenefitsGrid`, `HowItWorks`, `StatsBar`, `CollectionPageSchema`, `SoftwareApplicationSchema`, `WebApplicationSchema`) are imported from `SeoSchema.tsx` anywhere — same-named symbols elsewhere (`PageHero` from `@shared/presentation/layout`, `HowItWorks` from the `tap-review` feature) resolve to different, unrelated files.
+2. Deleted all 8 components, their Props interfaces, and the page-local type helpers only used by them (`BenefitCard`, `StepInfo`, `StatItem`, `CollectionPageItem`) — confirmed none of those helper types are used elsewhere. `SeoSchema.tsx` shrank from 729 to 310 lines; the still-live exports (`organizationNode`, `buildHomeSchema`, `buildAboutSchema`, `SeoFaqSchema`, `ServiceSchema`, `BreadcrumbListSchema`, `ORGANIZATION_ID`, `WEBSITE_ID`, `HomeSchemaFaq`) are untouched.
+3. Extended `tests/unit/ci/deadCodeGate.test.ts` FIRST (RED) to assert the workflow's knip step has no `--include` flag, then widened `.github/workflows/ci-cd.yml`'s `Dead code (knip)` step from the narrow `--include` set to the full `npm run knip` (GREEN).
+4. Verification: `npx tsc --noEmit` (clean), `npm run lint` (clean), `npm test` (145/145 suites, 1857 passed — +1 for the new guard assertion), `npx vitest run` (33/33, 187 passed), `npm run knip` (full, no flags) exits 0 with **zero** findings of any kind. Ran the existing SEO regression suite (`tests/unit/seo`, 9 suites, 230 passed, 4 skipped — the 4 "fresh-gated" tests require a `dist` build and only run inside the CI job that builds first, per the no-local-build rule) to confirm prerendered JSON-LD and route structure are unaffected; `clientRoutes.tsx` and `vite-manual-chunks.ts` were never touched. `git diff -- supabase/functions/` stayed empty.
+5. **T3.5 decision**: this PR is ~420 lines of pure deletion, over the 400-line review budget. Per the `ask-on-risk` delivery strategy this would normally block for a maintainer decision; the owner pre-resolved it on 2026-10-23 as `size:exception` (one cohesive file, no logic changes, straightforward to review as a deletion diff) rather than splitting into 3a/3b.
+
+### Final state
+
+All 3 PRs (knip config, named-only convention, SeoSchema deletions) complete. `npx knip` reports 0 unused files, 0 unused exports, 0 unused exported types, 0 duplicate exports. CI's `Dead code (knip)` gate runs the full, unfiltered check after type-check — any future regression on any of these four fronts now fails CI.
+
+### Deviation from design
+
+None.
