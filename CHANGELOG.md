@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+- **Knowledge-base refresh snapshots dropped**: the `kb_backup` schema (`documents_20261007`, 7 legacy rows with outdated prices; `documents_20261008`, 3 rows) taken before the 2026-10-08 KB refresh is gone, via migration `20261023093831_drop_kb_backup_snapshots.sql`, now that the new KB (113 hashed rows) is validated.
 - **Dead Supabase write RPCs dropped (SDD `supabase-schema-hygiene`, PR2)**: `batch_insert_document`, `insert_document` and `insert_document_with_embedding` were superseded by `upsert_document` (KB ingest), had zero code references and zero API calls. Migration `20261023082716_schema_hygiene_drop_dead_rpcs.sql` drops them (no `CASCADE`), revokes `PUBLIC`/`anon`/`authenticated` EXECUTE on the `public.update_updated_at_column()` trigger function, and drops the duplicate `service_role_insert_logs` policy on `security_logs`. Rollback definitions are in `docs/audit/2026-10-23_supabase-schema-hygiene.md`.
 
 ### Fixed
