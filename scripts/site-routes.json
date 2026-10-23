@@ -5,7 +5,7 @@
       "path": "/",
       "priority": "1.0",
       "changefreq": "monthly",
-      "lastmod": "2026-10-05",
+      "lastmod": "2026-10-23",
       "sources": [
         "src/App.tsx",
         "src/features/landing/presentation/components/Hero.tsx",
@@ -30,12 +30,18 @@
       "path": "/carta-digital",
       "priority": "0.9",
       "changefreq": "monthly",
-      "lastmod": "2026-10-05",
+      "lastmod": "2026-10-23",
       "sources": [
         "src/features/landing/presentation/components/CartaDigitalPage.tsx",
         "src/features/landing/presentation/components/CartaDigitalSection.tsx",
         "src/features/landing/presentation/components/CartaDigitalReviews.tsx",
-        "src/features/landing/presentation/components/CartaDigitalTelegramSection.tsx"
+        "src/features/landing/presentation/components/CartaDigitalTelegramSection.tsx",
+        "src/features/landing/presentation/components/CartaDigitalConfianzaSection.tsx",
+        "src/features/landing/presentation/components/CartaDigitalEcosistemaSection.tsx",
+        "src/features/landing/presentation/components/CartaDigitalPagoMesaSection.tsx",
+        "src/features/landing/presentation/components/CartaDigitalVisibilidadSection.tsx",
+        "src/features/landing/presentation/components/CartaDigitalPruebaSection.tsx",
+        "src/shared/i18n/modules/carta-diferenciacion.ts"
       ]
     },
     {

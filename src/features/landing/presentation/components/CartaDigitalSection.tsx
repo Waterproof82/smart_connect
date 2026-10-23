@@ -32,6 +32,11 @@ import CartaDigitalLightbox from "./CartaDigitalLightbox";
 import CartaDigitalTelegramSection from "./CartaDigitalTelegramSection";
 import CartaDigitalModosSection from "./CartaDigitalModosSection";
 import CartaDigitalAntidesperdicioSection from "./CartaDigitalAntidesperdicioSection";
+import CartaDigitalConfianzaSection from "./CartaDigitalConfianzaSection";
+import CartaDigitalEcosistemaSection from "./CartaDigitalEcosistemaSection";
+import CartaDigitalPagoMesaSection from "./CartaDigitalPagoMesaSection";
+import CartaDigitalVisibilidadSection from "./CartaDigitalVisibilidadSection";
+import CartaDigitalPruebaSection from "./CartaDigitalPruebaSection";
 
 interface CartaDigitalSectionProps {
   /**
@@ -71,14 +76,19 @@ const CartaDigitalSection: React.FC<CartaDigitalSectionProps> = ({
       <CartaDigitalGlovoSection />
       <CartaDigitalProblemaSection />
       <CartaDigitalSolucionSection />
+      <CartaDigitalConfianzaSection />
       <CartaDigitalBeneficiosSection />
+      <CartaDigitalEcosistemaSection />
       <CartaDigitalTelegramSection />
+      <CartaDigitalPagoMesaSection />
       <CartaDigitalModosSection />
       <CartaDigitalComoFuncionaSection />
+      <CartaDigitalVisibilidadSection />
       <CartaDigitalAntidesperdicioSection />
       <CartaDigitalDineroSection />
       <CartaDigitalComparacionSection />
       <CartaDigitalBBDDSection />
+      <CartaDigitalPruebaSection />
       <CartaDigitalDemoSection
         videoRef={videoRef}
         isVideoPlaying={isVideoPlaying}

@@ -27,3 +27,27 @@ Los pedidos de la carta digital llegan por Telegram, no por WhatsApp. Telegram e
 ## Compra y envío a domicilio
 
 El proyecto estándar de carta digital y tienda digital incluye una landing page de presentación con la descripción del local, sus datos y el enlace a sus reseñas de Google; acceso de contacto por WhatsApp; y un catálogo con todo el sistema de compra y envío a domicilio. También incluye el hosting y el mantenimiento.
+
+## Pago desde la mesa, propinas y cuenta dividida
+
+Desde la carta digital el cliente puede pagar en la mesa con su móvil, sin esperar la cuenta ni el datáfono. Al ver el ticket, la carta le sugiere añadir una propina para el equipo, algo que se pierde mucho cuando se paga con tarjeta. La mesa puede dividir la cuenta a partes iguales entre varias personas o que cada comensal marque lo que ha pedido y pague solo su parte. Justo después del pago, el cliente puede dejar su reseña en Google con un toque.
+
+## Reseñas en Google desde la carta
+
+Cada cliente puede dejar una reseña en Google directamente desde la carta digital. Más reseñas recientes mejoran la posición del negocio en Google y en las respuestas de los asistentes de IA.
+
+## Ecosistema completo para el local
+
+La carta digital forma parte de un sistema modular. El cliente descubre el negocio en Google, en redes sociales o en su landing propia; pide online, para recoger, a domicilio, desde la mesa o a través del camarero; el equipo recibe cada pedido con todo el detalle y responde con un solo botón que lo tiene listo en 30 minutos o en una hora, sin coger el teléfono. Los camareros pueden usar una PDA para tomar o recibir comandas, que se envían solas a cocina (comida) o a barra (bebida). El sistema se conecta con un TPV para contabilidad, control de fichajes, stock y proveedores, adaptado a Veri*factu.
+
+## Persona de contacto y seguridad
+
+Detrás de la carta hay una persona real de Digitaliza Tenerife que la pone en marcha, la adapta al modelo de negocio y responde por WhatsApp. El negocio sabe quién trata los datos de sus clientes y la base de datos de clientes es suya, a diferencia de las apps anónimas en las que no hay nadie con nombre al que llamar.
+
+## SEO local y GEO
+
+La carta es indexable, con URL propia y no un PDF, y se enlaza desde el perfil de empresa de Google y las redes sociales. Está en 5 idiomas para que la encuentren los turistas que buscan en el suyo, y su contenido está pensado para que los asistentes de IA como ChatGPT, Gemini o Perplexity puedan leerlo y recomendar el local.
+
+## Prueba gratis de 30 días
+
+La carta digital se puede probar gratis durante 30 días. Se pone en marcha la primera semana, se miden visitas, pedidos, clientes nuevos y reseñas, y el día 30 se revisan los resultados juntos. Si el negocio no ve mejora, lo deja sin coste y sin permanencia.

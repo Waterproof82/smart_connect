@@ -37,7 +37,7 @@ export const SOLUTIONS: SolutionConfig[] = [
     serviceValue: "Carta Digital Premium",
     jsonLd: {
       description:
-        "Menú digital con pedidos en tiempo real desde la mesa a barra y cocina. Sin comisiones por pedido.",
+        "Carta digital autogestionable con pedidos online, para recoger y desde la mesa, comandas a barra y cocina, pago en mesa con propinas y cuenta dividida, y conexión con TPV y Veri*factu. Sin comisiones por pedido.",
       serviceType: "Digital Menu Platform",
       areaServed: ["Tenerife", "Gran Canaria", "Lanzarote", "Canarias"],
     },
