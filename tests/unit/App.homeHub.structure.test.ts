@@ -39,4 +39,12 @@ describe("Home hub (App.tsx + HomeSolutionsSection)", () => {
   it("flagship Carta Digital card uses the no-commission (Glovo) message", () => {
     expect(read(HUB)).toMatch(/t\.cartaTeaserTitle/);
   });
+
+  it("features Carta Digital as the main service with its differentiators and trial badge", () => {
+    const hub = read(HUB);
+    expect(hub).toMatch(/t\.homeCartaBadge/);
+    for (const n of [1, 2, 3, 4, 5]) {
+      expect(hub).toMatch(new RegExp(`t\\.homeCartaHighlight${n}\\b`));
+    }
+  });
 });

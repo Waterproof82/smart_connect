@@ -35,6 +35,24 @@ const CartaDigitalComparacionSection: React.FC = () => {
       papel: t.cartaComparRow5Papel,
       otras: t.cartaComparRow5Otras,
     },
+    {
+      label: t.cartaComparRow6Label,
+      plataforma: t.cartaComparRow6Plataforma,
+      papel: t.cartaComparRow6Papel,
+      otras: t.cartaComparRow6Otras,
+    },
+    {
+      label: t.cartaComparRow7Label,
+      plataforma: t.cartaComparRow7Plataforma,
+      papel: t.cartaComparRow7Papel,
+      otras: t.cartaComparRow7Otras,
+    },
+    {
+      label: t.cartaComparRow8Label,
+      plataforma: t.cartaComparRow8Plataforma,
+      papel: t.cartaComparRow8Papel,
+      otras: t.cartaComparRow8Otras,
+    },
   ];
 
   return (
