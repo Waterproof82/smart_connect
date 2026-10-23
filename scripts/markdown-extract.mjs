@@ -62,10 +62,8 @@ function extractMainContent(html) {
 
 /**
  * `fallbackTitle` is caller-supplied (not hardcoded here) so this module
- * never embeds a historical brand string itself — brand copy is each
- * consumer's own concern (and api/negotiate.mjs keeps its own legacy
- * fallback literal there only, for byte-identical output — see
- * tests/unit/scripts/negotiateApi.test.ts).
+ * never embeds a brand string itself — brand copy is each consumer's own
+ * concern (api/negotiate.mjs passes its `BRAND` constant).
  *
  * @param {string} html
  * @param {{ route?: string, scope?: "root" | "main", fallbackTitle?: string }} [options]

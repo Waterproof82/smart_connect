@@ -9,6 +9,9 @@ import { extractPageMarkdown } from "../scripts/markdown-extract.mjs";
  * (middleware.ts, vite-plugin-md-negotiation.ts, src/WebMCP.ts) by
  * tests/unit/agentSurfaceParity.test.ts and tests/unit/scripts/negotiateApi.test.ts.
  */
+/** Brand title for the fallback/404 markdown (F-17: was the legacy name). */
+const BRAND = "Digitaliza Tenerife";
+
 export const MARKDOWN_ROUTES = siteRoutes.routes.map((r) => r.path);
 
 export const isMarkdownRoute = (requestedPath) =>
@@ -31,7 +34,7 @@ function buildQuickLinks() {
 
 function buildNotFoundMarkdown(requestedPath) {
   return [
-    `# SmartConnect AI`,
+    `# ${BRAND}`,
     ``,
     `> IA, automatización y hardware inteligente para negocios locales en Tenerife y Canarias.`,
     ``,
@@ -83,7 +86,7 @@ export default function handler(req, res) {
     const { markdown } = extractPageMarkdown(html, {
       route: cleanPath,
       scope: "main",
-      fallbackTitle: "SmartConnect AI",
+      fallbackTitle: BRAND,
     });
 
     res.setHeader("Cache-Control", "public, max-age=3600, s-maxage=3600");
@@ -107,7 +110,7 @@ export default function handler(req, res) {
       .status(200)
       .send(
         [
-          `# SmartConnect AI`,
+          `# ${BRAND}`,
           ``,
           `> IA, automatización y hardware inteligente para negocios locales en Tenerife y Canarias.`,
           ``,

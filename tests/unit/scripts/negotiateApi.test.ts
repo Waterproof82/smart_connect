@@ -68,6 +68,9 @@ describe("api/negotiate.mjs — route allowlist (design.md D3/D7/D8)", () => {
     `);
     const { statusCode, body } = JSON.parse(out);
     expect(statusCode).toBe(404);
+    // F-17: the 404 body carries the current brand, never the legacy one.
+    expect(body).toContain("# Digitaliza Tenerife");
+    expect(body).not.toContain("SmartConnect");
     // The requested (dead) path is echoed back in the error line, so we
     // assert on the quick-links' markdown *link targets* specifically —
     // no hyperlink may point at a dead route.
@@ -236,7 +239,7 @@ describe("api/negotiate.mjs — route allowlist (design.md D3/D7/D8)", () => {
     );
   });
 
-  it("handler falls back to the literal 'SmartConnect AI' title when the prerendered file has no <title>", () => {
+  it("handler falls back to the 'Digitaliza Tenerife' title when the prerendered file has no <title>", () => {
     const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "negotiate-test-"));
     const routeDir = path.join(tmpDir, "dist", "about");
     fs.mkdirSync(routeDir, { recursive: true });
@@ -273,7 +276,8 @@ describe("api/negotiate.mjs — route allowlist (design.md D3/D7/D8)", () => {
 
     const { statusCode, body } = JSON.parse(out);
     expect(statusCode).toBe(200);
-    expect(body).toContain("# SmartConnect AI");
+    expect(body).toContain("# Digitaliza Tenerife");
+    expect(body).not.toContain("SmartConnect");
   });
 
   // F-15 (2026-10-23 audit): real prerendered pages nest divs before <main>
