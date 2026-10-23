@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Security
+
+- **`match_documents` / `match_documents_by_source` no longer granted to `PUBLIC`**: the chatbot (`chat-with-rag`) calls them with the anon key, so `anon`, `authenticated` and `service_role` keep their explicit EXECUTE grants; only the redundant implicit `PUBLIC` grant is revoked (migration `20261023095144_revoke_public_execute_match_documents.sql`). Restricting `anon` was reviewed and rejected: the chatbot depends on it and `documents` is anon-readable by design, so it would protect nothing.
+
+### Changed
+
+- **`knip.json`**: dropped the redundant `src/entry-client.tsx` entry (the Vite plugin already resolves it; knip flagged it as a configuration hint).
+
 ### Removed
 
 - **Knowledge-base refresh snapshots dropped**: the `kb_backup` schema (`documents_20261007`, 7 legacy rows with outdated prices; `documents_20261008`, 3 rows) taken before the 2026-10-08 KB refresh is gone, via migration `20261023093831_drop_kb_backup_snapshots.sql`, now that the new KB (113 hashed rows) is validated.
