@@ -62,6 +62,13 @@ export interface PageCopy {
   tpvCardCta: string;
   tpvH1: string;
   tpvIntro: string;
+  tpvFaqTitle: string;
+  tpvFaqQ1: string;
+  tpvFaqA1: string;
+  tpvFaqQ2: string;
+  tpvFaqA2: string;
+  tpvFaqQ3: string;
+  tpvFaqA3: string;
   tpvCtaTitle: string;
   tpvCtaButton: string;
   relatedTitle: string;
@@ -91,6 +98,8 @@ export interface PageCopy {
   iaFaqA5: string;
   iaFaqQ6: string;
   iaFaqA6: string;
+  iaFaqQ7: string;
+  iaFaqA7: string;
 }
 
 export const pageCopy: { es: PageCopy; en: PageCopy } = {
@@ -115,12 +124,12 @@ export const pageCopy: { es: PageCopy; en: PageCopy } = {
     iaTeaserDesc:
       "Atiende a tus clientes 24/7 y automatiza tareas repetitivas en tu negocio.",
     iaTeaserCta: "Ver soluciones de inteligencia artificial para empresas en Tenerife",
-    iaH1: "Inteligencia artificial y automatización para empresas en Tenerife y Canarias",
+    iaH1: "Chatbot con IA para empresas en Tenerife y Canarias",
     iaChatbotsTitle: "Chatbots con IA y robots de atención al público",
     iaCasesIntro:
       "Algunas tareas que un asistente de IA puede cubrir en un negocio local, según el sector.",
     iaIntro:
-      "Un asistente de IA (lo que muchos llaman robot de atención al público) que responde a tus clientes a cualquier hora, y flujos automáticos que se encargan de las tareas repetitivas para que tú te centres en tu negocio.",
+      "Chatbot inteligente con IA para empresas en Tenerife y Canarias: un asistente (lo que muchos llaman robot de atención al público) que responde a tus clientes a cualquier hora, y flujos automáticos que se encargan de las tareas repetitivas para que tú te centres en tu negocio.",
     iaCard1Title: "Chatbot para tu web",
     iaCard1Desc:
       "Responde dudas sobre tus servicios, precios y horarios con información de tu propio negocio.",
@@ -167,9 +176,19 @@ export const pageCopy: { es: PageCopy; en: PageCopy } = {
     tpvCardDesc:
       "Cobro, comandero, cocina, reservas, stock y alérgenos en un solo sistema.",
     tpvCardCta: "Ver el TPV",
-    tpvH1: "TPV para restaurantes con 13 módulos integrados",
+    tpvH1: "TPV para restaurantes en Tenerife y Canarias: 13 módulos integrados",
     tpvIntro:
-      "Cobro, comandero móvil, pantalla de cocina, reservas, fichajes, stock, alérgenos y carta digital: todo tu restaurante en un solo sistema.",
+      "TPV para restaurantes y bares en Tenerife y Canarias: cobro, comandero móvil, pantalla de cocina, reservas, fichajes, stock, alérgenos y carta digital: todo tu restaurante en un solo sistema.",
+    tpvFaqTitle: "Preguntas frecuentes sobre el TPV para restaurantes",
+    tpvFaqQ1: "¿Qué es un TPV para hostelería?",
+    tpvFaqA1:
+      "Es el sistema con el que un restaurante o bar cobra, toma comandas y controla su operativa. Nuestro TPV para hostelería reúne en un solo sistema el cobro, el comandero móvil, la pantalla de cocina, las reservas, el stock y los alérgenos.",
+    tpvFaqQ2: "¿Ofrecéis TPV para restaurantes en Tenerife y Canarias?",
+    tpvFaqA2:
+      "Sí. Digitaliza Tenerife es una agencia de Tacoronte (Tenerife) y trabaja con restaurantes, bares y cafeterías de Tenerife y del resto de Canarias. Puedes pedir una demo por WhatsApp.",
+    tpvFaqQ3: "¿Qué incluye el TPV?",
+    tpvFaqA3:
+      "13 módulos integrados: cobro, comandero móvil, pantalla de cocina (KDS), reservas, fichajes, stock, alérgenos, carta digital y más.",
     tpvCtaTitle: "¿Quieres ver el TPV funcionando en tu local?",
     tpvCtaButton: "Pedir una demo",
     relatedTitle: "Otros servicios para tu negocio",
@@ -209,6 +228,9 @@ export const pageCopy: { es: PageCopy; en: PageCopy } = {
     iaFaqQ6: "¿Cómo puede usar la inteligencia artificial una pyme de Tenerife?",
     iaFaqA6:
       "Con aplicaciones prácticas: un chatbot que responde a tus clientes en la web o en WhatsApp, la recogida de reservas y contactos, y automatizaciones que envían avisos o registran datos sin trabajo manual. Empezamos por la tarea que más tiempo te quita cada día.",
+    iaFaqQ7: "¿Qué es un chatbot inteligente con IA para empresas en Canarias?",
+    iaFaqA7:
+      "Es un asistente que entiende las preguntas de tus clientes y responde con la información de tu propio negocio, en tu web o en WhatsApp, a cualquier hora. Lo configuramos para empresas de Tenerife y del resto de Canarias, desde restaurantes hasta comercios y servicios.",
   },
   en: {
     glovoEyebrow: "No commissions",
@@ -231,12 +253,12 @@ export const pageCopy: { es: PageCopy; en: PageCopy } = {
     iaTeaserDesc:
       "Serve your customers 24/7 and automate repetitive tasks in your business.",
     iaTeaserCta: "See AI solutions for businesses in Tenerife",
-    iaH1: "Artificial intelligence and automation for businesses in Tenerife and the Canary Islands",
+    iaH1: "AI chatbot for businesses in Tenerife and the Canary Islands",
     iaChatbotsTitle: "AI chatbots and customer-service bots",
     iaCasesIntro:
       "Some tasks an AI assistant can handle in a local business, by sector.",
     iaIntro:
-      "An AI assistant (what many call a customer-service bot) that answers your customers at any hour, and automated workflows that handle repetitive tasks so you can focus on your business.",
+      "Smart AI chatbot for businesses in Tenerife and the Canary Islands: an assistant (what many call a customer-service bot) that answers your customers at any hour, and automated workflows that handle repetitive tasks so you can focus on your business.",
     iaCard1Title: "Website chatbot",
     iaCard1Desc:
       "Answers questions about your services, prices and opening hours using your own business information.",
@@ -282,9 +304,19 @@ export const pageCopy: { es: PageCopy; en: PageCopy } = {
     tpvCardDesc:
       "Payments, mobile ordering, kitchen display, bookings, stock and allergens in one system.",
     tpvCardCta: "See the POS",
-    tpvH1: "Restaurant POS with 13 integrated modules",
+    tpvH1: "Restaurant POS in Tenerife and the Canary Islands: 13 integrated modules",
     tpvIntro:
-      "Payments, mobile ordering, kitchen display, bookings, time tracking, stock, allergens and digital menu: your whole restaurant in one system.",
+      "Restaurant POS for bars and restaurants in Tenerife and the Canary Islands: payments, mobile ordering, kitchen display, bookings, time tracking, stock, allergens and digital menu: your whole restaurant in one system.",
+    tpvFaqTitle: "Restaurant POS FAQ",
+    tpvFaqQ1: "What is a hospitality POS?",
+    tpvFaqA1:
+      "The system a restaurant or bar uses to take payments, take orders and run daily operations. Our hospitality POS brings payments, mobile ordering, kitchen display, bookings, stock and allergens into one system.",
+    tpvFaqQ2: "Do you offer a restaurant POS in Tenerife and the Canary Islands?",
+    tpvFaqA2:
+      "Yes. Digitaliza Tenerife is an agency based in Tacoronte (Tenerife) and works with restaurants, bars and cafes across Tenerife and the rest of the Canary Islands. You can request a demo on WhatsApp.",
+    tpvFaqQ3: "What does the POS include?",
+    tpvFaqA3:
+      "13 integrated modules: payments, mobile ordering, kitchen display (KDS), bookings, time tracking, stock, allergens, digital menu and more.",
     tpvCtaTitle: "Want to see the POS running in your venue?",
     tpvCtaButton: "Request a demo",
     relatedTitle: "More services for your business",
@@ -323,5 +355,8 @@ export const pageCopy: { es: PageCopy; en: PageCopy } = {
     iaFaqQ6: "How can a small business in Tenerife use artificial intelligence?",
     iaFaqA6:
       "Through practical applications: a chatbot that answers your customers on your website or WhatsApp, collecting bookings and contacts, and automations that send notifications or record data without manual work. We start with the task that takes up most of your time each day.",
+    iaFaqQ7: "What is a smart AI chatbot for businesses in the Canary Islands?",
+    iaFaqA7:
+      "An assistant that understands your customers' questions and answers with your own business information, on your website or WhatsApp, at any hour. We set it up for businesses in Tenerife and across the Canary Islands, from restaurants to shops and services.",
   },
 };

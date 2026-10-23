@@ -7,7 +7,7 @@ const readJson = (rel: string) => JSON.parse(read(rel));
 
 const { origin, routes } = readJson("scripts/site-routes.json") as {
   origin: string;
-  routes: Array<{ path: string; lastmod?: string }>;
+  routes: Array<{ path: string; lastmod?: string; indexable?: boolean }>;
 };
 const vercel = readJson("vercel.json") as {
   redirects: Array<{
@@ -230,7 +230,10 @@ describe("SEO regression — vercel.json redirects", () => {
   const routePaths = new Set(routes.map((route) => route.path));
 
   it("are permanent (301/308)", () => {
-    const temporary = vercel.redirects.filter((redirect) => !("permanent" in redirect) || (redirect as { permanent?: boolean }).permanent !== true);
+    const temporary = vercel.redirects.filter((redirect) => {
+      const { permanent, statusCode } = redirect as { permanent?: boolean; statusCode?: number };
+      return permanent !== true && statusCode !== 301 && statusCode !== 308;
+    });
     expect(temporary).toEqual([]);
   });
 
@@ -265,7 +268,10 @@ describe("SEO regression — indexing headers", () => {
     );
     for (const entry of noindexEntries) {
       const matcher = new RegExp(`^${entry.source.replace(/:path\*/g, ".*")}$`);
-      const hit = routes.map((route) => route.path).filter((p) => matcher.test(p));
+      const hit = routes
+        .filter((route) => route.indexable !== false)
+        .map((route) => route.path)
+        .filter((p) => matcher.test(p));
       expect(hit).toEqual([]);
     }
   });

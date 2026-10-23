@@ -8,6 +8,9 @@
 
 export const ORGANIZATION = {
   name: "Digitaliza Tenerife",
+  // Spelling variants of the brand only; never "Digitaliza Canarias" (the
+  // public programme is a different entity, see iaFaqA5).
+  alternateName: ["DigitalizaTenerife", "digitalizatenerife.es"],
   url: "https://digitalizatenerife.es",
   email: "info@digitalizatenerife.es",
   telephone: "+34 601 39 64 19",

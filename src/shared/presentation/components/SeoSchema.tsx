@@ -50,6 +50,7 @@ export function organizationNode(): Record<string, unknown> {
     "@type": "LocalBusiness",
     "@id": ORGANIZATION_ID,
     name: ORGANIZATION.name,
+    alternateName: [...ORGANIZATION.alternateName],
     url: ORGANIZATION.url,
     email: ORGANIZATION.email,
     telephone: ORGANIZATION.telephone,
@@ -116,9 +117,9 @@ export function buildHomeSchema(
     // Matches the home canonical (https://digitalizatenerife.es/).
     "@id": `${ORG_URL}/#webpage`,
     url: `${ORG_URL}/`,
-    name: "Digitaliza Tenerife | Carta digital, NFC e IA para negocios",
+    name: "Digitaliza Tenerife | TPV, carta digital y chatbot con IA",
     description:
-      "Carta digital sin comisiones, tarjetas NFC para reseñas de Google, chatbots con IA y TPV para restaurantes y negocios de Tenerife y Canarias.",
+      "Digitaliza Tenerife: TPV para restaurantes, carta digital sin comisiones, tarjetas NFC para reseñas y chatbot con IA en Tenerife y Canarias.",
     inLanguage: "es",
     isPartOf: { "@id": WEBSITE_ID },
     author: { "@id": ORGANIZATION_ID },
