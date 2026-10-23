@@ -1,7 +1,6 @@
 {
   "$schema": "https://unpkg.com/knip@5/schema.json",
   "entry": [
-    "src/entry-client.tsx",
     "src/entry-server.tsx",
     "middleware.ts",
     "api/**/*.mjs",
