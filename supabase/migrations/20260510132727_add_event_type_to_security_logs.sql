@@ -1,1 +1,0 @@
-ALTER TABLE security_logs ADD COLUMN IF NOT EXISTS event_type VARCHAR(50) NOT NULL DEFAULT 'unknown';
