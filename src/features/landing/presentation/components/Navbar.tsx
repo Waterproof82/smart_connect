@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Cpu, ChevronDown, ArrowLeft, Shield, X, Menu } from "lucide-react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import LanguageSelector from "@shared/components/LanguageSelector";
+import { LanguageSelector } from "@shared/components/LanguageSelector";
 import { useLanguage } from "@shared/context/LanguageContext";
 import { WhatsAppCta } from "@shared/presentation/layout";
 

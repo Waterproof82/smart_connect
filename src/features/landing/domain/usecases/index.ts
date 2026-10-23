@@ -4,4 +4,3 @@
  */
 
 export { SubmitLeadUseCase } from './SubmitLeadUseCase';
-export type { SubmitLeadResult } from './SubmitLeadUseCase';

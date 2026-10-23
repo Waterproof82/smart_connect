@@ -88,5 +88,3 @@ export const DocumentFilters: React.FC<DocumentFiltersProps> = ({
     </div>
   );
 };
-
-export default DocumentFilters;

@@ -31,5 +31,3 @@ export const FaqList: React.FC<{ items: FaqItem[] }> = ({ items }) => (
     ))}
   </div>
 );
-
-export default FaqList;

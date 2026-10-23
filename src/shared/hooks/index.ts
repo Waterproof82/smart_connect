@@ -1,2 +1,1 @@
-export { useIntersectionObserver } from './useIntersectionObserver';
-export { useWhatsappPhone, sanitizeWhatsappPhone } from './useWhatsappPhone';
+export { useWhatsappPhone } from './useWhatsappPhone';

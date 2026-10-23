@@ -42,5 +42,3 @@ export const PageHero: React.FC<PageHeroProps> = ({
     </div>
   </header>
 );
-
-export default PageHero;

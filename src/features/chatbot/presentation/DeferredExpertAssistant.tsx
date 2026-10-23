@@ -53,5 +53,3 @@ export const DeferredExpertAssistant: React.FC = () => {
 
   return <ExpertAssistant initialOpen={openedEarly} />;
 };
-
-export default DeferredExpertAssistant;

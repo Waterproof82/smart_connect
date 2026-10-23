@@ -83,5 +83,3 @@ export const CookieConsent: React.FC = () => {
     </button>
   );
 };
-
-export default CookieConsent;

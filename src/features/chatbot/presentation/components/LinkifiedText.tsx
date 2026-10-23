@@ -36,5 +36,3 @@ export const LinkifiedText: React.FC<LinkifiedTextProps> = ({ text }) => {
     </>
   );
 };
-
-export default LinkifiedText;

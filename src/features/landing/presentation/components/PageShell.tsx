@@ -70,5 +70,3 @@ export const PageShell: React.FC<PageShellProps> = ({
     </div>
   );
 };
-
-export default PageShell;

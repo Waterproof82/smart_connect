@@ -25,6 +25,3 @@ export async function createChatbotContainer() {
     generateResponseUseCase,
   };
 }
-
-// Alias export for compatibility with barrel
-export { createChatbotContainer as getChatbotContainer };
