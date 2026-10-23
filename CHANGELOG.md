@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **Carta Digital ordering copy (ES/EN)**: Telegram was presented as the channel for all orders. It is now described correctly: table orders (QR) reach our own waiter app, which waiters can also use to take orders and which connects to bar and kitchen tablets in real time; Telegram is used only for pickup orders at the restaurant or shop. Updated the ordering section, modes, benefits, flow steps, comparison table, FAQ, meta description and WebMCP description.
+
 ### Added
 
 - **Carta Digital differentiation sections on `/carta-digital`**: five new sections, with all copy in a new i18n module (`src/shared/i18n/modules/carta-diferenciacion.ts`, ES/EN):

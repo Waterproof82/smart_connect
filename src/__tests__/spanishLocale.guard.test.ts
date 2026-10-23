@@ -77,7 +77,7 @@ describe("Spanish locale guard", () => {
     expect(findMatches(VOSEO)).toEqual([]);
   });
 
-  it("never claims digital-menu orders arrive by WhatsApp (they arrive by Telegram)", () => {
+  it("never claims digital-menu orders arrive by WhatsApp (they arrive via the waiter app, or Telegram for pickup)", () => {
     expect(findMatches(WHATSAPP_ORDERS)).toEqual([]);
   });
 });

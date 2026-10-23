@@ -546,7 +546,7 @@ const translations: Record<Language, Translation> = {
       "Hardware físico con alma digital. Tarjetas NFC elegantes que permiten a tus clientes dejar reseñas positivas al instante con un solo toque.",
     featuresCartaDigital: "Carta Digital Premium",
     featuresCartaDigitalDesc:
-      "La carta digital que elimina intermediarios. 0% comisiones, 5 idiomas, pedidos por Telegram y tu propia base de datos de clientes.",
+      "La carta digital que elimina intermediarios. 0% comisiones, 5 idiomas, pedidos en mesa y para recoger, y tu propia base de datos de clientes.",
     featuresDetails: "Ver detalles",
 
     // Carta Digital reviews (seo-trust-claims-cleanup PR2a)
@@ -675,7 +675,7 @@ const translations: Record<Language, Translation> = {
     cartaSolucionSuffix:
       " que trabaja para ti las 24 horas: dentro del local, en Google y en redes sociales.",
     cartaSolucionDesc:
-      "Tus clientes ven los platos con fotos, vídeos y descripciones en 5 idiomas escaneando el QR de la mesa. Los nuevos clientes encuentran tu carta en Google y hacen pedidos take away directamente. Tú recibes el pedido por Telegram, acumulas su contacto en tu base de datos y les fidelizas con promociones. Sin intermediarios. Sin comisiones. Sin depender de nadie.",
+      "Tus clientes ven los platos con fotos, vídeos y descripciones en 5 idiomas escaneando el QR de la mesa. Los nuevos clientes encuentran tu carta en Google y hacen pedidos take away directamente. Los pedidos de mesa llegan a la app de tu equipo y los de recoger a tu Telegram; acumulas su contacto en tu base de datos y les fidelizas con promociones. Sin intermediarios. Sin comisiones. Sin depender de nadie.",
 
     cartaBeneficiosTitle: "7 beneficios que",
     cartaBeneficiosSubtitle: "cambian tu negocio",
@@ -695,9 +695,9 @@ const translations: Record<Language, Translation> = {
     cartaBeneficio4Desc:
       "Cada pedido online pasa a ser tuyo. Envías promociones cuando quieras.",
     cartaBeneficio4Tag: "Fidelización",
-    cartaBeneficio5Title: "Pedidos por Telegram",
+    cartaBeneficio5Title: "Pedidos en tiempo real",
     cartaBeneficio5Desc:
-      "El cliente pide desde el QR y el pedido llega al grupo de Telegram de tu equipo. Todo el personal lo ve en tiempo real, sin llamadas ni confusiones.",
+      "El pedido de mesa llega a la app de tus camareros, a la barra y a la cocina al instante. Los pedidos para recoger te avisan por Telegram. Sin llamadas ni confusiones.",
     cartaBeneficio5Tag: "↓ Errores",
     cartaBeneficio6Title: "Presencia digital",
     cartaBeneficio6Desc:
@@ -717,10 +717,10 @@ const translations: Record<Language, Translation> = {
     cartaFlujoStep1Desc: "El cliente apunta la cámara al QR de la mesa y abre la carta al instante.",
     cartaFlujoStep2Title: "Explora y pide",
     cartaFlujoStep2Desc: "Selecciona platos con fotos y precios. Confirma el pedido desde el móvil.",
-    cartaFlujoStep3Title: "Llega a Telegram",
-    cartaFlujoStep3Desc: "El pedido aparece en el grupo de Telegram de tu equipo en menos de 2 segundos.",
+    cartaFlujoStep3Title: "Llega a tu equipo",
+    cartaFlujoStep3Desc: "El pedido de mesa aparece en la app de camareros, barra y cocina en menos de 2 segundos.",
     cartaFlujoStep4Title: "Confirmación",
-    cartaFlujoStep4Desc: "El equipo responde el tiempo de recogida con un botón. Sin llamadas.",
+    cartaFlujoStep4Desc: "En pedidos para recoger, el equipo responde el tiempo desde Telegram con un botón. Sin llamadas.",
 
     // --- COMPARATIVA DINERO ---
     cartaDineroTitle: "El valor real",
@@ -986,7 +986,7 @@ const translations: Record<Language, Translation> = {
     // CartaDigital FAQ & HowTo
     cartaFaqTitle: "Preguntas Frecuentes — Carta Digital",
     cartaFaqQ1: "¿Qué es la Carta Digital?",
-    cartaFaqA1: "La Carta Digital de Digitaliza Tenerife es un menú digital con fotos y vídeos, gestión de pedidos vía Telegram, base de datos de clientes propia y herramientas de reducción de desperdicio alimentario. Sin comisiones por pedido.",
+    cartaFaqA1: "La Carta Digital de Digitaliza Tenerife es un menú digital con fotos y vídeos, gestión de pedidos (app propia para mesas y Telegram para recoger), base de datos de clientes propia y herramientas de reducción de desperdicio alimentario. Sin comisiones por pedido.",
     cartaFaqQ2: "¿Necesito una app para usar el menú digital?",
     cartaFaqA2: "No. Los clientes simplemente escanean el QR de la mesa con la cámara del móvil. No se necesita descargar ninguna aplicación.",
     cartaFaqQ3: "¿Cuántos idiomas soporta la carta?",
@@ -1014,7 +1014,7 @@ const translations: Record<Language, Translation> = {
     cartaComparRow3Papel: "1 (reimpresión)",
     cartaComparRow3Otras: "1–2",
     cartaComparRow4Label: "Pedidos digitales",
-    cartaComparRow4Plataforma: "Sí, vía Telegram",
+    cartaComparRow4Plataforma: "Sí, app propia + Telegram",
     cartaComparRow4Papel: "No",
     cartaComparRow4Otras: "Sí (con comisión)",
     cartaComparRow5Label: "Puesta en marcha",
@@ -1037,31 +1037,31 @@ const translations: Record<Language, Translation> = {
     cartaSolucionPill9: "⭐ Google",
 
     // Carta Digital — Telegram section
-    cartaTelegramTitle: "Pedidos por Telegram",
-    cartaTelegramSubtitle: "El cliente pide desde el QR. El restaurante gestiona desde Telegram. Sin apps, sin comisiones.",
-    cartaTelegramFeature1Title: "Pedido online al instante",
-    cartaTelegramFeature1Desc: "El cliente escanea el QR y hace su pedido en segundos desde el móvil.",
-    cartaTelegramFeature2Title: "Grupo de Telegram del equipo",
-    cartaTelegramFeature2Desc: "El pedido llega al grupo compartido. Todo el equipo lo ve en tiempo real.",
-    cartaTelegramFeature3Title: "Respuesta con un botón",
-    cartaTelegramFeature3Desc: "Confirmas el tiempo de recogida con un solo toque. Sin llamadas, sin confusión.",
-    cartaTelegramFeature4Title: "Camarero en mesa desde el móvil",
-    cartaTelegramFeature4Desc: "El camarero gestiona pedidos en sala desde su móvil sin pantallas adicionales.",
+    cartaTelegramTitle: "Pedidos en mesa y para recoger",
+    cartaTelegramSubtitle: "En mesa, el pedido llega a la app de tu equipo. Para recoger, te avisa Telegram. Sin comisiones.",
+    cartaTelegramFeature1Title: "Pedido en mesa desde el QR",
+    cartaTelegramFeature1Desc: "El cliente escanea el QR, se abre la carta digital y hace su pedido en segundos desde el móvil.",
+    cartaTelegramFeature2Title: "App propia para camareros",
+    cartaTelegramFeature2Desc: "El pedido llega a la app que todos tus camareros pueden tener en el móvil. Ellos también pueden tomar pedidos desde la propia app.",
+    cartaTelegramFeature3Title: "Barra y cocina en tiempo real",
+    cartaTelegramFeature3Desc: "La app conecta con las tablets de barra y cocina, que reciben cada pedido al instante.",
+    cartaTelegramFeature4Title: "Recoger en el local: aviso por Telegram",
+    cartaTelegramFeature4Desc: "Telegram se usa solo para los pedidos para recoger en el restaurante o la tienda. Confirmas el tiempo con un solo toque.",
     cartaSmartTitle:
       "Convierte tu local en uno de los nuevos restaurantes inteligentes de Tenerife",
     cartaSmartDesc:
-      "Une la carta digital con pedidos en mesa, los avisos de pedido por Telegram para tu equipo y las tarjetas NFC para conseguir reseñas en Google. Tres herramientas que funcionan juntas, sin comisiones por pedido y sin que tus clientes instalen ninguna app.",
+      "Une la carta digital con pedidos en mesa, la app de pedidos para tu equipo, los avisos por Telegram de los pedidos para recoger y las tarjetas NFC para conseguir reseñas en Google. Tres herramientas que funcionan juntas, sin comisiones por pedido y sin que tus clientes instalen ninguna app.",
 
     // Carta Digital — Modos section
     cartaModosTitle: "Dos modos, un sistema",
     cartaModosSubtitle: "Elige el modo que se adapta a tu negocio.",
     cartaModoRestauranteTitle: "Modo Restaurante",
-    cartaModoRestauranteDesc: "Pedidos online y en mesa desde Telegram. Perfecto para bares, restaurantes y cafeterías.",
-    cartaModoRestauranteFeature1: "Pedidos en mesa vía QR + Telegram",
-    cartaModoRestauranteFeature2: "Grupo compartido para todo el equipo",
+    cartaModoRestauranteDesc: "Pedidos en mesa con app propia para camareros, barra y cocina. Perfecto para bares, restaurantes y cafeterías.",
+    cartaModoRestauranteFeature1: "Pedidos en mesa vía QR + app de camareros",
+    cartaModoRestauranteFeature2: "Tablets en barra y cocina en tiempo real",
     cartaModoTiendaTitle: "Modo Tienda",
-    cartaModoTiendaDesc: "Gestión de pedidos online con cartera de clientes propia. Ideal para tiendas y take away.",
-    cartaModoTiendaFeature1: "Pedidos online con gestión de clientes",
+    cartaModoTiendaDesc: "Pedidos para recoger con aviso por Telegram y cartera de clientes propia. Ideal para tiendas y take away.",
+    cartaModoTiendaFeature1: "Pedidos para recoger avisados por Telegram",
     cartaModoTiendaFeature2: "Portfolio propio — sin depender de plataformas",
 
     // Carta Digital — Antidesperdicio section
@@ -1137,7 +1137,7 @@ const translations: Record<Language, Translation> = {
       "Physical hardware with a digital soul. Elegant NFC cards that allow your customers to leave positive reviews instantly with a single tap.",
     featuresCartaDigital: "Carta Digital Premium",
     featuresCartaDigitalDesc:
-      "The digital menu that eliminates intermediaries. 0% commissions, 5 languages, Telegram orders and your own customer database.",
+      "The digital menu that eliminates intermediaries. 0% commissions, 5 languages, table and pickup orders, and your own customer database.",
     featuresDetails: "View details",
     cartaReviewsEyebrow: "Reviews",
     cartaReviewsTitle: "What diners say",
@@ -1265,7 +1265,7 @@ const translations: Record<Language, Translation> = {
     cartaSolucionSuffix:
       " that works for you 24/7: in your venue, on Google, and on social media.",
     cartaSolucionDesc:
-      "Your customers see dishes with photos, videos and descriptions in 5 languages by scanning the table QR. New customers find your menu on Google and order take away directly. You receive orders via Telegram, accumulate their contact in your database and fidelize them with promotions. No intermediaries. No commissions. Depending on no one.",
+      "Your customers see dishes with photos, videos and descriptions in 5 languages by scanning the table QR. New customers find your menu on Google and order take away directly. Table orders reach your team's app and pickup orders reach your Telegram; you accumulate their contact in your database and fidelize them with promotions. No intermediaries. No commissions. Depending on no one.",
 
     cartaBeneficiosTitle: "7 benefits that",
     cartaBeneficiosSubtitle: "change your business",
@@ -1285,9 +1285,9 @@ const translations: Record<Language, Translation> = {
     cartaBeneficio4Desc:
       "Every online order becomes yours. Send promotions whenever you want.",
     cartaBeneficio4Tag: "Fidelization",
-    cartaBeneficio5Title: "Orders via Telegram",
+    cartaBeneficio5Title: "Real-time orders",
     cartaBeneficio5Desc:
-      "Customers order from the QR and the order arrives in your team's Telegram group. Everyone sees it in real time — no calls, no confusion.",
+      "Table orders reach your waiters' app, the bar and the kitchen instantly. Pickup orders alert you on Telegram. No calls, no confusion.",
     cartaBeneficio5Tag: "↓ Errors",
     cartaBeneficio6Title: "Digital presence",
     cartaBeneficio6Desc:
@@ -1309,12 +1309,12 @@ const translations: Record<Language, Translation> = {
     cartaFlujoStep2Title: "Browse and order",
     cartaFlujoStep2Desc:
       "Select dishes with photos and prices. Confirm the order from their phone.",
-    cartaFlujoStep3Title: "Arrives on Telegram",
+    cartaFlujoStep3Title: "Reaches your team",
     cartaFlujoStep3Desc:
-      "Order appears in your team's Telegram group in under 2 seconds.",
+      "Table orders appear in the waiters', bar and kitchen app in under 2 seconds.",
     cartaFlujoStep4Title: "Confirmation",
     cartaFlujoStep4Desc:
-      "Team responds with pickup time using one button. No phone calls.",
+      "For pickup orders, the team replies with the pickup time on Telegram using one button. No phone calls.",
 
     // --- COMPARATIVE MONEY ---
     cartaDineroTitle: "The real value",
@@ -1578,7 +1578,7 @@ const translations: Record<Language, Translation> = {
     // CartaDigital FAQ & HowTo
     cartaFaqTitle: "FAQ — Digital Menu",
     cartaFaqQ1: "What is the Digital Menu?",
-    cartaFaqA1: "Digitaliza Tenerife's Digital Menu is a digital menu with photos and videos, Telegram-based order management, your own customer database, and food waste reduction tools. No per-order commissions.",
+    cartaFaqA1: "Digitaliza Tenerife's Digital Menu is a digital menu with photos and videos, order management (own app for tables, Telegram for pickup), your own customer database, and food waste reduction tools. No per-order commissions.",
     cartaFaqQ2: "Do customers need an app?",
     cartaFaqA2: "No. Customers just scan the table QR code with their phone camera. No app download required.",
     cartaFaqQ3: "How many languages does the menu support?",
@@ -1606,7 +1606,7 @@ const translations: Record<Language, Translation> = {
     cartaComparRow3Papel: "1 (reprint)",
     cartaComparRow3Otras: "1–2",
     cartaComparRow4Label: "Digital orders",
-    cartaComparRow4Plataforma: "Yes, via Telegram",
+    cartaComparRow4Plataforma: "Yes, own app + Telegram",
     cartaComparRow4Papel: "No",
     cartaComparRow4Otras: "Yes (with commission)",
     cartaComparRow5Label: "Setup time",
@@ -1629,31 +1629,31 @@ const translations: Record<Language, Translation> = {
     cartaSolucionPill9: "⭐ Google",
 
     // Carta Digital — Telegram section
-    cartaTelegramTitle: "Orders via Telegram",
-    cartaTelegramSubtitle: "Customers order from the QR. The restaurant manages via Telegram. No apps, no commissions.",
-    cartaTelegramFeature1Title: "Instant online orders",
-    cartaTelegramFeature1Desc: "The customer scans the QR and places their order in seconds from their phone.",
-    cartaTelegramFeature2Title: "Team Telegram group",
-    cartaTelegramFeature2Desc: "Orders arrive in the shared group. The whole team sees them in real time.",
-    cartaTelegramFeature3Title: "One-button response",
-    cartaTelegramFeature3Desc: "Confirm the pickup time with a single tap. No calls, no confusion.",
-    cartaTelegramFeature4Title: "Waiter on the floor via mobile",
-    cartaTelegramFeature4Desc: "Staff manage table orders from their phone — no additional screens needed.",
+    cartaTelegramTitle: "Table and pickup orders",
+    cartaTelegramSubtitle: "At the table, the order reaches your team's app. For pickup, Telegram alerts you. No commissions.",
+    cartaTelegramFeature1Title: "Table orders from the QR",
+    cartaTelegramFeature1Desc: "The customer scans the QR, the digital menu opens and they order in seconds from their phone.",
+    cartaTelegramFeature2Title: "Own app for waiters",
+    cartaTelegramFeature2Desc: "Orders arrive in the app all your waiters can have on their phone. They can also take orders from the app itself.",
+    cartaTelegramFeature3Title: "Bar and kitchen in real time",
+    cartaTelegramFeature3Desc: "The app connects to the bar and kitchen tablets, which receive every order instantly.",
+    cartaTelegramFeature4Title: "Pickup at the venue: Telegram alert",
+    cartaTelegramFeature4Desc: "Telegram is used only for pickup orders at the restaurant or shop. Confirm the pickup time with a single tap.",
     cartaSmartTitle:
       "Turn your venue into one of Tenerife's new smart restaurants",
     cartaSmartDesc:
-      "Combine the digital menu with table ordering, Telegram order alerts for your team and NFC cards for collecting Google reviews. Three tools that work together, with no per-order commissions and no app for your customers to install.",
+      "Combine the digital menu with table ordering, the team order app, Telegram alerts for pickup orders and NFC cards for collecting Google reviews. Three tools that work together, with no per-order commissions and no app for your customers to install.",
 
     // Carta Digital — Modos section
     cartaModosTitle: "Two modes, one system",
     cartaModosSubtitle: "Choose the mode that fits your business.",
     cartaModoRestauranteTitle: "Restaurant Mode",
-    cartaModoRestauranteDesc: "Online and table orders via Telegram. Perfect for bars, restaurants, and cafes.",
-    cartaModoRestauranteFeature1: "Table orders via QR + Telegram",
-    cartaModoRestauranteFeature2: "Shared group for the whole team",
+    cartaModoRestauranteDesc: "Table orders with an own app for waiters, bar and kitchen. Perfect for bars, restaurants, and cafes.",
+    cartaModoRestauranteFeature1: "Table orders via QR + waiter app",
+    cartaModoRestauranteFeature2: "Bar and kitchen tablets in real time",
     cartaModoTiendaTitle: "Shop Mode",
-    cartaModoTiendaDesc: "Online order management with your own client portfolio. Ideal for shops and take away.",
-    cartaModoTiendaFeature1: "Online orders with customer management",
+    cartaModoTiendaDesc: "Pickup orders with Telegram alerts and your own client portfolio. Ideal for shops and take away.",
+    cartaModoTiendaFeature1: "Pickup orders alerted via Telegram",
     cartaModoTiendaFeature2: "Own portfolio — no platform dependency",
 
     // Carta Digital — Antidesperdicio section
