@@ -3,9 +3,9 @@ import TurndownService from "turndown";
 /**
  * Shared, pure HTML→Markdown extraction (design.md rag-knowledge-base-refresh
  * D8). Two consumers:
- * - `api/negotiate.mjs` calls `extractPageMarkdown(html, { route, scope: "root" })`
- *   — byte-identical to the pre-refactor inline logic, guarded by
- *   tests/unit/scripts/negotiateApi.test.ts.
+ * - `api/negotiate.mjs` calls `extractPageMarkdown(html, { route, scope: "main" })`
+ *   — switched from "root" in F-15 (2026-10-23): the lazy #root capture
+ *   truncated real pages. Guarded by tests/unit/scripts/negotiateApi.test.ts.
  * - the knowledge-base ingestion pipeline (Unit 5/7) will call it with
  *   `scope: "main"` to get cleaner body content (nav/JSON-LD stripped), and
  *   will call `extractFaqJsonLd(html)` to pull FAQ Q&A straight from the

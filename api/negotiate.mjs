@@ -75,12 +75,14 @@ export default function handler(req, res) {
     const html = fs.readFileSync(filePath, "utf-8");
 
     // Extraction logic lives in scripts/markdown-extract.mjs (shared with
-    // the knowledge-base ingestion pipeline, design.md D8). 'root' scope is
-    // byte-identical to the pre-refactor inline logic — guarded by
-    // tests/unit/scripts/negotiateApi.test.ts.
+    // the knowledge-base ingestion pipeline, design.md D8). 'main' scope, not
+    // 'root': the lazy #root capture stops at the first `</div><`, which on
+    // real prerendered pages truncated the body to the title or to raw
+    // JSON-LD (F-15). 'main' drops inline JSON-LD and <nav>, and falls back
+    // to #root when a page has no <main>.
     const { markdown } = extractPageMarkdown(html, {
       route: cleanPath,
-      scope: "root",
+      scope: "main",
       fallbackTitle: "SmartConnect AI",
     });
 

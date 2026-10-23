@@ -275,4 +275,60 @@ describe("api/negotiate.mjs — route allowlist (design.md D3/D7/D8)", () => {
     expect(statusCode).toBe(200);
     expect(body).toContain("# SmartConnect AI");
   });
+
+  // F-15 (2026-10-23 audit): real prerendered pages nest divs before <main>
+  // and inline JSON-LD at the top of #root. The lazy `#root` capture stopped
+  // at the first `</div><`, so production returned only title + description
+  // (home: 283 bytes) or raw JSON-LD (/carta-digital).
+  it("returns the full <main> content of a realistic page, without inline JSON-LD or the site chrome", () => {
+    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "negotiate-test-"));
+    const routeDir = path.join(tmpDir, "dist", "carta-digital");
+    fs.mkdirSync(routeDir, { recursive: true });
+    fs.writeFileSync(
+      path.join(routeDir, "index.html"),
+      `<html><head><title>Carta Digital</title></head><body>` +
+        `<div id="root" class="min-h-full"><!--$-->` +
+        `<script type="application/ld+json">{"@context":"https://schema.org","@type":"Service"}</script>` +
+        `<div class="min-h-screen"><div class="absolute" aria-hidden="true"></div>` +
+        `<header><nav><a href="/">Menu del sitio</a></nav></header>` +
+        `<main id="main"><section><div><h1>Carta digital para restaurantes</h1></div>` +
+        `<div><p>Contenido profundo de la página</p></div></section></main>` +
+        `<footer><p>Pie de página del sitio</p></footer></div><!--/$--></div>` +
+        `<script></script></body></html>`,
+    );
+
+    const modUrl = pathToFileURL(
+      path.join(API_DIR, "negotiate.mjs"),
+    ).href;
+    const out = execFileSync(
+      process.execPath,
+      [
+        "--input-type=module",
+        "-e",
+        `
+        const { default: handler } = await import(${JSON.stringify(modUrl)});
+        let statusCode, body;
+        const req = { query: { path: "/carta-digital" } };
+        const res = {
+          setHeader() {},
+          status(code) { statusCode = code; return this; },
+          send(b) { body = b; },
+        };
+        handler(req, res);
+        process.stdout.write(JSON.stringify({ statusCode, body }));
+      `,
+      ],
+      { encoding: "utf-8", cwd: tmpDir },
+    );
+
+    fs.rmSync(tmpDir, { recursive: true, force: true });
+
+    const { statusCode, body } = JSON.parse(out);
+    expect(statusCode).toBe(200);
+    expect(body).toContain("Carta digital para restaurantes");
+    expect(body).toContain("Contenido profundo de la página");
+    expect(body).not.toContain("@context");
+    expect(body).not.toContain("Menu del sitio");
+    expect(body).not.toContain("Pie de página del sitio");
+  });
 });
