@@ -66,5 +66,3 @@ export const Section: React.FC<SectionProps> = ({
     </section>
   );
 };
-
-export default Section;

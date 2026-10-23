@@ -29,5 +29,3 @@ export const MobileWhatsAppBar: React.FC<MobileWhatsAppBarProps> = ({
     </aside>
   );
 };
-
-export default MobileWhatsAppBar;

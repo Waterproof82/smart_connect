@@ -54,5 +54,3 @@ export const RelatedServices: React.FC<RelatedServicesProps> = ({
     </section>
   );
 };
-
-export default RelatedServices;

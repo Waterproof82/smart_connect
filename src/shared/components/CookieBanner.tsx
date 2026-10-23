@@ -73,5 +73,3 @@ export const CookieBanner: React.FC<CookieBannerProps> = ({
     </div>
   );
 };
-
-export default CookieBanner;
