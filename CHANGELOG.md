@@ -25,6 +25,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Markdown negotiation returned truncated pages** (`api/negotiate.mjs`): `Accept: text/markdown` (and the WebMCP tool `get_page_content_markdown`) used the `root` extraction scope, whose lazy `#root` capture stopped at the first `</div><`. On production the home returned only its title and description (283 bytes) and `/carta-digital` ended in raw JSON-LD. It now uses the existing `main` scope (page body without inline JSON-LD or navigation; 4.9-15.9 KB per page). New regression test with a realistic nested fixture in `tests/unit/scripts/negotiateApi.test.ts`. Audit finding F-15.
 - **Carta Digital ordering copy (ES/EN)**: Telegram was presented as the channel for all orders. It is now described correctly: table orders (QR) reach our own waiter app, which waiters can also use to take orders and which connects to bar and kitchen tablets in real time; Telegram is used only for pickup orders at the restaurant or shop. Updated the ordering section, modes, benefits, flow steps, comparison table, FAQ, meta description and WebMCP description.
 
+### Removed
+
+- **`tests/integration/security-logger.test.js`**: a manual Node script, not a test (Jest only matches `*.test.ts`) and imported by nothing. It wrote to `security_logs` with columns that do not exist in production (`event_type`, `ip_address`, `user_agent`, `metadata`; the real ones are `type`, `client_ip`, `details`, …), and with a service-role key it would have inserted test rows into the production table. Found in the post-migration cleanup review of 2026-10-23.
+
 ### Added
 
 - **Carta Digital differentiation sections on `/carta-digital`**: five new sections, with all copy in a new i18n module (`src/shared/i18n/modules/carta-diferenciacion.ts`, ES/EN):
