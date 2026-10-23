@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Removed
+
+- **Dead Supabase write RPCs dropped (SDD `supabase-schema-hygiene`, PR2)**: `batch_insert_document`, `insert_document` and `insert_document_with_embedding` were superseded by `upsert_document` (KB ingest), had zero code references and zero API calls. Migration `20261023082716_schema_hygiene_drop_dead_rpcs.sql` drops them (no `CASCADE`), revokes `PUBLIC`/`anon`/`authenticated` EXECUTE on the `public.update_updated_at_column()` trigger function, and drops the duplicate `service_role_insert_logs` policy on `security_logs`. Rollback definitions are in `docs/audit/2026-10-23_supabase-schema-hygiene.md`.
+
 ### Fixed
 
 - **Supabase migration history drift repaired (SDD `supabase-schema-hygiene`, PR1)**: local `supabase/migrations` had 6 files recorded with placeholder/incorrect timestamps instead of the version Supabase actually applied remotely (`20260309000000`→`20260309073550`, `20260309000001`→`20260309073628`, `20260309100000`→`20260309140223`, `20260810120000`→`20260810184815`, `20260810130000`→`20260810194044`, `20260810131500`→`20260810195508`), plus 5 remotely-applied migrations with no local file at all (`20260309121822`, `20260516163904/163914/163925`, `20260527184851`), plus one never-applied, dead migration (`20260510132727_add_event_type_to_security_logs`, a no-op `event_type` column no code ever reads). Renamed the 6, copied the 5 verbatim from the live `schema_migrations.statements`, deleted the dead one. A new guard test, `tests/unit/migrationHistory.structure.test.ts`, fails if the file set drifts from the remote version snapshot again. See `docs/audit/2026-10-23_supabase-schema-hygiene.md`.

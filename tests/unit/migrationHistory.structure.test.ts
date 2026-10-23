@@ -130,3 +130,72 @@ describe("supabase migration history — structure (PR1 drift repair)", () => {
     expect(missing).toEqual([]);
   });
 });
+
+// supabase-schema-hygiene (PR2): dead write RPCs dropped, trigger function
+// no longer executable by API roles, duplicate service_role INSERT policy
+// removed. The file's version is whatever the live apply recorded, so it is
+// located by its name suffix.
+const HYGIENE_SUFFIX = "_schema_hygiene_drop_dead_rpcs.sql";
+const DROPPED_RPCS = [
+  "batch_insert_document",
+  "insert_document",
+  "insert_document_with_embedding",
+];
+
+describe("supabase migration history — schema hygiene (PR2)", () => {
+  const files = listMigrationFiles().sort();
+  const hygieneFile = files.find((f) => f.endsWith(HYGIENE_SUFFIX));
+
+  it("has exactly one schema-hygiene migration", () => {
+    expect(files.filter((f) => f.endsWith(HYGIENE_SUFFIX))).toHaveLength(1);
+  });
+
+  it("drops the three dead RPCs with full signatures and without CASCADE", () => {
+    const sql = fs.readFileSync(path.join(MIGRATIONS_DIR, hygieneFile ?? ""), "utf-8");
+    expect(sql).toContain("DROP FUNCTION IF EXISTS public.batch_insert_document(text);");
+    expect(sql).toContain("DROP FUNCTION IF EXISTS public.insert_document(text, text, text);");
+    expect(sql).toContain(
+      "DROP FUNCTION IF EXISTS public.insert_document_with_embedding(text, text, jsonb, text);",
+    );
+    const sqlWithoutComments = sql.replace(/--[^\n]*/g, "");
+    expect(sqlWithoutComments).not.toMatch(/\bCASCADE\b/i);
+  });
+
+  it("revokes API-role EXECUTE on the schema-qualified trigger function", () => {
+    const sql = fs.readFileSync(path.join(MIGRATIONS_DIR, hygieneFile ?? ""), "utf-8");
+    expect(sql).toContain(
+      "REVOKE EXECUTE ON FUNCTION public.update_updated_at_column() FROM PUBLIC, anon, authenticated;",
+    );
+  });
+
+  it("drops the duplicate service_role INSERT policy on security_logs", () => {
+    const sql = fs.readFileSync(path.join(MIGRATIONS_DIR, hygieneFile ?? ""), "utf-8");
+    expect(sql).toContain("DROP POLICY IF EXISTS service_role_insert_logs ON public.security_logs;");
+  });
+
+  const recreates = (fn: string) =>
+    new RegExp(
+      String.raw`CREATE\s+(OR\s+REPLACE\s+)?FUNCTION\s+(public\.)?${fn}\s*\(`,
+      "i",
+    );
+
+  it("the recreate detector actually matches a CREATE FUNCTION (guards against a vacuous pass)", () => {
+    expect(
+      recreates("insert_document").test(
+        "CREATE OR REPLACE FUNCTION public.insert_document(doc_content text)",
+      ),
+    ).toBe(true);
+    expect(recreates("insert_document").test("DROP FUNCTION public.insert_document(text)")).toBe(
+      false,
+    );
+  });
+
+  it("no migration after the hygiene one recreates a dropped RPC", () => {
+    const later = files.filter((f) => hygieneFile !== undefined && f > hygieneFile);
+    const offenders = later.filter((f) => {
+      const sql = fs.readFileSync(path.join(MIGRATIONS_DIR, f), "utf-8");
+      return DROPPED_RPCS.some((fn) => recreates(fn).test(sql));
+    });
+    expect(offenders).toEqual([]);
+  });
+});

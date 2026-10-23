@@ -58,3 +58,102 @@ RED confirmed before the file changes (4/6 assertions failed for the expected re
 ## Out of scope (PR2, separate branch, after this merges)
 
 Dropping `batch_insert_document`, `insert_document`, `insert_document_with_embedding`; revoking `update_updated_at_column()` EXECUTE from `PUBLIC`/`anon`/`authenticated`; dropping the redundant `service_role_insert_logs` policy on `security_logs`. Requires a live MCP `apply_migration` call before the migration file can be named with its real version — see design doc §(d)-(f) and tasks artifact PR2.
+
+## 2026-10-23T08:30Z — PR1 merged + bookkeeping (orchestrator)
+
+- PR #151 merged into develop (0ced1e0). `20260309000003` recorded in `supabase_migrations.schema_migrations` via `INSERT ... ON CONFLICT DO NOTHING` (statements = local file content, `created_by` notes bookkeeping); its SQL was NOT re-run.
+- Parity: 45 local files = 45 remote versions. Owner ran `supabase migration list` (all 45 rows local == remote) and `supabase db push --dry-run` → "Remote database is up to date".
+- Also removed 6 stray, git-ignored Git Bash crash dumps (`bash.exe.stackdump`), one of which sat inside `supabase/migrations/`.
+
+## 2026-10-23T08:27Z — PR2: cleanup migration applied live (orchestrator, Supabase MCP)
+
+- Pre-checks: 0 objects depend on the 3 RPCs (`pg_depend`); `public.update_updated_at_column` is only used by trigger `update_app_settings_updated_at` (the `storage.objects` trigger uses `storage.update_updated_at_column`, a different function — the REVOKE is schema-qualified).
+- Applied `schema_hygiene_drop_dead_rpcs` via MCP `apply_migration` → remote version `20261023082716`; local file created with the identical SQL.
+- Post-checks: public functions = `delete_stale_documents, match_documents, match_documents_by_source, update_updated_at_column, upsert_document`; trigger fn ACL = `postgres, service_role`; `security_logs` INSERT policies = `admin_insert_security_logs, service_insert_security_logs`.
+- Trigger smoke: `UPDATE app_settings SET id=id` inside a transaction → `updated_at` advanced (trigger fired), then `ROLLBACK` (value back to 2026-10-02). Live chatbot (`chat-with-rag` → `match_documents`) answered normally.
+- Guard test extended (TDD red → green). Lint caught a vacuous regex in the "no later migration recreates a dropped RPC" check (single-escaped `\s` inside a template string); fixed with `String.raw` plus a self-test that the detector matches a real `CREATE FUNCTION`.
+
+### Rollback (run as a NEW forward migration) — live definitions captured with `pg_get_functiondef` before the drop
+
+```sql
+-- Live definitions captured 2026-10-23 (pg_get_functiondef) BEFORE dropping.
+-- Rollback for supabase-schema-hygiene: run as a new forward migration.
+-- ACL at capture time for all three: postgres=X, service_role=X (no anon/authenticated/PUBLIC).
+
+CREATE OR REPLACE FUNCTION public.batch_insert_document(documents_json text)
+ RETURNS integer
+ LANGUAGE plpgsql
+ SET search_path TO 'public', 'extensions'
+AS $function$
+DECLARE
+  inserted_count INT := 0;
+  doc_record JSONB;
+  doc_array JSONB;
+BEGIN
+  doc_array := documents_json::jsonb;
+
+  FOR doc_record IN SELECT * FROM jsonb_array_elements(doc_array)
+  LOOP
+    INSERT INTO public.documents (content, source, metadata, embedding)
+    VALUES (
+      doc_record->>'content',
+      doc_record->>'source',
+      COALESCE(doc_record->>'metadata', '{}')::jsonb,
+      CASE
+        WHEN doc_record->>'embedding' IS NOT NULL THEN (doc_record->>'embedding')::vector(768)
+        ELSE NULL::vector(768)
+      END
+    );
+    inserted_count := inserted_count + 1;
+  END LOOP;
+
+  RETURN inserted_count;
+END;
+$function$;
+
+CREATE OR REPLACE FUNCTION public.insert_document(doc_content text, doc_embedding text, doc_source text)
+ RETURNS void
+ LANGUAGE plpgsql
+ SET search_path TO 'public', 'extensions'
+AS $function$
+BEGIN
+  INSERT INTO public.documents (content, embedding, source)
+  VALUES (doc_content, doc_embedding::vector(768), doc_source);
+END;
+$function$;
+
+CREATE OR REPLACE FUNCTION public.insert_document_with_embedding(doc_content text, doc_source text, doc_metadata jsonb DEFAULT '{}'::jsonb, doc_embedding text DEFAULT NULL::text)
+ RETURNS uuid
+ LANGUAGE plpgsql
+ SET search_path TO 'public', 'extensions'
+AS $function$
+DECLARE
+  new_id UUID;
+BEGIN
+  new_id := gen_random_uuid();
+
+  INSERT INTO public.documents (id, content, source, metadata, embedding)
+  VALUES (
+    new_id,
+    doc_content,
+    doc_source,
+    doc_metadata,
+    CASE
+      WHEN doc_embedding IS NOT NULL THEN doc_embedding::vector(768)
+      ELSE NULL::vector(768)
+    END
+  );
+
+  RETURN new_id;
+END;
+$function$;
+
+REVOKE EXECUTE ON FUNCTION public.batch_insert_document(text) FROM PUBLIC, anon, authenticated;
+REVOKE EXECUTE ON FUNCTION public.insert_document(text, text, text) FROM PUBLIC, anon, authenticated;
+REVOKE EXECUTE ON FUNCTION public.insert_document_with_embedding(text, text, jsonb, text) FROM PUBLIC, anon, authenticated;
+GRANT EXECUTE ON FUNCTION public.batch_insert_document(text) TO service_role;
+GRANT EXECUTE ON FUNCTION public.insert_document(text, text, text) TO service_role;
+GRANT EXECUTE ON FUNCTION public.insert_document_with_embedding(text, text, jsonb, text) TO service_role;
+GRANT EXECUTE ON FUNCTION public.update_updated_at_column() TO anon, authenticated;
+CREATE POLICY service_role_insert_logs ON public.security_logs FOR INSERT TO service_role WITH CHECK (true);
+```
