@@ -9,5 +9,3 @@ export const DocumentEmptyState: React.FC = () => {
     </div>
   );
 };
-
-export default DocumentEmptyState;

@@ -134,5 +134,3 @@ export const DocumentCreateModal: React.FC<DocumentCreateModalProps> = ({
     </div>
   );
 };
-
-export default DocumentCreateModal;

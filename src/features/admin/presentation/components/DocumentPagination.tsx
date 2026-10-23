@@ -43,5 +43,3 @@ export const DocumentPagination: React.FC<DocumentPaginationProps> = ({
     </div>
   );
 };
-
-export default DocumentPagination;

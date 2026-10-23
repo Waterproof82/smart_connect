@@ -109,10 +109,3 @@ export const AdminPanel: React.FC = () => {
     </AdminProvider>
   );
 };
-
-// Export components for external use
-export { Login } from './components/Login';
-export { AdminDashboard } from './components/AdminDashboard';
-export { DocumentList } from './components/DocumentList';
-export { StatsDashboard } from './components/StatsDashboard';
-export { SettingsPanel } from './components/SettingsPanel';
