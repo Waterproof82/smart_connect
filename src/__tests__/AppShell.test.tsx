@@ -10,6 +10,7 @@ import { ConsentProvider } from "@shared/context/ConsentContext";
 import { ScrollToTop } from "@shared/components/ScrollToTop";
 import { CookieConsent } from "@shared/components/CookieConsent";
 import { AppShell } from "../shared/presentation/AppShell";
+import { ChunkReloadBoundary } from "../shared/presentation/ChunkReloadBoundary";
 
 // jsdom has no IntersectionObserver; PageShell/CookieBanner chains use it
 // for nav/visibility state (see NotFound.test.tsx for the same rationale).
@@ -27,7 +28,7 @@ const unwrap = (el: ReactElement) =>
   (el.props as { children: ReactElement | ReactElement[] }).children;
 
 describe("AppShell (shared-app-shell PR2, Shared AppShell Provider Tree)", () => {
-  it("nests providers in spec order: Helmet > Theme > Language > Consent > [ScrollToTop, CookieConsent, Suspense(children)] — pure element-tree walk, zero hooks run", () => {
+  it("nests providers in spec order: Helmet > Theme > Language > Consent > [ScrollToTop, CookieConsent, ChunkReloadBoundary > Suspense(children)] — pure element-tree walk, zero hooks run", () => {
     const marker = <div data-testid="child" /> as ReactElement;
 
     const helmetEl = AppShell({ children: marker }) as ReactElement;
@@ -46,8 +47,11 @@ describe("AppShell (shared-app-shell PR2, Shared AppShell Provider Tree)", () =>
     expect(consentChildren).toHaveLength(3);
     expect(consentChildren[0].type).toBe(ScrollToTop);
     expect(consentChildren[1].type).toBe(CookieConsent);
-    expect(consentChildren[2].type).toBe(Suspense);
-    expect(consentChildren[2].props.children).toBe(marker);
+    expect(consentChildren[2].type).toBe(ChunkReloadBoundary);
+
+    const suspenseEl = unwrap(consentChildren[2]) as ReactElement;
+    expect(suspenseEl.type).toBe(Suspense);
+    expect((suspenseEl.props as { children: ReactElement }).children).toBe(marker);
   });
 
   it("Router stays outside AppShell (AppShell renders no router of its own)", () => {

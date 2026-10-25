@@ -6,6 +6,7 @@ import { LanguageProvider } from "@shared/context/LanguageContext";
 import { ConsentProvider } from "@shared/context/ConsentContext";
 import { ScrollToTop } from "@shared/components/ScrollToTop";
 import { CookieConsent } from "@shared/components/CookieConsent";
+import { ChunkReloadBoundary } from "./ChunkReloadBoundary";
 
 /**
  * Shared provider tree (design.md shared-app-shell, Shared AppShell
@@ -17,6 +18,10 @@ import { CookieConsent } from "@shared/components/CookieConsent";
  * entry (so `render()` can read `.helmet` after `renderToString`); the
  * client entry omits it and lets `HelmetProvider` manage its own
  * internal instance.
+ *
+ * `ChunkReloadBoundary` reloads the page once if a lazy route chunk from
+ * an older deploy is gone; it renders only its children, so SSR markup is
+ * unchanged.
  */
 export interface AppShellProps {
   children: ReactNode;
@@ -32,7 +37,9 @@ export function AppShell({ children, fallback = null, helmetContext }: AppShellP
           <ConsentProvider>
             <ScrollToTop />
             <CookieConsent />
-            <Suspense fallback={fallback}>{children}</Suspense>
+            <ChunkReloadBoundary>
+              <Suspense fallback={fallback}>{children}</Suspense>
+            </ChunkReloadBoundary>
           </ConsentProvider>
         </LanguageProvider>
       </ThemeProvider>
