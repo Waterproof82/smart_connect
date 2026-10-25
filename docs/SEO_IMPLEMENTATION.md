@@ -481,7 +481,7 @@ npm run build
 - **Font-size**: Explicit `16px` on `body` for mobile tap targets
 - **Script loading**: Changed from blocking to `defer` for non-blocking execution
 - **Crawlability**: `X-Robots-Tag: index, follow` in Vercel headers
-- **Cache-Control**: `public, max-age=3600` per route for CDN caching
+- **Cache-Control**: `public, max-age=0, must-revalidate, s-maxage=3600` per route: the Vercel edge caches HTML for 1 h (purged on deploy); browsers always revalidate, so they never keep HTML that points at deleted hashed chunks
 - **Sitemap**: 8 routes with priority hierarchy (1.0 → 0.3)
 
 ### 🛡️ SSR Safety (CRITICAL)

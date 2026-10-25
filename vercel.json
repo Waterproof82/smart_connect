@@ -85,7 +85,7 @@
     },
     {
       "source": "/(|about|tarjetas-nfc|carta-digital|ia-chatbots-tenerife|tpv-restaurantes|blog|blog/carta-digital-vs-comisiones-glovo|blog/chatbot-ia-hoteles-alojamientos-pequenos-canarias|blog/cuanto-cuesta-un-tpv-restaurante|blog/tarjetas-nfc-mas-resenas-google-restaurante)",
-      "headers": [{ "key": "Cache-Control", "value": "public, max-age=3600" }]
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=0, must-revalidate, s-maxage=3600" }]
     }
   ],
   "rewrites": [
