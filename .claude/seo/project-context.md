@@ -58,4 +58,4 @@ Trampas locales: `vite preview` no aplica `/admin → /_spa.html` (errores #418/
 `npm run lint` · `npm run type-check` · `npm run knip` · `npm test` · `npx vitest run` · `npm run build` (solo con autorización del propietario).
 
 ## Protocolos de documentación
-CHANGELOG (inglés, Keep a Changelog, CRLF) · audit log `docs/audit/YYYY-MM-DD_<tema>.md` · guías: seguridad `docs/context/security_agent.md`, testing `docs/context/readme_testing.md`, ADR `docs/context/adr.md`. Medir rendimiento en PSI desde España, varias pasadas.
+CHANGELOG (inglés, Keep a Changelog, LF — verificar bytes antes de insertar) · audit log `docs/audit/YYYY-MM-DD_<tema>.md` · guías: seguridad `docs/context/security_agent.md`, testing `docs/context/readme_testing.md`, ADR `docs/context/adr.md`. Medir rendimiento en PSI desde España, varias pasadas.
