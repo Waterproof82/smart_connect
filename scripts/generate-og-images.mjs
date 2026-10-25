@@ -74,6 +74,18 @@ export const OG_IMAGES = [
     title: ["Más reseñas en Google", "con tarjetas NFC"],
     subtitle: "Guía para restaurantes",
   },
+  {
+    file: "blog/comandero-movil-vs-libreta-restaurante.png",
+    eyebrow: "Blog · TPV",
+    title: ["Comandero móvil", "o libreta en sala"],
+    subtitle: "Qué cambia en tu restaurante",
+  },
+  {
+    file: "blog/carta-digital-bares-cafeterias.png",
+    eyebrow: "Blog · Carta digital",
+    title: ["Carta digital para", "bares y cafeterías"],
+    subtitle: "Pedidos en mesa desde el móvil",
+  },
 ];
 
 const escapeXml = (s) =>

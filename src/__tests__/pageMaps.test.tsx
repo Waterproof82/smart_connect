@@ -49,9 +49,9 @@ describe("serverPages.ts / clientPages.ts (design.md shared-app-shell, Per-Entry
     }
   });
 
-  it("all 4 blog paths resolve to the same client Component (one shared preloadable)", () => {
+  it("all blog article paths resolve to the same client Component (one shared preloadable)", () => {
     const blogPaths = PRERENDERED_PATHS.filter((p) => p.startsWith("/blog/"));
-    expect(blogPaths).toHaveLength(4);
+    expect(blogPaths.length).toBeGreaterThan(1);
     const [first, ...rest] = blogPaths;
     for (const path of rest) {
       expect(CLIENT_PAGES[path]).toBe(CLIENT_PAGES[first]);

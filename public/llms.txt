@@ -24,6 +24,8 @@ Digitaliza Tenerife es una agencia de transformación digital especializada en r
   - [Chatbot con IA para hoteles y alojamientos pequeños en Canarias](https://digitalizatenerife.es/blog/chatbot-ia-hoteles-alojamientos-pequenos-canarias)
   - [¿Cuánto cuesta un TPV para un restaurante?](https://digitalizatenerife.es/blog/cuanto-cuesta-un-tpv-restaurante)
   - [Más reseñas en Google con tarjetas NFC](https://digitalizatenerife.es/blog/tarjetas-nfc-mas-resenas-google-restaurante)
+  - [Comandero móvil o libreta en la sala de un restaurante](https://digitalizatenerife.es/blog/comandero-movil-vs-libreta-restaurante)
+  - [Carta digital para bares y cafeterías](https://digitalizatenerife.es/blog/carta-digital-bares-cafeterias)
 - [Contacto](https://digitalizatenerife.es/#contacto): formulario de contacto, en la portada.
 
 ## Legal

@@ -119,6 +119,8 @@ export const PRERENDERED_ROUTES: Readonly<
   "/blog/chatbot-ia-hoteles-alojamientos-pequenos-canarias": BLOG_POST_ROUTE,
   "/blog/cuanto-cuesta-un-tpv-restaurante": BLOG_POST_ROUTE,
   "/blog/tarjetas-nfc-mas-resenas-google-restaurante": BLOG_POST_ROUTE,
+  "/blog/comandero-movil-vs-libreta-restaurante": BLOG_POST_ROUTE,
+  "/blog/carta-digital-bares-cafeterias": BLOG_POST_ROUTE,
   "/legal/aviso": preloadable(() =>
     import("@features/legal/presentation/AvisoLegalPage").then(asPageModule),
   ),

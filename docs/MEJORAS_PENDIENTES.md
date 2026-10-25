@@ -15,11 +15,15 @@ Origen: revisión externa de digitalizatenerife.es (2026-10-23) y la implementac
 
 | # | Mejora | Detalle | Prioridad |
 |---|---|---|---|
-| 6 | Más artículos de blog | Ideas con intención local: "carta digital para bares y cafeterías", "chatbot de WhatsApp para reservas", "qué es el IGIC en el TPV", "comandero móvil frente a libreta". Mismas reglas que los actuales (sin cifras ni clientes inventados). Añadir la entrada en `blogPosts.ts`, la ruta en `src/shared/routing/prerenderedRoutes.ts` (`PRERENDERED_PATHS`), `src/serverPages.ts`, `src/clientPages.ts`, `src/clientRoutes.tsx`, `site-routes.json`, `middleware.ts`, `vercel.json` y `llms.txt` (recalcular el sha256 de `agent-skills/index.json`). Los tests de paridad comparan contra `site-routes.json`, sin contadores fijos; `tsc` falla si falta la página en algún mapa. | Media |
-| 7 | Enlaces internos desde el cuerpo de las páginas a los artículos | Hoy el blog solo se enlaza desde el pie de página. Añadir "Lee también" en las páginas de producto. | Media |
-| 8 | Imagen OG propia para el blog | Los artículos usan `/og/home.png`. Generar una por artículo con `scripts/generate-og-images.mjs`. | Baja |
+| 6 | Más artículos de blog | Ideas con intención local pendientes: "chatbot de WhatsApp para reservas", "qué es el IGIC en el TPV", Mismas reglas que los actuales (sin cifras ni clientes inventados). Añadir la entrada en `blogPosts.ts`, la ruta en `src/shared/routing/prerenderedRoutes.ts` (`PRERENDERED_PATHS`), `src/serverPages.ts`, `src/clientPages.ts`, `src/clientRoutes.tsx`, `site-routes.json`, `middleware.ts`, `vercel.json` y `llms.txt` (recalcular el sha256 de `agent-skills/index.json`). Los tests de paridad comparan contra `site-routes.json`, sin contadores fijos; `tsc` falla si falta la página en algún mapa. | Media |
 | 9 | Medir el efecto en Search Console | Comparar a 4 y 8 semanas: impresiones y posición de "tpv táctil", "tpv restaurante", "chatbot con IA Tenerife / Lanzarote / Fuerteventura", "canarias digitaliza". Ver `docs/audit/2026-10-01_gsc-search-performance-analysis.md`. | Alta |
 | 10 | Revisar si mantener `/tarjetas-nfc` como servicio principal en la home | La home da peso a TPV, carta y chatbot; NFC pasó a secundaria. Decidir con datos de GSC. | Baja |
+
+## Hecho (2026-10-25)
+
+- 6 (parcial): artículos "Comandero móvil o libreta" (`/blog/comandero-movil-vs-libreta-restaurante`) y "Carta digital para bares y cafeterías" (`/blog/carta-digital-bares-cafeterias`), solo con datos que ya publica el sitio.
+- 7: bloque "Lee también" en `/carta-digital`, `/ia-chatbots-tenerife`, `/tpv-restaurantes` y `/tarjetas-nfc` (`RelatedArticles.tsx`, derivado de `cta.to`).
+- 8: imagen OG propia por artículo y para `/blog` (`public/og/blog/`).
 
 ## Descartado
 

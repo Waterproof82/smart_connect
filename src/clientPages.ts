@@ -28,6 +28,8 @@ export const CLIENT_PAGES: PageMap = {
   "/blog/tarjetas-nfc-mas-resenas-google-restaurante":
     PRERENDERED_ROUTES["/blog/tarjetas-nfc-mas-resenas-google-restaurante"]
       .Component,
+  "/blog/comandero-movil-vs-libreta-restaurante": PRERENDERED_ROUTES["/blog/comandero-movil-vs-libreta-restaurante"].Component,
+  "/blog/carta-digital-bares-cafeterias": PRERENDERED_ROUTES["/blog/carta-digital-bares-cafeterias"].Component,
   "/legal/aviso": PRERENDERED_ROUTES["/legal/aviso"].Component,
   "/legal/privacidad": PRERENDERED_ROUTES["/legal/privacidad"].Component,
   "/legal/cookies": PRERENDERED_ROUTES["/legal/cookies"].Component,

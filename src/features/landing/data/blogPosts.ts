@@ -241,6 +241,112 @@ export const BLOG_POSTS: readonly BlogPost[] = [
       text: "Descubre nuestras ",
     },
   },
+  {
+    slug: "comandero-movil-vs-libreta-restaurante",
+    title: "Comandero móvil o libreta: qué cambia en la sala de tu restaurante",
+    description:
+      "Qué gana un bar o restaurante al tomar comandas con un comandero móvil en lugar de la libreta de papel, y cuándo la libreta todavía es suficiente.",
+    datePublished: "2026-10-25",
+    intro:
+      "La libreta funciona desde siempre, y en muchos locales sigue funcionando. Pero cada comanda escrita a mano tiene que viajar hasta la barra o la cocina, y por el camino se pierden tiempo y detalles. Esto es lo que cambia cuando el camarero toma el pedido con el móvil.",
+    sections: [
+      {
+        heading: "Qué es un comandero móvil",
+        paragraphs: [
+          "Es una aplicación del TPV que el camarero lleva en el móvil. Toma el pedido en la propia mesa y lo envía directamente a la cocina o a la barra, sin volver al mostrador ni pasar el papel a nadie.",
+          "En nuestro TPV táctil, el comandero móvil es uno de los módulos, junto a la pantalla de cocina, las reservas o el control de stock: se activa si tu local lo necesita.",
+        ],
+      },
+      {
+        heading: "Qué resuelve frente a la libreta",
+        paragraphs: [
+          "La mayoría de los problemas de la libreta no son de la libreta, sino del traspaso: alguien escribe el pedido y otra persona tiene que leerlo, interpretarlo y volver a introducirlo.",
+        ],
+        bullets: [
+          "La comanda llega a cocina o barra tal y como se tomó: nadie tiene que descifrar la letra de otro.",
+          "Menos viajes: el camarero no vuelve al mostrador para pasar cada pedido.",
+          "Los cambios y las anulaciones se actualizan al momento en todas las pantallas.",
+          "El pedido queda registrado en el TPV, así que no hay que volver a teclearlo para cobrar.",
+        ],
+      },
+      {
+        heading: "Cuándo la libreta todavía basta",
+        paragraphs: [
+          "Si tienes pocas mesas, una sola persona en sala y la cocina a dos pasos, la libreta puede ser suficiente. El comandero aporta más cuanto más grande es la sala, más gente trabaja en ella o más lejos queda la cocina: terraza, varias plantas o mucho movimiento en hora punta.",
+        ],
+      },
+      {
+        heading: "Qué revisar antes de dar el paso",
+        paragraphs: [
+          "Lo configuramos con tu carta y tus mesas en Tenerife o en el resto de Canarias. Si quieres verlo funcionando, pídenos una demo por WhatsApp.",
+        ],
+        bullets: [
+          "Buena conexión en toda la sala y la terraza, porque el pedido se envía por la red del local.",
+          "Qué móviles van a usar los camareros y quién los carga al final del día.",
+          "Adónde debe llegar cada pedido: cocina, barra o ambas.",
+          "Un rato de práctica con el equipo antes de abrir: el cambio se nota sobre todo los primeros días.",
+        ],
+      },
+    ],
+    cta: {
+      to: "/tpv-restaurantes",
+      anchor: "TPV táctil con comandero móvil para restaurantes",
+      text: "Descubre nuestro ",
+    },
+  },
+  {
+    slug: "carta-digital-bares-cafeterias",
+    title: "Carta digital para bares y cafeterías: cómo funciona y qué aporta",
+    description:
+      "Cómo funciona una carta digital con pedidos en mesa en un bar o una cafetería, qué aporta frente a la carta de papel y qué preparar antes de empezar.",
+    datePublished: "2026-10-25",
+    intro:
+      "En un bar o una cafetería todo va rápido: mesas que cambian cada poco, terraza llena y clientes que quieren pedir sin esperar a que pase el camarero. Una carta digital con pedidos en mesa ayuda justo en ese momento.",
+    sections: [
+      {
+        heading: "Cómo funciona en la mesa",
+        paragraphs: [
+          "El cliente escanea el código QR de su mesa, se abre la carta en el móvil, sin descargar ninguna app, y hace el pedido. El pedido llega al instante a la app de los camareros y a las tablets de barra y cocina.",
+          "Los camareros también pueden tomar pedidos desde la misma app, así que la carta digital convive con el servicio de siempre: quien prefiera pedir al camarero, lo sigue haciendo.",
+        ],
+      },
+      {
+        heading: "Qué aporta frente a la carta de papel",
+        paragraphs: [
+          "La carta de papel no explica qué lleva cada producto ni habla idiomas. La digital sí:",
+        ],
+        bullets: [
+          "Fotos, vídeos y descripciones de cada producto, para que el cliente sepa qué pide.",
+          "La carta en 5 idiomas, útil en zonas con turismo.",
+          "Los cambios de precios o de productos no obligan a reimprimir la carta.",
+          "Sin comisión por pedido.",
+        ],
+      },
+      {
+        heading: "Si vendes para llevar",
+        paragraphs: [
+          "Si tu negocio vive sobre todo del take away (café para llevar, bollería, bocadillos), el modo Tienda permite que el cliente haga el pedido para recoger desde el móvil. Te llega un aviso por Telegram y confirmas el tiempo de recogida con un toque.",
+          "Además, los clientes que piden quedan en tu propia base de datos, no en la de una plataforma de reparto.",
+        ],
+      },
+      {
+        heading: "Qué preparar antes de empezar",
+        paragraphs: [
+          "Configuramos la carta por ti en Tenerife o en el resto de Canarias. Escríbenos por WhatsApp y te enseñamos cómo quedaría con tus productos.",
+        ],
+        bullets: [
+          "Fotos de tus productos: mejor propias que de un banco de imágenes.",
+          "Un QR visible en cada mesa, para que el pedido llegue a la mesa correcta.",
+          "Explicar al equipo cómo llegan los pedidos a la app y a la barra.",
+        ],
+      },
+    ],
+    cta: {
+      to: "/carta-digital",
+      anchor: "carta digital con pedidos en mesa para bares y cafeterías",
+      text: "Mira cómo funciona la ",
+    },
+  },
 ];
 
 export const getBlogPost = (slug: string): BlogPost | undefined =>

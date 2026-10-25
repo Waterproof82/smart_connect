@@ -106,6 +106,22 @@
       ]
     },
     {
+      "path": "/blog/comandero-movil-vs-libreta-restaurante",
+      "lastmod": "2026-10-25",
+      "sources": [
+        "src/features/landing/presentation/components/BlogPostPage.tsx",
+        "src/features/landing/data/blogPosts.ts"
+      ]
+    },
+    {
+      "path": "/blog/carta-digital-bares-cafeterias",
+      "lastmod": "2026-10-25",
+      "sources": [
+        "src/features/landing/presentation/components/BlogPostPage.tsx",
+        "src/features/landing/data/blogPosts.ts"
+      ]
+    },
+    {
       "path": "/legal/aviso",
       "indexable": false,
       "lastmod": "2026-10-02",

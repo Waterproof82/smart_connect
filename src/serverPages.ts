@@ -30,6 +30,8 @@ export const SERVER_PAGES: PageMap = {
   "/blog/chatbot-ia-hoteles-alojamientos-pequenos-canarias": BlogPostPage,
   "/blog/cuanto-cuesta-un-tpv-restaurante": BlogPostPage,
   "/blog/tarjetas-nfc-mas-resenas-google-restaurante": BlogPostPage,
+  "/blog/comandero-movil-vs-libreta-restaurante": BlogPostPage,
+  "/blog/carta-digital-bares-cafeterias": BlogPostPage,
   "/legal/aviso": AvisoLegalPage,
   "/legal/privacidad": PrivacidadPage,
   "/legal/cookies": CookiesPage,

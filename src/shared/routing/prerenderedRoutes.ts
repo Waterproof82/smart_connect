@@ -21,6 +21,8 @@ export const PRERENDERED_PATHS = [
   "/blog/chatbot-ia-hoteles-alojamientos-pequenos-canarias",
   "/blog/cuanto-cuesta-un-tpv-restaurante",
   "/blog/tarjetas-nfc-mas-resenas-google-restaurante",
+  "/blog/comandero-movil-vs-libreta-restaurante",
+  "/blog/carta-digital-bares-cafeterias",
   "/legal/aviso",
   "/legal/privacidad",
   "/legal/cookies",

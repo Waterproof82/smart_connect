@@ -84,7 +84,7 @@
       "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
     },
     {
-      "source": "/(|about|tarjetas-nfc|carta-digital|ia-chatbots-tenerife|tpv-restaurantes|blog|blog/carta-digital-vs-comisiones-glovo|blog/chatbot-ia-hoteles-alojamientos-pequenos-canarias|blog/cuanto-cuesta-un-tpv-restaurante|blog/tarjetas-nfc-mas-resenas-google-restaurante)",
+      "source": "/(|about|tarjetas-nfc|carta-digital|ia-chatbots-tenerife|tpv-restaurantes|blog|blog/carta-digital-vs-comisiones-glovo|blog/chatbot-ia-hoteles-alojamientos-pequenos-canarias|blog/cuanto-cuesta-un-tpv-restaurante|blog/tarjetas-nfc-mas-resenas-google-restaurante|blog/comandero-movil-vs-libreta-restaurante|blog/carta-digital-bares-cafeterias)",
       "headers": [{ "key": "Cache-Control", "value": "public, max-age=0, must-revalidate, s-maxage=3600" }]
     }
   ],
@@ -100,6 +100,8 @@
     { "source": "/blog/chatbot-ia-hoteles-alojamientos-pequenos-canarias", "destination": "/blog/chatbot-ia-hoteles-alojamientos-pequenos-canarias/index.html" },
     { "source": "/blog/cuanto-cuesta-un-tpv-restaurante", "destination": "/blog/cuanto-cuesta-un-tpv-restaurante/index.html" },
     { "source": "/blog/tarjetas-nfc-mas-resenas-google-restaurante", "destination": "/blog/tarjetas-nfc-mas-resenas-google-restaurante/index.html" },
+    { "source": "/blog/comandero-movil-vs-libreta-restaurante", "destination": "/blog/comandero-movil-vs-libreta-restaurante/index.html" },
+    { "source": "/blog/carta-digital-bares-cafeterias", "destination": "/blog/carta-digital-bares-cafeterias/index.html" },
     { "source": "/legal/aviso", "destination": "/legal/aviso/index.html" },
     { "source": "/legal/privacidad", "destination": "/legal/privacidad/index.html" },
     { "source": "/legal/cookies", "destination": "/legal/cookies/index.html" },

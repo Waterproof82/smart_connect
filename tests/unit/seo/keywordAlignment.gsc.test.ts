@@ -121,16 +121,16 @@ describe("Canarias Digitaliza disambiguation (home FAQ + /about)", () => {
   });
 });
 
-describe("blog (4 articles, no invented data)", () => {
+describe("blog (no invented data)", () => {
   const posts = read("features/landing/data/blogPosts.ts");
   const slugs = BLOG_POSTS.map((post) => post.slug);
 
-  it("has 4 articles; every slug has a matching /blog/<slug> entry in the shared prerendered table, both directions (design.md shared-app-shell)", () => {
-    expect(slugs).toHaveLength(4);
+  it("every slug has a matching /blog/<slug> entry in the shared prerendered table, both directions (design.md shared-app-shell)", () => {
+    expect(slugs.length).toBeGreaterThan(0);
     const blogArticlePaths = PRERENDERED_PATHS.filter((p) =>
       p.startsWith("/blog/"),
     );
-    expect(blogArticlePaths).toHaveLength(4);
+    expect(blogArticlePaths).toHaveLength(slugs.length);
 
     // post -> route: no article is missing its SSR/prerendered path.
     for (const slug of slugs) {
@@ -155,10 +155,11 @@ describe("blog (4 articles, no invented data)", () => {
     expect(posts).toMatch(/to: "\/ia-chatbots-tenerife"/);
     expect(posts).toMatch(/to: "\/tarjetas-nfc"/);
   });
-  it("the TPV price article gives no price figure", () => {
-    const start = posts.indexOf('slug: "cuanto-cuesta-un-tpv-restaurante"');
-    const end = posts.indexOf('slug: "tarjetas-nfc', start);
-    expect(posts.slice(start, end)).not.toMatch(/\d+\s?(€|euros)/);
+  it("no article gives a price figure, except the labelled Glovo illustration", () => {
+    for (const post of BLOG_POSTS) {
+      if (post.slug === "carta-digital-vs-comisiones-glovo") continue;
+      expect(JSON.stringify(post)).not.toMatch(/\d+\s?(€|euros)/);
+    }
   });
   it("footer links the blog", () => {
     expect(read("shared/components/SiteFooter.tsx")).toMatch(/to="\/blog"/);
