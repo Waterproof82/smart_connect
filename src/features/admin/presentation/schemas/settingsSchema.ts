@@ -21,7 +21,7 @@ export const settingsSchema = z
   .superRefine((data, ctx) => {
     if (data.n8nEnabled && !data.n8nWebhookUrl) {
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: "custom",
         path: ['n8nWebhookUrl'],
         message: 'Para activar n8n necesitas una URL de webhook válida',
       });

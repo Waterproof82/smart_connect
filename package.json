@@ -34,7 +34,7 @@
     "react-hook-form": "^7.89.0",
     "react-router-dom": "^7.18.4",
     "turndown": "^7.2.4",
-    "zod": "^3.22.4"
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",
@@ -70,5 +70,8 @@
     "typescript": "^5.2.2",
     "vite": "^8.3.1",
     "vitest": "^4.1.11"
+  },
+  "overrides": {
+    "zod": "$zod"
   }
 }

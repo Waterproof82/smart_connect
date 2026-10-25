@@ -77,6 +77,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+- **zod upgraded from 3.25.76 to 4.6.7** (SNYK-JS-ZOD-20510278 / CVE-2023-54404, fixed in 4.6.6). The transitive copy pulled by `@vercel/cli-config` (pinned 4.1.11) now resolves to the same version through `overrides`. The temporary Snyk ignore (expiring 2026-11-05) is removed. The three form schemas keep the same accepted input and messages, checked by a new characterization test that passed on zod 3 and zod 4.
 - **`match_documents` / `match_documents_by_source` no longer granted to `PUBLIC`**: the chatbot (`chat-with-rag`) calls them with the anon key, so `anon`, `authenticated` and `service_role` keep their explicit EXECUTE grants; only the redundant implicit `PUBLIC` grant is revoked (migration `20261023095144_revoke_public_execute_match_documents.sql`). Restricting `anon` was reviewed and rejected: the chatbot depends on it and `documents` is anon-readable by design, so it would protect nothing.
 
 ### Changed
