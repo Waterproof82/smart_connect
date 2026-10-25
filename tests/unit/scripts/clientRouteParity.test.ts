@@ -22,14 +22,15 @@ describe("client route loader parity (design.md shared-app-shell)", () => {
     expect(loaderPaths.size).toBe(PRERENDERED_PATHS.length - 1);
   });
 
-  it("entry-client.tsx has no lazy( calls besides the admin chunk", () => {
-    const source = fs.readFileSync(
-      path.join(ROOT, "src/entry-client.tsx"),
-      "utf-8",
-    );
-    const lazyMatches = [...source.matchAll(/\blazy\(/g)];
+  // The client tree moved from entry-client.tsx into ClientApp.tsx
+  // (shared-app-shell PR2), so the admin chunk is the only lazy( across both.
+  it("ClientApp.tsx has no lazy( calls besides the admin chunk", () => {
+    const read = (rel: string) =>
+      fs.readFileSync(path.join(ROOT, rel), "utf-8");
+    const clientApp = read("src/ClientApp.tsx");
 
-    expect(lazyMatches).toHaveLength(1);
-    expect(source).toMatch(/const AdminPanel = lazy\(/);
+    expect([...clientApp.matchAll(/\blazy\(/g)]).toHaveLength(1);
+    expect(clientApp).toMatch(/const AdminPanel = lazy\(/);
+    expect(read("src/entry-client.tsx")).not.toMatch(/\blazy\(/);
   });
 });

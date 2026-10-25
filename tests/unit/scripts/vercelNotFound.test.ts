@@ -66,14 +66,9 @@ describe("prerender — writes dist/404.html from the NotFound page", () => {
     expect(source).toMatch(/"404\.html"/);
   });
 
-  it("entry-server.tsx exposes the notFound option and renders <NotFound />", () => {
-    const source = fs.readFileSync(
-      path.join(ROOT, "src/entry-server.tsx"),
-      "utf-8",
-    );
-    expect(source).toMatch(/notFound\?: boolean/);
-    expect(source).toMatch(/<NotFound \/>/);
-  });
+  // entry-server's render("/404", { notFound: true }) output (NotFound h1 +
+  // noindex) is asserted on the real render in
+  // src/__tests__/notFoundRender.test.tsx (Vitest), not by source regex.
 
   it("NotFound declares noindex", () => {
     const source = fs.readFileSync(

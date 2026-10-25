@@ -1,39 +1,12 @@
 import { hydrateRoot, createRoot } from "react-dom/client";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { HelmetProvider } from "react-helmet-async";
-import { Suspense, lazy } from "react";
-import { LanguageProvider } from "@shared/context/LanguageContext";
-import { ThemeProvider } from "@shared/context/ThemeContext";
-import { ConsentProvider } from "@shared/context/ConsentContext";
-import { ScrollToTop } from "@shared/components/ScrollToTop";
-import { CookieConsent } from "@shared/components/CookieConsent";
 import { scheduleWebMCPRegistration } from "./webmcpBoot";
 import { registerContactClickTracking } from "@shared/utils/analyticsEvents";
-import { NOT_FOUND_ROUTE, routeForPath } from "./clientRoutes";
-import { CLIENT_PAGES } from "./clientPages";
-import { prerenderedRouteElements } from "@shared/routing/prerenderedRouteElements";
+import { routeForPath } from "./clientRoutes";
+import { ClientApp } from "./ClientApp";
 import "./index.css";
 
 // GA4: WhatsApp / phone / email link clicks as conversion events
 registerContactClickTracking();
-
-// Lazy-loaded route — not prerendered, remains SPA after hydration.
-// Every prerendered page's loader lives in ./clientRoutes instead (design.md
-// D1/D2, seo-audit-followups S1): their Component is preloaded and awaited
-// before hydrateRoot below, which is what prevents React error #421.
-const AdminPanel = lazy(() =>
-  import("@features/admin/presentation").then((m) => ({
-    default: m.AdminPanel,
-  })),
-);
-
-const NotFound = NOT_FOUND_ROUTE.Component;
-
-const LoadingFallback = () => (
-  <div className="min-h-screen bg-base flex items-center justify-center">
-    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500" />
-  </div>
-);
 
 const rootElement = document.getElementById("root");
 if (!rootElement) throw new Error("Could not find root element to mount to");
@@ -45,27 +18,7 @@ const root: HTMLElement = rootElement;
 // the <!--ssr-outlet--> comment → createRoot, to avoid hydration errors.
 const hasSSRContent = root.children.length > 0;
 
-const app = (
-  <HelmetProvider>
-    <BrowserRouter>
-      <ThemeProvider>
-        <LanguageProvider>
-          <ConsentProvider>
-            <ScrollToTop />
-            <CookieConsent />
-            <Suspense fallback={<LoadingFallback />}>
-              <Routes>
-                {prerenderedRouteElements(CLIENT_PAGES)}
-                <Route path="/admin" element={<AdminPanel />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </Suspense>
-          </ConsentProvider>
-        </LanguageProvider>
-      </ThemeProvider>
-    </BrowserRouter>
-  </HelmetProvider>
-);
+const app = <ClientApp />;
 
 // design.md D1/D2 (seo-audit-followups, S1): on a prerendered route,
 // await the matched chunk's preload() before hydrateRoot so the first

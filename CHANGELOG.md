@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Redirects**: `/tap-review` → `/tarjetas-nfc` and `/servicios` → `/` now return an explicit 301 (`statusCode`) instead of Vercel's 308 `permanent`.
 - **On-page SEO**: new titles, descriptions and H1 for `/tpv-restaurantes` ("TPV para restaurantes ... Tenerife y Canarias"), `/ia-chatbots-tenerife` ("Chatbot con IA ... Tenerife y Canarias") and the home (title, description, hero audience line mention the brand, TPV and chatbot). ES and EN.
 - **Organization JSON-LD**: added `alternateName` (`DigitalizaTenerife`, `digitalizatenerife.es`).
+- **One shared provider tree for SSR and hydration** (refactor, no visible change): `entry-client.tsx` and `entry-server.tsx` no longer hand-copy the Helmet > Theme > Language > Consent > ScrollToTop/CookieConsent/Suspense tree. Both render the new `AppShell` (`src/shared/presentation/AppShell.tsx`); the client's tree lives in `src/ClientApp.tsx`. A new test renders every prerendered page (plus two unknown URLs) through both entries and fails if the markup differs, which is the drift that causes React error #418. Source-regex tests for provider order and the 404 render were replaced by tests that render the real output.
 
 ### Added
 

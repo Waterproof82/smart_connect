@@ -1,13 +1,7 @@
 import { renderToString } from "react-dom/server";
-import { StaticRouter } from "react-router-dom";
-import { HelmetProvider, type HelmetServerState } from "react-helmet-async";
-import { Routes } from "react-router-dom";
-import { Suspense } from "react";
-import { LanguageProvider } from "@shared/context/LanguageContext";
-import { ThemeProvider } from "@shared/context/ThemeContext";
-import { ConsentProvider } from "@shared/context/ConsentContext";
-import { ScrollToTop } from "@shared/components/ScrollToTop";
-import { CookieConsent } from "@shared/components/CookieConsent";
+import { StaticRouter, Routes } from "react-router-dom";
+import { type HelmetServerState } from "react-helmet-async";
+import { AppShell } from "@shared/presentation/AppShell";
 import { NotFound } from "./features/landing/presentation/components/NotFound";
 import { SERVER_PAGES } from "./serverPages";
 import { prerenderedRouteElements } from "@shared/routing/prerenderedRouteElements";
@@ -25,25 +19,15 @@ export function render(
   const helmetContext = {} as { helmet?: HelmetServerState };
 
   const html = renderToString(
-    <HelmetProvider context={helmetContext}>
-      <StaticRouter location={url}>
-        <ThemeProvider>
-          <LanguageProvider>
-            <ConsentProvider>
-              <ScrollToTop />
-              <CookieConsent />
-              <Suspense fallback={null}>
-                {options.notFound ? (
-                  <NotFound />
-                ) : (
-                  <Routes>{prerenderedRouteElements(SERVER_PAGES)}</Routes>
-                )}
-              </Suspense>
-            </ConsentProvider>
-          </LanguageProvider>
-        </ThemeProvider>
-      </StaticRouter>
-    </HelmetProvider>,
+    <StaticRouter location={url}>
+      <AppShell helmetContext={helmetContext}>
+        {options.notFound ? (
+          <NotFound />
+        ) : (
+          <Routes>{prerenderedRouteElements(SERVER_PAGES)}</Routes>
+        )}
+      </AppShell>
+    </StaticRouter>,
   );
 
   const { helmet } = helmetContext;

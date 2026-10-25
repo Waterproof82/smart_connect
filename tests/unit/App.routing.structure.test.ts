@@ -86,7 +86,7 @@ describe("Hero.tsx — variant prop removed (design.md §3.3)", () => {
 
 describe("entry-client.tsx — /contacto route removed (design.md §2.1)", () => {
   it("has no /contacto route", () => {
-    const source = read("entry-client.tsx");
+    const source = read("entry-client.tsx") + read("ClientApp.tsx");
     expect(source).not.toMatch(/\/contacto/);
   });
 
@@ -104,19 +104,21 @@ describe("entry-client.tsx — /contacto route removed (design.md §2.1)", () =>
   // page-map module Jest must not import (design.md shared-app-shell).
 });
 
-describe("entry-client.tsx — /blog/:slug removed (design.md shared-app-shell, Client-Only Routes Appended After Shared Table)", () => {
+// The client's <Routes> live in ClientApp.tsx since shared-app-shell PR2;
+// entry-client.tsx only mounts <ClientApp />.
+describe("ClientApp.tsx — /blog/:slug removed (design.md shared-app-shell, Client-Only Routes Appended After Shared Table)", () => {
   it("has no /blog/:slug wildcard route", () => {
-    const source = read("entry-client.tsx");
+    const source = read("ClientApp.tsx");
     expect(source).not.toMatch(/\/blog\/:slug/);
   });
 
   it("registers the shared prerendered table via prerenderedRouteElements(CLIENT_PAGES)", () => {
-    const source = read("entry-client.tsx");
+    const source = read("ClientApp.tsx");
     expect(source).toMatch(/prerenderedRouteElements\(CLIENT_PAGES\)/);
   });
 
   it("'*' is the last route and /admin precedes it, both absent from the shared table", () => {
-    const source = read("entry-client.tsx");
+    const source = read("ClientApp.tsx");
     const adminIdx = source.indexOf('path="/admin"');
     const catchAllIdx = source.indexOf('path="*"');
 
