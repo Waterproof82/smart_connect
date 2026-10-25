@@ -1,12 +1,22 @@
 import fs from "node:fs";
 import path from "node:path";
+import { PRERENDERED_PATHS } from "../../src/shared/routing/prerenderedRoutes";
+import { PRERENDERED_ROUTES } from "../../src/clientRoutes";
 
 /**
  * D5 guard (design.md): "/tarjetas-nfc" needs FOUR registration points, not
  * two. Missing any one produces a route that passes tsc/lint/Jest but
  * serves a blank/broken page (or zero prerendered HTML) in production.
- * This test asserts all four points, plus the redirect retarget, via
- * source-text checks (no jest-environment-jsdom in this repo).
+ * This test asserts all four points, plus the redirect retarget.
+ *
+ * Points 1-2 were rewritten (design.md shared-app-shell) to import-based
+ * checks: both entries now build their <Route> elements from the shared
+ * PRERENDERED_PATHS table via prerenderedRouteElements(), so there is no
+ * more per-page source-text pattern to regex-match in entry-client.tsx or
+ * entry-server.tsx. The server-side component identity
+ * (SERVER_PAGES["/tarjetas-nfc"] === TapReviewPage) is asserted in
+ * src/__tests__/pageMaps.test.tsx (Vitest) — Jest must not import
+ * serverPages.ts, a page-map module.
  */
 const SRC = path.resolve(__dirname, "../../src");
 const ROOT = path.resolve(__dirname, "../..");
@@ -14,24 +24,17 @@ const ROOT = path.resolve(__dirname, "../..");
 const read = (absPath: string) => fs.readFileSync(absPath, "utf-8");
 
 describe("/tarjetas-nfc route registration (D5 — four points)", () => {
-  it("1) entry-client.tsx: sources TapReviewPage from the preloadable route-loader map and registers the route (mirrors /about; design.md D1/D2, seo-audit-followups S1)", () => {
-    const source = read(path.join(SRC, "entry-client.tsx"));
-    expect(source).toMatch(
-      /const TapReviewPage = PRERENDERED_ROUTES\["\/tarjetas-nfc"\]\.Component;/,
-    );
-    expect(source).toMatch(
-      /<Route path="\/tarjetas-nfc" element={<TapReviewPage \/>} \/>/,
-    );
+  it("1) /tarjetas-nfc is registered in the shared prerendered path table, and the client route loader exposes a working preload()", async () => {
+    expect(PRERENDERED_PATHS).toContain("/tarjetas-nfc");
+    expect(PRERENDERED_ROUTES["/tarjetas-nfc"]).toBeDefined();
+    await expect(
+      PRERENDERED_ROUTES["/tarjetas-nfc"].preload(),
+    ).resolves.toBeUndefined();
   });
 
-  it("2) entry-server.tsx: eager-imports TapReviewPage and registers the route (mirrors /about)", () => {
+  it("2) entry-server.tsx builds its <Routes> from the shared table (server-side TapReviewPage identity is asserted in pageMaps.test.tsx, Vitest)", () => {
     const source = read(path.join(SRC, "entry-server.tsx"));
-    expect(source).toMatch(
-      /import TapReviewPage from ["']\.\/features\/tap-review\/presentation\/TapReviewPage["']/,
-    );
-    expect(source).toMatch(
-      /<Route path="\/tarjetas-nfc" element={<TapReviewPage \/>} \/>/,
-    );
+    expect(source).toMatch(/prerenderedRouteElements\(SERVER_PAGES\)/);
   });
 
   it("3) scripts/site-routes.json: includes /tarjetas-nfc in the prerendered route table", () => {

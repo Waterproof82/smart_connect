@@ -1,25 +1,16 @@
 import { renderToString } from "react-dom/server";
 import { StaticRouter } from "react-router-dom";
 import { HelmetProvider, type HelmetServerState } from "react-helmet-async";
-import { Routes, Route } from "react-router-dom";
+import { Routes } from "react-router-dom";
 import { Suspense } from "react";
 import { LanguageProvider } from "@shared/context/LanguageContext";
 import { ThemeProvider } from "@shared/context/ThemeContext";
 import { ConsentProvider } from "@shared/context/ConsentContext";
 import { ScrollToTop } from "@shared/components/ScrollToTop";
 import { CookieConsent } from "@shared/components/CookieConsent";
-import App from "./App";
-import AboutPage from "./features/landing/presentation/components/AboutPage";
-import TapReviewPage from "./features/tap-review/presentation/TapReviewPage";
-import CartaDigitalPage from "./features/landing/presentation/components/CartaDigitalPage";
-import IaChatbotsPage from "./features/landing/presentation/components/IaChatbotsPage";
-import TpvRestaurantesPage from "./features/landing/presentation/components/TpvRestaurantesPage";
-import BlogIndexPage from "./features/landing/presentation/components/BlogIndexPage";
-import BlogPostPage from "./features/landing/presentation/components/BlogPostPage";
-import AvisoLegalPage from "./features/legal/presentation/AvisoLegalPage";
-import PrivacidadPage from "./features/legal/presentation/PrivacidadPage";
-import CookiesPage from "./features/legal/presentation/CookiesPage";
 import { NotFound } from "./features/landing/presentation/components/NotFound";
+import { SERVER_PAGES } from "./serverPages";
+import { prerenderedRouteElements } from "@shared/routing/prerenderedRouteElements";
 
 /**
  * Renders a prerendered route. With `notFound: true` it renders the 404
@@ -45,46 +36,7 @@ export function render(
                 {options.notFound ? (
                   <NotFound />
                 ) : (
-                  <Routes>
-                    <Route path="/" element={<App />} />
-                    <Route path="/about" element={<AboutPage />} />
-                    <Route path="/tarjetas-nfc" element={<TapReviewPage />} />
-                    <Route
-                      path="/carta-digital"
-                      element={<CartaDigitalPage />}
-                    />
-                    <Route
-                      path="/ia-chatbots-tenerife"
-                      element={<IaChatbotsPage />}
-                    />
-                    <Route
-                      path="/tpv-restaurantes"
-                      element={<TpvRestaurantesPage />}
-                    />
-                    <Route path="/blog" element={<BlogIndexPage />} />
-                    <Route
-                      path="/blog/carta-digital-vs-comisiones-glovo"
-                      element={<BlogPostPage />}
-                    />
-                    <Route
-                      path="/blog/chatbot-ia-hoteles-alojamientos-pequenos-canarias"
-                      element={<BlogPostPage />}
-                    />
-                    <Route
-                      path="/blog/cuanto-cuesta-un-tpv-restaurante"
-                      element={<BlogPostPage />}
-                    />
-                    <Route
-                      path="/blog/tarjetas-nfc-mas-resenas-google-restaurante"
-                      element={<BlogPostPage />}
-                    />
-                    <Route path="/legal/aviso" element={<AvisoLegalPage />} />
-                    <Route
-                      path="/legal/privacidad"
-                      element={<PrivacidadPage />}
-                    />
-                    <Route path="/legal/cookies" element={<CookiesPage />} />
-                  </Routes>
+                  <Routes>{prerenderedRouteElements(SERVER_PAGES)}</Routes>
                 )}
               </Suspense>
             </ConsentProvider>

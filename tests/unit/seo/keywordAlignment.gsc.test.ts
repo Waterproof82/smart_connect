@@ -1,5 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
+import { BLOG_POSTS } from "../../../src/features/landing/data/blogPosts";
+import { PRERENDERED_PATHS } from "../../../src/shared/routing/prerenderedRoutes";
 
 /**
  * Search Console keyword alignment (2026-10-23): the queries with
@@ -121,19 +123,26 @@ describe("Canarias Digitaliza disambiguation (home FAQ + /about)", () => {
 
 describe("blog (4 articles, no invented data)", () => {
   const posts = read("features/landing/data/blogPosts.ts");
-  const slugs = [...posts.matchAll(/slug:\s*"([^"]+)"/g)].map((m) => m[1]);
+  const slugs = BLOG_POSTS.map((post) => post.slug);
 
-  it("has 4 articles, each registered in the sitemap routes and the SSR table", () => {
+  it("has 4 articles; every slug has a matching /blog/<slug> entry in the shared prerendered table, both directions (design.md shared-app-shell)", () => {
     expect(slugs).toHaveLength(4);
-    const server = read("entry-server.tsx");
-    const routes = JSON.parse(
-      fs.readFileSync(path.join(SRC, "../scripts/site-routes.json"), "utf-8"),
-    ).routes.map((r: { path: string }) => r.path);
+    const blogArticlePaths = PRERENDERED_PATHS.filter((p) =>
+      p.startsWith("/blog/"),
+    );
+    expect(blogArticlePaths).toHaveLength(4);
+
+    // post -> route: no article is missing its SSR/prerendered path.
     for (const slug of slugs) {
-      expect(server).toContain(`path="/blog/${slug}"`);
-      expect(routes).toContain(`/blog/${slug}`);
+      expect(PRERENDERED_PATHS).toContain(`/blog/${slug}`);
     }
-    expect(routes).toContain("/blog");
+    // route -> post: no table entry serves a soft 404 (a NotFound page
+    // returned with 200) because its slug has no matching article.
+    for (const blogPath of blogArticlePaths) {
+      const slug = blogPath.slice("/blog/".length);
+      expect(slugs).toContain(slug);
+    }
+    expect(PRERENDERED_PATHS).toContain("/blog");
   });
   it("descriptions fit a SERP snippet (<= 155 chars)", () => {
     for (const m of posts.matchAll(/description:\s*\n?\s*"([^"]+)"/g)) {

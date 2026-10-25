@@ -96,9 +96,33 @@ describe("entry-client.tsx — /contacto route removed (design.md §2.1)", () =>
     expect(source).toMatch(/\/tarjetas-nfc/);
   });
 
-  it("still renders <App /> for '/'", () => {
+  // "/" still resolving to App is asserted in src/__tests__/pageMaps.test.tsx
+  // (Vitest: CLIENT_PAGES["/"] === App === SERVER_PAGES["/"]), not here —
+  // entry-client.tsx no longer declares a literal
+  // <Route path="/" element={<App/>}/>; it builds every <Route> from
+  // CLIENT_PAGES via prerenderedRouteElements(), and clientPages.ts is a
+  // page-map module Jest must not import (design.md shared-app-shell).
+});
+
+describe("entry-client.tsx — /blog/:slug removed (design.md shared-app-shell, Client-Only Routes Appended After Shared Table)", () => {
+  it("has no /blog/:slug wildcard route", () => {
     const source = read("entry-client.tsx");
-    expect(source).toMatch(/<Route path="\/" element=\{<App \/>\} \/>/);
+    expect(source).not.toMatch(/\/blog\/:slug/);
+  });
+
+  it("registers the shared prerendered table via prerenderedRouteElements(CLIENT_PAGES)", () => {
+    const source = read("entry-client.tsx");
+    expect(source).toMatch(/prerenderedRouteElements\(CLIENT_PAGES\)/);
+  });
+
+  it("'*' is the last route and /admin precedes it, both absent from the shared table", () => {
+    const source = read("entry-client.tsx");
+    const adminIdx = source.indexOf('path="/admin"');
+    const catchAllIdx = source.indexOf('path="*"');
+
+    expect(adminIdx).toBeGreaterThan(-1);
+    expect(catchAllIdx).toBeGreaterThan(-1);
+    expect(catchAllIdx).toBeGreaterThan(adminIdx);
   });
 });
 

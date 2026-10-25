@@ -1,41 +1,25 @@
 import fs from "node:fs";
 import path from "node:path";
 import { PRERENDERED_ROUTES } from "../../../src/clientRoutes";
+import { PRERENDERED_PATHS } from "../../../src/shared/routing/prerenderedRoutes";
 
-// design.md D1/D2 (seo-audit-followups, S1): the client route-loader map
-// (src/clientRoutes.tsx) must stay in lockstep with scripts/site-routes.json
-// and entry-server.tsx's <Routes> table, or a route can silently stop being
-// preloaded on the client (regressing React error #421) or stop being
-// prerendered on the server without anyone noticing.
+// design.md (shared-app-shell, rev 2): the client route-loader map
+// (src/clientRoutes.tsx) must stay in lockstep with the shared
+// `PRERENDERED_PATHS` table, which is itself checked against
+// scripts/site-routes.json by routeParity.test.ts — one source of truth
+// instead of three hand-copied lists.
 const ROOT = path.resolve(__dirname, "../../../");
 
-function extractServerRoutePaths(): string[] {
-  const source = fs.readFileSync(
-    path.join(ROOT, "src/entry-server.tsx"),
-    "utf-8",
-  );
-  const matches = [...source.matchAll(/<Route\s+path="([^"]+)"/g)];
-  return matches.map((m) => m[1]);
-}
+describe("client route loader parity (design.md shared-app-shell)", () => {
+  it("PRERENDERED_ROUTES keys equal PRERENDERED_PATHS minus '/'", () => {
+    const loaderPaths = new Set(Object.keys(PRERENDERED_ROUTES));
+    const expected = new Set(
+      PRERENDERED_PATHS.filter((p): boolean => p !== "/"),
+    );
 
-function readSiteRoutePaths(): string[] {
-  const data = JSON.parse(
-    fs.readFileSync(path.join(ROOT, "scripts/site-routes.json"), "utf-8"),
-  );
-  return data.routes.map((r: { path: string }) => r.path);
-}
-
-describe("client route loader parity (design.md D1/D2, S1)", () => {
-  it("loader map keys ∪ {'/'} equals site-routes.json paths equals entry-server.tsx <Routes> paths", () => {
-    const loaderPaths = new Set([...Object.keys(PRERENDERED_ROUTES), "/"]);
-    const sitePaths = new Set(readSiteRoutePaths());
-    const serverPaths = new Set(extractServerRoutePaths());
-
-    expect(loaderPaths).toEqual(sitePaths);
-    expect(loaderPaths).toEqual(serverPaths);
-    // Sanity check the extraction itself isn't vacuously matching zero
-    // routes (same guard rationale as routeParity.test.ts).
-    expect(loaderPaths.size).toBe(14);
+    expect(loaderPaths).toEqual(expected);
+    // Sanity check the comparison isn't vacuously matching zero routes.
+    expect(loaderPaths.size).toBe(PRERENDERED_PATHS.length - 1);
   });
 
   it("entry-client.tsx has no lazy( calls besides the admin chunk", () => {

@@ -1,20 +1,12 @@
 import fs from "node:fs";
 import path from "node:path";
+import { PRERENDERED_PATHS } from "../../../src/shared/routing/prerenderedRoutes";
 
-// design.md §1.7 (seo-geo-p0-fixes, PR#2) — the piece that makes the fix
-// permanent: adding an SSR route without a matching sitemap entry, or vice
-// versa, fails CI. Deliberately excludes entry-client.tsx: that file
-// legitimately carries extra non-prerendered routes (/admin, *).
+// design.md (shared-app-shell, rev 2) — PRERENDERED_PATHS is now the single
+// source of truth both entries build their <Routes> from (via
+// prerenderedRouteElements). It must still stay in lockstep with
+// scripts/site-routes.json, which also feeds the sitemap.
 const ROOT = path.resolve(__dirname, "../../../");
-
-function extractServerRoutePaths(): string[] {
-  const source = fs.readFileSync(
-    path.join(ROOT, "src/entry-server.tsx"),
-    "utf-8",
-  );
-  const matches = [...source.matchAll(/<Route\s+path="([^"]+)"/g)];
-  return matches.map((m) => m[1]);
-}
 
 function readSiteRoutePaths(): string[] {
   const data = JSON.parse(
@@ -23,20 +15,18 @@ function readSiteRoutePaths(): string[] {
   return data.routes.map((r: { path: string }) => r.path);
 }
 
-describe("route parity — entry-server.tsx <-> scripts/site-routes.json (design.md §1.7)", () => {
-  it("entry-server.tsx declares exactly 14 <Route> paths (extraction sanity check)", () => {
-    // R4: assert length before comparing sets, so a broken regex extraction
-    // (e.g. entry-server.tsx switching to a route map) fails loudly instead
-    // of silently matching zero routes and passing a vacuous set-equality.
-    const serverPaths = extractServerRoutePaths();
-    expect(serverPaths).toHaveLength(14);
+describe("route parity — PRERENDERED_PATHS <-> scripts/site-routes.json (design.md shared-app-shell)", () => {
+  it("PRERENDERED_PATHS has no duplicate paths", () => {
+    expect(new Set(PRERENDERED_PATHS).size).toBe(PRERENDERED_PATHS.length);
   });
 
-  it("the set of SSR routes exactly equals the set of routes in site-routes.json", () => {
-    const serverPaths = extractServerRoutePaths();
+  it("the set of PRERENDERED_PATHS exactly equals the set of routes in site-routes.json", () => {
     const sitePaths = readSiteRoutePaths();
+    expect(new Set(PRERENDERED_PATHS)).toEqual(new Set(sitePaths));
+  });
 
-    expect(new Set(serverPaths)).toEqual(new Set(sitePaths));
-    expect(serverPaths).toHaveLength(sitePaths.length);
+  it("PRERENDERED_PATHS length equals site-routes.json length (never a hardcoded count)", () => {
+    const sitePaths = readSiteRoutePaths();
+    expect(PRERENDERED_PATHS.length).toBe(sitePaths.length);
   });
 });

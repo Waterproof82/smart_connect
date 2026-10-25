@@ -9,14 +9,10 @@ import { ScrollToTop } from "@shared/components/ScrollToTop";
 import { CookieConsent } from "@shared/components/CookieConsent";
 import { scheduleWebMCPRegistration } from "./webmcpBoot";
 import { registerContactClickTracking } from "@shared/utils/analyticsEvents";
-import {
-  PRERENDERED_ROUTES,
-  BLOG_POST_ROUTE,
-  NOT_FOUND_ROUTE,
-  routeForPath,
-} from "./clientRoutes";
+import { NOT_FOUND_ROUTE, routeForPath } from "./clientRoutes";
+import { CLIENT_PAGES } from "./clientPages";
+import { prerenderedRouteElements } from "@shared/routing/prerenderedRouteElements";
 import "./index.css";
-import App from "./App";
 
 // GA4: WhatsApp / phone / email link clicks as conversion events
 registerContactClickTracking();
@@ -31,17 +27,6 @@ const AdminPanel = lazy(() =>
   })),
 );
 
-const AboutPage = PRERENDERED_ROUTES["/about"].Component;
-const TapReviewPage = PRERENDERED_ROUTES["/tarjetas-nfc"].Component;
-const CartaDigitalPage = PRERENDERED_ROUTES["/carta-digital"].Component;
-const IaChatbotsPage = PRERENDERED_ROUTES["/ia-chatbots-tenerife"].Component;
-const TpvRestaurantesPage =
-  PRERENDERED_ROUTES["/tpv-restaurantes"].Component;
-const BlogIndexPage = PRERENDERED_ROUTES["/blog"].Component;
-const BlogPostPage = BLOG_POST_ROUTE.Component;
-const AvisoLegalPage = PRERENDERED_ROUTES["/legal/aviso"].Component;
-const PrivacidadPage = PRERENDERED_ROUTES["/legal/privacidad"].Component;
-const CookiesPage = PRERENDERED_ROUTES["/legal/cookies"].Component;
 const NotFound = NOT_FOUND_ROUTE.Component;
 
 const LoadingFallback = () => (
@@ -70,24 +55,8 @@ const app = (
             <CookieConsent />
             <Suspense fallback={<LoadingFallback />}>
               <Routes>
-                <Route path="/" element={<App />} />
+                {prerenderedRouteElements(CLIENT_PAGES)}
                 <Route path="/admin" element={<AdminPanel />} />
-                <Route path="/about" element={<AboutPage />} />
-                <Route path="/tarjetas-nfc" element={<TapReviewPage />} />
-                <Route path="/carta-digital" element={<CartaDigitalPage />} />
-                <Route
-                  path="/ia-chatbots-tenerife"
-                  element={<IaChatbotsPage />}
-                />
-                <Route
-                  path="/tpv-restaurantes"
-                  element={<TpvRestaurantesPage />}
-                />
-                <Route path="/blog" element={<BlogIndexPage />} />
-                <Route path="/blog/:slug" element={<BlogPostPage />} />
-                <Route path="/legal/aviso" element={<AvisoLegalPage />} />
-                <Route path="/legal/privacidad" element={<PrivacidadPage />} />
-                <Route path="/legal/cookies" element={<CookiesPage />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>

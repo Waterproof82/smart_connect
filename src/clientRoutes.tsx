@@ -1,4 +1,5 @@
 import { lazy, useState, type ComponentType } from "react";
+import type { PrerenderedPath } from "@shared/routing/prerenderedRoutes";
 
 /**
  * Hydration fix for React error #421 (design.md D1/D2, seo-audit-followups
@@ -56,20 +57,10 @@ export function preloadable(
   };
 }
 
-type PrerenderedPath =
-  | "/about"
-  | "/tarjetas-nfc"
-  | "/carta-digital"
-  | "/ia-chatbots-tenerife"
-  | "/tpv-restaurantes"
-  | "/blog"
-  | "/blog/carta-digital-vs-comisiones-glovo"
-  | "/blog/chatbot-ia-hoteles-alojamientos-pequenos-canarias"
-  | "/blog/cuanto-cuesta-un-tpv-restaurante"
-  | "/blog/tarjetas-nfc-mas-resenas-google-restaurante"
-  | "/legal/aviso"
-  | "/legal/privacidad"
-  | "/legal/cookies";
+// The shared table (design.md shared-app-shell) is the single source of
+// truth for every prerendered path; "/" renders <App/> directly and
+// statically, so it has no loader entry here.
+type ClientRoutePath = Exclude<PrerenderedPath, "/">;
 
 // Every page module below uses a named default export re-wrapped as
 // `{ default }`, so this one helper replaces the near-identical `.then()`s.
@@ -79,17 +70,20 @@ const asPageModule = (mod: { default: ComponentType }): PageModule => ({
 
 /**
  * Every article path shares ONE preloadable: they render the same module,
- * so a single preload() settles for all of them and the client's one
- * `<Route path="/blog/:slug">` mounts the resolved component on hydration.
+ * so a single preload() settles for all of them and every explicit
+ * `/blog/<slug>` entry below mounts the resolved component on hydration.
+ * Module-local (not exported): the client now registers each blog path
+ * explicitly via the shared table instead of a single `/blog/:slug`
+ * route, so nothing outside this file needs the loader directly.
  */
-export const BLOG_POST_ROUTE: PreloadableRoute = preloadable(() =>
+const BLOG_POST_ROUTE: PreloadableRoute = preloadable(() =>
   import("@features/landing/presentation/components/BlogPostPage").then(
     asPageModule,
   ),
 );
 
 export const PRERENDERED_ROUTES: Readonly<
-  Record<PrerenderedPath, PreloadableRoute>
+  Record<ClientRoutePath, PreloadableRoute>
 > = {
   "/about": preloadable(() =>
     import("@features/landing/presentation/components/AboutPage").then(
@@ -165,7 +159,7 @@ export function routeForPath(pathname: string): PreloadableRoute | null {
   const normalized = normalizePath(pathname);
   if (normalized === "/") return null;
   if (Object.prototype.hasOwnProperty.call(PRERENDERED_ROUTES, normalized)) {
-    return PRERENDERED_ROUTES[normalized as PrerenderedPath];
+    return PRERENDERED_ROUTES[normalized as ClientRoutePath];
   }
   return NOT_FOUND_ROUTE;
 }
