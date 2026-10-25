@@ -1,7 +1,8 @@
 /**
  * WebMCP — Web Model Context Protocol
  *
- * Registers tools on navigator.modelContext for AI agents visiting the page.
+ * Registers tools on document.modelContext (navigator.modelContext as a
+ * fallback) for AI agents visiting the page.
  * Uses @mcp-b/webmcp-polyfill to work in all browsers (not just Chrome 146+).
  *
  * Each tool has: name, description, inputSchema (JSON Schema), execute callback.
@@ -224,10 +225,16 @@ export function registerWebMCPTools(): void {
   }
 
   try {
-    const mc = (navigator as unknown as Record<string, unknown>)
-      .modelContext as
-      | { registerTool?: (tool: ToolDescriptor) => void }
-      | undefined;
+    // The May 2026 WebMCP draft moved modelContext from Navigator to
+    // Document (webmcp PR #184); the polyfill keeps navigator.modelContext
+    // only as a deprecated alias that warns on access. Read document first;
+    // fall back to navigator for browsers with the older native surface.
+    type ModelContext = { registerTool?: (tool: ToolDescriptor) => void };
+    const mc =
+      ((globalThis.document as unknown as Record<string, unknown>)
+        ?.modelContext as ModelContext | undefined) ??
+      ((globalThis.navigator as unknown as Record<string, unknown>)
+        ?.modelContext as ModelContext | undefined);
 
     if (mc && typeof mc.registerTool === "function") {
       for (const tool of tools) {

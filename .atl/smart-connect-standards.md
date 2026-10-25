@@ -504,7 +504,7 @@ registerWebMCPTools();
 
 ### Reglas
 
-- Usa `navigator.modelContext.provideContext()` — API disponible en navegadores con capacidades de IA.
+- Usa `document.modelContext.registerTool()` (fallback `navigator.modelContext`) — `provideContext()` fue eliminada del spec.
 - Si `modelContext` no está disponible, falla silenciosamente (sin console.log).
 - Cada tool tiene: `name`, `description`, `inputSchema` (JSON Schema), `execute` callback.
 - Las tools bilingües responden en `es` o `en` según el parámetro `language`.
@@ -538,6 +538,6 @@ registerWebMCPTools();
 - **Global Skills**: [Skill Registry](.atl/skill-registry.md)
   - **smart-connect-standards**: Estándares globales para arquitectura, testing, seguridad, RAG y best practices.
   - **markdown-negotiation**: Content negotiation para `Accept: text/markdown`.
-  - **webmcp-tools**: WebMCP tools via `navigator.modelContext.provideContext()`.
+  - **webmcp-tools**: WebMCP tools via `document.modelContext.registerTool()`.
   - **authorship-signals**: Señales de autoría y autoridad (rel="author", JSON-LD, /about).
   - **agent-skills**: Agent Skills discovery index con $schema.

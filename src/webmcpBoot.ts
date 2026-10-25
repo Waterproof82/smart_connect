@@ -34,7 +34,7 @@ export function scheduleWebMCPRegistration(
       .catch(() => {
         // Chunk load or registration failed — non-critical, skip
         // silently (same contract as registerWebMCPTools' own internal
-        // try/catch for navigator.modelContext access).
+        // try/catch for modelContext access).
       });
   });
 }
