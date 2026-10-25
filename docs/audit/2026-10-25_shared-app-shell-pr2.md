@@ -30,6 +30,9 @@
 - `ssrHydrationParity.test.tsx` normalizes single-quoted attributes on both sides: `/legal/cookies` ships a raw `dangerouslySetInnerHTML` string that DOMPurify re-serializes only when `window` exists. React does not hydration-diff that content, so it is not a #418 source; left as a separate follow-up.
 - Runs under `@vitest-environment node` because `react-helmet-async` fixes `canUseDOM` at import time; jsdom globals are stubbed only while rendering the client side.
 
+## Verify follow-up (2026-10-25)
+- sdd-verify flagged the spec scenario "Missing context on server crashes loudly" as untested (CRITICAL). Added `src/__tests__/helmetContextMissing.test.tsx` (jsdom env: `render()` throws when `helmetContext.helmet` is never filled) and `src/__tests__/helmetContextThreading.test.tsx` (node env: AppShell fills the exact context object it receives). Both checked RED by mutating `helmet!.` to `helmet?.` and `context={helmetContext}` to `context={{}}`, then GREEN on the real code. Vitest now 44 files / 242 tests.
+
 ## Follow-ups
 - Phase 4 (owner-gated): build, diff `dist/` HTML (14 routes + 404.html) against main, serve and check for #418/#421.
 - `sanitizeHTML` SSR path: run sanitization (or emit the same quoting) without `window`.
