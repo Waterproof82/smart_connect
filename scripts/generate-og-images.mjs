@@ -42,6 +42,38 @@ export const OG_IMAGES = [
     title: ["Todo tu restaurante", "en un solo sistema"],
     subtitle: "13 módulos: cobro, comandero, cocina, reservas y más",
   },
+  // Blog: one image per article (file = "blog/<slug>.png", must match
+  // blogOgImage() in src/features/landing/data/blogPosts.ts).
+  {
+    file: "blog.png",
+    eyebrow: "Blog",
+    title: ["TPV, carta digital y", "chatbots para hostelería"],
+    subtitle: "Guías prácticas para negocios de Canarias",
+  },
+  {
+    file: "blog/carta-digital-vs-comisiones-glovo.png",
+    eyebrow: "Blog · Carta digital",
+    title: ["Carta digital frente a", "las comisiones de reparto"],
+    subtitle: "Cuánto te cuesta cada pedido",
+  },
+  {
+    file: "blog/chatbot-ia-hoteles-alojamientos-pequenos-canarias.png",
+    eyebrow: "Blog · Chatbots IA",
+    title: ["Chatbot con IA para", "alojamientos pequeños"],
+    subtitle: "Hoteles rurales y apartamentos en Canarias",
+  },
+  {
+    file: "blog/cuanto-cuesta-un-tpv-restaurante.png",
+    eyebrow: "Blog · TPV",
+    title: ["¿Cuánto cuesta un TPV", "para un restaurante?"],
+    subtitle: "De qué depende el precio",
+  },
+  {
+    file: "blog/tarjetas-nfc-mas-resenas-google-restaurante.png",
+    eyebrow: "Blog · Tarjetas NFC",
+    title: ["Más reseñas en Google", "con tarjetas NFC"],
+    subtitle: "Guía para restaurantes",
+  },
 ];
 
 const escapeXml = (s) =>
@@ -82,6 +114,7 @@ async function main() {
   fs.mkdirSync(OUT_DIR, { recursive: true });
   for (const image of OG_IMAGES) {
     const out = path.join(OUT_DIR, image.file);
+    fs.mkdirSync(path.dirname(out), { recursive: true });
     await sharp(Buffer.from(buildSvg(image)))
       .png({ compressionLevel: 9, palette: true })
       .toFile(out);

@@ -4,7 +4,11 @@ import { Link } from "react-router-dom";
 import { PageShell } from "@features/landing/presentation/components/PageShell";
 import { PageHero, Section } from "@shared/presentation/layout";
 import { BreadcrumbListSchema } from "@shared/presentation/components/SeoSchema";
-import { BLOG_BASE_PATH, BLOG_POSTS } from "@features/landing/data/blogPosts";
+import {
+  BLOG_BASE_PATH,
+  BLOG_INDEX_OG_IMAGE,
+  BLOG_POSTS,
+} from "@features/landing/data/blogPosts";
 
 const ORG_URL = "https://digitalizatenerife.es";
 const PAGE_URL = `${ORG_URL}${BLOG_BASE_PATH}`;
@@ -25,7 +29,7 @@ const BlogIndexPage: React.FC = () => (
       <meta property="og:description" content={PAGE_DESCRIPTION} />
       <meta property="og:type" content="website" />
       <meta property="og:url" content={PAGE_URL} />
-      <meta property="og:image" content={`${ORG_URL}/og/home.png`} />
+      <meta property="og:image" content={`${ORG_URL}${BLOG_INDEX_OG_IMAGE}`} />
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
       <meta
@@ -35,7 +39,7 @@ const BlogIndexPage: React.FC = () => (
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={PAGE_TITLE} />
       <meta name="twitter:description" content={PAGE_DESCRIPTION} />
-      <meta name="twitter:image" content={`${ORG_URL}/og/home.png`} />
+      <meta name="twitter:image" content={`${ORG_URL}${BLOG_INDEX_OG_IMAGE}`} />
     </Helmet>
     <BreadcrumbListSchema
       breadcrumbs={[

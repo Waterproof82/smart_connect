@@ -8,6 +8,7 @@ import { BreadcrumbListSchema } from "@shared/presentation/components/SeoSchema"
 import { ORGANIZATION } from "@shared/config/organization";
 import {
   BLOG_BASE_PATH,
+  blogOgImage,
   getBlogPost,
 } from "@features/landing/data/blogPosts";
 
@@ -24,6 +25,7 @@ const BlogPostPage: React.FC = () => {
 
   const pageUrl = `${ORG_URL}${BLOG_BASE_PATH}/${post.slug}`;
   const title = `${post.title} | Digitaliza Tenerife`;
+  const ogImage = `${ORG_URL}${blogOgImage(post.slug)}`;
   const schema = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
@@ -33,7 +35,7 @@ const BlogPostPage: React.FC = () => {
     datePublished: post.datePublished,
     dateModified: post.datePublished,
     mainEntityOfPage: pageUrl,
-    image: `${ORG_URL}/og/home.png`,
+    image: ogImage,
     author: { "@type": "Organization", name: ORGANIZATION.name, url: ORG_URL },
     publisher: {
       "@type": "Organization",
@@ -54,14 +56,14 @@ const BlogPostPage: React.FC = () => {
         <meta property="og:description" content={post.description} />
         <meta property="og:type" content="article" />
         <meta property="og:url" content={pageUrl} />
-        <meta property="og:image" content={`${ORG_URL}/og/home.png`} />
+        <meta property="og:image" content={ogImage} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:image:alt" content={post.title} />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={post.description} />
-        <meta name="twitter:image" content={`${ORG_URL}/og/home.png`} />
+        <meta name="twitter:image" content={ogImage} />
         <script type="application/ld+json">{JSON.stringify(schema)}</script>
       </Helmet>
       <BreadcrumbListSchema
