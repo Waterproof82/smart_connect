@@ -30,6 +30,7 @@ import {
 } from "@shared/presentation/components/SeoSchema";
 import { useLanguage } from "@shared/context/LanguageContext";
 import { trackEvent } from "@shared/utils/analyticsEvents";
+import { RelatedArticles } from "@features/landing/presentation/components/RelatedArticles";
 
 const ORG_URL = "https://digitalizatenerife.es";
 const PAGE_URL = `${ORG_URL}/ia-chatbots-tenerife`;
@@ -242,6 +243,7 @@ const IaChatbotsPage: React.FC = () => {
             items={faqs.map((f) => ({ q: f.question, a: f.answer }))}
           />
         </Section>
+        <RelatedArticles servicePath="/ia-chatbots-tenerife" />
 
         <ClosingCta
           id="ia-cta"

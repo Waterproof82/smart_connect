@@ -63,6 +63,8 @@ export interface PageCopy {
   tpvH1: string;
   tpvIntro: string;
   tpvFaqTitle: string;
+  relatedArticlesTitle: string;
+  relatedArticlesIntro: string;
   tpvFaqQ1: string;
   tpvFaqA1: string;
   tpvFaqQ2: string;
@@ -180,6 +182,8 @@ export const pageCopy: { es: PageCopy; en: PageCopy } = {
     tpvIntro:
       "TPV táctil para restaurantes, pizzerías y bares en Tenerife y Canarias: cobro, comandero móvil, pantalla de cocina, reservas, fichajes, stock, alérgenos y carta digital: todo tu local en un solo sistema.",
     tpvFaqTitle: "Preguntas frecuentes sobre el TPV para restaurantes",
+    relatedArticlesTitle: "Lee también",
+    relatedArticlesIntro: "Guías de nuestro blog relacionadas con este servicio.",
     tpvFaqQ1: "¿Qué es un TPV para hostelería?",
     tpvFaqA1:
       "Es el sistema con el que un restaurante o bar cobra, toma comandas y controla su operativa. Nuestro TPV para hostelería reúne en un solo sistema el cobro, el comandero móvil, la pantalla de cocina, las reservas, el stock y los alérgenos.",
@@ -308,6 +312,8 @@ export const pageCopy: { es: PageCopy; en: PageCopy } = {
     tpvIntro:
       "Touch-screen POS for restaurants, pizzerias and bars in Tenerife and the Canary Islands: payments, mobile ordering, kitchen display, bookings, time tracking, stock, allergens and digital menu: your whole venue in one system.",
     tpvFaqTitle: "Restaurant POS FAQ",
+    relatedArticlesTitle: "Further reading",
+    relatedArticlesIntro: "Guides from our blog about this service (in Spanish).",
     tpvFaqQ1: "What is a hospitality POS?",
     tpvFaqA1:
       "The system a restaurant or bar uses to take payments, take orders and run daily operations. Our hospitality POS brings payments, mobile ordering, kitchen display, bookings, stock and allergens into one system.",

@@ -18,6 +18,7 @@ import {
 import { useLanguage } from "@shared/context/LanguageContext";
 import { useWhatsappPhone } from "@shared/hooks";
 import { SOLUTIONS } from "@shared/config/solutions";
+import { RelatedArticles } from "@features/landing/presentation/components/RelatedArticles";
 
 const ORG_URL = "https://digitalizatenerife.es";
 const PAGE_URL = `${ORG_URL}/tpv-restaurantes`;
@@ -137,6 +138,7 @@ const TpvRestaurantesPage: React.FC = () => {
         <Section id="tpv-faq" width="prose" title={t.tpvFaqTitle}>
           <FaqList items={faqs.map((f) => ({ q: f.question, a: f.answer }))} />
         </Section>
+        <RelatedArticles servicePath="/tpv-restaurantes" />
 
         <ClosingCta
           id="tpv-cta"

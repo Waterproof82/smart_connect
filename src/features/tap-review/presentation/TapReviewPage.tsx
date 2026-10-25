@@ -12,6 +12,7 @@ import {
 import { useNfcFaqGroup } from "@features/landing/presentation/components/HomeFaqSection";
 import { SOLUTIONS } from "@shared/config/solutions";
 import { TapReviewSection } from "./TapReviewSection";
+import { RelatedArticles } from "@features/landing/presentation/components/RelatedArticles";
 
 const ORG_URL = "https://digitalizatenerife.es";
 const PAGE_URL = `${ORG_URL}/tarjetas-nfc`;
@@ -95,6 +96,7 @@ const TapReviewPage: React.FC = () => {
         <Section id="faq" width="prose" title={nfcFaqGroup.title}>
           <FaqList items={nfcFaqGroup.items} />
         </Section>
+        <RelatedArticles servicePath="/tarjetas-nfc" />
         <RelatedServices currentId="tarjetas-nfc" />
       </PageShell>
     </>

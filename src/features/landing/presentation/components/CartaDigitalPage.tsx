@@ -13,6 +13,7 @@ import {
 import { useCartaFaqGroup } from "@features/landing/presentation/components/HomeFaqSection";
 import { useLanguage } from "@shared/context/LanguageContext";
 import { SOLUTIONS } from "@shared/config/solutions";
+import { RelatedArticles } from "@features/landing/presentation/components/RelatedArticles";
 
 const ORG_URL = "https://digitalizatenerife.es";
 const PAGE_URL = `${ORG_URL}/carta-digital`;
@@ -94,6 +95,7 @@ const CartaDigitalPage: React.FC = () => {
         <Section id="faq" width="prose" title={cartaFaqGroup.title}>
           <FaqList items={cartaFaqGroup.items} />
         </Section>
+        <RelatedArticles servicePath="/carta-digital" />
         <RelatedServices currentId="carta-digital" />
       </PageShell>
     </>
