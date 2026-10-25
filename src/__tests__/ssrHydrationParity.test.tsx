@@ -33,27 +33,6 @@ import { PRERENDERED_PATHS } from "@shared/routing/prerenderedRoutes";
  * cannot change it back — both sides stay on the same Helmet code path,
  * which is what makes the `html` comparison fair.
  */
-/**
- * Canonicalizes single-quoted HTML attributes (`attr='value'`) to
- * double-quoted (`attr="value"`). React's own serializer never emits
- * single quotes, so any instance in either side's output can only come
- * from a raw, un-reserialized string passed through
- * `dangerouslySetInnerHTML` — specifically `/legal/cookies`' Google
- * Analytics copy (`LanguageContext.tsx`), which embeds a literal
- * single-quoted `<a>` tag. `sanitizeHTML` (`shared/utils/sanitizer.ts`)
- * only runs DOMPurify when `window` exists, so the server side (no
- * `window`) ships that string byte-for-byte while the client side (real
- * DOM here) gets it re-serialized with double quotes. React does not
- * hydration-diff `dangerouslySetInnerHTML` content, so this is a
- * pre-existing, non-#418 cosmetic gap in `sanitizeHTML`'s SSR path —
- * out of scope for this change — not a regression this guard should
- * fail on. Normalizing both sides here keeps the guard strict about
- * everything React itself renders while not gating on that unrelated,
- * already-filed gap.
- */
-const normalizeQuotes = (html: string): string =>
-  html.replace(/(\s[\w-]+)='([^']*)'/g, '$1="$2"');
-
 async function clientHtmlFor(path: string): Promise<string> {
   const dom = new JSDOM("<!doctype html><html><body></body></html>", {
     url: `http://localhost${path}`,
@@ -80,7 +59,7 @@ describe("Shell Parity Across Entries (ssrHydrationParity, PR2)", () => {
     async (path) => {
       const serverHtml = render(path).html;
       const clientHtml = await clientHtmlFor(path);
-      expect(normalizeQuotes(clientHtml)).toBe(normalizeQuotes(serverHtml));
+      expect(clientHtml).toBe(serverHtml);
     },
   );
 
@@ -89,7 +68,7 @@ describe("Shell Parity Across Entries (ssrHydrationParity, PR2)", () => {
     async (path) => {
       const serverHtml = render("/404", { notFound: true }).html;
       const clientHtml = await clientHtmlFor(path);
-      expect(normalizeQuotes(clientHtml)).toBe(normalizeQuotes(serverHtml));
+      expect(clientHtml).toBe(serverHtml);
     },
   );
 });

@@ -64,8 +64,9 @@ function extractLocaleBlock(
 }
 
 function resolveKey(block: string, key: string): string | undefined {
-  const match = block.match(new RegExp(`\\b${key}:\\s*"([^"]*)"`));
-  return match ? match[1] : undefined;
+  // Escape-aware: values may contain \" (double-quoted HTML attributes).
+  const match = block.match(new RegExp(String.raw`\b${key}:\s*"((?:[^"\\]|\\.)*)"`));
+  return match ? match[1].replaceAll(String.raw`\"`, '"') : undefined;
 }
 
 /** Expands a prefix into the Section{n}Title/Content pairs a component declares. */
