@@ -15,6 +15,9 @@ CI on `main` had been red since PR #165 (runs #414–#416). PR #165 put `Tarjeta
 - The fallback in `ProductGallery.tsx` (NFC page) uses `/assets/nfc/tarjeta_nfc.webp`, with width/height set to 625x436.
 - Deleted `public/assets/Tarjeta_NFC_negra_MontesTAP.webp`.
 
+- Re-converted `tarjeta_nfc_google.png` after the owner replaced it (428x404, now 21 KB).
+- Deleted the 4 supplier SKU-named gallery originals (`S…jpg_640x640q75.jpg_.avif`), after checking with `cmp` that each one is byte-identical to its descriptive copy. `scripts/optimize-images.mjs` now lists `NFC_GALLERY_MAINS` instead of using `NFC_RENAMES`/`renameNfcGalleryAssets`. A guard was added to `nfcImageRights.test.ts`; it was RED first.
+
 ## Verification
 
 - Jest: every unit suite passes. The only failure is `tests/e2e/chatbotFlow.test.ts`, which returns 503 from the live chatbot endpoint. That test is unrelated to this change and is skipped in CI.

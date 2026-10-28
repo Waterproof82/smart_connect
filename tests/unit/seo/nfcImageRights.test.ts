@@ -43,6 +43,14 @@ describe("NFC images: no supplier photo without rights (F-07)", () => {
     );
   });
 
+  it("no supplier SKU-style filenames remain in public/ or the image script", () => {
+    const sku = /^S[0-9a-f]{32}m?\.jpg_/;
+    expect(fs.readdirSync(path.join(ROOT, "public/assets/nfc")).filter((f) => sku.test(f))).toEqual([]);
+    const script = fs.readFileSync(path.join(ROOT, "scripts/optimize-images.mjs"), "utf-8");
+    expect(script).not.toMatch(/\.jpg_640x640q75/);
+    expect(script).not.toMatch(/NFC_RENAMES|renameNfcGalleryAssets/);
+  });
+
   it("own card images exist in public/", () => {
     for (const name of ["tarjeta_nfc_google.webp", "tarjeta_nfc.webp"]) {
       expect(fs.existsSync(path.join(ROOT, "public/assets/nfc", name))).toBe(true);

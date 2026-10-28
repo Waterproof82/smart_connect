@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 - **NFC supplier photo (no usage rights, F-07)**: `Tarjeta_NFC_negra_MontesTAP.webp` is deleted. The home flagship card and the carta digital section now use the business's own Google-review card (`/assets/nfc/tarjeta_nfc_google.webp`), and the NFC page gallery fallback uses the own NFC card (`/assets/nfc/tarjeta_nfc.webp`). This fixes the red CI on `main` (the F-07 guard test).
+- **Supplier SKU-named NFC gallery files**: the 4 `S…jpg_640x640q75.jpg_.avif` originals are deleted (byte-identical copies already live under descriptive names), and `scripts/optimize-images.mjs` drops the `NFC_RENAMES` map and `renameNfcGalleryAssets` for a plain `NFC_GALLERY_MAINS` list.
 
 ### Changed
 
