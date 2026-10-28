@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Blog link in main navigation**: "Blog" now appears in the desktop navbar and the mobile menu drawer (previously only reachable from the footer).
 - **GA4 CTA events**: `cta_contact_click` (hero "Contactar" and header/mobile-menu "Contacto") and `cta_demo_click` (hero "Ver Demo"), via the new `trackCtaClick` in `analyticsEvents`. Parameters are only `page_path` and `cta_location` (`hero` | `header`).
 
 ### Changed

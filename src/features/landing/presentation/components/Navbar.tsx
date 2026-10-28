@@ -297,6 +297,12 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
               </div>
             </div>
           </div>
+          <Link
+            to="/blog"
+            className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline focus-visible:outline-none transition-colors min-h-[48px] flex items-center"
+          >
+            {t.footerBlog}
+          </Link>
           <a
             href="/#contacto"
             className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline focus-visible:outline-none transition-colors min-h-[48px] flex items-center"
@@ -422,6 +428,13 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
                   );
                 })}
                 <hr className="border-[var(--color-border)] my-2" />
+                <Link
+                  to="/blog"
+                  className="text-muted p-3 min-h-[48px] flex items-center hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-xl transition-colors"
+                  onClick={closeMobileMenu}
+                >
+                  {t.footerBlog}
+                </Link>
                 <a
                   href="/#contacto"
                   className="text-muted p-3 min-h-[48px] flex items-center hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-xl transition-colors"
