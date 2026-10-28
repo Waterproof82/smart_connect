@@ -12,11 +12,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Blog link in main navigation**: "Blog" now appears in the desktop navbar and the mobile menu drawer (previously only reachable from the footer).
 - **GA4 CTA events**: `cta_contact_click` (hero "Contactar" and header/mobile-menu "Contacto") and `cta_demo_click` (hero "Ver Demo"), via the new `trackCtaClick` in `analyticsEvents`. Parameters are only `page_path` and `cta_location` (`hero` | `header`).
 
+- **Image rights metadata for NFC photos**: the 12 owner-verified NFC images now carry XMP rights fields (creator, credit, `© 2026 Digitaliza Tenerife`, licence URL `/legal/aviso`). The fields were written with exiftool, so the pixels are byte-identical. The NFC page also declares those photos as `ImageObject` (`creator`, `copyrightHolder`, `creditText`, `copyrightNotice`, `license`) through the new `ImageRightsSchema`, which makes them eligible for Google Images' "Licensable" badge.
+
 ### Changed
 
 - **Home hero and products**: h1 accent now reads "para tiendas y restaurantes" ("for shops and restaurants"), and the NFC cards moved from "more services" to a full-width flagship card with product image next to Carta Digital and TPV.
 - **Contact phone card** now links to `tel:+<whatsapp_phone>` (opens the dialer) instead of `wa.me`, so the click fires `contact_phone`, which never fired before.
 - **`trackEvent` honours cookie consent**: no GA4 event is sent unless `sc_consent_v1` grants analytics (previously Consent Mode could still send cookieless pings for events).
+
+### Removed
+
+- **NFC supplier photo (no usage rights, F-07)**: `Tarjeta_NFC_negra_MontesTAP.webp` is deleted. The home flagship card and the carta digital section now use the business's own Google-review card (`/assets/nfc/tarjeta_nfc_google.webp`), and the NFC page gallery fallback uses the own NFC card (`/assets/nfc/tarjeta_nfc.webp`). This fixes the red CI on `main` (the F-07 guard test).
+- **Supplier SKU-named NFC gallery files**: the 4 `S…jpg_640x640q75.jpg_.avif` originals are deleted (byte-identical copies already live under descriptive names), and `scripts/optimize-images.mjs` drops the `NFC_RENAMES` map and `renameNfcGalleryAssets` for a plain `NFC_GALLERY_MAINS` list.
+- **`put_exibitor.webp`** (3200x3200) is deleted. Step 1 of the NFC page's "how it works" section now shows the own NFC card (`/assets/nfc/tarjeta_nfc.webp`, 625x436).
 
 ### Changed
 

@@ -11,28 +11,28 @@ const ProductGallery: React.FC = () => {
       image: "/assets/nfc/nfc-exhibidor-blanco-1.avif",
       thumbnail: "/assets/nfc/nfc-exhibidor-blanco-1-128w.webp",
       alt: t.tapReviewProductExhibitorWhiteAlt,
-      fallback: "/assets/Tarjeta_NFC_negra_MontesTAP.webp",
+      fallback: "/assets/nfc/tarjeta_nfc.webp",
     },
     {
       name: t.tapReviewProductExhibitorBlack,
       image: "/assets/nfc/nfc-exhibidor-negro.avif",
       thumbnail: "/assets/nfc/nfc-exhibidor-negro-128w.webp",
       alt: t.tapReviewProductExhibitorBlackAlt,
-      fallback: "/assets/Tarjeta_NFC_negra_MontesTAP.webp",
+      fallback: "/assets/nfc/tarjeta_nfc.webp",
     },
     {
       name: t.tapReviewProductStand,
       image: "/assets/nfc/nfc-stand-exhibidor.avif",
       thumbnail: "/assets/nfc/nfc-stand-exhibidor-128w.webp",
       alt: t.tapReviewProductStandAlt,
-      fallback: "/assets/Tarjeta_NFC_negra_MontesTAP.webp",
+      fallback: "/assets/nfc/tarjeta_nfc.webp",
     },
     {
       name: t.tapReviewProductExhibitorWhite,
       image: "/assets/nfc/nfc-exhibidor-blanco-2.avif",
       thumbnail: "/assets/nfc/nfc-exhibidor-blanco-2-128w.webp",
       alt: t.tapReviewProductExhibitorWhiteAlt,
-      fallback: "/assets/Tarjeta_NFC_negra_MontesTAP.webp",
+      fallback: "/assets/nfc/tarjeta_nfc.webp",
     },
   ];
 
@@ -52,8 +52,8 @@ const ProductGallery: React.FC = () => {
               <img
                 src={product.fallback}
                 alt={product.alt}
-                width="640"
-                height="640"
+                width="625"
+                height="436"
                 className="w-3/4 h-3/4 object-contain drop-shadow-2xl"
               />
             ) : (

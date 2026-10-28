@@ -12,9 +12,9 @@ const HowItWorks: React.FC = () => {
       icon: <Smartphone className="w-8 h-8" />,
       title: t.tapReviewHowStep1Title,
       desc: t.tapReviewHowStep1Desc,
-      image: "/assets/nfc/put_exibitor.webp",
-      width: 3200,
-      height: 3200,
+      image: "/assets/nfc/tarjeta_nfc.webp",
+      width: 625,
+      height: 436,
     },
     {
       icon: <Star className="w-8 h-8" />,
