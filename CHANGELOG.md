@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **Home hero and products**: h1 accent now reads "para tiendas y restaurantes" ("for shops and restaurants"), and the NFC cards moved from "more services" to a full-width flagship card with product image next to Carta Digital and TPV.
 - **Contact phone card** now links to `tel:+<whatsapp_phone>` (opens the dialer) instead of `wa.me`, so the click fires `contact_phone`, which never fired before.
 - **`trackEvent` honours cookie consent**: no GA4 event is sent unless `sc_consent_v1` grants analytics (previously Consent Mode could still send cookieless pings for events).
 
