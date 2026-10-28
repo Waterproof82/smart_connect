@@ -1,12 +1,19 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Check, MessageSquare, Monitor, Smartphone, Utensils } from "lucide-react";
+import {
+  ArrowRight,
+  Check,
+  MessageSquare,
+  Monitor,
+  Smartphone,
+  Utensils,
+} from "lucide-react";
 import { useLanguage } from "@shared/context/LanguageContext";
 
 /**
- * Home hub: the two flagship products (Carta Digital, TPV) as large cards
+ * Home hub: the three flagship products (Carta Digital, TPV, NFC cards) as large cards
  * with a real product image (indexable `<img>` + descriptive alt), then the
- * secondary services (chatbot, NFC cards). Every card links to its own
+ * secondary services (chatbot). Every card links to its own
  * indexable page with a keyword anchor — home carries no duplicated product
  * content.
  */
@@ -36,6 +43,7 @@ const HomeSolutionsSection: React.FC = () => {
     badge?: string;
     highlights?: string[];
     image?: CardImage;
+    wide?: boolean;
   }> = [
     {
       to: "/carta-digital",
@@ -79,6 +87,23 @@ const HomeSolutionsSection: React.FC = () => {
         alt: t.tpvCobroFigureAlt,
       },
     },
+    {
+      to: "/tarjetas-nfc",
+      icon: Smartphone,
+      eyebrow: t.nfcCardEyebrow,
+      title: t.nfcCardTitle,
+      desc: t.nfcCardDesc,
+      cta: t.nfcCardCta,
+      wide: true,
+      image: {
+        src: "/assets/Tarjeta_NFC_negra_MontesTAP.webp",
+        srcSet: "",
+        sizes: "(min-width: 1024px) 400px, calc(100vw - 2rem)",
+        width: 1024,
+        height: 1024,
+        alt: t.nfcCardImageAlt,
+      },
+    },
   ];
 
   const services = [
@@ -89,27 +114,14 @@ const HomeSolutionsSection: React.FC = () => {
       desc: t.iaTeaserDesc,
       cta: t.iaTeaserCta,
     },
-    {
-      to: "/tarjetas-nfc",
-      icon: Smartphone,
-      title: t.nfcCardTitle,
-      desc: t.nfcCardDesc,
-      cta: t.nfcCardCta,
-    },
   ];
 
   return (
     <>
-      <section
-        aria-labelledby="productos-title"
-        className="ds-section"
-      >
+      <section aria-labelledby="productos-title" className="ds-section">
         <div className="ds-container">
           <div className="max-w-2xl mb-12">
-            <h2
-              id="productos-title"
-              className="ds-h2 mb-4"
-            >
+            <h2 id="productos-title" className="ds-h2 mb-4">
               {t.homeStarsTitle}
             </h2>
             <p className="text-muted text-lg leading-relaxed">
@@ -117,70 +129,101 @@ const HomeSolutionsSection: React.FC = () => {
             </p>
           </div>
           <ul className="grid grid-cols-1 lg:grid-cols-3 gap-6 list-none">
-            {flagships.map(({ to, icon: Icon, eyebrow, title, desc, cta, badge, highlights, image }) => (
-              <li key={to} className={highlights ? "lg:col-span-2" : undefined}>
-                <Link
-                  to={to}
-                  className={`group flex flex-col h-full bg-[var(--color-surface)] border rounded-xl p-8 md:p-10 hover:border-[var(--color-primary)] hover:-translate-y-1 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] ${highlights ? "border-[var(--color-accent-border)]" : "border-[var(--color-border)]"}`}
+            {flagships.map(
+              ({
+                to,
+                icon: Icon,
+                eyebrow,
+                title,
+                desc,
+                cta,
+                badge,
+                highlights,
+                image,
+                wide,
+              }) => (
+                <li
+                  key={to}
+                  className={
+                    highlights
+                      ? "lg:col-span-2"
+                      : wide
+                        ? "lg:col-span-3"
+                        : undefined
+                  }
                 >
-                  {image && (
-                    <div className="mb-6 overflow-hidden rounded-lg border border-[var(--color-border)] aspect-[16/9]">
-                      <img
-                        src={image.src}
-                        srcSet={image.srcSet}
-                        sizes={image.sizes}
-                        alt={image.alt}
-                        width={image.width}
-                        height={image.height}
-                        loading="lazy"
-                        decoding="async"
-                        className="w-full h-full object-cover object-top"
-                      />
-                    </div>
-                  )}
-                  <div className="flex flex-wrap items-center gap-3 mb-6">
-                    <span className="w-11 h-11 rounded-xl flex items-center justify-center bg-[var(--color-accent-subtle)] text-[var(--color-primary)]">
-                      <Icon className="w-5 h-5" aria-hidden="true" />
-                    </span>
-                    <span className="ds-kicker">
-                      {eyebrow}
-                    </span>
-                    {badge && (
-                      <span className="ml-auto px-3 py-1 rounded-full bg-[var(--color-accent-subtle)] border border-[var(--color-accent-border)] text-sm font-semibold text-[var(--color-primary)]">
-                        {badge}
-                      </span>
+                  <Link
+                    to={to}
+                    className={`group flex ${wide ? "flex-col lg:flex-row lg:items-center lg:gap-10" : "flex-col"} h-full bg-[var(--color-surface)] border rounded-xl p-8 md:p-10 hover:border-[var(--color-primary)] hover:-translate-y-1 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] ${highlights ? "border-[var(--color-accent-border)]" : "border-[var(--color-border)]"}`}
+                  >
+                    {image && (
+                      <div
+                        className={
+                          wide
+                            ? "mb-6 lg:mb-0 lg:w-2/5 lg:shrink-0 overflow-hidden rounded-lg border border-[var(--color-border)] aspect-[16/9] lg:aspect-square"
+                            : "mb-6 overflow-hidden rounded-lg border border-[var(--color-border)] aspect-[16/9]"
+                        }
+                      >
+                        <img
+                          src={image.src}
+                          srcSet={image.srcSet || undefined}
+                          sizes={image.sizes}
+                          alt={image.alt}
+                          width={image.width}
+                          height={image.height}
+                          loading="lazy"
+                          decoding="async"
+                          className={`w-full h-full ${wide ? "object-cover object-center" : "object-cover object-top"}`}
+                        />
+                      </div>
                     )}
-                  </div>
-                  <h3 className="text-2xl md:text-3xl font-black font-display leading-tight mb-4">
-                    {title}
-                  </h3>
-                  <p className="text-muted leading-relaxed mb-8">{desc}</p>
-                  {highlights && (
-                    <ul
-                      aria-label={t.homeCartaHighlightsLabel}
-                      className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 list-none mb-8"
-                    >
-                      {highlights.map((item) => (
-                        <li key={item} className="flex items-start gap-2 text-sm md:text-base">
-                          <Check
-                            className="w-5 h-5 shrink-0 mt-0.5 text-[var(--color-primary)]"
-                            aria-hidden="true"
-                          />
-                          <span>{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                  <span className="mt-auto inline-flex items-center gap-2 font-bold text-[var(--color-primary)]">
-                    {cta}
-                    <ArrowRight
-                      className="w-4 h-4 group-hover:translate-x-1 transition-transform"
-                      aria-hidden="true"
-                    />
-                  </span>
-                </Link>
-              </li>
-            ))}
+                    <div className="flex flex-col flex-1 min-w-0 w-full">
+                      <div className="flex flex-wrap items-center gap-3 mb-6">
+                        <span className="w-11 h-11 rounded-xl flex items-center justify-center bg-[var(--color-accent-subtle)] text-[var(--color-primary)]">
+                          <Icon className="w-5 h-5" aria-hidden="true" />
+                        </span>
+                        <span className="ds-kicker">{eyebrow}</span>
+                        {badge && (
+                          <span className="ml-auto px-3 py-1 rounded-full bg-[var(--color-accent-subtle)] border border-[var(--color-accent-border)] text-sm font-semibold text-[var(--color-primary)]">
+                            {badge}
+                          </span>
+                        )}
+                      </div>
+                      <h3 className="text-2xl md:text-3xl font-black font-display leading-tight mb-4">
+                        {title}
+                      </h3>
+                      <p className="text-muted leading-relaxed mb-8">{desc}</p>
+                      {highlights && (
+                        <ul
+                          aria-label={t.homeCartaHighlightsLabel}
+                          className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 list-none mb-8"
+                        >
+                          {highlights.map((item) => (
+                            <li
+                              key={item}
+                              className="flex items-start gap-2 text-sm md:text-base"
+                            >
+                              <Check
+                                className="w-5 h-5 shrink-0 mt-0.5 text-[var(--color-primary)]"
+                                aria-hidden="true"
+                              />
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                      <span className="mt-auto inline-flex items-center gap-2 font-bold text-[var(--color-primary)]">
+                        {cta}
+                        <ArrowRight
+                          className="w-4 h-4 group-hover:translate-x-1 transition-transform"
+                          aria-hidden="true"
+                        />
+                      </span>
+                    </div>
+                  </Link>
+                </li>
+              ),
+            )}
           </ul>
         </div>
       </section>
@@ -190,10 +233,7 @@ const HomeSolutionsSection: React.FC = () => {
         className="pb-[var(--section-y)]"
       >
         <div className="ds-container">
-          <h2
-            id="servicios-title"
-            className="ds-h2 mb-8"
-          >
+          <h2 id="servicios-title" className="ds-h2 mb-8">
             {t.homeMoreTitle}
           </h2>
           <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 list-none">
