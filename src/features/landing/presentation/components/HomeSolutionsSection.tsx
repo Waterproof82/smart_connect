@@ -141,88 +141,89 @@ const HomeSolutionsSection: React.FC = () => {
                 highlights,
                 image,
                 wide,
-              }) => (
-                <li
-                  key={to}
-                  className={
-                    highlights
-                      ? "lg:col-span-2"
-                      : wide
-                        ? "lg:col-span-3"
-                        : undefined
-                  }
-                >
-                  <Link
-                    to={to}
-                    className={`group flex ${wide ? "flex-col lg:flex-row lg:items-center lg:gap-10" : "flex-col"} h-full bg-[var(--color-surface)] border rounded-xl p-8 md:p-10 hover:border-[var(--color-primary)] hover:-translate-y-1 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] ${highlights ? "border-[var(--color-accent-border)]" : "border-[var(--color-border)]"}`}
-                  >
-                    {image && (
-                      <div
-                        className={
-                          wide
-                            ? "mb-6 lg:mb-0 lg:w-2/5 lg:shrink-0 overflow-hidden rounded-lg border border-[var(--color-border)] aspect-[16/9] lg:aspect-square"
-                            : "mb-6 overflow-hidden rounded-lg border border-[var(--color-border)] aspect-[16/9]"
-                        }
-                      >
-                        <img
-                          src={image.src}
-                          srcSet={image.srcSet || undefined}
-                          sizes={image.sizes}
-                          alt={image.alt}
-                          width={image.width}
-                          height={image.height}
-                          loading="lazy"
-                          decoding="async"
-                          className={`w-full h-full ${wide ? "object-cover object-center" : "object-cover object-top"}`}
-                        />
-                      </div>
-                    )}
-                    <div className="flex flex-col flex-1 min-w-0 w-full">
-                      <div className="flex flex-wrap items-center gap-3 mb-6">
-                        <span className="w-11 h-11 rounded-xl flex items-center justify-center bg-[var(--color-accent-subtle)] text-[var(--color-primary)]">
-                          <Icon className="w-5 h-5" aria-hidden="true" />
-                        </span>
-                        <span className="ds-kicker">{eyebrow}</span>
-                        {badge && (
-                          <span className="ml-auto px-3 py-1 rounded-full bg-[var(--color-accent-subtle)] border border-[var(--color-accent-border)] text-sm font-semibold text-[var(--color-primary)]">
-                            {badge}
-                          </span>
-                        )}
-                      </div>
-                      <h3 className="text-2xl md:text-3xl font-black font-display leading-tight mb-4">
-                        {title}
-                      </h3>
-                      <p className="text-muted leading-relaxed mb-8">{desc}</p>
-                      {highlights && (
-                        <ul
-                          aria-label={t.homeCartaHighlightsLabel}
-                          className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 list-none mb-8"
+              }) => {
+                let cardClassName: string | undefined;
+
+                if (highlights) {
+                  cardClassName = "lg:col-span-2";
+                } else if (wide) {
+                  cardClassName = "lg:col-span-3";
+                }
+
+                return (
+                  <li key={to} className={cardClassName}>
+                    <Link
+                      to={to}
+                      className={`group flex ${wide ? "flex-col lg:flex-row lg:items-center lg:gap-10" : "flex-col"} h-full bg-[var(--color-surface)] border rounded-xl p-8 md:p-10 hover:border-[var(--color-primary)] hover:-translate-y-1 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] ${highlights ? "border-[var(--color-accent-border)]" : "border-[var(--color-border)]"}`}
+                    >
+                      {image && (
+                        <div
+                          className={
+                            wide
+                              ? "mb-6 lg:mb-0 lg:w-2/5 lg:shrink-0 overflow-hidden rounded-lg border border-[var(--color-border)] aspect-[16/9] lg:aspect-square"
+                              : "mb-6 overflow-hidden rounded-lg border border-[var(--color-border)] aspect-[16/9]"
+                          }
                         >
-                          {highlights.map((item) => (
-                            <li
-                              key={item}
-                              className="flex items-start gap-2 text-sm md:text-base"
-                            >
-                              <Check
-                                className="w-5 h-5 shrink-0 mt-0.5 text-[var(--color-primary)]"
-                                aria-hidden="true"
-                              />
-                              <span>{item}</span>
-                            </li>
-                          ))}
-                        </ul>
+                          <img
+                            src={image.src}
+                            srcSet={image.srcSet || undefined}
+                            sizes={image.sizes}
+                            alt={image.alt}
+                            width={image.width}
+                            height={image.height}
+                            loading="lazy"
+                            decoding="async"
+                            className={`w-full h-full ${wide ? "object-cover object-center" : "object-cover object-top"}`}
+                          />
+                        </div>
                       )}
-                      <span className="mt-auto inline-flex items-center gap-2 font-bold text-[var(--color-primary)]">
-                        {cta}
-                        <ArrowRight
-                          className="w-4 h-4 group-hover:translate-x-1 transition-transform"
-                          aria-hidden="true"
-                        />
-                      </span>
-                    </div>
-                  </Link>
-                </li>
-              ),
+                      <div className="flex flex-col flex-1 min-w-0 w-full">
+                        <div className="flex flex-wrap items-center gap-3 mb-6">
+                          <span className="w-11 h-11 rounded-xl flex items-center justify-center bg-[var(--color-accent-subtle)] text-[var(--color-primary]">
+                            <Icon className="w-5 h-5" aria-hidden="true" />
+                          </span>
+                          <span className="ds-kicker">{eyebrow}</span>
+                          {badge && (
+                            <span className="ml-auto px-3 py-1 rounded-full bg-[var(--color-accent-subtle)] border border-[var(--color-accent-border)] text-sm font-semibold text-[var(--color-primary)]">
+                              {badge}
+                            </span>
+                          )}
+                        </div>
+                        <h3 className="text-2xl md:text-3xl font-black font-display leading-tight mb-4">
+                          {title}
+                        </h3>
+                        <p className="text-muted leading-relaxed mb-8">{desc}</p>
+                        {highlights && (
+                          <ul
+                            aria-label={t.homeCartaHighlightsLabel}
+                            className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 list-none mb-8"
+                          >
+                            {highlights.map((item) => (
+                              <li
+                                key={item}
+                                className="flex items-start gap-2 text-sm md:text-base"
+                              >
+                                <Check
+                                  className="w-5 h-5 shrink-0 mt-0.5 text-[var(--color-primary)]"
+                                  aria-hidden="true"
+                                />
+                                <span>{item}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                        <span className="mt-auto inline-flex items-center gap-2 font-bold text-[var(--color-primary)]">
+                          {cta}
+                          <ArrowRight
+                            className="w-4 h-4 group-hover:translate-x-1 transition-transform"
+                            aria-hidden="true"
+                          />
+                        </span>
+                      </div>
+                    </Link>
+                  </li>
+                );
+              },
             )}
           </ul>
         </div>
