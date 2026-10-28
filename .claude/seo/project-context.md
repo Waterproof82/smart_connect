@@ -14,7 +14,7 @@
 - **SSR/prerender propio:** `src/entry-server.tsx`, `src/entry-client.tsx`, `scripts/prerender.mjs`, rutas en `scripts/site-routes.json` → verificar paridad de árbol SSR/hidratación (errores de hydration = riesgo SEO).
 - i18n ES/EN: `src/shared/context/LanguageContext.tsx`. Cero strings hardcodeadas. Copy en español de España (sin voseo).
 - Metadata y JSON-LD: Helmet en cada página; schemas en `src/shared/presentation/components/SeoSchema.tsx`.
-- Hosting: Vercel (`vercel.json` con cabeceras, redirects y `Link`) ; dev: `vite.config.ts`. Cloudflare es SOLO DNS (nube gris, desde 2026-10-28): apex y `www` → CNAME `ad9255928cb40788.vercel-dns-017.com`. No reactivar el proxy (doble CDN, renovación HTTP-01 del certificado de Vercel frágil, firewall de Vercel ve IPs de CF).
+- Hosting: Vercel (`vercel.json` con cabeceras, redirects y `Link`); dev: `vite.config.ts`. Cloudflare es SOLO DNS (nube gris, desde 2026-10-28): apex y `www` → CNAME `ad9255928cb40788.vercel-dns-017.com`. No reactivar el proxy (doble CDN, renovación HTTP-01 del certificado de Vercel frágil, firewall de Vercel ve IPs de CF).
   - `www` → apex se configura en Vercel → Settings → Domains → Redirect → **308**. No duplicar en Cloudflare.
   - Si algún día se vuelve a activar el proxy: Cloudflare Email Obfuscation debe seguir **desactivada** (rompía el email para agentes sin JS, F-16).
 - Backend: Supabase (Edge Functions, pgvector), n8n, Gemini. `/admin`, `/panel`, `/login` → `_spa.html`, noindex.
