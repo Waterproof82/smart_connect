@@ -494,7 +494,7 @@ const translations: Record<Language, Translation> = {
     // tiempo ahorrado), platform breadth is supporting copy in the eyebrow.
     heroEyebrow: "Todo tu negocio en una pantalla",
     heroTitle: "TPV, carta digital y chatbot con IA",
-    heroTitleAccent: "para restaurantes",
+    heroTitleAccent: "para tiendas y restaurantes",
     heroTitleEnd: "de Tenerife y Canarias",
     heroServiciosTitle: "Soluciones de",
     heroServiciosTitleAccent: "IA y Automatización",
@@ -1083,7 +1083,7 @@ const translations: Record<Language, Translation> = {
     // saved), platform breadth is supporting copy in the eyebrow.
     heroEyebrow: "Your whole business, one screen",
     heroTitle: "POS, digital menu and AI chatbot",
-    heroTitleAccent: "for restaurants",
+    heroTitleAccent: "for shops and restaurants",
     heroTitleEnd: "in Tenerife and the Canary Islands",
     heroServiciosTitle: "AI and Automation",
     heroServiciosTitleAccent: "Solutions",

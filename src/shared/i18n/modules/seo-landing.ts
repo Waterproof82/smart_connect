@@ -10,6 +10,7 @@ export interface SeoLandingCopy {
   homeFaqQ7: string;
   homeFaqA7: string;
   homeCartaImageAlt: string;
+  nfcCardImageAlt: string;
   tpvCardEyebrow: string;
   tpvTactilTitle: string;
   tpvTactilDesc: string;
@@ -42,6 +43,8 @@ export const seoLandingCopy: { es: SeoLandingCopy; en: SeoLandingCopy } = {
     homeFaqA7:
       "No. Digitaliza Tenerife es una agencia privada con sede en Tacoronte (Tenerife) que ofrece TPV táctil, carta digital, tarjetas NFC y chatbots con IA a negocios de Tenerife y Canarias. «Canarias Digitaliza» es un programa público distinto, del que no formamos parte. Si buscas digitalizar tu negocio en Canarias con un proveedor local, escríbenos por WhatsApp.",
     tpvCardEyebrow: "TPV táctil",
+    nfcCardImageAlt:
+      "Tarjeta NFC negra Tap to Review para que los clientes dejen su reseña en Google acercando el móvil",
     homeCartaImageAlt:
       "Ejemplo de carta digital de un restaurante en pantalla: categorías, platos con foto, precio y botón para añadir al carrito",
     tpvTactilTitle: "TPV táctil en Tenerife: cobra y comanda con un par de toques",
@@ -84,6 +87,8 @@ export const seoLandingCopy: { es: SeoLandingCopy; en: SeoLandingCopy } = {
     homeFaqA7:
       "No. Digitaliza Tenerife is a private agency based in Tacoronte (Tenerife) that offers touch-screen POS, digital menus, NFC cards and AI chatbots to businesses in Tenerife and the Canary Islands. “Canarias Digitaliza” is a separate public programme that we are not part of. If you want to digitise your business in the Canary Islands with a local provider, message us on WhatsApp.",
     tpvCardEyebrow: "Touch-screen POS",
+    nfcCardImageAlt:
+      "Black Tap to Review NFC card so customers can leave a Google review by tapping their phone",
     homeCartaImageAlt:
       "Example of a restaurant's digital menu on screen: categories, dishes with photos, prices and an add-to-cart button",
     tpvTactilTitle: "Touch-screen POS in Tenerife: charge and order in a few taps",

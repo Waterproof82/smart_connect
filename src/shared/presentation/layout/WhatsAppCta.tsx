@@ -14,6 +14,8 @@ export interface WhatsAppCtaProps {
   size?: "md" | "sm";
   block?: boolean;
   className?: string;
+  /** Extra click handler (e.g. a CTA analytics event). */
+  onClick?: () => void;
 }
 
 /**
@@ -29,6 +31,7 @@ export const WhatsAppCta: React.FC<WhatsAppCtaProps> = ({
   size = "md",
   block = false,
   className = "",
+  onClick,
 }) => {
   const { t } = useLanguage();
   const phone = useWhatsappPhone();
@@ -49,6 +52,7 @@ export const WhatsAppCta: React.FC<WhatsAppCtaProps> = ({
   return (
     <a
       href={href}
+      onClick={onClick}
       className={classes}
       target={external ? "_blank" : undefined}
       rel={external ? "noopener noreferrer" : undefined}

@@ -14,7 +14,7 @@ import {
 import { getAppSettings, AppSettings } from "@shared/services/settingsService";
 import { formatAddressLine } from "@shared/config/organization";
 import { useWhatsappPhone } from "@shared/hooks";
-import { buildWhatsappLink } from "@shared/utils/whatsappLink";
+import { buildTelHref } from "@shared/utils/telLink";
 import { createLandingContainer } from "../LandingContainer";
 import { LeadEntity, LeadSubmissionMeta } from "../../domain/entities";
 import { sanitizeInput, isValidEmail } from "@shared/utils/sanitizer";
@@ -329,10 +329,6 @@ const Contact: React.FC = () => {
 
   const { ref: nameRegRef, ...nameRegProps } = register("name");
 
-  const whatsappLink = whatsappPhone
-    ? buildWhatsappLink(whatsappPhone, { message: t.waMsgDefault })
-    : null;
-
   return (
     <div className="relative ds-section overflow-hidden">
       <DotField
@@ -373,9 +369,8 @@ const Contact: React.FC = () => {
                 value: whatsappPhone,
                 desc: t.contactWhatsappDesc,
                 color: "text-[var(--color-icon-emerald)]",
-                // external only when buildWhatsappLink produced a wa.me URL
-                href: whatsappLink?.href,
-                external: whatsappLink?.external ?? false,
+                // Phone number: opens the dialer (tracked as contact_phone)
+                href: buildTelHref(whatsappPhone),
               },
               {
                 id: "location",

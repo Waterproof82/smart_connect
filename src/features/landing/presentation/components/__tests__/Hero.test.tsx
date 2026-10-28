@@ -51,20 +51,20 @@ describe("Hero", () => {
       localStorage.removeItem("language");
     });
 
-    it("es: reads 'TPV, carta digital y chatbot con IA' / 'para restaurantes' / 'de Tenerife y Canarias'", () => {
+    it("es: reads 'TPV, carta digital y chatbot con IA' / 'para tiendas y restaurantes' / 'de Tenerife y Canarias'", () => {
       renderWithLanguage();
       const h1 = screen.getByRole("heading", { level: 1 });
       expect(h1).toHaveTextContent(
-        "TPV, carta digital y chatbot con IA para restaurantes de Tenerife y Canarias",
+        "TPV, carta digital y chatbot con IA para tiendas y restaurantes de Tenerife y Canarias",
       );
     });
 
-    it("en: reads 'POS, digital menu and AI chatbot' / 'for restaurants' / 'in Tenerife and the Canary Islands'", () => {
+    it("en: reads 'POS, digital menu and AI chatbot' / 'for shops and restaurants' / 'in Tenerife and the Canary Islands'", () => {
       localStorage.setItem("language", "en");
       renderWithLanguage();
       const h1 = screen.getByRole("heading", { level: 1 });
       expect(h1).toHaveTextContent(
-        "POS, digital menu and AI chatbot for restaurants in Tenerife and the Canary Islands",
+        "POS, digital menu and AI chatbot for shops and restaurants in Tenerife and the Canary Islands",
       );
     });
 
@@ -92,7 +92,7 @@ describe("Hero", () => {
       const h1 = screen.getByRole("heading", { level: 1 });
       const spans = h1.querySelectorAll("span");
       expect(spans).toHaveLength(1);
-      expect(spans[0]).toHaveTextContent("para restaurantes");
+      expect(spans[0]).toHaveTextContent("para tiendas y restaurantes");
       expect(
         h1.textContent?.startsWith("TPV, carta digital y chatbot con IA"),
       ).toBe(true);

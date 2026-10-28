@@ -165,7 +165,7 @@ export const pageCopy: { es: PageCopy; en: PageCopy } = {
     navbarTpvDesc: "13 módulos en un solo sistema",
     serviceIaChatbots: "Chatbots IA y automatización",
     serviceTpv: "TPV para restaurantes",
-    homeStarsTitle: "TPV, carta digital, chatbot y reseñas: lo que más usan los restaurantes",
+    homeStarsTitle: "TPV, carta digital, chatbot y reseñas: lo que más usan tiendas y restaurantes",
     homeStarsSubtitle:
       "Más margen en cada pedido, menos tiempo atendiendo consultas y más reseñas en Google, sin complicaciones.",
     nfcCardEyebrow: "Tarjetas NFC",
@@ -295,7 +295,7 @@ export const pageCopy: { es: PageCopy; en: PageCopy } = {
     navbarTpvDesc: "13 modules in one system",
     serviceIaChatbots: "AI chatbots and automation",
     serviceTpv: "Restaurant POS",
-    homeStarsTitle: "POS, digital menu, chatbot and reviews: what restaurants use most",
+    homeStarsTitle: "POS, digital menu, chatbot and reviews: what shops and restaurants use most",
     homeStarsSubtitle:
       "More margin on every order, less time answering enquiries and more Google reviews, without the hassle.",
     nfcCardEyebrow: "NFC cards",

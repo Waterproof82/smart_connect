@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Blog link in main navigation**: "Blog" now appears in the desktop navbar and the mobile menu drawer (previously only reachable from the footer).
+- **GA4 CTA events**: `cta_contact_click` (hero "Contactar" and header/mobile-menu "Contacto") and `cta_demo_click` (hero "Ver Demo"), via the new `trackCtaClick` in `analyticsEvents`. Parameters are only `page_path` and `cta_location` (`hero` | `header`).
+
+### Changed
+
+- **Home hero and products**: h1 accent now reads "para tiendas y restaurantes" ("for shops and restaurants"), and the NFC cards moved from "more services" to a full-width flagship card with product image next to Carta Digital and TPV.
+- **Contact phone card** now links to `tel:+<whatsapp_phone>` (opens the dialer) instead of `wa.me`, so the click fires `contact_phone`, which never fired before.
+- **`trackEvent` honours cookie consent**: no GA4 event is sent unless `sc_consent_v1` grants analytics (previously Consent Mode could still send cookieless pings for events).
+
 ### Changed
 
 - **Home H1 aligned with the `<title>`**: the H1 now reads "TPV, carta digital y chatbot con IA para restaurantes de Tenerife y Canarias" (ES and EN) and the subtitle covers the four services. The hub puts Carta Digital and the TPV as the two flagship cards, with the chatbot and NFC cards as secondary services.

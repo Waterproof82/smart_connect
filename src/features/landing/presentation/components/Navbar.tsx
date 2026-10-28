@@ -5,6 +5,7 @@ import { LanguageSelector } from "@shared/components/LanguageSelector";
 import { useLanguage } from "@shared/context/LanguageContext";
 import { WhatsAppCta } from "@shared/presentation/layout";
 
+import { trackCtaClick } from "@shared/utils/analyticsEvents";
 import { SOLUTIONS } from "@shared/config/solutions";
 import { mapSolutions, SolutionItem } from "@shared/utils/solutionHelpers";
 
@@ -296,10 +297,19 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
               </div>
             </div>
           </div>
+          <Link
+            to="/blog"
+            className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline focus-visible:outline-none transition-colors min-h-[48px] flex items-center"
+          >
+            {t.footerBlog}
+          </Link>
           <a
             href="/#contacto"
             className="hover:text-[var(--color-text)] focus-visible:text-[var(--color-text)] focus-visible:underline focus-visible:outline-none transition-colors min-h-[48px] flex items-center"
-            onClick={(e) => handleNavClick(e, "#contacto")}
+            onClick={(e) => {
+              trackCtaClick("cta_contact_click", "header");
+              handleNavClick(e, "#contacto");
+            }}
           >
             {t.navContact}
           </a>
@@ -418,10 +428,20 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
                   );
                 })}
                 <hr className="border-[var(--color-border)] my-2" />
+                <Link
+                  to="/blog"
+                  className="text-muted p-3 min-h-[48px] flex items-center hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-xl transition-colors"
+                  onClick={closeMobileMenu}
+                >
+                  {t.footerBlog}
+                </Link>
                 <a
                   href="/#contacto"
                   className="text-muted p-3 min-h-[48px] flex items-center hover:bg-[var(--color-surface)] focus:bg-[var(--color-surface)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-xl transition-colors"
-                  onClick={(e) => handleNavClick(e, "#contacto")}
+                  onClick={(e) => {
+                    trackCtaClick("cta_contact_click", "header");
+                    handleNavClick(e, "#contacto");
+                  }}
                 >
                   {t.navContact}
                 </a>

@@ -1,14 +1,33 @@
 import {
   classifyContactHref,
   trackEvent,
+  trackCtaClick,
   registerContactClickTracking,
 } from "@shared/utils/analyticsEvents";
+import { CONSENT_KEY } from "@shared/utils/consentStorage";
 
 type GtagWindow = typeof globalThis & {
   gtag?: (...args: unknown[]) => void;
   __scAnalyticsScope?: boolean;
 };
-const win = globalThis as GtagWindow;
+const win = globalThis as GtagWindow & { localStorage?: Storage };
+
+function setConsent(analytics: boolean | null) {
+  const store = new Map<string, string>();
+  if (analytics !== null) {
+    store.set(
+      CONSENT_KEY,
+      JSON.stringify({
+        version: 1,
+        timestamp: Date.now(),
+        categories: { necessary: true, analytics },
+      }),
+    );
+  }
+  win.localStorage = {
+    getItem: (k: string) => store.get(k) ?? null,
+  } as unknown as Storage;
+}
 
 describe("classifyContactHref", () => {
   it.each([
@@ -29,9 +48,32 @@ describe("classifyContactHref", () => {
 });
 
 describe("trackEvent", () => {
+  beforeEach(() => setConsent(true));
   afterEach(() => {
     delete win.gtag;
     delete win.__scAnalyticsScope;
+    delete win.localStorage;
+  });
+
+  it.each([
+    ["denied", false],
+    ["never answered", null],
+  ])("sends nothing when analytics consent is %s", (_label, consent) => {
+    const gtag = jest.fn();
+    win.gtag = gtag;
+    win.__scAnalyticsScope = true;
+    setConsent(consent);
+    trackEvent("generate_lead");
+    expect(gtag).not.toHaveBeenCalled();
+  });
+
+  it("sends nothing when storage is unavailable", () => {
+    const gtag = jest.fn();
+    win.gtag = gtag;
+    win.__scAnalyticsScope = true;
+    delete win.localStorage;
+    expect(() => trackEvent("generate_lead")).not.toThrow();
+    expect(gtag).not.toHaveBeenCalled();
   });
 
   it("sends a GA4 event when gtag exists and the route is in analytics scope", () => {
@@ -56,10 +98,45 @@ describe("trackEvent", () => {
   });
 });
 
-describe("registerContactClickTracking", () => {
+describe("trackCtaClick", () => {
+  beforeEach(() => setConsent(true));
   afterEach(() => {
     delete win.gtag;
     delete win.__scAnalyticsScope;
+    delete win.localStorage;
+  });
+
+  it("sends the CTA event with only page_path and cta_location", () => {
+    const gtag = jest.fn();
+    win.gtag = gtag;
+    win.__scAnalyticsScope = true;
+    trackCtaClick("cta_demo_click", "hero", () => "/");
+    expect(gtag).toHaveBeenCalledTimes(1);
+    expect(gtag).toHaveBeenCalledWith("event", "cta_demo_click", {
+      page_path: "/",
+      cta_location: "hero",
+    });
+  });
+
+  it("respects consent and analytics scope", () => {
+    const gtag = jest.fn();
+    win.gtag = gtag;
+    win.__scAnalyticsScope = true;
+    setConsent(false);
+    trackCtaClick("cta_contact_click", "header", () => "/");
+    setConsent(true);
+    win.__scAnalyticsScope = false;
+    trackCtaClick("cta_contact_click", "header", () => "/admin");
+    expect(gtag).not.toHaveBeenCalled();
+  });
+});
+
+describe("registerContactClickTracking", () => {
+  beforeEach(() => setConsent(true));
+  afterEach(() => {
+    delete win.gtag;
+    delete win.__scAnalyticsScope;
+    delete win.localStorage;
   });
 
   function fakeDocument() {
