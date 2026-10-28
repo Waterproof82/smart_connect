@@ -18,6 +18,10 @@ CI on `main` had been red since PR #165 (runs #414–#416). PR #165 put `Tarjeta
 - Re-converted `tarjeta_nfc_google.png` after the owner replaced it (428x404, now 21 KB).
 - Deleted the 4 supplier SKU-named gallery originals (`S…jpg_640x640q75.jpg_.avif`), after checking with `cmp` that each one is byte-identical to its descriptive copy. `scripts/optimize-images.mjs` now lists `NFC_GALLERY_MAINS` instead of using `NFC_RENAMES`/`renameNfcGalleryAssets`. A guard was added to `nfcImageRights.test.ts`; it was RED first.
 - `HowItWorks.tsx` step 1: replaced `put_exibitor.webp` (3200x3200) with `tarjeta_nfc.webp` (625x436) and deleted the old file. A guard assertion was added first and was RED before the change.
+- Image rights metadata: exiftool 13.60 wrote the XMP fields `dc:Creator`, `dc:Rights` (`© 2026 Digitaliza Tenerife`), `photoshop:Credit`, `xmpRights:Marked/WebStatement`, `plus:Licensor*` and `iptcCore:CreatorWorkURL` into the 12 own NFC images. A SHA-1 of the raw pixels is identical before and after, so nothing was re-encoded. Gotcha: on Windows, a `©` passed as a command-line argument is stored as `?`, so the value has to go through a UTF-8 `-@` argfile. The guard is `tests/unit/seo/imageRights.metadata.test.ts`, which was RED first.
+- Added `ImageRightsSchema` (in `SeoSchema.tsx`) with `ImageObject` nodes for creator, copyrightHolder (`@id` organisation), creditText, copyrightNotice and license. It is rendered on `TapReviewPage`.
+- Caution: `sharp` drops metadata by default. If `optimize-images.mjs` regenerates the 128w thumbnails, the XMP has to be written again (the guard test will fail until it is).
+- Unused-image sweep of `public/`: no orphan images found. Every `-320w`/`-480w`/`-720w`/`-1280w` variant is referenced through template strings (`TpvModuleFigure.tsx:38`, `CartaDigitalDemoSection.tsx:134`).
 
 ## Verification
 

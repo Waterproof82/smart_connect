@@ -277,6 +277,39 @@ export const ServiceSchema: React.FC<ServiceSchemaProps> = ({
   );
 };
 
+// ─── Image rights Schema ───────────────────────────────────────
+// Owner-verified photos (F-07) declared as ImageObject so Google Images can
+// show creator/licence ("Licensable"). Mirrors the XMP written into each file.
+const IMAGE_LICENSE_URL = `${ORG_URL}/legal/aviso`;
+const IMAGE_COPYRIGHT = `© 2026 ${ORGANIZATION.name}`;
+
+interface ImageRightsSchemaProps {
+  /** Site-relative image paths, e.g. "/assets/nfc/review.webp". */
+  images: string[];
+}
+
+export const ImageRightsSchema: React.FC<ImageRightsSchemaProps> = ({ images }) => {
+  const schema = {
+    "@context": "https://schema.org",
+    "@graph": images.map((src) => ({
+      "@type": "ImageObject",
+      contentUrl: `${ORG_URL}${src}`,
+      creator: { "@id": ORGANIZATION_ID },
+      copyrightHolder: { "@id": ORGANIZATION_ID },
+      creditText: ORGANIZATION.name,
+      copyrightNotice: IMAGE_COPYRIGHT,
+      license: IMAGE_LICENSE_URL,
+    })),
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+};
+
 // ─── BreadcrumbList Schema ─────────────────────────────────────
 interface BreadcrumbItem {
   name: string;

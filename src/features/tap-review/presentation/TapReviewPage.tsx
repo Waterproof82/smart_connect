@@ -8,6 +8,7 @@ import {
   ServiceSchema,
   SeoFaqSchema,
   BreadcrumbListSchema,
+  ImageRightsSchema,
 } from "@shared/presentation/components/SeoSchema";
 import { useNfcFaqGroup } from "@features/landing/presentation/components/HomeFaqSection";
 import { SOLUTIONS } from "@shared/config/solutions";
@@ -79,6 +80,17 @@ const TapReviewPage: React.FC = () => {
         breadcrumbs={[
           { name: "Inicio", url: `${ORG_URL}/` },
           { name: "Tarjetas NFC", url: PAGE_URL },
+        ]}
+      />
+      <ImageRightsSchema
+        images={[
+          "/assets/nfc/nfc-exhibidor-blanco-1.avif",
+          "/assets/nfc/nfc-exhibidor-negro.avif",
+          "/assets/nfc/nfc-stand-exhibidor.avif",
+          "/assets/nfc/nfc-exhibidor-blanco-2.avif",
+          "/assets/nfc/tarjeta_nfc.webp",
+          "/assets/nfc/place_device.jpg",
+          "/assets/nfc/review.webp",
         ]}
       />
       <SeoFaqSchema

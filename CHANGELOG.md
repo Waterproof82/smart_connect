@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Blog link in main navigation**: "Blog" now appears in the desktop navbar and the mobile menu drawer (previously only reachable from the footer).
 - **GA4 CTA events**: `cta_contact_click` (hero "Contactar" and header/mobile-menu "Contacto") and `cta_demo_click` (hero "Ver Demo"), via the new `trackCtaClick` in `analyticsEvents`. Parameters are only `page_path` and `cta_location` (`hero` | `header`).
 
+- **Image rights metadata for NFC photos**: the 12 owner-verified NFC images now carry XMP rights fields (creator, credit, `© 2026 Digitaliza Tenerife`, licence URL `/legal/aviso`). The fields were written with exiftool, so the pixels are byte-identical. The NFC page also declares those photos as `ImageObject` (`creator`, `copyrightHolder`, `creditText`, `copyrightNotice`, `license`) through the new `ImageRightsSchema`, which makes them eligible for Google Images' "Licensable" badge.
+
 ### Changed
 
 - **Home hero and products**: h1 accent now reads "para tiendas y restaurantes" ("for shops and restaurants"), and the NFC cards moved from "more services" to a full-width flagship card with product image next to Carta Digital and TPV.
