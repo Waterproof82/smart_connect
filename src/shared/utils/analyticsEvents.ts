@@ -1,9 +1,12 @@
+import { readConsent } from "./consentStorage";
+
 /**
- * GA4 conversion events (contact intent and leads).
+ * GA4 conversion events (contact intent, leads and CTA clicks).
  *
- * Events go through the gtag() loaded in index.html, which already applies
- * Consent Mode v2 (analytics_storage denied until the visitor accepts), and
- * only on public routes (`window.__scAnalyticsScope`, see analyticsScope.ts).
+ * Events go through the gtag() loaded in index.html, only on public routes
+ * (`window.__scAnalyticsScope`, see analyticsScope.ts) and only while the
+ * stored consent (`sc_consent_v1`) grants analytics: Consent Mode would
+ * otherwise still send cookieless pings while analytics_storage is denied.
  * Never send personal data: no phone numbers, emails or form contents.
  */
 export type ContactEventName =
@@ -23,13 +26,35 @@ export function classifyContactHref(href: string): ContactEventName | null {
   return null;
 }
 
+export type CtaEventName = "cta_contact_click" | "cta_demo_click";
+export type CtaLocation = "hero" | "header" | "footer";
+
+function hasAnalyticsConsent(): boolean {
+  try {
+    return readConsent(globalThis.localStorage)?.categories.analytics === true;
+  } catch {
+    // No storage (SSR, blocked): stay denied.
+    return false;
+  }
+}
+
 export function trackEvent(
   name: string,
   params: Record<string, string> = {},
 ): void {
   const win = globalThis as GtagWindow;
   if (!win.__scAnalyticsScope || typeof win.gtag !== "function") return;
+  if (!hasAnalyticsConsent()) return;
   win.gtag("event", name, params);
+}
+
+/** One CTA click: page_path + cta_location only, nothing personal. */
+export function trackCtaClick(
+  name: CtaEventName,
+  ctaLocation: CtaLocation,
+  getPath: () => string = () => globalThis.location.pathname,
+): void {
+  trackEvent(name, { page_path: getPath(), cta_location: ctaLocation });
 }
 
 /**
