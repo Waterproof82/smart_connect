@@ -18,6 +18,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Contact phone card** now links to `tel:+<whatsapp_phone>` (opens the dialer) instead of `wa.me`, so the click fires `contact_phone`, which never fired before.
 - **`trackEvent` honours cookie consent**: no GA4 event is sent unless `sc_consent_v1` grants analytics (previously Consent Mode could still send cookieless pings for events).
 
+### Removed
+
+- **NFC supplier photo (no usage rights, F-07)**: `Tarjeta_NFC_negra_MontesTAP.webp` is deleted. The home flagship card and the carta digital section now use the business's own Google-review card (`/assets/nfc/tarjeta_nfc_google.webp`), and the NFC page gallery fallback uses the own NFC card (`/assets/nfc/tarjeta_nfc.webp`). This fixes the red CI on `main` (the F-07 guard test).
+
 ### Changed
 
 - **Home H1 aligned with the `<title>`**: the H1 now reads "TPV, carta digital y chatbot con IA para restaurantes de Tenerife y Canarias" (ES and EN) and the subtitle covers the four services. The hub puts Carta Digital and the TPV as the two flagship cards, with the chatbot and NFC cards as secondary services.

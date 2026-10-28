@@ -1,0 +1,25 @@
+# 2026-10-28 — NFC supplier photo removal (F-07)
+
+**Timestamp:** 2026-10-28T18:00:00Z
+
+## Context
+
+CI on `main` had been red since PR #165 (runs #414–#416). PR #165 put `Tarjeta_NFC_negra_MontesTAP.webp` on the home flagship NFC card, and the F-07 guard in `tests/unit/seo/keywordAlignment.gsc.test.ts:42` failed. The owner confirmed that the business has no permission to use the MontesTAP supplier photo.
+
+## Actions
+
+- Added the guard test `tests/unit/seo/nfcImageRights.test.ts` first (RED: 5/5 failing). It checks that nothing in `src/` references MontesTAP, that the file is not in `public/`, and which own images each surface uses.
+- Converted the owner-supplied PNGs to WebP at q80, keeping the original dimensions: `tarjeta_nfc_google` 428x404 (132 KB → 16 KB) and `tarjeta_nfc` 625x436 (158 KB → 22 KB).
+- `HomeSolutionsSection.tsx` uses `/assets/nfc/tarjeta_nfc_google.webp`, with width/height set to the real size.
+- `CartaDigitalSolucionSection.tsx` uses `/assets/nfc/tarjeta_nfc_google.webp` for its decorative background.
+- The fallback in `ProductGallery.tsx` (NFC page) uses `/assets/nfc/tarjeta_nfc.webp`, with width/height set to 625x436.
+- Deleted `public/assets/Tarjeta_NFC_negra_MontesTAP.webp`.
+
+## Verification
+
+- Jest: every unit suite passes. The only failure is `tests/e2e/chatbotFlow.test.ts`, which returns 503 from the live chatbot endpoint. That test is unrelated to this change and is skipped in CI.
+- `npm run lint` and `npm run type-check` are clean.
+
+## Follow-up
+
+- The gallery exhibitor photos (`/assets/nfc/nfc-*.avif`) came from files with supplier SKU-style names. Their usage rights still need to be confirmed.
