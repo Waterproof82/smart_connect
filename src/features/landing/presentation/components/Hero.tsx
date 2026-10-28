@@ -3,6 +3,7 @@ import { ArrowDown } from "lucide-react";
 import { useLanguage } from "@shared/context/LanguageContext";
 import { DotField } from "@shared/presentation/components/DotField";
 import { WhatsAppCta } from "@shared/presentation/layout";
+import { trackCtaClick } from "@shared/utils/analyticsEvents";
 
 /**
  * Home hero (design.md § Marquee Hero). The h1 is the LCP element: it is
@@ -26,8 +27,15 @@ export const Hero: React.FC = () => {
           <p className="ds-lede">{t.heroSubtitle}</p>
 
           <div className="ds-actions">
-            <WhatsAppCta label={t.heroButtonContact} />
-            <a href="/#soluciones" className="btn-ghost">
+            <WhatsAppCta
+              label={t.heroButtonContact}
+              onClick={() => trackCtaClick("cta_contact_click", "hero")}
+            />
+            <a
+              href="/#soluciones"
+              className="btn-ghost"
+              onClick={() => trackCtaClick("cta_demo_click", "hero")}
+            >
               {t.heroButtonDemo}
               <ArrowDown className="w-4 h-4" aria-hidden="true" />
             </a>
