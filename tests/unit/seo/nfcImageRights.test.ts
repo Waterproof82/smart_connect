@@ -43,6 +43,13 @@ describe("NFC images: no supplier photo without rights (F-07)", () => {
     );
   });
 
+  it("NFC page 'how it works' step 1 uses the own NFC card, not put_exibitor", () => {
+    const how = read("features/tap-review/presentation/components/HowItWorks.tsx");
+    expect(how).toMatch(/\/assets\/nfc\/tarjeta_nfc\.webp/);
+    expect(how).not.toMatch(/put_exibitor/);
+    expect(fs.existsSync(path.join(ROOT, "public/assets/nfc/put_exibitor.webp"))).toBe(false);
+  });
+
   it("no supplier SKU-style filenames remain in public/ or the image script", () => {
     const sku = /^S[0-9a-f]{32}m?\.jpg_/;
     expect(fs.readdirSync(path.join(ROOT, "public/assets/nfc")).filter((f) => sku.test(f))).toEqual([]);

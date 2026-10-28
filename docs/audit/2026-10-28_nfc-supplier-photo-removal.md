@@ -17,6 +17,7 @@ CI on `main` had been red since PR #165 (runs #414–#416). PR #165 put `Tarjeta
 
 - Re-converted `tarjeta_nfc_google.png` after the owner replaced it (428x404, now 21 KB).
 - Deleted the 4 supplier SKU-named gallery originals (`S…jpg_640x640q75.jpg_.avif`), after checking with `cmp` that each one is byte-identical to its descriptive copy. `scripts/optimize-images.mjs` now lists `NFC_GALLERY_MAINS` instead of using `NFC_RENAMES`/`renameNfcGalleryAssets`. A guard was added to `nfcImageRights.test.ts`; it was RED first.
+- `HowItWorks.tsx` step 1: replaced `put_exibitor.webp` (3200x3200) with `tarjeta_nfc.webp` (625x436) and deleted the old file. A guard assertion was added first and was RED before the change.
 
 ## Verification
 
