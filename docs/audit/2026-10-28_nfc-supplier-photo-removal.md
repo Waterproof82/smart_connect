@@ -26,4 +26,4 @@ CI on `main` had been red since PR #165 (runs #414–#416). PR #165 put `Tarjeta
 
 ## Follow-up
 
-- The gallery exhibitor photos (`/assets/nfc/nfc-*.avif`) came from files with supplier SKU-style names. Their usage rights still need to be confirmed.
+- None. The owner confirmed on 2026-10-28 that the remaining NFC page photos are their own: the gallery `nfc-*.avif` mains and thumbnails, `place_device.jpg` and `review.webp`. F-07 is closed.
