@@ -22,7 +22,6 @@
     { "source": "/software-restaurantes-canarias", "destination": "/tpv-restaurantes", "permanent": true },
     { "source": "/digitalizacion-hosteleria-tenerife", "destination": "/", "permanent": true },
     { "source": "/tap-review", "destination": "/tarjetas-nfc", "statusCode": 301 },
-    { "source": "/servicios", "destination": "/", "statusCode": 301 },
     { "source": "/contacto", "destination": "/#contacto", "permanent": true }
   ],
   "headers": [
