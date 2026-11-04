@@ -7,6 +7,20 @@ const ProductGallery: React.FC = () => {
 
   const products = [
     {
+      name: "Google Reviews Stick",
+      image: "/assets/nfc/greviews-stick-removebg-preview.webp",
+      thumbnail: "/assets/nfc/greviews-stick-removebg-preview.webp",
+      alt: "Pegatina de reseñas de Google",
+      fallback: "/assets/nfc/tarjeta_nfc.webp",
+    },
+    {
+      name: "Tik NFC",
+      image: "/assets/nfc/tik-removebg-preview.webp",
+      thumbnail: "/assets/nfc/tik-removebg-preview.webp",
+      alt: "Tarjeta Tik NFC para reseñas rápidas",
+      fallback: "/assets/nfc/tarjeta_nfc.webp",
+    },
+    {
       name: t.tapReviewProductExhibitorWhite,
       image: "/assets/nfc/nfc-exhibidor-blanco-1.avif",
       thumbnail: "/assets/nfc/nfc-exhibidor-blanco-1-128w.webp",
